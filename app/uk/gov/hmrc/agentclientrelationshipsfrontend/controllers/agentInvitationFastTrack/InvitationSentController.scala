@@ -14,14 +14,19 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.agentclientrelationshipsfrontend.config
+package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitationFastTrack
 
-import com.google.inject.AbstractModule
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
-class Module extends AbstractModule {
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.Future
 
-  override def configure(): Unit = {
-
-    bind(classOf[AppConfig]).asEagerSingleton()
+@Singleton
+class InvitationSentController @Inject()(
+                                      mcc: MessagesControllerComponents)
+  extends FrontendController(mcc) {
+    def show: Action[AnyContent] = Action.async { implicit request =>
+      Future.successful(Ok("Show fast track invitation sent"))
+    }
   }
-}
