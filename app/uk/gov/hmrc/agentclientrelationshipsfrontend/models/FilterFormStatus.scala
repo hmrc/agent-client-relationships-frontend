@@ -19,7 +19,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.models
 import java.time.LocalDateTime
 
 trait FilterFormStatus {
-  val filterForStatus: TrackInformationSorted => Boolean
+  def filterForStatus: TrackInformationSorted => Boolean
 }
 
 object FilterFormStatus {
