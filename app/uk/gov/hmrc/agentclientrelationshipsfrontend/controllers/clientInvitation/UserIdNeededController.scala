@@ -14,13 +14,23 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.agentclientrelationshipsfrontend.config
+package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.clientInvitation
+
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}
-import play.api.Configuration
+import scala.concurrent.Future
 
 @Singleton
-class AppConfig @Inject()(config: Configuration) {
-  val welshLanguageSupportEnabled: Boolean = config.getOptional[Boolean]("features.welsh-language-support").getOrElse(false)
+class UserIdNeededController @Inject()(
+                                      mcc: MessagesControllerComponents)
+  extends FrontendController(mcc) {
+  def show: Action[AnyContent] = Action.async { implicit request =>
+    Future.successful(Ok("Show user id needed"))
+  }
 
-}
+  def submit: Action[AnyContent] = Action.async { implicit request =>
+    Future.successful(Ok("Submit user id needed"))
+  }
+  }

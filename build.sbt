@@ -9,6 +9,7 @@ lazy val microservice = Project("agent-client-relationships-frontend", file(".")
     libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test,
     // https://www.scala-lang.org/2021/01/12/configuring-and-suppressing-warnings.html
     // suppress warnings in generated routes files
+    routesImport += "uk.gov.hmrc.agentclientrelationshipsfrontend.binders.UrlBinders._",
     scalacOptions += "-Wconf:src=routes/.*:s",
     scalacOptions += "-Wconf:cat=unused-imports&src=html/.*:s",
     pipelineStages := Seq(gzip),

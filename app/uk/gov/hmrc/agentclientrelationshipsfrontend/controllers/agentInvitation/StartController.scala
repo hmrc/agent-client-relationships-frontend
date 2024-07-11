@@ -14,14 +14,20 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.agentclientrelationshipsfrontend.config
+package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitation
 
-import com.google.inject.AbstractModule
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
-class Module extends AbstractModule {
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.Future
 
-  override def configure(): Unit = {
+@Singleton
+class StartController @Inject()(
+                                      mcc: MessagesControllerComponents)
+  extends FrontendController(mcc) {
+    def start: Action[AnyContent] = Action.async { implicit request =>
+        Future.successful(Redirect(routes.SelectClientTypeController.show))
+    }
 
-    bind(classOf[AppConfig]).asEagerSingleton()
-  }
 }
