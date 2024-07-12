@@ -15,22 +15,69 @@
  *@
 
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.routes
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcStandardPage
-@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.hmrcstandardpage.HmrcStandardPageParams
+@import uk.gov.hmrc.hmrcfrontend.views.html.helpers._
+@import uk.gov.hmrc.govukfrontend.views.html.components._
+@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.hmrcstandardpage._
 
 @this(
-  appConfig: AppConfig,
-  hmrcStandardPage: HmrcStandardPage
+        appConfig: AppConfig,
+        hmrcStandardPage: HmrcStandardPage,
+        hmrcLanguageSelectHelper: HmrcLanguageSelectHelper,
+        autocompleteCss: HmrcAccessibleAutocompleteCss,
+        autocompleteJavascript: HmrcAccessibleAutocompleteJavascript,
+        hmrcTimeoutDialogHelper: HmrcTimeoutDialogHelper,
+        hmrcReportTechnicalIssueHelper: HmrcReportTechnicalIssueHelper
 )
 
-@(pageTitle: Option[String] = None)(contentBlock: Html)(implicit request: RequestHeader, messages: Messages)
+@(
+        pageTitle: String,
+        serviceName: Option[String] = None,
+        hasErrors: Boolean = false,
+        backLinkHref: Option[String] = None
+)(contentBlock: Html)(implicit request: RequestHeader, messages: Messages)
 
+@isSignedIn  = @{request.session.get("authToken").isDefined}
+@* sign out url is only available if the user is signed in, the signOut method can do survey redirection etc *@
+@signOutUrl = @{if(isSignedIn) Some(routes.SignOutController.signOut.url) else None}
+@* only pass in the service name as a fully resolved message if it is not the default for agents auth *@
+@service = @{serviceName.getOrElse(messages("service.name.agents.auth"))}
+@head = {
+    @if(isSignedIn) {
+        @hmrcTimeoutDialogHelper(
+            signOutUrl = signOutUrl.get,
+            timeoutUrl = Some(routes.SignOutController.timedOut.url)
+        )
+    }
+    @autocompleteCss()
+}
+@* instead of doing title building at template level we can centralise it here and for
+form submission pages we can pass in hasErrors = form.hasErrors, the required pageTitle should always
+equal the page heading (H1) content *@
+@gdsTitle = @{
+    s"""${if(hasErrors){ s"""${messages("error.prefix")} """ } else ""}$pageTitle - $service - GOV.UK"""
+}
+
+@content = {
+    @contentBlock
+    <div class="govuk-!-display-none-print govuk-!-margin-top-6">
+        @hmrcReportTechnicalIssueHelper()
+    </div>
+}
 @hmrcStandardPage(
-  HmrcStandardPageParams(
-    pageTitle = pageTitle,
-    isWelshTranslationAvailable = appConfig.welshLanguageSupportEnabled
+    HmrcStandardPageParams(
+        pageTitle = Some(gdsTitle),
+        serviceURLs = ServiceURLs(signOutUrl),
+        templateOverrides = TemplateOverrides(
+            additionalHeadBlock = Some(head),
+            additionalScriptsBlock = Some(autocompleteJavascript())
+        ),
+        isWelshTranslationAvailable = appConfig.welshLanguageSupportEnabled,
+        backLink = backLinkHref.map(BackLink(_, messages("button.back"))),
+        serviceName = Some(service)
   )
-)(contentBlock)
+)(content)
 
 @{
     //$COVERAGE-OFF$

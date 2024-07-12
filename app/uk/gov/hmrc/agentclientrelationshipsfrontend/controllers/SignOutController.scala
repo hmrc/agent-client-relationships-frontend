@@ -29,6 +29,8 @@ class SignOutController @Inject()(
     extends FrontendController(mcc) {
 
   def signOut: Action[AnyContent] = Action.async { implicit request =>
+    // previously the destination of sign out was determined by MainTemplate code
+    // instead we could do that in here
     Future.successful(Ok("Signed out"))
   }
 

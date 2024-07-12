@@ -38,13 +38,13 @@ Feature flags exist for each service and for requirement of known facts.
 
 ### Running the app locally
 
-    sm --start AGENT_AUTHORISATION -r
-    sm --stop AGENT_CLIENT_RELATIONSHIPS_FRONTEND
+    sm2 --start AGENT_AUTHORISATION
+    sm2 --stop AGENT_CLIENT_RELATIONSHIPS_FRONTEND
     sbt run
 
 It should then be listening on port 9448
 
-    browse http://localhost:9448/invitations/agents
+    browse http://localhost:9448/agent-client-relationships/agents
 
 ## Endpoints
 All Endpoints require Authentication.
@@ -53,14 +53,14 @@ All Endpoints require Authentication.
 
 Start page for Agents:
 
-    GET   	/invitations/agents/
+    GET   	/agent-client-relationships/agents/
 
 Fast Track Invitation:
 
 API to create a fast-track invitation.
 
 ```
-POST   /invitations/agents/fast-track
+POST   /agent-client-relationships/agents/fast-track
 ```
 
 The following are the supported services and relevant fields required to create a fast track invitation:
@@ -86,7 +86,7 @@ Note: Client Type and Known Fact are optional. If either of those are missing yo
 Start Page for Clients:
 
 ```
-    GET     /invitations/{clientType}/{uid}/{agentName}
+    GET     /agent-client-relationships/{clientType}/{uid}/{agentName}
 
 ```
 
