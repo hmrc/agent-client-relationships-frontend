@@ -21,17 +21,20 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future
+import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.ExamplePage
 
 @Singleton
 class ConfirmClientController @Inject()(
-                                      mcc: MessagesControllerComponents)
+                                      mcc: MessagesControllerComponents,
+                                      view: ExamplePage
+                                       )
   extends FrontendController(mcc) {
     def show: Action[AnyContent] = Action.async { implicit request =>
-        Future.successful(Ok("Show confirm client"))
+        Future.successful(Ok(view("Show confirm client")))
     }
 
     def submit: Action[AnyContent] = Action.async { implicit request =>
-        Future.successful(Ok("Submit confirm client"))
+        Future.successful(Ok(view("Submit confirm client")))
     }
 
 }
