@@ -17,6 +17,7 @@ object CodeCoverageSettings {
     ".*models.*",
     ".*views.*",
     ".*binders.*",
+    ".*utils.*",
     ".*controllers.agentInvitation.AgentInvitationErrorController.*",
     ".*controllers.agentInvitation.ConfirmCountryCodeController.*",
     ".*controllers.agentInvitation.DeleteAuthorisationController.*",
@@ -77,7 +78,7 @@ object CodeCoverageSettings {
   )
 
   val settings: Seq[Setting[_]] = Seq(
-    ScoverageKeys.coverageExcludedPackages := excludedPackages.mkString(";"),
+    ScoverageKeys.coverageExcludedPackages := excludedPackages.mkString(","),
     ScoverageKeys.coverageMinimumStmtTotal := 100,
     ScoverageKeys.coverageFailOnMinimum := true,
     ScoverageKeys.coverageHighlighting := true

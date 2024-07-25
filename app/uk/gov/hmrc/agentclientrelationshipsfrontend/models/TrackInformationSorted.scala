@@ -16,13 +16,11 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.models
 
-import uk.gov.hmrc.agentmtdidentifiers.model.Service
-
 import java.time.LocalDateTime
 
 case class TrackInformationSorted(
   clientType: Option[String],
-  service: Option[Service],
+  service: Option[String],
   clientId: String,
   clientIdType: String,
   clientName: Option[String],
@@ -33,17 +31,15 @@ case class TrackInformationSorted(
   isRelationshipEnded: Boolean,
   relationshipEndedBy: Option[String],
   lastUpdated: Option[LocalDateTime],
-  isAltItsa: Boolean = false) {
+  isAltItsa: Boolean = false):
 
   def sortDate: Option[LocalDateTime] =
     if (dateTime.isEmpty) expiryDate
     else if (expiryDate.isEmpty) dateTime
     else None
-}
 
-object TrackInformationSorted {
+object TrackInformationSorted:
 
-  implicit def dateOrdering: Ordering[LocalDateTime] = Ordering.fromLessThan(_ isAfter _)
+  implicit def dateOrdering: Ordering[LocalDateTime] = Ordering.fromLessThan(_ `isAfter` _)
 
   val orderingByDate: Ordering[TrackInformationSorted] = Ordering.by(_.sortDate)
-}

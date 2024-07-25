@@ -16,22 +16,22 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.clientInvitation
 
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, MessagesRequest}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future
 
 @Singleton
-class CreateNewUserIdController @Inject()(
-                                      mcc: MessagesControllerComponents)
-  extends FrontendController(mcc) {
+class CreateNewUserIdController @Inject()(mcc: MessagesControllerComponents) extends FrontendController(mcc):
 
-    def show: Action[AnyContent] = Action.async { implicit request =>
+  def show: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
       Future.successful(Ok("Show client create new user id"))
-    }
 
-    def submit: Action[AnyContent] = Action.async { implicit request =>
+  def submit: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
       Future.successful(Ok("Submit client create new user id"))
-    }
-  }
+        

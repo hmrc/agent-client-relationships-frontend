@@ -16,22 +16,21 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitation
 
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, MessagesRequest}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future
 
 @Singleton
-class ConfirmPostcodeController @Inject()(
-                                      mcc: MessagesControllerComponents)
-  extends FrontendController(mcc) {
-    def show: Action[AnyContent] = Action.async { implicit request =>
-        Future.successful(Ok("Show confirm postcode"))
-    }
+class ConfirmPostcodeController @Inject()(mcc: MessagesControllerComponents) extends FrontendController(mcc):
+    
+  def show: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Show confirm postcode"))
 
-    def submit: Action[AnyContent] = Action.async { implicit request =>
-        Future.successful(Ok("Submit confirm postcode"))
-    }
-
-}
+  def submit: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Submit confirm postcode"))

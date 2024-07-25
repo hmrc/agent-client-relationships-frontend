@@ -16,30 +16,31 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.clientInvitation
 
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, MessagesRequest}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future
 
 @Singleton
-class WarmUpController @Inject()(
-                                      mcc: MessagesControllerComponents)
-  extends FrontendController(mcc) {
-  def show(clientType: String, uid: String, agentName: String, attempt: Option[Int]): Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok("Show warm up"))
-  }
+class WarmUpController @Inject()(mcc: MessagesControllerComponents) extends FrontendController(mcc):
+  
+  def show(clientType: String, uid: String, agentName: String, attempt: Option[Int]): Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Show warm up"))
 
-  def submit: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok("Submit warm up"))
-  }
+  def submit: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Submit warm up"))
 
-  def submitWarmUpSessionRequired: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok("Show session required"))
-  }
+  def submitWarmUpSessionRequired: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Show session required"))
 
-  def submitWarmUpConfirmDecline: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok("Submit warm up confirm decline"))
-  }
-
-  }
+  def submitWarmUpConfirmDecline: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Submit warm up confirm decline"))

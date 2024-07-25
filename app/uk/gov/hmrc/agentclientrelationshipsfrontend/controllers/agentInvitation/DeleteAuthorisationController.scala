@@ -16,23 +16,23 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitation
 
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, MessagesRequest}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future
 
 @Singleton
-class DeleteAuthorisationController @Inject()(
-                                      mcc: MessagesControllerComponents)
-  extends FrontendController(mcc) {
+class DeleteAuthorisationController @Inject()(mcc: MessagesControllerComponents) extends FrontendController(mcc):
 
-    def show(itemId: String): Action[AnyContent] = Action.async { implicit request =>
+  def show(itemId: String): Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
       Future.successful(Ok("Show delete authorisation"))
-    }
 
-    def submit: Action[AnyContent] = Action.async { implicit request =>
+  def submit: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
       Future.successful(Ok("Submit delete authorisation"))
-    }
 
-  }
+

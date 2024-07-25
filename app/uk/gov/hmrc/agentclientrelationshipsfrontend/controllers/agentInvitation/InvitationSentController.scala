@@ -16,17 +16,16 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitation
 
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, MessagesRequest}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future
 
 @Singleton
-class InvitationSentController @Inject()(
-                                      mcc: MessagesControllerComponents)
-  extends FrontendController(mcc) {
-    def show: Action[AnyContent] = Action.async { implicit request =>
+class InvitationSentController @Inject()(mcc: MessagesControllerComponents) extends FrontendController(mcc):
+
+  def show: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
       Future.successful(Ok("Show invitation sent"))
-    }
-  }

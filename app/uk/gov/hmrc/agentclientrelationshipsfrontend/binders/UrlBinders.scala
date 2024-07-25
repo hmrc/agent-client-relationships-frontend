@@ -16,54 +16,44 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.binders
 
+import play.api.mvc.PathBindable.bindableString
 import play.api.mvc.{PathBindable, QueryStringBindable}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.FilterFormStatus
-import uk.gov.hmrc.agentmtdidentifiers.model.InvitationId
+import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.InvitationIdHelper
 
-object UrlBinders {
+import scala.util.Try
 
-  implicit val invitationIdBinder: PathBindable[InvitationId] = getInvitationIdBinder
+object UrlBinders:
 
-  def getInvitationIdBinder(implicit stringBinder: PathBindable[String]) = new PathBindable[InvitationId] {
+  implicit val invitationIdBinder: PathBindable[String] = getInvitationIdBinder(bindableString)
 
-    override def bind(key: String, value: String): Either[String, InvitationId] = {
-      val isValidPrefix = value.headOption.fold(false)(Seq('A', 'B', 'C').contains)
+  def getInvitationIdBinder(implicit stringBinder: PathBindable[String]): PathBindable[String] = new PathBindable[String]:
 
-      if (isValidPrefix && InvitationId.isValid(value))
-        Right(InvitationId(value))
+    override def bind(key: String, value: String): Either[String, String] =
+      val isValidPrefix = value.headOption.exists(Seq('A', 'B', 'C').contains)
+
+      if (isValidPrefix && InvitationIdHelper.isValid(value))
+        Right(value)
       else
         Left(ErrorConstants.InvitationIdNotFound)
-    }
 
-    override def unbind(key: String, id: InvitationId): String = stringBinder.unbind(key, id.value)
-  }
+    override def unbind(key: String, id: String): String = stringBinder.unbind(key, id)
+
 
   implicit val filterFormStatusBinder: QueryStringBindable[FilterFormStatus] = getFilterFormStatusBinder
 
-  def getFilterFormStatusBinder(implicit queryStringBinder: QueryStringBindable[String]) =
-    new QueryStringBindable[FilterFormStatus] {
+  def getFilterFormStatusBinder(implicit queryStringBinder: QueryStringBindable[String]): QueryStringBindable[FilterFormStatus] =
+    new QueryStringBindable[FilterFormStatus]:
 
       override def bind(key: String, params: Map[String, Seq[String]]): Option[Either[String, FilterFormStatus]] =
-        for {
-          status <- queryStringBinder.bind(key, params)
-        } yield
-          status match {
-            case Right(s) =>
-              try {
-                Right(FilterFormStatus.toEnum(s))
-              } catch {
-                case e: Exception => Left(ErrorConstants.StatusError)
-              }
-            case _ => Left(ErrorConstants.StatusError)
-          }
+        queryStringBinder.bind(key, params).map:
+          case Right(s) => Try(FilterFormStatus.valueOf(s)).toEither.left.map(_ => ErrorConstants.StatusError)
+          case _ => Left(ErrorConstants.StatusError)
 
       override def unbind(key: String, ffs: FilterFormStatus): String =
-        queryStringBinder.unbind(key, FilterFormStatus.fromEnum(ffs))
-    }
-}
+        queryStringBinder.unbind(key, ffs.toString)
 
-object ErrorConstants {
+object ErrorConstants:
   val InvitationIdNotFound = "INVITATION_ID_NOTFOUND"
   val StatusError = "FORM_FILTER_STATUS_INVALID"
 
-}

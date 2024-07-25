@@ -16,39 +16,46 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitationFastTrack
 
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, MessagesRequest}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future
 
 @Singleton
-class KnownFactController @Inject()(
-                                      mcc: MessagesControllerComponents)
-  extends FrontendController(mcc) {
+class KnownFactController @Inject()(mcc: MessagesControllerComponents) extends FrontendController(mcc):
 
-  def show: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok("Show known fact"))
-  }
+  def show: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Show known fact"))
 
-  def submitKnownFactItsa: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok("Submit known fact ITSA"))
-  }
+  def submitKnownFactItsa: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Submit known fact ITSA"))
 
-  def submitKnownFactIrv: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok("Submit known fact IRV"))
-  }
-  def submitKnownFactVat: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok("Submit known fact VAT"))
-  }
-  def submitKnownFactPpt: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok("Submit known fact PPT"))
-  }
-  def submitKnownFactCbc: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok("Submit known fact CBC"))
-  }
-  def submitKnownFactPillar2: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok("Submit known fact PILLAR2"))
-  }
+  def submitKnownFactIrv: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Submit known fact IRV"))
 
-}
+  def submitKnownFactVat: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Submit known fact VAT"))
+
+  def submitKnownFactPpt: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Submit known fact PPT"))
+
+  def submitKnownFactCbc: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Submit known fact CBC"))
+
+  def submitKnownFactPillar2: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Submit known fact PILLAR2"))

@@ -16,67 +16,76 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitation
 
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, MessagesRequest}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future
 
 @Singleton
-class AgentInvitationErrorController @Inject()(
-                                      mcc: MessagesControllerComponents
-                                              )
-  extends FrontendController(mcc) {
-    def showClientNotSignedUp: Action[AnyContent] = Action.async { implicit request =>
-        Future.successful(Ok("Show client not signed up"))
-    }
+class AgentInvitationErrorController @Inject()(mcc: MessagesControllerComponents) extends FrontendController(mcc):
 
-    def showClientNotRegistered: Action[AnyContent] = Action.async { implicit request =>
-        Future.successful(Ok("Show client not registered"))
-    }
+  def showClientNotSignedUp: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Show client not signed up"))
 
-    def showNotMatched: Action[AnyContent] = Action.async { implicit request =>
-        Future.successful(Ok("Show not matched"))
-    }
+  def showClientNotRegistered: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Show client not registered"))
 
-    def showCannotCreateRequest: Action[AnyContent] = Action.async { implicit request =>
-        Future.successful(Ok("Show cannot create request"))
-    }
+  def showNotMatched: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Show not matched"))
 
-    def showAllAuthorisationsRemoved: Action[AnyContent] = Action.async { implicit request =>
-        Future.successful(Ok("Show all authorisations removed"))
-    }
+  def showCannotCreateRequest: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Show cannot create request"))
 
-    def showPendingAuthorisationExists: Action[AnyContent] = Action.async { implicit request =>
-        Future.successful(Ok("Show pending authorisation exists"))
-    }
+  def showAllAuthorisationsRemoved: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Show all authorisations removed"))
 
-    def showActiveAuthorisationExists: Action[AnyContent] = Action.async { implicit request =>
-        Future.successful(Ok("Show active authorisation exists"))
-    }
+  def showPendingAuthorisationExists: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Show pending authorisation exists"))
 
-    def showAllAuthorisationsFailed: Action[AnyContent] = Action.async { implicit request =>
-        Future.successful(Ok("Show all authorisations failed"))
-    }
+  def showActiveAuthorisationExists: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Show active authorisation exists"))
 
-    def showSomeAuthorisationsFailed: Action[AnyContent] = Action.async { implicit request =>
-        Future.successful(Ok("Show some authorisations removed"))
-    }
+  def showAllAuthorisationsFailed: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Show all authorisations failed"))
 
-    def submitSomeAuthorisationsFailed: Action[AnyContent] = Action.async { implicit request =>
-        Future.successful(Ok("Submit some authorisations failed"))
-    }
+  def showSomeAuthorisationsFailed: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Show some authorisations removed"))
 
-    def showAgentSuspended: Action[AnyContent] = Action.async { implicit request =>
-        Future.successful(Ok("Show agent suspended"))
-    }
+  def submitSomeAuthorisationsFailed: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Submit some authorisations failed"))
 
-    def showAlreadyCopiedAcrossItsa: Action[AnyContent] = Action.async { implicit request =>
-        Future.successful(Ok("Show already coped across ITSA"))
-    }
+  def showAgentSuspended: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Show agent suspended"))
 
-    def showClientInsolvent: Action[AnyContent] = Action.async { implicit request =>
-        Future.successful(Ok("Show client insolvent"))
-    }
+  def showAlreadyCopiedAcrossItsa: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Show already coped across ITSA"))
 
-}
+  def showClientInsolvent: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Show client insolvent"))

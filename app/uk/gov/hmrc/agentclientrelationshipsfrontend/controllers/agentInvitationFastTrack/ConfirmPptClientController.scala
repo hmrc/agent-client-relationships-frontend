@@ -16,22 +16,21 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitationFastTrack
 
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, MessagesRequest}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future
 
 @Singleton
-class ConfirmPptClientController @Inject()(
-                                      mcc: MessagesControllerComponents)
-  extends FrontendController(mcc) {
-    def show: Action[AnyContent] = Action.async { implicit request =>
-        Future.successful(Ok("Show fast track confirm PPT client"))
-    }
+class ConfirmPptClientController @Inject()(mcc: MessagesControllerComponents) extends FrontendController(mcc):
+    
+  def show: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Show fast track confirm PPT client"))
 
-    def submit: Action[AnyContent] = Action.async { implicit request =>
-        Future.successful(Ok("Submit fast track confirm PPT client"))
-    }
-
-}
+  def submit: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Submit fast track confirm PPT client"))

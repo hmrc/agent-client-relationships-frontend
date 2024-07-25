@@ -16,59 +16,66 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.clientInvitation
 
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, MessagesRequest}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future
 
 @Singleton
-class InvitationErrorController @Inject()(
-                                      mcc: MessagesControllerComponents)
-  extends FrontendController(mcc) {
+class InvitationErrorController @Inject()(mcc: MessagesControllerComponents) extends FrontendController(mcc):
 
+  def notFound: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Show not found"))
 
-  def notFound: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok("Show not found"))
-  }
+  def actionNeeded: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Show action needed"))
 
-  def actionNeeded: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok("Show action needed"))
-  }
+  def cannotViewRequest: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Show cannot view request"))
 
-  def cannotViewRequest: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok("Show cannot view request"))
-  }
+  def noOutstandingRequests: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Show no outstanding requests"))
 
-  def noOutstandingRequests: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok("Show no outstanding requests"))
-  }
+  def authorisationRequestInvalid: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Show authorisation request invalid"))
 
-  def authorisationRequestInvalid: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok("Show authorisation request invalid"))
-  }
+  def authorisationRequestUnsuccessful: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Show authorisation request unsuccessful"))
 
-  def authorisationRequestUnsuccessful: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok("Show authorisation request unsuccessful"))
-  }
+  def cannotFindRequest: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Show cannot find request"))
 
-  def cannotFindRequest: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok("Show cannot find request"))
-  }
+  def incorrectlyAuthorisedAsAgent: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Show not found"))
 
-  def incorrectlyAuthorisedAsAgent: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok("Show not found"))
-  }
+  def showCannotConfirmIdentity(journeyId: Option[String], success: Option[String]): Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Show cannot confirm identity"))
 
-  def showCannotConfirmIdentity(journeyId: Option[String], success: Option[String]): Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok("Show cannot confirm identity"))
-  }
-  def showMissingJourneyHistory: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok("Show missing journey history"))
-  }
+  def showMissingJourneyHistory: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Show missing journey history"))
 
-  def showTrustNotClaimed: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok("Show trust not claimed"))
-  }
-
-  }
+  def showTrustNotClaimed: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Show trust not claimed"))

@@ -16,50 +16,56 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitation
 
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, MessagesRequest}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future
 
 @Singleton
-class IdentifyClientController @Inject()(
-                                      mcc: MessagesControllerComponents)
-  extends FrontendController(mcc) {
-    def show: Action[AnyContent] = Action.async { implicit request =>
-        Future.successful(Ok("Show identify client"))
-    }
+class IdentifyClientController @Inject()(mcc: MessagesControllerComponents) extends FrontendController(mcc):
 
-    def submitIdentifyItsaClient: Action[AnyContent] = Action.async { implicit request =>
-        Future.successful(Ok("Submit identify ITSA client"))
-    }
+  def show: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Show identify client"))
 
-    def submitIdentifyVatClient: Action[AnyContent] = Action.async { implicit request =>
-        Future.successful(Ok("Submit identify VAT client"))
-    }
+  def submitIdentifyItsaClient: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Submit identify ITSA client"))
 
-    def submitIdentifyIrvClient: Action[AnyContent] = Action.async { implicit request =>
-        Future.successful(Ok("Submit identify IRV client"))
-    }
+  def submitIdentifyVatClient: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Submit identify VAT client"))
 
-    def submitIdentifyTrustClient: Action[AnyContent] = Action.async { implicit request =>
-        Future.successful(Ok("Submit identify TRUST client"))
-    }
+  def submitIdentifyIrvClient: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Submit identify IRV client"))
 
-    def submitIdentifyCgtClient: Action[AnyContent] = Action.async { implicit request =>
-        Future.successful(Ok("Submit identify CGT client"))
-    }
+  def submitIdentifyTrustClient: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Submit identify TRUST client"))
 
-    def submitIdentifyPptClient: Action[AnyContent] = Action.async { implicit request =>
-        Future.successful(Ok("Submit identify PPT client"))
-    }
+  def submitIdentifyCgtClient: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Submit identify CGT client"))
 
-    def submitIdentifyCbcClient: Action[AnyContent] = Action.async { implicit request =>
-        Future.successful(Ok("Submit identify CBC client"))
-    }
+  def submitIdentifyPptClient: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Submit identify PPT client"))
 
-    def submitIdentifyPillar2Client: Action[AnyContent] = Action.async { implicit request =>
-        Future.successful(Ok("Submit identify PILLAR2 client"))
-    }
+  def submitIdentifyCbcClient: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Submit identify CBC client"))
 
-  }
+  def submitIdentifyPillar2Client: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Submit identify PILLAR2 client"))

@@ -16,29 +16,31 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentLedDeauth
 
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, MessagesRequest}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future
 
 @Singleton
-class DeauthErrorController @Inject()(
-                                      mcc: MessagesControllerComponents)
-  extends FrontendController(mcc) {
-  def notSignedUp: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok("Show deauth not signed up"))
-  }
+class DeauthErrorController @Inject()(mcc: MessagesControllerComponents) extends FrontendController(mcc):
+  
+  def notSignedUp: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Show deauth not signed up"))
 
-  def notAuthorised: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok("Show deauth not authorised"))
-  }
+  def notAuthorised: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Show deauth not authorised"))
 
-  def knownFactNotMatched: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok("Show deauth known fact not matched"))
-  }
+  def knownFactNotMatched: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Show deauth known fact not matched"))
 
-  def responseFailed: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok("Show deauth response failed"))
-  }
-  }
+  def responseFailed: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Show deauth response failed"))
