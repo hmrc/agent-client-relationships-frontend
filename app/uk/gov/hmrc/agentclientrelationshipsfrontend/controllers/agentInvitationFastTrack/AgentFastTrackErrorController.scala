@@ -16,55 +16,70 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitationFastTrack
 
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, MessagesRequest}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future
 
 @Singleton
-class AgentFastTrackErrorController @Inject()(
-                                      mcc: MessagesControllerComponents
-                                              )
-  extends FrontendController(mcc) {
-    def showClientNotSignedUp: Action[AnyContent] = Action.async { implicit request =>
-        Future.successful(Ok("Show client not signed up"))
-    }
+class AgentFastTrackErrorController @Inject()(mcc: MessagesControllerComponents) extends FrontendController(mcc):
+  
+  def showClientNotSignedUp: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Show client not signed up"))
 
-    def showClientNotRegistered: Action[AnyContent] = Action.async { implicit request =>
-        Future.successful(Ok("Show client not registered"))
-    }
 
-    def showNotMatched: Action[AnyContent] = Action.async { implicit request =>
-        Future.successful(Ok("Show not matched"))
-    }
+  def showClientNotRegistered: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Show client not registered"))
 
-    def redirectTryAgainNotMatchedKnownFact: Action[AnyContent] = Action.async { implicit request =>
-        Future.successful(Ok("Show redirect try again known fact not matched"))
-    }
 
-    def showPendingAuthorisationExists: Action[AnyContent] = Action.async { implicit request =>
-        Future.successful(Ok("Show fast track pending authorisation exists"))
-    }
+  def showNotMatched: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Show not matched"))
 
-    def showActiveAuthorisationExists: Action[AnyContent] = Action.async { implicit request =>
-        Future.successful(Ok("Show fast track active authorisation exists"))
-    }
 
-    def showAgentSuspended: Action[AnyContent] = Action.async { implicit request =>
-        Future.successful(Ok("Show agent fast track suspended"))
-    }
+  def redirectTryAgainNotMatchedKnownFact: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Show redirect try again known fact not matched"))
 
-    def showAlreadyCopiedAcrossItsa: Action[AnyContent] = Action.async { implicit request =>
-        Future.successful(Ok("Show fast track already coped across ITSA"))
-    }
 
-    def showClientInsolvent: Action[AnyContent] = Action.async { implicit request =>
-        Future.successful(Ok("Show fast track client insolvent"))
-    }
+  def showPendingAuthorisationExists: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Show fast track pending authorisation exists"))
 
-    def showCannotCreateFastTrackRequest: Action[AnyContent] = Action.async { implicit request =>
-        Future.successful(Ok("Submit cannot create fast track request"))
-    }
 
-}
+  def showActiveAuthorisationExists: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Show fast track active authorisation exists"))
+
+
+  def showAgentSuspended: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Show agent fast track suspended"))
+
+
+  def showAlreadyCopiedAcrossItsa: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Show fast track already coped across ITSA"))
+
+
+  def showClientInsolvent: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Show fast track client insolvent"))
+
+
+  def showCannotCreateFastTrackRequest: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Submit cannot create fast track request"))

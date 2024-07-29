@@ -16,26 +16,26 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitationFastTrack
 
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, MessagesRequest}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future
 
 @Singleton
-class ProgressToController @Inject()(
-                                      mcc: MessagesControllerComponents)
-  extends FrontendController(mcc) {
+class ProgressToController @Inject()(mcc: MessagesControllerComponents) extends FrontendController(mcc):
 
-  def toKnownFact: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok("Submit fast track progress to known fact"))
-  }
+  def toKnownFact: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Submit fast track progress to known fact"))
 
-  def toClientType: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok("Submit fast track progress to client type"))
-  }
+  def toClientType: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Submit fast track progress to client type"))
 
-  def toIdentifyClient: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok("Get fast track progress to identify client"))
-  }
-}
+  def toIdentifyClient: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Get fast track progress to identify client"))

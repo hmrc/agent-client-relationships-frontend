@@ -16,23 +16,21 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitation
 
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, MessagesRequest}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future
 
 @Singleton
-class LegacyAuthorisationDetectedController @Inject()(
-                                      mcc: MessagesControllerComponents)
-  extends FrontendController(mcc) {
+class LegacyAuthorisationDetectedController @Inject()(mcc: MessagesControllerComponents) extends FrontendController(mcc):
 
-    def show: Action[AnyContent] = Action.async { implicit request =>
+  def show: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
       Future.successful(Ok("Show legacy authorisation detected"))
-    }
 
-    def submit: Action[AnyContent] = Action.async { implicit request =>
+  def submit: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
       Future.successful(Ok("Submit legacy authorisation detected"))
-    }
-
-  }

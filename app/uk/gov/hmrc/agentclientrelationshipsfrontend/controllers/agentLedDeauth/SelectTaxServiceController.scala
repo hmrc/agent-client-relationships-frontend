@@ -16,26 +16,26 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentLedDeauth
 
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, MessagesRequest}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future
 
 @Singleton
-class SelectTaxServiceController @Inject()(
-                                      mcc: MessagesControllerComponents)
-  extends FrontendController(mcc) {
-  def show: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok("Show select tax service"))
-  }
+class SelectTaxServiceController @Inject()(mcc: MessagesControllerComponents) extends FrontendController(mcc):
+  
+  def show: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Show select tax service"))
 
-  def submit: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok("Submit select tax service"))
-  }
+  def submit: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Submit select tax service"))
 
-  def submitSingle: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok("Submit select single tax service"))
-  }
-
-  }
+  def submitSingle: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Submit select single tax service"))

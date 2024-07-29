@@ -16,21 +16,19 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitationFastTrack
 
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, MessagesRequest}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future
 
 @Singleton
-class StartController @Inject()(
-                                      mcc: MessagesControllerComponents)
-  extends FrontendController(mcc) {
-    def start: Action[AnyContent] = Action.async { implicit request =>
+class StartController @Inject()(mcc: MessagesControllerComponents) extends FrontendController(mcc):
+  
+  def start: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
       // previously in agents-invitations the redirection was informed
       // by the value of query string param "continue" - from sign in
       // this is a placeholder as reproducing involves a lot of dependencies
       Future.successful(Redirect(routes.SelectClientTypeController.show))
-    }
-
-}

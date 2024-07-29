@@ -16,38 +16,38 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers
 
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, MessagesRequest}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future
 
 @Singleton
-class SignOutController @Inject()(
-  mcc: MessagesControllerComponents
-                                 )
-    extends FrontendController(mcc) {
+class SignOutController @Inject()(mcc: MessagesControllerComponents) extends FrontendController(mcc):
 
-  def signOut: Action[AnyContent] = Action.async { implicit request =>
-    // previously the destination of sign out was determined by MainTemplate code
-    // instead we could do that in here
-    Future.successful(Ok("Signed out"))
-  }
+  def signOut: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request 
+      // previously the destination of sign out was determined by MainTemplate code
+      // instead we could do that in here
+      Future.successful(Ok("Signed out"))
 
-  def timedOut: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok("Timed out"))
-  }
+  def timedOut: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Timed out"))
 
-  def lockedOut: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok("Locked out"))
-  }
+  def lockedOut: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Locked out"))
 
-  def handleIVTimeout(success: Option[String]): Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok("Handle IV timeout out"))
-  }
+  def handleIVTimeout(success: Option[String]): Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Handle IV timeout out"))
 
-  def signOutAndRedirect: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok("Sign out and redirect"))
-  }
-
-}
+  def signOutAndRedirect: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Sign out and redirect"))

@@ -16,23 +16,21 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentsRequestTracking
 
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, MessagesRequest}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future
 
 @Singleton
-class ResendLinkController @Inject()(
-                                      mcc: MessagesControllerComponents)
-  extends FrontendController(mcc) {
+class ResendLinkController @Inject()(mcc: MessagesControllerComponents) extends FrontendController(mcc):
 
-  def show: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok("Show tracking resend link"))
-  }
+  def show: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Show tracking resend link"))
 
-  def submit: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok("Submit tracking resend linkt"))
-  }
-
-  }
+  def submit: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Submit tracking resend link"))

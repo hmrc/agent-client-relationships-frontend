@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitation
 
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, MessagesRequest}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}
@@ -24,17 +24,17 @@ import scala.concurrent.Future
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.ExamplePage
 
 @Singleton
-class ConfirmClientController @Inject()(
-                                      mcc: MessagesControllerComponents,
-                                      view: ExamplePage
-                                       )
-  extends FrontendController(mcc) {
-    def show: Action[AnyContent] = Action.async { implicit request =>
-        Future.successful(Ok(view("Show confirm client")))
-    }
+class ConfirmClientController @Inject()(mcc: MessagesControllerComponents,
+                                        view: ExamplePage) extends FrontendController(mcc):
 
-    def submit: Action[AnyContent] = Action.async { implicit request =>
-        Future.successful(Ok(view("Submit confirm client")))
-    }
+  def show: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok(view("Show confirm client")))
 
-}
+
+  def submit: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok(view("Submit confirm client")))
+  

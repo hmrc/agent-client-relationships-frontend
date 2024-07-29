@@ -16,43 +16,36 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.clientInvitation
 
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, MessagesRequest}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future
 
 @Singleton
-class InvitationHistoryController @Inject()(
-                                      mcc: MessagesControllerComponents)
-  extends FrontendController(mcc) {
+class InvitationHistoryController @Inject()(mcc: MessagesControllerComponents) extends FrontendController(mcc):
 
-  def showInvitationsAccepted: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok("Show invitations accepted"))
-  }
+  def showInvitationsAccepted: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Show invitations accepted"))
 
-  def showSomeResponsesFailed: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok("Show invitations accepted"))
-  }
+  def showSomeResponsesFailed: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Show invitations accepted"))
 
-  def showAllResponsesFailed: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok("Show invitations accepted"))
-  }
+  def showAllResponsesFailed: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Show invitations accepted"))
 
-  def showInvitationsDeclined: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok("Show invitations accepted"))
-  }
+  def showInvitationsDeclined: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Show invitations accepted"))
 
-  def submitSomeResponsesFailed: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok("Show invitations accepted"))
-  }
-
-
-
-
-
-
-
-
-
-  }
+  def submitSomeResponsesFailed: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Show invitations accepted"))

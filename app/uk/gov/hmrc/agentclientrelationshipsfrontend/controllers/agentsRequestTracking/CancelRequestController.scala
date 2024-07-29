@@ -16,30 +16,32 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentsRequestTracking
 
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, MessagesRequest}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future
 
 @Singleton
-class CancelRequestController @Inject()(
-                                      mcc: MessagesControllerComponents)
-  extends FrontendController(mcc) {
+class CancelRequestController @Inject()(mcc: MessagesControllerComponents) extends FrontendController(mcc):
 
-  def start: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok("Submit tracking start cancel request"))
-  }
+  def start: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Submit tracking start cancel request"))
 
-  def show: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok("Show tracking cancel request"))
-  }
+  def show: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Show tracking cancel request"))
 
-  def submit: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok("Submit tracking cancel request"))
-  }
+  def submit: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Submit tracking cancel request"))
 
-  def complete: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok("Show tracking cancel request complete"))
-  }
-  }
+  def complete: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Show tracking cancel request complete"))
+      

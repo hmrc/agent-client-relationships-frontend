@@ -16,32 +16,31 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentsRequestTracking
 
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, MessagesRequest}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future
 
 @Singleton
-class CancelAuthorisationController @Inject()(
-                                      mcc: MessagesControllerComponents)
-  extends FrontendController(mcc) {
+class CancelAuthorisationController @Inject()(mcc: MessagesControllerComponents) extends FrontendController(mcc):
 
-  def start: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok("Show tracking start cancel authorisation"))
-  }
+  def start: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Show tracking start cancel authorisation"))
 
-  def show: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok("Show tracking cancel authorisation"))
-  }
+  def show: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Show tracking cancel authorisation"))
 
-  def submit: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok("Submit tracking cancel authorisation"))
-  }
+  def submit: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Submit tracking cancel authorisation"))
 
-  def complete: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok("Show tracking cancel authorisation complete"))
-  }
-
-  }
-
+  def complete: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Show tracking cancel authorisation complete"))

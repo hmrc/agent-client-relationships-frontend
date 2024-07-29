@@ -16,22 +16,21 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.clientInvitation
 
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, MessagesRequest}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future
 
 @Singleton
-class SuspendedAgentController @Inject()(
-                                      mcc: MessagesControllerComponents)
-  extends FrontendController(mcc) {
-  def show: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok("Show suspended agent"))
-  }
+class SuspendedAgentController @Inject()(mcc: MessagesControllerComponents) extends FrontendController(mcc):
+  
+  def show: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Show suspended agent"))
 
-  def submit: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok("Submit suspended agent"))
-  }
-
-  }
+  def submit: Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok("Submit suspended agent"))
