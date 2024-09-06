@@ -3,215 +3,27 @@
 ->         /hmrc-frontend                                                               hmrcfrontend.Routes
 GET        /assets/*file                                                                controllers.Assets.versioned(path = "/public", file: Asset)
 
-# Invitations ---------------------------------------------------------------------------------------------------------
+# Create an invitation ---------------------------------------------------------------------------------------------------------
+GET         /invitations/create/client-type                                             uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.createInvitation.SelectClientTypeController.show(cya: Boolean ?= false)
+POST        /invitations/create/client-type                                             uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.createInvitation.SelectClientTypeController.onSubmit(cya: Boolean ?= false)
 
-# Agent Endpoints
-GET         /agents                                                                     uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitation.StartController.start
-GET         /agents/client-type                                                         uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitation.SelectClientTypeController.show
-POST        /agents/client-type                                                         uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitation.SelectClientTypeController.submit
-GET         /agents/select-service                                                      uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitation.SelectTaxServiceController.show
+GET         /invitations/create/client-service                                          uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.createInvitation.SelectClientServiceController.show
+POST        /invitations/create/client-service                                          uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.createInvitation.SelectClientServiceController.onSubmit
 
-# multi-select endpoint
-POST        /agents/select-service                                                      uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitation.SelectTaxServiceController.submit
-POST        /agents/select-service-single                                               uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitation.SelectTaxServiceController.submitSingle(serviceId: String, clientType: String)
+GET         /invitations/create/client-details/:fieldName                               uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.createInvitation.EnterClientDetailsController.show(fieldName)
+POST        /invitations/create/client-details/:fieldName                               uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.createInvitation.EnterClientDetailsController.onSubmit(fieldName)
 
-GET         /agents/identify-client                                                     uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitation.IdentifyClientController.show
+GET         /invitations/create/confirm-your-client                                     uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.createInvitation.ConfirmClientController.show
+POST        /invitations/create/confirm-your-client                                     uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.createInvitation.ConfirmClientController.onSubmit
 
-POST        /agents/identify-itsa-client                                                uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitation.IdentifyClientController.submitIdentifyItsaClient
-POST        /agents/identify-vat-client                                                 uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitation.IdentifyClientController.submitIdentifyVatClient
-POST        /agents/identify-irv-client                                                 uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitation.IdentifyClientController.submitIdentifyIrvClient
-POST        /agents/identify-trust-client                                               uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitation.IdentifyClientController.submitIdentifyTrustClient
-POST        /agents/identify-cgt-client                                                 uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitation.IdentifyClientController.submitIdentifyCgtClient
-POST        /agents/identify-ppt-client                                                 uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitation.IdentifyClientController.submitIdentifyPptClient
-POST        /agents/identify-cbc-client                                                 uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitation.IdentifyClientController.submitIdentifyCbcClient
-POST        /agents/identify-pillar2-client                                             uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitation.IdentifyClientController.submitIdentifyPillar2Client
+GET         /invitations/create/agent-type                                              uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.createInvitation.SelectAgentTypeController.show
+POST        /invitations/create/agent-type                                              uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.createInvitation.SelectAgentTypeController.onSubmit
 
-GET         /agents/client-postcode                                                     uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitation.ConfirmPostcodeController.show
-POST        /agents/client-postcode                                                     uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitation.ConfirmPostcodeController.submit
+GET         /invitations/create/check-your-answers                                      uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.createInvitation.CheckYourAnswersController.show
+POST        /invitations/create/check-your-answers                                      uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.createInvitation.CheckYourAnswersController.onSubmit
 
-GET         /agents/client-country                                                      uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitation.ConfirmCountryCodeController.show
-POST        /agents/client-country                                                      uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitation.ConfirmCountryCodeController.submit
+GET         /invitations/created                                                        uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.createInvitation.InvitationCreatedController.show(agentInvitationId: String)
 
-GET         /agents/confirm-client                                                      uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitation.ConfirmClientController.show
-POST        /agents/confirm-client                                                      uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitation.ConfirmClientController.submit
-
-GET         /agents/review-authorisations                                               uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitation.ReviewAuthorisationsController.show
-POST        /agents/review-authorisations                                               uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitation.ReviewAuthorisationsController.submit
-GET         /agents/invitation-sent                                                     uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitation.InvitationSentController.show
-GET         /agents/delete                                                              uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitation.DeleteAuthorisationController.show(itemId: String)
-POST        /agents/delete                                                              uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitation.DeleteAuthorisationController.submit
-
-GET         /agents/authorisation-detected                                              uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitation.LegacyAuthorisationDetectedController.show
-POST        /agents/authorisation-detected                                              uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitation.LegacyAuthorisationDetectedController.submit
-
-#Error Agent Endpoints
-GET         /agents/not-signed-up                                                       uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitation.AgentInvitationErrorController.showClientNotSignedUp
-GET         /agents/client-not-registered                                               uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitation.AgentInvitationErrorController.showClientNotRegistered
-GET         /agents/not-matched                                                         uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitation.AgentInvitationErrorController.showNotMatched
-GET         /agents/cannot-create-request                                               uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitation.AgentInvitationErrorController.showCannotCreateRequest
-GET         /agents/all-authorisations-removed                                          uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitation.AgentInvitationErrorController.showAllAuthorisationsRemoved
-GET         /agents/already-authorisation-pending                                       uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitation.AgentInvitationErrorController.showPendingAuthorisationExists
-GET         /agents/already-authorisation-present                                       uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitation.AgentInvitationErrorController.showActiveAuthorisationExists
-GET         /agents/all-create-authorisation-failed                                     uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitation.AgentInvitationErrorController.showAllAuthorisationsFailed
-GET         /agents/some-create-authorisation-failed                                    uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitation.AgentInvitationErrorController.showSomeAuthorisationsFailed
-POST        /agents/some-create-authorisation-failed                                    uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitation.AgentInvitationErrorController.submitSomeAuthorisationsFailed
-GET         /agents/access-removed                                                      uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitation.AgentInvitationErrorController.showAgentSuspended
-GET         /agents/already-copied-across-itsa                                          uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitation.AgentInvitationErrorController.showAlreadyCopiedAcrossItsa
-GET         /agents/client-insolvent                                                    uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitation.AgentInvitationErrorController.showClientInsolvent
-
-#Fast Track Endpoints
-+ nocsrf
-POST        /agents/fast-track                                                          uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitationFastTrack.StartController.start
-GET         /agents/check-details                                                       uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitationFastTrack.CheckDetailsController.show
-POST        /agents/check-details                                                       uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitationFastTrack.CheckDetailsController.submit
-GET         /agents/client-details                                                      uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitationFastTrack.IdentifyClientController.show
-POST        /agents/client-details-itsa                                                 uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitationFastTrack.IdentifyClientController.submitIdentifyItsaClient
-POST        /agents/client-details-irv                                                  uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitationFastTrack.IdentifyClientController.submitIdentifyIrvClient
-POST        /agents/client-details-vat                                                  uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitationFastTrack.IdentifyClientController.submitIdentifyVatClient
-POST        /agents/client-details-trust                                                uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitationFastTrack.IdentifyClientController.submitIdentifyTrustClient
-POST        /agents/client-details-cgt                                                  uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitationFastTrack.IdentifyClientController.submitIdentifyCgtClient
-POST        /agents/client-details-ppt                                                  uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitationFastTrack.IdentifyClientController.submitIdentifyPptClient
-POST        /agents/client-details-cbc                                                  uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitationFastTrack.IdentifyClientController.submitIdentifyCbcClient
-POST        /agents/client-details-pillar2                                              uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitationFastTrack.IdentifyClientController.submitIdentifyPillar2Client
-
-POST        /agents/to-known-fact                                                       uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitationFastTrack.ProgressToController.toKnownFact
-POST        /agents/to-client-type                                                      uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitationFastTrack.ProgressToController.toClientType
-GET         /agents/to-identify-client                                                  uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitationFastTrack.ProgressToController.toIdentifyClient
-GET         /agents/confirm-trust-client                                                uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitationFastTrack.ConfirmTrustClientController.show
-POST        /agents/confirm-trust-client                                                uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitationFastTrack.ConfirmTrustClientController.submit
-
-GET         /agents/track/client-postcode                                               uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitationFastTrack.ConfirmPostcodeController.show
-POST        /agents/track/client-postcode                                               uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitationFastTrack.ConfirmPostcodeController.submit
-
-GET         /agents/track/client-country                                                uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitationFastTrack.ConfirmCountryCodeController.show
-POST        /agents/track/client-country                                                uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitationFastTrack.ConfirmCountryCodeController.submit
-
-GET         /agents/track/ppt-registration-date                                         uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitationFastTrack.ConfirmPptRegDateController.show
-POST        /agents/track/ppt-registration-date                                         uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitationFastTrack.ConfirmPptRegDateController.submit
-
-GET         /agents/track/confirm-cgt-client                                            uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitationFastTrack.ConfirmCgtClientController.show
-POST        /agents/track/confirm-cgt-client                                            uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitationFastTrack.ConfirmCgtClientController.submit
-
-GET         /agents/track/confirm-ppt-client                                            uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitationFastTrack.ConfirmPptClientController.show
-POST        /agents/track/confirm-ppt-client                                            uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitationFastTrack.ConfirmPptClientController.submit
-
-GET         /agents/more-details                                                        uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitationFastTrack.KnownFactController.show
-POST        /agents/more-details-itsa                                                   uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitationFastTrack.KnownFactController.submitKnownFactItsa
-POST        /agents/more-details-irv                                                    uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitationFastTrack.KnownFactController.submitKnownFactIrv
-POST        /agents/more-details-vat                                                    uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitationFastTrack.KnownFactController.submitKnownFactVat
-POST        /agents/more-details-ppt                                                    uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitationFastTrack.KnownFactController.submitKnownFactPpt
-POST        /agents/more-details-cbc                                                    uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitationFastTrack.KnownFactController.submitKnownFactCbc
-POST        /agents/more-details-pillar2                                                uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitationFastTrack.KnownFactController.submitKnownFactPillar2
-GET         /agents/select-client-type                                                  uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitationFastTrack.SelectClientTypeController.show
-POST        /agents/select-client-type                                                  uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitationFastTrack.SelectClientTypeController.submit
-GET         /agents/sent-invitation                                                     uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitationFastTrack.InvitationSentController.show
-GET         /agents/track/authorisation-detected                                        uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitationFastTrack.LegacyAuthorisationDetectedController.show
-POST        /agents/track/authorisation-detected                                        uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitationFastTrack.LegacyAuthorisationDetectedController.submit
-
-#Error Fast Track Endpoint
-GET         /agents/client-not-signed-up                                                uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitationFastTrack.AgentFastTrackErrorController.showClientNotSignedUp
-GET         /agents/track/client-not-registered                                         uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitationFastTrack.AgentFastTrackErrorController.showClientNotRegistered
-GET         /agents/no-match                                                            uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitationFastTrack.AgentFastTrackErrorController.showNotMatched
-GET         /agents/no-match-try-again                                                  uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitationFastTrack.AgentFastTrackErrorController.redirectTryAgainNotMatchedKnownFact
-GET         /agents/authorisation-already-requested                                     uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitationFastTrack.AgentFastTrackErrorController.showPendingAuthorisationExists
-GET         /agents/already-authorised                                                  uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitationFastTrack.AgentFastTrackErrorController.showActiveAuthorisationExists
-GET         /agents/suspended                                                           uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitationFastTrack.AgentFastTrackErrorController.showAgentSuspended
-GET         /agents/track/already-copied-across-itsa                                    uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitationFastTrack.AgentFastTrackErrorController.showAlreadyCopiedAcrossItsa
-GET         /agents/track/client-insolvent                                              uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitationFastTrack.AgentFastTrackErrorController.showClientInsolvent
-GET         /agents/track/cannot-create-request                                         uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentInvitationFastTrack.AgentFastTrackErrorController.showCannotCreateFastTrackRequest
-
-# agent led deauth FSM
-GET         /agents/cancel-authorisation                                                uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentLedDeauth.StartController.start
-GET         /agents/cancel-authorisation/client-type                                    uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentLedDeauth.SelectClientTypeController.show
-POST        /agents/cancel-authorisation/client-type                                    uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentLedDeauth.SelectClientTypeController.submit
-GET         /agents/cancel-authorisation/select-service                                 uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentLedDeauth.SelectTaxServiceController.show
-POST        /agents/cancel-authorisation/select-service                                 uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentLedDeauth.SelectTaxServiceController.submit
-POST        /agents/cancel-authorisation/select-business-service-single                 uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentLedDeauth.SelectTaxServiceController.submitSingle
-GET         /agents/cancel-authorisation/identify-client                                uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentLedDeauth.IdentifyClientController.show
-POST        /agents/cancel-authorisation/identify-itsa-client                           uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentLedDeauth.IdentifyClientController.submitIdentifyItsaClient
-POST        /agents/cancel-authorisation/identify-irv-client                            uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentLedDeauth.IdentifyClientController.submitIdentifyIrvClient
-POST        /agents/cancel-authorisation/identify-vat-client                            uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentLedDeauth.IdentifyClientController.submitIdentifyVatClient
-POST        /agents/cancel-authorisation/identify-trust-client                          uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentLedDeauth.IdentifyClientController.submitIdentifyTrustClient
-POST        /agents/cancel-authorisation/identify-cgt-client                            uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentLedDeauth.IdentifyClientController.submitIdentifyCgtClient
-POST        /agents/cancel-authorisation/identify-ppt-client                            uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentLedDeauth.IdentifyClientController.submitIdentifyPptClient
-POST        /agents/cancel-authorisation/identify-cbc-client                            uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentLedDeauth.IdentifyClientController.submitIdentifyCbcClient
-POST        /agents/cancel-authorisation/identify-pillar2-client                        uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentLedDeauth.IdentifyClientController.submitIdentifyPillar2Client
-
-GET         /agents/cancel-authorisation/client-postcode                                uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentLedDeauth.ConfirmPostcodeController.show
-POST        /agents/cancel-authorisation/client-postcode                                uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentLedDeauth.ConfirmPostcodeController.submit
-
-GET         /agents/cancel-authorisation/client-country                                 uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentLedDeauth.ConfirmCountryCodeController.show
-POST        /agents/cancel-authorisation/client-country                                 uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentLedDeauth.ConfirmCountryCodeController.submit
-
-GET         /agents/cancel-authorisation/confirm-client                                 uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentLedDeauth.ConfirmClientController.show
-POST        /agents/cancel-authorisation/confirm-client                                 uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentLedDeauth.ConfirmClientController.submit
-GET         /agents/cancel-authorisation/confirm-cancel                                 uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentLedDeauth.CancelAuthorisationController.show
-POST        /agents/cancel-authorisation/confirm-cancel                                 uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentLedDeauth.CancelAuthorisationController.submit
-GET         /agents/cancel-authorisation/cancelled                                      uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentLedDeauth.CancelAuthorisationController.complete
-GET         /agents/cancel-authorisation/client-not-found                               uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentLedDeauth.DeauthErrorController.knownFactNotMatched
-GET         /agents/cancel-authorisation/not-signed-up                                  uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentLedDeauth.DeauthErrorController.notSignedUp
-GET         /agents/cancel-authorisation/not-authorised                                 uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentLedDeauth.DeauthErrorController.notAuthorised
-GET         /agents/cancel-authorisation/response-failed                                uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentLedDeauth.DeauthErrorController.responseFailed
-
-# Request tracking
-GET         /track                                                                      uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentsRequestTracking.TrackRequestsController.show(page: Int ?= 1, client: Option[String] ?= None, status: Option[uk.gov.hmrc.agentclientrelationshipsfrontend.models.FilterFormStatus] ?= None)
-POST        /track                                                                      uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentsRequestTracking.TrackRequestsController.submit
-POST        /resend-link                                                                uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentsRequestTracking.ResendLinkController.submit
-GET         /resend-link                                                                uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentsRequestTracking.ResendLinkController.show
-POST        /confirm-cancel                                                             uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentsRequestTracking.CancelRequestController.start
-GET         /track/confirm-cancel                                                       uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentsRequestTracking.CancelRequestController.show
-POST        /track/confirm-cancel                                                       uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentsRequestTracking.CancelRequestController.submit
-GET         /track/request-cancelled                                                    uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentsRequestTracking.CancelRequestController.complete
-POST        /confirm-cancel-authorisation                                               uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentsRequestTracking.CancelAuthorisationController.start
-GET         /track/cancel-authorisation                                                 uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentsRequestTracking.CancelAuthorisationController.show
-POST        /track/cancel-authorisation                                                 uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentsRequestTracking.CancelAuthorisationController.submit
-GET         /track/cancelled                                                            uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentsRequestTracking.CancelAuthorisationController.complete
-
-#Journey Client endpoints
-GET         /:clientType-taxes/manage-who-can-deal-with-HMRC-for-you/:uid/:agentName    uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.clientInvitation.WarmUpController.show(clientType: String, uid: String, agentName: String, attempt: Option[Int] ?= None)
-GET         /warm-up                                                                    uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.clientInvitation.WarmUpController.submit
-GET         /warm-up/session-required                                                   uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.clientInvitation.WarmUpController.submitWarmUpSessionRequired
-GET         /warm-up/to-decline                                                         uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.clientInvitation.WarmUpController.submitWarmUpConfirmDecline
-GET         /create-new-user-id                                                         uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.clientInvitation.CreateNewUserIdController.show
-GET         /accept-tax-agent-invitation                                                uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.clientInvitation.CreateNewUserIdController.submit
-GET         /which-tax-service                                                          uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.clientInvitation.SelectTaxServiceController.show
-POST        /which-tax-service                                                          uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.clientInvitation.SelectTaxServiceController.submit
-GET         /sign-up-to-tax-service                                                     uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.clientInvitation.SelectTaxServiceController.showSignUpToTaxService
-GET         /not-found                                                                  uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.clientInvitation.InvitationErrorController.notFound
-GET         /action-needed                                                              uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.clientInvitation.InvitationErrorController.actionNeeded
-GET         /respond/error/cannot-view-request                                          uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.clientInvitation.InvitationErrorController.cannotViewRequest
-GET         /respond/error/no-outstanding-requests                                      uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.clientInvitation.InvitationErrorController.noOutstandingRequests
-GET         /respond/error/authorisation-request-invalid                                uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.clientInvitation.InvitationErrorController.authorisationRequestInvalid
-GET         /respond/error/authorisation-request-unsuccessful                           uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.clientInvitation.InvitationErrorController.authorisationRequestUnsuccessful
-GET         /respond/error/cannot-find-request                                          uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.clientInvitation.InvitationErrorController.cannotFindRequest
-GET         /consent                                                                    uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.clientInvitation.ConsentController.show
-POST        /consent                                                                    uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.clientInvitation.ConsentController.submit
-GET         /change-consent                                                             uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.clientInvitation.ChangeConsentController.show
-POST        /change-consent                                                             uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.clientInvitation.ChangeConsentController.submit
-GET         /check-answers                                                              uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.clientInvitation.CheckYourAnswersController.show
-POST        /check-answers                                                              uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.clientInvitation.CheckYourAnswersController.submit
-GET         /check-answers-change/:serviceId                                            uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.clientInvitation.CheckYourAnswersController.submitChange(serviceId: String)
-GET         /confirm-decline                                                            uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.clientInvitation.ConfirmDeclineController.show
-POST        /confirm-decline                                                            uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.clientInvitation.ConfirmDeclineController.submit
-GET         /accepted                                                                   uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.clientInvitation.InvitationHistoryController.showInvitationsAccepted
-GET         /declined                                                                   uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.clientInvitation.InvitationHistoryController.showInvitationsDeclined
-GET         /all-responses-failed                                                       uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.clientInvitation.InvitationHistoryController.showAllResponsesFailed
-GET         /some-responses-failed                                                      uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.clientInvitation.InvitationHistoryController.showSomeResponsesFailed
-POST        /some-responses-failed                                                      uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.clientInvitation.InvitationHistoryController.submitSomeResponsesFailed
-GET         /not-authorised-as-client                                                   uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.clientInvitation.InvitationErrorController.incorrectlyAuthorisedAsAgent
-GET         /cannot-confirm-identity                                                    uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.clientInvitation.InvitationErrorController.showCannotConfirmIdentity(journeyId: Option[String] ?= None, success: Option[String] ?= None)
-GET         /session-timeout                                                            uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.clientInvitation.InvitationErrorController.showMissingJourneyHistory
-GET         /cannot-appoint                                                             uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.clientInvitation.SuspendedAgentController.show
-POST        /cannot-appoint                                                             uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.clientInvitation.SuspendedAgentController.submit
-
-
-GET         /trust-not-claimed                                                          uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.clientInvitation.InvitationErrorController.showTrustNotClaimed
-GET         /Government-Gateway-user-ID-needed                                          uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.clientInvitation.UserIdNeededController.show
-POST        /Government-Gateway-user-ID-needed                                          uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.clientInvitation.UserIdNeededController.submit
-
-# Signing out
-GET         /from-iv-signed-out                                                         uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.SignOutController.handleIVTimeout(success: Option[String] ?= None)
-GET         /timed-out                                                                  uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.SignOutController.timedOut
+# Sign out/Timed out ---------------------------------------------------------------------------------------------------------
+GET         /timed-out                                                                  uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.TimedOutController.timedOut
 GET         /sign-out                                                                   uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.SignOutController.signOut
-GET         /locked-out                                                                 uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.SignOutController.lockedOut
-GET         /sign-out-redirect                                                          uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.SignOutController.signOutAndRedirect

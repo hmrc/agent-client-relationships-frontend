@@ -8,7 +8,6 @@ lazy val microservice = Project("agent-client-relationships-frontend", file(".")
   .settings(
     PlayKeys.playDefaultPort := 9448,
     libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test,
-    routesImport += "uk.gov.hmrc.agentclientrelationshipsfrontend.binders.UrlBinders._",
     // scalacOptions += "-Wconf:src=routes/.*:s", // doesn't work in scala 3 yet - available in 3.5.0 RC1 and maybe 3.3.4 LTS
     // scalacOptions += "-Wconf:cat=unused-imports&src=html/.*:s", // doesn't work in scala 3
     scalacOptions := scalacOptions.value.diff(Seq("-Wunused:all")), // temp fix to hide all unused warnings

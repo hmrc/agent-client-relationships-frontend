@@ -1,0 +1,77 @@
+@*
+ * Copyright 2024 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.Layout
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.components.{h1, h2}
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.createInvitation.routes
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants._
+@import uk.gov.hmrc.govukfrontend.views.html.components.{GovukSummaryList, SummaryList, SummaryListRow, Key, Value, Actions, ActionItem, Text, GovukButton, Button, FormWithCSRF}
+
+@this(
+        layout: Layout,
+        h1: h1,
+        h2: h2,
+        govukSummaryList: GovukSummaryList,
+        formWithCSRF: FormWithCSRF,
+        govukButton: GovukButton
+)
+
+@(previousPageUrl: String, clientType: String, clientService: String, clientName: String, agentType: String)(implicit request: RequestHeader, messages: Messages)
+
+@pageTitle: String = @{messages("cya.header")}
+
+@layout(pageTitle, backLinkHref = Some(previousPageUrl)) {
+
+    @h1(pageTitle)
+
+    @h2(messages("cya.h2"))
+
+    @govukSummaryList(SummaryList(Seq(
+        SummaryListRow(
+            key = Key(Text(messages(s"cya.$ClientTypeFieldName.label"))),
+            value = Value(Text(messages(s"$ClientTypeFieldName.$clientType"))),
+            actions = Some(Actions(items = Seq(ActionItem(href = routes.SelectClientTypeController.show(true).url, content = Text(messages("cya.changeLink"))))))
+        ),
+        SummaryListRow(
+            key = Key(Text(messages(s"cya.$ClientServiceFieldName.label"))),
+            value = Value(Text(messages(s"$ClientServiceFieldName.$clientService.$clientType"))),
+            actions = Some(Actions(items = Seq(ActionItem(href = routes.SelectClientServiceController.show.url, content = Text(messages("cya.changeLink"))))))
+        ),
+        SummaryListRow(
+            key = Key(Text(messages(s"cya.$ClientNameFieldName.label"))),
+            value = Value(Text(clientName)),
+            actions = Some(Actions(items = Seq(ActionItem(href = routes.ConfirmClientController.show.url, content = Text(messages("cya.changeLink"))))))
+        ),
+        SummaryListRow(
+            key = Key(Text(messages(s"cya.$AgentTypeFieldName.label"))),
+            value = Value(Text(messages(s"$AgentTypeFieldName.$agentType"))),
+            actions = Some(Actions(items = Seq(ActionItem(href = routes.SelectAgentTypeController.show.url, content = Text(messages("cya.changeLink"))))))
+        )
+    )))
+
+    @formWithCSRF(action = routes.CheckYourAnswersController.onSubmit) {
+        @govukButton(Button(
+            attributes = Map("id" -> "confirmAndSend"),
+            inputType = Some("submit"),
+            content = Text(messages("cya.confirmAndSend.button"))
+        ))
+    }
+
+}
+
+@{
+ //$COVERAGE-OFF$
+}

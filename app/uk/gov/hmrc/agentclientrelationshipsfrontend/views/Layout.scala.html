@@ -19,11 +19,14 @@
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcStandardPage
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers._
 @import uk.gov.hmrc.govukfrontend.views.html.components._
+@import uk.gov.hmrc.hmrcfrontend.views.html.components.implicits.RichErrorSummary
 @import uk.gov.hmrc.hmrcfrontend.views.viewmodels.hmrcstandardpage._
+@import views.html.helper.CSPNonce
 
 @this(
         appConfig: AppConfig,
         hmrcStandardPage: HmrcStandardPage,
+        govukErrorSummary: GovukErrorSummary,
         hmrcLanguageSelectHelper: HmrcLanguageSelectHelper,
         autocompleteCss: HmrcAccessibleAutocompleteCss,
         autocompleteJavascript: HmrcAccessibleAutocompleteJavascript,
@@ -34,7 +37,7 @@
 @(
         pageTitle: String,
         serviceName: Option[String] = None,
-        hasErrors: Boolean = false,
+        optionalForm: Option[Form[?]] = None,
         backLinkHref: Option[String] = None
 )(contentBlock: Html)(implicit request: RequestHeader, messages: Messages)
 
@@ -47,31 +50,44 @@
     @if(isSignedIn) {
         @hmrcTimeoutDialogHelper(
             signOutUrl = signOutUrl.get,
-            timeoutUrl = Some(routes.SignOutController.timedOut.url)
+            timeoutUrl = Some(routes.TimedOutController.timedOut.url)
         )
     }
     @autocompleteCss()
+    <link rel="stylesheet" media="screen" href='@controllers.routes.Assets.versioned("stylesheets/application.css")'>
 }
 @* instead of doing title building at template level we can centralise it here and for
 form submission pages we can pass in hasErrors = form.hasErrors, the required pageTitle should always
 equal the page heading (H1) content *@
 @gdsTitle = @{
-    s"""${if(hasErrors){ s"""${messages("error.prefix")} """ } else ""}$pageTitle - $service - GOV.UK"""
+    s"""${if(optionalForm.exists(_.hasErrors)){ s"""${messages("error.prefix")} """ } else ""}$pageTitle - $service - GOV.UK"""
+}
+
+@scripts = {
+    @autocompleteJavascript()
+    <script @CSPNonce.attr src='@controllers.routes.Assets.versioned("javascripts/application.js")'></script>
 }
 
 @content = {
+    @optionalForm.map { form =>
+        @if(form.hasErrors) {
+            @govukErrorSummary(ErrorSummary().withFormErrorsAsText(form))
+        }
+    }
     @contentBlock
     <div class="govuk-!-display-none-print govuk-!-margin-top-6">
         @hmrcReportTechnicalIssueHelper()
     </div>
 }
+
 @hmrcStandardPage(
     HmrcStandardPageParams(
         pageTitle = Some(gdsTitle),
         serviceURLs = ServiceURLs(signOutUrl),
+        banners = Banners(displayHmrcBanner = true),
         templateOverrides = TemplateOverrides(
             additionalHeadBlock = Some(head),
-            additionalScriptsBlock = Some(autocompleteJavascript())
+            additionalScriptsBlock = Some(scripts)
         ),
         isWelshTranslationAvailable = appConfig.welshLanguageSupportEnabled,
         backLink = backLinkHref.map(BackLink(_, messages("button.back"))),

@@ -14,13 +14,17 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.agentclientrelationshipsfrontend.config
+package uk.gov.hmrc.agentclientrelationshipsfrontend.connectors
 
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.Invitation
+
+import java.time.LocalDate
 import javax.inject.{Inject, Singleton}
-import play.api.Configuration
-import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
+import scala.concurrent.Future
 
 @Singleton
-class AppConfig @Inject()(servicesConfig: ServicesConfig, config: Configuration):
-  val welshLanguageSupportEnabled: Boolean = config.getOptional[Boolean]("features.welsh-language-support").getOrElse(false)
-  val agentServicesAccountHomeUrl = servicesConfig.getString("agent-services-account-frontend-home-url")
+class AgentClientRelationshipsConnector @Inject():
+  def getClientDetails: Future[String] = Future.successful("Troy Barnes")
+  def createInvitation: Future[String] = Future.successful("3d358ba5-cc1a-4baa-8965-75f8e7814005")
+  def getInvitation(invitationId: String): Future[Invitation] = Future.successful(Invitation(invitationId, LocalDate.now().plusDays(21), "Troy Barnes"))
+

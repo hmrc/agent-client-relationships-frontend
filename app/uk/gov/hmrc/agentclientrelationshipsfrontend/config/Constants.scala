@@ -16,11 +16,26 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.config
 
-import javax.inject.{Inject, Singleton}
-import play.api.Configuration
-import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
+object Constants {
+  
+  // client services
+  val MtdIncomeTax = "HMRC-MTD-IT"
+  val PersonalIncome = "PERSONAL-INCOME-RECORD"
+  val PlasticPackaging = "HMRC-PPT-ORG"
 
-@Singleton
-class AppConfig @Inject()(servicesConfig: ServicesConfig, config: Configuration):
-  val welshLanguageSupportEnabled: Boolean = config.getOptional[Boolean]("features.welsh-language-support").getOrElse(false)
-  val agentServicesAccountHomeUrl = servicesConfig.getString("agent-services-account-frontend-home-url")
+  // dates
+  val Year = "year"
+  val Month = "month"
+  val Day = "day"
+
+  // createInvitationFields
+  val ClientTypeFieldName = "clientType"
+  val ClientServiceFieldName = "clientService"
+  val ClientNameFieldName = "clientName"
+  val ConfirmationFieldName = "accepted"
+
+  val AgentTypeFieldName = "agentType"
+  val MainAgentType = "main"
+  val SupportingAgentType = "supporting"
+
+}

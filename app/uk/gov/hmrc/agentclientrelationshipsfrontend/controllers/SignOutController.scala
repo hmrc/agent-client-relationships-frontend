@@ -31,23 +31,3 @@ class SignOutController @Inject()(mcc: MessagesControllerComponents) extends Fro
       // previously the destination of sign out was determined by MainTemplate code
       // instead we could do that in here
       Future.successful(Ok("Signed out"))
-
-  def timedOut: Action[AnyContent] = Action.async:
-    request =>
-      given MessagesRequest[AnyContent] = request
-      Future.successful(Ok("Timed out"))
-
-  def lockedOut: Action[AnyContent] = Action.async:
-    request =>
-      given MessagesRequest[AnyContent] = request
-      Future.successful(Ok("Locked out"))
-
-  def handleIVTimeout(success: Option[String]): Action[AnyContent] = Action.async:
-    request =>
-      given MessagesRequest[AnyContent] = request
-      Future.successful(Ok("Handle IV timeout out"))
-
-  def signOutAndRedirect: Action[AnyContent] = Action.async:
-    request =>
-      given MessagesRequest[AnyContent] = request
-      Future.successful(Ok("Sign out and redirect"))

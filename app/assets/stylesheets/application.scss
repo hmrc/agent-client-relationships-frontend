@@ -1,1 +1,19 @@
 @import "lib/govuk-frontend/dist/govuk/base";
+
+.copy-to-clipboard {
+  padding: 7px 30px;
+  &.not-supported {
+    display: none;
+  }
+  .copied-content {
+    display: none;
+  }
+  &.copied-to-clipboard {
+    .copied-content {
+      display: inline;
+    }
+    .copy-content {
+      display: none
+    }
+  }
+}
