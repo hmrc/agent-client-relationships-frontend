@@ -14,13 +14,20 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.agentclientrelationshipsfrontend.config
+package uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.createInvitation
 
-import javax.inject.{Inject, Singleton}
-import play.api.Configuration
-import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
+import play.api.data.*
+import play.api.data.Forms.*
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.helpers.FormFieldHelper
 
-@Singleton
-class AppConfig @Inject()(servicesConfig: ServicesConfig, config: Configuration):
-  val welshLanguageSupportEnabled: Boolean = config.getOptional[Boolean]("features.welsh-language-support").getOrElse(false)
-  val agentServicesAccountHomeUrl = servicesConfig.getString("agent-services-account-frontend-home-url")
+object SelectFromOptionsForm extends FormFieldHelper {
+  def form(fieldName: String, options: Set[String]): Form[String] = {
+    Form[String](
+      single(
+        fieldName -> optional(text)
+          .verifying(mandatoryFieldErrorMessage(fieldName), _.fold(false)(options.contains))
+          .transform(_.getOrElse(""), (Some(_)): String => Option[String])
+      )
+    )
+  }
+}

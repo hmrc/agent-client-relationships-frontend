@@ -1,0 +1,76 @@
+@*
+ * Copyright 2024 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.Layout
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.components.SubmitButton
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.common.FieldConfiguration
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.createInvitation.routes
+@import uk.gov.hmrc.govukfrontend.views.html.components.{GovukInput, GovukDateInput, DateInput, Text, Fieldset, Legend, FormWithCSRF, GovukFieldset, Input, Label, Hint}
+@import uk.gov.hmrc.govukfrontend.views.html.components.implicits.RichInput
+@import uk.gov.hmrc.hmrcfrontend.views.html.components.implicits.RichDateInput
+
+
+@this(
+        layout: Layout,
+        govukInput: GovukInput,
+        govukFieldset: GovukFieldset,
+        formWithCSRF: FormWithCSRF,
+        govukDateInput: GovukDateInput,
+        submitButton: SubmitButton
+)
+
+@(form: Form[?], clientDetailField: FieldConfiguration, previousPageUrl: String)(implicit request: RequestHeader, messages: Messages)
+
+@pageTitle: String = @{messages(s"client-details.${clientDetailField.name}.label")}
+
+@layout(pageTitle = pageTitle, optionalForm = Some(form), backLinkHref = Some(previousPageUrl)) {
+
+    @formWithCSRF(action = routes.EnterClientDetailsController.onSubmit(clientDetailField.name)) {
+
+        @clientDetailField.inputType match {
+            case "text" => {
+                @govukInput(Input(
+                    label = Label(
+                        isPageHeading = true,
+                        classes = "govuk-label--xl",
+                        content = Text(messages(s"client-details.${clientDetailField.name}.label"))
+                    ),
+                    hint = Some(Hint(content = Text(messages(s"client-details.${clientDetailField.name}.hint")))),
+                    classes = s"govuk-input--width-${clientDetailField.width}"
+                ).withFormField(form(clientDetailField.name)))
+            }
+            case "date" => {
+                @govukDateInput(DateInput(
+                    hint = Some(Hint(content = Text(messages(s"client-details.${clientDetailField.name}.hint")))),
+                    fieldset = Some(Fieldset(
+                        legend = Some(Legend(
+                            content = Text(messages(s"client-details.${clientDetailField.name}.label")),
+                            classes = "govuk-fieldset__legend--xl",
+                            isPageHeading = true
+                        ))
+                    ))
+                ).withDayMonthYearFormField(form(clientDetailField.name)))
+            }
+        }
+
+        @submitButton()
+
+    }
+}
+
+@{
+ //$COVERAGE-OFF$
+}

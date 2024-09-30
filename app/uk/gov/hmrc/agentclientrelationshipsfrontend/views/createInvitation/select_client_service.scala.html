@@ -1,0 +1,74 @@
+@*
+ * Copyright 2024 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.Layout
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.components.SubmitButton
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.createInvitation.routes
+@import uk.gov.hmrc.govukfrontend.views.html.components.{Radios, Fieldset, Legend, Text, RadioItem, FormWithCSRF, Button, GovukRadios, GovukDetails, Hint, Details, HtmlContent}
+@import uk.gov.hmrc.govukfrontend.views.html.components.implicits.RichRadios
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.ClientServiceFieldName
+
+@this(
+        layout: Layout,
+        govukDetails: GovukDetails,
+        formWithCSRF: FormWithCSRF,
+        govukRadios: GovukRadios,
+        submitButton: SubmitButton
+)
+
+@(form: Form[String], previousPageUrl: String, clientType: String, clientServices: Set[String])(implicit request: RequestHeader, messages: Messages)
+
+@pageTitle: String = @{messages("clientService.header")}
+
+@detailsContent = {
+    <p id="selectServiceSuggestion">@Html(messages("clientService.alt-suggestion", "https://www.gov.uk/guidance/client-authorisation-an-overview#how-to-set-up-agent-authorisation"))</p>
+}
+
+@layout(pageTitle = pageTitle, optionalForm = Some(form), backLinkHref = Some(previousPageUrl)) {
+
+    @formWithCSRF(action = routes.SelectClientServiceController.onSubmit) {
+        @govukRadios(Radios(
+            hint = Some(Hint(content = Text(messages("clientService.p1")))),
+            fieldset = Some(Fieldset(
+                legend = Some(Legend(
+                    content = Text(pageTitle),
+                    isPageHeading = true,
+                    classes = "govuk-fieldset__legend--xl"
+                ))
+            )),
+            items = clientServices.toSeq.map(clientService =>
+                RadioItem(
+                    id = Some(clientService),
+                    content = Text(messages(form(ClientServiceFieldName).name + "." + clientService + "." + clientType)),
+                    value = Some(clientService)
+                )
+            )
+        ).withFormField(form(ClientServiceFieldName)))
+
+        @govukDetails(Details(
+            id = Some("selectServiceHelper"),
+            summary = Text(messages("clientService.alternative")),
+            content = HtmlContent(detailsContent.toString)
+        ))
+
+        @submitButton()
+    }
+
+}
+
+@{
+ //$COVERAGE-OFF$
+}
