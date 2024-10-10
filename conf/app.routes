@@ -24,6 +24,8 @@ POST        /invitations/create/check-your-answers                              
 
 GET         /invitations/created                                                        uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.createInvitation.InvitationCreatedController.show(agentInvitationId: String)
 
+# Track requests ---------------------------------------------------------------------------------------------------------
+GET         /track-requests                                                             uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.TrackRequestsController.show
 # Sign out/Timed out ---------------------------------------------------------------------------------------------------------
 GET         /timed-out                                                                  uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.TimedOutController.timedOut
 GET         /sign-out                                                                   uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.SignOutController.signOut

@@ -1,0 +1,82 @@
+@*
+ * Copyright 2024 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.Layout
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.components._
+@import uk.gov.hmrc.govukfrontend.views.html.components._
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.Invitation
+
+@this(
+        layout: Layout,
+        govukInput: GovukInput,
+        govukFieldset: GovukFieldset,
+        govukTable: GovukTable,
+        formWithCSRF: FormWithCSRF,
+        submitButton: SubmitButton
+)
+
+@(requests: List[Invitation])(implicit request: RequestHeader, messages: Messages)
+
+@pageTitle = @{messages("trackRequests.title")}
+
+@layout(pageTitle) {
+    <h1 class="govuk-heading-xl">@pageTitle</h1>
+
+    @if(requests.nonEmpty) {
+     @govukTable(Table(
+        head = Some(
+            Seq(
+                HeadCell(
+                    content = Text(messages("trackRequests.th.client"))
+                ),
+                HeadCell(
+                    content = Text(messages("trackRequests.th.service"))
+                ),
+                HeadCell(
+                    content = Text(messages("trackRequests.th.status"))
+                ),
+                HeadCell(
+                    content = Text(messages("trackRequests.th.expiryDate"))
+                ),
+                HeadCell(
+                    content = Text(messages("trackRequests.th.actions"))
+                )
+            )
+        ),
+         caption = Some(messages("trackRequest.resultsCaption")),
+         captionClasses = "govuk-table__caption--m",
+        rows = requests.map(r =>
+            Seq(
+                TableRow(
+                    content = Text(r.clientName)
+                ),
+                TableRow(
+                    content = Text(r.service)
+                ),
+                TableRow(
+                    content = Text(r.status)
+                ),
+                TableRow(
+                    content = Text(r.expiryDate.toString)
+                ),
+                TableRow(
+                    content = HtmlContent(s"""<a href="#">${messages("trackRequests.view")}</a>""")
+                )
+            )
+        ).toSeq
+     ))
+    }
+}

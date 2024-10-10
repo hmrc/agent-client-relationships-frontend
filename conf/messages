@@ -138,3 +138,15 @@ invitationCreated.list.three=Ask your client to authorise you by {0} – they ha
 invitationCreated.list.four=We will email you at {0} to update you on the status of this request.
 invitationCreated.createAnother=Create another authorisation request
 invitationCreated.agentHome=Go to your agent services account homepage
+
+# ________________________________________________________________________________
+# Track requests
+# ________________________________________________________________________________
+trackRequests.title=Track requests
+trackRequests.view=View request
+trackRequests.th.client=Client
+trackRequests.th.service=Service
+trackRequests.th.status=Status
+trackRequests.th.expiryDate=Expires
+trackRequests.th.actions=Actions
+trackRequests.resultsCaption=Showing {0} to {1} of {2} requests

@@ -14,8 +14,17 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.agentclientrelationshipsfrontend.models
+package uk.gov.hmrc.agentclientrelationshipsfrontend.services
+
+import uk.gov.hmrc.agentclientrelationshipsfrontend.connectors.AgentClientRelationshipsConnector
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.Invitation
 
 import java.time.LocalDate
+import javax.inject.Inject
+import scala.concurrent.Future
 
-case class Invitation(invitationId: String, expiryDate: LocalDate, clientName: String, service: String = "HMRC-MTD-IT", status: String = "Pending")
+class TrackRequestsService @Inject()(acrConnector: AgentClientRelationshipsConnector) {
+  def getRequests(arn: String): Future[List[Invitation]] = 
+    acrConnector.getAllRequests(arn, LocalDate.now())
+
+}
