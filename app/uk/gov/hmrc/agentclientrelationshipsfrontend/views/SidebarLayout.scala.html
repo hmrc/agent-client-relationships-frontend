@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,16 +12,20 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package uk.gov.hmrc.agentclientrelationshipsfrontend.config
+@this()
 
-import javax.inject.{Inject, Singleton}
-import play.api.Configuration
-import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
+@(sidebarContent: Html, pageTitle: String)(mainContent: Html)
 
-@Singleton
-class AppConfig @Inject()(servicesConfig: ServicesConfig, config: Configuration):
-  val welshLanguageSupportEnabled: Boolean = config.getOptional[Boolean]("features.welsh-language-support").getOrElse(false)
-  val agentServicesAccountHomeUrl = servicesConfig.getString("agent-services-account-frontend-home-url")
-  val trackRequestsPerPage: Int = servicesConfig.getInt("track-requests-per-page")
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-three-quarters">
+        <h1 class="govuk-heading-xl">@pageTitle</h1>
+    </div>
+    <div class="govuk-grid-column-one-third">
+        @sidebarContent
+    </div>
+    <div class="govuk-grid-column-two-thirds">
+        @mainContent
+    </div>
+</div>

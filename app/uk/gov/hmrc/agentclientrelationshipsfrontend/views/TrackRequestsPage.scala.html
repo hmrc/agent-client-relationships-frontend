@@ -1,0 +1,142 @@
+@*
+ * Copyright 2024 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import play.twirl.api.Html
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{AuthorisationRequest, PageInfo}
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.Layout
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.components.*
+@import uk.gov.hmrc.govukfrontend.views.html.components.*
+@import uk.gov.hmrc.govukfrontend.views.Implicits.RichSelect
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.routes
+@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.accessibleautocomplete.AccessibleAutocomplete
+@import java.time.LocalDate
+@import java.time.format.DateTimeFormatter
+@import java.util.Locale
+
+@this(
+        layout: Layout,
+        govukSelect: GovukSelect,
+        govukPagination: GovukPagination,
+        govukTable: GovukTable,
+        formWithCSRF: FormWithCSRF,
+        govukButton: GovukButton,
+        govukCheckboxes: GovukCheckboxes
+)
+
+@(requests: List[AuthorisationRequest], pageInfo: PageInfo, clientNames: List[String], statusFilters: List[String])(implicit request: RequestHeader, messages: Messages)
+
+@key = @{
+    "trackRequests"
+}
+@pageTitle = @{
+    messages(s"$key.title")
+}
+@dateFormatter = @{
+    DateTimeFormatter.ofPattern("d MMMM uuuu", Locale.UK)
+}
+@statusContent(status: String, expiryDate: Option[LocalDate]) = {
+@{
+    status match {
+        case "Pending" => <span>{messages(s"$key.status.$status")}</span>
+                <br/> <span class="govuk-body-s">{messages(s"$key.expires", expiryDate.map(_.format(dateFormatter)).getOrElse(""))}</span>
+        case _ => <span>{messages(s"$key.status.$status")}</span>
+    }
+}
+}
+@actions(status: String, id: String) = {
+@{
+    status match {
+        case "Pending" => <a class="govuk-link" href="#?id=@id">{messages(s"$key.action.resend")}</a>
+                <br/> <a class="govuk-link" href="#?id=@id">{messages(s"$key.action.cancel")}</a>
+        case "Accepted" => <a class="govuk-link" href="#?id=@{id}">{messages(s"$key.action.deauth")}</a>
+        case _ => Html("")
+    }
+}
+}
+
+@sidebarContent = {
+    @formWithCSRF(action = routes.TrackRequestsController.submitFilters) {
+
+    @govukSelect(Select(
+        id = "clientFilter",
+        name = "clientFilter",
+        label = Label(content = Text(messages(s"$key.sidebar.clientFilter")), classes = "govuk-label--m"),
+        items = clientNames.map(name => SelectItem(value = Some(name), text = name)),
+        classes = "govuk-!-margin-bottom-4"
+    ).asAccessibleAutocomplete(Some(
+        AccessibleAutocomplete(
+            showAllValues = true,
+            autoSelect = false,
+        )
+    )))
+        @govukCheckboxes(Checkboxes(
+            name = "statusFilter",
+            fieldset = Some(Fieldset(
+                legend = Some(Legend(
+                    content = Text(messages(s"$key.sidebar.statusFilter")),
+                    classes = "govuk-fieldset__legend--l",
+                    isPageHeading = true
+                )),
+                classes = "govuk-fieldset--m"
+            )),
+            classes = "govuk-checkboxes--small",
+            items = statusFilters.map(name => CheckboxItem(value = name, content = Text(messages(s"$key.filter-status.$name")))).toSeq,
+        ))
+    @govukButton(Button(
+        content = Text(messages(s"$key.sidebar.applyFilters"))
+    ))
+}
+}
+
+@layout(pageTitle, sidebar = Some(sidebarContent)) {
+    @if(requests.nonEmpty) {
+        @govukTable(Table(
+            head = Some(
+                Seq(
+                    HeadCell(content = Text(messages(s"$key.th.client"))),
+                    HeadCell(content = Text(messages(s"$key.th.service"))),
+                    HeadCell(content = Text(messages(s"$key.th.status"))),
+                    HeadCell(content = Text(messages(s"$key.th.actions")))
+                )
+            ),
+            caption = Some(messages(s"$key.resultsCaption", pageInfo.offset + 1, pageInfo.lastItemOnPage, pageInfo.totalResults)),
+            captionClasses = "govuk-table__caption--m",
+            rows = requests.map(r => Seq(
+                TableRow(content = Text(r.clientName), attributes = Map("id" -> s"client-name-${r.invitationId}")),
+                TableRow(content = Text(messages(s"$key.service.${r.service}")), attributes = Map("id" -> s"service-name-${r.invitationId}")),
+                TableRow(content = HtmlContent(statusContent(r.status, r.expiryDate)), attributes = Map("id" -> s"status-${r.invitationId}")),
+                TableRow(content = HtmlContent(actions(r.status, r.invitationId)), attributes = Map("id" -> s"actions-${r.invitationId}"))
+            )).toSeq
+        ))
+        @if(pageInfo.numberOfPages > 1) {
+            @govukPagination(Pagination(
+                items = Some(
+                    for {
+                        n <- 1 to pageInfo.numberOfPages
+                    } yield PaginationItem(
+                        href = routes.TrackRequestsController.show(n).url,
+                        number = Some(s"$n"),
+                        current = Some(pageInfo.page == n)
+                    )
+                ),
+                previous = if(pageInfo.page > 1) Some(PaginationLink(href = routes.TrackRequestsController.show(pageInfo.previousPage).url)) else None,
+                next = if(pageInfo.page < pageInfo.numberOfPages) Some(PaginationLink(href = routes.TrackRequestsController.show(pageInfo.nextPage).url)) else None,
+            ))
+        }
+    } else {
+        <p class="govuk-body">@messages(s"$key.empty")</p>
+    }
+}

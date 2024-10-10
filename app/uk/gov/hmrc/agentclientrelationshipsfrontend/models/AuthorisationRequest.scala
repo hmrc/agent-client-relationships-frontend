@@ -14,14 +14,8 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.agentclientrelationshipsfrontend.config
+package uk.gov.hmrc.agentclientrelationshipsfrontend.models
 
-import javax.inject.{Inject, Singleton}
-import play.api.Configuration
-import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
+import java.time.LocalDate
 
-@Singleton
-class AppConfig @Inject()(servicesConfig: ServicesConfig, config: Configuration):
-  val welshLanguageSupportEnabled: Boolean = config.getOptional[Boolean]("features.welsh-language-support").getOrElse(false)
-  val agentServicesAccountHomeUrl = servicesConfig.getString("agent-services-account-frontend-home-url")
-  val trackRequestsPerPage: Int = servicesConfig.getInt("track-requests-per-page")
+case class AuthorisationRequest(invitationId: String, expiryDate: Option[LocalDate], clientName: String, service: String, status: String)

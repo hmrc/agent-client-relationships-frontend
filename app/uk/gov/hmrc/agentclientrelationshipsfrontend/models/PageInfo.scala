@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.agentclientrelationshipsfrontend.config
+package uk.gov.hmrc.agentclientrelationshipsfrontend.models
 
-import javax.inject.{Inject, Singleton}
-import play.api.Configuration
-import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
-
-@Singleton
-class AppConfig @Inject()(servicesConfig: ServicesConfig, config: Configuration):
-  val welshLanguageSupportEnabled: Boolean = config.getOptional[Boolean]("features.welsh-language-support").getOrElse(false)
-  val agentServicesAccountHomeUrl = servicesConfig.getString("agent-services-account-frontend-home-url")
-  val trackRequestsPerPage: Int = servicesConfig.getInt("track-requests-per-page")
+case class PageInfo(page: Int, resultsPerPage: Int, totalResults: Int) {
+  def offset: Int = (page - 1) * resultsPerPage
+  def nextPage: Int = page + 1
+  def previousPage: Int = page - 1
+  def numberOfPages: Int = totalResults / resultsPerPage + (if (totalResults % resultsPerPage == 0) 0 else 1)
+  def lastItemOnPage: Int = if (page == numberOfPages) totalResults else page * resultsPerPage
+}
