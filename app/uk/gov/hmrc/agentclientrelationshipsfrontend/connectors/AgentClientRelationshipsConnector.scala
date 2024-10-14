@@ -38,6 +38,8 @@ class AgentClientRelationshipsConnector @Inject()(appConfig: AppConfig):
 
   def getAllClientNames(arn: String): Future[List[String]] = Future.successful(stubbedAuthorisationRequests.map(_.clientName))
 
+  def getAllTaxServices(arn: String): Future[List[String]] = Future.successful(stubbedAuthorisationRequests.map(_.service))
+
   def getAvailableStatusFilters: Future[List[String]] = Future.successful(availableFilters)
 
 
@@ -47,7 +49,7 @@ class AgentClientRelationshipsConnector @Inject()(appConfig: AppConfig):
     AuthorisationRequest("ABC2", None, "Sienna Barnes", "HMRC-PPT-ORG", "Accepted"),
     AuthorisationRequest("ABC3", Some(LocalDate.now().plusDays(3)), "Martin Barnes", "HMRC-MTD-VAT", "Pending"),
     AuthorisationRequest("ABC4", Some(LocalDate.now().plusDays(4)), "Bob Barnes", "HMRC-MTD-IT", "Pending"),
-    AuthorisationRequest("ABC5", Some(LocalDate.now().plusDays(5)), "Jean Barnes", "HMRC-MTD-IT", "Pending"),
+    AuthorisationRequest("ABC5", Some(LocalDate.now().plusDays(5)), "Jean Barnes", "HMRC-CGT-PD", "Pending"),
     AuthorisationRequest("ABC6", Some(LocalDate.now().plusDays(6)), "Brian Barnes", "HMRC-MTD-IT", "Pending"),
     AuthorisationRequest("ABC7", None, "Abigail Barnes", "HMRC-MTD-VAT", "Cancelled"),
     AuthorisationRequest("ABC8", Some(LocalDate.now().plusDays(8)), "Francis Barnes", "HMRC-MTD-VAT", "Pending"),
@@ -58,7 +60,7 @@ class AgentClientRelationshipsConnector @Inject()(appConfig: AppConfig):
     AuthorisationRequest("ABCD", Some(LocalDate.now().plusDays(13)), "Marjorie Barnes", "HMRC-MTD-IT", "Pending"),
     AuthorisationRequest("ABCE", Some(LocalDate.now().plusDays(14)), "Ade Barnes", "HMRC-MTD-IT", "Pending"),
     AuthorisationRequest("ABCF", Some(LocalDate.now().plusDays(15)), "Ewan Barnes", "HMRC-MTD-IT", "Pending"),
-    AuthorisationRequest("AABC1", Some(LocalDate.now().plusDays(1)), "Troy Stevens", "HMRC-MTD-IT", "Pending"),
+    AuthorisationRequest("AABC1", Some(LocalDate.now().plusDays(1)), "Troy Stevens", "HMRC-CBC-ORG", "Pending"),
     AuthorisationRequest("AABC2", None, "Sienna Stevens", "HMRC-PPT-ORG", "Accepted"),
     AuthorisationRequest("AABC3", Some(LocalDate.now().plusDays(3)), "Martin Stevens", "HMRC-MTD-IT", "Pending"),
     AuthorisationRequest("AABC4", Some(LocalDate.now().plusDays(4)), "Bob Stevens", "HMRC-MTD-IT", "Pending"),
@@ -91,7 +93,6 @@ class AgentClientRelationshipsConnector @Inject()(appConfig: AppConfig):
   )
 
   private val availableFilters: List[String] = List(
-    "AllStatuses",
     "ExpireInNext5Days",
     "ActivityWithinLast5Days",
     "ClientNotYetResponded",
