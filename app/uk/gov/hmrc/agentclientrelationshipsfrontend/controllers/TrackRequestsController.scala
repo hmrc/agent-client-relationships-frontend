@@ -32,29 +32,31 @@ class TrackRequestsController @Inject()(
                                          trackRequestsPage: TrackRequestsPage
                                        )(implicit val executionContext: ExecutionContext, appConfig: AppConfig) extends FrontendController(mcc) {
   
-  def show(pageNumber: Int): Action[AnyContent] = Action.async:
+  def show(pageNumber: Int, filtersApplied: Option[Map[String, Seq[String]]] = None): Action[AnyContent] = Action.async:
     request =>
       given MessagesRequest[AnyContent] = request
+
       for{
-        totalResults <- trackRequestsService.getTotalRequests("arn")
+        totalResults <- trackRequestsService.getTotalRequests("arn", filtersApplied)
         pageInfo = PageInfo(pageNumber, appConfig.trackRequestsPerPage, totalResults)
-        requests <- trackRequestsService.getRequests("arn", pageInfo)
-        clientNames <- trackRequestsService.getAllClientNames("arn")
+        requests <- trackRequestsService.getRequests("arn", pageInfo, filtersApplied)
+        clientNames <- trackRequestsService.getAllClientNames("arn", filtersApplied)
         statusFilters <- trackRequestsService.getStatusFilters
       } yield {
-        Ok(trackRequestsPage(requests, pageInfo, clientNames, statusFilters))
+        Ok(trackRequestsPage(requests, pageInfo, clientNames, statusFilters, filtersApplied))
       }
       
    def submitFilters: Action[AnyContent] = Action.async:
     request => 
       given MessagesRequest[AnyContent] = request
+      val filtersApplied: Option[Map[String, Seq[String]]] = request.body.asFormUrlEncoded
       for{
-        totalResults <- trackRequestsService.getTotalRequests("arn")
+        totalResults <- trackRequestsService.getTotalRequests("arn", filtersApplied)
         pageInfo = PageInfo(1, appConfig.trackRequestsPerPage, totalResults)
-        requests <- trackRequestsService.getRequests("arn", pageInfo)
-        clientNames <- trackRequestsService.getAllClientNames("arn")
+        requests <- trackRequestsService.getRequests("arn", pageInfo, filtersApplied)
+        clientNames <- trackRequestsService.getAllClientNames("arn", filtersApplied)
         statusFilters <- trackRequestsService.getStatusFilters
       } yield {
-        Ok(trackRequestsPage(requests, pageInfo, clientNames, statusFilters))
+        Ok(trackRequestsPage(requests, pageInfo, clientNames, statusFilters, filtersApplied))
       }
 }

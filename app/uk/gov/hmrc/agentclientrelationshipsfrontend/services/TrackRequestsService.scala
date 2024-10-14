@@ -24,12 +24,12 @@ import javax.inject.Inject
 import scala.concurrent.Future
 
 class TrackRequestsService @Inject()(acrConnector: AgentClientRelationshipsConnector) {
-  def getRequests(arn: String, pageInfo: PageInfo): Future[List[AuthorisationRequest]] = 
-    acrConnector.getPagedRequests(arn, LocalDate.now(), pageInfo)
+  def getRequests(arn: String, pageInfo: PageInfo, filtersApplied: Option[Map[String, Seq[String]]]): Future[List[AuthorisationRequest]] =
+    acrConnector.getPagedRequests(arn, LocalDate.now(), pageInfo, filtersApplied)
     
-  def getTotalRequests(arn: String): Future[Int] = acrConnector.getTotalRequests(arn)
+  def getTotalRequests(arn: String, filtersApplied: Option[Map[String, Seq[String]]]): Future[Int] = acrConnector.getTotalRequests(arn, filtersApplied)
   
-  def getAllClientNames(arn: String): Future[List[String]] = acrConnector.getAllClientNames(arn)
+  def getAllClientNames(arn: String, filtersApplied: Option[Map[String, Seq[String]]]): Future[List[String]] = acrConnector.getAllClientNames(arn, filtersApplied)
   
   def getStatusFilters: Future[List[String]] = acrConnector.getAvailableStatusFilters
 

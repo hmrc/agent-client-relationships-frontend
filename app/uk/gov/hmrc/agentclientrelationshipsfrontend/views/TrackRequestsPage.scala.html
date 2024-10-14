@@ -36,7 +36,13 @@
         govukCheckboxes: GovukCheckboxes
 )
 
-@(requests: List[AuthorisationRequest], pageInfo: PageInfo, clientNames: List[String], statusFilters: List[String])(implicit request: RequestHeader, messages: Messages)
+@(
+        requests: List[AuthorisationRequest],
+        pageInfo: PageInfo,
+        clientNames: List[String],
+        statusFilters: List[String],
+        appliedFilters: Option[Map[String, Seq[String]]]
+)(implicit request: RequestHeader, messages: Messages)
 
 @key = @{
     "trackRequests"
@@ -72,7 +78,11 @@
         id = "clientFilter",
         name = "clientFilter",
         label = Label(content = Text(messages(s"$key.sidebar.clientFilter")), classes = "govuk-label--m"),
-        items = Seq(SelectItem(value = Some("all"), text = "")) ++ clientNames.map(name => SelectItem(value = Some(name), text = name)),
+        items = Seq(SelectItem(value = Some("all"), text = "")) ++ clientNames.map(name => SelectItem(
+            value = Some(name),
+            text = name,
+            selected = appliedFilters.flatMap(_.get("clientFilter")).flatMap(_.headOption).contains(name)
+        )),
         classes = "govuk-!-margin-bottom-4"
     ).asAccessibleAutocomplete(Some(
         AccessibleAutocomplete(
@@ -94,7 +104,7 @@
     ))
 
     @govukCheckboxes(Checkboxes(
-        name = "statusFilter",
+        name = "statusFilter[]",
         fieldset = Some(Fieldset(
             legend = Some(Legend(
                 content = Text(messages(s"$key.sidebar.statusFilter")),
@@ -103,7 +113,12 @@
             classes = "govuk-fieldset--m"
         )),
         classes = "govuk-checkboxes--small",
-        items = statusFilters.map(name => CheckboxItem(value = name, content = Text(messages(s"$key.filter-status.$name")))).toSeq,
+        items = statusFilters.zipWithIndex.map(name => CheckboxItem(
+            name = Some(s"statusFilter[${name._2 + 1}]"),
+            value = name._1,
+            content = Text(messages(s"$key.filter-status.${name._1}")),
+            checked = appliedFilters.flatMap(_.get(s"statusFilter[${name._2 + 1}]")).flatMap(_.headOption).contains(name._1)
+        )).toSeq
     ))
 
     @govukButton(Button(

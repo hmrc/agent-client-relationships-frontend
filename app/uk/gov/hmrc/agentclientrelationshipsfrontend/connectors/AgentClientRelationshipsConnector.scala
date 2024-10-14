@@ -31,14 +31,14 @@ class AgentClientRelationshipsConnector @Inject()(appConfig: AppConfig):
 
   def getInvitation(invitationId: String): Future[Invitation] = Future.successful(Invitation(invitationId, LocalDate.now().plusDays(21), "Troy Barnes"))
 
-  def getPagedRequests(arn: String, createdOnOrAfter: LocalDate, pageInfo: PageInfo): Future[List[AuthorisationRequest]] =
+  def getPagedRequests(arn: String, createdOnOrAfter: LocalDate, pageInfo: PageInfo, filtersApplied: Option[Map[String, Seq[String]]]): Future[List[AuthorisationRequest]] =
     Future.successful(stubbedAuthorisationRequests.slice(pageInfo.offset, pageInfo.offset + appConfig.trackRequestsPerPage))
 
-  def getTotalRequests(arn: String): Future[Int] = Future.successful(stubbedAuthorisationRequests.size)
+  def getTotalRequests(arn: String, filtersApplied: Option[Map[String, Seq[String]]]): Future[Int] = Future.successful(stubbedAuthorisationRequests.size)
 
-  def getAllClientNames(arn: String): Future[List[String]] = Future.successful(stubbedAuthorisationRequests.map(_.clientName))
+  def getAllClientNames(arn: String, filtersApplied: Option[Map[String, Seq[String]]]): Future[List[String]] = Future.successful(stubbedAuthorisationRequests.map(_.clientName))
 
-  def getAllTaxServices(arn: String): Future[List[String]] = Future.successful(stubbedAuthorisationRequests.map(_.service))
+  def getAllTaxServices(arn: String, filtersApplied: Option[Map[String, Seq[String]]]): Future[List[String]] = Future.successful(stubbedAuthorisationRequests.map(_.service))
 
   def getAvailableStatusFilters: Future[List[String]] = Future.successful(availableFilters)
 
