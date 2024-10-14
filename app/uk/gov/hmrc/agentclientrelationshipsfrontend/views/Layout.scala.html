@@ -16,6 +16,8 @@
 
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.routes
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.SidebarLayout
+
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcStandardPage
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers._
 @import uk.gov.hmrc.govukfrontend.views.html.components._
@@ -31,14 +33,16 @@
         autocompleteCss: HmrcAccessibleAutocompleteCss,
         autocompleteJavascript: HmrcAccessibleAutocompleteJavascript,
         hmrcTimeoutDialogHelper: HmrcTimeoutDialogHelper,
-        hmrcReportTechnicalIssueHelper: HmrcReportTechnicalIssueHelper
+        hmrcReportTechnicalIssueHelper: HmrcReportTechnicalIssueHelper,
+        twoThirdsOneThirdMainContent: SidebarLayout
 )
 
 @(
         pageTitle: String,
         serviceName: Option[String] = None,
         optionalForm: Option[Form[?]] = None,
-        backLinkHref: Option[String] = None
+        backLinkHref: Option[String] = None,
+        sidebar: Option[Html] = None
 )(contentBlock: Html)(implicit request: RequestHeader, messages: Messages)
 
 @isSignedIn  = @{request.session.get("authToken").isDefined}
@@ -87,7 +91,8 @@ equal the page heading (H1) content *@
         banners = Banners(displayHmrcBanner = true),
         templateOverrides = TemplateOverrides(
             additionalHeadBlock = Some(head),
-            additionalScriptsBlock = Some(scripts)
+            additionalScriptsBlock = Some(scripts),
+            mainContentLayout = sidebar.map(s => twoThirdsOneThirdMainContent(s, pageTitle))
         ),
         isWelshTranslationAvailable = appConfig.welshLanguageSupportEnabled,
         backLink = backLinkHref.map(BackLink(_, messages("button.back"))),
