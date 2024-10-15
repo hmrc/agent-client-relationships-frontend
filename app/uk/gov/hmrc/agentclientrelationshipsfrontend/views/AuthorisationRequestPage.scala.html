@@ -85,7 +85,7 @@
                     content = Text(messages(s"$parentKey.th.service"))
                 ),
                 value = Value(
-                    content = Text(authorisationRequest.service)
+                    content = Text(messages(s"$parentKey.service.${authorisationRequest.service}"))
                 )
             ),
             SummaryListRow(
@@ -109,11 +109,12 @@
     ))
 
     @if(authorisationRequest.status == "Pending") {
-        <h2 class="govuk-heading-m">Resend the link to @{authorisationRequest.clientName}</h2>
-
-        <p class="govuk-body govuk-!-font-weight-bold">@invitationLink</p>
-        <p class="govuk-body">@copyButton(invitationLink)</p>
+        <h2 class="govuk-heading-m">Cancel this authorisation request</h2>
         <p class="govuk-body"><a class="govuk-link" href="#">Cancel this authorisation request</a></p>
+        <h2 class="govuk-heading-m">Resend the link</h2>
+        <p class="govuk-body">This is the link you can send to the client for them to accept your request for authorisation:</p>
+        <p class="govuk-body">@invitationLink</p>
+        <p class="govuk-body">@copyButton(invitationLink)</p>
     }
 
 }
