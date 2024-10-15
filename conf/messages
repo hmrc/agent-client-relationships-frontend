@@ -187,3 +187,6 @@ trackRequests.filter-status.Expired=Request expired as client did not respond in
 trackRequests.filter-status.ClientCancelledAuthorisation=Accepted by client. They later cancelled their authorisation
 trackRequests.filter-status.HMRCCancelledAuthorisation=Accepted by client. HMRC later cancelled your authorisation
 trackRequests.filter-status.Declined.HMRC-CBC={0} request to manage the client's country-by-country reports was declined.
+
+
+authorisationRequest.title=Authorisation request

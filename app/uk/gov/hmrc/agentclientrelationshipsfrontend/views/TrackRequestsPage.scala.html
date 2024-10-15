@@ -71,6 +71,10 @@
     }}
 }
 
+@viewLink(id: String) = @{
+    Html(s"""<a href="${routes.TrackRequestsController.showAuthorisationRequest(id).url}" class="govuk-link">View</a>""")
+}
+
 @sidebarContent = {
     @formWithCSRF(action = routes.TrackRequestsController.submitFilters) {
 
@@ -144,7 +148,7 @@
                 TableRow(content = Text(r.clientName), attributes = Map("id" -> s"client-name-${r.invitationId}")),
                 TableRow(content = Text(messages(s"$key.service.${r.service}")), attributes = Map("id" -> s"service-name-${r.invitationId}")),
                 TableRow(content = HtmlContent(statusContent(r.status, r.expiryDate)), attributes = Map("id" -> s"status-${r.invitationId}")),
-                TableRow(content = HtmlContent(actions(r.status, r.invitationId)), attributes = Map("id" -> s"actions-${r.invitationId}"))
+                TableRow(content = HtmlContent(viewLink(r.invitationId)))
             )).toSeq
         ))
         @if(pageInfo.numberOfPages > 1) {

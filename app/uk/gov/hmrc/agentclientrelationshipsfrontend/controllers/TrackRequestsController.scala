@@ -24,12 +24,14 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.TrackRequestsPage
+import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.{AuthorisationRequestPage, TrackRequestsPage}
+
 @Singleton
 class TrackRequestsController @Inject()(
                                          mcc: MessagesControllerComponents,
                                          trackRequestsService: TrackRequestsService,
-                                         trackRequestsPage: TrackRequestsPage
+                                         trackRequestsPage: TrackRequestsPage,
+                                         showAuthorisationRequestPage: AuthorisationRequestPage
                                        )(implicit val executionContext: ExecutionContext, appConfig: AppConfig) extends FrontendController(mcc) {
   
   def show(pageNumber: Int, filtersApplied: Option[Map[String, Seq[String]]] = None): Action[AnyContent] = Action.async:
@@ -58,5 +60,14 @@ class TrackRequestsController @Inject()(
         statusFilters <- trackRequestsService.getStatusFilters
       } yield {
         Ok(trackRequestsPage(requests, pageInfo, clientNames, statusFilters, filtersApplied))
+      }
+      
+  def showAuthorisationRequest(id: String): Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      for{
+        authorisationRequest <- trackRequestsService.getAuthorisationRequest(id)
+      } yield {
+        Ok(showAuthorisationRequestPage(authorisationRequest))
       }
 }

@@ -41,6 +41,8 @@ class AgentClientRelationshipsConnector @Inject()(appConfig: AppConfig):
   def getAllTaxServices(arn: String, filtersApplied: Option[Map[String, Seq[String]]]): Future[List[String]] = Future.successful(stubbedAuthorisationRequests.map(_.service))
 
   def getAvailableStatusFilters: Future[List[String]] = Future.successful(availableFilters)
+  
+  def getAuthorisationRequest(id: String): Future[AuthorisationRequest] = Future.successful(stubbedAuthorisationRequests.find(_.invitationId == id).get)
 
 
   // stubbing the back end

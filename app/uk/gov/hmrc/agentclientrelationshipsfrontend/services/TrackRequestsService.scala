@@ -33,4 +33,6 @@ class TrackRequestsService @Inject()(acrConnector: AgentClientRelationshipsConne
   
   def getStatusFilters: Future[List[String]] = acrConnector.getAvailableStatusFilters
 
+  def getAuthorisationRequest(id: String): Future[AuthorisationRequest] = acrConnector.getAuthorisationRequest(id)
+
 }
