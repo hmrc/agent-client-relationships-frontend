@@ -30,7 +30,8 @@
 @this(
         layout: Layout,
         govukSummaryList: GovukSummaryList,
-        copyButton: CopyButton
+        copyButton: CopyButton,
+        govukNotificationBanner: GovukNotificationBanner
 )
 
 @(
@@ -46,12 +47,26 @@
 @pageTitle = @{
     messages(s"$key.title")
 }
-
 @invitationLink = @{
-    s"https://tax.service.gov.uk/agent-client-relationships/accept-invitation/${authorisationRequest.invitationId}"
+    s"https://tax.service.gov.uk/agent-client-relationships/authorise-agent/${authorisationRequest.invitationId}"
+}
+@dateFormatter = @{
+    DateTimeFormatter.ofPattern("d MMMM uuuu", Locale.UK)
+}
+
+@html = {
+    <p class="govuk-notification-banner__heading">
+        This request expires on @{authorisationRequest.expiryDate.map(_.format(dateFormatter)).getOrElse("")}
+    </p>
 }
 
 @layout(pageTitle, backLinkHref = Some(routes.TrackRequestsController.show(1).url)) {
+
+    @authorisationRequest.expiryDate.map { expiryDate =>
+        @govukNotificationBanner(NotificationBanner(
+            content = HtmlContent(html)
+        ))
+    }
 
     <h1 class="govuk-heading-xl">@pageTitle</h1>
 
@@ -79,6 +94,14 @@
                 ),
                 value = Value(
                     content = Text(messages(s"$parentKey.status.${authorisationRequest.status}"))
+                )
+            ),
+            SummaryListRow(
+                key = Key(
+                    content = Text("Sent")
+                ),
+                value = Value(
+                    content = Text("12 October 2024")
                 )
             )
         )
