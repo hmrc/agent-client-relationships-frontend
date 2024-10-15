@@ -41,7 +41,7 @@ class AgentClientRelationshipsConnector @Inject()(appConfig: AppConfig):
   def getAllTaxServices(arn: String, filtersApplied: Option[Map[String, Seq[String]]]): Future[List[String]] = Future.successful(stubbedAuthorisationRequests.map(_.service))
 
   def getAvailableStatusFilters: Future[List[String]] = Future.successful(availableFilters)
-  
+
   def getAuthorisationRequest(id: String): Future[AuthorisationRequest] = Future.successful(stubbedAuthorisationRequests.find(_.invitationId == id).get)
 
 
@@ -95,6 +95,13 @@ class AgentClientRelationshipsConnector @Inject()(appConfig: AppConfig):
   )
 
   private val availableFilters: List[String] = List(
+    "ActivityWithinLast5Days",
+    "ClientNotYetResponded",
+    "AgentCancelledAuthorisation",
+    "AcceptedByClient"
+  )
+
+  private val allFilters: List[String] = List(
     "ExpireInNext5Days",
     "ActivityWithinLast5Days",
     "ClientNotYetResponded",

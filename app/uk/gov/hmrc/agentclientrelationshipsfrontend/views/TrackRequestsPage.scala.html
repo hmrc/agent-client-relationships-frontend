@@ -71,8 +71,8 @@
     }}
 }
 
-@viewLink(id: String) = @{
-    Html(s"""<a href="${routes.TrackRequestsController.showAuthorisationRequest(id).url}" class="govuk-link">View</a>""")
+@viewLink(id: String, clientName: String, service: String) = @{
+    Html(s"""<a href="${routes.TrackRequestsController.showAuthorisationRequest(id).url}" class="govuk-link">View<span class="govuk-visually-hidden">authorisation request to ${service} for ${clientName}</span></a>""")
 }
 
 @sidebarContent = {
@@ -131,7 +131,7 @@
 }
 }
 
-@layout(pageTitle, sidebar = Some(sidebarContent)) {
+@layout(pageTitle, sidebar = if(statusFilters.size > 1) Some(sidebarContent) else None) {
     @if(requests.nonEmpty) {
         @govukTable(Table(
             head = Some(
@@ -139,7 +139,7 @@
                     HeadCell(content = Text(messages(s"$key.th.client"))),
                     HeadCell(content = Text(messages(s"$key.th.service"))),
                     HeadCell(content = Text(messages(s"$key.th.status"))),
-                    HeadCell(content = Text(messages(s"$key.th.actions")))
+                    HeadCell(content = HtmlContent(s"""<span class="govuk-visually-hidden">${messages(s"$key.th.actions")}</span>"""))
                 )
             ),
             caption = Some(messages(s"$key.resultsCaption", pageInfo.offset + 1, pageInfo.lastItemOnPage, pageInfo.totalResults)),
@@ -148,7 +148,7 @@
                 TableRow(content = Text(r.clientName), attributes = Map("id" -> s"client-name-${r.invitationId}")),
                 TableRow(content = Text(messages(s"$key.service.${r.service}")), attributes = Map("id" -> s"service-name-${r.invitationId}")),
                 TableRow(content = HtmlContent(statusContent(r.status, r.expiryDate)), attributes = Map("id" -> s"status-${r.invitationId}")),
-                TableRow(content = HtmlContent(viewLink(r.invitationId)))
+                TableRow(content = HtmlContent(viewLink(r.invitationId, r.clientName, messages(s"$key.service.${r.service}"))))
             )).toSeq
         ))
         @if(pageInfo.numberOfPages > 1) {
