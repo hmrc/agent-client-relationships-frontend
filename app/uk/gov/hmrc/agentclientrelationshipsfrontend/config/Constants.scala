@@ -18,10 +18,14 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.config
 
 object Constants {
   
+  // agent enrolment
+  val AsAgent = "HMRC-AS-AGENT"
+  
   // client services
   val MtdIncomeTax = "HMRC-MTD-IT"
   val PersonalIncome = "PERSONAL-INCOME-RECORD"
   val PlasticPackaging = "HMRC-PPT-ORG"
+  val CgtPd = "HMRC-CGT-PD"
 
   // dates
   val Year = "year"

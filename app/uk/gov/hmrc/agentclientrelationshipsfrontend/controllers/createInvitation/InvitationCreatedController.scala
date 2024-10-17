@@ -54,6 +54,6 @@ class InvitationCreatedController @Inject()(mcc: MessagesControllerComponents,
           invitationExpiryDate = invitationDetails.expiryDate.format(formatter),
           daysUntilInvitationExpires = ChronoUnit.DAYS.between(LocalDate.now(), invitationDetails.expiryDate).toString,
           agentEmail = agentEmail,
-          agentHomeLink = appConfig.agentServicesAccountHomeUrl
+          agentHomeLink = appConfig.asaHomeUrl
         ))
       }

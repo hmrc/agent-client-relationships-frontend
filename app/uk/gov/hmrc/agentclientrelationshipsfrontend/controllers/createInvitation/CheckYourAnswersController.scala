@@ -43,12 +43,12 @@ class CheckYourAnswersController @Inject()(mcc: MessagesControllerComponents,
     request =>
       given MessagesRequest[AnyContent] = request
 
-      val answersFromSession = for {
+      val answersFromSession = for
         clientType <- createInvitationService.getAnswerFromSession(ClientTypeFieldName)
         clientService <- createInvitationService.getAnswerFromSession(ClientServiceFieldName)
         clientName <- createInvitationService.getAnswerFromSession(ClientNameFieldName)
         agentType <- createInvitationService.getAnswerFromSession(AgentTypeFieldName)
-      } yield (clientType, clientService, clientName, agentType)
+      yield (clientType, clientService, clientName, agentType)
       
       answersFromSession.map { answers =>
         Ok(view(previousPageUrl, clientType = answers._1, clientService = answers._2, clientName = answers._3, agentType = answers._4))
