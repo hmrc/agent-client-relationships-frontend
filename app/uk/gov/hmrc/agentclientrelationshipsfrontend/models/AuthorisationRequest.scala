@@ -18,4 +18,10 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.models
 
 import java.time.LocalDate
 
-case class AuthorisationRequest(invitationId: String, expiryDate: Option[LocalDate], clientName: String, service: String, status: String)
+case class AuthorisationRequest(
+                                 invitationId: String,
+                                 expiryDate: Option[LocalDate],
+                                 clientName: String,
+                                 service: String,
+                                 status: String
+                               )

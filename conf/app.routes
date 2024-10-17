@@ -32,3 +32,23 @@ GET         /authorisation-request/:invitationId                                
 # Sign out/Timed out ---------------------------------------------------------------------------------------------------------
 GET         /timed-out                                                                  uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.TimedOutController.timedOut
 GET         /sign-out                                                                   uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.SignOutController.signOut
+
+
+GET        /:journeyType/select-client-type                                            uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.SelectClientTypeController.show(journeyType: String)
+POST       /:journeyType/select-client-type                                            uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.SelectClientTypeController.onSubmit
+GET        /:journeyType/select-service                                                uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.SelectClientServiceController.show
+POST       /:journeyType/select-service                                                uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.SelectClientServiceController.onSubmit
+GET        /:journeyType/enter-client-id
+POST       /:journeyType/enter-client-id
+GET        /:journeyType/known-fact
+POST       /:journeyType/known-fact
+GET        /:journeyType/confirm-client
+POST       /:journeyType/confirm-client
+GET        /:journeyType/agent-type
+POST       /:journeyType/agent-type
+GET        /:journeyType/check-your-answers
+POST       /:journeyType/check-your-answers
+GET        /:journeyType/confirmation
+POST       /:journeyType/confirmation
+GET        /:journeyType/:action                                                       uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.AuthorisationJourneyController.route(action: String)
+
