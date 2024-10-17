@@ -38,12 +38,12 @@ class CreateInvitationService @Inject()(createInvitationJourneyRepository: Creat
   }
 
   def getCheckYourAnswersDataFromSession(implicit request: Request[Any]): Future[(String, String, String, String)] = {
-    for {
+    for
       clientType <- getAnswerFromSession(ClientTypeFieldName)
       clientService <- getAnswerFromSession(ClientServiceFieldName)
       clientName <- getAnswerFromSession(ClientNameFieldName)
       agentType <- getAnswerFromSession(AgentTypeFieldName)
-    } yield (clientType, clientService, clientName, agentType)
+    yield (clientType, clientService, clientName, agentType)
   }
 
   def deleteAllAnswersInSession(implicit request: Request[Any]): Future[Unit] = {

@@ -38,7 +38,7 @@ class EnterClientDetailsController @Inject()(mcc: MessagesControllerComponents,
   private def previousPageUrl(clientService: String, currentFieldName: String): String = {
     val firstFieldName = clientServiceConfig.firstClientDetailsFieldFor(clientService).name
 
-    if (currentFieldName.equalsIgnoreCase(firstFieldName)) { // this is field 1/1 or 1/2
+    if currentFieldName.equalsIgnoreCase(firstFieldName) then { // this is field 1/1 or 1/2
       routes.SelectClientServiceController.show.url
     } else { // this is field 2/2
       routes.EnterClientDetailsController.show(firstFieldName).url
@@ -55,7 +55,7 @@ class EnterClientDetailsController @Inject()(mcc: MessagesControllerComponents,
         val clientDetailsFieldConfiguration = clientServiceConfig.fieldConfigurationFor(clientService, fieldName)
 
         createInvitationService.getAnswerFromSession(fieldName).map { fieldAnswer =>
-          val form = if (fieldAnswer.nonEmpty) {
+          val form = if fieldAnswer.nonEmpty then {
             EnterClientDetailsForm.form(clientDetailsFieldConfiguration).fill(fieldAnswer)
           } else {
             EnterClientDetailsForm.form(clientDetailsFieldConfiguration)
@@ -80,7 +80,7 @@ class EnterClientDetailsController @Inject()(mcc: MessagesControllerComponents,
             createInvitationService.saveAnswerInSession(fieldName, clientDetailsData).flatMap { _ =>
               val lastFieldName = clientServiceConfig.clientDetailsFor(clientService).last.name
 
-              if (fieldName.equalsIgnoreCase(lastFieldName)) { // this is field 1/1 or 2/2
+              if fieldName.equalsIgnoreCase(lastFieldName) then { // this is field 1/1 or 2/2
                 agentClientRelationshipsConnector.getClientDetails.flatMap { clientName =>
                   createInvitationService.saveAnswerInSession(ClientNameFieldName, clientName).map { _ =>
                     Redirect(nextPageUrl)
