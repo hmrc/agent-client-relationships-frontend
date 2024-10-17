@@ -45,7 +45,7 @@ object DateFormFieldHelper extends FormFieldHelper {
     ).verifying(validateDate(formMessageKey))
       .transform[String](
         { case (y, m, d) =>
-          if (y.isEmpty || m.isEmpty || d.isEmpty) ""
+          if y.isEmpty || m.isEmpty || d.isEmpty then ""
           else LocalDate.of(y.toInt, m.toInt, d.toInt).format(dateFormatter)
         },
         date =>
@@ -70,7 +70,7 @@ object DateFormFieldHelper extends FormFieldHelper {
         case (false, true, false) => invalidMandatoryField(s"$formMessageKey.$Day-$Year", s"$Day-$Year")
         case (false, false, true) => invalidMandatoryField(s"$formMessageKey.$Month-$Year", s"$Month-$Year")
         case (true, true, true) =>
-          if (parseDate(s"${s._1}-${s._2}-${s._3}")) Valid
+          if parseDate(s"${s._1}-${s._2}-${s._3}") then Valid
           else invalidInput(formMessageKey, s"$Day-$Month-$Year")
       }
     }

@@ -36,7 +36,7 @@ class SelectClientTypeController @Inject()(mcc: MessagesControllerComponents,
                                            serviceConfig: ClientServiceConfigurationService
                                           )(implicit val executionContext: ExecutionContext) extends FrontendController(mcc):
 
-  private def previousPageUrl(cya: Boolean = false): String = if (cya) routes.CheckYourAnswersController.show.url else appConfig.agentServicesAccountHomeUrl
+  private def previousPageUrl(cya: Boolean = false): String = if cya then routes.CheckYourAnswersController.show.url else appConfig.asaHomeUrl
   private lazy val nextPageUrl: String = routes.SelectClientServiceController.show.url
   private def formSubmitUrl(cya: Boolean = false): Call = routes.SelectClientTypeController.onSubmit(cya)
   

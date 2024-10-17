@@ -71,7 +71,7 @@ class ConfirmClientController @Inject()(mcc: MessagesControllerComponents,
             }
           },
           clientConfirmed => {
-            if (clientConfirmed) {
+            if clientConfirmed then {
               createInvitationService.saveAnswerInSession(ConfirmationFieldName, clientConfirmed.toString).map { _ =>
                 Redirect(nextPageUrl)
               }
