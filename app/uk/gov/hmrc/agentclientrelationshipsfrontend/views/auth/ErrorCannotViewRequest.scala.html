@@ -14,18 +14,16 @@
  * limitations under the License.
  *@
 
-@import play.api.Configuration
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 
 @this(
         layout: Layout,
         govukButton: GovukButton,
         h1: h1,
-        p: p,
-        appConfig: AppConfig
+        p: p
 )
 
-@(clientType: String)(implicit request: Request[?], messages: Messages)
+@(clientType: String)(implicit request: Request[?], messages: Messages, appConfig: AppConfig)
 
 @layout(
     pageTitle = messages("error.cannot-view-request.title"),

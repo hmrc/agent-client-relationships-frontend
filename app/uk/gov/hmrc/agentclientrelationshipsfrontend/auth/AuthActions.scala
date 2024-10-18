@@ -16,9 +16,9 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.auth
 
+import play.api.Logging
 import play.api.mvc.Results.*
-import play.api.mvc.{Request, Result, Results}
-import play.api.{Configuration, Environment, Logging}
+import play.api.mvc.{Request, Result}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.{AsAgent, CgtPd, MtdIncomeTax}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.routes
@@ -27,7 +27,7 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.UrlHelper
 import uk.gov.hmrc.auth.core.*
 import uk.gov.hmrc.auth.core.AuthProvider.GovernmentGateway
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals.*
-import uk.gov.hmrc.auth.core.retrieve.{Credentials, ~}
+import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl
 
@@ -35,9 +35,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AuthActions @Inject()(env: Environment,
-                            config: Configuration,
-                            val authConnector: AuthConnector,
+class AuthActions @Inject()(val authConnector: AuthConnector,
                             appConfig: AppConfig)
   extends AuthorisedFunctions with Logging {
 

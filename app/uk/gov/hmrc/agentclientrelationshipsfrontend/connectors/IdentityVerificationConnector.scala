@@ -20,7 +20,7 @@ import com.codahale.metrics.MetricRegistry
 import play.api.Logging
 import play.api.http.Status.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.IVResult
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.IvResult
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.HttpAPIMonitor
 import uk.gov.hmrc.http.*
 import uk.gov.hmrc.http.HttpReads.Implicits.*
@@ -40,7 +40,7 @@ class IdentityVerificationConnector @Inject()(http: HttpClientV2)
   private[connectors] def getIVResultUrl(journeyId: String) =
     s"${appConfig.ivFrontendBaseUrl}/mdtp/journey/journeyId/$journeyId"
 
-  def getIVResult(journeyId: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[IVResult]] =
+  def getIVResult(journeyId: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[IvResult]] =
     monitor("ConsumedAPI-Client-Get-IVResult-GET") {
       http
         .get(url"${getIVResultUrl(journeyId)}")
@@ -48,7 +48,7 @@ class IdentityVerificationConnector @Inject()(http: HttpClientV2)
         .map { response =>
           response.status match {
             case OK =>
-              val result = (response.json \ "result").as[IVResult]
+              val result = (response.json \ "result").as[IvResult]
               logger.warn(s"identity verification returned result $result for journeyId $journeyId")
               Some(result)
             case NOT_FOUND => None

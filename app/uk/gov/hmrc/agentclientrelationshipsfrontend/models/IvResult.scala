@@ -19,24 +19,24 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.models
 import play.api.libs.json._
 import uk.gov.hmrc.http.BadRequestException
 
-sealed trait IVResult {
+sealed trait IvResult {
   val value: String
 }
 
-case object Success extends IVResult { override val value = "Success" }
-case object Incomplete extends IVResult { override val value = "Incomplete" }
-case object PreconditionFailed extends IVResult { override val value = "PreconditionFailed" }
-case object LockedOut extends IVResult { override val value = "LockedOut" }
-case object InsufficientEvidence extends IVResult { override val value = "InsufficientEvidence" }
-case object FailedMatching extends IVResult { override val value = "FailedMatching" }
-case object TechnicalIssue extends IVResult { override val value = "TechnicalIssue" }
-case object UserAborted extends IVResult { override val value = "UserAborted" }
-case object TimedOut extends IVResult { override val value = "Timeout" }
-case object FailedIV extends IVResult { override val value = "FailedIV" }
-case object FailedDirectorCheck extends IVResult { override val value = "FailedDirectorCheck" }
+case object Success extends IvResult { override val value = "Success" }
+case object Incomplete extends IvResult { override val value = "Incomplete" }
+case object PreconditionFailed extends IvResult { override val value = "PreconditionFailed" }
+case object LockedOut extends IvResult { override val value = "LockedOut" }
+case object InsufficientEvidence extends IvResult { override val value = "InsufficientEvidence" }
+case object FailedMatching extends IvResult { override val value = "FailedMatching" }
+case object TechnicalIssue extends IvResult { override val value = "TechnicalIssue" }
+case object UserAborted extends IvResult { override val value = "UserAborted" }
+case object TimedOut extends IvResult { override val value = "Timeout" }
+case object FailedIv extends IvResult { override val value = "FailedIV" }
+case object FailedDirectorCheck extends IvResult { override val value = "FailedDirectorCheck" }
 
-object IVResult {
-  def apply(str: String): IVResult = str match {
+object IvResult {
+  def apply(str: String): IvResult = str match {
     case Success.value              => Success
     case Incomplete.value           => Incomplete
     case PreconditionFailed.value   => PreconditionFailed
@@ -46,12 +46,12 @@ object IVResult {
     case TechnicalIssue.value       => TechnicalIssue
     case UserAborted.value          => UserAborted
     case TimedOut.value             => TimedOut
-    case FailedIV.value             => FailedIV
+    case FailedIv.value             => FailedIv
     case FailedDirectorCheck.value  => FailedDirectorCheck
     case _                          => throw new BadRequestException("strange value for IVReason")
   }
 
-  def unapply(reason: IVResult): Option[String] = reason match {
+  def unapply(reason: IvResult): Option[String] = reason match {
     case Success              => Some("Success")
     case Incomplete           => Some("Incomplete")
     case PreconditionFailed   => Some("PreconditionFailed")
@@ -61,12 +61,12 @@ object IVResult {
     case TechnicalIssue       => Some("TechnicalIssue")
     case UserAborted          => Some("UserAborted")
     case TimedOut             => Some("Timeout")
-    case FailedIV             => Some("FailedIV")
+    case FailedIv             => Some("FailedIV")
     case FailedDirectorCheck  => Some("FailedDirectorCheck")
   }
 
-  implicit val reads: Reads[IVResult] = new Reads[IVResult] {
-    override def reads(json: JsValue): JsResult[IVResult] =
+  implicit val reads: Reads[IvResult] = new Reads[IvResult] {
+    override def reads(json: JsValue): JsResult[IvResult] =
       json match {
         case JsString(Success.value)              => JsSuccess(Success)
         case JsString(Incomplete.value)           => JsSuccess(Incomplete)
@@ -77,14 +77,14 @@ object IVResult {
         case JsString(TechnicalIssue.value)       => JsSuccess(TechnicalIssue)
         case JsString(UserAborted.value)          => JsSuccess(UserAborted)
         case JsString(TimedOut.value)             => JsSuccess(TimedOut)
-        case JsString(FailedIV.value)             => JsSuccess(FailedIV)
+        case JsString(FailedIv.value)             => JsSuccess(FailedIv)
         case JsString(FailedDirectorCheck.value)  => JsSuccess(FailedDirectorCheck)
         case invalid                              => JsError(s"invalid IVResult value found: $invalid")
       }
   }
 
-  implicit val writes: Writes[IVResult] = new Writes[IVResult] {
-    override def writes(o: IVResult): JsValue = JsString(o.value)
+  implicit val writes: Writes[IvResult] = new Writes[IvResult] {
+    override def writes(o: IvResult): JsValue = JsString(o.value)
   }
 
 }
