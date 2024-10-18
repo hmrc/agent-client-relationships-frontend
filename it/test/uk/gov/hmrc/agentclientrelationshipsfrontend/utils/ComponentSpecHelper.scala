@@ -16,9 +16,9 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.utils
 
-import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
+import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
@@ -27,8 +27,10 @@ import play.api.libs.ws.DefaultBodyWritables.writeableOf_String
 import play.api.libs.ws.{WSClient, WSRequest, WSResponse}
 import play.api.test.Helpers.*
 
+import scala.concurrent.ExecutionContext
+
 trait ComponentSpecHelper
-    extends AnyWordSpec
+  extends AnyWordSpec
     with Matchers
     with CustomMatchers
     with WiremockHelper
@@ -36,16 +38,26 @@ trait ComponentSpecHelper
     with BeforeAndAfterEach
     with GuiceOneServerPerSuite {
 
+  def downstreamServices: Map[String, String] = Seq(
+    "auth",
+    "identity-verification-frontend"
+  ).flatMap { service =>
+    Seq(
+      s"microservice.services.$service.host" -> mockHost,
+      s"microservice.services.$service.port" -> mockPort
+    )
+  }.toMap
+
   def extraConfig(): Map[String, String] = Map.empty
 
   override lazy val app: Application = new GuiceApplicationBuilder()
-    .configure(config ++ extraConfig())
+    .configure(config ++ extraConfig() ++ downstreamServices)
     .configure("play.http.router" -> "testOnlyDoNotUseInAppConf.Routes")
     .build()
 
   val mockHost: String = WiremockHelper.wiremockHost
   val mockPort: String = WiremockHelper.wiremockPort.toString
-  val mockUrl: String  = s"http://$mockHost:$mockPort"
+  val mockUrl: String = s"http://$mockHost:$mockPort"
 
   def config: Map[String, String] = Map(
     "auditing.enabled"                                      -> "false",
@@ -55,6 +67,7 @@ trait ComponentSpecHelper
   )
 
   implicit val ws: WSClient = app.injector.instanceOf[WSClient]
+  implicit val executionContext: ExecutionContext = app.injector.instanceOf[ExecutionContext]
 
   override def beforeAll(): Unit = {
     startWiremock()
