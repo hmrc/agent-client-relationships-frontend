@@ -21,11 +21,10 @@
         layout: Layout,
         govukButton: GovukButton,
         h1: h1,
-        p: p,
-        appConfig: AppConfig
+        p: p
 )
 
-@()(implicit request: Request[?], messages: Messages)
+@()(implicit request: Request[?], messages: Messages, appConfig: AppConfig)
 
 @layout(
     pageTitle = messages("not-authorised.header"),

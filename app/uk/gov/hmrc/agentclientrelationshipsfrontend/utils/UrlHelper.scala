@@ -16,12 +16,11 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.utils
 
-import play.api.{Environment, Mode}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
-import uk.gov.hmrc.play.bootstrap.binders.{AbsoluteWithHostnameFromAllowlist, OnlyRelative, RedirectUrl}
 import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl.idFunctor
+import uk.gov.hmrc.play.bootstrap.binders.{AbsoluteWithHostnameFromAllowlist, OnlyRelative, RedirectUrl}
 
-import java.net.{URI, URLEncoder}
+import java.net.URLEncoder
 
 object UrlHelper {
 

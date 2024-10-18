@@ -17,14 +17,14 @@
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers
 
 import play.api.i18n.I18nSupport
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.connectors.IdentityVerificationConnector
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.UrlHelper
-import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.TimedOut
+import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.UserTimedOut
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.auth.*
-import uk.gov.hmrc.play.bootstrap.binders.{AbsoluteWithHostnameFromAllowlist, OnlyRelative, RedirectUrl}
+import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}
@@ -38,7 +38,7 @@ class AuthorisationController @Inject()(mcc: MessagesControllerComponents,
                                         notAuthorisedAsClientView: NotAuthorisedAsClient,
                                         ivTechDifficultiesView: IvTechDifficulties,
                                         ivLockedOutView: IvLockedOut,
-                                        timedOutView: TimedOut)
+                                        timedOutView: UserTimedOut)
                                        (implicit executionContext: ExecutionContext,
                                         appConfig: AppConfig)
   extends FrontendController(mcc) with I18nSupport:
@@ -58,20 +58,17 @@ class AuthorisationController @Inject()(mcc: MessagesControllerComponents,
           identityVerificationConnector
             .getIVResult(id)
             .map {
-              case Some(TechnicalIssue) =>
-                Forbidden(ivTechDifficultiesView())
-              case Some(FailedMatching | FailedDirectorCheck | FailedIV | InsufficientEvidence) =>
-                Forbidden(cannotConfirmIdentityView(url))
-              case Some(UserAborted | TimedOut) => Redirect(routes.AuthorisationController.handleIVTimeout(continueUrl))
-              case Some(LockedOut) => Redirect(routes.AuthorisationController.lockedOut)
+              case Some(TechnicalIssue) => Forbidden(ivTechDifficultiesView())
+              case Some(TimedOut) => Redirect(routes.AuthorisationController.ivTimedOut(continueUrl))
+              case Some(LockedOut) => Redirect(routes.AuthorisationController.ivLockedOut)
               case _ => Forbidden(cannotConfirmIdentityView(url))
             }
         )
 
-  def handleIVTimeout(continueUrl: Option[RedirectUrl]): Action[AnyContent] = Action.async:
+  def ivTimedOut(continueUrl: Option[RedirectUrl]): Action[AnyContent] = Action.async:
     implicit request =>
       Future.successful(Forbidden(timedOutView(continueUrl.map(UrlHelper.validateRedirectUrl), isAgent = false)))
 
-  def lockedOut: Action[AnyContent] = Action.async:
+  def ivLockedOut: Action[AnyContent] = Action.async:
     implicit request =>
       Future.successful(Forbidden(ivLockedOutView()))

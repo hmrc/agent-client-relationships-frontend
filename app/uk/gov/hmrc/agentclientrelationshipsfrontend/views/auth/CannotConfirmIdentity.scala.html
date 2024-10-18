@@ -14,23 +14,19 @@
  * limitations under the License.
  *@
 
-@import play.api.Configuration
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
-@import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.routes
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.*
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.components.*
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
-@import uk.gov.hmrc.hmrcfrontend.config.ContactFrontendConfig
 
 @this(
         layout: Layout,
         govukButton: GovukButton,
         h1: h1,
-        p: p,
-        appConfig: AppConfig
+        p: p
 )
 
-@(tryAgainUrl: Option[String])(implicit request: Request[?], messages: Messages)
+@(tryAgainUrl: Option[String])(implicit request: Request[?], messages: Messages, appConfig: AppConfig)
 
 @layout(
     pageTitle = messages("cannot-confirm-identity.header"),

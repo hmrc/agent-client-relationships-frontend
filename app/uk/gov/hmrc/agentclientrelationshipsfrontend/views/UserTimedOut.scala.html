@@ -21,11 +21,10 @@
         h1: h1,
         p: p,
         a: a,
-        govukButton: GovukButton,
-        appConfig: AppConfig
+        govukButton: GovukButton
 )
 
-@(continueUrl: Option[String], isAgent: Boolean)(implicit request: Request[?], messages: Messages)
+@(continueUrl: Option[String], isAgent: Boolean)(implicit request: Request[?], messages: Messages, appConfig: AppConfig)
 
 @timeString = @{
     val timeout = appConfig.timeoutDialogTimeoutSeconds

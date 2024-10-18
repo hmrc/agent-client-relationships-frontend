@@ -14,24 +14,20 @@
  * limitations under the License.
  *@
 
-@import play.api.Configuration
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
-@import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.routes
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.*
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.components.*
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
-@import uk.gov.hmrc.hmrcfrontend.config.ContactFrontendConfig
 
 @this(
         layout: Layout,
         govukButton: GovukButton,
         h1: h1,
         p: p,
-        a: a,
-        appConfig: AppConfig
+        a: a
 )
 
-@()(implicit request: Request[?], messages: Messages)
+@()(implicit request: Request[?], messages: Messages, appConfig: AppConfig)
 
 @layout(
     pageTitle = messages("technical-issues.header"),
