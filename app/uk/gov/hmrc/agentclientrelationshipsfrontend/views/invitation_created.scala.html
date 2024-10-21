@@ -43,9 +43,9 @@
 
     <ol class="govuk-list govuk-list--number govuk-list--spaced">
         <li>
-            <p>@messages("invitationCreated.list.one")</p>
-            <p><strong>@invitationLink</strong></p>
-            <p>
+            <p class="govuk-body">@messages("invitationCreated.list.one")</p>
+            <p class="govuk-body govuk-!-font-weight-bold">@invitationLink</p>
+            <p class="govuk-body">
                 @copyButton(invitationLink)
             </p>
         </li>
@@ -54,8 +54,12 @@
         <li>@messages("invitationCreated.list.four", agentEmail)</li>
     </ol>
 
-    <p>@a(routes.SelectClientTypeController.show().url, messages("invitationCreated.createAnother"))</p>
-    <p>@a(agentHomeLink, messages("invitationCreated.agentHome"))</p>
+    <p class="govuk-body">
+        <a class="govuk-link" href=@{routes.SelectClientTypeController.show().url}>@messages("invitationCreated.createAnother")</a>
+    </p>
+    <p class="govuk-body">
+        <a class="govuk-link" href=@agentHomeLink>@messages("invitationCreated.agentHome")</a>
+    </p>
 }
 
 @{

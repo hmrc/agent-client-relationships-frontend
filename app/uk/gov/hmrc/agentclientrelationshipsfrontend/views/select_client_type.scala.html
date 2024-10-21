@@ -17,9 +17,12 @@
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.Layout
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.components.SubmitButton
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.createInvitation.routes
-@import uk.gov.hmrc.govukfrontend.views.html.components.{FormWithCSRF, GovukRadios, Radios, RadioItem, Fieldset, Legend, Text}
+@import uk.gov.hmrc.govukfrontend.views.html.components.{Radios, Fieldset, Legend, Text, RadioItem, FormWithCSRF, Button, GovukRadios}
 @import uk.gov.hmrc.govukfrontend.views.html.components.implicits.RichRadios
-@import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.ConfirmationFieldName
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.ClientTypeFieldName
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{JourneyType}
+@import play.api.mvc.Call
+
 
 @this(
         layout: Layout,
@@ -28,28 +31,31 @@
         submitButton: SubmitButton
 )
 
-@(form: Form[Boolean], previousPageUrl: String, clientName: String)(implicit request: RequestHeader, messages: Messages)
+@(form: Form[String], clientTypes: Set[String], journey: JourneyModel)(implicit request: RequestHeader, messages: Messages)
 
-@layout(pageTitle = messages("confirm-client.title"), optionalForm = Some(form), backLinkHref = Some(previousPageUrl)) {
+@pageKey = @{"selectClientType"}
+@journeyKey = @{}
+@pageTitle = @{messages(s"${pageKey}.${journeyKey}.header")}
 
-    @formWithCSRF(action = routes.ConfirmClientController.onSubmit) {
+@layout(pageTitle = pageTitle, optionalForm = Some(form)) {
+
+    @formWithCSRF(action = routes.SelectClientTypeController.onSubmit(journeyKey).url) { implicit form =>
         @govukRadios(Radios(
-            classes = "govuk-radios--inline",
             fieldset = Some(Fieldset(
                 legend = Some(Legend(
-                    content = Text(messages("confirm-client.header", clientName)),
+                    content = Text(pageTitle),
                     isPageHeading = true,
                     classes = "govuk-fieldset__legend--xl"
                 ))
             )),
-            items = Seq("true", "false").map(trueOrFalse =>
+            items = clientTypes.toSeq.map(clientType =>
                 RadioItem(
-                    id = Some(trueOrFalse),
-                    content = Text(messages(form(ConfirmationFieldName).name + "." + trueOrFalse)),
-                    value = Some(trueOrFalse)
+                    id = Some(clientType),
+                    content = Text(messages(form(ClientTypeFieldName).name + "." + clientType)),
+                    value = Some(clientType)
                 )
             )
-        ).withFormField(form(ConfirmationFieldName)))
+        ).withFormField(form(ClientTypeFieldName)))
 
         @submitButton()
     }

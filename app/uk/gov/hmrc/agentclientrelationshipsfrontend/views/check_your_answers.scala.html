@@ -19,6 +19,7 @@
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.createInvitation.routes
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants._
 @import uk.gov.hmrc.govukfrontend.views.html.components.{GovukSummaryList, SummaryList, SummaryListRow, Key, Value, Actions, ActionItem, Text, GovukButton, Button, FormWithCSRF}
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.CompleteAnswers
 
 @this(
         layout: Layout,
@@ -29,11 +30,11 @@
         govukButton: GovukButton
 )
 
-@(previousPageUrl: String, clientType: String, clientService: String, clientName: String, agentType: String)(implicit request: RequestHeader, messages: Messages)
+@(cyaAnswers: CompleteAnswers)(implicit request: RequestHeader, messages: Messages)
 
-@pageTitle: String = @{messages("cya.header")}
+@pageTitle = @{messages("cya.header")}
 
-@layout(pageTitle, backLinkHref = Some(previousPageUrl)) {
+@layout(pageTitle) {
 
     @h1(pageTitle)
 
@@ -42,23 +43,18 @@
     @govukSummaryList(SummaryList(Seq(
         SummaryListRow(
             key = Key(Text(messages(s"cya.$ClientTypeFieldName.label"))),
-            value = Value(Text(messages(s"$ClientTypeFieldName.$clientType"))),
-            actions = Some(Actions(items = Seq(ActionItem(href = routes.SelectClientTypeController.show(true).url, content = Text(messages("cya.changeLink"))))))
+            value = Value(Text(messages(s"$ClientTypeFieldName.${cyaAnswers.clientType}"))),
+            actions = None
         ),
         SummaryListRow(
             key = Key(Text(messages(s"cya.$ClientServiceFieldName.label"))),
-            value = Value(Text(messages(s"$ClientServiceFieldName.$clientService.$clientType"))),
-            actions = Some(Actions(items = Seq(ActionItem(href = routes.SelectClientServiceController.show.url, content = Text(messages("cya.changeLink"))))))
+            value = Value(Text(messages(s"$ClientServiceFieldName.${cyaAnswers.service}.${cyaAnswers.clientType}"))),
+            actions = None
         ),
         SummaryListRow(
             key = Key(Text(messages(s"cya.$ClientNameFieldName.label"))),
-            value = Value(Text(clientName)),
-            actions = Some(Actions(items = Seq(ActionItem(href = routes.ConfirmClientController.show.url, content = Text(messages("cya.changeLink"))))))
-        ),
-        SummaryListRow(
-            key = Key(Text(messages(s"cya.$AgentTypeFieldName.label"))),
-            value = Value(Text(messages(s"$AgentTypeFieldName.$agentType"))),
-            actions = Some(Actions(items = Seq(ActionItem(href = routes.SelectAgentTypeController.show.url, content = Text(messages("cya.changeLink"))))))
+            value = Value(Text(cyaAnswers.clientName)),
+            actions = None
         )
     )))
 

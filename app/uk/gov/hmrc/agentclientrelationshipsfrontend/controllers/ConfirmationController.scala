@@ -31,29 +31,14 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class ConfirmationController @Inject()(mcc: MessagesControllerComponents,
-                                       appConfig: AppConfig,
-                                       view: invitation_created,
-                                       clientServiceConfig: ClientServiceConfigurationService,
-                                       createInvitationService: CreateInvitationService,
-                                       agentClientRelationshipsConnector: AgentClientRelationshipsConnector
+class ConfirmationController @Inject()(mcc: MessagesControllerComponents
                                        )(implicit val executionContext: ExecutionContext) extends FrontendController(mcc):
-  
-  private val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("d MMMM yyyy")
-
-  def show(invitationId: String): Action[AnyContent] = Action.async:
+  def show(journeyType: String): Action[AnyContent] = Action.async:
     request =>
       given MessagesRequest[AnyContent] = request
-      
-      val agentEmail = "test@email.com" //TODO where does this come from?
 
-      agentClientRelationshipsConnector.getInvitation(invitationId).map { invitationDetails =>
-        Ok(view(
-          clientName = invitationDetails.clientName,
-          invitationLink = s"https://tax.service.gov.uk/invitations/${invitationDetails.invitationId}",
-          invitationExpiryDate = invitationDetails.expiryDate.format(formatter),
-          daysUntilInvitationExpires = ChronoUnit.DAYS.between(LocalDate.now(), invitationDetails.expiryDate).toString,
-          agentEmail = agentEmail,
-          agentHomeLink = appConfig.agentServicesAccountHomeUrl
-        ))
-      }
+
+
+  def onSubmit(journeyType: String): Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request

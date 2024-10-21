@@ -28,45 +28,15 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class SelectClientServiceController @Inject()(mcc: MessagesControllerComponents,
-                                              view: select_client_service,
-                                              appConfig: AppConfig,
-                                              createInvitationService: CreateInvitationService,
-                                              clientServiceConfig: ClientServiceConfigurationService
+class SelectClientServiceController @Inject()(mcc: MessagesControllerComponents
                                              )(implicit val executionContext: ExecutionContext) extends FrontendController(mcc):
 
-  private lazy val previousPageUrl: String = routes.SelectClientTypeController.show().url
-  
-  private def nextPageUrl(clientService: String): String =
-    routes.EnterClientDetailsController.show(clientServiceConfig.firstClientDetailsFieldFor(clientService).name).url
-  
-  def show: Action[AnyContent] = Action.async:
+  def show(journeyType: String): Action[AnyContent] = Action.async:
     request =>
       given MessagesRequest[AnyContent] = request
 
-      createInvitationService.getAnswerFromSession(ClientTypeFieldName).flatMap { clientType =>
-          val clientServices = clientServiceConfig.clientServicesFor(clientType)
-          
-          createInvitationService.getAnswerFromSession(ClientServiceFieldName).map { clientService =>
-            Ok(view(SelectFromOptionsForm.form(ClientServiceFieldName, clientServices).fill(clientService), previousPageUrl, clientType, clientServices))
-          }
-      }
 
-  def onSubmit: Action[AnyContent] = Action.async:
+
+  def onSubmit(journeyType: String): Action[AnyContent] = Action.async:
     request =>
       given MessagesRequest[AnyContent] = request
-
-      createInvitationService.getAnswerFromSession(ClientTypeFieldName).flatMap { clientType =>
-          val clientServices = clientServiceConfig.clientServicesFor(clientType)
-          
-          SelectFromOptionsForm.form(ClientServiceFieldName, clientServices).bindFromRequest().fold(
-            formWithErrors => {
-              Future.successful(Ok(view(formWithErrors, previousPageUrl, clientType, clientServices)))
-            },
-            clientService => {
-              createInvitationService.saveAnswerInSession(ClientServiceFieldName, clientService).map { _ =>
-                  Redirect(nextPageUrl(clientService))
-              }
-            }
-          )
-      }

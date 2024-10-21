@@ -32,38 +32,13 @@ class SelectAgentTypeController @Inject()(mcc: MessagesControllerComponents,
                                           clientServiceConfig: ClientServiceConfigurationService,
                                           createInvitationService: CreateInvitationService
                                        )(implicit val executionContext: ExecutionContext) extends FrontendController(mcc):
-
-  private lazy val previousPageUrl: String = routes.ConfirmClientController.show.url
-
-  private lazy val nextPageUrl: String = routes.CheckYourAnswersController.show.url
   
-  private val agentTypes: Set[String] = Set(MainAgentType, SupportingAgentType)
-  
-  def show: Action[AnyContent] = Action.async:
-    request =>
-      given MessagesRequest[AnyContent] = request
-      
-      createInvitationService.getAnswerFromSession(ClientNameFieldName).flatMap { clientName =>
-        createInvitationService.getAnswerFromSession(AgentTypeFieldName).map { agentType =>
-          val form = SelectFromOptionsForm.form(AgentTypeFieldName, agentTypes).fill(agentType)
-          Ok(view(form, agentTypes, previousPageUrl, clientName))
-        }
-      }
-  
-
-  def onSubmit: Action[AnyContent] = Action.async:
+  def show(journeyType: String): Action[AnyContent] = Action.async:
     request =>
       given MessagesRequest[AnyContent] = request
 
-      createInvitationService.getAnswerFromSession(ClientNameFieldName).flatMap { clientName =>
-        SelectFromOptionsForm.form(AgentTypeFieldName, agentTypes).bindFromRequest().fold(
-          formWithErrors => {
-            Future.successful(Ok(view(formWithErrors, agentTypes, previousPageUrl, clientName)))
-          },
-          agentType => {
-            createInvitationService.saveAnswerInSession(AgentTypeFieldName, agentType).map { _ =>
-              Redirect(nextPageUrl)
-            }
-          }
-        )
-      }
+  
+
+  def onSubmit(journeyType: String): Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request

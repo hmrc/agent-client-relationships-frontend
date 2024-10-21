@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey
+package uk.gov.hmrc.agentclientrelationshipsfrontend.models
 
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{ClientDetailsResponse, JourneyType}
 case class JourneyModel(
                          journeyType: JourneyType,
                          clientType: Option[String],
@@ -26,7 +25,6 @@ case class JourneyModel(
                          clientDetailsResponse: Option[ClientDetailsResponse],
                          agentType: Option[String]
                        )
-
 
 
 

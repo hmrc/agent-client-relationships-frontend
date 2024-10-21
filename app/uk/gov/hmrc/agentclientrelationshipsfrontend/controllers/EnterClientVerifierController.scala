@@ -28,7 +28,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class EnterClientIdController @Inject()(mcc: MessagesControllerComponents)(implicit val executionContext: ExecutionContext) extends FrontendController(mcc):
+class EnterClientVerifierController @Inject()(mcc: MessagesControllerComponents)(implicit val executionContext: ExecutionContext) extends FrontendController(mcc):
 
 
   def show(journeyType: String): Action[AnyContent] = Action.async:
@@ -38,8 +38,3 @@ class EnterClientIdController @Inject()(mcc: MessagesControllerComponents)(impli
   def onSubmit(fieldName: String): Action[AnyContent] = Action.async:
     request =>
       given MessagesRequest[AnyContent] = request
-
-    for {
-      journey <- journeyService.sessionToJourneyModel
-    }
-

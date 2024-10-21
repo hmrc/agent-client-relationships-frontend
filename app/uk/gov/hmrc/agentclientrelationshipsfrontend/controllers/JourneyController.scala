@@ -33,3 +33,12 @@ class JourneyController @Inject()(mcc: MessagesControllerComponents,
       given MessagesRequest[AnyContent] = request
       
       Redirect(journeyService.getNextRequiredStep(action))
+      
+  def fastTrack(action: String): Action[AnyContent] = Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      journeyService.populateJourneyWithFastTrack(request.body.asFormUrlEncoded).flatMap(_ =>
+        // TODO: validate request body and return bad requests etc where needed instead of always success
+        Future.successful(Redirect(journeyService.getNextRequiredStep(action)))
+      )
+      

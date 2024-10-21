@@ -19,7 +19,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, MessagesRequest}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.connectors.AgentClientRelationshipsConnector
-import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{ClientServiceConfigurationService, CreateInvitationService}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{ClientServiceConfigurationService, JourneyService}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.createInvitation.check_your_answers
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
@@ -30,38 +30,26 @@ import scala.concurrent.{ExecutionContext, Future}
 class CheckYourAnswersController @Inject()(mcc: MessagesControllerComponents,
                                            view: check_your_answers,
                                            clientServiceConfig: ClientServiceConfigurationService,
-                                           createInvitationService: CreateInvitationService,
+                                           journeyService: JourneyService,
                                            agentClientRelationshipsConnector: AgentClientRelationshipsConnector
                                        )(implicit val executionContext: ExecutionContext) extends FrontendController(mcc):
 
-  private lazy val previousPageUrl: String = routes.SelectAgentTypeController.show.url
 
-  private def nextPageUrl(invitationId: String): String = routes.InvitationCreatedController.show(invitationId).url
-
-
-  def show: Action[AnyContent] = Action.async:
+  def show(journeyType: String): Action[AnyContent] = Action.async:
     request =>
       given MessagesRequest[AnyContent] = request
+      for {
+        cyaAnswers <- journeyService.getCheckYourAnswersDataFromSession(request)
+      } yield if(cyaAnswers.clientConfirmed) Future.successful(Ok(view(cyaAnswers))) 
+      else Future.successful(Redirect(journeyService.getNextRequiredStep(journeyType)))
 
-      val answersFromSession = for {
-        clientType <- createInvitationService.getAnswerFromSession(ClientTypeFieldName)
-        clientService <- createInvitationService.getAnswerFromSession(ClientServiceFieldName)
-        clientName <- createInvitationService.getAnswerFromSession(ClientNameFieldName)
-        agentType <- createInvitationService.getAnswerFromSession(AgentTypeFieldName)
-      } yield (clientType, clientService, clientName, agentType)
-      
-      answersFromSession.map { answers =>
-        Ok(view(previousPageUrl, clientType = answers._1, clientService = answers._2, clientName = answers._3, agentType = answers._4))
-      }
-
-
-
-  def onSubmit: Action[AnyContent] = Action.async:
-    request =>
+                                        
+  def onSubmit(journeyType: String): Action[AnyContent] = Action.async:
+    request =
       given MessagesRequest[AnyContent] = request
-
-      agentClientRelationshipsConnector.createInvitation.flatMap { invitationId =>
-        createInvitationService.deleteAllAnswersInSession().map { _ =>
-          Redirect(nextPageUrl(invitationId))
-        }
+      for {
+        journey <- journeyService.sessionToJourneyModel(request)
+      } yield journey.journeyType match {
+        case CreateInvitationJourney => journeyService.createAuthorisationRequest(journey)
+        case DeleteAuthorisationJourney => journeyService.deAuthoriseRelationship(journey)
       }

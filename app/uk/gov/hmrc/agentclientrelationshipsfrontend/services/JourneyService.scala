@@ -17,9 +17,8 @@
 package uk.gov.hmrc.agentclientrelationshipsfrontend.services
 
 import play.api.mvc.Request
-import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.{AgentTypeFieldName, ClientNameFieldName, ClientServiceFieldName, ClientTypeFieldName, JourneyTypeFieldName}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.*
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyModel
+import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.{AgentTypeFieldName, ClientNameFieldName, ClientServiceFieldName, ClientTypeFieldName}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsResponse, CompleteAnswers, JourneyModel}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.repositories.JourneyRepository
 import uk.gov.hmrc.http.SessionKeys
 import uk.gov.hmrc.mongo.cache.DataKey
@@ -43,14 +42,14 @@ class JourneyService @Inject()(journeyRepository: JourneyRepository
     journeyRepository.getFromSession[Seq[String]](DataKey[Seq[String]](fieldName)).map(_.getOrElse(Seq.empty))
   }
 
-  def getCheckYourAnswersDataFromSession(implicit request: Request[Any]): Future[(String, String, String, String)] = {
+  def getCheckYourAnswersDataFromSession(implicit request: Request[Any]): Future[CompleteAnswers] = 
     for {
       clientType <- getAnswerFromSession(ClientTypeFieldName)
       clientService <- getAnswerFromSession(ClientServiceFieldName)
       clientName <- getAnswerFromSession(ClientNameFieldName)
       agentType <- getAnswerFromSession(AgentTypeFieldName)
-    } yield (clientType, clientService, clientName, agentType)
-  }
+      clientConfirmed <- getAnswerFromSession("clientConfirmed")
+    } yield CompleteAnswers(clientConfirmed, clientType, clientService, clientName, agentType)
 
   def deleteAllAnswersInSession(implicit request: Request[Any]): Future[Unit] = {
     journeyRepository.cacheRepo.deleteEntity(request)
@@ -58,16 +57,16 @@ class JourneyService @Inject()(journeyRepository: JourneyRepository
 
   private def sessionToJourneyModel(implicit request: Request[Any]): Future[JourneyModel] = {
     for {
-      clientType <- getAnswerFromSession(ClientTypeFieldName)
-      clientService <- getAnswerFromSession(ClientServiceFieldName)
-      agentType <- getAnswerFromSession(AgentTypeFieldName)
-      journeyType <- getAnswerFromSession("journeyType")
-      requiredKnownFact <- getAnswerFromSession("requiredKnownFact")
-      factValue <- getSeqFromSession("factValue")
-      agentTypeRequired <- getAnswerFromSession("agentTypeRequired")
-      clientName <- getAnswerFromSession("clientName")
-      clientConfirmed <- getAnswerFromSession("clientConfirmed")
-      clientId <- getAnswerFromSession("clientId")
+      clientType <- getAnswerFromSession("clientType")(request)
+      clientService <- getAnswerFromSession("clientService")(request)
+      agentType <- getAnswerFromSession("agentType")(request)
+      journeyType <- getAnswerFromSession("journeyType")(request)
+      requiredKnownFact <- getAnswerFromSession("requiredKnownFact")(request)
+      factValue <- getSeqFromSession("factValue")(request)
+      agentTypeRequired <- getAnswerFromSession("agentTypeRequired")(request)
+      clientName <- getAnswerFromSession("clientName")(request)
+      clientConfirmed <- getAnswerFromSession("clientConfirmed")(request)
+      clientId <- getAnswerFromSession("clientId")(request)
     } yield JourneyModel(
       clientType = emptyStringToNone(clientType),
       service = emptyStringToNone(clientService),
@@ -76,10 +75,11 @@ class JourneyService @Inject()(journeyRepository: JourneyRepository
       agentType = emptyStringToNone(agentType),
       clientConfirmed = emptyStringToNone(clientConfirmed).contains("true"),
       clientDetailsResponse = ClientDetailsResponse(
-        requiredKnownFact = emptyStringToNone(requiredKnownFact).map(KnownFactType.toEnum),
-        factValue = factValue,
-        agentTypeRequired = emptyStringToNone(agentTypeRequired).contains("true"),
-        clientName = emptyStringToNone(clientName)
+        emptyStringToNone(requiredKnownFact).map(s => KnownFactType.toEnum(s)),
+        factValue,
+        emptyStringToNone(agentTypeRequired).contains("true"),
+        emptyStringToNone(clientName)
+        emptyStringToNone(relationshipExists).contains("true")
       )
     )
   }
@@ -87,13 +87,43 @@ class JourneyService @Inject()(journeyRepository: JourneyRepository
   private def emptyStringToNone(s: String): Option[String] = if (s.isEmpty) None else Some(s)
 
   def getNextRequiredStep(action: String)(implicit request: Request[Any]): Future[Call] = {
-    val journey: JourneyModel = sessionToJourneyModel
-    if (journey.journeyType != JourneyType.toEnum(action)) routes.SelectClientTypeController.show(action)
+    for {
+      journey <- sessionToJourneyModel(request)
+    } yield journey
+
+    if (journey.journeyType != JourneyType.toEnum(action)) {
+      deleteAllAnswersInSession(request) // reset the journey to be of the new journey type and start again
+      routes.SelectClientTypeController.show(action)
+    }
     else if (journey.clientConfirmed) routes.CheckYourAnswersController.show
     else if (journey.service.isEmpty) routes.SelectClientTypeController.show(action)
     else if (journey.clientDetailsResponse.isEmpty) routes.EnterClientIdController.show
-    else if (journey.clientDetailsResponse.flatMap(_.requiredKnownFact).nonEmpty) routes.EnterKnownFactController.show
-    else if (journey.clientDetailsResponse.exists(_.agentTypeRequired)) routes.SelectAgentTypeController.show
+    else if (journey.clientDetailsResponse.exists(_.requiredKnownFact).nonEmpty) routes.EnterClientVerifierController.show
+    else if (journey.clientDetailsResponse.exists(_.agentTypeRequired).contains(true)) routes.SelectAgentTypeController.show
+    
   }
+  
+  def populateJourneyWithFastTrack(action: String, data: Option[Map[String, Seq[String]]])(implicit request: Request[Any]): Future[Unit] =
+    data match {
+      case Some(d) =>  for {
+        _ <- deleteAllAnswersInSession(request)
+        _ <- saveAnswerInSession("journeyType", action)(request)
+        _ <- d.map((k, v) => saveAnswerInSession(k, v))
+        clientDetailsResponse <- journeyService.getClientDetailsResponse(data)
+        _ <- saveAnswerInSession("requiredKnownFact", clientDetailsResponse.requiredknownFact)(request)
+        _ <- saveAnswerInSession("factValue", clientDetailsResponse.factValue)(request)
+        _ <- saveAnswerInSession("clientName", clientDetailsResponse.clientName)(request)
+        _ <- saveAnswerInSession("agentTypeRequired", clientDetailsResponse.agentTypeRequired)(request)
+        _ <- saveAnswerInSession("relationshipExists", clientDetailsResponse.relationshipExists)(request)
+      } yield result 
+      case _ => // TODO: Return "failure" or something for caller to act upon - e.g. redirect to start of journey
+    }
+   
+    
+    def getClientDetailsResponse(data: Option[Map[String, Seq[String]]]): Future[ClientDetailsResponse] = {
+      
+      // TODO: HTTP call to get client details response using the client identifier and service from the request body
+      //       and return the response as a ClientDetailsResponse
+    }
 
 }

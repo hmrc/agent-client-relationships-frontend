@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.repositories
 
-import play.api.mvc.Request
 import uk.gov.hmrc.http.SessionKeys
 import uk.gov.hmrc.mongo.cache.{DataKey, SessionCacheRepository}
 import uk.gov.hmrc.mongo.{CurrentTimestampSupport, MongoComponent}

@@ -31,26 +31,20 @@ import scala.concurrent.{ExecutionContext, Future}
 class SelectClientTypeController @Inject()(mcc: MessagesControllerComponents,
                                            view: select_client_type,
                                            appConfig: AppConfig,
-                                           authorisationService: JourneyService,
+                                           journeyService: JourneyService,
                                            serviceConfig: ClientServiceConfigurationService
                                           )(implicit val executionContext: ExecutionContext) extends FrontendController(mcc):
-
-  private def previousPageUrl(cya: Boolean = false): String = if (cya) routes.CheckYourAnswersController.show.url else appConfig.agentServicesAccountHomeUrl
-  private lazy val nextPageUrl: String = routes.SelectClientServiceController.show.url
-  private def formSubmitUrl(cya: Boolean = false): Call = routes.SelectClientTypeController.onSubmit(cya)
   
-  def show(cya: Boolean = false): Action[AnyContent] = Action.async:
+  def show(journeyType: String): Action[AnyContent] = Action.async:
     request =>
       given MessagesRequest[AnyContent] = request
-      
-      createInvitationService.getAnswerFromSession(ClientTypeFieldName).map { clientTypeValue =>
-        Ok(view(SelectFromOptionsForm.form(ClientTypeFieldName, serviceConfig.allClientTypes).fill(clientTypeValue), serviceConfig.allClientTypes, previousPageUrl(cya), formSubmitUrl(cya)))
-      }
       
 
-  def onSubmit(cya: Boolean = false): Action[AnyContent] = Action.async:
+  def onSubmit(journeyType: String): Action[AnyContent] = Action.async:
     request =>
       given MessagesRequest[AnyContent] = request
+      // validate the form and update the session/journey model with the selected client type
+      // redirect by using journeyService.getNextRequiredStep(journeyType)
       
       
       

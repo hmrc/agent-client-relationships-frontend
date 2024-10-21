@@ -19,6 +19,9 @@ clientType.business=A company or partnership
 clientType.trust=A trust or an estate
 error.clientType.required=Select the type of client you need authorisation from
 
+clientType.create.header=What type of client is this authorisation for?
+clientType.delete.header=What type of client do you want to remove authorisation for?
+
 
 # -------------------------------------------------------------------------------------------
 # Select Client Service
