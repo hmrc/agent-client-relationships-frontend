@@ -22,6 +22,46 @@ import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 @Singleton
 class AppConfig @Inject()(servicesConfig: ServicesConfig, config: Configuration):
+  // Base Urls
+  val ivFrontendBaseUrl: String = baseUrl("identity-verification-frontend")
+
+  // Urls
+  val appExternalUrl: String = getConfString("agent-client-relationships-frontend.external-url")
+  val asaFrontendExternalUrl: String = getConfString("agent-services-account-frontend.external-url")
+  val agentServicesAccountLimitedUrl: String = asaFrontendExternalUrl + getConfString("agent-services-account-frontend.account-limited")
+  val agentServicesAccountHomeUrl: String = asaFrontendExternalUrl + getConfString("agent-services-account-frontend.home")
+  val ivUpliftUrl: String = getConfString("identity-verification-frontend.uplift-url")
+  val signInUrl: String = getString("bas-gateway.url")
+  val subscriptionUrl: String = getConfString("agent-subscription-frontend.subscription-url")
+
+  // Feature Flags
   val welshLanguageSupportEnabled: Boolean = config.getOptional[Boolean]("features.welsh-language-support").getOrElse(false)
-  val agentServicesAccountHomeUrl = servicesConfig.getString("agent-services-account-frontend-home-url")
+
+  // Service config
+  val appName: String = getString("appName")
+  val timeoutDialogTimeoutSeconds: Int = servicesConfig.getInt("timeoutDialog.timeout-seconds")
+  val allowedRedirectHosts: Set[String] = config.getOptional[Seq[String]]("allowed-redirect-hosts").getOrElse(Nil).toSet
   val trackRequestsPerPage: Int = servicesConfig.getInt("track-requests-per-page")
+
+  // Stub for supported services to be replaced when decision on how to handle this is reached
+  val supportedServices: Set[String] =
+    Set(
+      "HMRC-MTD-IT",
+      "PERSONAL-INCOME-RECORD",
+      "HMRC-MTD-VAT",
+      "HMRC-TERS-ORG",
+      "HMRC-TERSNT-ORG",
+      "HMRC-CGT-PD",
+      "HMRC-PPT-ORG",
+      "HMRC-CBC-ORG",
+      "HMRC-CBC-NONUK-ORG",
+      "HMRC-PILLAR2-ORG"
+    )
+
+  private def getString(key: String) = servicesConfig.getString(key)
+
+  // For config contained in 'microservice.services'
+  private def getConfString(key: String) =
+    servicesConfig.getConfString(key, throw new RuntimeException(s"config $key not found"))
+
+  private def baseUrl(serviceName: String) = servicesConfig.baseUrl(serviceName)

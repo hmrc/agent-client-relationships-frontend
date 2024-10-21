@@ -2,12 +2,64 @@
 # Common
 # -------------------------------------------------------------------------------------------
 service.name.agents.auth=Gofyn i gleient eich awdurdodi
+service.name.agents.de-auth=Canslo awdurdodiad cleient
+service.name.clients=Penodi rhywun i ddelio â CThEM ar eich rhan
 
 error.prefix=Gwall:' '
 error.heading=Mae problem wedi codi
 
 continue.button=Yn eich blaen
+try-again.button=Rhoi cynnig arall arni
 
+# -------------------------------------------------------------------------------------------
+# Timeout/Auth/IV error pages
+# -------------------------------------------------------------------------------------------
+
+# Cannot confirm identity
+cannot-confirm-identity.header=Nid oeddem yn gallu cadarnhau pwy ydych
+cannot-confirm-identity.p1=Nid yw’r wybodaeth yr ydych wedi’i nodi yn cyd-fynd â’n cofnodion.
+cannot-confirm-identity.p2=Os oes angen help arnoch i gadarnhau pwy ydych, defnyddiwch y cysylltiad ‘A yw’r dudalen hon yn gweithio’n iawn’.
+
+# Locked-out
+locked-out.header=Nid oeddem yn gallu cadarnhau pwy ydych
+locked-out.p1=Rydych wedi nodi gwybodaeth nad yw’n cyd-fynd â’n cofnodion gormod o weithiau.
+locked-out.p2=Am resymau diogelwch, mae’n rhaid i chi aros 24 awr ac yna mewngofnodi i roi cynnig arall arni.
+locked-out.p3=Os oes angen help arnoch i gadarnhau pwy ydych, defnyddiwch y cysylltiad ‘A yw’r dudalen hon yn gweithio’n iawn’.
+
+#Timed out
+timed-out.header=Rydych wedi cael eich allgofnodi
+timed-out.p1=Nid ydych wedi gwneud dim byd ers {0}, felly rydym wedi’ch allgofnodi er mwyn cadw’ch cyfrif yn ddiogel.
+timed-out.p2.link=Mewngofnodwch eto
+timed-out.p2.end=i ddefnyddio’r gwasanaeth hwn.
+timed-out.button=Dechrau eto
+timed-out.minutes=munud
+timed-out.seconds=eiliad
+
+# Technical issues
+technical-issues.header=Mae’n ddrwg gennym, mae problem gyda’r gwasanaeth
+technical-issues.p1=Rhowch gynnig arall arni yn nes ymlaen.
+technical-issues.p2=Efallai nad ydym wedi cadw’ch atebion. Pan fydd y gwasanaeth ar gael, efallai y bydd yn rhaid i chi ddechrau eto.
+technical-issues.sa-url=https://www.gov.uk/government/organisations/hm-revenue-customs/contact/welsh-language-helplines
+technical-issues.vat-url= https://www.gov.uk/government/organisations/hm-revenue-customs/contact/vat-customs-and-excise-and-duties-enquiries-for-welsh-speaking-customers
+technical-issues.vat.link=Ffoniwch linell Ymholiadau TAW, Tollau ac Ecséis CThEM
+technical-issues.vat.end=os oes angen help arnoch gyda’r cynllun TAW.
+technical-issues.it.link=Ffoniwch Wasanaeth Cwsmeriaid Cymraeg CThEM
+technical-issues.it.end=os oes angen help arnoch gyda’r cynllun Troi Treth yn Ddigidol ar gyfer Treth Incwm.
+
+#Not Authorised
+not-authorised.header=Nid oes gennych fynediad at y dudalen hon
+not-authorised.description.p1=Dim ond eich cleient all fynd at y dudalen hon.
+not-authorised.description.p2=Gofynnwch i’ch cleient ddilyn y cysylltiad yr oeddech yn ceisio’i ddefnyddio er mwyn iddo allu derbyn eich cais am awdurdodiad.
+not-authorised.button=Allgofnodi
+
+#Error Cannot View Request
+error.cannot-view-request.header=Ni allwch fwrw golwg dros y cais am awdurdodiad hwn
+error.cannot-view-request.p1=Rydych wedi mewngofnodi gan ddefnyddio Dynodydd Defnyddiwr (ID) asiant.
+error.cannot-view-request.p2=Os mai chi yw’r asiant, gofynnwch i’ch cleient ddilyn y cysylltiad er mwyn ymateb i’r cais am awdurdodiad.
+error.cannot-view-request.p3=Os nad ydych yn asiant, mewngofnodwch gyda’r Dynodydd Defnyddiwr (ID) ar gyfer Porth y Llywodraeth rydych yn ei ddefnyddio ar gyfer eich {0}.
+error.cannot-view-request.client-type.business=materion treth busnes
+error.cannot-view-request.client-type.personal=materion treth personol
+error.cannot-view-request.button=Mewngofnodi
 
 # -------------------------------------------------------------------------------------------
 # Select Client Type

@@ -31,3 +31,9 @@ POST        /track-requests                                                     
 # Sign out/Timed out ---------------------------------------------------------------------------------------------------------
 GET         /timed-out                                                                  uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.TimedOutController.timedOut
 GET         /sign-out                                                                   uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.SignOutController.signOut
+
+# Auth/IV --------------------------------------------------------------------------------------------------------------------
+GET         /cannot-view-request                                                        uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.AuthorisationController.cannotViewRequest
+GET         /cannot-confirm-identity                                                    uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.AuthorisationController.cannotConfirmIdentity(journeyId: Option[String] ?= None, continueUrl: Option[RedirectUrl] ?= None)
+GET         /iv-timed-out                                                               uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.AuthorisationController.ivTimedOut(continueUrl: Option[RedirectUrl] ?= None)
+GET         /iv-locked-out                                                              uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.AuthorisationController.ivLockedOut

@@ -1,7 +1,8 @@
+import play.sbt.routes.RoutesKeys
 import uk.gov.hmrc.DefaultBuildSettings
 
 ThisBuild / majorVersion := 0
-ThisBuild / scalaVersion := "3.4.2"
+ThisBuild / scalaVersion := "3.5.1"
 
 lazy val microservice = Project("agent-client-relationships-frontend", file("."))
   .enablePlugins(play.sbt.PlayScala, SbtDistributablesPlugin)
@@ -15,6 +16,17 @@ lazy val microservice = Project("agent-client-relationships-frontend", file(".")
   )
   .settings(resolvers += Resolver.jcenterRepo)
   .settings(CodeCoverageSettings.settings)
+  .settings(
+    RoutesKeys.routesImport += "uk.gov.hmrc.play.bootstrap.binders.RedirectUrl"
+  )
+  .settings(
+    TwirlKeys.templateImports ++= Seq(
+      "uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.Layout",
+      "uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.components._",
+      "uk.gov.hmrc.govukfrontend.views.html.components._",
+      "uk.gov.hmrc.hmrcfrontend.views.html.components._",
+    )
+  )
 
 lazy val it = project
   .enablePlugins(PlayScala)
