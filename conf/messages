@@ -66,11 +66,13 @@ error.cannot-view-request.button=Sign in
 # -------------------------------------------------------------------------------------------
 # Select Client Type
 # -------------------------------------------------------------------------------------------
-clientType.header=What type of client is this authorisation for?
+clientType.authorisation-request.header=What type of client is this authorisation for?
+clientType.agent-cancel-authorisation.header=What type of client do you want to cancel your authorisation for?
 clientType.personal=An individual or sole trader
 clientType.business=A company or partnership
 clientType.trust=A trust or an estate
-error.clientType.required=Select the type of client you need authorisation from
+clientType.authorisation-request.error.required=Select the type of client you need authorisation from
+clientType.agent-cancel-authorisation.error.required=Select the type of client you want to cancel authorisation for
 
 
 # -------------------------------------------------------------------------------------------
