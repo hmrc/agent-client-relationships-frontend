@@ -37,3 +37,7 @@ GET         /cannot-view-request                                                
 GET         /cannot-confirm-identity                                                    uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.AuthorisationController.cannotConfirmIdentity(journeyId: Option[String] ?= None, continueUrl: Option[RedirectUrl] ?= None)
 GET         /iv-timed-out                                                               uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.AuthorisationController.ivTimedOut(continueUrl: Option[RedirectUrl] ?= None)
 GET         /iv-locked-out                                                              uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.AuthorisationController.ivLockedOut
+
+
+GET        /:journeyType/start                                                          uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.JourneyController.show(journeyType: String)
+GET        /:journeyType/client-type                                                    uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.SelectClientTypeController.show(journeyType: String)
