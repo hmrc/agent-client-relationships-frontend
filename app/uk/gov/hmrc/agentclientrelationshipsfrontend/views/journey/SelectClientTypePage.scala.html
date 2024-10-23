@@ -16,7 +16,7 @@
 
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.Layout
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.components.SubmitButton
-@import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.createInvitation.routes
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.routes
 @import uk.gov.hmrc.govukfrontend.views.html.components.{Radios, Fieldset, Legend, Text, RadioItem, FormWithCSRF, Button, GovukRadios}
 @import uk.gov.hmrc.govukfrontend.views.html.components.implicits.RichRadios
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.ClientTypeFieldName
@@ -35,11 +35,11 @@
 @key = @{"clientType"}
 @*    @journeyKey = @{request.journey.journeyType}*@
 @journeyKey = @{"authorisation-request"}
-@pageTitle: String = @{messages(s"$key.$journeyKey.header")}
+@pageTitle = @{messages(s"$key.$journeyKey.header")}
 
 @layout(pageTitle = pageTitle, optionalForm = Some(form)) {
 
-    @formWithCSRF(action = routes.SelectClientTypeController.submit(journeyKey) {
+    @formWithCSRF(action = routes.SelectClientTypeController.onSubmit(journeyKey)) {
         @govukRadios(Radios(
             fieldset = Some(Fieldset(
                 legend = Some(Legend(

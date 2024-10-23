@@ -39,5 +39,5 @@ GET         /iv-timed-out                                                       
 GET         /iv-locked-out                                                              uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.AuthorisationController.ivLockedOut
 
 
-GET        /:journeyType/start                                                          uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.JourneyController.show(journeyType: String)
-GET        /:journeyType/client-type                                                    uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.SelectClientTypeController.show(journeyType: String)
+GET        /:journeyType/client-type                                                    uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.SelectClientTypeController.show(journeyType: String)
+POST       /:journeyType/client-type                                                    uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.SelectClientTypeController.onSubmit(journeyType: String)

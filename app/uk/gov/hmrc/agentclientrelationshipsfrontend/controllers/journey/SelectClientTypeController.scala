@@ -16,24 +16,48 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey
 
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, MessagesRequest}
+import play.api.mvc._
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
-import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{ClientServiceConfigurationService, CreateInvitationService}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.ClientTypeFieldName
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.SelectFromOptionsForm
+import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{ClientServiceConfigurationService, JourneyService}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.SelectClientTypePage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 @Singleton
-class SelectClientTypeController @Inject()(mcc: MessagesControllerComponents
+class SelectClientTypeController @Inject()(mcc: MessagesControllerComponents,
+                                           serviceConfig: ClientServiceConfigurationService,
+                                           journeyService: JourneyService,
+                                           selectClientTypePage: SelectClientTypePage
                                           )(implicit val executionContext: ExecutionContext) extends FrontendController(mcc):
   
   def show(journeyType: String): Action[AnyContent] = Action.async:
     request =>
       given MessagesRequest[AnyContent] = request
-      Future.successful(Ok("template tbc"))
+      journeyService.getAnswerFromSession(ClientTypeFieldName).map { clientTypeValue =>
+        Ok(selectClientTypePage(
+          form = SelectFromOptionsForm.form(ClientTypeFieldName, serviceConfig.allClientTypes, journeyType).fill(clientTypeValue),
+          clientTypes = serviceConfig.allClientTypes
+        ))
+      }
       
 
   def onSubmit(journeyType: String): Action[AnyContent] = Action.async:
     request =>
       given MessagesRequest[AnyContent] = request
-      Future.successful(Ok("submit redirect tbc"))
+      SelectFromOptionsForm.form(ClientTypeFieldName, serviceConfig.allClientTypes, journeyType).bindFromRequest().fold(
+        formWithErrors => {
+          Future.successful(Ok(selectClientTypePage(
+            form = formWithErrors,
+            clientTypes = serviceConfig.allClientTypes
+          )))
+        },
+        clientType => {
+          journeyService.saveAnswerInSession(ClientTypeFieldName, clientType).map { _ =>
+              Ok("Redirect to next page")
+            }
+
+        }
+  )
