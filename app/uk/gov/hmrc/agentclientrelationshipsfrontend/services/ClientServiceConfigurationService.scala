@@ -33,7 +33,7 @@ class ClientServiceConfigurationService @Inject() {
     "HMRC-MTD-IT" -> ServiceData(
       serviceName = "HMRC-MTD-IT",
       clientTypes = Set("personal"),
-      clientId = Seq(
+      clientDetails = Seq(
         FieldConfiguration(
           name = "nino",
           regex = "[[A-Z]&&[^DFIQUV]][[A-Z]&&[^DFIQUVO]] ?\\d{2} ?\\d{2} ?\\d{2} ?[A-D]{1}",
