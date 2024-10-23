@@ -30,16 +30,13 @@
         submitButton: SubmitButton
 )
 
-@(form: Form[String], clientTypes: Set[String])(implicit request: RequestHeader, messages: Messages)
+@(form: Form[String], clientTypes: Set[String], previousPageUrl: String, formSubmitUrl: Call)(implicit request: RequestHeader, messages: Messages)
 
-@key = @{"clientType"}
-@*    @journeyKey = @{request.journey.journeyType}*@
-@journeyKey = @{"authorisation-request"}
-@pageTitle: String = @{messages(s"$key.$journeyKey.header")}
+@pageTitle: String = @{messages("clientType.header")}
 
-@layout(pageTitle = pageTitle, optionalForm = Some(form)) {
+@layout(pageTitle = pageTitle, optionalForm = Some(form), backLinkHref = Some(previousPageUrl)) {
 
-    @formWithCSRF(action = routes.SelectClientTypeController.submit(journeyKey) {
+    @formWithCSRF(action = formSubmitUrl) {
         @govukRadios(Radios(
             fieldset = Some(Fieldset(
                 legend = Some(Legend(

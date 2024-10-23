@@ -16,24 +16,24 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey
 
-import play.api.mvc.MessagesControllerComponents
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, MessagesRequest}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{ClientServiceConfigurationService, CreateInvitationService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class SelectClientTypeController @Inject()(mcc: MessagesControllerComponents
                                           )(implicit val executionContext: ExecutionContext) extends FrontendController(mcc):
   
-  def show(journeyType: JourneyType): Action[AnyContent] = Action.async:
+  def show(journeyType: String): Action[AnyContent] = Action.async:
     request =>
       given MessagesRequest[AnyContent] = request
       Future.successful(Ok("template tbc"))
       
 
-  def onSubmit(journeyType: JourneyType): Action[AnyContent] = Action.async:
+  def onSubmit(journeyType: String): Action[AnyContent] = Action.async:
     request =>
       given MessagesRequest[AnyContent] = request
       Future.successful(Ok("submit redirect tbc"))
