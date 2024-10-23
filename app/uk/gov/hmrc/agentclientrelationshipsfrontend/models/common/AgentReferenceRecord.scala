@@ -16,4 +16,15 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.models.common
 
-case class ServiceData(serviceName: String, clientTypes: Set[String], clientTypesId: ClientIdType, clientDetails: Seq[FieldConfiguration])
+import play.api.libs.json.{Format, Json}
+
+case class AgentReferenceRecord(
+                                 uid: String,
+                                 arn: String,
+                                 normalisedAgentNames: Seq[String]
+                               )
+
+object AgentReferenceRecord {
+  private val arnPattern = "^[A-Z]ARN[0-9]{7}$".r
+  implicit val formats: Format[AgentReferenceRecord] = Json.format[AgentReferenceRecord]
+}

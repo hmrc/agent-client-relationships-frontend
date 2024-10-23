@@ -16,4 +16,4 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.models.common
 
-case class ServiceData(serviceName: String, clientTypes: Set[String], clientTypesId: ClientIdType, clientDetails: Seq[FieldConfiguration])
+case class ClientIdType(id: String, enrolmentId: String)

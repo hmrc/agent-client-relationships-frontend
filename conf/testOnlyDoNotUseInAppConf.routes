@@ -11,3 +11,6 @@
 
 # Add all the application routes to the prod.routes file
 ->         /                          prod.Routes
+
+GET         /invitations/test-only/fast-track                          uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.test.TestEndpointsController.getFastTrackForm()
+GET         /invitations/test-only/create-invitation                   uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.test.StartInvitationController.startCreateInvitationJourney()

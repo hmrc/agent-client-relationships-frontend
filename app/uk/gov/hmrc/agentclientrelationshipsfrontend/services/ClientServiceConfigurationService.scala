@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.services
 
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.common.{FieldConfiguration, ServiceData}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.common.{ClientIdType, FieldConfiguration, ServiceData}
 
 import javax.inject.{Inject, Singleton}
 
@@ -28,11 +28,20 @@ class ClientServiceConfigurationService @Inject() {
   def fieldConfigurationFor(clientService: String, fieldName: String): FieldConfiguration = services(clientService).clientDetails.filter(_.name.equalsIgnoreCase(fieldName)).head
   def firstClientDetailsFieldFor(clientService: String): FieldConfiguration = services(clientService).clientDetails.head
   def lastClientDetailsFieldFor(clientService: String): FieldConfiguration = services(clientService).clientDetails.last
+  def allServices: Set[String] = services.map(_._2.serviceName).toSet[String]
+  def allClientIdTypes: Set[String] = services.map(_._2.clientTypesId.id).toSet[String]
+  def allClientIdRegs: Set[String] = services.map(_._2.clientDetails.head.regex).toSet[String]
+  def allKnowFactsRegs: Set[String] = services.map(_._2.clientDetails.last.regex).toSet[String]
+
 
   private val services: Map[String, ServiceData] = Map(
     "HMRC-MTD-IT" -> ServiceData(
       serviceName = "HMRC-MTD-IT",
       clientTypes = Set("personal"),
+      ClientIdType(
+        id = "ni",
+        enrolmentId = "NINO"
+      ),
       clientDetails = Seq(
         FieldConfiguration(
           name = "nino",
@@ -51,6 +60,10 @@ class ClientServiceConfigurationService @Inject() {
     "HMRC-PPT-ORG" -> ServiceData(
       serviceName = "HMRC-PPT-ORG",
       clientTypes = Set("personal", "business", "trust"),
+      ClientIdType(
+        id = "EtmpRegistrationNumber",
+        enrolmentId = "EtmpRegistrationNumber"
+      ),
       clientDetails = Seq(
         FieldConfiguration(
           name = "pptRef",
@@ -69,6 +82,10 @@ class ClientServiceConfigurationService @Inject() {
     "HMRC-CGT-PD" -> ServiceData(
       serviceName = "HMRC-CGT-PD",
       clientTypes = Set("personal", "trust"),
+      ClientIdType(
+        id = "CGTPDRef",
+        enrolmentId = "CGTPDRef"
+      ),
       clientDetails = Seq(
         FieldConfiguration(
           name = "cgtRef",
@@ -81,6 +98,10 @@ class ClientServiceConfigurationService @Inject() {
     "PERSONAL-INCOME-RECORD" -> ServiceData(
       serviceName = "PERSONAL-INCOME-RECORD",
       clientTypes = Set("personal"),
+      ClientIdType(
+        id = "ni",
+        enrolmentId = "NINO"
+      ),
       clientDetails = Seq(
         FieldConfiguration(
           name = "nino",

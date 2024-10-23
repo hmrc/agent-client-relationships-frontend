@@ -17,6 +17,7 @@
 package uk.gov.hmrc.agentclientrelationshipsfrontend.connectors
 
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.Invitation
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.common.{ClientDetailsIds, ClientIdentifier}
 
 import java.time.LocalDate
 import javax.inject.{Inject, Singleton}

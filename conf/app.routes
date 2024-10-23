@@ -24,6 +24,11 @@ POST        /invitations/create/check-your-answers                              
 
 GET         /invitations/created                                                        uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.createInvitation.InvitationCreatedController.show(agentInvitationId: String)
 
+#Fast Track Endpoints
++ nocsrf
+POST        /agents/fast-track                                                          uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.fastTrack.AgentFastTrackController.agentFastTrack
+
+
 # Sign out/Timed out ---------------------------------------------------------------------------------------------------------
 GET         /timed-out                                                                  uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.TimedOutController.timedOut
 GET         /sign-out                                                                   uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.SignOutController.signOut

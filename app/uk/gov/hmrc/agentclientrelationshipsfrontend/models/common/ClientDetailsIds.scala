@@ -16,4 +16,10 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.models.common
 
-case class ServiceData(serviceName: String, clientTypes: Set[String], clientTypesId: ClientIdType, clientDetails: Seq[FieldConfiguration])
+import play.api.libs.json.{Json, OFormat, Reads}
+
+case class ClientDetailsIds(clientIdentifier: ClientIdentifier, clientVerifier: Seq[ClientVerifier])
+
+object ClientDetailsIds {
+  implicit val formats: OFormat[ClientDetailsIds] = Json.format[ClientDetailsIds]
+}

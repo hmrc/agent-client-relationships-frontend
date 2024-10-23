@@ -16,17 +16,16 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.repositories
 
-import play.api.mvc.Request
-import uk.gov.hmrc.mongo.{CurrentTimestampSupport, MongoComponent}
 import uk.gov.hmrc.http.SessionKeys
-import uk.gov.hmrc.mongo.cache.{DataKey, SessionCacheRepository}
+import uk.gov.hmrc.mongo.cache.SessionCacheRepository
+import uk.gov.hmrc.mongo.{CurrentTimestampSupport, MongoComponent}
 
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 import scala.concurrent.duration.DurationInt
 
 @Singleton
-class CreateInvitationJourneyRepository @Inject()(mongo: MongoComponent)(implicit ec: ExecutionContext)
+class JourneyRepository @Inject()(mongo: MongoComponent)(implicit ec: ExecutionContext)
   extends SessionCacheRepository(
     mongoComponent = mongo,
     collectionName = "create-invitation",

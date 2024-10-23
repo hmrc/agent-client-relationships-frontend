@@ -16,17 +16,20 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.createInvitation
 
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, MessagesRequest}
+import actions.Actions
+import play.api.i18n.I18nSupport
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, MessagesRequest, Request}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.ClientNameFieldName
 import uk.gov.hmrc.agentclientrelationshipsfrontend.connectors.AgentClientRelationshipsConnector
-import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{ClientServiceConfigurationService, CreateInvitationService}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{ClientServiceConfigurationService, JourneyService}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.createInvitation.invitation_created
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import uk.gov.hmrc.agentclientrelationshipsfrontend.requests.JourneyRequest
+
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import java.time.LocalDate
-
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -35,9 +38,10 @@ class InvitationCreatedController @Inject()(mcc: MessagesControllerComponents,
                                             appConfig: AppConfig,
                                             view: invitation_created,
                                             clientServiceConfig: ClientServiceConfigurationService,
-                                            createInvitationService: CreateInvitationService,
-                                            agentClientRelationshipsConnector: AgentClientRelationshipsConnector
-                                       )(implicit val executionContext: ExecutionContext) extends FrontendController(mcc):
+                                            journeyService: JourneyService,
+                                            agentClientRelationshipsConnector: AgentClientRelationshipsConnector,
+                                            actions:        Actions
+                                       )(implicit val executionContext: ExecutionContext) extends FrontendController(mcc) with I18nSupport:
   
   private val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("d MMMM yyyy")
 

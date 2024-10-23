@@ -16,12 +16,15 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.createInvitation
 
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, MessagesRequest}
+import actions.Actions
+import play.api.i18n.I18nSupport
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, MessagesRequest, Request}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.{ClientNameFieldName, ClientServiceFieldName, ConfirmationFieldName}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.createInvitation.ConfirmationForm
-import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{ClientServiceConfigurationService, CreateInvitationService}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{ClientServiceConfigurationService, JourneyService}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.createInvitation.confirm_client
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import uk.gov.hmrc.agentclientrelationshipsfrontend.requests.JourneyRequest
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -30,8 +33,9 @@ import scala.concurrent.{ExecutionContext, Future}
 class ConfirmClientController @Inject()(mcc: MessagesControllerComponents,
                                         view: confirm_client,
                                         clientServiceConfig: ClientServiceConfigurationService,
-                                        createInvitationService: CreateInvitationService
-                                       )(implicit val executionContext: ExecutionContext) extends FrontendController(mcc):
+                                        journeyService: JourneyService,
+                                        actions:        Actions
+                                       )(implicit val executionContext: ExecutionContext) extends FrontendController(mcc) with I18nSupport:
 
   private def previousPageUrl(clientService: String): String =
     routes.EnterClientDetailsController.show(clientServiceConfig.lastClientDetailsFieldFor(clientService).name).url
@@ -41,43 +45,42 @@ class ConfirmClientController @Inject()(mcc: MessagesControllerComponents,
   private def restartEnterClientDetailsUrl(clientService: String): String =
     routes.EnterClientDetailsController.show(clientServiceConfig.firstClientDetailsFieldFor(clientService).name).url
   
-  def show: Action[AnyContent] = Action.async:
-    request =>
-      given MessagesRequest[AnyContent] = request
+  def show: Action[AnyContent] = actions.getJourney.async:
+    journeyRequest =>
+      given Request[?] = journeyRequest.request
 
-      createInvitationService.getAnswerFromSession(ClientNameFieldName).flatMap { clientName =>
-        createInvitationService.getAnswerFromSession(ClientServiceFieldName).flatMap { clientService =>
-          createInvitationService.getAnswerFromSession(ConfirmationFieldName).map { clientConfirmed =>
-            val form = clientConfirmed.toBooleanOption match {
-              case Some(data) => ConfirmationForm.form(ConfirmationFieldName).fill(data)
-              case _ => ConfirmationForm.form(ConfirmationFieldName)
+      //TODO WG - write getters for journey fields
+      val journey = journeyRequest.journey
+      val clientName =  journeyRequest.journey.clientName.getOrElse("")
+      val clientService =  journeyRequest.journey.service.getOrElse("")
+      val clientConfirmed =  journeyRequest.journey.clientConfirmed.getOrElse("")
+      val form = clientConfirmed.toBooleanOption match {
+        case Some(data) => ConfirmationForm.form(ConfirmationFieldName).fill(data)
+        case _ => ConfirmationForm.form(ConfirmationFieldName)
+      }
+
+      Future.successful(Ok(view(form, previousPageUrl(clientService), clientName)))
+
+
+  def onSubmit: Action[AnyContent] = actions.getJourney.async:
+    journeyRequest =>
+      given Request[?] = journeyRequest.request
+
+      val clientService =  journeyRequest.journey.service.getOrElse("")
+      val clientName =  journeyRequest.journey.clientName.getOrElse("")
+      
+      ConfirmationForm.form(ConfirmationFieldName).bindFromRequest().fold(
+        formWithErrors => {
+          Future.successful(Ok(view(formWithErrors, previousPageUrl(clientService), clientName)))
+        },
+        clientConfirmed => {
+          if (clientConfirmed) {
+            journeyService.saveJourney(journeyRequest.journey.copy(clientConfirmed = Some(clientConfirmed.toString))).flatMap { _ =>
+              journeyService.nextPageUrl(clientServiceConfig).map(Redirect(_))
             }
-
-            Ok(view(form, previousPageUrl(clientService), clientName))
+          } else {
+            Future.successful(Redirect(restartEnterClientDetailsUrl(clientService)))
           }
         }
-      }
-
-
-  def onSubmit: Action[AnyContent] = Action.async:
-    request =>
-      given MessagesRequest[AnyContent] = request
-
-      createInvitationService.getAnswerFromSession(ClientServiceFieldName).flatMap { clientService =>
-        ConfirmationForm.form(ConfirmationFieldName).bindFromRequest().fold(
-          formWithErrors => {
-            createInvitationService.getAnswerFromSession(ClientNameFieldName).map { clientName =>
-              Ok(view(formWithErrors, previousPageUrl(clientService), clientName))
-            }
-          },
-          clientConfirmed => {
-            if (clientConfirmed) {
-              createInvitationService.saveAnswerInSession(ConfirmationFieldName, clientConfirmed.toString).map { _ =>
-                Redirect(nextPageUrl)
-              }
-            } else {
-              Future.successful(Redirect(restartEnterClientDetailsUrl(clientService)))
-            }
-          }
-        )
-      }
+      )
+      

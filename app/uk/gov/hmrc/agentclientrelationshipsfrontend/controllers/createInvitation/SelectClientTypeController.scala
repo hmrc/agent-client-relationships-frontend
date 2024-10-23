@@ -16,14 +16,17 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.createInvitation
 
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, MessagesRequest}
+import actions.Actions
+import play.api.i18n.I18nSupport
+import play.api.mvc.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.ClientTypeFieldName
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.createInvitation.SelectFromOptionsForm
-import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{ClientServiceConfigurationService, CreateInvitationService}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyType
+import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{ClientServiceConfigurationService, JourneyService}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.createInvitation.select_client_type
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import play.api.mvc.Call
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.Journey
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -32,36 +35,51 @@ import scala.concurrent.{ExecutionContext, Future}
 class SelectClientTypeController @Inject()(mcc: MessagesControllerComponents,
                                            view: select_client_type,
                                            appConfig: AppConfig,
-                                           createInvitationService: CreateInvitationService,
-                                           serviceConfig: ClientServiceConfigurationService
-                                          )(implicit val executionContext: ExecutionContext) extends FrontendController(mcc):
-
-  private def previousPageUrl(cya: Boolean = false): String = if (cya) routes.CheckYourAnswersController.show.url else appConfig.agentServicesAccountHomeUrl
-  private lazy val nextPageUrl: String = routes.SelectClientServiceController.show.url
+                                           journeyService: JourneyService,
+                                           serviceConfig: ClientServiceConfigurationService,
+                                           actions:        Actions
+                                          )(implicit val executionContext: ExecutionContext) extends FrontendController(mcc) with I18nSupport:
+  
   private def formSubmitUrl(cya: Boolean = false): Call = routes.SelectClientTypeController.onSubmit(cya)
   
-  def show(cya: Boolean = false): Action[AnyContent] = Action.async:
-    request =>
-      given MessagesRequest[AnyContent] = request
+  def show(cya: Boolean = false): Action[AnyContent] = actions.getJourney.async: 
+    journeyRequest =>
+      given Request[?] = journeyRequest.request
       
-      createInvitationService.getAnswerFromSession(ClientTypeFieldName).map { clientTypeValue =>
-        Ok(view(SelectFromOptionsForm.form(ClientTypeFieldName, serviceConfig.allClientTypes).fill(clientTypeValue), serviceConfig.allClientTypes, previousPageUrl(cya), formSubmitUrl(cya)))
-      }
+      val journey = journeyRequest.journey
+      lazy val previousPageUrl: String = if (cya) routes.CheckYourAnswersController.show.url else appConfig.agentServicesAccountHomeUrl
       
+      Future.successful(Ok(view(SelectFromOptionsForm.form(ClientTypeFieldName, serviceConfig.allClientTypes).fill(journey.clientType.getOrElse("")), serviceConfig.allClientTypes, previousPageUrl, formSubmitUrl(cya))))
 
-  def onSubmit(cya: Boolean = false): Action[AnyContent] = Action.async:
-    request =>
-      given MessagesRequest[AnyContent] = request
+  
+  def onSubmit(cya: Boolean = false): Action[AnyContent] = actions.getJourney.async:
+    journeyRequest =>
+      given Request[?] = journeyRequest.request
+      val journey = journeyRequest.journey
+      
+      lazy val previousPageUrl: String = journey.journeyType match
+        case JourneyType.CreateInvitation | JourneyType.CreateInvitationFastTrack  => if (cya) routes.CheckYourAnswersController.show.url else appConfig.agentServicesAccountHomeUrl
+            
       
       SelectFromOptionsForm.form(ClientTypeFieldName, serviceConfig.allClientTypes).bindFromRequest().fold(
         formWithErrors => {
-          Future.successful(Ok(view(formWithErrors, serviceConfig.allClientTypes, previousPageUrl(cya), formSubmitUrl(cya))))
+          Future.successful(Ok(view(formWithErrors, serviceConfig.allClientTypes, previousPageUrl, formSubmitUrl(cya))))
         },
         clientType => {
-          createInvitationService.deleteAllAnswersInSession.flatMap { _ =>
-            createInvitationService.saveAnswerInSession(ClientTypeFieldName, clientType).map { _ =>
-              Redirect(nextPageUrl)
-            }
+            journeyService.saveJourney(journey.copy(clientType = Some(clientType))).flatMap { _ =>
+              journeyService.nextPageUrl(serviceConfig).map(Redirect(_))
           }
         }
       )
+
+//  private def nextPageUrlFastTrack(journey: Journey): String =
+//    val clientService = journey.getService
+//    val knowFactsType = serviceConfig.clientDetailsFor(clientService).last.name
+//    val isKowFactDefined = journey.clientDetails.contains(knowFactsType)
+//
+//    if (isKowFactDefined) routes.CheckYourAnswersController.show.url
+//    else
+//      val knowFactsType = serviceConfig.clientDetailsFor(journey.getService).last.name
+//      routes.EnterClientDetailsController.show(knowFactsType).url
+//
+//

@@ -16,4 +16,10 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.models.common
 
-case class ServiceData(serviceName: String, clientTypes: Set[String], clientTypesId: ClientIdType, clientDetails: Seq[FieldConfiguration])
+import play.api.libs.json.{Json, OFormat, Reads}
+
+case class SuspensionDetails(suspensionStatus: Boolean, regimes: Option[Set[String]])
+
+object SuspensionDetails {
+  implicit val formats: OFormat[SuspensionDetails] = Json.format
+}

@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,12 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.agentclientrelationshipsfrontend.models.common
+package uk.gov.hmrc.agentclientrelationshipsfrontend.views.components
 
-case class ServiceData(serviceName: String, clientTypes: Set[String], clientTypesId: ClientIdType, clientDetails: Seq[FieldConfiguration])
+case class RadioData(
+  name: String,
+  label: String,
+  hint: Option[String] = None,
+  isChecked: Option[Boolean] = None,
+  id: Option[String] = None
+)
