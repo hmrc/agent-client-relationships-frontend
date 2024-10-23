@@ -16,11 +16,15 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey
 
-import play.api.mvc._
+import play.api.i18n.I18nSupport
+import play.api.mvc.*
+import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.ClientTypeFieldName
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.SelectFromOptionsForm
-import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{ClientServiceConfigurationService, JourneyService}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{JourneyRequest, JourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.services.ClientServiceConfigurationService
+import uk.gov.hmrc.agentclientrelationshipsfrontend.services.journey.JourneyService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.SelectClientTypePage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
@@ -30,24 +34,28 @@ import scala.concurrent.{ExecutionContext, Future}
 class SelectClientTypeController @Inject()(mcc: MessagesControllerComponents,
                                            serviceConfig: ClientServiceConfigurationService,
                                            journeyService: JourneyService,
-                                           selectClientTypePage: SelectClientTypePage
-                                          )(implicit val executionContext: ExecutionContext) extends FrontendController(mcc):
+                                           selectClientTypePage: SelectClientTypePage,
+                                           actions:        Actions
+                                          )(implicit val executionContext: ExecutionContext) extends FrontendController(mcc)  with I18nSupport:
   
-  def show(journeyType: String): Action[AnyContent] = Action.async:
-    request =>
-      given MessagesRequest[AnyContent] = request
-      journeyService.getAnswerFromSession(ClientTypeFieldName).map { clientTypeValue =>
+  def show(journeyTypeNotUsed: String): Action[AnyContent] = actions.getJourney:
+    journeyRequest =>
+      given Request[?] = journeyRequest
+      val journey = journeyRequest.journey
+
         Ok(selectClientTypePage(
-          form = SelectFromOptionsForm.form(ClientTypeFieldName, serviceConfig.allClientTypes, journeyType).fill(clientTypeValue),
+          form = SelectFromOptionsForm.form(ClientTypeFieldName, serviceConfig.allClientTypes, journey.journeyType.toString).fill(journey.getClientType),
           clientTypes = serviceConfig.allClientTypes
         ))
-      }
+
       
 
-  def onSubmit(journeyType: String): Action[AnyContent] = Action.async:
-    request =>
-      given MessagesRequest[AnyContent] = request
-      SelectFromOptionsForm.form(ClientTypeFieldName, serviceConfig.allClientTypes, journeyType).bindFromRequest().fold(
+  def onSubmit(journeyTypeNotUsed: String): Action[AnyContent] = actions.getJourney.async:
+    journeyRequest =>
+      given Request[?] = journeyRequest
+      val journey = journeyRequest.journey
+
+      SelectFromOptionsForm.form(ClientTypeFieldName, serviceConfig.allClientTypes, journey.journeyType.toString).bindFromRequest().fold(
         formWithErrors => {
           Future.successful(Ok(selectClientTypePage(
             form = formWithErrors,
@@ -55,9 +63,7 @@ class SelectClientTypeController @Inject()(mcc: MessagesControllerComponents,
           )))
         },
         clientType => {
-          journeyService.saveAnswerInSession(ClientTypeFieldName, clientType).map { _ =>
-              Ok("Redirect to next page")
-            }
-
+          journeyService.saveJourney(journeyRequest.journey.copy(service = Some(clientType))).flatMap { _ =>
+            journeyService.nextPageUrl().map(Redirect(_))}
         }
   )

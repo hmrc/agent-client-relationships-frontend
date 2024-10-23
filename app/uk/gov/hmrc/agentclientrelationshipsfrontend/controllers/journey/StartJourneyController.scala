@@ -19,6 +19,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey
 import play.api.i18n.I18nSupport
 import play.api.mvc.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyType.AuthorisationRequest
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{Journey, JourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.journey.JourneyService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
@@ -27,18 +28,19 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DummyStartJourneyController @Inject()(mcc: MessagesControllerComponents,
-                                            journeyService: JourneyService,
-                                            actions:        Actions
+class StartJourneyController @Inject()(mcc: MessagesControllerComponents,
+                                       journeyService: JourneyService,
+                                       actions:        Actions
                                           )(implicit val executionContext: ExecutionContext) extends FrontendController(mcc) with I18nSupport:
   
   
-  def startJourney(journeyType: JourneyType): Action[AnyContent] = actions.getJourney.async: 
+  def startJourney(journeyType: String): Action[AnyContent] = actions.getJourney.async: 
     journeyRequest =>
       given Request[?] = journeyRequest
       
       val journey = journeyRequest.journey
-      val newJourney = journeyService.newJourney(journeyType)
+//      val newJourney = journeyService.newJourney(journeyType) //TODO - replace once binders fixed
+      val newJourney = journeyService.newJourney(AuthorisationRequest)
 
       journeyService.saveJourney(newJourney).flatMap { _ =>
         journeyService.nextPageUrl().map(Redirect(_))}

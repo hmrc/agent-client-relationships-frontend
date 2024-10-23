@@ -61,10 +61,11 @@ class JourneyService @Inject()(journeyRepository: JourneyRepository
       mayBeJourney match {
         case Some(journey) =>
           journey.journeyState match
-            case JourneyState.SelectClientType => ??? //routes.SelectClientServiceController.show.url
+            case JourneyState.SelectClientType => routes.SelectClientTypeController.show(journey.journeyType.toString).url //TODO WG - remove toSTring once binders fixed
             case JourneyState.SelectService => ??? //routes.SelectClientServiceController.show.url
             case JourneyState.EnterClientId => journey.journeyType match
               case JourneyType.AuthorisationRequest | JourneyType.AgentCancelAuthorisation => ???
+        case None => ??? //TODO WG - route to page where user select JOurney Type
       }
     }
   

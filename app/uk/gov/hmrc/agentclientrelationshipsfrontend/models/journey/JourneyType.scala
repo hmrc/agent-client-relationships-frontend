@@ -17,16 +17,23 @@
 package uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey
 
 import play.api.libs.json._
+import play.api.mvc.PathBindable
 
-//TODO WG - missing binder
+
 enum JourneyType:
   case AuthorisationRequest, AgentCancelAuthorisation
 
+  override def toString: String = this match {
+    case AuthorisationRequest => "authorisation-request"
+    case AgentCancelAuthorisation => "agentCancel-authorisation"
+  }
+
+
 implicit val journeyTypeReads: Reads[JourneyType] = Reads[JourneyType] { json =>
   json.validate[String].flatMap {
-    case "AuthorisationRequest"   => JsSuccess(JourneyType.AuthorisationRequest)
+    case "AuthorisationRequest" => JsSuccess(JourneyType.AuthorisationRequest)
     case "AgentCancelAuthorisation" => JsSuccess(JourneyType.AgentCancelAuthorisation)
-    case _       => JsError("Invalid JourneyType")
+    case _ => JsError("Invalid JourneyType")
   }
 }
 
@@ -34,4 +41,4 @@ implicit val journeyTypeWrites: Writes[JourneyType] = Writes[JourneyType] { jour
   JsString(journeyType.toString)
 }
 
-implicit val colorFormat: Format[JourneyType] = Format(journeyTypeReads, journeyTypeWrites)
+implicit val journeyTypeFormat: Format[JourneyType] = Format(journeyTypeReads, journeyTypeWrites)

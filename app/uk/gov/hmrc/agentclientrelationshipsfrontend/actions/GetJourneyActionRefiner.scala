@@ -18,7 +18,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.actions
 
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{ActionRefiner, Request, Result}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{Journey, JourneyRequest}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{Journey, JourneyRequest, JourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.journey.JourneyService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.routes
 
@@ -41,7 +41,7 @@ class GetJourneyActionRefiner @Inject()(
           Right(new JourneyRequest(journey, request))
         case None =>
           //TODO WG - replace with start journey that do not take journeyType
-          Left(Redirect(routes.ExampleController.????))
+          Left(Redirect(routes.StartJourneyController.startJourney(JourneyType.AuthorisationRequest.toString).url))
       }
     }
   }
