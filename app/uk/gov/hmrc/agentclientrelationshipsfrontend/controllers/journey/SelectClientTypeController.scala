@@ -46,7 +46,6 @@ class SelectClientTypeController @Inject()(mcc: MessagesControllerComponents,
         form = SelectFromOptionsForm.form(ClientTypeFieldName, serviceConfig.allClientTypes, journey.journeyType.toString).fill(journey.getClientTypeWithDefault),
         clientTypes = serviceConfig.allClientTypes
       ))
-
       
 
   def onSubmit(journeyType: JourneyType): Action[AnyContent] = actions.getJourney(journeyType).async:
@@ -62,7 +61,7 @@ class SelectClientTypeController @Inject()(mcc: MessagesControllerComponents,
           )))
         },
         clientType => {
-          journeyService.saveJourney(journeyRequest.journey.copy(service = Some(clientType))).flatMap { _ =>
+          journeyService.saveJourney(journeyRequest.journey.copy(clientType = Some(clientType))).flatMap { _ =>
             journeyService.nextPageUrl().map(Redirect(_))}
         }
   )
