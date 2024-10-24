@@ -39,7 +39,7 @@ GET         /iv-timed-out                                                       
 GET         /iv-locked-out                                                              uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.AuthorisationController.ivLockedOut
 
 
-GET        /:journeyType/start-journey                                                  uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.StartJourneyController.startJourney(journeyType: JourneyType)
+GET        /:journeyType                                                                uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.StartJourneyController.startJourney(journeyType: JourneyType)
 
 GET        /:journeyType/client-type                                                    uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.SelectClientTypeController.show(journeyType: JourneyType)
 POST       /:journeyType/client-type                                                    uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.SelectClientTypeController.onSubmit(journeyType: JourneyType)
