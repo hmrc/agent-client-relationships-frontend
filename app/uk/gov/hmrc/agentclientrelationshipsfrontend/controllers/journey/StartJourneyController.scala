@@ -34,13 +34,11 @@ class StartJourneyController @Inject()(mcc: MessagesControllerComponents,
                                           )(implicit val executionContext: ExecutionContext) extends FrontendController(mcc) with I18nSupport:
   
   
-  def startJourney(journeyType: String): Action[AnyContent] = actions.getJourney.async: 
-    journeyRequest =>
-      given Request[?] = journeyRequest
+  def startJourney(journeyType: JourneyType): Action[AnyContent] = Action.async:
+    request =>
+      given Request[?] = request
       
-      val journey = journeyRequest.journey
-//      val newJourney = journeyService.newJourney(journeyType) //TODO - replace once binders fixed
-      val newJourney = journeyService.newJourney(AuthorisationRequest)
+      val newJourney = journeyService.newJourney(journeyType)
 
       journeyService.saveJourney(newJourney).flatMap { _ =>
         journeyService.nextPageUrl().map(Redirect(_))}

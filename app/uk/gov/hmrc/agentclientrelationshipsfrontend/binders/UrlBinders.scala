@@ -19,10 +19,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.binders
 import play.api.mvc.PathBindable
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyType
 
-//TODO WG - binders does not work !!!!
 object UrlBinders {
-//  given PathBindable[JourneyType] with
-
   implicit val journeyTypeBinder: PathBindable[JourneyType] = getJourneyTypeBinder
 
   private def getJourneyTypeBinder(implicit stringBinder: PathBindable[String]) = new PathBindable[JourneyType] {

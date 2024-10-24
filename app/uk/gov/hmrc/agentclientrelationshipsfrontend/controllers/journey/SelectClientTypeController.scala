@@ -38,9 +38,9 @@ class SelectClientTypeController @Inject()(mcc: MessagesControllerComponents,
                                            actions:        Actions
                                           )(implicit val executionContext: ExecutionContext) extends FrontendController(mcc)  with I18nSupport:
   
-  def show(journeyTypeNotUsed: String): Action[AnyContent] = actions.getJourney:
+  def show(journeyTypeNotUsed: JourneyType): Action[AnyContent] = actions.getJourney:
     journeyRequest =>
-      given Request[?] = journeyRequest
+      given JourneyRequest[?] = journeyRequest
       val journey = journeyRequest.journey
 
         Ok(selectClientTypePage(
@@ -50,9 +50,9 @@ class SelectClientTypeController @Inject()(mcc: MessagesControllerComponents,
 
       
 
-  def onSubmit(journeyTypeNotUsed: String): Action[AnyContent] = actions.getJourney.async:
+  def onSubmit(journeyTypeNotUsed: JourneyType): Action[AnyContent] = actions.getJourney.async:
     journeyRequest =>
-      given Request[?] = journeyRequest
+      given JourneyRequest[?] = journeyRequest
       val journey = journeyRequest.journey
 
       SelectFromOptionsForm.form(ClientTypeFieldName, serviceConfig.allClientTypes, journey.journeyType.toString).bindFromRequest().fold(

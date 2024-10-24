@@ -21,6 +21,7 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.implicits.RichRadios
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.ClientTypeFieldName
 @import play.api.mvc.Call
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyRequest
 
 
 @this(
@@ -30,7 +31,7 @@
         submitButton: SubmitButton
 )
 
-@(form: Form[String], clientTypes: Set[String])(implicit request: RequestHeader, messages: Messages)
+@(form: Form[String], clientTypes: Set[String])(implicit request: JourneyRequest[?], messages: Messages)
 
 @key = @{"clientType"}
 @*    @journeyKey = @{request.journey.journeyType}*@
@@ -39,7 +40,7 @@
 
 @layout(pageTitle = pageTitle, optionalForm = Some(form)) {
 
-    @formWithCSRF(action = routes.SelectClientTypeController.onSubmit(journeyKey)) {
+    @formWithCSRF(action = routes.SelectClientTypeController.onSubmit(request.journey.journeyType)) {
         @govukRadios(Radios(
             fieldset = Some(Fieldset(
                 legend = Some(Legend(

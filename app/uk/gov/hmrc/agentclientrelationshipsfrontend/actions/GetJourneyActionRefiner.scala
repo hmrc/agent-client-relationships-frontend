@@ -40,8 +40,7 @@ class GetJourneyActionRefiner @Inject()(
         case Some(journey) =>
           Right(new JourneyRequest(journey, request))
         case None =>
-          //TODO WG - replace with start journey that do not take journeyType
-          Left(Redirect(routes.StartJourneyController.startJourney(JourneyType.AuthorisationRequest.toString).url))
+          Left(Redirect(routes.StartJourneyController.startJourney(JourneyType.AuthorisationRequest).url))
       }
     }
   }
