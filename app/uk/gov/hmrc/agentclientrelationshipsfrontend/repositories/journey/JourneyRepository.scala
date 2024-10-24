@@ -14,21 +14,22 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers
+package uk.gov.hmrc.agentclientrelationshipsfrontend.repositories.journey
 
-import play.api.mvc._
-import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import uk.gov.hmrc.http.SessionKeys
+import uk.gov.hmrc.mongo.cache.SessionCacheRepository
+import uk.gov.hmrc.mongo.{CurrentTimestampSupport, MongoComponent}
 
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.Future
+import scala.concurrent.ExecutionContext
+import scala.concurrent.duration.DurationInt
 
 @Singleton
-class TimedOutController @Inject()(mcc: MessagesControllerComponents) extends FrontendController(mcc):
-
-  def timedOut: Action[AnyContent] = Action.async:
-    request =>
-      given MessagesRequest[AnyContent] = request
-      // previously the destination of sign out was determined by MainTemplate code
-      // instead we could do that in here
-      Future.successful(Ok("Timed out"))
-
+class JourneyRepository @Inject()(mongo: MongoComponent)(implicit ec: ExecutionContext)
+  extends SessionCacheRepository(
+    mongoComponent = mongo,
+    collectionName = "client-relationships",
+    ttl = 15.minutes,
+    timestampSupport = new CurrentTimestampSupport(),
+    sessionIdKey = SessionKeys.sessionId
+  )

@@ -28,8 +28,8 @@ trait FormFieldHelper {
     Invalid(ValidationError(invalidInputErrorMessage(messageKey), "inputFieldClass" -> inputFieldClass))
   }
   
-  protected def mandatoryFieldErrorMessage(messageKey: String): String = s"error.$messageKey.required"
+  protected def mandatoryFieldErrorMessage(messageKey: String): String = s"$messageKey.error.required"
   
-  protected def invalidInputErrorMessage(messageKey: String): String = s"error.$messageKey.invalid"
+  protected def invalidInputErrorMessage(messageKey: String): String = s"$messageKey.error.invalid"
   
 }

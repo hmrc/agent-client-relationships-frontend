@@ -64,11 +64,14 @@ error.cannot-view-request.button=Mewngofnodi
 # -------------------------------------------------------------------------------------------
 # Select Client Type
 # -------------------------------------------------------------------------------------------
-clientType.header=<translation needed>
+clientType.authorisation-request.header=<translation needed>
+clientType.agent-cancel-authorisation.header=<translation needed>
 clientType.personal=Unigolyn neu unig fasnachwr
 clientType.business=Cwmni neu bartneriaeth
 clientType.trust=Ymddiriedolaeth neu ystâd
-error.clientType.required=Dewiswch y math o gleient rydych angen awdurdodiad ganddo
+
+clientType.authorisation-request.error.required=Dewiswch y math o gleient rydych angen awdurdodiad ganddo
+clientType.agent-cancel-authorisation.error.required=<translation needed>
 
 
 # -------------------------------------------------------------------------------------------
