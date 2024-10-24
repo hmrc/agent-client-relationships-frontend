@@ -17,7 +17,7 @@
 package uk.gov.hmrc.agentclientrelationshipsfrontend.actions
 
 import play.api.mvc.{ActionBuilder, AnyContent, DefaultActionBuilder, Request}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyRequest
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{JourneyRequest, JourneyType}
 
 import javax.inject.{Inject, Singleton}
 
@@ -29,7 +29,7 @@ class Actions @Inject()(
 
   val default: ActionBuilder[Request, AnyContent] = actionBuilder
 
-  @SuppressWarnings(Array("org.wartremover.warts.Any"))
-  val getJourney: ActionBuilder[JourneyRequest, AnyContent] = default andThen getJourneyAction
+  def getJourney(journeyTypeFromUrl: JourneyType): ActionBuilder[JourneyRequest, AnyContent] =
+    default andThen getJourneyAction.journeyAction(journeyTypeFromUrl)
 
 }

@@ -17,33 +17,30 @@
 package uk.gov.hmrc.agentclientrelationshipsfrontend.actions
 
 import play.api.mvc.Results.Redirect
-import play.api.mvc.{ActionRefiner, Request, Result}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{Journey, JourneyRequest, JourneyType}
+import play.api.mvc.{ActionFunction, Request, Result}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{JourneyRequest, JourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.journey.JourneyService
-import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.routes
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
-
 @Singleton
-class GetJourneyActionRefiner @Inject()(
-    journeyService: JourneyService
-)(implicit ec: ExecutionContext) extends ActionRefiner[Request, JourneyRequest] {
+class GetJourneyActionRefiner @Inject()(journeyService: JourneyService,
+                                        appConfig: AppConfig
+                                       )(implicit ec: ExecutionContext) {
 
-  override protected def refine[A](request: Request[A]): Future[Either[Result, JourneyRequest[A]]] = {
-    implicit val r: Request[A] = request
-    for {
-      maybeJourney <- journeyService.getJourney()
-    } yield {
-      maybeJourney match {
-        case Some(journey) =>
-          Right(new JourneyRequest(journey, request))
-        case None =>
-          Left(Redirect(routes.StartJourneyController.startJourney(JourneyType.AuthorisationRequest).url))
+  def journeyAction(journeyTypeFromUrl: JourneyType): ActionFunction[Request, JourneyRequest] = new ActionFunction[Request, JourneyRequest] {
+    override protected def executionContext: ExecutionContext = ec
+
+    override def invokeBlock[A](request: Request[A], block: JourneyRequest[A] => Future[Result]): Future[Result] =
+      implicit val r: Request[A] = request
+      journeyService.getJourney().flatMap {
+        case Some(journey) if journey.journeyType == journeyTypeFromUrl =>
+          block(new JourneyRequest(journey, request))
+        case _ =>
+          Future.successful(Redirect(appConfig.agentServicesAccountHomeUrl))
       }
-    }
   }
 
-  override protected def executionContext: ExecutionContext = ec
 }
