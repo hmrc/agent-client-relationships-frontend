@@ -42,9 +42,8 @@ class SelectClientTypeController @Inject()(mcc: MessagesControllerComponents,
     journeyRequest =>
       given JourneyRequest[?] = journeyRequest
       val journey = journeyRequest.journey
-
       Ok(selectClientTypePage(
-        form = SelectFromOptionsForm.form(ClientTypeFieldName, serviceConfig.allClientTypes, journey.journeyType.toString).fill(journey.getClientType),
+        form = SelectFromOptionsForm.form(ClientTypeFieldName, serviceConfig.allClientTypes, journey.journeyType.toString).fill(journey.getClientTypeWithDefault),
         clientTypes = serviceConfig.allClientTypes
       ))
 

@@ -26,7 +26,7 @@ object UrlBinders {
 
     override def bind(key: String, value: String): Either[String, JourneyType] = value match
       case "authorisation-request" => Right(JourneyType.AuthorisationRequest)
-      case "agentCancel-authorisation" => Right(JourneyType.AgentCancelAuthorisation)
+      case "agent-cancel-authorisation" => Right(JourneyType.AgentCancelAuthorisation)
       case other => Left(s"Invalid value for $key: $other")
 
     override def unbind(key: String, value: JourneyType): String =

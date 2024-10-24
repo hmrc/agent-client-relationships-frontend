@@ -25,14 +25,14 @@ enum JourneyType:
 
   override def toString: String = this match {
     case AuthorisationRequest => "authorisation-request"
-    case AgentCancelAuthorisation => "agentCancel-authorisation"
+    case AgentCancelAuthorisation => "agent-cancel-authorisation"
   }
 
 
 implicit val journeyTypeReads: Reads[JourneyType] = Reads[JourneyType] { json =>
   json.validate[String].flatMap {
-    case "AuthorisationRequest" => JsSuccess(JourneyType.AuthorisationRequest)
-    case "AgentCancelAuthorisation" => JsSuccess(JourneyType.AgentCancelAuthorisation)
+    case "authorisation-request" => JsSuccess(JourneyType.AuthorisationRequest)
+    case "agent-cancel-authorisation" => JsSuccess(JourneyType.AgentCancelAuthorisation)
     case _ => JsError("Invalid JourneyType")
   }
 }

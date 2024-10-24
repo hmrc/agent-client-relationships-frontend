@@ -34,8 +34,7 @@
 @(form: Form[String], clientTypes: Set[String])(implicit request: JourneyRequest[?], messages: Messages)
 
 @key = @{"clientType"}
-@*    @journeyKey = @{request.journey.journeyType}*@
-@journeyKey = @{"authorisation-request"}
+@journeyKey = @{request.journey.journeyType.toString}
 @pageTitle = @{messages(s"$key.$journeyKey.header")}
 
 @layout(pageTitle = pageTitle, optionalForm = Some(form)) {
