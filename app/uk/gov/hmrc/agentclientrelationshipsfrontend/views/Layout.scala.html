@@ -95,7 +95,7 @@ equal the page heading (H1) content *@
             mainContentLayout = sidebar.map(s => twoThirdsOneThirdMainContent(s, pageTitle))
         ),
         isWelshTranslationAvailable = appConfig.welshLanguageSupportEnabled,
-        backLink = backLinkHref.map(BackLink(_, messages("button.back"))),
+        backLink = Some(backLinkHref.map(BackLink(_, messages("button.back"))).getOrElse(BackLink.mimicsBrowserBackButtonViaJavaScript)),
         serviceName = Some(service)
   )
 )(content)

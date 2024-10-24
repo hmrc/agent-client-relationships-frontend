@@ -23,9 +23,9 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.services.ClientServiceConfig
 
 case class Journey(journeyType: JourneyType,
                    journeyState: JourneyState,
-                   clientType: Option[String],
-                   service: Option[String],
-                   clientId: Option[String]
+                   clientType: Option[String] = None,
+                   service: Option[String] = None,
+                   clientId: Option[String] = None
                   ) {
   
   def getClientTypeWithDefault:String = clientType.getOrElse("")
