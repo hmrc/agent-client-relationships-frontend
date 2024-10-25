@@ -26,14 +26,13 @@ object UrlHelper {
 
   def addParamsToUrl(url: String, params: (String, Option[String])*): String = {
     val query = params.collect { case (key, Some(value)) => s"$key=${URLEncoder.encode(value, "UTF-8")}" } mkString "&"
-    if query.isEmpty then {
+    if query.isEmpty then
       url
-    } else if url.endsWith("?") || url.endsWith("&") then {
+    else if url.endsWith("?") || url.endsWith("&") then
       url + query
-    } else {
+    else
       val join = if url.contains("?") then "&" else "?"
       url + join + query
-    }
   }
 
   def validateRedirectUrl(redirectUrl: RedirectUrl)(implicit appConfig: AppConfig): String =

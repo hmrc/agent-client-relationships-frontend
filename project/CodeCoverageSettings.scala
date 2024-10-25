@@ -14,23 +14,7 @@ object CodeCoverageSettings {
     ".*Routes.*",
     "testOnly.*",
     "testOnlyDoNotUseInAppConf.*",
-    ".*models.*",
-    ".*views.*",
-    ".*binders.*",
-    ".*utils.*",
-    ".*controllers.TrackRequestsController.*",
-    ".*controllers.clientInvitation.ChangeConsentController.*",
-    ".*controllers.clientInvitation.InvitationErrorController.*",
-    ".*controllers.clientInvitation.CheckYourAnswersController.*",
-    ".*controllers.clientInvitation.ConfirmDeclineController.*",
-    ".*controllers.clientInvitation.ConsentController.*",
-    ".*controllers.clientInvitation.CreateNewUserIdController.*",
-    ".*controllers.clientInvitation.InvitationHistoryController.*",
-    ".*controllers.clientInvitation.SelectTaxServiceController.*",
-    ".*controllers.clientInvitation.SuspendedAgentController.*",
-    ".*controllers.clientInvitation.UserIdNeededController.*",
-    ".*controllers.clientInvitation.WarmUpController.*",
-    ".*controllers.SignOutController.*"
+    "$anon"
   )
 
   val settings: Seq[Setting[_]] = Seq(

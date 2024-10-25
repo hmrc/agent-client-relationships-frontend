@@ -17,26 +17,20 @@
 package uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey
 
 import play.api.libs.json.{Json, OFormat}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.createInvitation.routes
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.common.*
-import uk.gov.hmrc.agentclientrelationshipsfrontend.services.ClientServiceConfigurationService
 
 case class Journey(journeyType: JourneyType,
                    journeyState: JourneyState,
-                   clientType: Option[String],
-                   service: Option[String],
-                   clientId: Option[String]
-                  ) {
-  
-  def getClientTypeWithDefault:String = clientType.getOrElse("")
+                   clientType: Option[String] = None,
+                   service: Option[String] = None,
+                   clientId: Option[String] = None):
+
+  def getClientTypeWithDefault: String = clientType.getOrElse("")
   def getClientType: String = clientType.getOrElse(throw new RuntimeException("clientType not defined"))
 
   def getServiceWithDefault: String = service.getOrElse("")
   def getService: String = service.getOrElse(throw new RuntimeException("service not defined"))
-  
-}
 
-object Journey {
+object Journey:
   implicit lazy val format: OFormat[Journey] = Json.format[Journey]
-}
+
 
