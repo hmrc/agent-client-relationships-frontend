@@ -25,9 +25,12 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Writes
 import play.api.libs.ws.DefaultBodyWritables.writeableOf_String
 import play.api.libs.ws.{WSClient, WSRequest, WSResponse}
+import play.api.mvc.{AnyContent, Request}
+import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 
 import scala.concurrent.ExecutionContext
+import uk.gov.hmrc.http.SessionKeys
 
 trait ComponentSpecHelper
   extends AnyWordSpec
@@ -110,7 +113,16 @@ trait ComponentSpecHelper
 
   val baseUrl: String = "/agent-client-relationships"
 
-  private def buildClient(path: String): WSRequest =
-    ws.url(s"http://localhost:$port$baseUrl$path").withFollowRedirects(false)
+  private def buildClient(path: String, headers: Seq[(String, String)] = sessionHeaders): WSRequest =
+    ws.url(s"http://localhost:$port$baseUrl${path.replace(baseUrl, "")}")
+      .withFollowRedirects(false)
+      .withHttpHeaders(sessionHeaders*)
+
+  val sessionHeaders: Seq[(String, String)] = Seq(
+    SessionKeys.authToken -> "testAuth",
+    SessionKeys.sessionId -> "testSession"
+  )
+
+  implicit val request: Request[AnyContent] = FakeRequest().withSession(sessionHeaders*)
 
 }

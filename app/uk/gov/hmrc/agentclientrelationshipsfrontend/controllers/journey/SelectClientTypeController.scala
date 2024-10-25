@@ -55,7 +55,7 @@ class SelectClientTypeController @Inject()(mcc: MessagesControllerComponents,
 
       SelectFromOptionsForm.form(ClientTypeFieldName, serviceConfig.allClientTypes, journey.journeyType.toString).bindFromRequest().fold(
         formWithErrors => {
-          Future.successful(Ok(selectClientTypePage(
+          Future.successful(BadRequest(selectClientTypePage(
             form = formWithErrors,
             clientTypes = serviceConfig.allClientTypes
           )))
