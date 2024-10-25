@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.agentclientrelationshipsfrontend.auth
+package uk.gov.hmrc.agentclientrelationshipsfrontend.actions
 
 import org.mockito.Mockito.reset
 import org.scalatest.matchers.should.Matchers

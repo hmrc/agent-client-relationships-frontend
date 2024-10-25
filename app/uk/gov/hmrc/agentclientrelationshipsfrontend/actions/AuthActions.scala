@@ -45,8 +45,8 @@ class ClientRequest[A](val client: AuthorisedClient,
 
 @Singleton
 class AuthActions @Inject()(val authConnector: AuthConnector,
-                            appConfig: AppConfig)
-                           (implicit ec: ExecutionContext)
+                            appConfig: AppConfig
+                           )(implicit ec: ExecutionContext)
   extends AuthorisedFunctions with Logging {
 
   private val requiredCL = ConfidenceLevel.L250

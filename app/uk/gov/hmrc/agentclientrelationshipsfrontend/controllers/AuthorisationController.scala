@@ -20,7 +20,7 @@ import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.connectors.IdentityVerificationConnector
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.*
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.IvResult.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.UrlHelper
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.UserTimedOut
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.auth.*

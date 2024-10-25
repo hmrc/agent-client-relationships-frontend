@@ -21,17 +21,23 @@ import play.api.libs.json.*
 enum JourneyState:
   case SelectClientType, SelectService, EnterClientId
 
-implicit val journeyStateReads: Reads[JourneyState] = Reads[JourneyState] { json =>
-  json.validate[String].flatMap {
-    case "SelectClientType"   => JsSuccess(JourneyState.SelectClientType)
-    case "SelectService" => JsSuccess(JourneyState.SelectService)
-    case "EnterClientId" => JsSuccess(JourneyState.EnterClientId)
-    case _       => JsError("Invalid JourneyType")
+object JourneyState:
+  val mapping: Map[String, JourneyState] = Map(
+    "SelectClientType" -> JourneyState.SelectClientType,
+    "SelectService" -> JourneyState.SelectService,
+    "EnterClientId" -> JourneyState.EnterClientId
+  )
+  val inverseMapping: Map[JourneyState, String] = mapping.map(_.swap)
+
+  implicit val journeyStateReads: Reads[JourneyState] = Reads[JourneyState] { json =>
+    json.validate[String].flatMap(string => mapping
+      .get(string).map(JsSuccess(_))
+      .getOrElse(JsError("Invalid JourneyState"))
+    )
   }
-}
 
-implicit val journeyStateWrites: Writes[JourneyState] = Writes[JourneyState] { journeyState =>
-  JsString(journeyState.toString)
-}
+  implicit val journeyStateWrites: Writes[JourneyState] = Writes[JourneyState] { journeyState =>
+    JsString(inverseMapping(journeyState))
+  }
 
-implicit val journeyStateFormat: Format[JourneyState] = Format(journeyStateReads, journeyStateWrites)
+  implicit val journeyStateFormat: Format[JourneyState] = Format(journeyStateReads, journeyStateWrites)

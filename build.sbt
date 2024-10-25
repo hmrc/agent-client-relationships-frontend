@@ -1,5 +1,6 @@
 import play.sbt.routes.RoutesKeys
 import uk.gov.hmrc.DefaultBuildSettings
+import scoverage.ScoverageKeys
 
 ThisBuild / majorVersion := 0
 ThisBuild / scalaVersion := "3.5.1"

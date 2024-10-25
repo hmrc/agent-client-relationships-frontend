@@ -26,21 +26,20 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class GetJourneyActionRefiner @Inject()(journeyService: JourneyService,
-                                        appConfig: AppConfig
-                                       )(implicit ec: ExecutionContext) {
+class GetJourneyAction @Inject()(journeyService: JourneyService,
+                                 appConfig: AppConfig
+                                )(implicit ec: ExecutionContext) {
 
-  def journeyAction(journeyTypeFromUrl: JourneyType): ActionFunction[Request, JourneyRequest] = new ActionFunction[Request, JourneyRequest] {
+  def journeyAction(journeyTypeFromUrl: JourneyType): ActionFunction[Request, JourneyRequest] = new ActionFunction[Request, JourneyRequest]:
     override protected def executionContext: ExecutionContext = ec
 
     override def invokeBlock[A](request: Request[A], block: JourneyRequest[A] => Future[Result]): Future[Result] =
-      implicit val r: Request[A] = request
+      given Request[A] = request
       journeyService.getJourney().flatMap {
         case Some(journey) if journey.journeyType == journeyTypeFromUrl =>
           block(new JourneyRequest(journey, request))
         case _ =>
           Future.successful(Redirect(appConfig.agentServicesAccountHomeUrl))
       }
-  }
 
 }

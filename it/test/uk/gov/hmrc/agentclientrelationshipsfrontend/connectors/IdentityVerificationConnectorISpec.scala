@@ -18,7 +18,8 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.connectors
 
 import play.api.libs.json.Json
 import play.api.test.Helpers.*
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.*
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.IvResult
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.IvResult.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.ComponentSpecHelper
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.WiremockHelper.stubGet
 import uk.gov.hmrc.http.HeaderCarrier
