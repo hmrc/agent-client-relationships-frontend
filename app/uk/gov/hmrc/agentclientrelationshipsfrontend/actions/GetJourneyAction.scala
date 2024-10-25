@@ -37,7 +37,7 @@ class GetJourneyAction @Inject()(journeyService: JourneyService,
       given Request[A] = request
       journeyService.getJourney().flatMap {
         case Some(journey) if journey.journeyType == journeyTypeFromUrl =>
-          block(new JourneyRequest(journey, r))
+          block(new JourneyRequest(journey, request))
         case _ =>
           Future.successful(Redirect(appConfig.agentServicesAccountHomeUrl))
       }
