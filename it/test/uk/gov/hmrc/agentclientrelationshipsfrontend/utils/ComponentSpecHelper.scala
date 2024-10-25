@@ -18,19 +18,23 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.utils
 
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
+import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, OptionValues}
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Writes
 import play.api.libs.ws.DefaultBodyWritables.writeableOf_String
-import play.api.libs.ws.{WSClient, WSRequest, WSResponse}
-import play.api.mvc.{AnyContent, Request}
+import play.api.libs.ws.DefaultBodyWritables.writeableOf_urlEncodedForm
+import play.api.libs.ws.{BodyWritable, DefaultWSCookie, WSClient, WSCookie, WSRequest, WSResponse}
+import play.api.mvc.{AnyContent, Request, Session, SessionCookieBaker}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
+import uk.gov.hmrc.crypto.PlainText
+import uk.gov.hmrc.http.SessionKeys
+import uk.gov.hmrc.play.bootstrap.frontend.filters.crypto.SessionCookieCrypto
+import play.api.mvc.AnyContentAsFormUrlEncoded
 
 import scala.concurrent.ExecutionContext
-import uk.gov.hmrc.http.SessionKeys
 
 trait ComponentSpecHelper
   extends AnyWordSpec
@@ -39,7 +43,8 @@ trait ComponentSpecHelper
     with WiremockHelper
     with BeforeAndAfterAll
     with BeforeAndAfterEach
-    with GuiceOneServerPerSuite {
+    with GuiceOneServerPerSuite
+    with OptionValues {
 
   def downstreamServices: Map[String, String] = Seq(
     "auth",
@@ -63,10 +68,10 @@ trait ComponentSpecHelper
   val mockUrl: String = s"http://$mockHost:$mockPort"
 
   def config: Map[String, String] = Map(
-    "auditing.enabled"                                      -> "false",
-    "play.filters.csrf.header.bypassHeaders.Csrf-Token"     -> "nocheck",
-    "auditing.consumer.baseUri.host"                        -> mockHost,
-    "auditing.consumer.baseUri.port"                        -> mockPort
+    "auditing.enabled" -> "false",
+    "play.filters.csrf.header.bypassHeaders.Csrf-Token" -> "nocheck",
+    "auditing.consumer.baseUri.host" -> mockHost,
+    "auditing.consumer.baseUri.port" -> mockPort
   )
 
   implicit val ws: WSClient = app.injector.instanceOf[WSClient]
@@ -87,42 +92,67 @@ trait ComponentSpecHelper
     super.beforeEach()
   }
 
-  def get[T](uri: String): WSResponse = {
+  def get[T](uri: String): WSResponse =
     await(buildClient(uri).withHttpHeaders("Authorization" -> "Bearer 123").get())
-  }
 
-  def post[T](uri: String)(body: T)(implicit writes: Writes[T]): WSResponse = {
+  def post(uri: String)(body: Map[String, Seq[String]]): WSResponse =
     await(
       buildClient(uri)
-        .withHttpHeaders("Content-Type" -> "application/json", "Authorization" -> "Bearer 123")
+        .withHttpHeaders("Authorization" -> "Bearer 123", "Csrf-Token" -> "nocheck")
+        .post(body)
+    )
+
+  def post[T](uri: String)(body: T)(implicit writes: Writes[T]): WSResponse =
+    await(
+      buildClient(uri)
+        .withHttpHeaders("Authorization" -> "Bearer 123", "Csrf-Token" -> "nocheck")
         .post(writes.writes(body).toString())
     )
-  }
 
-  def put[T](uri: String)(body: T)(implicit writes: Writes[T]): WSResponse = {
+  def put[T](uri: String)(body: T)(implicit writes: Writes[T]): WSResponse =
     await(
       buildClient(uri)
-        .withHttpHeaders("Content-Type" -> "application/json", "Authorization" -> "Bearer 123")
+        .withHttpHeaders("Authorization" -> "Bearer 123", "Csrf-Token" -> "nocheck")
         .put(writes.writes(body).toString())
     )
-  }
 
-  def delete[T](uri: String): WSResponse = {
+  def delete[T](uri: String): WSResponse =
     await(buildClient(uri).withHttpHeaders("Authorization" -> "Bearer 123").delete())
-  }
 
   val baseUrl: String = "/agent-client-relationships"
 
-  private def buildClient(path: String, headers: Seq[(String, String)] = sessionHeaders): WSRequest =
+  private def buildClient(path: String): WSRequest =
     ws.url(s"http://localhost:$port$baseUrl${path.replace(baseUrl, "")}")
       .withFollowRedirects(false)
-      .withHttpHeaders(sessionHeaders*)
+      .withCookies(
+        DefaultWSCookie("PLAY_LANG", "en"),
+        mockSessionCookie
+      )
 
-  val sessionHeaders: Seq[(String, String)] = Seq(
-    SessionKeys.authToken -> "testAuth",
-    SessionKeys.sessionId -> "testSession"
+  val sessionHeaders: Map[String, String] = Map(
+    SessionKeys.lastRequestTimestamp -> System.currentTimeMillis().toString,
+    SessionKeys.authToken -> "mock-bearer-token",
+    SessionKeys.sessionId -> "mock-sessionid"
   )
 
-  implicit val request: Request[AnyContent] = FakeRequest().withSession(sessionHeaders*)
+  implicit val request: Request[AnyContentAsFormUrlEncoded] = FakeRequest().withSession(sessionHeaders.toSeq *).withFormUrlEncodedBody()
 
+  def mockSessionCookie: WSCookie = {
+
+    val cookieCrypto = app.injector.instanceOf[SessionCookieCrypto]
+    val cookieBaker = app.injector.instanceOf[SessionCookieBaker]
+    val sessionCookie = cookieBaker.encodeAsCookie(Session(sessionHeaders))
+    val encryptedValue = cookieCrypto.crypto.encrypt(PlainText(sessionCookie.value))
+    val cookie = sessionCookie.copy(value = encryptedValue.value)
+
+    new WSCookie() {
+      override def name: String = cookie.name
+      override def value: String = cookie.value
+      override def domain: Option[String] = cookie.domain
+      override def path: Option[String] = Some(cookie.path)
+      override def maxAge: Option[Long] = cookie.maxAge.map(_.toLong)
+      override def secure: Boolean = cookie.secure
+      override def httpOnly: Boolean = cookie.httpOnly
+    }
+  }
 }
