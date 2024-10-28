@@ -24,7 +24,7 @@ import javax.inject.{Inject, Singleton}
 @Singleton
 class Actions @Inject()(
     actionBuilder:    DefaultActionBuilder,
-    getJourneyAction: GetJourneyActionRefiner
+    getJourneyAction: GetJourneyAction
 ) {
 
   val default: ActionBuilder[Request, AnyContent] = actionBuilder

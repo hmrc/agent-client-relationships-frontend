@@ -16,29 +16,30 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey
 
-import play.api.libs.json._
-import play.api.mvc.PathBindable
-
+import play.api.libs.json.*
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyType.inverseMapping
 
 enum JourneyType:
   case AuthorisationRequest, AgentCancelAuthorisation
 
-  override def toString: String = this match {
-    case AuthorisationRequest => "authorisation-request"
-    case AgentCancelAuthorisation => "agentCancel-authorisation"
+  override def toString: String = inverseMapping(this)
+
+object JourneyType:
+  val mapping: Map[String, JourneyType] = Map(
+    "authorisation-request" -> AuthorisationRequest,
+    "agent-cancel-authorisation" -> AgentCancelAuthorisation
+  )
+  val inverseMapping: Map[JourneyType, String] = mapping.map(_.swap)
+
+  implicit val journeyTypeReads: Reads[JourneyType] = Reads[JourneyType] { json =>
+    json.validate[String].flatMap(string => mapping
+      .get(string).map(JsSuccess(_))
+      .getOrElse(JsError("Invalid JourneyType"))
+    )
   }
 
-
-implicit val journeyTypeReads: Reads[JourneyType] = Reads[JourneyType] { json =>
-  json.validate[String].flatMap {
-    case "AuthorisationRequest" => JsSuccess(JourneyType.AuthorisationRequest)
-    case "AgentCancelAuthorisation" => JsSuccess(JourneyType.AgentCancelAuthorisation)
-    case _ => JsError("Invalid JourneyType")
+  implicit val journeyTypeWrites: Writes[JourneyType] = Writes[JourneyType] { journeyType =>
+    JsString(inverseMapping(journeyType))
   }
-}
 
-implicit val journeyTypeWrites: Writes[JourneyType] = Writes[JourneyType] { journeyType =>
-  JsString(journeyType.toString)
-}
-
-implicit val journeyTypeFormat: Format[JourneyType] = Format(journeyTypeReads, journeyTypeWrites)
+  implicit val journeyTypeFormat: Format[JourneyType] = Format(journeyTypeReads, journeyTypeWrites)

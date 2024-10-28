@@ -19,18 +19,15 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.binders
 import play.api.mvc.PathBindable
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyType
 
-object UrlBinders {
+object UrlBinders:
   implicit val journeyTypeBinder: PathBindable[JourneyType] = getJourneyTypeBinder
 
-  private def getJourneyTypeBinder(implicit stringBinder: PathBindable[String]) = new PathBindable[JourneyType] {
+  private def getJourneyTypeBinder(implicit stringBinder: PathBindable[String]) = new PathBindable[JourneyType]:
 
-    override def bind(key: String, value: String): Either[String, JourneyType] = value match
-      case "authorisation-request" => Right(JourneyType.AuthorisationRequest)
-      case "agentCancel-authorisation" => Right(JourneyType.AgentCancelAuthorisation)
-      case other => Left(s"Invalid value for $key: $other")
+    override def bind(key: String, value: String): Either[String, JourneyType] =
+      JourneyType.mapping
+        .get(value).map(Right(_))
+        .getOrElse(Left(s"Invalid value for $key: $value"))
 
     override def unbind(key: String, value: JourneyType): String =
       value.toString
-  }
-
-}
