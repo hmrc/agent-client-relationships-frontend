@@ -19,9 +19,10 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.services.journey
 import play.api.mvc.Request
 import play.api.mvc.Results.Redirect
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.{AgentTypeFieldName, ClientNameFieldName, ClientServiceFieldName, ClientTypeFieldName}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{Journey, JourneyState, JourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{CheckYourAnswersResult, Journey, JourneyState, JourneyType, RelationshipChecks}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.repositories.journey.JourneyRepository
 import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.routes
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyErrors.{ClientInsolvent, ClientNotFount, NotAuthorised}
 import uk.gov.hmrc.http.SessionKeys
 import uk.gov.hmrc.mongo.cache.DataKey
 
@@ -50,7 +51,13 @@ class JourneyService @Inject()(journeyRepository: JourneyRepository
     journeyState = JourneyState.SelectClientType,
     clientType = None,
     service = None,
-    clientId = None
+    clientId = None,
+    relationshipDetails = None,
+    knowFacts = None,
+    relationshipChecks = None,
+    confirmClient = None,
+    agentType = None,
+    checkYourAnswers = None
   )
   
   //TODO - change routing
@@ -62,9 +69,18 @@ class JourneyService @Inject()(journeyRepository: JourneyRepository
         case Some(journey) =>
           journey.journeyState match
             case JourneyState.SelectClientType => routes.SelectClientTypeController.show(journey.journeyType).url
-            case JourneyState.SelectService => ??? //routes.SelectClientServiceController.show.url
-            case JourneyState.EnterClientId => journey.journeyType match
-              case JourneyType.AuthorisationRequest | JourneyType.AgentCancelAuthorisation => ???
+            case JourneyState.SelectService => ???
+            case JourneyState.EnterClientId => ???
+            case JourneyState.EnterKnowFacts => ???
+            case JourneyState.ConfirmClient => ???
+            case JourneyState.SelectAgentType => ???
+            case JourneyState.CheckYourAnswers => ???
+            case JourneyState.Finished =>
+              journey.journeyType match
+                case JourneyType.AuthorisationRequest => ???
+                case JourneyType.AgentCancelAuthorisation => ???
+            case JourneyState.Error(journeyErrors) => ???
+
         case None => ??? //TODO WG - route to page where user select JOurney Type
       }
     }
@@ -72,11 +88,34 @@ class JourneyService @Inject()(journeyRepository: JourneyRepository
 
   //TODO - 
   def previousPageUrl(journey: Journey): String = ???
-
-  private def calculateJourneyState(journey: Journey): Journey = journey.journeyState match
-    case JourneyState.SelectClientType if journey.clientType.isDefined => journey.copy(journeyState = JourneyState.SelectService)
-    case JourneyState.SelectService if journey.service.isDefined => journey.copy(journeyState = JourneyState.EnterClientId)
-    case JourneyState.EnterClientId if journey.clientId.isDefined => ???
-    case _ => newJourney(journey.journeyType)
   
+  
+  private def calculateJourneyState(journey: Journey): Journey = journey.journeyState match
+    case JourneyState.SelectClientType if journey.clientType.isDefined  => journey.copy(journeyState = JourneyState.SelectService)
+    case JourneyState.SelectService if journey.service.isDefined        => journey.copy(journeyState = JourneyState.EnterClientId)
+    //TODO WG - we might need better relationshipDetails validation than isDefined
+    case JourneyState.EnterClientId if (journey.clientId.isDefined && journey.relationshipDetails.isDefined) => journey.copy(journeyState = JourneyState.EnterKnowFacts)
+    
+    case JourneyState.EnterKnowFacts if journey.knowFacts.isDefined && journey.relationshipChecks.isDefined  => journey.getRelationshipChecks match
+      case RelationshipChecks.AllGood => journey.copy(journeyState = JourneyState.ConfirmClient)
+      case RelationshipChecks.KnowFactsNotMatching => journey.copy(journeyState = JourneyState.Error(ClientNotFount))
+      case RelationshipChecks.AgentSuspended => journey.copy(journeyState = JourneyState.Error(ClientInsolvent))
+      case RelationshipChecks.ClientInsolvent => journey.copy(journeyState = JourneyState.Error(NotAuthorised))
+      
+    case JourneyState.ConfirmClient if journey.confirmClient.isDefined => 
+      if (journey.getConfirmClient)  journey.copy(journeyState = JourneyState.SelectAgentType)
+      else  journey.copy(journeyState = JourneyState.EnterClientId)
+
+    case JourneyState.SelectAgentType if journey.agentType.isDefined => journey.copy(journeyState = JourneyState.CheckYourAnswers)
+    
+    case JourneyState.CheckYourAnswers if journey.checkYourAnswers.isDefined => journey.getConfirmCheckYourAnswers match
+      case CheckYourAnswersResult.BackToJourneyStart => newJourney(journey.journeyType)
+      case CheckYourAnswersResult.UpdateAgentType => journey.copy(journeyState = JourneyState.SelectAgentType)
+      case CheckYourAnswersResult.GoToNextPage => journey.copy(journeyState = JourneyState.Finished)
+    
+    //TODO Some Error pages have start again
+    case JourneyState.Error(_) => newJourney(journey.journeyType)
+    case _ => newJourney(journey.journeyType)
+
+
 }

@@ -25,7 +25,13 @@ case class Journey(journeyType: JourneyType,
                    journeyState: JourneyState,
                    clientType: Option[String],
                    service: Option[String],
-                   clientId: Option[String]
+                   clientId: Option[String],
+                   relationshipDetails: Option[RelationshipDetails], //TODO Model once know all 
+                   knowFacts: Option[String],
+                   relationshipChecks: Option[RelationshipChecks],
+                   confirmClient: Option[Boolean], 
+                   agentType: Option[AgentType], 
+                   checkYourAnswers: Option[CheckYourAnswersResult] //TODO - we might need to model that
                   ) {
   
   def getClientTypeWithDefault:String = clientType.getOrElse("")
@@ -33,6 +39,17 @@ case class Journey(journeyType: JourneyType,
 
   def getServiceWithDefault: String = service.getOrElse("")
   def getService: String = service.getOrElse(throw new RuntimeException("service not defined"))
+
+  def getClientIdWithDefault: String = clientId.getOrElse("")
+  def getClientId: String = clientId.getOrElse(throw new RuntimeException("clientId not defined"))
+  
+  def getConfirmClient: Boolean = confirmClient.getOrElse(throw new RuntimeException("confirmClient not defined"))
+
+  //  def geconfirmCheckYourAnswersDefault: String = confirmCheckYourAnswers.getOrElse("")
+  def getConfirmCheckYourAnswers:CheckYourAnswersResult = checkYourAnswers.getOrElse(throw new RuntimeException("confirmCheckYourAnswers not defined"))
+
+  def getRelationshipChecks: RelationshipChecks = relationshipChecks.getOrElse(throw new RuntimeException("relationshipChecks not defined"))
+  
   
 }
 

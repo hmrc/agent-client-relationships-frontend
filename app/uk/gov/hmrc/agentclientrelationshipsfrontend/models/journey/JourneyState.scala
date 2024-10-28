@@ -19,19 +19,44 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey
 import play.api.libs.json.*
 
 enum JourneyState:
-  case SelectClientType, SelectService, EnterClientId
+  case SelectClientType
+  case SelectService
+  case EnterClientId
+  case EnterKnowFacts
+  case ConfirmClient
+  case SelectAgentType
+  case CheckYourAnswers
+//  case Finished(finishType: JourneyFinishType)
+  case Finished
+  case Error(journeyErrors: JourneyErrors)
 
 implicit val journeyStateReads: Reads[JourneyState] = Reads[JourneyState] { json =>
-  json.validate[String].flatMap {
+  (json \ "type").validate[String].flatMap {
     case "SelectClientType"   => JsSuccess(JourneyState.SelectClientType)
     case "SelectService" => JsSuccess(JourneyState.SelectService)
     case "EnterClientId" => JsSuccess(JourneyState.EnterClientId)
+    case "EnterKnowFacts" => JsSuccess(JourneyState.EnterKnowFacts)
+    case "ConfirmClient" => JsSuccess(JourneyState.ConfirmClient)
+    case "SelectAgentType" => JsSuccess(JourneyState.SelectAgentType)
+    case "CheckYourAnswers" => JsSuccess(JourneyState.CheckYourAnswers)
+    case "Finished" => JsSuccess(JourneyState.Finished)
+    //case "Finished" => (json \ "finishType").validate[JourneyFinishType].map(JourneyState.Finished.apply)
+    case "Error" => (json \ "journeyErrors").validate[JourneyErrors].map(JourneyState.Error.apply)
     case _       => JsError("Invalid JourneyType")
   }
 }
 
-implicit val journeyStateWrites: Writes[JourneyState] = Writes[JourneyState] { journeyState =>
-  JsString(journeyState.toString)
+implicit val journeyStateWrites: Writes[JourneyState] = Writes[JourneyState] {
+  case JourneyState.SelectClientType => Json.obj("type" -> "SelectClientType")
+  case JourneyState.SelectService => Json.obj("type" -> "SelectService")
+  case JourneyState.EnterClientId => Json.obj("type" -> "EnterClientId")
+  case JourneyState.EnterKnowFacts => Json.obj("type" -> "EnterKnowFacts")
+  case JourneyState.ConfirmClient => Json.obj("type" -> "ConfirmClient")
+  case JourneyState.SelectAgentType => Json.obj("type" -> "SelectAgentType")
+  case JourneyState.CheckYourAnswers => Json.obj("type" -> "CheckYourAnswers")
+  case JourneyState.Finished => Json.obj("type" -> "Finished")
+//  case JourneyState.Finished(finishType: JourneyFinishType) => Json.obj("type" -> "Finished", "finishType" -> finishType)
+  case JourneyState.Error(journeyErrors: JourneyErrors) => Json.obj("type" -> "Error", "journeyErrors" -> journeyErrors)
 }
 
 implicit val journeyStateFormat: Format[JourneyState] = Format(journeyStateReads, journeyStateWrites)
