@@ -5,6 +5,9 @@ service.name.agents.auth=Gofyn i gleient eich awdurdodi
 service.name.agents.de-auth=Canslo awdurdodiad cleient
 service.name.clients=Penodi rhywun i ddelio â CThEM ar eich rhan
 
+authorisation-request.service.name = Gofyn i gleient eich awdurdodi
+agent-cancel-authorisation.service.name = Canslo awdurdodiad cleient
+
 error.prefix=Gwall:' '
 error.heading=Mae problem wedi codi
 
