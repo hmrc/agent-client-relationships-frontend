@@ -21,7 +21,7 @@ import play.api.data.Forms.{optional, single, text}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.helpers.FormFieldHelper
 
 object SelectFromOptionsForm extends FormFieldHelper {
-  def form(fieldName: String, options: Set[String], journeyType: String = "authorisation-request"): Form[String] = {
+  def form(fieldName: String, options: Set[String], journeyType: String): Form[String] = {
     Form[String](
       single(
         fieldName -> optional(text)

@@ -62,7 +62,7 @@ class JourneyService @Inject()(journeyRepository: JourneyRepository
         case Some(journey) =>
           journey.journeyState match
             case JourneyState.SelectClientType => routes.SelectClientTypeController.show(journey.journeyType).url
-            case JourneyState.SelectService => ??? //routes.SelectClientServiceController.show.url
+            case JourneyState.SelectService => "???" //routes.SelectClientServiceController.show.url
             case JourneyState.EnterClientId => journey.journeyType match
               case JourneyType.AuthorisationRequest | JourneyType.AgentCancelAuthorisation => ???
         case None => ??? //TODO WG - route to page where user select JOurney Type

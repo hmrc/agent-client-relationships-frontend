@@ -41,7 +41,9 @@ class StartJourneyController @Inject()(mcc: MessagesControllerComponents,
       val newJourney = journeyService.newJourney(journeyType)
 
       journeyService.saveJourney(newJourney).flatMap { _ =>
-        journeyService.nextPageUrl().map(Redirect(_))}
+        Future.successful(Redirect(routes.SelectClientTypeController.show(journeyType)))
+      }
+
 
         
 
