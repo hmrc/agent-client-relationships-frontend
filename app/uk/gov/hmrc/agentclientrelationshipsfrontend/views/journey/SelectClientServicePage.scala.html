@@ -16,7 +16,7 @@
 
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.Layout
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.components.SubmitButton
-@import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.createInvitation.routes
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.routes
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyRequest
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyType.AuthorisationRequest
 @import uk.gov.hmrc.govukfrontend.views.html.components.implicits.RichRadios
@@ -49,9 +49,13 @@
     </p>
 }
 
-@layout(pageTitle = pageTitle, optionalForm = Some(form)) {
+@layout(
+    pageTitle = pageTitle,
+    optionalForm = Some(form),
+    serviceName = Some(messages(s"$journeyKey.service.name"))
+) {
 
-    @formWithCSRF(action = routes.SelectClientServiceController.onSubmit) {
+    @formWithCSRF(action = routes.SelectServiceController.onSubmit(request.journey.journeyType)) {
         @govukRadios(Radios(
             hint = hint,
             fieldset = Some(Fieldset(

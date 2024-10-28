@@ -37,7 +37,11 @@
 @journeyKey = @{request.journey.journeyType.toString}
 @pageTitle = @{messages(s"$key.$journeyKey.header")}
 
-@layout(pageTitle = pageTitle, optionalForm = Some(form)) {
+@layout(
+    pageTitle = pageTitle,
+    optionalForm = Some(form),
+    serviceName = Some(messages(s"$journeyKey.service.name"))
+) {
 
     @formWithCSRF(action = routes.SelectClientTypeController.onSubmit(request.journey.journeyType)) {
         @govukRadios(Radios(

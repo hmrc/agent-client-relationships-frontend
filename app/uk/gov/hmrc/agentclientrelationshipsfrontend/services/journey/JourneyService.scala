@@ -35,7 +35,7 @@ class JourneyService @Inject()(journeyRepository: JourneyRepository
   val dataKey = DataKey[Journey]("JourneySessionData")
 
   def saveJourney(journey: Journey)(implicit request: Request[?], ec: ExecutionContext): Future[Unit] = {
-    journeyRepository.putSession(dataKey, calculateJourneyState(journey)).map(_ => ())
+    journeyRepository.putSession(dataKey, journey).map(_ => ())
   }
 
   def getJourney()(implicit request: Request[Any]): Future[Option[Journey]] =
@@ -47,36 +47,33 @@ class JourneyService @Inject()(journeyRepository: JourneyRepository
 
   def newJourney(journeyType: JourneyType): Journey = Journey(
     journeyType = journeyType,
-    journeyState = JourneyState.SelectClientType,
     clientType = None,
-    service = None,
-    clientId = None
+    clientService = None,
+    clientId = None,
+    clientDetailsResponse = None,
+    agentType = None
   )
-  
-  //TODO - change routing
-  def nextPageUrl()(implicit request: Request[Any]): Future[String] = 
+
+  def nextPageUrl(journeyType: JourneyType)(implicit request: Request[Any]): Future[String] = {
     for {
-      mayBeJourney <- getJourney()
-    } yield {
-      mayBeJourney match {
-        case Some(journey) =>
-          journey.journeyState match
-            case JourneyState.SelectClientType => routes.SelectClientTypeController.show(journey.journeyType).url
-            case JourneyState.SelectService => "???" //routes.SelectClientServiceController.show.url
-            case JourneyState.EnterClientId => journey.journeyType match
-              case JourneyType.AuthorisationRequest | JourneyType.AgentCancelAuthorisation => ???
-        case None => ??? //TODO WG - route to page where user select JOurney Type
+      journey <- getJourney()
+    } yield journey match {
+      case Some(journey) if journey.journeyType != journeyType => routes.StartJourneyController.startJourney(journeyType).url
+      case Some(journey) => {
+        if (journey.clientService.isEmpty) routes.SelectClientTypeController.show(journeyType).url // this page is hard coded to always redirect to Select Tax Service
+        // this next step makes the back end call onSubmit of the EnterClientIdController to get the client details needed to complete the journey
+        // so fast-track posts for example may not need to go through this step but instead could make the same back end call within the post handler
+        // and then call this routing method to determine the next step with the clientDetailsResponse in place
+        else if (journey.clientDetailsResponse.isEmpty) "routes.EnterClientIdController.show(journeyType).url"
+        else if (journey.clientDetailsResponse.get.knownFactType.nonEmpty && !journey.clientConfirmed) "routes.EnterClientVerifierController.show(journeyType).url"
+        else if (journey.getService.matches("MTD-IT") && journey.agentType.isEmpty) "routes.SelectAgentTypeController.show(journeyType).url"
+        // this next step uses a method on the ClientDetailsResponse model to determine if errors exist with the journey
+        // e.g. authorisation already exists or client is insolvent, the JourneyErrorController can produce a code/slug for the error page to use
+        else if (journey.clientDetailsResponse.get.hasErrors(journeyType)) "routes.JourneyErrorController.show(journeyType).url"
+        else "routes.CheckYourAnswersController.show(journeyType).url"
       }
+      case _ => routes.StartJourneyController.startJourney(journeyType).url
     }
-  
-
-  //TODO - 
-  def previousPageUrl(journey: Journey): String = ???
-
-  private def calculateJourneyState(journey: Journey): Journey = journey.journeyState match
-    case JourneyState.SelectClientType if journey.clientType.isDefined => journey.copy(journeyState = JourneyState.SelectService)
-    case JourneyState.SelectService if journey.service.isDefined => journey.copy(journeyState = JourneyState.EnterClientId)
-    case JourneyState.EnterClientId if journey.clientId.isDefined => ???
-    case _ => newJourney(journey.journeyType)
+  }
   
 }

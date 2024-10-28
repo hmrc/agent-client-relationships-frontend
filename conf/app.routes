@@ -43,3 +43,6 @@ GET        /:journeyType                                                        
 
 GET        /:journeyType/client-type                                                    uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.SelectClientTypeController.show(journeyType: JourneyType)
 POST       /:journeyType/client-type                                                    uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.SelectClientTypeController.onSubmit(journeyType: JourneyType)
+
+GET        /:journeyType/select-service                                                 uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.SelectServiceController.show(journeyType: JourneyType)
+POST       /:journeyType/select-service                                                 uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.SelectServiceController.onSubmit(journeyType: JourneyType)

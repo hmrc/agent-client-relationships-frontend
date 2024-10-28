@@ -5,6 +5,9 @@ service.name.agents.auth=Ask a client to authorise you
 service.name.agents.de-auth=Cancel a client’s authorisation
 service.name.clients=Appoint someone to deal with HMRC for you
 
+authorisation-request.service.name = Ask a client to authorise you
+agent-cancel-authorisation.service.name = Cancel a client’s authorisation
+
 error.prefix=Error:' '
 error.heading=There is a problem
 

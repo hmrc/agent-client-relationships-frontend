@@ -29,7 +29,7 @@ import play.api.mvc.*
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsJson, defaultAwaitTimeout, redirectLocation, status}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{Journey, JourneyState, JourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{Journey, JourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.journey.JourneyService
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -67,8 +67,7 @@ class GetJourneyActionSpec extends AnyWordSpecLike with Matchers with OptionValu
   "journeyAction" should {
     "successfully retrieve journey and continue if it matches the url journey type" in {
       val testJourney = Journey(
-        JourneyType.AuthorisationRequest,
-        JourneyState.SelectClientType
+        JourneyType.AuthorisationRequest
       )
       when(mockJourneyService.getJourney()(any()))
         .thenReturn(Future.successful(Some(testJourney)))
@@ -80,8 +79,7 @@ class GetJourneyActionSpec extends AnyWordSpecLike with Matchers with OptionValu
     }
     "successfully retrieve journey and redirect to ASA if it does not match the url journey type" in {
       val testJourney = Journey(
-        JourneyType.AuthorisationRequest,
-        JourneyState.SelectClientType
+        JourneyType.AuthorisationRequest
       )
       when(mockJourneyService.getJourney()(any()))
         .thenReturn(Future.successful(Some(testJourney)))
