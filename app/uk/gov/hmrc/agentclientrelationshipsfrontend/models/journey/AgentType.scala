@@ -23,16 +23,26 @@ import play.api.mvc.PathBindable
 enum AgentType:
   case Main, Supporting
 
-implicit val agentTypeReads: Reads[AgentType] = Reads[AgentType] { json =>
-  json.validate[String].flatMap {
-    case "Main" => JsSuccess(AgentType.Main)
-    case "Supporting" => JsSuccess(AgentType.Supporting)
-    case _ => JsError("Invalid AgentType")
+object AgentType:
+  val mapping: Map[String, AgentType] = Map(
+    "Main" -> AgentType.Main,
+    "Supporting" -> AgentType.Supporting
+  )
+
+  val inverseMapping: Map[AgentType, String] = mapping.map(_.swap)
+
+  implicit val agentTypeReads: Reads[AgentType] = Reads[AgentType] { json =>
+    json.validate[String].flatMap(string => mapping
+      .get(string).map(JsSuccess(_))
+      .getOrElse(JsError("Invalid AgentType"))
+    )
   }
-}
 
-implicit val agentTypeWrites: Writes[AgentType] = Writes[AgentType] { agentType =>
-  JsString(agentType.toString)
-}
+  implicit val agentTypeWrites: Writes[AgentType] = Writes[AgentType] { agentType =>
+    JsString(inverseMapping(agentType))
+  }
 
-implicit val agentTypeFormat: Format[AgentType] = Format(agentTypeReads, agentTypeWrites)
+  implicit val agentTypeFormat: Format[AgentType] = Format(agentTypeReads, agentTypeWrites)
+  
+
+

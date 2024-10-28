@@ -22,15 +22,29 @@ import play.api.libs.json.{JsError, JsString, JsSuccess, Json}
 
 class JourneyStateSpec extends AnyWordSpecLike with Matchers {
 
+  //TODO - work around JourneyState.values.  - please revisit
+  val sampleJourneyState = Seq(
+    JourneyState.SelectClientType,
+    JourneyState.SelectService,
+    JourneyState.EnterClientId,
+    JourneyState.EnterKnowFacts,
+    JourneyState.ConfirmClient,
+    JourneyState.SelectAgentType,
+    JourneyState.CheckYourAnswers,
+    JourneyState.Finished,
+    JourneyState.Error(JourneyErrors.ClientNotFount)
+  )
+
+//TODO - rethink how to test it
   "JourneyState format" should {
-    JourneyState.values.foreach(value => s"write $value to a json string and read it back" in {
-      val jsString = JsString(value.toString)
-      Json.toJson[JourneyState](value) shouldBe jsString
+    sampleJourneyState.foreach(value => s"write $value to a json string and read it back" in {
+      val jsString = Json.toJson[JourneyState](value) 
       Json.fromJson[JourneyState](jsString) shouldBe JsSuccess(value)
     })
-
+    
     "fail to read an unknown value" in {
-      Json.fromJson[JourneyState](JsString("invalid")) shouldBe JsError("Invalid JourneyState")
+      val fromJson = Json.fromJson[JourneyState](JsString("invalid"))
+      Json.fromJson[JourneyState](Json.obj("type" -> "invalid")) shouldBe JsError("Invalid JourneyState")
     }
   }
 

@@ -18,6 +18,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.services.journey
 
 import play.api.mvc.Request
 import play.api.mvc.Results.Redirect
+import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.{AgentTypeFieldName, ClientNameFieldName, ClientServiceFieldName, ClientTypeFieldName}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{CheckYourAnswersResult, Journey, JourneyState, JourneyType, RelationshipChecks}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.repositories.journey.JourneyRepository
@@ -30,7 +31,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class JourneyService @Inject()(journeyRepository: JourneyRepository
+class JourneyService @Inject()(journeyRepository: JourneyRepository, appConfig: AppConfig
                                        )(implicit executionContext: ExecutionContext) {
 
   val dataKey = DataKey[Journey]("JourneySessionData")
@@ -69,19 +70,19 @@ class JourneyService @Inject()(journeyRepository: JourneyRepository
         case Some(journey) =>
           journey.journeyState match
             case JourneyState.SelectClientType => routes.SelectClientTypeController.show(journey.journeyType).url
-            case JourneyState.SelectService => ???
-            case JourneyState.EnterClientId => ???
-            case JourneyState.EnterKnowFacts => ???
-            case JourneyState.ConfirmClient => ???
-            case JourneyState.SelectAgentType => ???
-            case JourneyState.CheckYourAnswers => ???
+            case JourneyState.SelectService => appConfig.agentServicesAccountHomeUrl //TODO replace with proper page
+            case JourneyState.EnterClientId => appConfig.agentServicesAccountHomeUrl //TODO replace with proper page
+            case JourneyState.EnterKnowFacts => appConfig.agentServicesAccountHomeUrl //TODO replace with proper page
+            case JourneyState.ConfirmClient => appConfig.agentServicesAccountHomeUrl //TODO replace with proper page
+            case JourneyState.SelectAgentType => appConfig.agentServicesAccountHomeUrl //TODO replace with proper page
+            case JourneyState.CheckYourAnswers => appConfig.agentServicesAccountHomeUrl //TODO replace with proper page
             case JourneyState.Finished =>
               journey.journeyType match
-                case JourneyType.AuthorisationRequest => ???
-                case JourneyType.AgentCancelAuthorisation => ???
-            case JourneyState.Error(journeyErrors) => ???
+                case JourneyType.AuthorisationRequest => appConfig.agentServicesAccountHomeUrl //TODO replace with proper page
+                case JourneyType.AgentCancelAuthorisation => appConfig.agentServicesAccountHomeUrl //TODO replace with proper page
+            case JourneyState.Error(journeyErrors) => appConfig.agentServicesAccountHomeUrl //TODO replace with proper page
 
-        case None => ??? //TODO WG - route to page where user select JOurney Type
+        case None => appConfig.agentServicesAccountHomeUrl
       }
     }
   

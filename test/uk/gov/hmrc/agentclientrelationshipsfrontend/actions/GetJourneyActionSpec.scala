@@ -67,8 +67,17 @@ class GetJourneyActionSpec extends AnyWordSpecLike with Matchers with OptionValu
   "journeyAction" should {
     "successfully retrieve journey and continue if it matches the url journey type" in {
       val testJourney = Journey(
-        JourneyType.AuthorisationRequest,
-        JourneyState.SelectClientType
+        journeyType = JourneyType.AuthorisationRequest,
+        journeyState = JourneyState.SelectClientType,
+        clientType = None,
+        service  = None,
+        clientId = None,
+        relationshipDetails = None,
+        knowFacts = None,
+        relationshipChecks = None,
+        confirmClient = None,
+        agentType = None,
+        checkYourAnswers = None
       )
       when(mockJourneyService.getJourney()(any()))
         .thenReturn(Future.successful(Some(testJourney)))
@@ -81,7 +90,16 @@ class GetJourneyActionSpec extends AnyWordSpecLike with Matchers with OptionValu
     "successfully retrieve journey and redirect to ASA if it does not match the url journey type" in {
       val testJourney = Journey(
         JourneyType.AuthorisationRequest,
-        JourneyState.SelectClientType
+        JourneyState.SelectClientType,
+        clientType = None,
+        service  = None,
+        clientId = None,
+        relationshipDetails = None,
+        knowFacts = None,
+        relationshipChecks = None,
+        confirmClient = None,
+        agentType = None,
+        checkYourAnswers = None
       )
       when(mockJourneyService.getJourney()(any()))
         .thenReturn(Future.successful(Some(testJourney)))

@@ -23,17 +23,19 @@ import play.api.mvc.PathBindable
 enum CheckYourAnswersResult:
   case BackToJourneyStart, UpdateAgentType, GoToNextPage
 
-implicit val checkYourAnswersResultReads: Reads[CheckYourAnswersResult] = Reads[CheckYourAnswersResult] { json =>
-  json.validate[String].flatMap {
-    case "BackToJourneyStart" => JsSuccess(CheckYourAnswersResult.BackToJourneyStart)
-    case "UpdateAgentType" => JsSuccess(CheckYourAnswersResult.UpdateAgentType)
-    case "GoToNextPage" => JsSuccess(CheckYourAnswersResult.GoToNextPage)
-    case _ => JsError("Invalid CheckYourAnswersResult")
+object CheckYourAnswersResult {
+  implicit val checkYourAnswersResultReads: Reads[CheckYourAnswersResult] = Reads[CheckYourAnswersResult] { json =>
+    json.validate[String].flatMap {
+      case "BackToJourneyStart" => JsSuccess(CheckYourAnswersResult.BackToJourneyStart)
+      case "UpdateAgentType" => JsSuccess(CheckYourAnswersResult.UpdateAgentType)
+      case "GoToNextPage" => JsSuccess(CheckYourAnswersResult.GoToNextPage)
+      case _ => JsError("Invalid CheckYourAnswersResult")
+    }
   }
-}
 
-implicit val checkYourAnswersResultWrites: Writes[CheckYourAnswersResult] = Writes[CheckYourAnswersResult] { checkYourAnswersResult =>
-  JsString(checkYourAnswersResult.toString)
-}
+  implicit val checkYourAnswersResultWrites: Writes[CheckYourAnswersResult] = Writes[CheckYourAnswersResult] { checkYourAnswersResult =>
+    JsString(checkYourAnswersResult.toString)
+  }
 
-implicit val checkYourAnswersResultFormat: Format[CheckYourAnswersResult] = Format(checkYourAnswersResultReads, checkYourAnswersResultWrites)
+  implicit val checkYourAnswersResultFormat: Format[CheckYourAnswersResult] = Format(checkYourAnswersResultReads, checkYourAnswersResultWrites)
+}

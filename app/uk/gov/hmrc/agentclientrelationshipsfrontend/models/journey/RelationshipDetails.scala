@@ -21,13 +21,13 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.createInvitation
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.common.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.ClientServiceConfigurationService
 
+//TODO - other JIRA - to confirm what kind of details we need
 case class RelationshipDetails(
                                 suspensionDetails: SuspensionDetails,
-                                storedInvitations: Seq[StoredInvitation],
                                 agentReferenceRecord: AgentReferenceRecord
                   )
 
-object RelationshipDetails {
+object RelationshipDetails:
   implicit lazy val format: OFormat[RelationshipDetails] = Json.format[RelationshipDetails]
-}
+
 

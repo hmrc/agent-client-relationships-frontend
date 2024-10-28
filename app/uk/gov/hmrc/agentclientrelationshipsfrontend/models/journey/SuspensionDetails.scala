@@ -20,6 +20,5 @@ import play.api.libs.json.{Json, OFormat, Reads}
 
 case class SuspensionDetails(suspensionStatus: Boolean, regimes: Option[Set[String]])
 
-object SuspensionDetails {
+object SuspensionDetails:
   implicit val formats: OFormat[SuspensionDetails] = Json.format
-}

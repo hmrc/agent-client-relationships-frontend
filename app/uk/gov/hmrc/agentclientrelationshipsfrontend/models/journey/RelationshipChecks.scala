@@ -23,18 +23,25 @@ import play.api.mvc.PathBindable
 enum RelationshipChecks:
   case AllGood, KnowFactsNotMatching, AgentSuspended, ClientInsolvent
 
-implicit val relationshipChecksReads: Reads[RelationshipChecks] = Reads[RelationshipChecks] { json =>
-  json.validate[String].flatMap {
-    case "AllGood" => JsSuccess(RelationshipChecks.AllGood)
-    case "KnowFactsNotMatching" => JsSuccess(RelationshipChecks.KnowFactsNotMatching)
-    case "AgentSuspended" => JsSuccess(RelationshipChecks.AgentSuspended)
-    case "ClientInsolvent" => JsSuccess(RelationshipChecks.ClientInsolvent)
-    case _ => JsError("Invalid RelationshipChecks")
+object RelationshipChecks:
+  val mapping: Map[String, RelationshipChecks] = Map(
+    "AllGood" -> RelationshipChecks.AllGood,
+    "KnowFactsNotMatching" -> RelationshipChecks.KnowFactsNotMatching,
+    "AgentSuspended" -> RelationshipChecks.AgentSuspended,
+    "ClientInsolvent" -> RelationshipChecks.ClientInsolvent
+  )
+
+  val inverseMapping: Map[RelationshipChecks, String] = mapping.map(_.swap)
+
+  implicit val relationshipChecksReads: Reads[RelationshipChecks] = Reads[RelationshipChecks] { json =>
+    json.validate[String].flatMap(string => mapping
+      .get(string).map(JsSuccess(_))
+      .getOrElse(JsError("Invalid AgentType"))
+    )
   }
-}
 
-implicit val relationshipChecksWrites: Writes[RelationshipChecks] = Writes[RelationshipChecks] { relationshipChecks =>
-  JsString(relationshipChecks.toString)
-}
+  implicit val relationshipChecksWrites: Writes[RelationshipChecks] = Writes[RelationshipChecks] { relationshipChecks =>
+    JsString(inverseMapping(relationshipChecks))
+  }
 
-implicit val relationshipChecksFormat: Format[RelationshipChecks] = Format(relationshipChecksReads, relationshipChecksWrites)
+  implicit val relationshipChecksFormat: Format[RelationshipChecks] = Format(relationshipChecksReads, relationshipChecksWrites)

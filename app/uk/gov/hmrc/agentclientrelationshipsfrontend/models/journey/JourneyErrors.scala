@@ -23,20 +23,22 @@ import play.api.mvc.PathBindable
 enum JourneyErrors:
   case ClientNotFount, NotSignedUp, NotAuthorised, ClientNotRegistered, ClientInsolvent, ClientAlreadyAuthorised
 
-implicit val journeyErrorsReads: Reads[JourneyErrors] = Reads[JourneyErrors] { json =>
-  json.validate[String].flatMap {
-    case "ClientNotFount" => JsSuccess(JourneyErrors.ClientNotFount)
-    case "NotSignedUp" => JsSuccess(JourneyErrors.NotSignedUp)
-    case "NotAuthorised" => JsSuccess(JourneyErrors.NotAuthorised)
-    case "ClientNotRegistered" => JsSuccess(JourneyErrors.ClientNotRegistered)
-    case "ClientInsolvent" => JsSuccess(JourneyErrors.ClientInsolvent)
-    case "ClientAlreadyAuthorised" => JsSuccess(JourneyErrors.ClientAlreadyAuthorised)
-    case _ => JsError("Invalid JourneyErrors")
+object JourneyErrors {
+  implicit val journeyErrorsReads: Reads[JourneyErrors] = Reads[JourneyErrors] { json =>
+    json.validate[String].flatMap {
+      case "ClientNotFount" => JsSuccess(JourneyErrors.ClientNotFount)
+      case "NotSignedUp" => JsSuccess(JourneyErrors.NotSignedUp)
+      case "NotAuthorised" => JsSuccess(JourneyErrors.NotAuthorised)
+      case "ClientNotRegistered" => JsSuccess(JourneyErrors.ClientNotRegistered)
+      case "ClientInsolvent" => JsSuccess(JourneyErrors.ClientInsolvent)
+      case "ClientAlreadyAuthorised" => JsSuccess(JourneyErrors.ClientAlreadyAuthorised)
+      case _ => JsError("Invalid JourneyErrors")
+    }
   }
-}
 
-implicit val journeyErrorsWrites: Writes[JourneyErrors] = Writes[JourneyErrors] { journeyErrors =>
-  JsString(journeyErrors.toString)
-}
+  implicit val journeyErrorsWrites: Writes[JourneyErrors] = Writes[JourneyErrors] { journeyErrors =>
+    JsString(journeyErrors.toString)
+  }
 
-implicit val journeyErrorsFormat: Format[JourneyErrors] = Format(journeyErrorsReads, journeyErrorsWrites)
+  implicit val journeyErrorsFormat: Format[JourneyErrors] = Format(journeyErrorsReads, journeyErrorsWrites)
+}

@@ -24,7 +24,7 @@ case class AgentReferenceRecord(
                                  normalisedAgentNames: Seq[String]
                                )
 
-object AgentReferenceRecord {
+object AgentReferenceRecord:
   private val arnPattern = "^[A-Z]ARN[0-9]{7}$".r
   implicit val formats: Format[AgentReferenceRecord] = Json.format[AgentReferenceRecord]
-}
+
