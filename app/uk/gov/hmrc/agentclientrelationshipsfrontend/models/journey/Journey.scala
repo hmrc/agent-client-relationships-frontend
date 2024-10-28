@@ -28,9 +28,9 @@ case class Journey(journeyType: JourneyType,
                    clientId: Option[String],
                    relationshipDetails: Option[RelationshipDetails], //TODO Model once know all 
                    knowFacts: Option[String],
-                   relationshipChecks: Option[RelationshipChecks],
-                   confirmClient: Option[Boolean], 
-                   agentType: Option[AgentType], 
+                   relationshipChecks: Option[RelationshipChecksResult],
+                   confirmClient: Option[Boolean],
+                   agentType: Option[AgentType],
                    checkYourAnswers: Option[CheckYourAnswersResult] //TODO - we might need to model that
                   ) {
   
@@ -48,7 +48,7 @@ case class Journey(journeyType: JourneyType,
   //  def geconfirmCheckYourAnswersDefault: String = confirmCheckYourAnswers.getOrElse("")
   def getConfirmCheckYourAnswers:CheckYourAnswersResult = checkYourAnswers.getOrElse(throw new RuntimeException("confirmCheckYourAnswers not defined"))
 
-  def getRelationshipChecks: RelationshipChecks = relationshipChecks.getOrElse(throw new RuntimeException("relationshipChecks not defined"))
+  def getRelationshipChecks: RelationshipChecksResult = relationshipChecks.getOrElse(throw new RuntimeException("relationshipChecks not defined"))
   
   
 }

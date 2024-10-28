@@ -32,7 +32,7 @@ class JourneyStateSpec extends AnyWordSpecLike with Matchers {
     JourneyState.SelectAgentType,
     JourneyState.CheckYourAnswers,
     JourneyState.Finished,
-    JourneyState.Error(JourneyErrors.ClientNotFount)
+    JourneyState.Error(JourneyErrorType.ClientNotFount)
   )
 
 //TODO - rethink how to test it

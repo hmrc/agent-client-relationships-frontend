@@ -20,10 +20,10 @@ import play.api.mvc.Request
 import play.api.mvc.Results.Redirect
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.{AgentTypeFieldName, ClientNameFieldName, ClientServiceFieldName, ClientTypeFieldName}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{CheckYourAnswersResult, Journey, JourneyState, JourneyType, RelationshipChecks}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{CheckYourAnswersResult, Journey, JourneyState, JourneyType, RelationshipChecksResult}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.repositories.journey.JourneyRepository
 import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.routes
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyErrors.{ClientInsolvent, ClientNotFount, NotAuthorised}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyErrorType.{ClientInsolvent, ClientNotFount, NotAuthorised}
 import uk.gov.hmrc.http.SessionKeys
 import uk.gov.hmrc.mongo.cache.DataKey
 
@@ -98,10 +98,10 @@ class JourneyService @Inject()(journeyRepository: JourneyRepository, appConfig: 
     case JourneyState.EnterClientId if (journey.clientId.isDefined && journey.relationshipDetails.isDefined) => journey.copy(journeyState = JourneyState.EnterKnowFacts)
     
     case JourneyState.EnterKnowFacts if journey.knowFacts.isDefined && journey.relationshipChecks.isDefined  => journey.getRelationshipChecks match
-      case RelationshipChecks.AllGood => journey.copy(journeyState = JourneyState.ConfirmClient)
-      case RelationshipChecks.KnowFactsNotMatching => journey.copy(journeyState = JourneyState.Error(ClientNotFount))
-      case RelationshipChecks.AgentSuspended => journey.copy(journeyState = JourneyState.Error(ClientInsolvent))
-      case RelationshipChecks.ClientInsolvent => journey.copy(journeyState = JourneyState.Error(NotAuthorised))
+      case RelationshipChecksResult.AllGood => journey.copy(journeyState = JourneyState.ConfirmClient)
+      case RelationshipChecksResult.KnowFactsNotMatching => journey.copy(journeyState = JourneyState.Error(ClientNotFount))
+      case RelationshipChecksResult.AgentSuspended => journey.copy(journeyState = JourneyState.Error(ClientInsolvent))
+      case RelationshipChecksResult.ClientInsolvent => journey.copy(journeyState = JourneyState.Error(NotAuthorised))
       
     case JourneyState.ConfirmClient if journey.confirmClient.isDefined => 
       if (journey.getConfirmClient)  journey.copy(journeyState = JourneyState.SelectAgentType)

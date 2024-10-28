@@ -20,28 +20,28 @@ import play.api.libs.json._
 import play.api.mvc.PathBindable
 
 
-enum RelationshipChecks:
+enum RelationshipChecksResult:
   case AllGood, KnowFactsNotMatching, AgentSuspended, ClientInsolvent
 
-object RelationshipChecks:
-  val mapping: Map[String, RelationshipChecks] = Map(
-    "AllGood" -> RelationshipChecks.AllGood,
-    "KnowFactsNotMatching" -> RelationshipChecks.KnowFactsNotMatching,
-    "AgentSuspended" -> RelationshipChecks.AgentSuspended,
-    "ClientInsolvent" -> RelationshipChecks.ClientInsolvent
+object RelationshipChecksResult:
+  val mapping: Map[String, RelationshipChecksResult] = Map(
+    "AllGood" -> RelationshipChecksResult.AllGood,
+    "KnowFactsNotMatching" -> RelationshipChecksResult.KnowFactsNotMatching,
+    "AgentSuspended" -> RelationshipChecksResult.AgentSuspended,
+    "ClientInsolvent" -> RelationshipChecksResult.ClientInsolvent
   )
 
-  val inverseMapping: Map[RelationshipChecks, String] = mapping.map(_.swap)
+  val inverseMapping: Map[RelationshipChecksResult, String] = mapping.map(_.swap)
 
-  implicit val relationshipChecksReads: Reads[RelationshipChecks] = Reads[RelationshipChecks] { json =>
+  implicit val relationshipChecksResultReads: Reads[RelationshipChecksResult] = Reads[RelationshipChecksResult] { json =>
     json.validate[String].flatMap(string => mapping
       .get(string).map(JsSuccess(_))
-      .getOrElse(JsError("Invalid AgentType"))
+      .getOrElse(JsError("Invalid RelationshipChecksResult"))
     )
   }
 
-  implicit val relationshipChecksWrites: Writes[RelationshipChecks] = Writes[RelationshipChecks] { relationshipChecks =>
+  implicit val relationshipChecksResultWrites: Writes[RelationshipChecksResult] = Writes[RelationshipChecksResult] { relationshipChecks =>
     JsString(inverseMapping(relationshipChecks))
   }
 
-  implicit val relationshipChecksFormat: Format[RelationshipChecks] = Format(relationshipChecksReads, relationshipChecksWrites)
+  implicit val relationshipChecksResultFormat: Format[RelationshipChecksResult] = Format(relationshipChecksResultReads, relationshipChecksResultWrites)

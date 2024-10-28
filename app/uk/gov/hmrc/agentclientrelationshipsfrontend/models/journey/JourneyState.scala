@@ -29,7 +29,7 @@ enum JourneyState:
   case SelectAgentType
   case CheckYourAnswers
   case Finished
-  case Error(journeyErrors: JourneyErrors)
+  case Error(journeyErrors: JourneyErrorType)
 
 object JourneyState {
   implicit val journeyStateReads: Reads[JourneyState] = Reads[JourneyState] { json =>
@@ -42,7 +42,7 @@ object JourneyState {
       case "SelectAgentType" => JsSuccess(JourneyState.SelectAgentType)
       case "CheckYourAnswers" => JsSuccess(JourneyState.CheckYourAnswers)
       case "Finished" => JsSuccess(JourneyState.Finished)
-      case "Error" => (json \ "journeyErrors").validate[JourneyErrors].map(JourneyState.Error.apply)
+      case "Error" => (json \ "journeyErrors").validate[JourneyErrorType].map(JourneyState.Error.apply)
       case _ => JsError("Invalid JourneyState")
     }
   }
@@ -56,7 +56,7 @@ object JourneyState {
     case JourneyState.SelectAgentType => Json.obj("type" -> "SelectAgentType")
     case JourneyState.CheckYourAnswers => Json.obj("type" -> "CheckYourAnswers")
     case JourneyState.Finished => Json.obj("type" -> "Finished")
-    case JourneyState.Error(journeyErrors: JourneyErrors) => Json.obj("type" -> "Error", "journeyErrors" -> journeyErrors)
+    case JourneyState.Error(journeyErrors: JourneyErrorType) => Json.obj("type" -> "Error", "journeyErrors" -> journeyErrors)
   }
 
   implicit val journeyStateFormat: Format[JourneyState] = Format(journeyStateReads, journeyStateWrites)
