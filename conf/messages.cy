@@ -77,11 +77,14 @@ clientType.agent-cancel-authorisation.error.required=<translation needed>
 # -------------------------------------------------------------------------------------------
 # Select Client Service
 # -------------------------------------------------------------------------------------------
-clientService.header=Beth yr ydych am i’r cleient eich awdurdodi i’w wneud?
-clientService.p1=<translation needed>
+clientService.authorisation-request.header=Beth yr ydych am i’r cleient eich awdurdodi i’w wneud?
+clientService.agent-cancel-authorisation.header=<translation needed>
+clientService.hint=<translation needed>
 clientService.alternative=Mae angen awdurdodiad arnaf ar gyfer rhywbeth arall
-clientService.alt-suggestion=Dysgwch ragor am <a id="guidanceLink" href="{0}" target="_blank" rel="noopener noreferrer">ofyn i gleient eich awdurdodi i ddelio â gwasanaethau treth eraill (yn agor tab newydd)</a>.
-error.clientService.required=Dewiswch yr hyn rydych am i’r cleient eich awdurdodi i’w wneud
+clientService.alt-suggestion=Dysgwch ragor am
+clientService.alt-suggestion.link=aofyn i gleient eich awdurdodi i ddelio â gwasanaethau treth eraill (yn agor tab newydd)
+clientService.authorisation-request.error.required=Dewiswch yr hyn rydych am i’r cleient eich awdurdodi i’w wneud
+clientService.agent-cancel-authorisation.error.required=<translation needed>
 
 clientService.PERSONAL-INCOME-RECORD.personal=Bwrw golwg dros ei gofnod incwm
 clientService.HMRC-MTD-IT.personal=Rheoli ei gyfrif Troi Treth yn Ddigidol ar gyfer Treth Incwm
