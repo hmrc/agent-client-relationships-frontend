@@ -38,7 +38,7 @@ GET         /cannot-confirm-identity                                            
 GET         /iv-timed-out                                                               uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.AuthorisationController.ivTimedOut(continueUrl: Option[RedirectUrl] ?= None)
 GET         /iv-locked-out                                                              uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.AuthorisationController.ivLockedOut
 
-
+# Main Journey URLs ----------------------------------------------------------------------------------------------------------
 GET        /:journeyType                                                                uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.StartJourneyController.startJourney(journeyType: JourneyType)
 
 GET        /:journeyType/client-type                                                    uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.SelectClientTypeController.show(journeyType: JourneyType)

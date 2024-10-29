@@ -18,7 +18,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey
 
 import play.api.i18n.I18nSupport
 import play.api.mvc.*
-import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
+import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.{Actions, AgentRequest}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyType.AuthorisationRequest
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{Journey, JourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.journey.JourneyService
@@ -34,16 +34,12 @@ class StartJourneyController @Inject()(mcc: MessagesControllerComponents,
                                           )(implicit val executionContext: ExecutionContext) extends FrontendController(mcc) with I18nSupport:
   
   
-  def startJourney(journeyType: JourneyType): Action[AnyContent] = Action.async:
+  def startJourney(journeyType: JourneyType): Action[AnyContent] = actions.authenticate.async:
     request =>
-      given Request[?] = request
+      given AgentRequest[?] = request
       
       val newJourney = journeyService.newJourney(journeyType)
 
       journeyService.saveJourney(newJourney).flatMap { _ =>
         Future.successful(Redirect(routes.SelectClientTypeController.show(journeyType)))
       }
-
-
-        
-

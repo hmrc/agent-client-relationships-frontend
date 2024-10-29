@@ -22,7 +22,7 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.{ClientServiceFieldName, ClientTypeFieldName}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.SelectFromOptionsForm
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{JourneyRequest, JourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, JourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.ClientServiceConfigurationService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.journey.JourneyService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.SelectClientServicePage
@@ -41,7 +41,7 @@ class SelectServiceController @Inject()(mcc: MessagesControllerComponents,
   
   def show(journeyType: JourneyType): Action[AnyContent] = actions.getJourney(journeyType):
     journeyRequest =>
-      given JourneyRequest[?] = journeyRequest
+      given AgentJourneyRequest[?] = journeyRequest
       val journey = journeyRequest.journey
       val services = serviceConfig.clientServicesFor(journey.getClientType)
       Ok(selectClientServicePage(
@@ -53,7 +53,7 @@ class SelectServiceController @Inject()(mcc: MessagesControllerComponents,
 
   def onSubmit(journeyType: JourneyType): Action[AnyContent] = actions.getJourney(journeyType).async:
     journeyRequest =>
-      given JourneyRequest[?] = journeyRequest
+      given AgentJourneyRequest[?] = journeyRequest
       val journey = journeyRequest.journey
       val services = serviceConfig.clientServicesFor(journey.getClientType)
       SelectFromOptionsForm.form(ClientServiceFieldName, services, journeyType.toString).bindFromRequest().fold(

@@ -16,11 +16,10 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey
 
-import play.api.mvc.{Request, WrappedRequest}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.Journey
-import uk.gov.hmrc.auth.core.retrieve.Credentials
+import play.api.mvc.Request
+import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.AgentRequest
 
-class JourneyRequest[A](
-    val journey:     Journey,
-    val request:     Request[A]
-) extends WrappedRequest[A](request) 
+class AgentJourneyRequest[A](override val arn: String,
+                             val journey: Journey,
+                             override val request: Request[A])
+  extends AgentRequest[A](arn, request)

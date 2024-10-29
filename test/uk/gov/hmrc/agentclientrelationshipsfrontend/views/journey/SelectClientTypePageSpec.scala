@@ -40,7 +40,7 @@ class SelectClientTypePageSpec extends ViewSpecSupport {
   }
 
   "SelectClientType for authorisation request view" should {
-    implicit val journeyRequest: JourneyRequest[?] = new JourneyRequest(journey = Journey(journeyType = JourneyType.AuthorisationRequest), request)
+    implicit val journeyRequest: AgentJourneyRequest[?] = new AgentJourneyRequest("", Journey(journeyType = JourneyType.AuthorisationRequest), request)
     val options: Set[String] = Set("personal", "business", "trust")
     val form: Form[String] = SelectFromOptionsForm.form("clientType", options, "authorisation-request")
     val view: HtmlFormat.Appendable = viewTemplate(form, options)
@@ -67,7 +67,7 @@ class SelectClientTypePageSpec extends ViewSpecSupport {
   }
 
   "SelectClientType for cancel authorisation view" should {
-    implicit val journeyRequest: JourneyRequest[?] = new JourneyRequest(journey = Journey(journeyType = JourneyType.AgentCancelAuthorisation), request)
+    implicit val journeyRequest: AgentJourneyRequest[?] = new AgentJourneyRequest("", Journey(journeyType = JourneyType.AgentCancelAuthorisation), request)
     val options: Set[String] = Set("personal", "business", "trust")
     val form: Form[String] = SelectFromOptionsForm.form("clientType", options, "agent-cancel-authorisation")
     val view: HtmlFormat.Appendable = viewTemplate(form, options)

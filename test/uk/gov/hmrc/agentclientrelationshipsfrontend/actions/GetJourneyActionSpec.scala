@@ -36,10 +36,15 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class GetJourneyActionSpec extends AnyWordSpecLike with Matchers with OptionValues with BeforeAndAfterEach with GuiceOneAppPerSuite:
 
+  val fakeAuthAction: ActionRefiner[Request, AgentRequest] = new ActionRefiner[Request, AgentRequest] {
+    override def refine[A](request: Request[A]): Future[Either[Result, AgentRequest[A]]] =
+      Future.successful(Right[Result, AgentRequest[A]](AgentRequest("testArn", request)))
+    override protected def executionContext: ExecutionContext = app.injector.instanceOf[ExecutionContext]
+  }
   class FakeController(getJourneyAction: GetJourneyAction,
                        actionBuilder: DefaultActionBuilder) {
     def route(journeyTypeFromUrl: JourneyType): Action[AnyContent] =
-      (actionBuilder andThen getJourneyAction.journeyAction(journeyTypeFromUrl)) {
+      (actionBuilder andThen fakeAuthAction andThen getJourneyAction.journeyAction(journeyTypeFromUrl)) {
         journeyRequest =>
           Results.Ok(Json.toJson(journeyRequest.journey).toString)
       }

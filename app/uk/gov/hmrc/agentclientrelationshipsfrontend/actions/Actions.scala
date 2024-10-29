@@ -17,19 +17,19 @@
 package uk.gov.hmrc.agentclientrelationshipsfrontend.actions
 
 import play.api.mvc.{ActionBuilder, AnyContent, DefaultActionBuilder, Request}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{JourneyRequest, JourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, JourneyType}
 
 import javax.inject.{Inject, Singleton}
 
 @Singleton
 class Actions @Inject()(
     actionBuilder:    DefaultActionBuilder,
-    getJourneyAction: GetJourneyAction
+    getJourneyAction: GetJourneyAction,
+    authActions:      AuthActions
 ) {
+  def getJourney(journeyTypeFromUrl: JourneyType): ActionBuilder[AgentJourneyRequest, AnyContent] =
+    actionBuilder andThen authActions.agentAuthAction andThen getJourneyAction.journeyAction(journeyTypeFromUrl)
 
-  val default: ActionBuilder[Request, AnyContent] = actionBuilder
-
-  def getJourney(journeyTypeFromUrl: JourneyType): ActionBuilder[JourneyRequest, AnyContent] =
-    default andThen getJourneyAction.journeyAction(journeyTypeFromUrl)
-
+  def authenticate: ActionBuilder[AgentRequest, AnyContent] =
+    actionBuilder andThen authActions.agentAuthAction
 }
