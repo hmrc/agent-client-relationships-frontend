@@ -25,7 +25,9 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentS
 class SelectServiceControllerISpec extends ComponentSpecHelper with AuthStubs {
 
   //TODO: Make the tests iterate over all client types and service values - these are only for one of each
-  private val authorisationRequestJourney: Journey = Journey(journeyType = JourneyType.AuthorisationRequest, clientType = Some("personal"))
+  private val personalAuthorisationRequestJourney: Journey = Journey(journeyType = JourneyType.AuthorisationRequest, clientType = Some("personal"))
+  private val businessAuthorisationRequestJourney: Journey = Journey(journeyType = JourneyType.AuthorisationRequest, clientType = Some("business"))
+  private val trustAuthorisationRequestJourney: Journey = Journey(journeyType = JourneyType.AuthorisationRequest, clientType = Some("trust"))
   private val agentCancelAuthorisationJourney: Journey = Journey(JourneyType.AgentCancelAuthorisation, clientType = Some("personal"))
 
   val journeyService: JourneyService = app.injector.instanceOf[JourneyService]
@@ -36,9 +38,22 @@ class SelectServiceControllerISpec extends ComponentSpecHelper with AuthStubs {
   }
 
   "GET /authorisation-request/select-service" should {
+    "redirect to ASA dashboard when no journey session present" in {
+      authoriseAsAgent()
+      val result = get(routes.SelectServiceController.show(JourneyType.AuthorisationRequest).url)
+      result.status shouldBe SEE_OTHER
+      result.header("Location").value shouldBe "http://localhost:9401/agent-services-account/home"
+    }
+    "redirect to the journey start when no client type present" in {
+      authoriseAsAgent()
+      await(journeyService.saveJourney(Journey(journeyType = JourneyType.AuthorisationRequest, clientType = None)))
+      val result = get(routes.SelectServiceController.show(JourneyType.AuthorisationRequest).url)
+      result.status shouldBe SEE_OTHER
+      result.header("Location").value shouldBe routes.SelectClientTypeController.show(JourneyType.AuthorisationRequest).url
+    }
     "display the select client service page" in {
       authoriseAsAgent()
-      await(journeyService.saveJourney(authorisationRequestJourney))
+      await(journeyService.saveJourney(personalAuthorisationRequestJourney))
       val result = get(routes.SelectServiceController.show(JourneyType.AuthorisationRequest).url)
       result.status shouldBe OK
     }
@@ -47,7 +62,7 @@ class SelectServiceControllerISpec extends ComponentSpecHelper with AuthStubs {
   "POST /authorisation-request/select-service" should {
     "redirect to the next page after storing the answer" in {
       authoriseAsAgent()
-      await(journeyService.saveJourney(authorisationRequestJourney))
+      await(journeyService.saveJourney(personalAuthorisationRequestJourney))
       val result = post(routes.SelectServiceController.onSubmit(JourneyType.AuthorisationRequest).url)(Map(
         "clientService" -> Seq("HMRC-MTD-IT")
       ))
@@ -56,7 +71,7 @@ class SelectServiceControllerISpec extends ComponentSpecHelper with AuthStubs {
     }
     "show an error when no selection is made" in {
       authoriseAsAgent()
-      await(journeyService.saveJourney(authorisationRequestJourney))
+      await(journeyService.saveJourney(personalAuthorisationRequestJourney))
       val result = post(routes.SelectServiceController.onSubmit(JourneyType.AuthorisationRequest).url)("")
       result.status shouldBe BAD_REQUEST
     }

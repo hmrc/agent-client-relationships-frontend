@@ -43,12 +43,15 @@ class SelectServiceController @Inject()(mcc: MessagesControllerComponents,
     journeyRequest =>
       given AgentJourneyRequest[?] = journeyRequest
       val journey = journeyRequest.journey
-      val services = serviceConfig.clientServicesFor(journey.getClientType)
-      Ok(selectClientServicePage(
-        form = SelectFromOptionsForm.form(ClientServiceFieldName, services, journey.journeyType.toString).fill(journey.getServiceWithDefault),
-        clientType = journey.getClientType,
-        services
-      ))
+      if journey.getClientTypeWithDefault.isEmpty then Redirect(routes.SelectClientTypeController.show(journey.journeyType))
+      else {
+        val services = serviceConfig.clientServicesFor(journey.getClientType)
+        Ok(selectClientServicePage(
+          form = SelectFromOptionsForm.form(ClientServiceFieldName, services, journey.journeyType.toString).fill(journey.getServiceWithDefault),
+          clientType = journey.getClientType,
+          services
+        ))
+      }
       
 
   def onSubmit(journeyType: JourneyType): Action[AnyContent] = actions.getJourney(journeyType).async:
