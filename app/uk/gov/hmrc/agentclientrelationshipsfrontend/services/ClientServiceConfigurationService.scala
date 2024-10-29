@@ -42,21 +42,15 @@ class ClientServiceConfigurationService @Inject() {
         )
       )
     ),
-    "HMRC-PPT-ORG" -> ServiceData(
-      serviceName = "HMRC-PPT-ORG",
+    "HMRC-MTD-VAT" -> ServiceData(
+      serviceName = "HMRC-MTD-VAT",
       clientTypes = Set("personal", "business", "trust"),
       clientDetails = Seq(
         FieldConfiguration(
-          name = "pptRef",
-          regex = "^[0-9A-Za-z]{15}$",
+          name = "vrn",
+          regex = "^[0-9]{9}$",
           inputType = "text",
-          width = 10
-        ),
-        FieldConfiguration(
-          name = "registrationDate",
-          regex = "",
-          inputType = "date",
-          width = 8
+          width = 9
         )
       )
     ),
@@ -81,12 +75,54 @@ class ClientServiceConfigurationService @Inject() {
           regex = "[[A-Z]&&[^DFIQUV]][[A-Z]&&[^DFIQUVO]] ?\\d{2} ?\\d{2} ?\\d{2} ?[A-D]{1}",
           inputType = "text",
           width = 10
-        ),
+        )
+      )
+    ),
+    "HMRC-PPT-ORG" -> ServiceData(
+      serviceName = "HMRC-PPT-ORG",
+      clientTypes = Set("personal", "business", "trust"),
+      clientDetails = Seq(
         FieldConfiguration(
-          name = "dob",
-          regex = "",
-          inputType = "date",
-          width = 8
+          name = "pptRef",
+          regex = "^[0-9A-Za-z]{15}$",
+          inputType = "text",
+          width = 10
+        )
+      )
+    ),
+    "HMRC-CBC-ORG" -> ServiceData(
+      serviceName = "HMRC-CBC-ORG",
+      clientTypes = Set("business"),
+      clientDetails = Seq(
+        FieldConfiguration(
+          name = "cbcId",
+          regex = "^[0-9A-Za-z]{15}$",
+          inputType = "text",
+          width = 10
+        )
+      )
+    ),
+    "HMRC-PILLAR2-ORG" -> ServiceData(
+      serviceName = "HMRC-PILLAR2-ORG",
+      clientTypes = Set("business", "trust"),
+      clientDetails = Seq(
+        FieldConfiguration(
+          name = "utr",
+          regex = "^[0-9]{10}$",
+          inputType = "text",
+          width = 10
+        )
+      )
+    ),
+    "HMRC-TERS-ORG" -> ServiceData(
+      serviceName = "HMRC-TERS-ORG",
+      clientTypes = Set("trust"),
+      clientDetails = Seq(
+        FieldConfiguration(
+          name = "utr",
+          regex = "^[0-9]{10}$",
+          inputType = "text",
+          width = 10
         )
       )
     )

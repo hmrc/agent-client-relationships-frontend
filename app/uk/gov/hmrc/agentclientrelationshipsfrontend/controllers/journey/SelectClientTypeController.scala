@@ -62,7 +62,16 @@ class SelectClientTypeController @Inject()(mcc: MessagesControllerComponents,
           )))
         },
         clientType => {
-          journeyService.saveJourney(journeyRequest.journey.copy(clientType = Some(clientType))).flatMap { _ =>
+          // unset any previous answers if client type is changed
+          val newJourney = if (journey.clientType.contains(clientType)) journey else journey.copy(
+            clientType = Some(clientType),
+            clientService = None,
+            clientId = None,
+            clientDetailsResponse = None,
+            clientConfirmed = false,
+            agentType = None
+          )
+          journeyService.saveJourney(newJourney).flatMap { _ =>
             // we always want to go to the services page after selecting client type
             Future.successful(Redirect(routes.SelectServiceController.show(journey.journeyType).url))
           }

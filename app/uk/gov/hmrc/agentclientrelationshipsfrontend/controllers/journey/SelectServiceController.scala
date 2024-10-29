@@ -65,7 +65,16 @@ class SelectServiceController @Inject()(mcc: MessagesControllerComponents,
           )))
         },
         clientService => {
-          journeyService.saveJourney(journey.copy(clientService = Some(clientService))).flatMap { _ =>
+          // unset any previous answers if service is changed 
+          val newJourney = if(journey.clientService.contains(clientService)) journey else journey.copy(
+            clientService = Some(clientService),
+            clientId = None,
+            clientDetailsResponse = None,
+            clientConfirmed = false,
+            agentType = None
+          )
+          
+          journeyService.saveJourney(newJourney).flatMap { _ =>
             journeyService.nextPageUrl(journeyType).map(Redirect(_))}
         }
   )
