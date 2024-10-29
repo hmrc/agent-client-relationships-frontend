@@ -56,7 +56,7 @@ class SelectClientServicePageSpec extends ViewSpecSupport {
     val buttonContent = "Continue"
   }
 
-  val optionsForPersonal: Seq[String] = Seq("HMRC-MTD-IT", "HMRC-MTD-VAT", "HMRC-PPT-ORG", "HMRC-CGT-PD", "PERSONAL-INCOME-RECORD")
+  val optionsForPersonal: Seq[String] = Seq("HMRC-MTD-IT", "PERSONAL-INCOME-RECORD", "HMRC-MTD-VAT", "HMRC-CGT-PD", "HMRC-PPT-ORG")
   val optionsForBusiness: Seq[String] = Seq("HMRC-MTD-VAT", "HMRC-PPT-ORG", "HMRC-CBC-ORG", "HMRC-PILLAR2-ORG")
   val optionsForTrust: Seq[String] = Seq("HMRC-TERS-ORG", "HMRC-PPT-ORG", "HMRC-CGT-PD", "HMRC-CBC-ORG", "HMRC-PILLAR2-ORG")
 
