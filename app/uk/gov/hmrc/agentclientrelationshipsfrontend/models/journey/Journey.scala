@@ -33,6 +33,13 @@ case class Journey(journeyType: JourneyType,
   def getServiceWithDefault: String = clientService.getOrElse("")
   def getService: String = clientService.getOrElse(throw new RuntimeException("service not defined"))
 
+  // TODO: Implement this method for real when our clientDetailsResponse contains
+  //  everything we need such as existing invitations or authorisations
+  def hasErrors(journeyType: JourneyType): Boolean = journeyType match
+    case JourneyType.AuthorisationRequest => clientDetailsResponse.exists(_.status.nonEmpty)
+    case JourneyType.AgentCancelAuthorisation => clientService.isEmpty
+    case _ => false
+
 object Journey:
   implicit lazy val format: OFormat[Journey] = Json.format[Journey]
 

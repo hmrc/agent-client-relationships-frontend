@@ -27,9 +27,7 @@ case class ClientDetailsResponse(
                                   isOverseas: Boolean,
                                   knownFacts: Seq[String],
                                   knownFactType: Option[KnownFactType]
-                                ) {
-  def hasErrors(journeyType: JourneyType): Boolean = false
-}
+                                )
 
 object ClientDetailsResponse {
   implicit val format: OFormat[ClientDetailsResponse] = Json.format[ClientDetailsResponse]

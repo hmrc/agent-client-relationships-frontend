@@ -55,16 +55,11 @@ class JourneyService @Inject()(journeyRepository: JourneyRepository
     } yield journey match {
       case Some(journey) if journey.journeyType != journeyType => routes.StartJourneyController.startJourney(journeyType).url
       case Some(journey) => {
-        if (journey.clientService.isEmpty) routes.SelectClientTypeController.show(journeyType).url // this page is hard coded to always redirect to Select Tax Service
-        // this next step makes the back end call onSubmit of the EnterClientIdController to get the client details needed to complete the journey
-        // so fast-track posts for example may not need to go through this step via the UI but instead could make the same back end call within the post handler
-        // and then call this routing method to determine the next step with the clientDetailsResponse in place
+        if (journey.clientService.isEmpty) routes.SelectClientTypeController.show(journeyType).url
         else if (journey.clientDetailsResponse.isEmpty) "routes.EnterClientIdController.show(journeyType).url"
-        else if (journey.clientDetailsResponse.get.knownFactType.nonEmpty && !journey.clientConfirmed) "routes.EnterClientVerifierController.show(journeyType).url"
+        else if (journey.clientDetailsResponse.get.knownFactType.nonEmpty && !journey.clientConfirmed) "routes.EnterClientFactController.show(journeyType).url"
         else if (journey.getService.matches("HMRC-MTD-IT") && journey.agentType.isEmpty) "routes.SelectAgentTypeController.show(journeyType).url"
-        // this next step uses a method on the ClientDetailsResponse model to determine if errors exist with the journey
-        // e.g. authorisation already exists or client is insolvent, the JourneyErrorController can produce a code/slug for the error page to use
-        else if (journey.clientDetailsResponse.get.hasErrors(journeyType)) "routes.JourneyErrorController.show(journeyType).url"
+        else if (journey.hasErrors(journeyType)) "routes.JourneyErrorController.show(journeyType).url"
         else "routes.CheckYourAnswersController.show(journeyType).url"
       }
       case _ => routes.StartJourneyController.startJourney(journeyType).url
