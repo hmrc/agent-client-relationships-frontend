@@ -41,7 +41,7 @@ class SelectClientTypePageSpec extends ViewSpecSupport {
 
   "SelectClientType for authorisation request view" should {
     implicit val journeyRequest: AgentJourneyRequest[?] = new AgentJourneyRequest("", Journey(journeyType = JourneyType.AuthorisationRequest), request)
-    val options: Set[String] = Set("personal", "business", "trust")
+    val options: Seq[String] = Seq("personal", "business", "trust")
     val form: Form[String] = SelectFromOptionsForm.form("clientType", options, "authorisation-request")
     val view: HtmlFormat.Appendable = viewTemplate(form, options)
     val doc: Document = Jsoup.parse(view.body)
@@ -68,7 +68,7 @@ class SelectClientTypePageSpec extends ViewSpecSupport {
 
   "SelectClientType for cancel authorisation view" should {
     implicit val journeyRequest: AgentJourneyRequest[?] = new AgentJourneyRequest("", Journey(journeyType = JourneyType.AgentCancelAuthorisation), request)
-    val options: Set[String] = Set("personal", "business", "trust")
+    val options: Seq[String] = Seq("personal", "business", "trust")
     val form: Form[String] = SelectFromOptionsForm.form("clientType", options, "agent-cancel-authorisation")
     val view: HtmlFormat.Appendable = viewTemplate(form, options)
     val doc: Document = Jsoup.parse(view.body)

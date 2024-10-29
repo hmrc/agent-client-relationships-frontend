@@ -30,7 +30,7 @@
         submitButton: SubmitButton
 )
 
-@(form: Form[String], clientType: String, clientServices: Set[String])(implicit request: AgentJourneyRequest[?], messages: Messages)
+@(form: Form[String], clientType: String, clientServices: Seq[String])(implicit request: AgentJourneyRequest[?], messages: Messages)
 
 @key = @{"clientService"}
 @journeyKey = @{request.journey.journeyType.toString}

@@ -44,8 +44,8 @@ class SelectClientTypeController @Inject()(mcc: MessagesControllerComponents,
       given AgentJourneyRequest[?] = journeyRequest
       val journey = journeyRequest.journey
       Ok(selectClientTypePage(
-        form = SelectFromOptionsForm.form(ClientTypeFieldName, serviceConfig.allClientTypes, journey.journeyType.toString).fill(journey.getClientTypeWithDefault),
-        clientTypes = serviceConfig.allClientTypes
+        form = SelectFromOptionsForm.form(ClientTypeFieldName, serviceConfig.orderedClientTypes, journey.journeyType.toString).fill(journey.getClientTypeWithDefault),
+        clientTypes = serviceConfig.orderedClientTypes
       ))
       
 
@@ -54,11 +54,11 @@ class SelectClientTypeController @Inject()(mcc: MessagesControllerComponents,
       given AgentJourneyRequest[?] = journeyRequest
       val journey = journeyRequest.journey
 
-      SelectFromOptionsForm.form(ClientTypeFieldName, serviceConfig.allClientTypes, journey.journeyType.toString).bindFromRequest().fold(
+      SelectFromOptionsForm.form(ClientTypeFieldName, serviceConfig.orderedClientTypes, journey.journeyType.toString).bindFromRequest().fold(
         formWithErrors => {
           Future.successful(BadRequest(selectClientTypePage(
             form = formWithErrors,
-            clientTypes = serviceConfig.allClientTypes
+            clientTypes = serviceConfig.orderedClientTypes
           )))
         },
         clientType => {
