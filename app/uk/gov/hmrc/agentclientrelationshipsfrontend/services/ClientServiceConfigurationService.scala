@@ -19,6 +19,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.services
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.common.{FieldConfiguration, ServiceData}
 
 import javax.inject.{Inject, Singleton}
+import scala.collection.immutable.ListMap
 
 @Singleton
 class ClientServiceConfigurationService @Inject() {
@@ -30,7 +31,7 @@ class ClientServiceConfigurationService @Inject() {
   def firstClientDetailsFieldFor(clientService: String): FieldConfiguration = services(clientService).clientDetails.head
   def lastClientDetailsFieldFor(clientService: String): FieldConfiguration = services(clientService).clientDetails.last
 
-  private val services: Map[String, ServiceData] = Map(
+  private val services: ListMap[String, ServiceData] = ListMap(
     "HMRC-MTD-IT" -> ServiceData(
       serviceName = "HMRC-MTD-IT",
       clientTypes = Set("personal"),
