@@ -18,12 +18,13 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey
 
 import play.api.test.Helpers.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyType
-import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.ComponentSpecHelper
+import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentSpecHelper}
 
-class StartJourneyControllerISpec extends ComponentSpecHelper {
+class StartJourneyControllerISpec extends ComponentSpecHelper with AuthStubs {
 
   "GET /authorisation-request/" should {
     "redirect to the select client type page" in {
+      authoriseAsAgent()
       val result = get(routes.StartJourneyController.startJourney(JourneyType.AuthorisationRequest).url)
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe routes.SelectClientTypeController.show(JourneyType.AuthorisationRequest).url
@@ -32,6 +33,7 @@ class StartJourneyControllerISpec extends ComponentSpecHelper {
 
   "GET /agent-cancel-authorisation/" should {
     "redirect to the select client type page" in {
+      authoriseAsAgent()
       val result = get(routes.StartJourneyController.startJourney(JourneyType.AgentCancelAuthorisation).url)
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe routes.SelectClientTypeController.show(JourneyType.AgentCancelAuthorisation).url

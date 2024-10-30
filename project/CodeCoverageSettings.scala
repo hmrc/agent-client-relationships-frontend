@@ -12,7 +12,7 @@ object CodeCoverageSettings {
     "app.*",
     "prod.*",
     ".*Routes.*",
-    "testOnly.*",
+    ".*testOnly.*",
     "testOnlyDoNotUseInAppConf.*",
     "$anon"
   )

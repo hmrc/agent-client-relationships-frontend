@@ -20,12 +20,12 @@ import play.api.http.Status.{BAD_REQUEST, OK}
 import play.api.test.Helpers.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{Journey, JourneyState, JourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.journey.JourneyService
-import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.ComponentSpecHelper
+import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentSpecHelper}
 
-class SelectClientTypeControllerISpec extends ComponentSpecHelper {
+class SelectClientTypeControllerISpec extends ComponentSpecHelper with AuthStubs {
 
-  private val authorisationRequestJourney: Journey = Journey(JourneyType.AuthorisationRequest, journeyState = JourneyState.SelectClientType)
-  private val agentCancelAuthorisationJourney: Journey = Journey(JourneyType.AgentCancelAuthorisation, journeyState = JourneyState.SelectClientType)
+  private val authorisationRequestJourney: Journey = Journey(JourneyType.AuthorisationRequest)
+  private val agentCancelAuthorisationJourney: Journey = Journey(JourneyType.AgentCancelAuthorisation)
 
   val journeyService: JourneyService = app.injector.instanceOf[JourneyService]
 
@@ -36,6 +36,7 @@ class SelectClientTypeControllerISpec extends ComponentSpecHelper {
 
   "GET /authorisation-request/client-type" should {
     "display the select client type page" in {
+      authoriseAsAgent()
       await(journeyService.saveJourney(authorisationRequestJourney))
       val result = get(routes.SelectClientTypeController.show(JourneyType.AuthorisationRequest).url)
       result.status shouldBe OK
@@ -44,14 +45,16 @@ class SelectClientTypeControllerISpec extends ComponentSpecHelper {
 
   "POST /authorisation-request/client-type" should {
     "redirect to the next page after storing the answer" in {
+      authoriseAsAgent()
       await(journeyService.saveJourney(authorisationRequestJourney))
       val result = post(routes.SelectClientTypeController.onSubmit(JourneyType.AuthorisationRequest).url)(Map(
         "clientType" -> Seq("personal")
       ))
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe "???"
+      result.header("Location").value shouldBe routes.SelectServiceController.show(JourneyType.AuthorisationRequest).url
     }
     "show an error when no selection is made" in {
+      authoriseAsAgent()
       await(journeyService.saveJourney(authorisationRequestJourney))
       val result = post(routes.SelectClientTypeController.onSubmit(JourneyType.AuthorisationRequest).url)("")
       result.status shouldBe BAD_REQUEST
@@ -60,6 +63,7 @@ class SelectClientTypeControllerISpec extends ComponentSpecHelper {
 
   "GET /agent-cancel-authorisation/client-type" should {
     "display the select client type page" in {
+      authoriseAsAgent()
       await(journeyService.saveJourney(agentCancelAuthorisationJourney))
       val result = get(routes.SelectClientTypeController.show(JourneyType.AgentCancelAuthorisation).url)
       result.status shouldBe OK
@@ -68,14 +72,16 @@ class SelectClientTypeControllerISpec extends ComponentSpecHelper {
 
   "POST /agent-cancel-authorisation/client-type" should {
     "redirect to the next page after storing the answer" in {
+      authoriseAsAgent()
       await(journeyService.saveJourney(agentCancelAuthorisationJourney))
       val result = post(routes.SelectClientTypeController.onSubmit(JourneyType.AgentCancelAuthorisation).url)(Map(
         "clientType" -> Seq("personal")
       ))
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe "???"
+      result.header("Location").value shouldBe routes.SelectServiceController.show(JourneyType.AgentCancelAuthorisation).url
     }
     "show an error when no selection is made" in {
+      authoriseAsAgent()
       await(journeyService.saveJourney(agentCancelAuthorisationJourney))
       val result = post(routes.SelectClientTypeController.onSubmit(JourneyType.AgentCancelAuthorisation).url)("")
       result.status shouldBe BAD_REQUEST

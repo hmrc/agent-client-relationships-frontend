@@ -5,6 +5,9 @@ service.name.agents.auth=Gofyn i gleient eich awdurdodi
 service.name.agents.de-auth=Canslo awdurdodiad cleient
 service.name.clients=Penodi rhywun i ddelio â CThEM ar eich rhan
 
+authorisation-request.service.name = Gofyn i gleient eich awdurdodi
+agent-cancel-authorisation.service.name = Canslo awdurdodiad cleient
+
 error.prefix=Gwall:' '
 error.heading=Mae problem wedi codi
 
@@ -93,7 +96,14 @@ clientService.HMRC-PPT-ORG.business=Rheoli ei Dreth Deunydd Pacio Plastig
 clientService.HMRC-PPT-ORG.trust=Rheoli ei Treth Deunydd Pacio Plastig ymddiriedolaeth
 clientService.HMRC-CGT-PD.personal=Rheoli ei gyfrif Treth Enillion Cyfalaf ar eiddo yn y DU
 clientService.HMRC-CGT-PD.trust=Rheoli ei cyfrif Treth Enillion Cyfalaf ar eiddo yn y DU ar gyfer ymddiriedolaeth
-
+select-service.HMRC-MTD-VAT.personal=Rheoli ei TAW
+clientService.HMRC-MTD-VAT.business=Rheoli ei TAW
+clientService.HMRC-TERS-ORG.business=Cynnal ei ymddiriedolaeth neu ystâd
+clientService.HMRC-TERS-ORG.trust=Cynnal ei ymddiriedolaeth neu ystâd
+clientService.HMRC-CBC-ORG.trust=Rheoli ei adroddiadau gwlad-wrth-wlad
+clientService.HMRC-CBC-ORG.business=Rheoli ei adroddiadau gwlad-wrth-wlad
+clientService.HMRC-PILLAR2-ORG.business=Rheoli ei drethi atodol Colofn 2
+clientService.HMRC-PILLAR2-ORG.trust=Rheoli ei drethi atodol Colofn 2
 
 # -------------------------------------------------------------------------------------------
 # Enter Known Facts

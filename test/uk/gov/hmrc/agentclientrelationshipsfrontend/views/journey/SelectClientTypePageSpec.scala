@@ -33,15 +33,15 @@ class SelectClientTypePageSpec extends ViewSpecSupport {
     val authorisationRequestHeading = "What type of client is this authorisation for?"
     val cancelAuthorisationHeading = "What type of client do you want to cancel your authorisation for?"
     val authorisationRequestTitle = s"$authorisationRequestHeading - Ask a client to authorise you - GOV.UK"
-    val cancelAuthorisationTitle = s"$cancelAuthorisationHeading - Ask a client to authorise you - GOV.UK"
+    val cancelAuthorisationTitle = s"$cancelAuthorisationHeading - Cancel a client’s authorisation - GOV.UK"
     val personalLabel = "An individual or sole trader"
     val businessLabel = "A company or partnership"
     val trustLabel = "A trust or an estate"
   }
 
   "SelectClientType for authorisation request view" should {
-    implicit val journeyRequest: JourneyRequest[?] = new JourneyRequest(journey = Journey(journeyType = JourneyType.AuthorisationRequest, journeyState = JourneyState.SelectClientType), request)
-    val options: Set[String] = Set("personal", "business", "trust")
+    implicit val journeyRequest: AgentJourneyRequest[?] = new AgentJourneyRequest("", Journey(journeyType = JourneyType.AuthorisationRequest), request)
+    val options: Seq[String] = Seq("personal", "business", "trust")
     val form: Form[String] = SelectFromOptionsForm.form("clientType", options, "authorisation-request")
     val view: HtmlFormat.Appendable = viewTemplate(form, options)
     val doc: Document = Jsoup.parse(view.body)
@@ -67,8 +67,8 @@ class SelectClientTypePageSpec extends ViewSpecSupport {
   }
 
   "SelectClientType for cancel authorisation view" should {
-    implicit val journeyRequest: JourneyRequest[?] = new JourneyRequest(journey = Journey(journeyType = JourneyType.AgentCancelAuthorisation, journeyState = JourneyState.SelectClientType), request)
-    val options: Set[String] = Set("personal", "business", "trust")
+    implicit val journeyRequest: AgentJourneyRequest[?] = new AgentJourneyRequest("", Journey(journeyType = JourneyType.AgentCancelAuthorisation), request)
+    val options: Seq[String] = Seq("personal", "business", "trust")
     val form: Form[String] = SelectFromOptionsForm.form("clientType", options, "agent-cancel-authorisation")
     val view: HtmlFormat.Appendable = viewTemplate(form, options)
     val doc: Document = Jsoup.parse(view.body)

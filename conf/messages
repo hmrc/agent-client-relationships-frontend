@@ -5,6 +5,9 @@ service.name.agents.auth=Ask a client to authorise you
 service.name.agents.de-auth=Cancel a client’s authorisation
 service.name.clients=Appoint someone to deal with HMRC for you
 
+authorisation-request.service.name = Ask a client to authorise you
+agent-cancel-authorisation.service.name = Cancel a client’s authorisation
+
 error.prefix=Error:' '
 error.heading=There is a problem
 
@@ -94,6 +97,14 @@ clientService.HMRC-PPT-ORG.business=Manage their Plastic Packaging Tax
 clientService.HMRC-PPT-ORG.trust=Manage their trust’s Plastic Packaging Tax
 clientService.HMRC-CGT-PD.personal=Manage their Capital Gains Tax on UK property account
 clientService.HMRC-CGT-PD.trust=Manage their trust’s Capital Gains Tax on UK property account
+clientService.HMRC-CBC-ORG.personal=Manage their country-by-country reports
+clientService.HMRC-CBC-ORG.business=Manage their country-by-country reports
+clientService.HMRC-CBC-ORG.trust=Manage their trust’s country-by-country reports
+clientService.HMRC-MTD-VAT.personal=Manage their VAT
+clientService.HMRC-MTD-VAT.business=Manage their VAT
+clientService.HMRC-PILLAR2-ORG.business=Manage their Pillar 2 top-up taxes
+clientService.HMRC-PILLAR2-ORG.trust=Manage their Pillar 2 top-up taxes
+clientService.HMRC-TERS-ORG.trust=Maintain their trust or an estate
 
 
 # -------------------------------------------------------------------------------------------

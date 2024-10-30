@@ -3,27 +3,6 @@
 ->         /hmrc-frontend                                                               hmrcfrontend.Routes
 GET        /assets/*file                                                                controllers.Assets.versioned(path = "/public", file: Asset)
 
-# Create an invitation ---------------------------------------------------------------------------------------------------------
-GET         /invitations/create/client-type                                             uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.createInvitation.SelectClientTypeController.show(cya: Boolean ?= false)
-POST        /invitations/create/client-type                                             uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.createInvitation.SelectClientTypeController.onSubmit(cya: Boolean ?= false)
-
-GET         /invitations/create/client-service                                          uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.createInvitation.SelectClientServiceController.show
-POST        /invitations/create/client-service                                          uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.createInvitation.SelectClientServiceController.onSubmit
-
-GET         /invitations/create/client-details/:fieldName                               uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.createInvitation.EnterClientDetailsController.show(fieldName)
-POST        /invitations/create/client-details/:fieldName                               uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.createInvitation.EnterClientDetailsController.onSubmit(fieldName)
-
-GET         /invitations/create/confirm-your-client                                     uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.createInvitation.ConfirmClientController.show
-POST        /invitations/create/confirm-your-client                                     uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.createInvitation.ConfirmClientController.onSubmit
-
-GET         /invitations/create/agent-type                                              uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.createInvitation.SelectAgentTypeController.show
-POST        /invitations/create/agent-type                                              uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.createInvitation.SelectAgentTypeController.onSubmit
-
-GET         /invitations/create/check-your-answers                                      uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.createInvitation.CheckYourAnswersController.show
-POST        /invitations/create/check-your-answers                                      uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.createInvitation.CheckYourAnswersController.onSubmit
-
-GET         /invitations/created                                                        uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.createInvitation.InvitationCreatedController.show(agentInvitationId: String)
-
 # Track requests ---------------------------------------------------------------------------------------------------------
 GET         /track-requests                                                             uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.TrackRequestsController.show(pageNumber: Int = 1)
 GET         /track-requests/page/:pageNumber                                            uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.TrackRequestsController.show(pageNumber: Int)
@@ -38,8 +17,11 @@ GET         /cannot-confirm-identity                                            
 GET         /iv-timed-out                                                               uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.AuthorisationController.ivTimedOut(continueUrl: Option[RedirectUrl] ?= None)
 GET         /iv-locked-out                                                              uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.AuthorisationController.ivLockedOut
 
-
+# Main Journey URLs ----------------------------------------------------------------------------------------------------------
 GET        /:journeyType                                                                uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.StartJourneyController.startJourney(journeyType: JourneyType)
 
 GET        /:journeyType/client-type                                                    uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.SelectClientTypeController.show(journeyType: JourneyType)
 POST       /:journeyType/client-type                                                    uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.SelectClientTypeController.onSubmit(journeyType: JourneyType)
+
+GET        /:journeyType/select-service                                                 uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.SelectServiceController.show(journeyType: JourneyType)
+POST       /:journeyType/select-service                                                 uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.SelectServiceController.onSubmit(journeyType: JourneyType)

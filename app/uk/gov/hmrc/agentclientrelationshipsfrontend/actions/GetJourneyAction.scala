@@ -19,7 +19,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.actions
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{ActionFunction, Request, Result}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{JourneyRequest, JourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, JourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.journey.JourneyService
 
 import javax.inject.{Inject, Singleton}
@@ -30,14 +30,14 @@ class GetJourneyAction @Inject()(journeyService: JourneyService,
                                  appConfig: AppConfig
                                 )(implicit ec: ExecutionContext) {
 
-  def journeyAction(journeyTypeFromUrl: JourneyType): ActionFunction[Request, JourneyRequest] = new ActionFunction[Request, JourneyRequest]:
+  def journeyAction(journeyTypeFromUrl: JourneyType): ActionFunction[AgentRequest, AgentJourneyRequest] = new ActionFunction[AgentRequest, AgentJourneyRequest]:
     override protected def executionContext: ExecutionContext = ec
 
-    override def invokeBlock[A](request: Request[A], block: JourneyRequest[A] => Future[Result]): Future[Result] =
-      given Request[A] = request
+    override def invokeBlock[A](request: AgentRequest[A], block: AgentJourneyRequest[A] => Future[Result]): Future[Result] =
+      given AgentRequest[A] = request
       journeyService.getJourney().flatMap {
         case Some(journey) if journey.journeyType == journeyTypeFromUrl =>
-          block(new JourneyRequest(journey, request))
+          block(new AgentJourneyRequest(request.arn, journey, request.request))
         case _ =>
           Future.successful(Redirect(appConfig.agentServicesAccountHomeUrl))
       }

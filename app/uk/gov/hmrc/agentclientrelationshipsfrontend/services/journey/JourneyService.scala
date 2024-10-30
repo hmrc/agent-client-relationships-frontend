@@ -35,7 +35,7 @@ class JourneyService @Inject()(journeyRepository: JourneyRepository
   val dataKey = DataKey[Journey]("JourneySessionData")
 
   def saveJourney(journey: Journey)(implicit request: Request[?], ec: ExecutionContext): Future[Unit] = {
-    journeyRepository.putSession(dataKey, calculateJourneyState(journey)).map(_ => ())
+    journeyRepository.putSession(dataKey, journey).map(_ => ())
   }
 
   def getJourney()(implicit request: Request[Any]): Future[Option[Journey]] =
@@ -46,37 +46,24 @@ class JourneyService @Inject()(journeyRepository: JourneyRepository
   }
 
   def newJourney(journeyType: JourneyType): Journey = Journey(
-    journeyType = journeyType,
-    journeyState = JourneyState.SelectClientType,
-    clientType = None,
-    service = None,
-    clientId = None
+    journeyType = journeyType
   )
-  
-  //TODO - change routing
-  def nextPageUrl()(implicit request: Request[Any]): Future[String] = 
+
+  def nextPageUrl(journeyType: JourneyType)(implicit request: Request[Any]): Future[String] = {
     for {
-      mayBeJourney <- getJourney()
-    } yield {
-      mayBeJourney match {
-        case Some(journey) =>
-          journey.journeyState match
-            case JourneyState.SelectClientType => routes.SelectClientTypeController.show(journey.journeyType).url
-            case JourneyState.SelectService => "???" //routes.SelectClientServiceController.show.url
-            case JourneyState.EnterClientId => journey.journeyType match
-              case JourneyType.AuthorisationRequest | JourneyType.AgentCancelAuthorisation => ???
-        case None => ??? //TODO WG - route to page where user select JOurney Type
+      journey <- getJourney()
+    } yield journey match {
+      case Some(journey) if journey.journeyType != journeyType => routes.StartJourneyController.startJourney(journeyType).url
+      case Some(journey) => {
+        if (journey.clientService.isEmpty) routes.SelectClientTypeController.show(journeyType).url
+        else if (journey.clientDetailsResponse.isEmpty) "routes.EnterClientIdController.show(journeyType).url"
+        else if (journey.clientDetailsResponse.get.knownFactType.nonEmpty && !journey.clientConfirmed) "routes.EnterClientFactController.show(journeyType).url"
+        else if (journey.getService.matches("HMRC-MTD-IT") && journey.agentType.isEmpty) "routes.SelectAgentTypeController.show(journeyType).url"
+        else if (journey.hasErrors(journeyType)) "routes.JourneyErrorController.show(journeyType).url"
+        else "routes.CheckYourAnswersController.show(journeyType).url"
       }
+      case _ => routes.StartJourneyController.startJourney(journeyType).url
     }
-  
-
-  //TODO - 
-  def previousPageUrl(journey: Journey): String = ???
-
-  private def calculateJourneyState(journey: Journey): Journey = journey.journeyState match
-    case JourneyState.SelectClientType if journey.clientType.isDefined => journey.copy(journeyState = JourneyState.SelectService)
-    case JourneyState.SelectService if journey.service.isDefined => journey.copy(journeyState = JourneyState.EnterClientId)
-    case JourneyState.EnterClientId if journey.clientId.isDefined => ???
-    case _ => newJourney(journey.journeyType)
+  }
   
 }

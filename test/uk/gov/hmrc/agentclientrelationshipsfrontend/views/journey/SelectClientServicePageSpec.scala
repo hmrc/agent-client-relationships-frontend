@@ -34,7 +34,7 @@ class SelectClientServicePageSpec extends ViewSpecSupport {
     val authorisationRequestHeading = "What do you want the client to authorise you to do?"
     val cancelAuthorisationHeading = "Which authorisation do you want to cancel for the client?"
     val authorisationRequestTitle = s"$authorisationRequestHeading - Ask a client to authorise you - GOV.UK"
-    val cancelAuthorisationTitle = s"$cancelAuthorisationHeading - Ask a client to authorise you - GOV.UK"
+    val cancelAuthorisationTitle = s"$cancelAuthorisationHeading - Cancel a client’s authorisation - GOV.UK"
     val formHint = "You need to create a separate request for each tax service."
     val detailsHeading = "I need authorisation for something else"
     val detailsContent = "Find out more about asking a client to authorise you to deal with other tax services (opens in new tab)."
@@ -48,16 +48,21 @@ class SelectClientServicePageSpec extends ViewSpecSupport {
     val pptTrustLabel = "Manage their trust’s Plastic Packaging Tax"
     val cgtPersonalLabel = "Manage their Capital Gains Tax on UK property account"
     val cgtTrustLabel = "Manage their trust’s Capital Gains Tax on UK property account"
+    val vatLabel = "Manage their VAT"
+    val pillar2Label = "Manage their Pillar 2 top-up taxes"
+    val trustLabel = "Maintain their trust or an estate"
+    val cbcTrustLabel = "Manage their trust’s country-by-country reports"
+    val cbcLabel = "Manage their country-by-country reports"
     val buttonContent = "Continue"
   }
 
-  val optionsForPersonal: Set[String] = Set("HMRC-MTD-IT", "HMRC-PPT-ORG", "HMRC-CGT-PD", "PERSONAL-INCOME-RECORD")
-  val optionsForBusiness: Set[String] = Set("HMRC-PPT-ORG")
-  val optionsForTrust: Set[String] = Set("HMRC-PPT-ORG", "HMRC-CGT-PD")
+  val optionsForPersonal: Seq[String] = Seq("HMRC-MTD-IT", "PERSONAL-INCOME-RECORD", "HMRC-MTD-VAT", "HMRC-CGT-PD", "HMRC-PPT-ORG")
+  val optionsForBusiness: Seq[String] = Seq("HMRC-MTD-VAT", "HMRC-PPT-ORG", "HMRC-CBC-ORG", "HMRC-PILLAR2-ORG")
+  val optionsForTrust: Seq[String] = Seq("HMRC-TERS-ORG", "HMRC-PPT-ORG", "HMRC-CGT-PD", "HMRC-CBC-ORG", "HMRC-PILLAR2-ORG")
 
   "SelectClientServicePage for authorisation request view" should {
-    implicit val journeyRequest: JourneyRequest[?] =
-      new JourneyRequest(journey = Journey(journeyType = AuthorisationRequest, journeyState = JourneyState.SelectService), request)
+    implicit val journeyRequest: AgentJourneyRequest[?] =
+      new AgentJourneyRequest("", Journey(journeyType = AuthorisationRequest), request)
     val formForPersonal: Form[String] = SelectFromOptionsForm.form("clientService", optionsForPersonal, AuthorisationRequest.toString)
     val view: HtmlFormat.Appendable = viewTemplate(formForPersonal, "personal", optionsForPersonal)
     val doc: Document = Jsoup.parse(view.body)
@@ -77,9 +82,10 @@ class SelectClientServicePageSpec extends ViewSpecSupport {
           Expected.authorisationRequestHeading,
           List(
             Expected.incomeTaxPersonalLabel -> "HMRC-MTD-IT",
-            Expected.pptPersonalLabel -> "HMRC-PPT-ORG",
+            Expected.personalIncomeRecordLabel -> "PERSONAL-INCOME-RECORD",
+            Expected.vatLabel -> "HMRC-MTD-VAT",
             Expected.cgtPersonalLabel -> "HMRC-CGT-PD",
-            Expected.personalIncomeRecordLabel -> "PERSONAL-INCOME-RECORD"
+            Expected.pptPersonalLabel -> "HMRC-PPT-ORG"
           ),
           Some(Expected.formHint)
         )
@@ -95,7 +101,10 @@ class SelectClientServicePageSpec extends ViewSpecSupport {
         val expectedRadioGroup: TestRadioGroup = TestRadioGroup(
           Expected.authorisationRequestHeading,
           List(
-            Expected.pptBusinessLabel-> "HMRC-PPT-ORG"
+            Expected.vatLabel -> "HMRC-MTD-VAT",
+            Expected.pptBusinessLabel-> "HMRC-PPT-ORG",
+            Expected.cbcLabel -> "HMRC-CBC-ORG",
+            Expected.pillar2Label -> "HMRC-PILLAR2-ORG"
           ),
           Some(Expected.formHint)
         )
@@ -111,8 +120,11 @@ class SelectClientServicePageSpec extends ViewSpecSupport {
         val expectedRadioGroup: TestRadioGroup = TestRadioGroup(
           Expected.authorisationRequestHeading,
           List(
+            Expected.trustLabel -> "HMRC-TERS-ORG",
             Expected.pptTrustLabel -> "HMRC-PPT-ORG",
-            Expected.cgtTrustLabel -> "HMRC-CGT-PD"
+            Expected.cgtTrustLabel -> "HMRC-CGT-PD",
+            Expected.cbcTrustLabel -> "HMRC-CBC-ORG",
+            Expected.pillar2Label -> "HMRC-PILLAR2-ORG"
           ),
           Some(Expected.formHint)
         )
@@ -149,8 +161,8 @@ class SelectClientServicePageSpec extends ViewSpecSupport {
   }
 
   "SelectClientServicePage for cancel authorisation view" should {
-    implicit val journeyRequest: JourneyRequest[?] =
-      new JourneyRequest(journey = Journey(journeyType = AgentCancelAuthorisation, journeyState = JourneyState.SelectService), request)
+    implicit val journeyRequest: AgentJourneyRequest[?] =
+      new AgentJourneyRequest("", Journey(journeyType = AgentCancelAuthorisation), request)
     val formForPersonal: Form[String] = SelectFromOptionsForm.form("clientService", optionsForPersonal, AgentCancelAuthorisation.toString)
     val view: HtmlFormat.Appendable = viewTemplate(formForPersonal, "personal", optionsForPersonal)
     val doc: Document = Jsoup.parse(view.body)
@@ -170,9 +182,10 @@ class SelectClientServicePageSpec extends ViewSpecSupport {
           Expected.cancelAuthorisationHeading,
           List(
             Expected.incomeTaxPersonalLabel -> "HMRC-MTD-IT",
-            Expected.pptPersonalLabel -> "HMRC-PPT-ORG",
+            Expected.personalIncomeRecordLabel -> "PERSONAL-INCOME-RECORD",
+            Expected.vatLabel -> "HMRC-MTD-VAT",
             Expected.cgtPersonalLabel -> "HMRC-CGT-PD",
-            Expected.personalIncomeRecordLabel -> "PERSONAL-INCOME-RECORD"
+            Expected.pptPersonalLabel -> "HMRC-PPT-ORG"
           ),
           None
         )
@@ -188,7 +201,10 @@ class SelectClientServicePageSpec extends ViewSpecSupport {
         val expectedRadioGroup: TestRadioGroup = TestRadioGroup(
           Expected.cancelAuthorisationHeading,
           List(
-            Expected.pptBusinessLabel -> "HMRC-PPT-ORG"
+            Expected.vatLabel -> "HMRC-MTD-VAT",
+            Expected.pptBusinessLabel-> "HMRC-PPT-ORG",
+            Expected.cbcLabel -> "HMRC-CBC-ORG",
+            Expected.pillar2Label -> "HMRC-PILLAR2-ORG"
           ),
           None
         )
@@ -204,8 +220,11 @@ class SelectClientServicePageSpec extends ViewSpecSupport {
         val expectedRadioGroup: TestRadioGroup = TestRadioGroup(
           Expected.cancelAuthorisationHeading,
           List(
+            Expected.trustLabel -> "HMRC-TERS-ORG",
             Expected.pptTrustLabel -> "HMRC-PPT-ORG",
-            Expected.cgtTrustLabel -> "HMRC-CGT-PD"
+            Expected.cgtTrustLabel -> "HMRC-CGT-PD",
+            Expected.cbcTrustLabel -> "HMRC-CBC-ORG",
+            Expected.pillar2Label -> "HMRC-PILLAR2-ORG"
           ),
           None
         )

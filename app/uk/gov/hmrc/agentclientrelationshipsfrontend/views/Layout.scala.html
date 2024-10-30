@@ -87,7 +87,7 @@ equal the page heading (H1) content *@
 @hmrcStandardPage(
     HmrcStandardPageParams(
         pageTitle = Some(gdsTitle),
-        serviceURLs = ServiceURLs(signOutUrl),
+        serviceURLs = ServiceURLs(signOutUrl = signOutUrl),
         banners = Banners(displayHmrcBanner = true),
         templateOverrides = TemplateOverrides(
             additionalHeadBlock = Some(head),

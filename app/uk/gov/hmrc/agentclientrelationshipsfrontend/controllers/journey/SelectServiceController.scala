@@ -20,60 +20,64 @@ import play.api.i18n.I18nSupport
 import play.api.mvc.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
-import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.ClientTypeFieldName
+import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.{ClientServiceFieldName, ClientTypeFieldName}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.SelectFromOptionsForm
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, JourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.ClientServiceConfigurationService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.journey.JourneyService
-import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.SelectClientTypePage
-import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.routes
+import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.SelectClientServicePage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
+
 @Singleton
-class SelectClientTypeController @Inject()(mcc: MessagesControllerComponents,
-                                           serviceConfig: ClientServiceConfigurationService,
-                                           journeyService: JourneyService,
-                                           selectClientTypePage: SelectClientTypePage,
-                                           actions:        Actions
+class SelectServiceController @Inject()(mcc: MessagesControllerComponents,
+                                        serviceConfig: ClientServiceConfigurationService,
+                                        journeyService: JourneyService,
+                                        selectClientServicePage: SelectClientServicePage,
+                                        actions:        Actions
                                           )(implicit val executionContext: ExecutionContext) extends FrontendController(mcc)  with I18nSupport:
   
   def show(journeyType: JourneyType): Action[AnyContent] = actions.getJourney(journeyType):
     journeyRequest =>
       given AgentJourneyRequest[?] = journeyRequest
       val journey = journeyRequest.journey
-      Ok(selectClientTypePage(
-        form = SelectFromOptionsForm.form(ClientTypeFieldName, serviceConfig.orderedClientTypes, journey.journeyType.toString).fill(journey.getClientTypeWithDefault),
-        clientTypes = serviceConfig.orderedClientTypes
-      ))
+      if journey.getClientTypeWithDefault.isEmpty then Redirect(routes.SelectClientTypeController.show(journey.journeyType))
+      else {
+        val services = serviceConfig.clientServicesFor(journey.getClientType)
+        Ok(selectClientServicePage(
+          form = SelectFromOptionsForm.form(ClientServiceFieldName, services, journey.journeyType.toString).fill(journey.getServiceWithDefault),
+          clientType = journey.getClientType,
+          services
+        ))
+      }
       
 
   def onSubmit(journeyType: JourneyType): Action[AnyContent] = actions.getJourney(journeyType).async:
     journeyRequest =>
       given AgentJourneyRequest[?] = journeyRequest
       val journey = journeyRequest.journey
-
-      SelectFromOptionsForm.form(ClientTypeFieldName, serviceConfig.orderedClientTypes, journey.journeyType.toString).bindFromRequest().fold(
+      val services = serviceConfig.clientServicesFor(journey.getClientType)
+      SelectFromOptionsForm.form(ClientServiceFieldName, services, journeyType.toString).bindFromRequest().fold(
         formWithErrors => {
-          Future.successful(BadRequest(selectClientTypePage(
+          Future.successful(BadRequest(selectClientServicePage(
             form = formWithErrors,
-            clientTypes = serviceConfig.orderedClientTypes
+            clientType = journey.getClientType,
+            clientServices = services
           )))
         },
-        clientType => {
-          // unset any previous answers if client type is changed
-          val newJourney = if (journey.clientType.contains(clientType)) journey else journey.copy(
-            clientType = Some(clientType),
-            clientService = None,
+        clientService => {
+          // unset any previous answers if service is changed 
+          val newJourney = if(journey.clientService.contains(clientService)) journey else journey.copy(
+            clientService = Some(clientService),
             clientId = None,
             clientDetailsResponse = None,
             clientConfirmed = false,
             agentType = None
           )
+          
           journeyService.saveJourney(newJourney).flatMap { _ =>
-            // we always want to go to the services page after selecting client type
-            Future.successful(Redirect(routes.SelectServiceController.show(journey.journeyType).url))
-          }
+            journeyService.nextPageUrl(journeyType).map(Redirect(_))}
         }
-      )
+  )

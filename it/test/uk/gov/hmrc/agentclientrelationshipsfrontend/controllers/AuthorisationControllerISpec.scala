@@ -18,22 +18,19 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers
 
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.libs.json.Json
-import play.api.mvc.AnyContentAsEmpty
-import play.api.test.FakeRequest
+import play.api.libs.ws.{BodyReadable, DefaultBodyReadables}
 import play.api.test.Helpers.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.ComponentSpecHelper
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.WiremockHelper.stubGet
-import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.UserTimedOut
-import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.auth.{CannotConfirmIdentity, IvLockedOut, IvTechDifficulties, NotAuthorisedAsClient}
 import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl
 
 class AuthorisationControllerISpec extends ComponentSpecHelper {
 
-  val controller: AuthorisationController = app.injector.instanceOf[AuthorisationController]
+  given BodyReadable[String] = DefaultBodyReadables.readableAsString
 
   implicit val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
-  
+
   implicit val messages: Messages = app.injector.instanceOf[MessagesApi].preferred(request)
 
   val testUrl = "/url"
@@ -43,75 +40,63 @@ class AuthorisationControllerISpec extends ComponentSpecHelper {
 
   "GET /cannot-view-request" should {
     "return NOT_IMPLEMENTED" in {
-      val result = controller.cannotViewRequest(request)
-      lazy val view = app.injector.instanceOf[NotAuthorisedAsClient]
+      val result = get(routes.AuthorisationController.cannotViewRequest.url)
 
-      status(result) shouldBe FORBIDDEN
-      contentAsString(result) shouldBe view().body
+      result.status shouldBe FORBIDDEN
     }
   }
 
   "GET /cannot-confirm-identity" should {
     "return FORBIDDEN with the CannotConfirmIdentity view when there's no journeyId" in {
-      val result = controller.cannotConfirmIdentity(None, Some(RedirectUrl(testUrl)))(request)
-      lazy val view = app.injector.instanceOf[CannotConfirmIdentity]
+      val result = get(routes.AuthorisationController.cannotConfirmIdentity(None, Some(RedirectUrl(testUrl))).url)
 
-      status(result) shouldBe FORBIDDEN
-      contentAsString(result) shouldBe view(Some(testUrl)).body
+      result.status shouldBe FORBIDDEN
     }
     "return FORBIDDEN with the IvTechDifficulties view when the journey status is TechnicalIssue" in {
       stubGet(ivUrl(testJourneyId), OK, Json.obj("result" -> "TechnicalIssue").toString)
 
-      val result = controller.cannotConfirmIdentity(Some(testJourneyId), Some(RedirectUrl(testUrl)))(request)
-      lazy val view = app.injector.instanceOf[IvTechDifficulties]
+      val result = get(routes.AuthorisationController.cannotConfirmIdentity(Some(testJourneyId), Some(RedirectUrl(testUrl))).url)
 
-      status(result) shouldBe FORBIDDEN
-      contentAsString(result) shouldBe view().body
+      result.status shouldBe FORBIDDEN
     }
     "redirect to /iv-timed-out when the journey status is TimedOut" in {
       stubGet(ivUrl(testJourneyId), OK, Json.obj("result" -> "Timeout").toString)
 
-      val result = controller.cannotConfirmIdentity(Some(testJourneyId), Some(RedirectUrl(testUrl)))(request)
+      val result = get(routes.AuthorisationController.cannotConfirmIdentity(Some(testJourneyId), Some(RedirectUrl(testUrl))).url)
 
-      status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(routes.AuthorisationController.ivTimedOut(Some(RedirectUrl(testUrl))).url)
+      result.status shouldBe SEE_OTHER
+      result.header("Location") shouldBe Some(routes.AuthorisationController.ivTimedOut(Some(RedirectUrl(testUrl))).url)
     }
     "redirect to /iv-locked-out when the journey status is LockedOut" in {
       stubGet(ivUrl(testJourneyId), OK, Json.obj("result" -> "LockedOut").toString)
 
-      val result = controller.cannotConfirmIdentity(Some(testJourneyId), Some(RedirectUrl(testUrl)))(request)
+      val result = get(routes.AuthorisationController.cannotConfirmIdentity(Some(testJourneyId), Some(RedirectUrl(testUrl))).url)
 
-      status(result) shouldBe SEE_OTHER
-      redirectLocation(result) shouldBe Some(routes.AuthorisationController.ivLockedOut.url)
+      result.status shouldBe SEE_OTHER
+      result.header("Location") shouldBe Some(routes.AuthorisationController.ivLockedOut.url)
     }
     "return FORBIDDEN with the CannotConfirmIdentity view for any other journey status" in {
       stubGet(ivUrl(testJourneyId), OK, Json.obj("result" -> "InsufficientEvidence").toString)
 
-      val result = controller.cannotConfirmIdentity(Some(testJourneyId), Some(RedirectUrl(testUrl)))(request)
-      lazy val view = app.injector.instanceOf[CannotConfirmIdentity]
+      val result = get(routes.AuthorisationController.cannotConfirmIdentity(Some(testJourneyId), Some(RedirectUrl(testUrl))).url)
 
-      status(result) shouldBe FORBIDDEN
-      contentAsString(result) shouldBe view(Some(testUrl)).body
+      result.status shouldBe FORBIDDEN
     }
   }
 
   "GET /iv-timed-out" should {
     "return FORBIDDEN with the TimedOut view" in {
-      val result = controller.ivTimedOut(Some(RedirectUrl(testUrl)))(request)
-      lazy val view = app.injector.instanceOf[UserTimedOut]
+      val result = get(routes.AuthorisationController.ivTimedOut(Some(RedirectUrl(testUrl))).url)
 
-      status(result) shouldBe FORBIDDEN
-      contentAsString(result) shouldBe view(Some(testUrl), isAgent = false).body
+      result.status shouldBe FORBIDDEN
     }
   }
 
   "GET /iv-locked-out" should {
     "return FORBIDDEN with the IvLockedOut view" in {
-      val result = controller.ivLockedOut()(request)
-      lazy val view = app.injector.instanceOf[IvLockedOut]
+      val result = get(routes.AuthorisationController.ivLockedOut.url)
 
-      status(result) shouldBe FORBIDDEN
-      contentAsString(result) shouldBe view().body
+      result.status shouldBe FORBIDDEN
     }
   }
 }

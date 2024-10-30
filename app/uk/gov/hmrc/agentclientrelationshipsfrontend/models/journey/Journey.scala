@@ -17,18 +17,28 @@
 package uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey
 
 import play.api.libs.json.{Json, OFormat}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.ClientDetailsResponse
 
 case class Journey(journeyType: JourneyType,
-                   journeyState: JourneyState,
                    clientType: Option[String] = None,
-                   service: Option[String] = None,
-                   clientId: Option[String] = None):
+                   clientService: Option[String] = None,
+                   clientId: Option[String] = None,
+                   clientDetailsResponse: Option[ClientDetailsResponse] = None,
+                   agentType: Option[String] = None,
+                   clientConfirmed: Boolean = false):
 
   def getClientTypeWithDefault: String = clientType.getOrElse("")
   def getClientType: String = clientType.getOrElse(throw new RuntimeException("clientType not defined"))
 
-  def getServiceWithDefault: String = service.getOrElse("")
-  def getService: String = service.getOrElse(throw new RuntimeException("service not defined"))
+  def getServiceWithDefault: String = clientService.getOrElse("")
+  def getService: String = clientService.getOrElse(throw new RuntimeException("service not defined"))
+
+  // TODO: Implement this method for real when our clientDetailsResponse contains
+  //  everything we need such as existing invitations or authorisations
+  def hasErrors(journeyType: JourneyType): Boolean = journeyType match
+    case JourneyType.AuthorisationRequest => clientDetailsResponse.exists(_.status.nonEmpty)
+    case JourneyType.AgentCancelAuthorisation => clientService.isEmpty
+    case _ => false
 
 object Journey:
   implicit lazy val format: OFormat[Journey] = Json.format[Journey]
