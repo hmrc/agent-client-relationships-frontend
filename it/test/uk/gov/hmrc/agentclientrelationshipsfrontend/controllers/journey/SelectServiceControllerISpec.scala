@@ -31,6 +31,16 @@ class SelectServiceControllerISpec extends ComponentSpecHelper with AuthStubs {
   private val businessAgentCancelAuthorisationJourney: Journey = Journey(JourneyType.AgentCancelAuthorisation, clientType = Some("business"))
   private val trustAgentCancelAuthorisationJourney: Journey = Journey(JourneyType.AgentCancelAuthorisation, clientType = Some("trust"))
 
+  private val optionsForPersonal: Seq[String] = Seq("HMRC-MTD-IT", "PERSONAL-INCOME-RECORD", "HMRC-MTD-VAT", "HMRC-CGT-PD", "HMRC-PPT-ORG")
+  private val optionsForBusiness: Seq[String] = Seq("HMRC-MTD-VAT", "HMRC-PPT-ORG", "HMRC-CBC-ORG", "HMRC-PILLAR2-ORG")
+  private val optionsForTrust: Seq[String] = Seq("HMRC-TERS-ORG", "HMRC-PPT-ORG", "HMRC-CGT-PD", "HMRC-CBC-ORG", "HMRC-PILLAR2-ORG")
+
+  private val allOptionsForClientType = Map(
+    "personal" -> optionsForPersonal,
+    "business" -> optionsForBusiness,
+    "trust" -> optionsForTrust
+  )
+
   private val allClientTypeAuthJourneys: List[Journey] = List(
     personalAuthorisationRequestJourney,
     businessAuthorisationRequestJourney,
@@ -71,15 +81,17 @@ class SelectServiceControllerISpec extends ComponentSpecHelper with AuthStubs {
   }
 
   "POST /authorisation-request/select-service" should {
-    "redirect to the next page after storing the answer" in {
-      authoriseAsAgent()
-      await(journeyService.saveJourney(personalAuthorisationRequestJourney))
-      val result = post(routes.SelectServiceController.onSubmit(JourneyType.AuthorisationRequest).url)(Map(
-        "clientService" -> Seq("HMRC-MTD-IT")
-      ))
-      result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe "routes.EnterClientIdController.show(journeyType).url"
-    }
+    allClientTypeAuthJourneys.foreach(j =>
+      allOptionsForClientType.get(j.getClientType).map(allOptions =>
+        allOptions.foreach(o => s"redirect to the next page after storing answer of ${o} for ${j.getClientType}" in {
+          authoriseAsAgent()
+          await(journeyService.saveJourney(j))
+          val result = post(routes.SelectServiceController.onSubmit(JourneyType.AuthorisationRequest).url)(Map(
+            "clientService" -> Seq(o)
+          ))
+          result.status shouldBe SEE_OTHER
+          result.header("Location").value shouldBe "routes.EnterClientIdController.show(journeyType).url"
+        })))
     "show an error when no selection is made" in {
       authoriseAsAgent()
       await(journeyService.saveJourney(personalAuthorisationRequestJourney))
@@ -111,6 +123,18 @@ class SelectServiceControllerISpec extends ComponentSpecHelper with AuthStubs {
   }
 
   "POST /agent-cancel-authorisation/client-type" should {
+    allClientTypeDeAuthJourneys.foreach(j =>
+      allOptionsForClientType.get(j.getClientType).map(allOptions =>
+        allOptions.foreach(o => s"redirect to the next page after storing answer of ${o} for ${j.getClientType}" in {
+          authoriseAsAgent()
+          await(journeyService.saveJourney(j))
+          val result = post(routes.SelectServiceController.onSubmit(JourneyType.AgentCancelAuthorisation).url)(Map(
+            "clientService" -> Seq(o)
+          ))
+          result.status shouldBe SEE_OTHER
+          result.header("Location").value shouldBe "routes.EnterClientIdController.show(journeyType).url"
+        })))
+    
     "redirect to the next page after storing the answer" in {
       authoriseAsAgent()
       await(journeyService.saveJourney(personalAgentCancelAuthorisationJourney))
