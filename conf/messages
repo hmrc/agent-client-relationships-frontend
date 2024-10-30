@@ -106,6 +106,19 @@ clientService.HMRC-PILLAR2-ORG.business=Manage their Pillar 2 top-up taxes
 clientService.HMRC-PILLAR2-ORG.trust=Manage their Pillar 2 top-up taxes
 clientService.HMRC-TERS-ORG.trust=Maintain their trust or an estate
 
+# -------------------------------------------------------------------------------------------
+# Enter Client ID
+# -------------------------------------------------------------------------------------------
+
+clientId.nino.label=What is your client’s National Insurance number?
+clientId.nino.hint=For example, QQ 12 34 56 C
+clientId.nino.error.invalid=National Insurance number must be 2 letters, 6 numbers, then A, B, C or D, like QQ 12 34 56 C
+clientId.nino.error.required=Enter your client’s National Insurance number
+
+clientId.vrn.label=What is your client’s VAT registration number?
+clientId.vrn.hint=This is 9 numbers, for example, 123456789
+clientId.vrn.error.invalid=VAT registration number must be 9 numbers
+clientId.vrn.error.required=Enter your client’s VAT registration number
 
 # -------------------------------------------------------------------------------------------
 # Enter Known Facts
