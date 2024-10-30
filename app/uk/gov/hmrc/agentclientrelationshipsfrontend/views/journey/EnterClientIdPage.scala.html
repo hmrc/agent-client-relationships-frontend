@@ -39,7 +39,7 @@
 
 @layout(pageTitle = pageTitle, optionalForm = Some(form)) {
 
-    @formWithCSRF(action = routes.SelectClientTypeController.onSubmit(request.journey.journeyType)) {
+    @formWithCSRF(action = routes.EnterClientIdController.onSubmit(request.journey.journeyType)) {
 
         @govukInput(Input(
             label = Label(

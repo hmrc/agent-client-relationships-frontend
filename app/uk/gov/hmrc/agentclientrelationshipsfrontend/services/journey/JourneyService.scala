@@ -27,6 +27,7 @@ import uk.gov.hmrc.mongo.cache.DataKey
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.ClientDetailsResponse
 
 @Singleton
 class JourneyService @Inject()(journeyRepository: JourneyRepository
@@ -64,6 +65,16 @@ class JourneyService @Inject()(journeyRepository: JourneyRepository
       }
       case _ => routes.StartJourneyController.startJourney(journeyType).url
     }
+  }
+  
+  def getClientDetailsResponse(clientId: String, journey: Journey): Future[Option[ClientDetailsResponse]] = {
+    // call the client details service - this is a stubbed implementation
+    Future.successful(Some(ClientDetailsResponse(
+      clientStatus = None,
+      knownFactType = Some("Postcode"),
+      knownFact = Seq("NW1 2DB"),
+      clientName = "John Doe"
+    )))
   }
   
 }
