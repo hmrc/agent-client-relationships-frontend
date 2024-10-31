@@ -90,7 +90,7 @@ class SelectServiceControllerISpec extends ComponentSpecHelper with AuthStubs {
             "clientService" -> Seq(o)
           ))
           result.status shouldBe SEE_OTHER
-          result.header("Location").value shouldBe "routes.EnterClientIdController.show(journeyType).url"
+          result.header("Location").value shouldBe routes.EnterClientIdController.show(JourneyType.AuthorisationRequest).url
         })))
     "show an error when no selection is made" in {
       authoriseAsAgent()
@@ -132,7 +132,7 @@ class SelectServiceControllerISpec extends ComponentSpecHelper with AuthStubs {
             "clientService" -> Seq(o)
           ))
           result.status shouldBe SEE_OTHER
-          result.header("Location").value shouldBe "routes.EnterClientIdController.show(journeyType).url"
+          result.header("Location").value shouldBe routes.EnterClientIdController.show(JourneyType.AgentCancelAuthorisation).url
         })))
     
     "redirect to the next page after storing the answer" in {
@@ -142,7 +142,7 @@ class SelectServiceControllerISpec extends ComponentSpecHelper with AuthStubs {
         "clientService" -> Seq("HMRC-MTD-IT")
       ))
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe "routes.EnterClientIdController.show(journeyType).url"
+      result.header("Location").value shouldBe routes.EnterClientIdController.show(JourneyType.AgentCancelAuthorisation).url
     }
     "show an error when no selection is made" in {
       authoriseAsAgent()

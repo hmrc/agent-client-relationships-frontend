@@ -19,7 +19,9 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.services.journey
 import play.api.mvc.Request
 import play.api.mvc.Results.Redirect
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.{AgentTypeFieldName, ClientNameFieldName, ClientServiceFieldName, ClientTypeFieldName}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{Journey, JourneyState, JourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey._
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{KnownFactType, ClientDetailsResponse}
+
 import uk.gov.hmrc.agentclientrelationshipsfrontend.repositories.journey.JourneyRepository
 import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.routes
 import uk.gov.hmrc.http.SessionKeys
@@ -56,7 +58,7 @@ class JourneyService @Inject()(journeyRepository: JourneyRepository
       case Some(journey) if journey.journeyType != journeyType => routes.StartJourneyController.startJourney(journeyType).url
       case Some(journey) => {
         if (journey.clientService.isEmpty) routes.SelectClientTypeController.show(journeyType).url
-        else if (journey.clientDetailsResponse.isEmpty) "routes.EnterClientIdController.show(journeyType).url"
+        else if (journey.clientDetailsResponse.isEmpty) routes.EnterClientIdController.show(journeyType).url
         else if (journey.clientDetailsResponse.get.knownFactType.nonEmpty && !journey.clientConfirmed) "routes.EnterClientFactController.show(journeyType).url"
         else if (journey.getService.matches("HMRC-MTD-IT") && journey.agentType.isEmpty) "routes.SelectAgentTypeController.show(journeyType).url"
         else if (journey.hasErrors(journeyType)) "routes.JourneyErrorController.show(journeyType).url"
@@ -64,6 +66,17 @@ class JourneyService @Inject()(journeyRepository: JourneyRepository
       }
       case _ => routes.StartJourneyController.startJourney(journeyType).url
     }
+  }
+  
+  def getClientDetailsResponse(clientId: String, journey: Journey): Future[Option[ClientDetailsResponse]] = {
+    // call the client details service - this is a stubbed implementation
+    Future.successful(Some(ClientDetailsResponse(
+      status = None,
+      isOverseas = false,
+      knownFactType = Some(KnownFactType.PostalCode),
+      knownFacts = Seq("NW1 2DB"),
+      name = "John Doe"
+    )))
   }
   
 }

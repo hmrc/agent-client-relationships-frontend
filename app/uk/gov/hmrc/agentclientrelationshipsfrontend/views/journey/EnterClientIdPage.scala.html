@@ -35,11 +35,11 @@
 @(form: Form[?], clientDetailField: FieldConfiguration)(implicit request: AgentJourneyRequest[?], messages: Messages)
 
 @key = @{"clientId"}
-@pageTitle: String = @{messages(s"$key.${clientDetailField.name}.label")}
+@pageTitle = @{messages(s"$key.${clientDetailField.name}.label")}
 
 @layout(pageTitle = pageTitle, optionalForm = Some(form)) {
 
-    @formWithCSRF(action = routes.SelectClientTypeController.onSubmit(request.journey.journeyType)) {
+    @formWithCSRF(action = routes.EnterClientIdController.onSubmit(request.journey.journeyType)) {
 
         @govukInput(Input(
             label = Label(
@@ -47,7 +47,7 @@
                 classes = "govuk-label--xl",
                 content = Text(pageTitle)
             ),
-            hint = Some(Hint(content = Text(messages(s"client-details.${clientDetailField.name}.hint")))),
+            hint = Some(Hint(content = Text(messages(s"$key.${clientDetailField.name}.hint")))),
             classes = s"govuk-input--width-${clientDetailField.width}"
         ).withFormField(form(clientDetailField.name)))
 
