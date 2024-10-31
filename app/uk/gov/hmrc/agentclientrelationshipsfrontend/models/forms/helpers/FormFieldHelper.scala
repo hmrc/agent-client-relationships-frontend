@@ -20,12 +20,12 @@ import play.api.data.validation.*
 
 trait FormFieldHelper {
 
-  protected def invalidMandatoryField(messageKey: String): Invalid = {
-    Invalid(ValidationError(mandatoryFieldErrorMessage(messageKey)))
+  protected def invalidMandatoryField(messageKey: String, inputFieldClass: String): Invalid = {
+    Invalid(ValidationError(mandatoryFieldErrorMessage(messageKey), "inputFieldClass" -> inputFieldClass))
   }
 
-  protected def invalidInput(messageKey: String): Invalid = {
-    Invalid(ValidationError(invalidInputErrorMessage(messageKey)))
+  protected def invalidInput(messageKey: String, inputFieldClass: String): Invalid = {
+    Invalid(ValidationError(invalidInputErrorMessage(messageKey), "inputFieldClass" -> inputFieldClass))
   }
   
   protected def mandatoryFieldErrorMessage(messageKey: String): String = s"$messageKey.error.required"

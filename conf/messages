@@ -105,7 +105,7 @@ clientService.HMRC-MTD-VAT.business=Manage their VAT
 clientService.HMRC-PILLAR2-ORG.business=Manage their Pillar 2 top-up taxes
 clientService.HMRC-PILLAR2-ORG.trust=Manage their Pillar 2 top-up taxes
 clientService.HMRC-TERS-ORG.trust=Maintain their trust or an estate
-
+clientService.HMRC-TERSNT-ORG.trust=Maintain their non-taxable trust
 # -------------------------------------------------------------------------------------------
 # Enter Client ID
 # -------------------------------------------------------------------------------------------
@@ -241,7 +241,7 @@ trackRequests.service.HMRC-MTD-IT=Manage their Making Tax Digital for Income Tax
 trackRequests.service.PERSONAL-INCOME-RECORD=View their Income record
 trackRequests.service.HMRC-MTD-VAT=Manage their VAT
 trackRequests.service.HMRC-TERS-ORG=Maintain a trust or an estate
-trackRequests.service.HMRC-TERSNT-ORG=Maintain a trust or an estate
+trackRequests.service.HMRC-TERSNT-ORG=Maintain a non-taxable trust
 trackRequests.service.HMRC-CGT-PD=Manage their Capital Gains Tax on UK property account
 trackRequests.service.HMRC-PPT-ORG=Manage their Plastic Packaging Tax
 trackRequests.service.HMRC-CBC-ORG=Manage their country-by-country reports

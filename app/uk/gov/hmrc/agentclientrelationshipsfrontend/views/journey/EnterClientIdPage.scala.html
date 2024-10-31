@@ -35,7 +35,7 @@
 @(form: Form[?], clientDetailField: FieldConfiguration)(implicit request: AgentJourneyRequest[?], messages: Messages)
 
 @key = @{"clientId"}
-@pageTitle: String = @{messages(s"$key.${clientDetailField.name}.label")}
+@pageTitle = @{messages(s"$key.${clientDetailField.name}.label")}
 
 @layout(pageTitle = pageTitle, optionalForm = Some(form)) {
 

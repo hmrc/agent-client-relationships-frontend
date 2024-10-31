@@ -68,6 +68,18 @@ class ClientServiceConfigurationService @Inject() {
         )
       )
     ),
+    "HMRC-TERSNT-ORG" -> ServiceData(
+      serviceName = "HMRC-TERSNT-ORG",
+      clientTypes = Set("trust"),
+      clientDetails = Seq(
+        FieldConfiguration(
+          name = "urn",
+          regex = "^((?i)[a-z]{2}trust[0-9]{8})$",
+          inputType = "text",
+          width = 10
+        )
+      )
+    ),
     "HMRC-TERS-ORG" -> ServiceData(
       serviceName = "HMRC-TERS-ORG",
       clientTypes = Set("trust"),
@@ -121,7 +133,7 @@ class ClientServiceConfigurationService @Inject() {
       clientTypes = Set("business", "trust"),
       clientDetails = Seq(
         FieldConfiguration(
-          name = "utr",
+          name = "PlrId",
           regex = "^[0-9]{10}$",
           inputType = "text",
           width = 10

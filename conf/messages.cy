@@ -98,8 +98,8 @@ clientService.HMRC-CGT-PD.personal=Rheoli ei gyfrif Treth Enillion Cyfalaf ar ei
 clientService.HMRC-CGT-PD.trust=Rheoli ei cyfrif Treth Enillion Cyfalaf ar eiddo yn y DU ar gyfer ymddiriedolaeth
 select-service.HMRC-MTD-VAT.personal=Rheoli ei TAW
 clientService.HMRC-MTD-VAT.business=Rheoli ei TAW
-clientService.HMRC-TERS-ORG.business=Cynnal ei ymddiriedolaeth neu ystâd
 clientService.HMRC-TERS-ORG.trust=Cynnal ei ymddiriedolaeth neu ystâd
+clientService.HMRC-TERSNT-ORG.trust=<translation needed>
 clientService.HMRC-CBC-ORG.trust=Rheoli ei adroddiadau gwlad-wrth-wlad
 clientService.HMRC-CBC-ORG.business=Rheoli ei adroddiadau gwlad-wrth-wlad
 clientService.HMRC-PILLAR2-ORG.business=Rheoli ei drethi atodol Colofn 2
@@ -109,7 +109,7 @@ clientService.HMRC-PILLAR2-ORG.trust=Rheoli ei drethi atodol Colofn 2
 # Enter Known Facts
 # -------------------------------------------------------------------------------------------
 # Nino
-client-details.nino.label=<Translation needed>
+client-details.nino.label=<translation needed>
 client-details.nino.hint=Er enghraifft, QQ 12 34 56 C
 error.client-details.nino.invalid=Mae’n rhaid i rif Yswiriant Gwladol fod ar ffurf 2 lythyren, yna 6 rhif wedi’u dilyn gan A, B, C neu D, megis QQ 12 34 56 C
 error.client-details.nino.required=Nodwch rif Yswiriant Gwladol eich cleient

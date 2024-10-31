@@ -48,7 +48,7 @@ class EnterClientIdController @Inject()(mcc: MessagesControllerComponents,
       if journey.getServiceWithDefault.isEmpty then Redirect(routes.SelectClientTypeController.show(journey.journeyType))
       else
         Ok(enterClientIdPage(
-          form = EnterClientIdForm.form(serviceConfig.firstClientDetailsFieldFor(journey.getService), journey.journeyType.toString).fill(journey.getServiceWithDefault),
+          form = EnterClientIdForm.form(serviceConfig.firstClientDetailsFieldFor(journey.getService), journey.journeyType.toString).fill(journey.clientId.getOrElse("")),
           clientDetailField = serviceConfig.firstClientDetailsFieldFor(journey.getService)
         ))
 
@@ -62,22 +62,24 @@ class EnterClientIdController @Inject()(mcc: MessagesControllerComponents,
 
       EnterClientIdForm.form(field, journey.journeyType.toString).bindFromRequest().fold(
         formWithErrors => {
-          Future.successful(BadRequest(EnterClientIdPage(
+          Future.successful(BadRequest(enterClientIdPage(
             formWithErrors,
             field
           )))
         },
         clientId => {
           // unset any previous answers if client id is changed
-          val newJourney = if (journey.clientId.contains(clientId)) journey else
-            journeyService.getClientDetails(journey.getService, clientId).map(clientDetailsResponse => journey.copy(
-              clientService = Some(clientId),
-              clientDetailsResponse = Some(clientDetailsResponse),
-              clientConfirmed = false,
-              agentType = None
-            ))
-          journeyService.saveJourney(newJourney).flatMap { _ =>
-            Future.successful(journeyService.nextPageUrl(journeyType).map(Redirect(_)))
-          }
+          if journey.clientId.contains(clientId) && journey.clientDetailsResponse.nonEmpty then journeyService.nextPageUrl(journeyType).map(Redirect(_))
+          else
+            for {
+              clientDetailsResponse <- journeyService.getClientDetailsResponse(clientId, journey)
+              _ <- journeyService.saveJourney(journey.copy(
+                clientId = Some(clientId),
+                clientDetailsResponse = clientDetailsResponse,
+                clientConfirmed = false,
+                agentType = None
+              ))
+              url <- journeyService.nextPageUrl(journeyType)
+            } yield Redirect(url)
         }
       )
