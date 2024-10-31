@@ -74,12 +74,12 @@ class EnterClientIdController @Inject()(mcc: MessagesControllerComponents,
             for {
               clientDetailsResponse <- journeyService.getClientDetailsResponse(clientId, journey)
               _ <- journeyService.saveJourney(journey.copy(
-                clientId = Some(clientId),
-                clientDetailsResponse = clientDetailsResponse,
-                clientConfirmed = false,
-                agentType = None
-              ))
-              url <- journeyService.nextPageUrl(journeyType)
-            } yield Redirect(url)
+                  clientId = Some(clientId),
+                  clientDetailsResponse = clientDetailsResponse,
+                  clientConfirmed = false,
+                  agentType = None
+                ))
+              nextPage <- journeyService.nextPageUrl(journeyType)
+            } yield Redirect(nextPage)
         }
       )

@@ -64,7 +64,7 @@ class ClientServiceConfigurationService @Inject() {
           name = "vrn",
           regex = "^[0-9]{9}$",
           inputType = "text",
-          width = 9
+          width = 10
         )
       )
     ),
@@ -76,7 +76,7 @@ class ClientServiceConfigurationService @Inject() {
           name = "urn",
           regex = "^((?i)[a-z]{2}trust[0-9]{8})$",
           inputType = "text",
-          width = 10
+          width = 20
         )
       )
     ),
@@ -110,9 +110,9 @@ class ClientServiceConfigurationService @Inject() {
       clientDetails = Seq(
         FieldConfiguration(
           name = "pptRef",
-          regex = "^[0-9A-Za-z]{15}$",
+          regex = "^X[A-Z]PPT000[0-9]{7}$",
           inputType = "text",
-          width = 10
+          width = 20
         )
       )
     ),
@@ -122,9 +122,9 @@ class ClientServiceConfigurationService @Inject() {
       clientDetails = Seq(
         FieldConfiguration(
           name = "cbcId",
-          regex = "^[0-9A-Za-z]{15}$",
+          regex = "^X[A-Z]CBC[0-9]{10}$",
           inputType = "text",
-          width = 10
+          width = 20
         )
       )
     ),
@@ -134,9 +134,9 @@ class ClientServiceConfigurationService @Inject() {
       clientDetails = Seq(
         FieldConfiguration(
           name = "PlrId",
-          regex = "^[0-9]{10}$",
+          regex = "^X[A-Z]{1}PLR[0-9]{10}$",
           inputType = "text",
-          width = 10
+          width = 20
         )
       )
     )

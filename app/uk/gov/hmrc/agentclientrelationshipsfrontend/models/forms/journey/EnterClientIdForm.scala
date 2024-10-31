@@ -26,7 +26,7 @@ object EnterClientIdForm {
   def form(clientDetail: FieldConfiguration, journeyType: String): Form[String] = {
     Form(
       single(
-        clientDetail.name -> textFieldMapping(clientDetail.name, s"client-details.${journeyType}.${clientDetail.name}", clientDetail.regex)
+        clientDetail.name -> textFieldMapping(clientDetail.name, s"clientId.${clientDetail.name}", clientDetail.regex)
       )
     )
   }

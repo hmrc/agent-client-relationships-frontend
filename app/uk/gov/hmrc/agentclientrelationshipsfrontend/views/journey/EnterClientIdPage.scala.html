@@ -47,7 +47,7 @@
                 classes = "govuk-label--xl",
                 content = Text(pageTitle)
             ),
-            hint = Some(Hint(content = Text(messages(s"client-details.${clientDetailField.name}.hint")))),
+            hint = Some(Hint(content = Text(messages(s"$key.${clientDetailField.name}.hint")))),
             classes = s"govuk-input--width-${clientDetailField.width}"
         ).withFormField(form(clientDetailField.name)))
 
