@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.actions
 
-import play.api.mvc.{ActionBuilder, AnyContent, DefaultActionBuilder, Request}
+import play.api.mvc.{ActionBuilder, AnyContent, DefaultActionBuilder}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, JourneyType}
 
 import javax.inject.{Inject, Singleton}

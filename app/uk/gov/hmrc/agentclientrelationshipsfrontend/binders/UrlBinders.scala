@@ -22,7 +22,7 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyType
 object UrlBinders:
   implicit val journeyTypeBinder: PathBindable[JourneyType] = getJourneyTypeBinder
 
-  private def getJourneyTypeBinder(implicit stringBinder: PathBindable[String]) = new PathBindable[JourneyType]:
+  private def getJourneyTypeBinder = new PathBindable[JourneyType]:
 
     override def bind(key: String, value: String): Either[String, JourneyType] =
       JourneyType.mapping

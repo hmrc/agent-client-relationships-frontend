@@ -17,7 +17,7 @@
 package uk.gov.hmrc.agentclientrelationshipsfrontend.actions
 
 import play.api.mvc.Results.Redirect
-import play.api.mvc.{ActionFunction, Request, Result}
+import play.api.mvc.{ActionFunction, Result}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, JourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.JourneyService

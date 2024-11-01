@@ -23,7 +23,7 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.services.TrackRequestsServic
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.TrackRequestsPage
 @Singleton
 class TrackRequestsController @Inject()(
