@@ -44,15 +44,15 @@ class SelectClientTypeControllerISpec extends ComponentSpecHelper with AuthStubs
   }
 
   "POST /authorisation-request/client-type" should {
-    "redirect to the next page after storing the answer" in {
+    Seq("personal", "business", "trust").foreach(clientType => s"redirect to the next page after storing $clientType as the answer" in {
       authoriseAsAgent()
       await(journeyService.saveJourney(authorisationRequestJourney))
       val result = post(routes.SelectClientTypeController.onSubmit(JourneyType.AuthorisationRequest).url)(Map(
-        "clientType" -> Seq("personal")
+        "clientType" -> Seq(clientType)
       ))
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe routes.SelectServiceController.show(JourneyType.AuthorisationRequest).url
-    }
+    })
     "show an error when no selection is made" in {
       authoriseAsAgent()
       await(journeyService.saveJourney(authorisationRequestJourney))
@@ -71,7 +71,7 @@ class SelectClientTypeControllerISpec extends ComponentSpecHelper with AuthStubs
   }
 
   "POST /agent-cancel-authorisation/client-type" should {
-    "redirect to the next page after storing the answer" in {
+    Seq("personal", "business", "trust").foreach(clientType => s"redirect to the next page after storing $clientType as the answer" in {
       authoriseAsAgent()
       await(journeyService.saveJourney(agentCancelAuthorisationJourney))
       val result = post(routes.SelectClientTypeController.onSubmit(JourneyType.AgentCancelAuthorisation).url)(Map(
@@ -79,7 +79,7 @@ class SelectClientTypeControllerISpec extends ComponentSpecHelper with AuthStubs
       ))
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe routes.SelectServiceController.show(JourneyType.AgentCancelAuthorisation).url
-    }
+    })
     "show an error when no selection is made" in {
       authoriseAsAgent()
       await(journeyService.saveJourney(agentCancelAuthorisationJourney))

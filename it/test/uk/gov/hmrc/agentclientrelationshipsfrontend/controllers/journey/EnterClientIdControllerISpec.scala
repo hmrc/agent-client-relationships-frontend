@@ -22,7 +22,16 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{Journey, Jou
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.JourneyService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentSpecHelper}
 
-class SelectServiceControllerISpec extends ComponentSpecHelper with AuthStubs {
+class EnterClientIdControllerISpec extends ComponentSpecHelper with AuthStubs {
+
+  val exampleNino: String = "AB123456C"
+  val exampleUtr: String = "1234567890"
+  val exampleVrn: String = "123456789"
+  val exampleUrn: String = "XATRUST12345678"
+  val exampleCgtRef: String = "XMCGTP123456789"
+  val examplePptRef: String = "XMPPT1234567890"
+  val exampleCbcId: String = "XMCBC1234567890"
+  val examplePlrId: String = "XMPLR1234567890"
 
   private val personalAuthorisationRequestJourney: Journey = Journey(journeyType = JourneyType.AuthorisationRequest, clientType = Some("personal"))
   private val businessAuthorisationRequestJourney: Journey = Journey(journeyType = JourneyType.AuthorisationRequest, clientType = Some("business"))
@@ -40,6 +49,15 @@ class SelectServiceControllerISpec extends ComponentSpecHelper with AuthStubs {
     "business" -> optionsForBusiness,
     "trust" -> optionsForTrust
   )
+
+  private def exampleValueForService(service: String): String = service match {
+    case "HMRC-MTD-IT" => exampleNino
+    case "PERSONAL-INCOME-RECORD" => exampleNino
+    case "HMRC-MTD-VAT" => exampleVrn
+    case "HMRC-CGT-PD" => exampleCgtRef
+    case "HMRC-PPT-ORG" => examplePptRef
+    case "HMRC-CBC-ORG" => exampleCbcId
+  }
 
   private val allClientTypeAuthJourneys: List[Journey] = List(
     personalAuthorisationRequestJourney,
@@ -59,7 +77,7 @@ class SelectServiceControllerISpec extends ComponentSpecHelper with AuthStubs {
     super.beforeEach()
   }
 
-  "GET /authorisation-request/select-service" should {
+  "GET /authorisation-request/client-identifier" should {
     "redirect to ASA dashboard when no journey session present" in {
       authoriseAsAgent()
       val result = get(routes.SelectServiceController.show(JourneyType.AuthorisationRequest).url)
@@ -81,14 +99,14 @@ class SelectServiceControllerISpec extends ComponentSpecHelper with AuthStubs {
     })
   }
 
-  "POST /authorisation-request/select-service" should {
+  "POST /authorisation-request/client-identifier" should {
     allClientTypeAuthJourneys.foreach(j =>
       allOptionsForClientType.get(j.getClientType).map(allOptions =>
         allOptions.foreach(o => s"redirect to the next page after storing answer of ${o} for ${j.getClientType}" in {
           authoriseAsAgent()
-          await(journeyService.saveJourney(j))
+          await(journeyService.saveJourney(j.copy(clientService = Some(o))))
           val result = post(routes.SelectServiceController.onSubmit(JourneyType.AuthorisationRequest).url)(Map(
-            "clientService" -> Seq(o)
+            " clientId" -> Seq()
           ))
           result.status shouldBe SEE_OTHER
           result.header("Location").value shouldBe routes.EnterClientIdController.show(JourneyType.AuthorisationRequest).url

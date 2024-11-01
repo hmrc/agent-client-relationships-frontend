@@ -48,8 +48,8 @@ class EnterClientIdController @Inject()(mcc: MessagesControllerComponents,
       if journey.getServiceWithDefault.isEmpty then Redirect(routes.SelectClientTypeController.show(journey.journeyType))
       else
         Ok(enterClientIdPage(
-          form = EnterClientIdForm.form(serviceConfig.firstClientDetailsFieldFor(journey.getService), journey.journeyType.toString).fill(journey.clientId.getOrElse("")),
-          clientDetailField = serviceConfig.firstClientDetailsFieldFor(journey.getService)
+          form = EnterClientIdForm.form(serviceConfig.firstClientDetailsFieldFor(journey.getServiceForForm), journey.journeyType.toString).fill(journey.clientId.getOrElse("")),
+          clientDetailField = serviceConfig.firstClientDetailsFieldFor(journey.getServiceForForm)
         ))
 
 
@@ -58,7 +58,7 @@ class EnterClientIdController @Inject()(mcc: MessagesControllerComponents,
       given AgentJourneyRequest[?] = journeyRequest
 
       val journey = journeyRequest.journey
-      val field = serviceConfig.firstClientDetailsFieldFor(journey.getService)
+      val field = serviceConfig.firstClientDetailsFieldFor(journey.getServiceForForm)
 
       EnterClientIdForm.form(field, journey.journeyType.toString).bindFromRequest().fold(
         formWithErrors => {
@@ -74,12 +74,13 @@ class EnterClientIdController @Inject()(mcc: MessagesControllerComponents,
             for {
               clientDetailsResponse <- agentClientRelationshipsService.getClientDetails(clientId, journey)
               _ <- journeyService.saveJourney(journey.copy(
+                clientService = if journey.getServiceWithDefault.matches("HMRC-TERS-ORG") && clientId.matches(serviceConfig.urnRegex) then Some("HMRC-TERSNT-ORG") else Some(journey.getServiceWithDefault),
                 clientId = Some(clientId),
                 clientDetailsResponse = clientDetailsResponse,
                 clientConfirmed = false,
                 agentType = None
               ))
-              nextPage <- journeyService.nextPageUrl(journeyType)
+              nextPage <- if clientDetailsResponse.nonEmpty then journeyService.nextPageUrl(journeyType) else Future.successful(routes.JourneyErrorController.show(journeyType, "client-not-found").url)
             } yield Redirect(nextPage)
         }
       )

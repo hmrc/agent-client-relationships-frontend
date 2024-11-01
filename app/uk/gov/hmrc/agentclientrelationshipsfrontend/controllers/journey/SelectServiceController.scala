@@ -45,7 +45,7 @@ class SelectServiceController @Inject()(mcc: MessagesControllerComponents,
       else {
         val services = serviceConfig.clientServicesFor(journey.getClientType)
         Ok(selectClientServicePage(
-          form = SelectFromOptionsForm.form(ClientServiceFieldName, services, journey.journeyType.toString).fill(journey.getServiceWithDefault),
+          form = SelectFromOptionsForm.form(ClientServiceFieldName, services, journey.journeyType.toString).fill(journey.getServiceForForm),
           clientType = journey.getClientType,
           services
         ))
@@ -67,7 +67,7 @@ class SelectServiceController @Inject()(mcc: MessagesControllerComponents,
         },
         clientService => {
           // unset any previous answers if service is changed 
-          val newJourney = if(journey.clientService.contains(clientService)) journey else journey.copy(
+          val newJourney = if(journey.getServiceForForm.matches(clientService)) journey else journey.copy(
             clientService = Some(clientService),
             clientId = None,
             clientDetailsResponse = None,

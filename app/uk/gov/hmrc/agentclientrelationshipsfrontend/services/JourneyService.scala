@@ -57,6 +57,7 @@ class JourneyService @Inject()(journeyRepository: JourneyRepository,
         if (journey.clientService.isEmpty) routes.SelectClientTypeController.show(journeyType).url
         else if (journey.clientDetailsResponse.isEmpty) routes.EnterClientIdController.show(journeyType).url
         else if (journey.clientDetailsResponse.get.knownFactType.nonEmpty && !journey.clientConfirmed) "routes.EnterClientFactController.show(journeyType).url"
+        else if(!journey.clientConfirmed) "routes.ConfirmClientController.show(journeyType).url"
         else if (journey.getService.matches("HMRC-MTD-IT") && journey.agentType.isEmpty) "routes.SelectAgentTypeController.show(journeyType).url"
         else if (journey.hasErrors(journeyType)) "routes.JourneyErrorController.show(journeyType).url"
         else "routes.CheckYourAnswersController.show(journeyType).url"

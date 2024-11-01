@@ -31,6 +31,9 @@ class ClientServiceConfigurationService @Inject() {
   def firstClientDetailsFieldFor(clientService: String): FieldConfiguration = services(clientService).clientDetails.head
   def lastClientDetailsFieldFor(clientService: String): FieldConfiguration = services(clientService).clientDetails.last
 
+  val utrRegex = "^[0-9]{10}$"
+  val urnRegex = "^[A-Z]{2}TRUST[0-9]{8}$"
+
   private val services: ListMap[String, ServiceData] = ListMap(
     "HMRC-MTD-IT" -> ServiceData(
       serviceName = "HMRC-MTD-IT",
@@ -68,27 +71,15 @@ class ClientServiceConfigurationService @Inject() {
         )
       )
     ),
-    "HMRC-TERSNT-ORG" -> ServiceData(
-      serviceName = "HMRC-TERSNT-ORG",
-      clientTypes = Set("trust"),
-      clientDetails = Seq(
-        FieldConfiguration(
-          name = "urn",
-          regex = "^((?i)[a-z]{2}trust[0-9]{8})$",
-          inputType = "text",
-          width = 20
-        )
-      )
-    ),
     "HMRC-TERS-ORG" -> ServiceData(
       serviceName = "HMRC-TERS-ORG",
       clientTypes = Set("trust"),
       clientDetails = Seq(
         FieldConfiguration(
-          name = "utr",
-          regex = "^[0-9]{10}$",
+          name = "trustId",
+          regex = s"($utrRegex)|($urnRegex)",
           inputType = "text",
-          width = 10
+          width = 20
         )
       )
     ),
