@@ -18,8 +18,8 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey
 
 import play.api.http.Status.{BAD_REQUEST, OK}
 import play.api.test.Helpers.*
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{Journey, JourneyState, JourneyType}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.services.journey.JourneyService
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{Journey, JourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.services.JourneyService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentSpecHelper}
 
 class SelectClientTypeControllerISpec extends ComponentSpecHelper with AuthStubs {

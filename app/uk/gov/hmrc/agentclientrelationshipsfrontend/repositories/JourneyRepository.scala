@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.agentclientrelationshipsfrontend.repositories.journey
+package uk.gov.hmrc.agentclientrelationshipsfrontend.repositories
 
 import uk.gov.hmrc.http.SessionKeys
 import uk.gov.hmrc.mongo.cache.SessionCacheRepository

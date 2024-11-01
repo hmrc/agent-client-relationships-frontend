@@ -23,16 +23,14 @@ import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Writes
-import play.api.libs.ws.DefaultBodyWritables.writeableOf_String
-import play.api.libs.ws.DefaultBodyWritables.writeableOf_urlEncodedForm
-import play.api.libs.ws.{BodyWritable, DefaultWSCookie, WSClient, WSCookie, WSRequest, WSResponse}
-import play.api.mvc.{AnyContent, Request, Session, SessionCookieBaker}
+import play.api.libs.ws.DefaultBodyWritables.{writeableOf_String, writeableOf_urlEncodedForm}
+import play.api.libs.ws.{DefaultWSCookie, WSClient, WSCookie, WSRequest, WSResponse}
+import play.api.mvc.{AnyContentAsFormUrlEncoded, Request, Session, SessionCookieBaker}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import uk.gov.hmrc.crypto.PlainText
 import uk.gov.hmrc.http.SessionKeys
 import uk.gov.hmrc.play.bootstrap.frontend.filters.crypto.SessionCookieCrypto
-import play.api.mvc.AnyContentAsFormUrlEncoded
 
 import scala.concurrent.ExecutionContext
 
@@ -46,9 +44,11 @@ trait ComponentSpecHelper
     with GuiceOneServerPerSuite
     with OptionValues {
 
+  // Add all services required by our (or bootstrap's) connectors here
   def downstreamServices: Map[String, String] = Seq(
     "auth",
-    "identity-verification-frontend"
+    "identity-verification-frontend",
+    "agent-client-relationships"
   ).flatMap { service =>
     Seq(
       s"microservice.services.$service.host" -> mockHost,

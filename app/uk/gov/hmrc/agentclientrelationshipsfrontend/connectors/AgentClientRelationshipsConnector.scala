@@ -17,15 +17,25 @@
 package uk.gov.hmrc.agentclientrelationshipsfrontend.connectors
 
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{AuthorisationRequest, Invitation, PageInfo}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{AuthorisationRequest, ClientDetailsResponse, Invitation, PageInfo}
+import uk.gov.hmrc.http.HttpReads.Implicits.*
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
 
 import java.time.LocalDate
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AgentClientRelationshipsConnector @Inject()(appConfig: AppConfig):
-  def getClientDetails: Future[String] = Future.successful("Troy Barnes")
+class AgentClientRelationshipsConnector @Inject()(appConfig: AppConfig,
+                                                  http: HttpClientV2
+                                                 )(implicit executionContext: ExecutionContext):
+
+  private val agentClientRelationshipsUrl = s"${appConfig.agentClientRelationshipsBaseUrl}/agent-client-relationships"
+
+  def getClientDetails(service: String, clientId: String)(implicit hc: HeaderCarrier): Future[Option[ClientDetailsResponse]] = http
+    .get(url"$agentClientRelationshipsUrl/client/$service/details/$clientId")
+    .execute[Option[ClientDetailsResponse]]
 
   def createInvitation: Future[String] = Future.successful("3d358ba5-cc1a-4baa-8965-75f8e7814005")
 

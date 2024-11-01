@@ -24,8 +24,7 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.ClientTypeF
 import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.routes
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.EnterClientIdForm
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, JourneyType}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.services.ClientServiceConfigurationService
-import uk.gov.hmrc.agentclientrelationshipsfrontend.services.journey.JourneyService
+import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{AgentClientRelationshipsService, ClientServiceConfigurationService, JourneyService}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.EnterClientIdPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
@@ -36,6 +35,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class EnterClientIdController @Inject()(mcc: MessagesControllerComponents,
                                         serviceConfig: ClientServiceConfigurationService,
                                         journeyService: JourneyService,
+                                        agentClientRelationshipsService: AgentClientRelationshipsService,
                                         enterClientIdPage: EnterClientIdPage,
                                         actions: Actions
                                        )(implicit val executionContext: ExecutionContext) extends FrontendController(mcc) with I18nSupport:
@@ -72,13 +72,13 @@ class EnterClientIdController @Inject()(mcc: MessagesControllerComponents,
           if journey.clientId.contains(clientId) && journey.clientDetailsResponse.nonEmpty then journeyService.nextPageUrl(journeyType).map(Redirect(_))
           else
             for {
-              clientDetailsResponse <- journeyService.getClientDetailsResponse(clientId, journey)
+              clientDetailsResponse <- agentClientRelationshipsService.getClientDetails(clientId, journey)
               _ <- journeyService.saveJourney(journey.copy(
-                  clientId = Some(clientId),
-                  clientDetailsResponse = clientDetailsResponse,
-                  clientConfirmed = false,
-                  agentType = None
-                ))
+                clientId = Some(clientId),
+                clientDetailsResponse = clientDetailsResponse,
+                clientConfirmed = false,
+                agentType = None
+              ))
               nextPage <- journeyService.nextPageUrl(journeyType)
             } yield Redirect(nextPage)
         }

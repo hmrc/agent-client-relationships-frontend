@@ -24,6 +24,7 @@ import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 class AppConfig @Inject()(servicesConfig: ServicesConfig, config: Configuration):
   // Base Urls
   val ivFrontendBaseUrl: String = baseUrl("identity-verification-frontend")
+  val agentClientRelationshipsBaseUrl: String = baseUrl("agent-client-relationships")
 
   // Urls
   val appExternalUrl: String = getConfString("agent-client-relationships-frontend.external-url")

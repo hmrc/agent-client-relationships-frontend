@@ -14,24 +14,23 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.agentclientrelationshipsfrontend.services.journey
+package uk.gov.hmrc.agentclientrelationshipsfrontend.services
 
 import play.api.mvc.Request
-import play.api.mvc.Results.Redirect
-import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.{AgentTypeFieldName, ClientNameFieldName, ClientServiceFieldName, ClientTypeFieldName}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey._
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{KnownFactType, ClientDetailsResponse}
-
-import uk.gov.hmrc.agentclientrelationshipsfrontend.repositories.journey.JourneyRepository
+import uk.gov.hmrc.agentclientrelationshipsfrontend.connectors.AgentClientRelationshipsConnector
 import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.routes
-import uk.gov.hmrc.http.SessionKeys
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.ClientDetailsResponse
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.*
+import uk.gov.hmrc.agentclientrelationshipsfrontend.repositories.JourneyRepository
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.mongo.cache.DataKey
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class JourneyService @Inject()(journeyRepository: JourneyRepository
+class JourneyService @Inject()(journeyRepository: JourneyRepository,
+                               agentClientRelationshipsConnector: AgentClientRelationshipsConnector
                                        )(implicit executionContext: ExecutionContext) {
 
   val dataKey = DataKey[Journey]("JourneySessionData")
@@ -66,17 +65,6 @@ class JourneyService @Inject()(journeyRepository: JourneyRepository
       }
       case _ => routes.StartJourneyController.startJourney(journeyType).url
     }
-  }
-  
-  def getClientDetailsResponse(clientId: String, journey: Journey): Future[Option[ClientDetailsResponse]] = {
-    // call the client details service - this is a stubbed implementation
-    Future.successful(Some(ClientDetailsResponse(
-      status = None,
-      isOverseas = false,
-      knownFactType = Some(KnownFactType.PostalCode),
-      knownFacts = Seq("NW1 2DB"),
-      name = "John Doe"
-    )))
   }
   
 }
