@@ -16,12 +16,15 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.models
 
-import play.api.libs.json.{Format, Json}
+import play.api.libs.json.Format
+import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.EnumFormatUtil
 
-object ClientStatus extends Enumeration {
-  type ClientStatus = Value
-  val Insolvent: ClientStatus = Value("Insolvent")
-  val Deregistered: ClientStatus = Value("Deregistered")
-  val Inactive: ClientStatus = Value("Inactive")
-  implicit val format: Format[ClientStatus.Value] = Json.formatEnum(this)
-}
+enum ClientStatus(val name: String):
+  case Insolvent extends ClientStatus("Insolvent")
+  case Deregistered extends ClientStatus("Deregistered")
+  case Inactive extends ClientStatus("Inactive")
+
+  override def toString: String = name
+
+object ClientStatus:
+  implicit val format: Format[ClientStatus] = EnumFormatUtil.enumFormat(ClientStatus.values)

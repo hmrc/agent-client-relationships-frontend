@@ -16,13 +16,16 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.models
 
-import play.api.libs.json.{Format, Json}
+import play.api.libs.json.Format
+import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.EnumFormatUtil
 
-object KnownFactType extends Enumeration {
-  type KnownFactType = Value
-  val PostalCode: KnownFactType = Value("PostalCode")
-  val CountryCode: KnownFactType = Value("CountryCode")
-  val Email: KnownFactType = Value("Email")
-  val Date: KnownFactType = Value("Date")
-  implicit val format: Format[KnownFactType.Value] = Json.formatEnum(this)
-}
+enum KnownFactType(val name: String):
+  case PostalCode extends KnownFactType("PostalCode")
+  case CountryCode extends KnownFactType("CountryCode")
+  case Email extends KnownFactType("Email")
+  case Date extends KnownFactType("Date")
+
+  override def toString: String = name
+
+object KnownFactType:
+  implicit val format: Format[KnownFactType] = EnumFormatUtil.enumFormat(KnownFactType.values)

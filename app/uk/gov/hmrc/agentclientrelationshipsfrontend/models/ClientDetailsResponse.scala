@@ -17,9 +17,6 @@
 package uk.gov.hmrc.agentclientrelationshipsfrontend.models
 
 import play.api.libs.json.{Json, OFormat}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.ClientStatus.ClientStatus
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.KnownFactType.KnownFactType
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyType
 
 case class ClientDetailsResponse(
                                   name: String,

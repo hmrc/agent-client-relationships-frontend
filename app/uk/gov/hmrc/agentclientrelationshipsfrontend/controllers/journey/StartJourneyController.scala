@@ -21,7 +21,7 @@ import play.api.mvc.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.{Actions, AgentRequest}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyType.AuthorisationRequest
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{Journey, JourneyType}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.services.journey.JourneyService
+import uk.gov.hmrc.agentclientrelationshipsfrontend.services.JourneyService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}

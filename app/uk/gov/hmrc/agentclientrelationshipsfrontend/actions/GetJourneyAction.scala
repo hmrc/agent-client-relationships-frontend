@@ -20,7 +20,7 @@ import play.api.mvc.Results.Redirect
 import play.api.mvc.{ActionFunction, Request, Result}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, JourneyType}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.services.journey.JourneyService
+import uk.gov.hmrc.agentclientrelationshipsfrontend.services.JourneyService
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}

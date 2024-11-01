@@ -30,7 +30,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsJson, defaultAwaitTimeout, redirectLocation, status}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{Journey, JourneyType}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.services.journey.JourneyService
+import uk.gov.hmrc.agentclientrelationshipsfrontend.services.JourneyService
 
 import scala.concurrent.{ExecutionContext, Future}
 
