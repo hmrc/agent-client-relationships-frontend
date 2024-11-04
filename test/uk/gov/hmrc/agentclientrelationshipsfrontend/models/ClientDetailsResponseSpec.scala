@@ -29,7 +29,7 @@ class ClientDetailsResponseSpec extends AnyWordSpecLike with Matchers {
   val testClientDetailsResponse: ClientDetailsResponse = ClientDetailsResponse(
     testName,
     Some(ClientStatus.Insolvent),
-    isOverseas = false,
+    isOverseas = Some(false),
     knownFacts = Seq(testPostCode),
     knownFactType = Some(KnownFactType.PostalCode)
   )
