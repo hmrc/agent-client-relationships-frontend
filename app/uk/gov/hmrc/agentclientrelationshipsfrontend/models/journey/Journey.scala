@@ -25,7 +25,8 @@ case class Journey(journeyType: JourneyType,
                    clientId: Option[String] = None,
                    clientDetailsResponse: Option[ClientDetailsResponse] = None,
                    agentType: Option[String] = None,
-                   clientConfirmed: Boolean = false):
+                   clientConfirmed: Boolean = false,
+                   refinedService: Option[Boolean] = None):
 
   def getClientTypeWithDefault: String = clientType.getOrElse("")
   def getClientType: String = clientType.getOrElse(throw new RuntimeException("clientType not defined"))

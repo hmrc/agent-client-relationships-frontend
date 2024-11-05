@@ -25,11 +25,14 @@ import scala.collection.immutable.ListMap
 class ClientServiceConfigurationService @Inject() {
   def orderedClientTypes: Seq[String] = Seq("personal", "business", "trust")
   def allClientTypes: Set[String] = services.flatMap(_._2.clientTypes).toSet[String]
-  def clientServicesFor(clientType: String): Seq[String] = services.filter(_._2.clientTypes.contains(clientType)).keys.toSeq
+  def clientServicesFor(clientType: String): Seq[String] = services.filter(_._2.serviceOption == true).filter(_._2.clientTypes.contains(clientType)).keys.toSeq
   def clientDetailsFor(clientService: String): Seq[FieldConfiguration] = services(clientService).clientDetails
   def fieldConfigurationFor(clientService: String, fieldName: String): FieldConfiguration = services(clientService).clientDetails.filter(_.name.equalsIgnoreCase(fieldName)).head
   def firstClientDetailsFieldFor(clientService: String): FieldConfiguration = services(clientService).clientDetails.head
   def lastClientDetailsFieldFor(clientService: String): FieldConfiguration = services(clientService).clientDetails.last
+  def requiresRefining(clientService: String): Boolean = services(clientService).supportedEnrolments.size > 1
+
+  def getSupportedEnrolments(clientService: String): Seq[String] = services(clientService).supportedEnrolments
 
   val utrRegex = "^[0-9]{10}$"
   val urnRegex = "^[A-Z]{2}TRUST[0-9]{8}$"
@@ -37,6 +40,7 @@ class ClientServiceConfigurationService @Inject() {
   private val services: ListMap[String, ServiceData] = ListMap(
     "HMRC-MTD-IT" -> ServiceData(
       serviceName = "HMRC-MTD-IT",
+      serviceOption = true,
       clientTypes = Set("personal"),
       clientDetails = Seq(
         FieldConfiguration(
@@ -49,6 +53,7 @@ class ClientServiceConfigurationService @Inject() {
     ),
     "PERSONAL-INCOME-RECORD" -> ServiceData(
       serviceName = "PERSONAL-INCOME-RECORD",
+      serviceOption = true,
       clientTypes = Set("personal"),
       clientDetails = Seq(
         FieldConfiguration(
@@ -61,6 +66,7 @@ class ClientServiceConfigurationService @Inject() {
     ),
     "HMRC-MTD-VAT" -> ServiceData(
       serviceName = "HMRC-MTD-VAT",
+      serviceOption = true,
       clientTypes = Set("personal", "business"),
       clientDetails = Seq(
         FieldConfiguration(
@@ -73,11 +79,27 @@ class ClientServiceConfigurationService @Inject() {
     ),
     "HMRC-TERS-ORG" -> ServiceData(
       serviceName = "HMRC-TERS-ORG",
+      serviceOption = true,
+      supportedEnrolments = Seq("HMRC-TERS-ORG", "HMRC-TERSNT-ORG"),
       clientTypes = Set("trust"),
       clientDetails = Seq(
         FieldConfiguration(
-          name = "trustId",
-          regex = s"($utrRegex)|($urnRegex)",
+          name = "utr",
+          regex = utrRegex,
+          inputType = "text",
+          width = 10
+        )
+      )
+    ),
+    "HMRC-TERSNT-ORG" -> ServiceData(
+      serviceName = "HMRC-TERSNT-ORG",
+      serviceOption = false,
+      supportedEnrolments = Seq("HMRC-TERS-ORG", "HMRC-TERSNT-ORG"),
+      clientTypes = Set("trust"),
+      clientDetails = Seq(
+        FieldConfiguration(
+          name = "urn",
+          regex = urnRegex,
           inputType = "text",
           width = 20
         )
@@ -85,6 +107,7 @@ class ClientServiceConfigurationService @Inject() {
     ),
     "HMRC-CGT-PD" -> ServiceData(
       serviceName = "HMRC-CGT-PD",
+      serviceOption = true,
       clientTypes = Set("personal", "trust"),
       clientDetails = Seq(
         FieldConfiguration(
@@ -97,6 +120,7 @@ class ClientServiceConfigurationService @Inject() {
     ),
     "HMRC-PPT-ORG" -> ServiceData(
       serviceName = "HMRC-PPT-ORG",
+      serviceOption = true,
       clientTypes = Set("personal", "business", "trust"),
       clientDetails = Seq(
         FieldConfiguration(
@@ -109,6 +133,7 @@ class ClientServiceConfigurationService @Inject() {
     ),
     "HMRC-CBC-ORG" -> ServiceData(
       serviceName = "HMRC-CBC-ORG",
+      serviceOption = true,
       clientTypes = Set("business", "trust"),
       clientDetails = Seq(
         FieldConfiguration(
@@ -121,6 +146,7 @@ class ClientServiceConfigurationService @Inject() {
     ),
     "HMRC-PILLAR2-ORG" -> ServiceData(
       serviceName = "HMRC-PILLAR2-ORG",
+      serviceOption = true,
       clientTypes = Set("business", "trust"),
       clientDetails = Seq(
         FieldConfiguration(

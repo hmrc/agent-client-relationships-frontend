@@ -48,8 +48,8 @@ class EnterClientIdController @Inject()(mcc: MessagesControllerComponents,
       if journey.getServiceWithDefault.isEmpty then Redirect(routes.SelectClientTypeController.show(journey.journeyType))
       else
         Ok(enterClientIdPage(
-          form = EnterClientIdForm.form(serviceConfig.firstClientDetailsFieldFor(journey.getServiceForForm), journey.journeyType.toString).fill(journey.clientId.getOrElse("")),
-          clientDetailField = serviceConfig.firstClientDetailsFieldFor(journey.getServiceForForm)
+          form = EnterClientIdForm.form(serviceConfig.firstClientDetailsFieldFor(journey.getService), journey.journeyType.toString).fill(journey.clientId.getOrElse("")),
+          clientDetailField = serviceConfig.firstClientDetailsFieldFor(journey.getService)
         ))
 
 

@@ -18,6 +18,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.services
 
 import play.api.mvc.Request
 import uk.gov.hmrc.agentclientrelationshipsfrontend.connectors.AgentClientRelationshipsConnector
+
 import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.routes
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.repositories.JourneyRepository
@@ -28,7 +29,8 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class JourneyService @Inject()(journeyRepository: JourneyRepository,
-                               agentClientRelationshipsConnector: AgentClientRelationshipsConnector
+                               agentClientRelationshipsConnector: AgentClientRelationshipsConnector,
+                               serviceConfig: ClientServiceConfigurationService
                                        )(implicit executionContext: ExecutionContext) {
 
   val dataKey = DataKey[Journey]("JourneySessionData")
@@ -55,6 +57,7 @@ class JourneyService @Inject()(journeyRepository: JourneyRepository,
       case Some(journey) if journey.journeyType != journeyType => routes.StartJourneyController.startJourney(journeyType).url
       case Some(journey) => {
         if (journey.clientService.isEmpty) routes.SelectClientTypeController.show(journeyType).url
+        else if (serviceConfig.requiresRefining(journey.clientService.get) && journey.refinedService.isEmpty) routes.ServiceRefinementController.show(journeyType).url
         else if (journey.clientDetailsResponse.isEmpty) routes.EnterClientIdController.show(journeyType).url
         else if (journey.clientDetailsResponse.get.knownFactType.nonEmpty && !journey.clientConfirmed) "routes.EnterClientFactController.show(journeyType).url"
         else if(!journey.clientConfirmed) "routes.ConfirmClientController.show(journeyType).url"

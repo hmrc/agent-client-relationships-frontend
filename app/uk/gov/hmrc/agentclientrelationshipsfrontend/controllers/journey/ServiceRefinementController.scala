@@ -23,18 +23,18 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.ClientServi
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.SelectFromOptionsForm
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, JourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{ClientServiceConfigurationService, JourneyService}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.SelectClientServicePage
+import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.ServiceRefinementPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class SelectServiceController @Inject()(mcc: MessagesControllerComponents,
-                                        serviceConfig: ClientServiceConfigurationService,
-                                        journeyService: JourneyService,
-                                        selectClientServicePage: SelectClientServicePage,
-                                        actions: Actions
+class ServiceRefinementController @Inject()(mcc: MessagesControllerComponents,
+                                            serviceConfig: ClientServiceConfigurationService,
+                                            journeyService: JourneyService,
+                                            serviceRefinementPage: ServiceRefinementPage,
+                                            actions: Actions
                                        )(implicit val executionContext: ExecutionContext) extends FrontendController(mcc) with I18nSupport:
   
   def show(journeyType: JourneyType): Action[AnyContent] = actions.getJourney(journeyType):
@@ -43,11 +43,14 @@ class SelectServiceController @Inject()(mcc: MessagesControllerComponents,
       val journey = journeyRequest.journey
       if journey.getClientTypeWithDefault.isEmpty then Redirect(routes.SelectClientTypeController.show(journey.journeyType))
       else {
-        val services = serviceConfig.clientServicesFor(journey.getClientType)
-        Ok(selectClientServicePage(
-          form = SelectFromOptionsForm.form(ClientServiceFieldName, services, journey.journeyType.toString).fill(journey.getServiceForForm),
-          clientType = journey.getClientType,
-          services
+        val options = serviceConfig.getSupportedEnrolments(journey.getService)
+        val prepop = journey.refinedService match {
+          case Some(true) => journey.getService
+          case _ => ""
+        }
+        Ok(serviceRefinementPage(
+          form = SelectFromOptionsForm.form(ClientServiceFieldName, options, journey.journeyType.toString).fill(prepop),
+          options
         ))
       }
       
@@ -56,13 +59,12 @@ class SelectServiceController @Inject()(mcc: MessagesControllerComponents,
     journeyRequest =>
       given AgentJourneyRequest[?] = journeyRequest
       val journey = journeyRequest.journey
-      val services = serviceConfig.clientServicesFor(journey.getClientType)
-      SelectFromOptionsForm.form(ClientServiceFieldName, services, journeyType.toString).bindFromRequest().fold(
+      val options = serviceConfig.getSupportedEnrolments(journey.getServiceWithDefault)
+      SelectFromOptionsForm.form(ClientServiceFieldName, options, journeyType.toString).bindFromRequest().fold(
         formWithErrors => {
-          Future.successful(BadRequest(selectClientServicePage(
-            form = formWithErrors,
-            clientType = journey.getClientType,
-            clientServices = services
+          Future.successful(BadRequest(serviceRefinementPage(
+            formWithErrors,
+            options
           )))
         },
         clientService => {
@@ -73,7 +75,7 @@ class SelectServiceController @Inject()(mcc: MessagesControllerComponents,
             clientDetailsResponse = None,
             clientConfirmed = false,
             agentType = None,
-            refinedService = None
+            refinedService = Some(true)
           )
           
           journeyService.saveJourney(newJourney).flatMap { _ =>

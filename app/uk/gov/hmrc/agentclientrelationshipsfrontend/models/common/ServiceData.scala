@@ -17,6 +17,8 @@
 package uk.gov.hmrc.agentclientrelationshipsfrontend.models.common
 
 case class ServiceData(
+                        serviceOption: Boolean = false,
+                        supportedEnrolments: Seq[String] = Seq.empty,
                         serviceName: String,
                         clientTypes: Set[String],
                         clientDetails: Seq[FieldConfiguration]

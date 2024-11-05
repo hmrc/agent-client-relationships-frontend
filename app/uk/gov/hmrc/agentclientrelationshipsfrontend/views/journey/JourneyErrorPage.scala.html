@@ -33,12 +33,12 @@
 @key = @{"journeyError"}
 @pageTitle = @{messages(s"$key.$errorCode.header")}
 
-@layout(pageTitle) {
+@layout(pageTitle, serviceName = Some(messages(s"${journeyType.toString}.service.name"))) {
 
     <h1 class="govuk-heading-xl">@pageTitle</h1>
     @{
      errorCode match {
-      case "client-not-found" => clientNotFound()
+      case "client-not-found" => clientNotFound(journeyType)
       case _ => HtmlFormat.empty
      }
     }

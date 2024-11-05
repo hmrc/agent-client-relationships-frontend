@@ -108,6 +108,16 @@ clientService.HMRC-PILLAR2-ORG.business=Manage their Pillar 2 top-up taxes
 clientService.HMRC-PILLAR2-ORG.trust=Manage their Pillar 2 top-up taxes
 clientService.HMRC-TERS-ORG.trust=Maintain their trust or an estate
 clientService.HMRC-TERSNT-ORG.trust=Maintain their non-taxable trust
+
+# -------------------------------------------------------------------------------------------
+# Client service refinement
+# -------------------------------------------------------------------------------------------
+
+clientServiceRefinement.HMRC-TERS-ORG.header=Is your client’s trust or estate taxable?
+clientServiceRefinement.HMRC-TERSNT-ORG.header=Is your client’s trust or estate taxable?
+clientServiceRefinement.HMRC-TERS-ORG.option=Yes
+clientServiceRefinement.HMRC-TERSNT-ORG.option=No, it’s exempt from tax
+
 # -------------------------------------------------------------------------------------------
 # Enter Client ID
 # -------------------------------------------------------------------------------------------
@@ -128,7 +138,7 @@ clientId.utr.error.invalid=Enter the Unique Taxpayer Reference (UTR) in the corr
 clientId.utr.error.required=Enter your client’s Unique Taxpayer Reference (UTR)
 
 clientId.urn.label=What is your client’s Unique Reference Number (URN)?
-clientId.urn.hint=This is 15 characters, for example, xxtrust12345678
+clientId.urn.hint=This is 15 characters, for example, XATRUST12345678
 clientId.urn.error.invalid=Enter the Unique Reference Number (URN) in the correct format
 clientId.urn.error.required=Enter your client’s Unique Reference Number (URN)
 
