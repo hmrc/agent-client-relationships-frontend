@@ -122,8 +122,13 @@ clientId.vrn.error.required=Enter your client’s VAT registration number
 
 clientId.utr.label=What is your client’s Unique Taxpayer Reference (UTR)?
 clientId.utr.hint=Enter the last 10 digits only. For example, 12345 67890
-clientId.utr.error.invalid=Enter the Unique Taxpayer Reference (UTR) or Unique Reference Number (URN) in the correct format
-clientId.utr.error.required=Enter your client’s Unique Taxpayer Reference (UTR) or Unique Reference Number (URN)
+clientId.utr.error.invalid=Enter the Unique Taxpayer Reference (UTR) in the correct format
+clientId.utr.error.required=Enter your client’s Unique Taxpayer Reference (UTR)
+
+clientId.urn.label=What is your client’s Unique Reference Number (URN)?
+clientId.urn.hint=This is 15 characters, for example, xxtrust12345678
+clientId.urn.error.invalid=Enter the Unique Reference Number (URN) in the correct format
+clientId.urn.error.required=Enter your client’s Unique Reference Number (URN)
 
 clientId.cgtRef.label=What is your client’s Capital Gains Tax account reference?
 clientId.cgtRef.hint=This is 15 characters, for example XYCGTP123456789. Your client received this when they created their account.
@@ -140,10 +145,10 @@ clientId.cbcId.hint=This is the email address we currently hold for your client.
 clientId.cbcId.error.invalid=Enter your client’s country-by-country ID must start with an ’X’ followed by a letter, then ’CBC’ and then 10 numbers
 clientId.cbcId.error.required=Enter your client’s country-by-country ID
 
-clientId.pillar2.label=What is your client’s Pillar 2 top-up taxes ID
-clientId.pillar2.hint=This is 15 characters, for example, XAPLR0000999999. The current filing member can find it on their Report Pillar 2 top-up taxes homepage.
-clientId.pillar2.error.invalid=Enter a valid Pillar 2 top-up taxes registration date
-clientId.pillar2.error.required=Enter your client’s  date of registration to report Pillar 2 top-up taxes
+clientId.PlrId.label=What is your client’s Pillar 2 top-up taxes ID
+clientId.PlrId.hint=This is 15 characters, for example, XAPLR0000999999. The current filing member can find it on their Report Pillar 2 top-up taxes homepage.
+clientId.PlrId.error.invalid=Enter a valid Pillar 2 top-up taxes registration date
+clientId.PlrId.error.required=Enter your client’s  date of registration to report Pillar 2 top-up taxes
 
 # -------------------------------------------------------------------------------------------
 # Enter Known Facts
