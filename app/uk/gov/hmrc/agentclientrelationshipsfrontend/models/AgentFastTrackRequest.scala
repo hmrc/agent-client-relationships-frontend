@@ -14,6 +14,18 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.agentclientrelationshipsfrontend.models.common
+package uk.gov.hmrc.agentclientrelationshipsfrontend.models
 
-case class FieldConfiguration(name: String, regex: String, inputType: String, width: Int, clientIdType: String)
+import play.api.mvc.Request
+import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.AgentRequest
+
+class AgentFastTrackRequest[A]( override val arn: String,
+                                val redirectUrl: Option[String],
+                                val errorUrl: Option[String],
+                                val refererUrl: Option[String],
+                                override val request: Request[A])
+  extends AgentRequest[A](arn, request)
+
+
+  
+  
