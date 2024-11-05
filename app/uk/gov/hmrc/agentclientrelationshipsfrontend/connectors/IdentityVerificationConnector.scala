@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.connectors
 
-import com.codahale.metrics.MetricRegistry
 import play.api.Logging
 import play.api.http.Status.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig

@@ -17,7 +17,7 @@
 package uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.createInvitation
 
 import play.api.data.Forms.*
-import play.api.data.{Form, Mapping}
+import play.api.data.Form
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.common.FieldConfiguration
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.helpers.DateFormFieldHelper.dateFieldMapping
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.helpers.TextFormFieldHelper.{emptyMapping, textFieldMapping}

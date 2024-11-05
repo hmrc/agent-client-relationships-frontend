@@ -16,9 +16,6 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.models
 
-import uk.gov.hmrc.auth.core.AffinityGroup.{Individual, Organisation}
 import uk.gov.hmrc.auth.core.{AffinityGroup, Enrolments}
-
-import scala.collection.immutable.Set
 
 case class AuthorisedClient(affinityGroup: AffinityGroup, enrolments: Enrolments)

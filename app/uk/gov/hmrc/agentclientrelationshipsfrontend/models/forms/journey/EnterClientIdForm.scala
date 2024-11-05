@@ -17,10 +17,9 @@
 package uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey
 
 import play.api.data.Forms.*
-import play.api.data.{Form, Mapping}
+import play.api.data.Form
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.common.FieldConfiguration
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.helpers.DateFormFieldHelper.dateFieldMapping
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.helpers.TextFormFieldHelper.{emptyMapping, textFieldMapping}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.helpers.TextFormFieldHelper.textFieldMapping
 
 object EnterClientIdForm {
   def form(clientDetail: FieldConfiguration, journeyType: String): Form[String] = {

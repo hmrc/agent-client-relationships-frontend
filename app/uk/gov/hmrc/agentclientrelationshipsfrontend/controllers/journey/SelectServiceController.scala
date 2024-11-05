@@ -19,8 +19,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey
 import play.api.i18n.I18nSupport
 import play.api.mvc.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
-import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
-import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.{ClientServiceFieldName, ClientTypeFieldName}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.ClientServiceFieldName
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.SelectFromOptionsForm
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, JourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{ClientServiceConfigurationService, JourneyService}
@@ -35,8 +34,8 @@ class SelectServiceController @Inject()(mcc: MessagesControllerComponents,
                                         serviceConfig: ClientServiceConfigurationService,
                                         journeyService: JourneyService,
                                         selectClientServicePage: SelectClientServicePage,
-                                        actions:        Actions
-                                          )(implicit val executionContext: ExecutionContext) extends FrontendController(mcc)  with I18nSupport:
+                                        actions: Actions
+                                       )(implicit val executionContext: ExecutionContext) extends FrontendController(mcc) with I18nSupport:
   
   def show(journeyType: JourneyType): Action[AnyContent] = actions.getJourney(journeyType):
     journeyRequest =>

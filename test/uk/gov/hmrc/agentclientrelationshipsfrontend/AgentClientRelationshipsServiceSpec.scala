@@ -49,7 +49,7 @@ class AgentClientRelationshipsServiceSpec extends AnyWordSpecLike with Matchers 
   val testClientDetails: ClientDetailsResponse = ClientDetailsResponse(
     "Name",
     None,
-    false,
+    None,
     Seq("testId"),
     Some(KnownFactType.PostalCode)
   )
