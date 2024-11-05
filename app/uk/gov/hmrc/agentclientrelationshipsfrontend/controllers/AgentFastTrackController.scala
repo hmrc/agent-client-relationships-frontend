@@ -46,10 +46,10 @@ class AgentFastTrackController @Inject()(mcc: MessagesControllerComponents,
   def agentFastTrack: Action[AnyContent] = actions.getFastTrackUrl.async { implicit agentFastTrackRequest =>
     
     AgentFastTrackForm.form(clientServiceConfig).bindFromRequest().fold(
-      agentFastTrackFormData => {
+      formWithErrors => {
         agentFastTrackRequest.errorUrl match {
           case Some(errorUrl) =>
-            Future.successful(Redirect(Call("GET", errorUrl + s"?issue=${agentFastTrackFormData.errorsAsJson.as[FastTrackErrors].formErrorsMessages}")))
+            Future.successful(Redirect(Call("GET", errorUrl + s"?issue=${formWithErrors.errorsAsJson.as[FastTrackErrors].formErrorsMessages}")))
           case None =>
             Future.successful(Redirect(routes.StartJourneyController.startJourney(journeyType)))
         }

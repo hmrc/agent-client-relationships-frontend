@@ -40,13 +40,12 @@ object AgentFastTrackForm {
         .fold(true)
         (clientType => clientServiceConfig.clientServicesFor(clientType).contains(agentFastTrackRequest.service))
 
-      //TODO - confirm if we are going to use clientIdType at all !!
       val clientIdMatchRegs = clientServiceConfig.clientDetailForServiceAndClientIdType(
         agentFastTrackRequest.service, 
         agentFastTrackRequest.clientIdType)
         .fold(false)(x => agentFastTrackRequest.clientId.matches(x.regex))
 
-      //TODO - should we have some knowFacts regex validation for service - like we have for clientId
+      //TODO - do knowFacts regex mapping
       if (serviceForClientType && clientIdMatchRegs) Valid
       else Invalid(ValidationError("INVALID_SUBMISSION"))
     }
@@ -61,7 +60,7 @@ object AgentFastTrackForm {
         "clientIdentifierType" -> text
           .verifying("UNSUPPORTED_CLIENT_ID_TYPE", clientServiceConfig.allSupportedClientTypeIds.contains(_)),
         "clientIdentifier" -> uppercaseNormalizedText.verifying(validateClientId(clientServiceConfig.allClientIdRegex)),
-        //TODO - should we have some knowFacts regex validation - like match any supported as we have for clientId
+        //TODO - do knowFacts regex mapping
         "knownFact"        -> optional(text)
       ) { (clientType, service, clientIdType, clientId, knownFact) =>
         AgentFastTrackFormData(clientType, service, clientId, clientIdType, knownFact)

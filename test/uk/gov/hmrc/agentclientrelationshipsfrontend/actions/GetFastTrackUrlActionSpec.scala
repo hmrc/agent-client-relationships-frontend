@@ -16,8 +16,7 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.actions
 
-import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.{reset, when}
+import org.mockito.Mockito.when
 import org.scalatest.RecoverMethods.recoverToExceptionIf
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
@@ -30,8 +29,7 @@ import play.api.libs.json.{JsObject, Json, OFormat}
 import play.api.mvc.*
 import play.api.test.Helpers.{contentAsJson, defaultAwaitTimeout, status}
 import play.api.test.{FakeHeaders, FakeRequest}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.connectors.SsoConnector
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.RequestSupport
+import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.http.BadRequestException
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -61,19 +59,17 @@ class GetFastTrackUrlActionSpec extends AnyWordSpecLike with Matchers with Optio
       }
   }
 
-  val mockSsoConnector: SsoConnector = mock[SsoConnector]
-  val requestSupport: RequestSupport = app.injector.instanceOf[RequestSupport]
   val defaultActionBuilder: DefaultActionBuilder = app.injector.instanceOf[DefaultActionBuilder]
+  implicit val appConfig: AppConfig = mock[AppConfig]
 
   given ExecutionContext = app.injector.instanceOf[ExecutionContext]
 
   override def afterEach(): Unit = {
-    reset(mockSsoConnector)
     super.afterEach()
   }
 
   val testController = new FakeController(
-    new GetFastTrackUrlAction(mockSsoConnector, requestSupport),
+    new GetFastTrackUrlAction(),
     defaultActionBuilder
   )
 
@@ -84,14 +80,11 @@ class GetFastTrackUrlActionSpec extends AnyWordSpecLike with Matchers with Optio
       val fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
       val testFastTrackUrlsNone = TestFastTrackUrls(None, None, None)
 
-      when(mockSsoConnector.getAllowlistedDomains()(any(), any()))
-        .thenReturn(Future.successful(allowedDomains))
+      when(appConfig.allowedRedirectHosts).thenReturn(allowedDomains)
 
       val result = testController.route(fakeRequest)
-
       status(result) shouldBe OK
       contentAsJson(result).as[TestFastTrackUrls] shouldBe testFastTrackUrlsNone
-
     }
 
     "successfully retrieve fastTrack URLs with errorUrl set" in {
@@ -99,8 +92,7 @@ class GetFastTrackUrlActionSpec extends AnyWordSpecLike with Matchers with Optio
       val fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(call = Call("POST", s"/agent-client-relationships/agents/fast-track?error=http%3A%2F%2Flocalhost%3A9448%2Ftest-only%2Ffast-track"))
       val testFastTrackUrlsNone = TestFastTrackUrls(None, Some("http://localhost:9448/test-only/fast-track"), None)
 
-      when(mockSsoConnector.getAllowlistedDomains()(any(), any()))
-        .thenReturn(Future.successful(allowedDomains))
+      when(appConfig.allowedRedirectHosts).thenReturn(allowedDomains)
 
       val result = testController.route(fakeRequest)
 
@@ -116,8 +108,7 @@ class GetFastTrackUrlActionSpec extends AnyWordSpecLike with Matchers with Optio
 
       val testFastTrackUrlsNone = TestFastTrackUrls(None, Some("http://localhost:9448/test-only/fast-track"), Some("http://localhost:9448/test-only/fast-track"))
 
-      when(mockSsoConnector.getAllowlistedDomains()(any(), any()))
-        .thenReturn(Future.successful(allowedDomains))
+      when(appConfig.allowedRedirectHosts).thenReturn(allowedDomains)
 
       val result = testController.route(fakeRequest)
 
@@ -131,8 +122,7 @@ class GetFastTrackUrlActionSpec extends AnyWordSpecLike with Matchers with Optio
       val fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(call = Call("POST", s"/agent-client-relationships/agents/fast-track?error=http%3A%2F%2Flocalhost%3A9448%2Ftest-only%2Ffast-track"))
       val testFastTrackUrlsNone = TestFastTrackUrls(None, Some("http://localhost:9448/test-only/fast-track"), None)
 
-      when(mockSsoConnector.getAllowlistedDomains()(any(), any()))
-        .thenReturn(Future.successful(allowedDomains))
+      when(appConfig.allowedRedirectHosts).thenReturn(allowedDomains)
 
       val result = testController.route(fakeRequest)
 
