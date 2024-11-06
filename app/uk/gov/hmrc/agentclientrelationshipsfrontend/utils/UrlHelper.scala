@@ -18,9 +18,10 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.utils
 
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl.idFunctor
-import uk.gov.hmrc.play.bootstrap.binders.{AbsoluteWithHostnameFromAllowlist, OnlyRelative, RedirectUrl}
+import uk.gov.hmrc.play.bootstrap.binders.{AbsoluteWithHostnameFromAllowlist, OnlyRelative, RedirectUrl, UnsafePermitAll}
 
 import java.net.URLEncoder
+import scala.util.{Failure, Success, Try}
 
 object UrlHelper {
 
@@ -41,6 +42,16 @@ object UrlHelper {
     } else {
       redirectUrl.get(AbsoluteWithHostnameFromAllowlist(appConfig.allowedRedirectHosts)).url
     }
+
+  def getRedirectUrl(url: String)(implicit appConfig: AppConfig): Option[String] = {
+    Try(RedirectUrl(url)) match {
+      case Success(redirectUrl) =>
+        val unsafeUrl = redirectUrl.get(UnsafePermitAll).url
+        if (RedirectUrl.isRelativeUrl(unsafeUrl)) Some(unsafeUrl)
+        else redirectUrl.getEither(AbsoluteWithHostnameFromAllowlist(appConfig.allowedRedirectHosts)).toOption.map(_.url)
+      case Failure(e) => None
+    }
+  }
 
 
 }

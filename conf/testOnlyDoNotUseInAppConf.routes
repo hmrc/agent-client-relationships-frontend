@@ -12,3 +12,4 @@
 # Add all the application routes to the prod.routes file
 ->         /                          prod.Routes
 GET        /test-only/asa-dashboard   uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.testOnly.TestOnlyController.fakeDashboard
+GET        /test-only/fast-track      uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.testOnly.TestOnlyController.getFastTrackForm()
