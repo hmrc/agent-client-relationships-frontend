@@ -49,7 +49,7 @@ class EnterClientIdPageSpec extends ViewSpecSupport {
 
   val urnField: FieldConfiguration = FieldConfiguration(
     name = "urn",
-    regex = "^((?i)[a-z]{2}trust[0-9]{8})$",
+    regex = "^[A-Z]{2}TRUST[0-9]{8}$",
     inputType = "text",
     width = 20
   )

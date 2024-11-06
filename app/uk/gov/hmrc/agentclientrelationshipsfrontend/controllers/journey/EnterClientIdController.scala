@@ -74,7 +74,7 @@ class EnterClientIdController @Inject()(mcc: MessagesControllerComponents,
             for {
               clientDetailsResponse <- agentClientRelationshipsService.getClientDetails(clientId, journey)
               _ <- journeyService.saveJourney(journey.copy(
-                clientService = if journey.getServiceWithDefault.matches("HMRC-TERS-ORG") && clientId.matches(serviceConfig.urnRegex) then Some("HMRC-TERSNT-ORG") else Some(journey.getServiceWithDefault),
+                clientService = Some(journey.getService),
                 clientId = Some(clientId),
                 clientDetailsResponse = clientDetailsResponse,
                 clientConfirmed = false,
