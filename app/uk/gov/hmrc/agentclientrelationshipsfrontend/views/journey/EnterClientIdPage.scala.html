@@ -34,10 +34,21 @@
 
 @(form: Form[?], clientDetailField: FieldConfiguration)(implicit request: AgentJourneyRequest[?], messages: Messages)
 
-@key = @{"clientId"}
-@pageTitle = @{messages(s"$key.${clientDetailField.name}.label")}
+@key = @{
+    "clientId"
+}
+@journeyKey = @{
+    request.journey.journeyType.toString
+}
+@pageTitle = @{
+    messages(s"$key.${clientDetailField.name}.label")
+}
 
-@layout(pageTitle = pageTitle, optionalForm = Some(form)) {
+@layout(
+    pageTitle = pageTitle,
+    optionalForm = Some(form),
+    serviceName = Some(messages(s"$journeyKey.service.name"))
+) {
 
     @formWithCSRF(action = routes.EnterClientIdController.onSubmit(request.journey.journeyType)) {
 

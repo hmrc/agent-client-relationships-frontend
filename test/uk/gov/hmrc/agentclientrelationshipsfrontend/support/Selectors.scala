@@ -41,6 +41,8 @@ trait Selectors {
   val fieldSet = ".govuk-fieldset"
   val fieldSetLegend = ".govuk-fieldset__legend"
   val hint = ".govuk-hint"
+  val formGroup = ".govuk-form-group"
+  val input = ".govuk-input"
 
   val table = ".govuk-table"
   val tableCaption = ".govuk-table__caption"
