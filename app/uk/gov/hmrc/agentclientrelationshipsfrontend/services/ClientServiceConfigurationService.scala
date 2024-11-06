@@ -96,7 +96,7 @@ class ClientServiceConfigurationService @Inject() {
           regex = "^[0-9]{10}$",
           inputType = "text",
           width = 10,
-          clientIdType = "urn"
+          clientIdType = "utr"
         )
       )
     ),
