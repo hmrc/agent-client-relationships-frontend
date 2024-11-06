@@ -33,7 +33,6 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class AgentFastTrackController @Inject()(mcc: MessagesControllerComponents,
-                                         appConfig: AppConfig,
                                          journeyService: JourneyService,
                                          clientServiceConfig: ClientServiceConfigurationService,
                                          actions: Actions,
