@@ -16,15 +16,23 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.testOnly
 
+import play.api.{Environment, Mode}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, MessagesRequest}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.services.ClientServiceConfigurationService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.testOnly.TestOnlyAsaDashboard
+import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.testOnly.{TestOnlyAsaDashboard, TestOnlyFastTrack}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.testOnly.TestOnlyFastTrackForm
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future
 
 @Singleton
-class TestOnlyController @Inject()(mcc: MessagesControllerComponents, view: TestOnlyAsaDashboard) extends FrontendController(mcc):
+class TestOnlyController @Inject()(mcc: MessagesControllerComponents, 
+                                   view: TestOnlyAsaDashboard,
+                                   testFastTrackView: TestOnlyFastTrack,
+                                   serviceConfig: ClientServiceConfigurationService,
+                                   val env: Environment
+                                  ) extends FrontendController(mcc):
 
   def fakeDashboard: Action[AnyContent] = Action.async:
     request =>
@@ -32,3 +40,12 @@ class TestOnlyController @Inject()(mcc: MessagesControllerComponents, view: Test
       // previously the destination of sign out was determined by MainTemplate code
       // instead we could do that in here
       Future.successful(Ok(view()))
+
+  private val isLocalEnv = if (env.mode.equals(Mode.Test)) false else env.mode.equals(Mode.Dev)
+
+  def getFastTrackForm: Action[AnyContent] = Action.async { implicit request =>
+    Future successful Ok(testFastTrackView(TestOnlyFastTrackForm.form(serviceConfig.allClientTypes, serviceConfig.allSupportedServices), isLocalEnv))
+  }
+
+
+

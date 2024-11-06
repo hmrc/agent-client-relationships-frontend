@@ -26,21 +26,25 @@ class ClientServiceConfigurationService @Inject() {
   def orderedClientTypes: Seq[String] = Seq("personal", "business", "trust")
   def allClientTypes: Set[String] = services.flatMap(_._2.clientTypes).toSet[String]
   def clientServicesFor(clientType: String): Seq[String] = services.filter(_._2.clientTypes.contains(clientType)).keys.toSeq
+  def allSupportedServices: Set[String] = services.map(_._2.serviceName).toSet[String]
   def clientDetailsFor(clientService: String): Seq[FieldConfiguration] = services(clientService).clientDetails
-  def fieldConfigurationFor(clientService: String, fieldName: String): FieldConfiguration = services(clientService).clientDetails.filter(_.name.equalsIgnoreCase(fieldName)).head
+  def allClientIdRegex: Set[String] = services.flatMap(_._2.clientDetails.map(_.regex)).toSet[String]
+  def allSupportedClientTypeIds: Set[String] = services.flatMap(_._2.clientDetails.map(_.clientIdType)).toSet[String]
   def firstClientDetailsFieldFor(clientService: String): FieldConfiguration = services(clientService).clientDetails.head
-  def lastClientDetailsFieldFor(clientService: String): FieldConfiguration = services(clientService).clientDetails.last
+  def clientDetailForServiceAndClientIdType(clientService: String, clientIdType:String): Option[FieldConfiguration] = services(clientService).clientDetails.find(_.clientIdType == clientIdType)
+  
 
   private val services: ListMap[String, ServiceData] = ListMap(
     "HMRC-MTD-IT" -> ServiceData(
       serviceName = "HMRC-MTD-IT",
       clientTypes = Set("personal"),
       clientDetails = Seq(
-        FieldConfiguration(
+          FieldConfiguration(
           name = "nino",
           regex = "[[A-Z]&&[^DFIQUV]][[A-Z]&&[^DFIQUVO]] ?\\d{2} ?\\d{2} ?\\d{2} ?[A-D]{1}",
           inputType = "text",
-          width = 10
+          width = 10,
+          clientIdType = "ni"
         )
       )
     ),
@@ -48,11 +52,12 @@ class ClientServiceConfigurationService @Inject() {
       serviceName = "PERSONAL-INCOME-RECORD",
       clientTypes = Set("personal"),
       clientDetails = Seq(
-        FieldConfiguration(
+          FieldConfiguration(
           name = "nino",
           regex = "[[A-Z]&&[^DFIQUV]][[A-Z]&&[^DFIQUVO]] ?\\d{2} ?\\d{2} ?\\d{2} ?[A-D]{1}",
           inputType = "text",
-          width = 10
+          width = 10,
+          clientIdType = "ni"
         )
       )
     ),
@@ -60,11 +65,12 @@ class ClientServiceConfigurationService @Inject() {
       serviceName = "HMRC-MTD-VAT",
       clientTypes = Set("personal", "business"),
       clientDetails = Seq(
-        FieldConfiguration(
+          FieldConfiguration(
           name = "vrn",
           regex = "^[0-9]{9}$",
           inputType = "text",
-          width = 10
+          width = 10,
+          clientIdType = "vrn"
         )
       )
     ),
@@ -72,11 +78,12 @@ class ClientServiceConfigurationService @Inject() {
       serviceName = "HMRC-TERSNT-ORG",
       clientTypes = Set("trust"),
       clientDetails = Seq(
-        FieldConfiguration(
+          FieldConfiguration(
           name = "urn",
           regex = "^((?i)[a-z]{2}trust[0-9]{8})$",
           inputType = "text",
-          width = 20
+          width = 20,
+          clientIdType = "urn"
         )
       )
     ),
@@ -84,11 +91,12 @@ class ClientServiceConfigurationService @Inject() {
       serviceName = "HMRC-TERS-ORG",
       clientTypes = Set("trust"),
       clientDetails = Seq(
-        FieldConfiguration(
+          FieldConfiguration(
           name = "utr",
           regex = "^[0-9]{10}$",
           inputType = "text",
-          width = 10
+          width = 10,
+          clientIdType = "utr"
         )
       )
     ),
@@ -96,11 +104,12 @@ class ClientServiceConfigurationService @Inject() {
       serviceName = "HMRC-CGT-PD",
       clientTypes = Set("personal", "trust"),
       clientDetails = Seq(
-        FieldConfiguration(
+          FieldConfiguration(
           name = "cgtRef",
           regex = "^X[A-Z]CGTP[0-9]{9}$",
           inputType = "text",
-          width = 20
+          width = 20,
+          clientIdType = "CGTPDRef"
         )
       )
     ),
@@ -108,11 +117,12 @@ class ClientServiceConfigurationService @Inject() {
       serviceName = "HMRC-PPT-ORG",
       clientTypes = Set("personal", "business", "trust"),
       clientDetails = Seq(
-        FieldConfiguration(
+          FieldConfiguration(
           name = "pptRef",
           regex = "^X[A-Z]PPT000[0-9]{7}$",
           inputType = "text",
-          width = 20
+          width = 20,
+          clientIdType = "EtmpRegistrationNumber"
         )
       )
     ),
@@ -120,11 +130,12 @@ class ClientServiceConfigurationService @Inject() {
       serviceName = "HMRC-CBC-ORG",
       clientTypes = Set("business", "trust"),
       clientDetails = Seq(
-        FieldConfiguration(
+          FieldConfiguration(
           name = "cbcId",
           regex = "^X[A-Z]CBC[0-9]{10}$",
           inputType = "text",
-          width = 20
+          width = 20,
+          clientIdType = "cbcId"
         )
       )
     ),
@@ -132,11 +143,12 @@ class ClientServiceConfigurationService @Inject() {
       serviceName = "HMRC-PILLAR2-ORG",
       clientTypes = Set("business", "trust"),
       clientDetails = Seq(
-        FieldConfiguration(
+          FieldConfiguration(
           name = "PlrId",
           regex = "^X[A-Z]{1}PLR[0-9]{10}$",
           inputType = "text",
-          width = 20
+          width = 20,
+          clientIdType = "PLRID"
         )
       )
     )

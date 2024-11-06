@@ -38,7 +38,6 @@ case class Journey(journeyType: JourneyType,
   def hasErrors(journeyType: JourneyType): Boolean = journeyType match
     case JourneyType.AuthorisationRequest => clientDetailsResponse.exists(_.status.nonEmpty)
     case JourneyType.AgentCancelAuthorisation => clientService.isEmpty
-    case _ => false
 
 object Journey:
   implicit lazy val format: OFormat[Journey] = Json.format[Journey]

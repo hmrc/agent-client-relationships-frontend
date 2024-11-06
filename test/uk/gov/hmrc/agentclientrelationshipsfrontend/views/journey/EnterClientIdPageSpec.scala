@@ -37,21 +37,24 @@ class EnterClientIdPageSpec extends ViewSpecSupport {
     name = "nino",
     regex = "[[A-Z]&&[^DFIQUV]][[A-Z]&&[^DFIQUVO]] ?\\d{2} ?\\d{2} ?\\d{2} ?[A-D]{1}",
     inputType = "text",
-    width = 10
+    width = 10,
+    clientIdType = "ni"
   )
 
   val vrnField: FieldConfiguration = FieldConfiguration(
     name = "vrn",
     regex = "^[0-9]{9}$",
     inputType = "text",
-    width = 10
+    width = 10,
+    clientIdType = "vrn"
   )
 
   val urnField: FieldConfiguration = FieldConfiguration(
     name = "urn",
     regex = "^((?i)[a-z]{2}trust[0-9]{8})$",
     inputType = "text",
-    width = 20
+    width = 20,
+    clientIdType = "urn"
   )
 
 
@@ -59,7 +62,8 @@ class EnterClientIdPageSpec extends ViewSpecSupport {
     name = "utr",
     regex = "^[0-9]{10}$",
     inputType = "text",
-    width = 10
+    width = 10,
+    clientIdType = "utr"
   )
 
 
@@ -67,7 +71,8 @@ class EnterClientIdPageSpec extends ViewSpecSupport {
     name = "cgtRef",
     regex = "^X[A-Z]CGTP[0-9]{9}$",
     inputType = "text",
-    width = 20
+    width = 20,
+    clientIdType = "CGTPDRef"
   )
 
 
@@ -75,21 +80,24 @@ class EnterClientIdPageSpec extends ViewSpecSupport {
     name = "pptRef",
     regex = "^X[A-Z]PPT000[0-9]{7}$",
     inputType = "text",
-    width = 20
+    width = 20,
+    clientIdType = "EtmpRegistrationNumber"
   )
 
   val cbcField: FieldConfiguration = FieldConfiguration(
     name = "cbcId",
     regex = "^X[A-Z]CBC[0-9]{10}$",
     inputType = "text",
-    width = 20
+    width = 20,
+    clientIdType = "cbcId"
   )
 
   val plrField: FieldConfiguration = FieldConfiguration(
     name = "PlrId",
     regex = "^X[A-Z]{1}PLR[0-9]{10}$",
     inputType = "text",
-    width = 20
+    width = 20,
+    clientIdType = "PLRID"
   )
 
   val mapOfFieldConfiguration: Map[String, (FieldConfiguration, ServiceStrings)] =
