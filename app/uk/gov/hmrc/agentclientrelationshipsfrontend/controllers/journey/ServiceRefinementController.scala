@@ -41,7 +41,7 @@ class ServiceRefinementController @Inject()(mcc: MessagesControllerComponents,
     journeyRequest =>
       given AgentJourneyRequest[?] = journeyRequest
       val journey = journeyRequest.journey
-      if journey.getClientTypeWithDefault.isEmpty then Redirect(routes.SelectClientTypeController.show(journey.journeyType))
+      if journey.getServiceWithDefault.isEmpty then Redirect(routes.SelectClientTypeController.show(journey.journeyType))
       else {
         val options = serviceConfig.getSupportedEnrolments(journey.getService)
         val prepop = journey.refinedService match {
