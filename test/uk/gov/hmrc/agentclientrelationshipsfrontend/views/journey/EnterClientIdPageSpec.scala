@@ -147,7 +147,7 @@ class EnterClientIdPageSpec extends ViewSpecSupport {
 
     object Urn extends ServiceStrings {
       val label = "What is your client’s Unique Reference Number (URN)?"
-      val hint = "This is 15 characters, for example, xxtrust12345678"
+      val hint = "This is 15 characters, for example, XATRUST12345678"
       val errorInvalid = "Enter the Unique Reference Number (URN) in the correct format"
       val errorRequired = "Enter your client’s Unique Reference Number (URN)"
       val authorisationRequestTitle = s"$label - Ask a client to authorise you - GOV.UK"
