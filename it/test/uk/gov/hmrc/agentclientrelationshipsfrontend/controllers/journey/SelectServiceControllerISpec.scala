@@ -33,9 +33,11 @@ class SelectServiceControllerISpec extends ComponentSpecHelper with AuthStubs {
 
   private val optionsForPersonal: Seq[String] = Seq("HMRC-MTD-IT", "PERSONAL-INCOME-RECORD", "HMRC-MTD-VAT", "HMRC-CGT-PD", "HMRC-PPT-ORG")
   private val optionsForBusiness: Seq[String] = Seq("HMRC-MTD-VAT", "HMRC-PPT-ORG", "HMRC-CBC-ORG", "HMRC-PILLAR2-ORG")
-  private val optionsForTrust: Seq[String] = Seq("HMRC-TERS-ORG", "HMRC-PPT-ORG", "HMRC-CGT-PD", "HMRC-CBC-ORG", "HMRC-PILLAR2-ORG")
-
-  private val allOptionsForClientType = Map(
+  private val optionsForTrust: Seq[String] = Seq("HMRC-PPT-ORG", "HMRC-CGT-PD", "HMRC-CBC-ORG", "HMRC-PILLAR2-ORG")
+  private val allRefinableOptionsForClientType = Map(
+    "trust" -> Seq("HMRC-TERS-ORG")
+  )
+  private val allNonRefinableOptionsForClientType = Map(
     "personal" -> optionsForPersonal,
     "business" -> optionsForBusiness,
     "trust" -> optionsForTrust
@@ -82,8 +84,8 @@ class SelectServiceControllerISpec extends ComponentSpecHelper with AuthStubs {
   }
 
   "POST /authorisation-request/select-service" should {
-    allClientTypeAuthJourneys.foreach(j =>
-      allOptionsForClientType.get(j.getClientType).map(allOptions =>
+    allClientTypeAuthJourneys.foreach(j => {
+      allNonRefinableOptionsForClientType.get(j.getClientType).map(allOptions =>
         allOptions.foreach(o => s"redirect to the next page after storing answer of ${o} for ${j.getClientType}" in {
           authoriseAsAgent()
           await(journeyService.saveJourney(j))
@@ -92,7 +94,21 @@ class SelectServiceControllerISpec extends ComponentSpecHelper with AuthStubs {
           ))
           result.status shouldBe SEE_OTHER
           result.header("Location").value shouldBe routes.EnterClientIdController.show(JourneyType.AuthorisationRequest).url
-        })))
+        }))
+    })
+    allClientTypeAuthJourneys.foreach(j => {
+      allRefinableOptionsForClientType.get(j.getClientType).map(allOptions =>
+        allOptions.foreach(o => s"redirect to the next page after storing answer of ${o} for ${j.getClientType}" in {
+          authoriseAsAgent()
+          await(journeyService.saveJourney(j))
+          val result = post(routes.SelectServiceController.onSubmit(JourneyType.AuthorisationRequest).url)(Map(
+            "clientService" -> Seq(o)
+          ))
+          result.status shouldBe SEE_OTHER
+          result.header("Location").value shouldBe routes.ServiceRefinementController.show(JourneyType.AuthorisationRequest).url
+        }))
+    })
+  
     "show an error when no selection is made" in {
       authoriseAsAgent()
       await(journeyService.saveJourney(personalAuthorisationRequestJourney))
@@ -125,7 +141,7 @@ class SelectServiceControllerISpec extends ComponentSpecHelper with AuthStubs {
 
   "POST /agent-cancel-authorisation/client-type" should {
     allClientTypeDeAuthJourneys.foreach(j =>
-      allOptionsForClientType.get(j.getClientType).map(allOptions =>
+      allNonRefinableOptionsForClientType.get(j.getClientType).map(allOptions =>
         allOptions.foreach(o => s"redirect to the next page after storing answer of ${o} for ${j.getClientType}" in {
           authoriseAsAgent()
           await(journeyService.saveJourney(j))
@@ -135,6 +151,19 @@ class SelectServiceControllerISpec extends ComponentSpecHelper with AuthStubs {
           result.status shouldBe SEE_OTHER
           result.header("Location").value shouldBe routes.EnterClientIdController.show(JourneyType.AgentCancelAuthorisation).url
         })))
+
+    allClientTypeDeAuthJourneys.foreach(j =>
+      allRefinableOptionsForClientType.get(j.getClientType).map(allOptions =>
+        allOptions.foreach(o => s"redirect to the refinement page after storing answer of ${o} for ${j.getClientType}" in {
+          authoriseAsAgent()
+          await(journeyService.saveJourney(j))
+          val result = post(routes.SelectServiceController.onSubmit(JourneyType.AgentCancelAuthorisation).url)(Map(
+            "clientService" -> Seq(o)
+          ))
+          result.status shouldBe SEE_OTHER
+          result.header("Location").value shouldBe routes.ServiceRefinementController.show(JourneyType.AgentCancelAuthorisation).url
+        })))
+    
     "show an error when no selection is made" in {
       authoriseAsAgent()
       await(journeyService.saveJourney(personalAgentCancelAuthorisationJourney))

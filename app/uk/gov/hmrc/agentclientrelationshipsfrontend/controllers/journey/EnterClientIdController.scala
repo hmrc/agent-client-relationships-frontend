@@ -58,7 +58,7 @@ class EnterClientIdController @Inject()(mcc: MessagesControllerComponents,
       given AgentJourneyRequest[?] = journeyRequest
 
       val journey = journeyRequest.journey
-      val field = serviceConfig.firstClientDetailsFieldFor(journey.getServiceForForm)
+      val field = serviceConfig.firstClientDetailsFieldFor(journey.getService)
 
       EnterClientIdForm.form(field, journey.journeyType.toString).bindFromRequest().fold(
         formWithErrors => {
