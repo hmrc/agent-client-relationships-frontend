@@ -25,7 +25,8 @@
 
 @this(
         layout: Layout,
-        clientNotFound: ClientNotFound
+        clientNotFound: ClientNotFound,
+        clientNotRegistered: ClientNotRegistered
 )
 
 @(journeyType: JourneyType, errorCode: String)(implicit request: AgentJourneyRequest[?], messages: Messages, appConfig: AppConfig)
@@ -38,7 +39,8 @@
     <h1 class="govuk-heading-xl">@pageTitle</h1>
     @{
      errorCode match {
-      case "client-not-found" => clientNotFound(journeyType)
+      case "client-not-found" => clientNotFound()
+      case "not-registered" => clientNotRegistered()
       case _ => HtmlFormat.empty
      }
     }

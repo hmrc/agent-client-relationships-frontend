@@ -14,21 +14,19 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{JourneyType, AgentJourneyRequest}
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.AgentJourneyRequest
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.routes
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
-@import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.agentErrors._
 
-@this(
-        genericNotFound: GenericNotFound,
-        clientNotRegistered: ClientNotRegistered
-)
+@this(govukButton: GovukButton)
 
-@(journeyType: JourneyType)(implicit request: AgentJourneyRequest[?], messages: Messages, appConfig: AppConfig)
-@service = @{request.journey.getServiceWithDefault}
-@{
-  service match {
-   case "HMRC-MTD-IT" if journeyType == JourneyType.AuthorisationRequest => clientNotRegistered()
-   case _ => genericNotFound()
-  }
-}
+@()(implicit request: AgentJourneyRequest[?], messages: Messages, appConfig: AppConfig)
+
+@key = @{"genericNotFound"}
+<p class="govuk-body">@messages(s"$key.description")</p>
+<p class="govuk-body">@messages(s"$key.advice")</p>
+@govukButton(Button(
+ id = Some("showClientTypeButton"),
+ href = Some(routes.StartJourneyController.startJourney(request.journey.journeyType).url),
+ content = Text(messages("start-over.button"))
+))

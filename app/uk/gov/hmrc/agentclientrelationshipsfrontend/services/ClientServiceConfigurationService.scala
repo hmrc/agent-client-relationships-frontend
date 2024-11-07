@@ -18,6 +18,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.services
 
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.KnownFactType
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.common.{FieldConfiguration, ServiceData}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{JourneyErrors, JourneyType}
 
 import javax.inject.{Inject, Singleton}
 import scala.collection.immutable.ListMap
@@ -27,6 +28,8 @@ class ClientServiceConfigurationService @Inject() {
   def orderedClientTypes: Seq[String] = Seq("personal", "business", "trust")
 
   def allClientTypes: Set[String] = services.flatMap(_._2.clientTypes).toSet[String]
+  
+  def getService(serviceName: String): Option[ServiceData] = services.get(serviceName)
 
   def clientServicesFor(clientType: String): Seq[String] = services.filter(_._2.serviceOption == true).filter(_._2.clientTypes.contains(clientType)).keys.toSeq
 
@@ -52,6 +55,13 @@ class ClientServiceConfigurationService @Inject() {
   def requiresRefining(clientService: String): Boolean = services(clientService).supportedEnrolments.size > 1
 
   def getSupportedEnrolments(clientService: String): Seq[String] = services(clientService).supportedEnrolments
+  
+  def getServiceForForm(clientService: String): String = if clientService.nonEmpty then getSupportedEnrolments(clientService) match {
+    case enrols: Seq[String] if enrols.size > 1 => enrols.head // the head of the list is the parent service
+    case _ => clientService
+  } else ""
+  
+  def getNotFoundError(journeyType: String, clientService: String): String = services(clientService).journeyErrors(journeyType).notFound
 
   val utrRegex = "^[0-9]{10}$"
   val urnRegex = "^[A-Z]{2}TRUST[0-9]{8}$"
@@ -71,6 +81,12 @@ class ClientServiceConfigurationService @Inject() {
           width = 10,
           clientIdType = "ni"
         )
+      ),
+      journeyErrors = Map(
+        JourneyType.AuthorisationRequest.toString -> JourneyErrors(
+          notFound = "not-registered"
+        ),
+        JourneyType.AgentCancelAuthorisation.toString -> JourneyErrors()
       )
     ),
     "PERSONAL-INCOME-RECORD" -> ServiceData(
@@ -104,7 +120,7 @@ class ClientServiceConfigurationService @Inject() {
     "HMRC-TERS-ORG" -> ServiceData(
       serviceName = "HMRC-TERS-ORG",
       serviceOption = true,
-      supportedEnrolments = Seq("HMRC-TERS-ORG", "HMRC-TERSNT-ORG"),
+      supportedEnrolments = Seq("HMRC-TERS-ORG", "HMRC-TERSNT-ORG"), // parent service is always head of the list
       clientTypes = Set("trust"),
       clientDetails = Seq(
         FieldConfiguration(
@@ -119,7 +135,7 @@ class ClientServiceConfigurationService @Inject() {
     "HMRC-TERSNT-ORG" -> ServiceData(
       serviceName = "HMRC-TERSNT-ORG",
       serviceOption = false,
-      supportedEnrolments = Seq("HMRC-TERS-ORG", "HMRC-TERSNT-ORG"),
+      supportedEnrolments = Seq("HMRC-TERS-ORG", "HMRC-TERSNT-ORG"), // parent service is always head of the list
       clientTypes = Set("trust"),
       clientDetails = Seq(
         FieldConfiguration(

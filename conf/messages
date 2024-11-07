@@ -147,28 +147,20 @@ clientId.cgtRef.hint=This is 15 characters, for example XYCGTP123456789. Your cl
 clientId.cgtRef.error.invalid=Enter your client’s Capital Gains Tax account reference
 clientId.cgtRef.error.required=Enter your client’s Capital Gains Tax account reference in the correct format
 
-clientId.pptRef.label=What is your client’s Plastic Packaging Tax reference
+clientId.pptRef.label=What is your client’s Plastic Packaging Tax reference?
 clientId.pptRef.hint=This is 15 characters, for example XMPPT0000000001. Your client received this when they registered for Plastic Packaging Tax.
 clientId.pptRef.error.invalid=Enter your client’s Plastic Packaging Tax reference in the correct format
 clientId.pptRef.error.required=Enter your client’s Plastic Packaging Tax reference
 
-clientId.cbcId.label=What is your client’s Country-by-country ID
-clientId.cbcId.hint=This is the email address we currently hold for your client. If they have 2 contacts, enter the email address for the first contact.
+clientId.cbcId.label=What is your client’s Country-by-country ID?
+clientId.cbcId.hint=For example, XACBC0000999999.
 clientId.cbcId.error.invalid=Enter your client’s country-by-country ID must start with an ’X’ followed by a letter, then ’CBC’ and then 10 numbers
 clientId.cbcId.error.required=Enter your client’s country-by-country ID
 
-clientId.PlrId.label=What is your client’s Pillar 2 top-up taxes ID
+clientId.PlrId.label=What is your client’s Pillar 2 top-up taxes ID?
 clientId.PlrId.hint=This is 15 characters, for example, XAPLR0000999999. The current filing member can find it on their Report Pillar 2 top-up taxes homepage.
 clientId.PlrId.error.invalid=Enter a valid Pillar 2 top-up taxes registration date
 clientId.PlrId.error.required=Enter your client’s  date of registration to report Pillar 2 top-up taxes
-
-# -------------------------------------------------------------------------------------------
-clientNotRegistered.header=Your client needs to register for Self Assessment
-clientNotRegistered.p1=You cannot create an authorisation request for this client until they have registered for Self Assessment and have a Self Assessment Unique Taxpayer Reference.
-clientNotRegistered.h2=What to do next
-clientNotRegistered.p2=Ask your client to <a class="govuk-link" href="{0}">register for Self Assessment</a>. After they have registered, they will receive a Self Assessment Unique Taxpayer Reference.
-clientNotRegistered.p3=Then you can <a class="govuk-link" href={0}>create an authorisation request to send them</a>.
-clientNotRegistered.return=Return to your authorisation requests
 
 #-------------------------------------------------------------------------------------------
 # Enter Known Facts
@@ -325,11 +317,21 @@ trackRequests.filter-status.Declined.HMRC-CBC={0} request to manage the client's
 # ________________________________________________________________________________
 
 journeyError.client-not-found.header=We could not find your client
+journeyError.not-registered.header=Your client needs to register for Self Assessment
 
 # ________________________________________________________________________________
 # Journey error partials
 # ________________________________________________________________________________
 
-client-not-found.description=We could not find a client in our records using the details you gave us.
-client-not-found.advice=Check the details and try again.
+genericNotFound.description=We could not find a client in our records using the details you gave us.
+genericNotFound.advice=Check the details and try again.
 
+# ________________________________________________________________________________
+
+clientNotRegistered.p1=You cannot create an authorisation request for this client until they have registered for Self Assessment and have a Self Assessment Unique Taxpayer Reference.
+clientNotRegistered.h2=What to do next
+clientNotRegistered.p2=Ask your client to <a class="govuk-link" href="{0}">register for Self Assessment</a>. After they have registered, they will receive a Self Assessment Unique Taxpayer Reference.
+clientNotRegistered.p3=Then you can <a class="govuk-link" href={0}>create an authorisation request to send them</a>.
+clientNotRegistered.return=Return to your authorisation requests
+
+# ________________________________________________________________________________
