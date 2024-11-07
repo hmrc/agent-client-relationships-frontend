@@ -51,7 +51,7 @@ class EnterClientIdPageSpec extends ViewSpecSupport {
 
   val urnField: FieldConfiguration = FieldConfiguration(
     name = "urn",
-    regex = "^((?i)[a-z]{2}trust[0-9]{8})$",
+    regex = "^[A-Z]{2}TRUST[0-9]{8}$",
     inputType = "text",
     width = 20,
     clientIdType = "urn"
@@ -155,7 +155,7 @@ class EnterClientIdPageSpec extends ViewSpecSupport {
 
     object Urn extends ServiceStrings {
       val label = "What is your client’s Unique Reference Number (URN)?"
-      val hint = "This is 15 characters, for example, xxtrust12345678"
+      val hint = "This is 15 characters, for example, XATRUST12345678"
       val errorInvalid = "Enter the Unique Reference Number (URN) in the correct format"
       val errorRequired = "Enter your client’s Unique Reference Number (URN)"
       val authorisationRequestTitle = s"$label - Ask a client to authorise you - GOV.UK"

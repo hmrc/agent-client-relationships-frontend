@@ -21,20 +21,21 @@ import play.api.data.Mapping
 import play.api.data.validation.*
 
 object TextFormFieldHelper extends FormFieldHelper {
-
+  // all text fields in this service are for ids or codes, so we strip all white spaces
+  private def stripWhiteSpaces(str: String): String = str.trim.replaceAll("\\s", "")
   val emptyMapping: (String, Mapping[String]) = "" -> optional(text).transform(_.getOrElse(""), (Some(_)): String => Option[String])
   
   def textFieldMapping(fieldName: String, formMessageKey: String, regex: String = ".*"): Mapping[String] = {
     optional(text)
       .verifying(validateText(fieldName, formMessageKey, regex))
-      .transform(_.getOrElse(""), (Some(_)): String => Option[String])
+      .transform(_.map(stripWhiteSpaces).getOrElse(""), (s: String) => Some(s))
   }
 
   private def validateText(fieldName: String, formMessageKey: String, regex: String = ".*"): Constraint[Option[String]] = {
     Constraint[Option[String]] { (userInput: Option[String]) =>
       userInput match {
-        case Some(value) if value.nonEmpty && value.matches(regex) => Valid
-        case Some(value) if value.nonEmpty && !value.matches(regex) => invalidInput(formMessageKey, fieldName)
+        case Some(value) if stripWhiteSpaces(value).nonEmpty && stripWhiteSpaces(value).matches(regex) => Valid
+        case Some(value) if stripWhiteSpaces(value).nonEmpty && !stripWhiteSpaces(value).matches(regex) => invalidInput(formMessageKey, fieldName)
         case _ => invalidMandatoryField(formMessageKey, fieldName)
       }
     }

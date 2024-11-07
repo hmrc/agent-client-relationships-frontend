@@ -24,22 +24,39 @@ import scala.collection.immutable.ListMap
 @Singleton
 class ClientServiceConfigurationService @Inject() {
   def orderedClientTypes: Seq[String] = Seq("personal", "business", "trust")
+
   def allClientTypes: Set[String] = services.flatMap(_._2.clientTypes).toSet[String]
-  def clientServicesFor(clientType: String): Seq[String] = services.filter(_._2.clientTypes.contains(clientType)).keys.toSeq
+
+  def clientServicesFor(clientType: String): Seq[String] = services.filter(_._2.serviceOption == true).filter(_._2.clientTypes.contains(clientType)).keys.toSeq
+
   def allSupportedServices: Set[String] = services.map(_._2.serviceName).toSet[String]
+
   def clientDetailsFor(clientService: String): Seq[FieldConfiguration] = services(clientService).clientDetails
+
   def allClientIdRegex: Set[String] = services.flatMap(_._2.clientDetails.map(_.regex)).toSet[String]
+
   def allSupportedClientTypeIds: Set[String] = services.flatMap(_._2.clientDetails.map(_.clientIdType)).toSet[String]
+
   def firstClientDetailsFieldFor(clientService: String): FieldConfiguration = services(clientService).clientDetails.head
-  def clientDetailForServiceAndClientIdType(clientService: String, clientIdType:String): Option[FieldConfiguration] = services(clientService).clientDetails.find(_.clientIdType == clientIdType)
-  
+
+  def lastClientDetailsFieldFor(clientService: String): FieldConfiguration = services(clientService).clientDetails.last
+
+  def requiresRefining(clientService: String): Boolean = services(clientService).supportedEnrolments.size > 1
+
+  def getSupportedEnrolments(clientService: String): Seq[String] = services(clientService).supportedEnrolments
+
+  val utrRegex = "^[0-9]{10}$"
+  val urnRegex = "^[A-Z]{2}TRUST[0-9]{8}$"
+
+  def clientDetailForServiceAndClientIdType(clientService: String, clientIdType: String): Option[FieldConfiguration] = services(clientService).clientDetails.find(_.clientIdType == clientIdType)
 
   private val services: ListMap[String, ServiceData] = ListMap(
     "HMRC-MTD-IT" -> ServiceData(
       serviceName = "HMRC-MTD-IT",
+      serviceOption = true,
       clientTypes = Set("personal"),
       clientDetails = Seq(
-          FieldConfiguration(
+        FieldConfiguration(
           name = "nino",
           regex = "[[A-Z]&&[^DFIQUV]][[A-Z]&&[^DFIQUVO]] ?\\d{2} ?\\d{2} ?\\d{2} ?[A-D]{1}",
           inputType = "text",
@@ -50,9 +67,10 @@ class ClientServiceConfigurationService @Inject() {
     ),
     "PERSONAL-INCOME-RECORD" -> ServiceData(
       serviceName = "PERSONAL-INCOME-RECORD",
+      serviceOption = true,
       clientTypes = Set("personal"),
       clientDetails = Seq(
-          FieldConfiguration(
+        FieldConfiguration(
           name = "nino",
           regex = "[[A-Z]&&[^DFIQUV]][[A-Z]&&[^DFIQUVO]] ?\\d{2} ?\\d{2} ?\\d{2} ?[A-D]{1}",
           inputType = "text",
@@ -63,9 +81,10 @@ class ClientServiceConfigurationService @Inject() {
     ),
     "HMRC-MTD-VAT" -> ServiceData(
       serviceName = "HMRC-MTD-VAT",
+      serviceOption = true,
       clientTypes = Set("personal", "business"),
       clientDetails = Seq(
-          FieldConfiguration(
+        FieldConfiguration(
           name = "vrn",
           regex = "^[0-9]{9}$",
           inputType = "text",
@@ -74,37 +93,42 @@ class ClientServiceConfigurationService @Inject() {
         )
       )
     ),
-    "HMRC-TERSNT-ORG" -> ServiceData(
-      serviceName = "HMRC-TERSNT-ORG",
-      clientTypes = Set("trust"),
-      clientDetails = Seq(
-          FieldConfiguration(
-          name = "urn",
-          regex = "^((?i)[a-z]{2}trust[0-9]{8})$",
-          inputType = "text",
-          width = 20,
-          clientIdType = "urn"
-        )
-      )
-    ),
     "HMRC-TERS-ORG" -> ServiceData(
       serviceName = "HMRC-TERS-ORG",
+      serviceOption = true,
+      supportedEnrolments = Seq("HMRC-TERS-ORG", "HMRC-TERSNT-ORG"),
       clientTypes = Set("trust"),
       clientDetails = Seq(
-          FieldConfiguration(
+        FieldConfiguration(
           name = "utr",
-          regex = "^[0-9]{10}$",
+          regex = utrRegex,
           inputType = "text",
           width = 10,
           clientIdType = "utr"
         )
       )
     ),
+    "HMRC-TERSNT-ORG" -> ServiceData(
+      serviceName = "HMRC-TERSNT-ORG",
+      serviceOption = false,
+      supportedEnrolments = Seq("HMRC-TERS-ORG", "HMRC-TERSNT-ORG"),
+      clientTypes = Set("trust"),
+      clientDetails = Seq(
+        FieldConfiguration(
+          name = "urn",
+          regex = urnRegex,
+          inputType = "text",
+          width = 20,
+          clientIdType = "urn"
+        )
+      )
+    ),
     "HMRC-CGT-PD" -> ServiceData(
       serviceName = "HMRC-CGT-PD",
+      serviceOption = true,
       clientTypes = Set("personal", "trust"),
       clientDetails = Seq(
-          FieldConfiguration(
+        FieldConfiguration(
           name = "cgtRef",
           regex = "^X[A-Z]CGTP[0-9]{9}$",
           inputType = "text",
@@ -115,9 +139,10 @@ class ClientServiceConfigurationService @Inject() {
     ),
     "HMRC-PPT-ORG" -> ServiceData(
       serviceName = "HMRC-PPT-ORG",
+      serviceOption = true,
       clientTypes = Set("personal", "business", "trust"),
       clientDetails = Seq(
-          FieldConfiguration(
+        FieldConfiguration(
           name = "pptRef",
           regex = "^X[A-Z]PPT000[0-9]{7}$",
           inputType = "text",
@@ -128,9 +153,10 @@ class ClientServiceConfigurationService @Inject() {
     ),
     "HMRC-CBC-ORG" -> ServiceData(
       serviceName = "HMRC-CBC-ORG",
+      serviceOption = true,
       clientTypes = Set("business", "trust"),
       clientDetails = Seq(
-          FieldConfiguration(
+        FieldConfiguration(
           name = "cbcId",
           regex = "^X[A-Z]CBC[0-9]{10}$",
           inputType = "text",
@@ -141,9 +167,10 @@ class ClientServiceConfigurationService @Inject() {
     ),
     "HMRC-PILLAR2-ORG" -> ServiceData(
       serviceName = "HMRC-PILLAR2-ORG",
+      serviceOption = true,
       clientTypes = Set("business", "trust"),
       clientDetails = Seq(
-          FieldConfiguration(
+        FieldConfiguration(
           name = "PlrId",
           regex = "^X[A-Z]{1}PLR[0-9]{10}$",
           inputType = "text",

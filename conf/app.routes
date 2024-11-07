@@ -26,9 +26,13 @@ POST       /:journeyType/client-type                                            
 GET        /:journeyType/select-service                                                 uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.SelectServiceController.show(journeyType: JourneyType)
 POST       /:journeyType/select-service                                                 uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.SelectServiceController.onSubmit(journeyType: JourneyType)
 
+GET        /:journeyType/refine-service                                                 uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.ServiceRefinementController.show(journeyType: JourneyType)
+POST       /:journeyType/refine-service                                                 uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.ServiceRefinementController.onSubmit(journeyType: JourneyType)
+
 GET        /:journeyType/client-identifier                                              uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.EnterClientIdController.show(journeyType: JourneyType)
 POST       /:journeyType/client-identifier                                              uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.EnterClientIdController.onSubmit(journeyType: JourneyType)
 
+GET       /:journeyType/error/:errorCode                                                uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.JourneyErrorController.show(journeyType: JourneyType, errorCode: String)
 
 # Fast Track URLs ----------------------------------------------------------------------------------------------------------
 + nocsrf

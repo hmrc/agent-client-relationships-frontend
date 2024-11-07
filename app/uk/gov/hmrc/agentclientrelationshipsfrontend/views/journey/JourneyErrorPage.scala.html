@@ -1,0 +1,45 @@
+@*
+ * Copyright 2024 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import play.twirl.api.{Format, HtmlFormat}
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.Layout
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.agentErrors._
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.components.SubmitButton
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.routes
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{JourneyType, AgentJourneyRequest}
+
+
+@this(
+        layout: Layout,
+        clientNotFound: ClientNotFound
+)
+
+@(journeyType: JourneyType, errorCode: String)(implicit request: AgentJourneyRequest[?], messages: Messages, appConfig: AppConfig)
+
+@key = @{"journeyError"}
+@pageTitle = @{messages(s"$key.$errorCode.header")}
+
+@layout(pageTitle, serviceName = Some(messages(s"${journeyType.toString}.service.name"))) {
+
+    <h1 class="govuk-heading-xl">@pageTitle</h1>
+    @{
+     errorCode match {
+      case "client-not-found" => clientNotFound(journeyType)
+      case _ => HtmlFormat.empty
+     }
+    }
+}

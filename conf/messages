@@ -15,6 +15,8 @@ continue.button=Continue
 try-again.button=Try again
 button.copy=Copy link to clipboard
 button.copied=Link copied
+start-over.button=Start over
+start-again.button=Start again
 
 # -------------------------------------------------------------------------------------------
 # Timeout/Auth/IV error pages
@@ -106,6 +108,16 @@ clientService.HMRC-PILLAR2-ORG.business=Manage their Pillar 2 top-up taxes
 clientService.HMRC-PILLAR2-ORG.trust=Manage their Pillar 2 top-up taxes
 clientService.HMRC-TERS-ORG.trust=Maintain their trust or an estate
 clientService.HMRC-TERSNT-ORG.trust=Maintain their non-taxable trust
+
+# -------------------------------------------------------------------------------------------
+# Client service refinement
+# -------------------------------------------------------------------------------------------
+
+clientServiceRefinement.HMRC-TERS-ORG.header=Is your client’s trust or estate taxable?
+clientServiceRefinement.HMRC-TERSNT-ORG.header=Is your client’s trust or estate taxable?
+clientServiceRefinement.HMRC-TERS-ORG.option=Yes
+clientServiceRefinement.HMRC-TERSNT-ORG.option=No, it’s exempt from tax
+
 # -------------------------------------------------------------------------------------------
 # Enter Client ID
 # -------------------------------------------------------------------------------------------
@@ -126,7 +138,7 @@ clientId.utr.error.invalid=Enter the Unique Taxpayer Reference (UTR) in the corr
 clientId.utr.error.required=Enter your client’s Unique Taxpayer Reference (UTR)
 
 clientId.urn.label=What is your client’s Unique Reference Number (URN)?
-clientId.urn.hint=This is 15 characters, for example, xxtrust12345678
+clientId.urn.hint=This is 15 characters, for example, XATRUST12345678
 clientId.urn.error.invalid=Enter the Unique Reference Number (URN) in the correct format
 clientId.urn.error.required=Enter your client’s Unique Reference Number (URN)
 
@@ -151,6 +163,14 @@ clientId.PlrId.error.invalid=Enter a valid Pillar 2 top-up taxes registration da
 clientId.PlrId.error.required=Enter your client’s  date of registration to report Pillar 2 top-up taxes
 
 # -------------------------------------------------------------------------------------------
+clientNotRegistered.header=Your client needs to register for Self Assessment
+clientNotRegistered.p1=You cannot create an authorisation request for this client until they have registered for Self Assessment and have a Self Assessment Unique Taxpayer Reference.
+clientNotRegistered.h2=What to do next
+clientNotRegistered.p2=Ask your client to <a class="govuk-link" href="{0}">register for Self Assessment</a>. After they have registered, they will receive a Self Assessment Unique Taxpayer Reference.
+clientNotRegistered.p3=Then you can <a class="govuk-link" href={0}>create an authorisation request to send them</a>.
+clientNotRegistered.return=Return to your authorisation requests
+
+#-------------------------------------------------------------------------------------------
 # Enter Known Facts
 # -------------------------------------------------------------------------------------------
 
@@ -299,3 +319,17 @@ trackRequests.filter-status.Expired=Request expired as client did not respond in
 trackRequests.filter-status.ClientCancelledAuthorisation=Accepted by client. They later cancelled their authorisation
 trackRequests.filter-status.HMRCCancelledAuthorisation=Accepted by client. HMRC later cancelled your authorisation
 trackRequests.filter-status.Declined.HMRC-CBC={0} request to manage the client's country-by-country reports was declined.
+
+# ________________________________________________________________________________
+# Journey error headings
+# ________________________________________________________________________________
+
+journeyError.client-not-found.header=We could not find your client
+
+# ________________________________________________________________________________
+# Journey error partials
+# ________________________________________________________________________________
+
+client-not-found.description=We could not find a client in our records using the details you gave us.
+client-not-found.advice=Check the details and try again.
+

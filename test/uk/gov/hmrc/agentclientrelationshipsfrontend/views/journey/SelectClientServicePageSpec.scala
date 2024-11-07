@@ -50,6 +50,7 @@ class SelectClientServicePageSpec extends ViewSpecSupport {
     val cgtTrustLabel = "Manage their trust’s Capital Gains Tax on UK property account"
     val vatLabel = "Manage their VAT"
     val pillar2Label = "Manage their Pillar 2 top-up taxes"
+    val trustNtLabel = "Maintain their non-taxable trust"
     val trustLabel = "Maintain their trust or an estate"
     val cbcTrustLabel = "Manage their trust’s country-by-country reports"
     val cbcLabel = "Manage their country-by-country reports"
