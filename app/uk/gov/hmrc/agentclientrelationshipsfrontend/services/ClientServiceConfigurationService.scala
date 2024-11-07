@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.services
 
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.KnownFactType
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.common.{FieldConfiguration, ServiceData}
 
 import javax.inject.{Inject, Singleton}
@@ -39,7 +40,14 @@ class ClientServiceConfigurationService @Inject() {
 
   def firstClientDetailsFieldFor(clientService: String): FieldConfiguration = services(clientService).clientDetails.head
 
-  def lastClientDetailsFieldFor(clientService: String): FieldConfiguration = services(clientService).clientDetails.last
+  //TODO this is a stub
+  def clientFactFieldFor(knownFactType: KnownFactType): FieldConfiguration = FieldConfiguration(
+    name = "postcode",
+    regex = "^[A-Z]{1,2}[0-9][0-9A-Z]?\\s?[0-9][A-Z]{2}$|BFPO\\s?[0-9]{1,5}$",
+    inputType = "text",
+    width = 20,
+    ""
+  )
 
   def requiresRefining(clientService: String): Boolean = services(clientService).supportedEnrolments.size > 1
 

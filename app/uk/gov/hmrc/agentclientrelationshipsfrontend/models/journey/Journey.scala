@@ -24,6 +24,7 @@ case class Journey(journeyType: JourneyType,
                    clientService: Option[String] = None,
                    clientId: Option[String] = None,
                    clientDetailsResponse: Option[ClientDetailsResponse] = None,
+                   knownFact: Option[String] = None,
                    agentType: Option[String] = None,
                    clientConfirmed: Boolean = false,
                    refinedService: Option[Boolean] = None):
