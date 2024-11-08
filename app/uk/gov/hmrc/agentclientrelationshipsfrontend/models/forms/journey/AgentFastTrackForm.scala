@@ -42,8 +42,8 @@ object AgentFastTrackForm {
 
       val clientIdMatchRegs = clientServiceConfig.clientDetailForServiceAndClientIdType(
         agentFastTrackRequest.service, 
-        agentFastTrackRequest.clientIdType)
-        .fold(false)(x => agentFastTrackRequest.clientId.matches(x.regex))
+        agentFastTrackRequest.clientIdentifierType)
+        .fold(false)(x => agentFastTrackRequest.clientIdentifier.matches(x.regex))
 
       //TODO - do knowFacts regex mapping
       if (serviceForClientType && clientIdMatchRegs) Valid
@@ -65,7 +65,7 @@ object AgentFastTrackForm {
       ) { (clientType, service, clientIdType, clientId, knownFact) =>
         AgentFastTrackFormData(clientType, service, clientId, clientIdType, knownFact)
       } { request =>
-        Some((request.clientType, request.service, request.clientIdType, request.clientId, request.knownFact))
+        Some((request.clientType, request.service, request.clientIdentifierType, request.clientIdentifier, request.knownFact))
       }.verifying(validateFastTrackForm(clientServiceConfig))
     )
 

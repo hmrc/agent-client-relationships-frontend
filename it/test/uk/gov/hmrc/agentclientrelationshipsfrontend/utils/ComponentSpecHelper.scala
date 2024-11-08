@@ -95,6 +95,15 @@ trait ComponentSpecHelper
   def get[T](uri: String): WSResponse =
     await(buildClient(uri).withHttpHeaders("Authorization" -> "Bearer 123").get())
 
+  def post(uri: String)(body: Map[String, Seq[String]])(queryParam: Seq[(String, String)]): WSResponse =
+    await(
+      buildClient(uri)
+        .withHttpHeaders("Authorization" -> "Bearer 123", "Csrf-Token" -> "nocheck")
+        .withQueryStringParameters(queryParam*)
+        .post(body)
+    )
+
+
   def post(uri: String)(body: Map[String, Seq[String]]): WSResponse =
     await(
       buildClient(uri)

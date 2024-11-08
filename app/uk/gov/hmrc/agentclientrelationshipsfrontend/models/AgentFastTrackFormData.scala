@@ -16,4 +16,4 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.models
 
-case class AgentFastTrackFormData(clientType: Option[String], service: String, clientId: String, clientIdType:String, knownFact: Option[String])
+case class AgentFastTrackFormData(clientType: Option[String], service: String, clientIdentifier: String, clientIdentifierType:String, knownFact: Option[String])
