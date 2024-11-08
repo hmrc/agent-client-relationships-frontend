@@ -36,7 +36,7 @@ object TestOnlyFastTrackForm extends FormFieldHelper {
       ) { (clientType, service, clientIdType, clientId, knownFact) =>
         AgentFastTrackFormData(clientType, service, clientId, clientIdType,  knownFact)
       } { fastTrack =>
-        Some((fastTrack.clientType, fastTrack.service, fastTrack.clientId, fastTrack.clientId, fastTrack.knownFact))
+        Some((fastTrack.clientType, fastTrack.service, fastTrack.clientIdentifier, fastTrack.clientIdentifier, fastTrack.knownFact))
       }
     )
   }

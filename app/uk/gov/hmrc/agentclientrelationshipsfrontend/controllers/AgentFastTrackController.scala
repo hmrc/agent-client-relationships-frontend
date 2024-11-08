@@ -55,12 +55,12 @@ class AgentFastTrackController @Inject()(mcc: MessagesControllerComponents,
       },
       agentFastTrackFormData => {
         for {
-          clientDetails <- agentClientRelationshipsConnector.getClientDetails(agentFastTrackFormData.service, agentFastTrackFormData.clientId)
+          clientDetails <- agentClientRelationshipsConnector.getClientDetails(agentFastTrackFormData.service, agentFastTrackFormData.clientIdentifier)
           newJourney = journeyService.newJourney(journeyType)
             .copy(
               clientType = agentFastTrackFormData.clientType,
               clientService = Some(agentFastTrackFormData.service),
-              clientId = Some(agentFastTrackFormData.clientId),
+              clientId = Some(agentFastTrackFormData.clientIdentifier),
               clientDetailsResponse = clientDetails
               //TODO - add knowFacts here
             )
