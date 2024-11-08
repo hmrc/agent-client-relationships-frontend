@@ -144,7 +144,8 @@ class EnterClientIdControllerISpec extends ComponentSpecHelper with AuthStubs {
             s"${getFieldName(o)}" -> Seq(exampleValueForService(o))
           ))
           result.status shouldBe SEE_OTHER
-          val expectedLocation = if(o == "HMRC-TERS-ORG" | o == "HMRC-TERSNT-ORG") "routes.ConfirmClientController.show(journeyType).url" else "routes.EnterClientFactController.show(journeyType).url"
+          val expectedLocation = if (o == "HMRC-TERS-ORG" | o == "HMRC-TERSNT-ORG") "routes.ConfirmClientController.show(journeyType).url"
+          else routes.EnterClientFactController.show(JourneyType.AuthorisationRequest).url
           result.header("Location").value shouldBe expectedLocation
         })))
     "show an error when no selection is made" in {
@@ -189,7 +190,8 @@ class EnterClientIdControllerISpec extends ComponentSpecHelper with AuthStubs {
             s"${getFieldName(o)}" -> Seq(exampleValueForService(o))
           ))
           result.status shouldBe SEE_OTHER
-          val expectedLocation = if(o == "HMRC-TERS-ORG" | o == "HMRC-TERSNT-ORG") "routes.ConfirmClientController.show(journeyType).url" else "routes.EnterClientFactController.show(journeyType).url"
+          val expectedLocation = if (o == "HMRC-TERS-ORG" | o == "HMRC-TERSNT-ORG") "routes.ConfirmClientController.show(journeyType).url"
+          else routes.EnterClientFactController.show(JourneyType.AgentCancelAuthorisation).url
           result.header("Location").value shouldBe expectedLocation
         })))
     "show an error when no selection is made" in {
