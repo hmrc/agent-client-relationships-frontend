@@ -163,6 +163,27 @@ clientId.PlrId.error.invalid=Enter a valid Pillar 2 top-up taxes registration da
 clientId.PlrId.error.required=Enter your client’s  date of registration to report Pillar 2 top-up taxes
 
 #-------------------------------------------------------------------------------------------
+# Enter Client Fact
+# -------------------------------------------------------------------------------------------
+
+clientFact.HMRC-MTD-IT.postcode.label=What is your client’s postcode?
+
+clientFact.PERSONAL-INCOME-RECORD.date.label=What is your client’s date of birth?
+
+clientFact.HMRC-MTD-VAT.date.label=When did the client’s VAT registration start?
+
+clientFact.HMRC-CGT-PD.postcode.label=What is your client’s postcode?
+
+#TODO do we want to update the service answer we hold when the backend returns that it’s an overseas user or are we leaving that up to the submission at the end?
+clientFact.HMRC-CGT-PD.countryCode.label=Which country is your client’s contact address in?
+
+clientFact.HMRC-PPT-ORG.date.label=When did your client’s registration start for Plastic Packaging Tax?
+
+clientFact.HMRC-CBC-ORG.email.label=What is your client’s Country-by-Country contact email address?
+
+clientFact.HMRC-PILLAR2-ORG.date.label=What is your client’s registration date for Pillar 2 top-up taxes?
+
+#-------------------------------------------------------------------------------------------
 # Enter Known Facts
 # -------------------------------------------------------------------------------------------
 
@@ -310,7 +331,7 @@ trackRequests.filter-status.AcceptedByClient=Accepted by client
 trackRequests.filter-status.Expired=Request expired as client did not respond in time
 trackRequests.filter-status.ClientCancelledAuthorisation=Accepted by client. They later cancelled their authorisation
 trackRequests.filter-status.HMRCCancelledAuthorisation=Accepted by client. HMRC later cancelled your authorisation
-trackRequests.filter-status.Declined.HMRC-CBC={0} request to manage the client's country-by-country reports was declined.
+trackRequests.filter-status.Declined.HMRC-CBC={0} request to manage the client’s country-by-country reports was declined.
 
 # ________________________________________________________________________________
 # Journey error headings

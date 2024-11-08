@@ -44,7 +44,8 @@ class EnterClientFactController @Inject()(mcc: MessagesControllerComponents,
 
   private def knownFactForm(journey: Journey): Form[String] = EnterClientFactForm.form(
     knownFactField(journey),
-    journey.journeyType.toString
+    journey.getService,
+    Nil
   )
 
   def show(journeyType: JourneyType): Action[AnyContent] = actions.getJourney(journeyType):

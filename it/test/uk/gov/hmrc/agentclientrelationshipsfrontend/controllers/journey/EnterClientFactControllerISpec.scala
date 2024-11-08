@@ -71,7 +71,7 @@ class EnterClientFactControllerISpec extends ComponentSpecHelper with AuthStubs 
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe "routes.ConfirmClientController.show(journeyType).url"
     }
-    "redirect to known-fact-not-matched when submitting a mismatching KF" in {
+    "redirect to client-not-found when submitting a mismatching KF" in {
       authoriseAsAgent()
       await(journeyService.saveJourney(testItsaJourney(JourneyType.AuthorisationRequest)))
       val result = post(routes.EnterClientFactController.onSubmit(JourneyType.AuthorisationRequest).url)(Map(
@@ -114,7 +114,7 @@ class EnterClientFactControllerISpec extends ComponentSpecHelper with AuthStubs 
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe "routes.ConfirmClientController.show(journeyType).url"
     }
-    "redirect to known-fact-not-matched when submitting a mismatching KF" in {
+    "redirect to client-not-found when submitting a mismatching KF" in {
       authoriseAsAgent()
       await(journeyService.saveJourney(testItsaJourney(JourneyType.AgentCancelAuthorisation)))
       val result = post(routes.EnterClientFactController.onSubmit(JourneyType.AgentCancelAuthorisation).url)(Map(
