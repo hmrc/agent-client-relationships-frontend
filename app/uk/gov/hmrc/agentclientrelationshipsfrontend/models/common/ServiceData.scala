@@ -16,10 +16,16 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.models.common
 
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{JourneyErrors, JourneyType}
+
 case class ServiceData(
                         serviceOption: Boolean = false,
                         supportedEnrolments: Seq[String] = Seq.empty,
                         serviceName: String,
                         clientTypes: Set[String],
-                        clientDetails: Seq[FieldConfiguration]
+                        clientDetails: Seq[FieldConfiguration],
+                        journeyErrors: Map[JourneyType, JourneyErrors] = Map(
+                          JourneyType.AuthorisationRequest -> JourneyErrors(), 
+                          JourneyType.AgentCancelAuthorisation -> JourneyErrors()
+                        )
                       )

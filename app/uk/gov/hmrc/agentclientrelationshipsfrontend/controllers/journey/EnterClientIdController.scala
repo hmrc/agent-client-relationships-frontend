@@ -74,13 +74,17 @@ class EnterClientIdController @Inject()(mcc: MessagesControllerComponents,
             for {
               clientDetailsResponse <- agentClientRelationshipsService.getClientDetails(clientId, journey)
               _ <- journeyService.saveJourney(journey.copy(
-                clientService = Some(journey.getService),
                 clientId = Some(clientId),
                 clientDetailsResponse = clientDetailsResponse,
                 clientConfirmed = false,
                 agentType = None
               ))
-              nextPage <- if clientDetailsResponse.nonEmpty then journeyService.nextPageUrl(journeyType) else Future.successful(routes.JourneyErrorController.show(journeyType, "client-not-found").url)
+              nextPage <- if clientDetailsResponse.nonEmpty then
+                journeyService.nextPageUrl(journeyType) else
+                Future.successful(routes.JourneyErrorController.show(
+                  journeyType, 
+                  serviceConfig.getNotFoundError(journeyType, journey.getService)).url
+                )
             } yield Redirect(nextPage)
         }
       )

@@ -22,8 +22,9 @@ lazy val microservice = Project("agent-client-relationships-frontend", file(".")
   .settings(
     RoutesKeys.routesImport ++= Seq(
       "uk.gov.hmrc.play.bootstrap.binders.RedirectUrl",
-      "uk.gov.hmrc.agentclientrelationshipsfrontend.binders.UrlBinders.journeyTypeBinder",
-      "uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyType"
+      "uk.gov.hmrc.agentclientrelationshipsfrontend.binders.UrlBinders._",
+      "uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyType",
+      "uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyErrorType"
     )
   )
   .settings(

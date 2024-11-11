@@ -21,7 +21,7 @@ import play.api.mvc.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.routes
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, JourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, JourneyType, JourneyErrorType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.JourneyErrorPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
@@ -34,7 +34,7 @@ class JourneyErrorController @Inject()(mcc: MessagesControllerComponents,
                                        actions: Actions
                                        )(implicit val executionContext: ExecutionContext, appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport:
 
-  def show(journeyType: JourneyType, errorCode: String): Action[AnyContent] = actions.getJourney(journeyType):
+  def show(journeyType: JourneyType, errorCode: JourneyErrorType): Action[AnyContent] = actions.getJourney(journeyType):
     journeyRequest =>
       given AgentJourneyRequest[?] = journeyRequest
 

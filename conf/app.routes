@@ -35,7 +35,7 @@ POST       /:journeyType/client-identifier                                      
 GET        /:journeyType/client-fact                                                    uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.EnterClientFactController.show(journeyType: JourneyType)
 POST       /:journeyType/client-fact                                                    uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.EnterClientFactController.onSubmit(journeyType: JourneyType)
 
-GET       /:journeyType/error/:errorCode                                                uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.JourneyErrorController.show(journeyType: JourneyType, errorCode: String)
+GET       /:journeyType/error/:errorCode                                                uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.JourneyErrorController.show(journeyType: JourneyType, errorCode: JourneyErrorType)
 
 # Fast Track URLs ----------------------------------------------------------------------------------------------------------
 + nocsrf

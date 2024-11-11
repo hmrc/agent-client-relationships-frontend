@@ -45,7 +45,7 @@ class SelectServiceController @Inject()(mcc: MessagesControllerComponents,
       else {
         val services = serviceConfig.clientServicesFor(journey.getClientType)
         Ok(selectClientServicePage(
-          form = SelectFromOptionsForm.form(ClientServiceFieldName, services, journey.journeyType.toString).fill(journey.getServiceForForm),
+          form = SelectFromOptionsForm.form(ClientServiceFieldName, services, journey.journeyType.toString).fill(serviceConfig.getServiceForForm(journey.getServiceWithDefault)),
           clientType = journey.getClientType,
           services
         ))

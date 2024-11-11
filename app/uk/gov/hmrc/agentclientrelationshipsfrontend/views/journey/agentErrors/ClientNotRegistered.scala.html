@@ -14,12 +14,14 @@
  * limitations under the License.
  *@
 
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.routes
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.AgentJourneyRequest
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 @import play.twirl.api.Html
 
 @this()
 
-@()(implicit messages: Messages, appConfig: AppConfig)
+@()(implicit request: AgentJourneyRequest[?], messages: Messages, appConfig: AppConfig)
 
 @key = @{"clientNotRegistered"}
 
@@ -29,4 +31,4 @@
 
 <p class="govuk-body">@Html(messages(s"$key.p2", appConfig.guidanceUrlSaSignup))</p>
 
-<p class="govuk-body">@Html(messages(s"$key.p3", "#"))</p>
+<p class="govuk-body">@Html(messages(s"$key.p3", routes.StartJourneyController.startJourney(request.journey.journeyType)))</p>

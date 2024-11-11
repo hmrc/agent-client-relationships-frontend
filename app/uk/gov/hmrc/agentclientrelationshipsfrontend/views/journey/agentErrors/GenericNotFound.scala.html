@@ -24,9 +24,9 @@
 )
 
 @()(implicit request: AgentJourneyRequest[?], messages: Messages, appConfig: AppConfig)
-
-<p class="govuk-body">@messages("client-not-found.description")</p>
-<p class="govuk-body">@messages("client-not-found.advice")</p>
+@key = @{"genericNotFound"}
+<p class="govuk-body">@messages(s"$key.description")</p>
+<p class="govuk-body">@messages(s"$key.advice")</p>
 @govukButton(Button(
     id = Some("showClientTypeButton"),
     href = Some(routes.StartJourneyController.startJourney(request.journey.journeyType).url),

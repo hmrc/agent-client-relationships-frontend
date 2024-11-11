@@ -68,7 +68,6 @@ class ServiceRefinementController @Inject()(mcc: MessagesControllerComponents,
           )))
         },
         clientService => {
-          // unset any previous answers if service is changed 
           val newJourney = journey.copy(
             clientService = Some(clientService),
             clientId = None,

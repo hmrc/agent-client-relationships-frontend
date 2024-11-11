@@ -20,7 +20,7 @@ import play.api.http.Status.{BAD_REQUEST, OK}
 import play.api.test.Helpers.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsResponse, KnownFactType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.KnownFactType.PostalCode
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{Journey, JourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{Journey, JourneyType, JourneyErrorType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.JourneyService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.WiremockHelper.stubGet
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentSpecHelper}
@@ -78,7 +78,7 @@ class EnterClientFactControllerISpec extends ComponentSpecHelper with AuthStubs 
         "postcode" -> Seq("ZZ1 1ZZ")
       ))
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe routes.JourneyErrorController.show(JourneyType.AuthorisationRequest, "known-fact-not-matched").url
+      result.header("Location").value shouldBe routes.JourneyErrorController.show(JourneyType.AuthorisationRequest, JourneyErrorType.NotRegistered).url
     }
     "show an error when no selection is made" in {
       authoriseAsAgent()
@@ -121,7 +121,7 @@ class EnterClientFactControllerISpec extends ComponentSpecHelper with AuthStubs 
         "postcode" -> Seq("ZZ1 1ZZ")
       ))
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe routes.JourneyErrorController.show(JourneyType.AgentCancelAuthorisation, "known-fact-not-matched").url
+      result.header("Location").value shouldBe routes.JourneyErrorController.show(JourneyType.AgentCancelAuthorisation, JourneyErrorType.NotFound).url
     }
     "show an error when no selection is made" in {
       authoriseAsAgent()

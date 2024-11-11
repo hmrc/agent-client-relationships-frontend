@@ -172,7 +172,7 @@ class EnterClientIdPageSpec extends ViewSpecSupport {
     }
 
     object PptRef extends ServiceStrings {
-      val label = "What is your client’s Plastic Packaging Tax reference"
+      val label = "What is your client’s Plastic Packaging Tax reference?"
       val hint = "This is 15 characters, for example XMPPT0000000001. Your client received this when they registered for Plastic Packaging Tax."
       val errorInvalid = "Enter your client’s Plastic Packaging Tax reference in the correct format"
       val errorRequired = "Enter your client’s Plastic Packaging Tax reference"
@@ -181,8 +181,8 @@ class EnterClientIdPageSpec extends ViewSpecSupport {
     }
 
     object CbcId extends ServiceStrings {
-      val label = "What is your client’s Country-by-country ID"
-      val hint = "This is the email address we currently hold for your client. If they have 2 contacts, enter the email address for the first contact."
+      val label = "What is your client’s Country-by-country ID?"
+      val hint = "For example, XACBC0000999999."
       val errorInvalid = "Enter your client’s country-by-country ID must start with an ’X’ followed by a letter, then ’CBC’ and then 10 numbers"
       val errorRequired = "Enter your client’s country-by-country ID"
       val authorisationRequestTitle = s"$label - Ask a client to authorise you - GOV.UK"
@@ -190,7 +190,7 @@ class EnterClientIdPageSpec extends ViewSpecSupport {
     }
 
     object PlrId extends ServiceStrings {
-      val label = "What is your client’s Pillar 2 top-up taxes ID"
+      val label = "What is your client’s Pillar 2 top-up taxes ID?"
       val hint = "This is 15 characters, for example, XAPLR0000999999. The current filing member can find it on their Report Pillar 2 top-up taxes homepage."
       val errorInvalid = "Enter a valid Pillar 2 top-up taxes registration date"
       val errorRequired = "Enter your client’s date of registration to report Pillar 2 top-up taxes"
