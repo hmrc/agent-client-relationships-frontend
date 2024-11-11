@@ -14,23 +14,30 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.AgentJourneyRequest
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.KnownFactType
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.models.common.FieldConfiguration
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.AgentJourneyRequest
 
 @this(
-    layout: Layout
+        layout: Layout
 )
 
 @(form: Form[?], inputField: FieldConfiguration)(implicit request: AgentJourneyRequest[?], messages: Messages)
 
 @key = @{
-    "clientId"
+    "clientFact"
 }
 @journeyKey = @{
     request.journey.journeyType.toString
 }
+@messagePrefix = @{
+    s"$key.${request.journey.getService}.${inputField.name}"
+}
 @pageTitle = @{
-    messages(s"$key.${inputField.name}.label")
+    messages(s"$messagePrefix.label")
+}
+@knownFactType = @{
+    request.journey.clientDetailsResponse.get.knownFactType.get
 }
 
 @layout(
@@ -39,4 +46,12 @@
     serviceName = Some(messages(s"$journeyKey.service.name"))
 ) {
 
+    @{
+        knownFactType match {
+            case KnownFactType.PostalCode => "postcodeHtmlTemplate(form, inputField, messagePrefix)"
+            case KnownFactType.CountryCode => "countryCodeHtmlTemplate(form, inputField, messagePrefix)"
+            case KnownFactType.Email => "emailHtmlTemplate(form, inputField, messagePrefix)"
+            case KnownFactType.Date => "dateHtmlTemplate(form, inputField, messagePrefix)"
+        }
+    }
 }
