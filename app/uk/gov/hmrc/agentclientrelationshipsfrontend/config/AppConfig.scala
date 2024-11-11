@@ -60,6 +60,8 @@ class AppConfig @Inject()(servicesConfig: ServicesConfig, config: Configuration)
       "HMRC-PILLAR2-ORG"
     )
 
+  val countryListLocation: String = servicesConfig.getString("country.list.location")
+
   private def getString(key: String) = servicesConfig.getString(key)
 
   // For config contained in 'microservice.services'

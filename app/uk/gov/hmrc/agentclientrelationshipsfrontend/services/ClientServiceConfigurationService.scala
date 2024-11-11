@@ -41,7 +41,7 @@ class ClientServiceConfigurationService @Inject() {
   def allSupportedClientTypeIds: Set[String] = services.flatMap(_._2.clientDetails.map(_.clientIdType)).toSet[String]
 
   def firstClientDetailsFieldFor(clientService: String): ClientDetailsConfiguration = services(clientService).clientDetails.head
-  
+
   def requiresRefining(clientService: String): Boolean = services(clientService).supportedEnrolments.size > 1
 
   def getSupportedEnrolments(clientService: String): Seq[String] = services(clientService).supportedEnrolments

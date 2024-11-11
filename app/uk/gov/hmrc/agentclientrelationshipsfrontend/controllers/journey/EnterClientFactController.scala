@@ -20,6 +20,9 @@ import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
+import uk.gov.hmrc.agentclientrelationshipsfrontend.config.CountryNamesLoader
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.KnownFactType
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.common.FieldConfiguration
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.EnterClientFactForm
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, Journey, JourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{AgentClientRelationshipsService, ClientServiceConfigurationService, JourneyService}
@@ -35,13 +38,24 @@ class EnterClientFactController @Inject()(mcc: MessagesControllerComponents,
                                           journeyService: JourneyService,
                                           agentClientRelationshipsService: AgentClientRelationshipsService,
                                           enterKnownFactPage: EnterClientFactPage,
-                                          actions: Actions
+                                          actions: Actions,
+                                          countryNamesLoader: CountryNamesLoader
                                          )(implicit val executionContext: ExecutionContext) extends FrontendController(mcc) with I18nSupport:
-  
+
+
+  private val countries = countryNamesLoader.load
+  private val validCountryCodes = countries.keys.toSet
+
+  private def knownFactField(journey: Journey): FieldConfiguration =
+    if(journey.clientDetailsResponse.get.knownFactType.get == KnownFactType.CountryCode) then
+      journey.clientDetailsResponse.get.knownFactType.get.getFieldConfiguration.copy(validOptions = Some(countries.toSeq))
+    else
+    journey.clientDetailsResponse.get.knownFactType.get.getFieldConfiguration
+
   private def knownFactForm(journey: Journey): Form[String] = EnterClientFactForm.form(
     journey.getKnowFactType.fieldConfiguration,
     journey.getService,
-    Nil
+    validCountryCodes
   )
 
   def show(journeyType: JourneyType): Action[AnyContent] = actions.getJourney(journeyType):
