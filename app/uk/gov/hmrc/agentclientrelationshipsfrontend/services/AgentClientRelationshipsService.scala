@@ -30,4 +30,7 @@ class AgentClientRelationshipsService @Inject()(agentClientRelationshipsConnecto
 
   def getClientDetails(clientId: String, journey: Journey)(implicit hc: HeaderCarrier): Future[Option[ClientDetailsResponse]] =
     agentClientRelationshipsConnector.getClientDetails(journey.getService, clientId)
+    
+  def getClientDetails(clientId: String, service: String)(implicit hc: HeaderCarrier): Future[Option[ClientDetailsResponse]] =
+    agentClientRelationshipsConnector.getClientDetails(service, clientId)
 }

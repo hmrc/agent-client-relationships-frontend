@@ -19,7 +19,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.actions
 
 import play.api.mvc.{ActionFunction, Result}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.AgentFastTrackRequest
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.AgentFastTrackRequestWithRedirectUrls
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.UrlHelper
 
 import javax.inject.{Inject, Singleton}
@@ -28,13 +28,13 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class GetFastTrackUrlAction @Inject()(implicit  appConfig: AppConfig, ec: ExecutionContext) {
 
-  def getFastTrackUrlAction: ActionFunction[AgentRequest, AgentFastTrackRequest] = new ActionFunction[AgentRequest, AgentFastTrackRequest]:
+  def getFastTrackUrlAction: ActionFunction[AgentRequest, AgentFastTrackRequestWithRedirectUrls] = new ActionFunction[AgentRequest, AgentFastTrackRequestWithRedirectUrls]:
     override protected def executionContext: ExecutionContext = ec
     
-    override def invokeBlock[A](request: AgentRequest[A], block: AgentFastTrackRequest[A] => Future[Result]): Future[Result] = {
+    override def invokeBlock[A](request: AgentRequest[A], block: AgentFastTrackRequestWithRedirectUrls[A] => Future[Result]): Future[Result] = {
       val redirectUrl = request.getQueryString("continue").flatMap(UrlHelper.getRedirectUrl(_))
       val errorUrl = request.getQueryString("error").flatMap(UrlHelper.getRedirectUrl(_))
       val refererUrl = request.headers.get("Referer").flatMap(UrlHelper.getRedirectUrl(_))
-      block(AgentFastTrackRequest(arn = request.arn, redirectUrl, errorUrl, refererUrl, request))
+      block(AgentFastTrackRequestWithRedirectUrls(arn = request.arn, redirectUrl, errorUrl, refererUrl, request))
     }
 }

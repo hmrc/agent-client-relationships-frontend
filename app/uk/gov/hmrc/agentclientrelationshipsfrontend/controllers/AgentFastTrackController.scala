@@ -19,13 +19,11 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
-import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
-import uk.gov.hmrc.agentclientrelationshipsfrontend.connectors.AgentClientRelationshipsConnector
 import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.routes
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.FastTrackErrors
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.AgentFastTrackForm
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyType
-import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{ClientServiceConfigurationService, JourneyService}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsResponse, FastTrackErrors}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{AgentClientRelationshipsService, ClientServiceConfigurationService, JourneyService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.*
@@ -34,17 +32,28 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class AgentFastTrackController @Inject()(mcc: MessagesControllerComponents,
                                          journeyService: JourneyService,
-                                         clientServiceConfig: ClientServiceConfigurationService,
+                                         serviceConfig: ClientServiceConfigurationService,
                                          actions: Actions,
-                                         agentClientRelationshipsConnector: AgentClientRelationshipsConnector
+                                         agentClientRelationshipsService: AgentClientRelationshipsService
                                         )(implicit val executionContext: ExecutionContext) extends FrontendController(mcc) with I18nSupport {
 
-  //TODO - rethink journeyType
   lazy val journeyType: JourneyType = JourneyType.AuthorisationRequest
 
-  def agentFastTrack: Action[AnyContent] = actions.getFastTrackUrl.async { implicit agentFastTrackRequest =>
+  private def stripWhiteSpaces(str: String): String = str.trim.replaceAll("\\s", "")
+
+  private def checkKnownFact(knownFact:String, clientDetailsResponse: ClientDetailsResponse):Boolean = {
+    val validKnownFact = clientDetailsResponse.knownFactType
+      .map(serviceConfig.clientFactFieldFor).map(_.regex)
+      .exists(stripWhiteSpaces(knownFact).matches)
     
-    AgentFastTrackForm.form(clientServiceConfig).bindFromRequest().fold(
+    val matchedKnownFact = clientDetailsResponse.knownFacts.contains(knownFact)
+    
+    validKnownFact && matchedKnownFact
+  }
+
+
+  def agentFastTrack: Action[AnyContent] = actions.getFastTrackUrl.async { implicit agentFastTrackRequest =>
+    AgentFastTrackForm.form(serviceConfig).bindFromRequest().fold(
       formWithErrors => {
         agentFastTrackRequest.errorUrl match {
           case Some(errorUrl) =>
@@ -53,22 +62,29 @@ class AgentFastTrackController @Inject()(mcc: MessagesControllerComponents,
             Future.successful(Redirect(routes.StartJourneyController.startJourney(journeyType)))
         }
       },
+
       agentFastTrackFormData => {
         for {
-          clientDetails <- agentClientRelationshipsConnector.getClientDetails(agentFastTrackFormData.service, agentFastTrackFormData.clientIdentifier)
+          clientDetails  <- agentClientRelationshipsService.getClientDetails(agentFastTrackFormData.clientIdentifier, agentFastTrackFormData.service)
+
+          checkedKnownFact = agentFastTrackFormData.knownFact.flatMap{ knownFact =>
+            clientDetails.map(checkKnownFact(knownFact, _))
+          }
+
           newJourney = journeyService.newJourney(journeyType)
             .copy(
-              clientType = agentFastTrackFormData.clientType,
               clientService = Some(agentFastTrackFormData.service),
               clientId = Some(agentFastTrackFormData.clientIdentifier),
-              clientDetailsResponse = clientDetails
-              //TODO - add knowFacts here
+              clientDetailsResponse = clientDetails,
+              knownFact = if(checkedKnownFact.contains(true)) agentFastTrackFormData.knownFact else None
             )
+
           _ <- journeyService.saveJourney(newJourney)
-          nextPage <- journeyService.nextPageUrl(journeyType)
+
+          nextPage <- (clientDetails, checkedKnownFact) match
+            case (Some(_), None | Some(true)) => journeyService.nextPageUrl(journeyType)
+            case _ => Future.successful(routes.JourneyErrorController.show(journeyType, serviceConfig.getNotFoundError(journeyType, agentFastTrackFormData.service)).url)
         } yield Redirect(nextPage)
-
-
       }
     )
   }

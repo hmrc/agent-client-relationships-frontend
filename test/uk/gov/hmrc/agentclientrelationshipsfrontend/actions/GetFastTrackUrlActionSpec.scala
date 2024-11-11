@@ -120,7 +120,6 @@ class GetFastTrackUrlActionSpec extends AnyWordSpecLike with Matchers with Optio
 
       val allowedDomains = Set("NotAllowed")
       val fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(call = Call("POST", s"/agent-client-relationships/agents/fast-track?error=http%3A%2F%2Flocalhost%3A9448%2Ftest-only%2Ffast-track"))
-      val testFastTrackUrlsNone = TestFastTrackUrls(None, Some("http://localhost:9448/test-only/fast-track"), None)
 
       when(appConfig.allowedRedirectHosts).thenReturn(allowedDomains)
 

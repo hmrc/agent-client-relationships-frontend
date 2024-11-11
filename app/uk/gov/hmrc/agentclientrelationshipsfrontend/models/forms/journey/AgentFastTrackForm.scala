@@ -20,7 +20,7 @@ import play.api.data.Forms.*
 import play.api.data.format.Formats.*
 import play.api.data.validation.*
 import play.api.data.{Form, Mapping}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.AgentFastTrackFormData
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.AgentFastTrackRequest
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.ClientServiceConfigurationService
 
 object AgentFastTrackForm {
@@ -34,38 +34,31 @@ object AgentFastTrackForm {
   }
 
 
-  def validateFastTrackForm(clientServiceConfig: ClientServiceConfigurationService): Constraint[AgentFastTrackFormData] =
-    Constraint[AgentFastTrackFormData] { agentFastTrackRequest =>
-      val serviceForClientType = agentFastTrackRequest.clientType
-        .fold(true)
-        (clientType => clientServiceConfig.clientServicesFor(clientType).contains(agentFastTrackRequest.service))
+  def validateFastTrackForm(clientServiceConfig: ClientServiceConfigurationService): Constraint[AgentFastTrackRequest] =
+    Constraint[AgentFastTrackRequest] { agentFastTrackRequest =>
 
       val clientIdMatchRegs = clientServiceConfig.clientDetailForServiceAndClientIdType(
         agentFastTrackRequest.service, 
         agentFastTrackRequest.clientIdentifierType)
         .fold(false)(x => agentFastTrackRequest.clientIdentifier.matches(x.regex))
 
-      //TODO - do knowFacts regex mapping
-      if (serviceForClientType && clientIdMatchRegs) Valid
+      if (clientIdMatchRegs) Valid
       else Invalid(ValidationError("INVALID_SUBMISSION"))
     }
 
-  def form(clientServiceConfig: ClientServiceConfigurationService): Form[AgentFastTrackFormData] = {
+  def form(clientServiceConfig: ClientServiceConfigurationService): Form[AgentFastTrackRequest] = {
     Form(
       mapping(
-        "clientType" -> optional(lowerCaseText
-          .verifying("UNSUPPORTED_CLIENT_TYPE", clientServiceConfig.allClientTypes.contains(_))),
         "service" -> text
           .verifying("UNSUPPORTED_SERVICE", clientServiceConfig.allSupportedServices.contains(_)),
         "clientIdentifierType" -> text
           .verifying("UNSUPPORTED_CLIENT_ID_TYPE", clientServiceConfig.allSupportedClientTypeIds.contains(_)),
         "clientIdentifier" -> uppercaseNormalizedText.verifying(validateClientId(clientServiceConfig.allClientIdRegex)),
-        //TODO - do knowFacts regex mapping
         "knownFact"        -> optional(text)
-      ) { (clientType, service, clientIdType, clientId, knownFact) =>
-        AgentFastTrackFormData(clientType, service, clientId, clientIdType, knownFact)
+      ) { (service, clientIdType, clientId, knownFact) =>
+        AgentFastTrackRequest(service, clientId, clientIdType, knownFact)
       } { request =>
-        Some((request.clientType, request.service, request.clientIdentifierType, request.clientIdentifier, request.knownFact))
+        Some((request.service, request.clientIdentifierType, request.clientIdentifier, request.knownFact))
       }.verifying(validateFastTrackForm(clientServiceConfig))
     )
 
