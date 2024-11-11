@@ -18,7 +18,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.services
 
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.KnownFactType
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.common.{FieldConfiguration, ServiceData}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{JourneyErrors, JourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{JourneyErrorType, JourneyErrors, JourneyType}
 
 import javax.inject.{Inject, Singleton}
 import scala.collection.immutable.ListMap
@@ -60,8 +60,8 @@ class ClientServiceConfigurationService @Inject() {
     case enrols: Seq[String] if enrols.size > 1 => enrols.head // the head of the list is the parent service
     case _ => clientService
   } else ""
-  
-  def getNotFoundError(journeyType: String, clientService: String): String = services(clientService).journeyErrors(journeyType).notFound
+
+  def getNotFoundError(journeyType: JourneyType, clientService: String): JourneyErrorType = services(clientService).journeyErrors(journeyType).notFound
 
   val utrRegex = "^[0-9]{10}$"
   val urnRegex = "^[A-Z]{2}TRUST[0-9]{8}$"
@@ -83,10 +83,10 @@ class ClientServiceConfigurationService @Inject() {
         )
       ),
       journeyErrors = Map(
-        JourneyType.AuthorisationRequest.toString -> JourneyErrors(
-          notFound = "not-registered"
+        JourneyType.AuthorisationRequest -> JourneyErrors(
+          notFound = JourneyErrorType.NotRegistered
         ),
-        JourneyType.AgentCancelAuthorisation.toString -> JourneyErrors()
+        JourneyType.AgentCancelAuthorisation -> JourneyErrors()
       )
     ),
     "PERSONAL-INCOME-RECORD" -> ServiceData(

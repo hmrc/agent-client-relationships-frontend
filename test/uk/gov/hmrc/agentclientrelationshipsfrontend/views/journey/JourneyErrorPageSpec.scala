@@ -32,12 +32,12 @@ class JourneyErrorPageSpec extends ViewSpecSupport {
   private val agentCancelAuthorisationJourney: Journey = Journey(JourneyType.AgentCancelAuthorisation)
 
   case class ExpectedStrings(authorisationTitle: String, cancelAuthorisationTitle: String)
-  private val supportedErrorCodes: Map[String, ExpectedStrings] = Map(
-    "client-not-found" -> ExpectedStrings(
+  private val supportedErrorCodes: Map[JourneyErrorType, ExpectedStrings] = Map(
+    JourneyErrorType.NotFound -> ExpectedStrings(
       authorisationTitle = "We could not find your client - Ask a client to authorise you - GOV.UK",
       cancelAuthorisationTitle = "We could not find your client - Cancel a client’s authorisation - GOV.UK"
     ),
-    "not-registered" ->  ExpectedStrings(
+    JourneyErrorType.NotRegistered ->  ExpectedStrings(
       authorisationTitle = "Your client needs to register for Self Assessment - Ask a client to authorise you - GOV.UK",
       cancelAuthorisationTitle = "Your client needs to register for Self Assessment - Cancel a client’s authorisation - GOV.UK"
     )

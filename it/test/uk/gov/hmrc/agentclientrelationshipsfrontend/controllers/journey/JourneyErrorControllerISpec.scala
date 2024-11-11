@@ -18,7 +18,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey
 
 import play.api.http.Status.{BAD_REQUEST, OK}
 import play.api.test.Helpers.*
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{Journey, JourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{Journey, JourneyType, JourneyErrorType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.JourneyService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentSpecHelper}
 
@@ -26,10 +26,6 @@ class JourneyErrorControllerISpec extends ComponentSpecHelper with AuthStubs {
 
   private val authorisationRequestJourney: Journey = Journey(JourneyType.AuthorisationRequest, clientType = Some("personal"))
   private val agentCancelAuthorisationJourney: Journey = Journey(JourneyType.AgentCancelAuthorisation, clientType = Some("personal"))
-  private val supportedErrorCodes: Seq[String] = Seq(
-    "client-not-found",
-    "not-registered"
-  )
 
   val journeyService: JourneyService = app.injector.instanceOf[JourneyService]
 
@@ -39,7 +35,7 @@ class JourneyErrorControllerISpec extends ComponentSpecHelper with AuthStubs {
   }
 
   List(authorisationRequestJourney, agentCancelAuthorisationJourney).foreach(j =>
-    supportedErrorCodes.foreach(errorCode =>
+    JourneyErrorType.values.foreach(errorCode =>
       s"GET /${j.journeyType.toString}/error/$errorCode" should {
         "display the error page" in {
           authoriseAsAgent()

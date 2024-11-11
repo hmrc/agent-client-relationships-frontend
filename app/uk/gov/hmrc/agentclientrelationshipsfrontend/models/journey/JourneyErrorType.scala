@@ -16,6 +16,11 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey
 
-case class JourneyErrors(
-                          notFound: JourneyErrorType = JourneyErrorType.NotFound
-                        )
+import play.api.libs.json.Format
+import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.EnumFormatUtil
+
+enum JourneyErrorType(val name: String):
+  case NotFound extends JourneyErrorType("client-not-found")
+  case NotRegistered extends JourneyErrorType("not-registered")
+
+  override def toString: String = name

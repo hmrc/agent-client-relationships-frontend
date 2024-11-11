@@ -20,7 +20,7 @@
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.agentErrors._
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.components.SubmitButton
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.routes
-@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{JourneyType, AgentJourneyRequest}
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{JourneyErrorType, JourneyType, AgentJourneyRequest}
 
 
 @this(
@@ -29,7 +29,7 @@
         clientNotRegistered: ClientNotRegistered
 )
 
-@(journeyType: JourneyType, errorCode: String)(implicit request: AgentJourneyRequest[?], messages: Messages, appConfig: AppConfig)
+@(journeyType: JourneyType, errorCode: JourneyErrorType)(implicit request: AgentJourneyRequest[?], messages: Messages, appConfig: AppConfig)
 
 @key = @{"journeyError"}
 @pageTitle = @{messages(s"$key.$errorCode.header")}
@@ -39,8 +39,8 @@
     <h1 class="govuk-heading-xl">@pageTitle</h1>
     @{
      errorCode match {
-      case "client-not-found" => clientNotFound()
-      case "not-registered" => clientNotRegistered()
+      case JourneyErrorType.NotFound => clientNotFound()
+      case JourneyErrorType.NotRegistered => clientNotRegistered()
       case _ => HtmlFormat.empty
      }
     }

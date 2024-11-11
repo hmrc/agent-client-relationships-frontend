@@ -83,7 +83,7 @@ class EnterClientIdController @Inject()(mcc: MessagesControllerComponents,
                 journeyService.nextPageUrl(journeyType) else
                 Future.successful(routes.JourneyErrorController.show(
                   journeyType, 
-                  serviceConfig.getNotFoundError(journey.journeyType.toString, journey.getService)).url
+                  serviceConfig.getNotFoundError(journeyType, journey.getService)).url
                 )
             } yield Redirect(nextPage)
         }

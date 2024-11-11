@@ -24,8 +24,8 @@ case class ServiceData(
                         serviceName: String,
                         clientTypes: Set[String],
                         clientDetails: Seq[FieldConfiguration],
-                        journeyErrors: Map[String, JourneyErrors] = Map(
-                          JourneyType.AuthorisationRequest.toString -> JourneyErrors(), 
-                          JourneyType.AgentCancelAuthorisation.toString -> JourneyErrors()
+                        journeyErrors: Map[JourneyType, JourneyErrors] = Map(
+                          JourneyType.AuthorisationRequest -> JourneyErrors(), 
+                          JourneyType.AgentCancelAuthorisation -> JourneyErrors()
                         )
                       )
