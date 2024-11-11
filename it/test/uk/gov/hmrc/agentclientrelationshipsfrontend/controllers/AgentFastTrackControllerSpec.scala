@@ -17,20 +17,22 @@
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers
 
 import org.scalatest.concurrent.Futures.whenReady
-import play.api.http.Status.{BAD_REQUEST, OK}
-import play.api.test.Helpers.*
-import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.routes as fastTrackRoutes
-import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.routes as journeyRoutes
-import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.testOnly.routes as testRoutes
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.AgentFastTrackFormData
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{Journey, JourneyState, JourneyType}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.services.JourneyService
-import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentSpecHelper}
 import org.scalatest.concurrent.ScalaFutures
+import play.api.libs.json.Json
+import play.api.test.Helpers.*
+import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.routes as journeyRoutes
+import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.routes as fastTrackRoutes
+import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.testOnly.routes as testRoutes
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{Journey, JourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{AgentFastTrackRequest, ClientDetailsResponse, KnownFactType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{ClientServiceConfigurationService, JourneyService}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AgentClientRelationshipStub, AuthStubs, ComponentSpecHelper}
 
-class AgentFastTrackControllerSpec extends ComponentSpecHelper with AuthStubs with ScalaFutures {
+class AgentFastTrackControllerSpec extends ComponentSpecHelper with AuthStubs with AgentClientRelationshipStub with ScalaFutures {
 
   lazy val journeyType: JourneyType = JourneyType.AuthorisationRequest
+
+  def getClientDetailsUrl(service: String, clientId: String) = s"/agent-client-relationships/client/$service/details/$clientId"
 
   //TODO Create TestData common and move identifiers there
   val urn = "XXTRUST10000100"
@@ -44,79 +46,70 @@ class AgentFastTrackControllerSpec extends ComponentSpecHelper with AuthStubs wi
 
 
 
-  val itSaFastTrackRequest: AgentFastTrackFormData = AgentFastTrackFormData(
-    clientType = None,
+  val itSaFastTrackRequest: AgentFastTrackRequest = AgentFastTrackRequest(
     service = "HMRC-MTD-IT",
     clientIdentifier = nino,
     clientIdentifierType = "ni",
-    knownFact = None
+    knownFact = Some("BX9 1AS")
   )
 
-  val personalIncomeFastTrackRequest: AgentFastTrackFormData = AgentFastTrackFormData(
-    clientType = None,
+  val personalIncomeFastTrackRequest: AgentFastTrackRequest = AgentFastTrackRequest(
     service = "PERSONAL-INCOME-RECORD",
     clientIdentifier = nino,
     clientIdentifierType = "ni",
-    knownFact = None
+    knownFact = Some("BX9 1AS")
   )
 
-  val vatFastTrackRequest: AgentFastTrackFormData = AgentFastTrackFormData(
-    clientType = None,
+  val vatFastTrackRequest: AgentFastTrackRequest = AgentFastTrackRequest(
     service = "HMRC-MTD-VAT",
     clientIdentifier = vrn,
     clientIdentifierType = "vrn",
-    knownFact = None
+    knownFact = Some("BX9 1AS")
   )
 
-  val cgtFastTrackRequest: AgentFastTrackFormData = AgentFastTrackFormData(
-    clientType = None,
+  val cgtFastTrackRequest: AgentFastTrackRequest = AgentFastTrackRequest(
     service = "HMRC-CGT-PD",
     clientIdentifier = cgtPgRef,
     clientIdentifierType = "CGTPDRef",
-    knownFact = None
+    knownFact = Some("BX9 1AS")
   )
 
-  val pptFastTrackRequest: AgentFastTrackFormData = AgentFastTrackFormData(
-    clientType = None,
+  val pptFastTrackRequest: AgentFastTrackRequest = AgentFastTrackRequest(
     service = "HMRC-PPT-ORG",
     clientIdentifier = etmpRegistrationNumber,
     clientIdentifierType = "EtmpRegistrationNumber",
-    knownFact = None
+    knownFact = Some("BX9 1AS")
   )
 
-  val cbcFastTrackRequest: AgentFastTrackFormData = AgentFastTrackFormData(
-    clientType = None,
+  val cbcFastTrackRequest: AgentFastTrackRequest = AgentFastTrackRequest(
     service = "HMRC-CBC-ORG",
     clientIdentifier = cbcId,
     clientIdentifierType = "cbcId",
-    knownFact = None
+    knownFact = Some("BX9 1AS")
   )
 
-  val pillar2FastTrackRequest: AgentFastTrackFormData = AgentFastTrackFormData(
-    clientType = None,
+  val pillar2FastTrackRequest: AgentFastTrackRequest = AgentFastTrackRequest(
     service = "HMRC-PILLAR2-ORG",
     clientIdentifier = plrid,
     clientIdentifierType = "PLRID",
-    knownFact = None
+    knownFact = Some("BX9 1AS")
   )
 
-  val tersFastTrackRequest: AgentFastTrackFormData = AgentFastTrackFormData(
-    clientType = None,
+  val tersFastTrackRequest: AgentFastTrackRequest = AgentFastTrackRequest(
     service = "HMRC-TERS-ORG",
     clientIdentifier = utr,
     clientIdentifierType = "utr",
-    knownFact = None
+    knownFact = Some("BX9 1AS")
   )
 
-  val tersNTFastTrackRequest: AgentFastTrackFormData = AgentFastTrackFormData(
-    clientType = None,
+  val tersNTFastTrackRequest: AgentFastTrackRequest = AgentFastTrackRequest(
     service = "HMRC-TERSNT-ORG",
     clientIdentifier = urn,
     clientIdentifierType = "urn",
-    knownFact = None
+    knownFact = Some("BX9 1AS")
   )
 
-  val validFastTrackRequests: Seq[AgentFastTrackFormData] = Seq(
+  val validFastTrackRequests: Seq[AgentFastTrackRequest] = Seq(
     itSaFastTrackRequest,
     personalIncomeFastTrackRequest,
     vatFastTrackRequest,
@@ -128,7 +121,19 @@ class AgentFastTrackControllerSpec extends ComponentSpecHelper with AuthStubs wi
     tersNTFastTrackRequest
   )
 
-  val invalidClientIdFastTrackRequests: Seq[AgentFastTrackFormData] = Seq(
+  val missingKnownFactsFastTrackRequests: Seq[AgentFastTrackRequest] = Seq(
+    itSaFastTrackRequest.copy(knownFact = None),
+    personalIncomeFastTrackRequest.copy(knownFact = None),
+    vatFastTrackRequest.copy(knownFact = None),
+    cgtFastTrackRequest.copy(knownFact = None),
+    pptFastTrackRequest.copy(knownFact = None),
+    cbcFastTrackRequest.copy(knownFact = None),
+    pillar2FastTrackRequest.copy(knownFact = None),
+    tersFastTrackRequest.copy(knownFact = None),
+    tersNTFastTrackRequest.copy(knownFact = None)
+  )
+
+  val invalidClientIdFastTrackRequests: Seq[AgentFastTrackRequest] = Seq(
     itSaFastTrackRequest.copy(clientIdentifier = urn),
     personalIncomeFastTrackRequest.copy(clientIdentifier = urn),
     vatFastTrackRequest.copy(clientIdentifier = urn),
@@ -140,7 +145,7 @@ class AgentFastTrackControllerSpec extends ComponentSpecHelper with AuthStubs wi
     tersNTFastTrackRequest.copy(clientIdentifier = nino)
   )
 
-  val invalidClientIdTypeFastTrackRequests: Seq[AgentFastTrackFormData] = Seq(
+  val invalidClientIdTypeFastTrackRequests: Seq[AgentFastTrackRequest] = Seq(
     itSaFastTrackRequest.copy(clientIdentifierType = "urn"),
     personalIncomeFastTrackRequest.copy(clientIdentifierType = "urn"),
     vatFastTrackRequest.copy(clientIdentifierType = "urn"),
@@ -153,24 +158,33 @@ class AgentFastTrackControllerSpec extends ComponentSpecHelper with AuthStubs wi
   )
 
 
-  def toFastTrackRequests(agentFastTrackFormData: AgentFastTrackFormData): Map[String, Seq[String]] = Map(
-     "clientType" -> agentFastTrackFormData.clientType.fold(Seq.empty)(Seq(_)),
-     "service" -> Seq(agentFastTrackFormData.service),
-     "clientIdentifier" -> Seq(agentFastTrackFormData.clientIdentifier),
-     "clientIdentifierType" -> Seq(agentFastTrackFormData.clientIdentifierType),
-     "knownFact" -> agentFastTrackFormData.knownFact.fold(Seq.empty)(Seq(_))
+  def toFastTrackRequests(agentFastTrackRequest: AgentFastTrackRequest): Map[String, Seq[String]] = Map(
+     "service" -> Seq(agentFastTrackRequest.service),
+     "clientIdentifier" -> Seq(agentFastTrackRequest.clientIdentifier),
+     "clientIdentifierType" -> Seq(agentFastTrackRequest.clientIdentifierType),
+     "knownFact" -> agentFastTrackRequest.knownFact.fold(Seq.empty)(Seq(_))
    )
 
-   def toJourney(fastTrackFormData: AgentFastTrackFormData, journeyType: JourneyType = journeyType): Journey =
+   def toJourney(agentFastTrackRequest: AgentFastTrackRequest,clientDetailsResponse: Option[ClientDetailsResponse], journeyType: JourneyType = journeyType): Journey =
      journeyService.newJourney(JourneyType.AuthorisationRequest)
        .copy(
-         clientType = fastTrackFormData.clientType,
-         clientService = Some(fastTrackFormData.service),
-         clientId = Some(fastTrackFormData.clientIdentifier),
+         clientService = Some(agentFastTrackRequest.service),
+         clientId = Some(agentFastTrackRequest.clientIdentifier),
+         clientDetailsResponse = clientDetailsResponse,
+         knownFact = agentFastTrackRequest.knownFact
 
        )
 
+   def toClientRelationship(agentFastTrackRequest: AgentFastTrackRequest, knownFactType: Option[KnownFactType] = Some(KnownFactType.PostalCode)):ClientDetailsResponse = ClientDetailsResponse(
+     name = "AnyName",
+     status = None,
+     isOverseas = None,
+     knownFacts = agentFastTrackRequest.knownFact.toSeq,
+     knownFactType = knownFactType
+   )
+
   val journeyService: JourneyService = app.injector.instanceOf[JourneyService]
+  val serviceConfig: ClientServiceConfigurationService = app.injector.instanceOf[ClientServiceConfigurationService]
 
   override def beforeEach(): Unit = {
     await(journeyService.deleteAllAnswersInSession(request))
@@ -178,19 +192,73 @@ class AgentFastTrackControllerSpec extends ComponentSpecHelper with AuthStubs wi
   }
   
   "POST /agents/fast-track/agentFastTrack" should {
-    validFastTrackRequests.foreach(fastTrackFormData => s"redirect to the next page and store journey data for ${fastTrackFormData.service} service for ${fastTrackFormData.clientIdentifierType}" in {
+    validFastTrackRequests.foreach(fastTrackFormData => s"redirect to the next page and store journey data for ${fastTrackFormData.service} service for ${fastTrackFormData.clientIdentifierType} and knownFacts: ${fastTrackFormData.knownFact}" in {
       authoriseAsAgent()
+      val clientDetailsResponse: Option[ClientDetailsResponse] = Some(toClientRelationship(fastTrackFormData, Some(KnownFactType.PostalCode)))
+      givenClientRelationshipFor(fastTrackFormData.service, fastTrackFormData.clientIdentifier, Json.toJson(clientDetailsResponse).toString)
 
       val result = post(fastTrackRoutes.AgentFastTrackController.agentFastTrack.url)(toFastTrackRequests(fastTrackFormData))
       result.status shouldBe SEE_OTHER
 
       fastTrackFormData.service match{
         case "HMRC-TERS-ORG" | "HMRC-TERSNT-ORG" => result.header("Location").value shouldBe journeyRoutes.ServiceRefinementController.show(journeyType).url
-        case _ => result.header("Location").value shouldBe journeyRoutes.EnterClientIdController.show(journeyType).url
+        //TODO - replace with url
+        case _ => result.header("Location").value shouldBe "routes.ConfirmClientController.show(journeyType).url"
       }
 
       whenReady(journeyService.getJourney()) { result =>
-        result should contain(toJourney(fastTrackFormData))
+        result should contain(toJourney(fastTrackFormData, clientDetailsResponse))
+      }
+    })
+
+    missingKnownFactsFastTrackRequests.foreach(fastTrackFormData => s"redirect to the next page and store journey data for ${fastTrackFormData.service} service for ${fastTrackFormData.clientIdentifierType} and knownFacts missing" in {
+      authoriseAsAgent()
+      val clientDetailsResponse: Option[ClientDetailsResponse] = Some(toClientRelationship(fastTrackFormData, Some(KnownFactType.PostalCode)))
+      givenClientRelationshipFor(fastTrackFormData.service, fastTrackFormData.clientIdentifier, Json.toJson(clientDetailsResponse).toString)
+
+      val result = post(fastTrackRoutes.AgentFastTrackController.agentFastTrack.url)(toFastTrackRequests(fastTrackFormData))
+      result.status shouldBe SEE_OTHER
+
+      fastTrackFormData.service match {
+        case "HMRC-TERS-ORG" | "HMRC-TERSNT-ORG" => result.header("Location").value shouldBe journeyRoutes.ServiceRefinementController.show(journeyType).url
+        case _ => result.header("Location").value shouldBe journeyRoutes.EnterClientFactController.show(journeyType).url
+      }
+
+      whenReady(journeyService.getJourney()) { result =>
+        result should contain(toJourney(fastTrackFormData, clientDetailsResponse))
+      }
+    })
+
+    validFastTrackRequests.foreach(originalFastTrackFormData => s"redirect to known-fact-not-matched page and store journey data for ${originalFastTrackFormData.service} service for ${originalFastTrackFormData.clientIdentifierType} when  knownFacts format check fail" in {
+      val fastTrackFormData = originalFastTrackFormData.copy(knownFact = Some("WrongKnownFacts"))
+      val clientDetailsResponse: Option[ClientDetailsResponse] = Some(toClientRelationship(fastTrackFormData))
+
+      authoriseAsAgent()
+      givenClientRelationshipFor(fastTrackFormData.service, fastTrackFormData.clientIdentifier, Json.toJson(clientDetailsResponse).toString)
+
+      val result = post(fastTrackRoutes.AgentFastTrackController.agentFastTrack.url)(toFastTrackRequests(fastTrackFormData))
+      result.status shouldBe SEE_OTHER
+
+      result.header("Location").value shouldBe journeyRoutes.JourneyErrorController.show(journeyType, serviceConfig.getNotFoundError(journeyType, fastTrackFormData.service)).url
+
+      whenReady(journeyService.getJourney()) { result =>
+        result should contain(toJourney(fastTrackFormData, clientDetailsResponse).copy(knownFact = None))
+      }
+    })
+
+    validFastTrackRequests.foreach(fastTrackFormData => s"redirect to client-not-found page and store journey data for ${fastTrackFormData.service} service for ${fastTrackFormData.clientIdentifierType} when  clientRelation data are missing" in {
+      val clientDetailsResponse: Option[ClientDetailsResponse] = None
+
+      authoriseAsAgent()
+      givenNotFoundForServiceAndClient(fastTrackFormData.service, fastTrackFormData.clientIdentifier)
+
+      val result = post(fastTrackRoutes.AgentFastTrackController.agentFastTrack.url)(toFastTrackRequests(fastTrackFormData))
+      result.status shouldBe SEE_OTHER
+
+      result.header("Location").value shouldBe journeyRoutes.JourneyErrorController.show(journeyType, serviceConfig.getNotFoundError(journeyType, fastTrackFormData.service)).url
+
+      whenReady(journeyService.getJourney()) { result =>
+        result should contain(toJourney(fastTrackFormData, clientDetailsResponse).copy(knownFact = None))
       }
     })
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,4 +16,16 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.models
 
-case class AgentFastTrackRequest(service: String, clientIdentifier: String, clientIdentifierType:String, knownFact: Option[String])
+import play.api.mvc.Request
+import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.AgentRequest
+
+class AgentFastTrackRequestWithRedirectUrls[A](override val arn: String,
+                                               val redirectUrl: Option[String],
+                                               val errorUrl: Option[String],
+                                               val refererUrl: Option[String],
+                                               override val request: Request[A])
+  extends AgentRequest[A](arn, request)
+
+
+  
+  

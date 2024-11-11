@@ -18,7 +18,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.actions
 
 import play.api.mvc.{ActionBuilder, AnyContent, DefaultActionBuilder}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, JourneyType}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.AgentFastTrackRequest
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.AgentFastTrackRequestWithRedirectUrls
 
 import javax.inject.{Inject, Singleton}
 
@@ -35,6 +35,6 @@ class Actions @Inject()(
   def authenticate: ActionBuilder[AgentRequest, AnyContent] =
     actionBuilder andThen authActions.agentAuthAction
     
-  def getFastTrackUrl: ActionBuilder[AgentFastTrackRequest, AnyContent] =
+  def getFastTrackUrl: ActionBuilder[AgentFastTrackRequestWithRedirectUrls, AnyContent] =
     actionBuilder andThen authActions.agentAuthAction andThen getFastTrackUrlAction.getFastTrackUrlAction
 }
