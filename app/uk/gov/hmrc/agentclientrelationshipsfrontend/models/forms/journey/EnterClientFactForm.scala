@@ -24,20 +24,20 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.helpers.FormFie
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.helpers.TextFormFieldHelper.textFieldMapping
 
 object EnterClientFactForm extends FormFieldHelper {
-  def form(fieldConfig: FieldConfiguration, serviceName: String, options: Set[String]): Form[String] = {
+  def form(fieldConfig: KnownFactsConfiguration, serviceName: String, options: Set[String]): Form[String] = {
     Form(
       single(
-        (knownFactsConfiguration.inputType, options) match {
+        (fieldConfig.inputType, options) match {
           case ("date", _) =>
-            knownFactsConfiguration.name -> dateFieldMapping(s"clientFact.$serviceName.${knownFactsConfiguration.name}")
+            fieldConfig.name -> dateFieldMapping(s"clientFact.$serviceName.${fieldConfig.name}")
           case ("select", options) if options.nonEmpty =>
-            knownFactsConfiguration.name -> optional(text)
-              .verifying(mandatoryFieldErrorMessage(s"clientFact.$serviceName.${knownFactsConfiguration.name}"), _.fold(false)(options.contains))
+            fieldConfig.name -> optional(text)
+              .verifying(mandatoryFieldErrorMessage(s"clientFact.$serviceName.${fieldConfig.name}"), _.fold(false)(options.contains))
               .transform(_.getOrElse(""), (Some(_)): String => Option[String])
           case ("text", _) =>
-            knownFactsConfiguration.name -> textFieldMapping(knownFactsConfiguration.name, s"clientFact.$serviceName.${knownFactsConfiguration.name}", knownFactsConfiguration.regex)
+            fieldConfig.name -> textFieldMapping(fieldConfig.name, s"clientFact.$serviceName.${fieldConfig.name}", fieldConfig.regex)
           case _ =>
-            throw RuntimeException(s"Attempted to create an unsupported form - input type: ${knownFactsConfiguration.inputType}, options: $options")
+            throw RuntimeException(s"Attempted to create an unsupported form - input type: ${fieldConfig.inputType}, options: $options")
         }
       )
     )

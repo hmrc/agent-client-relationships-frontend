@@ -22,7 +22,7 @@ import play.api.mvc.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.CountryNamesLoader
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.KnownFactType
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.common.FieldConfiguration
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.common.KnownFactsConfiguration
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.EnterClientFactForm
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, Journey, JourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{AgentClientRelationshipsService, ClientServiceConfigurationService, JourneyService}
@@ -46,11 +46,11 @@ class EnterClientFactController @Inject()(mcc: MessagesControllerComponents,
   private val countries = countryNamesLoader.load
   private val validCountryCodes = countries.keys.toSet
 
-  private def knownFactField(journey: Journey): FieldConfiguration =
+  private def knownFactField(journey: Journey): KnownFactsConfiguration =
     if(journey.clientDetailsResponse.get.knownFactType.get == KnownFactType.CountryCode) then
-      journey.clientDetailsResponse.get.knownFactType.get.getFieldConfiguration.copy(validOptions = Some(countries.toSeq))
+      journey.clientDetailsResponse.get.knownFactType.get.fieldConfiguration.copy(validOptions = Some(countries.toSeq))
     else
-    journey.clientDetailsResponse.get.knownFactType.get.getFieldConfiguration
+    journey.clientDetailsResponse.get.knownFactType.get.fieldConfiguration
 
   private def knownFactForm(journey: Journey): Form[String] = EnterClientFactForm.form(
     journey.getKnowFactType.fieldConfiguration,
@@ -68,7 +68,7 @@ class EnterClientFactController @Inject()(mcc: MessagesControllerComponents,
       else
         Ok(enterKnownFactPage(
           knownFactForm(journey).fill(journey.knownFact.getOrElse("")),
-          journey.getKnowFactType.fieldConfiguration
+          knownFactField(journey)
         ))
 
 
@@ -82,7 +82,7 @@ class EnterClientFactController @Inject()(mcc: MessagesControllerComponents,
         formWithErrors => {
           Future.successful(BadRequest(enterKnownFactPage(
             formWithErrors,
-            journey.getKnowFactType.fieldConfiguration
+            knownFactField(journey)
           )))
         },
         knownFact => {
