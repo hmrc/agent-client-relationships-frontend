@@ -20,7 +20,7 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.common.{FieldConfiguration, ServiceData}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.common.{ClientDetailsConfiguration, ServiceData}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.EnterClientIdForm
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.support.ViewSpecSupport
@@ -33,7 +33,7 @@ class EnterClientIdPageSpec extends ViewSpecSupport {
   private val authorisationRequestJourney: Journey = Journey(JourneyType.AuthorisationRequest)
   private val agentCancelAuthorisationJourney: Journey = Journey(JourneyType.AgentCancelAuthorisation)
 
-  val ninoField: FieldConfiguration = FieldConfiguration(
+  val ninoField: ClientDetailsConfiguration = ClientDetailsConfiguration(
     name = "nino",
     regex = "[[A-Z]&&[^DFIQUV]][[A-Z]&&[^DFIQUVO]] ?\\d{2} ?\\d{2} ?\\d{2} ?[A-D]{1}",
     inputType = "text",
@@ -41,7 +41,7 @@ class EnterClientIdPageSpec extends ViewSpecSupport {
     clientIdType = "ni"
   )
 
-  val vrnField: FieldConfiguration = FieldConfiguration(
+  val vrnField: ClientDetailsConfiguration = ClientDetailsConfiguration(
     name = "vrn",
     regex = "^[0-9]{9}$",
     inputType = "text",
@@ -49,7 +49,7 @@ class EnterClientIdPageSpec extends ViewSpecSupport {
     clientIdType = "vrn"
   )
 
-  val urnField: FieldConfiguration = FieldConfiguration(
+  val urnField: ClientDetailsConfiguration = ClientDetailsConfiguration(
     name = "urn",
     regex = "^[A-Z]{2}TRUST[0-9]{8}$",
     inputType = "text",
@@ -58,7 +58,7 @@ class EnterClientIdPageSpec extends ViewSpecSupport {
   )
 
 
-  val utrField: FieldConfiguration = FieldConfiguration(
+  val utrField: ClientDetailsConfiguration = ClientDetailsConfiguration(
     name = "utr",
     regex = "^[0-9]{10}$",
     inputType = "text",
@@ -67,7 +67,7 @@ class EnterClientIdPageSpec extends ViewSpecSupport {
   )
 
 
-  val cgtField: FieldConfiguration = FieldConfiguration(
+  val cgtField: ClientDetailsConfiguration = ClientDetailsConfiguration(
     name = "cgtRef",
     regex = "^X[A-Z]CGTP[0-9]{9}$",
     inputType = "text",
@@ -76,7 +76,7 @@ class EnterClientIdPageSpec extends ViewSpecSupport {
   )
 
 
-  val pptField: FieldConfiguration = FieldConfiguration(
+  val pptField: ClientDetailsConfiguration = ClientDetailsConfiguration(
     name = "pptRef",
     regex = "^X[A-Z]PPT000[0-9]{7}$",
     inputType = "text",
@@ -84,7 +84,7 @@ class EnterClientIdPageSpec extends ViewSpecSupport {
     clientIdType = "EtmpRegistrationNumber"
   )
 
-  val cbcField: FieldConfiguration = FieldConfiguration(
+  val cbcField: ClientDetailsConfiguration = ClientDetailsConfiguration(
     name = "cbcId",
     regex = "^X[A-Z]CBC[0-9]{10}$",
     inputType = "text",
@@ -92,7 +92,7 @@ class EnterClientIdPageSpec extends ViewSpecSupport {
     clientIdType = "cbcId"
   )
 
-  val plrField: FieldConfiguration = FieldConfiguration(
+  val plrField: ClientDetailsConfiguration = ClientDetailsConfiguration(
     name = "PlrId",
     regex = "^X[A-Z]{1}PLR[0-9]{10}$",
     inputType = "text",
@@ -100,7 +100,7 @@ class EnterClientIdPageSpec extends ViewSpecSupport {
     clientIdType = "PLRID"
   )
 
-  val mapOfFieldConfiguration: Map[String, (FieldConfiguration, ServiceStrings)] =
+  val mapOfFieldConfiguration: Map[String, (ClientDetailsConfiguration, ServiceStrings)] =
     Map(
       "nino" -> (ninoField, Expected.Nino),
       "vrn" -> (vrnField, Expected.Vrn),

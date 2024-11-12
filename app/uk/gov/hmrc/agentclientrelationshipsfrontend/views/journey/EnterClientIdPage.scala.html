@@ -16,7 +16,7 @@
 
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.Layout
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.components.SubmitButton
-@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.common.FieldConfiguration
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.common.ClientDetailsConfiguration
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.routes
 @import uk.gov.hmrc.govukfrontend.views.html.components.{GovukInput, GovukDateInput, DateInput, Text, Fieldset, Legend, FormWithCSRF, GovukFieldset, Input, Label, Hint}
 @import uk.gov.hmrc.govukfrontend.views.html.components.implicits.RichInput
@@ -32,7 +32,7 @@
         submitButton: SubmitButton
 )
 
-@(form: Form[?], clientDetailField: FieldConfiguration)(implicit request: AgentJourneyRequest[?], messages: Messages)
+@(form: Form[?], clientDetailField: ClientDetailsConfiguration)(implicit request: AgentJourneyRequest[?], messages: Messages)
 
 @key = @{
     "clientId"

@@ -17,7 +17,7 @@
 package uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey
 
 import play.api.libs.json.{Json, OFormat}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.ClientDetailsResponse
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsResponse, KnownFactType}
 
 case class Journey(journeyType: JourneyType,
                    clientType: Option[String] = None,
@@ -34,6 +34,10 @@ case class Journey(journeyType: JourneyType,
 
   def getServiceWithDefault: String = clientService.getOrElse("")
   def getService: String = clientService.getOrElse(throw new RuntimeException("service not defined"))
+
+  def getClientDetailsResponse: ClientDetailsResponse = clientDetailsResponse.getOrElse(throw new RuntimeException("client details are not defined"))
+
+  def getKnowFactType: KnownFactType = clientDetailsResponse.flatMap(_.knownFactType)getOrElse(throw new RuntimeException("known fact is not defined"))
 
   // TODO: Implement this method for real when our clientDetailsResponse contains
   //  everything we need such as existing invitations or authorisations

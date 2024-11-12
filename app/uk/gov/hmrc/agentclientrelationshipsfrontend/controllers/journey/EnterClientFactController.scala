@@ -20,7 +20,6 @@ import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.common.FieldConfiguration
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.EnterClientFactForm
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, Journey, JourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{AgentClientRelationshipsService, ClientServiceConfigurationService, JourneyService}
@@ -38,12 +37,9 @@ class EnterClientFactController @Inject()(mcc: MessagesControllerComponents,
                                           enterKnownFactPage: EnterClientFactPage,
                                           actions: Actions
                                          )(implicit val executionContext: ExecutionContext) extends FrontendController(mcc) with I18nSupport:
-
-  private def knownFactField(journey: Journey): FieldConfiguration =
-    serviceConfig.clientFactFieldFor(journey.clientDetailsResponse.get.knownFactType.get)
-
+  
   private def knownFactForm(journey: Journey): Form[String] = EnterClientFactForm.form(
-    knownFactField(journey),
+    journey.getKnowFactType.fieldConfiguration,
     journey.getService,
     Nil
   )
@@ -58,7 +54,7 @@ class EnterClientFactController @Inject()(mcc: MessagesControllerComponents,
       else
         Ok(enterKnownFactPage(
           knownFactForm(journey).fill(journey.knownFact.getOrElse("")),
-          knownFactField(journey)
+          journey.getKnowFactType.fieldConfiguration
         ))
 
 
@@ -72,7 +68,7 @@ class EnterClientFactController @Inject()(mcc: MessagesControllerComponents,
         formWithErrors => {
           Future.successful(BadRequest(enterKnownFactPage(
             formWithErrors,
-            knownFactField(journey)
+            journey.getKnowFactType.fieldConfiguration
           )))
         },
         knownFact => {

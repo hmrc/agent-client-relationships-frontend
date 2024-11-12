@@ -16,8 +16,7 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.services
 
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.KnownFactType
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.common.{FieldConfiguration, ServiceData}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.common.{ClientDetailsConfiguration, ServiceData}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{JourneyErrorType, JourneyErrors, JourneyType}
 
 import javax.inject.{Inject, Singleton}
@@ -35,23 +34,14 @@ class ClientServiceConfigurationService @Inject() {
 
   def allSupportedServices: Set[String] = services.map(_._2.serviceName).toSet[String]
 
-  def clientDetailsFor(clientService: String): Seq[FieldConfiguration] = services(clientService).clientDetails
+  def clientDetailsFor(clientService: String): Seq[ClientDetailsConfiguration] = services(clientService).clientDetails
 
   def allClientIdRegex: Set[String] = services.flatMap(_._2.clientDetails.map(_.regex)).toSet[String]
 
   def allSupportedClientTypeIds: Set[String] = services.flatMap(_._2.clientDetails.map(_.clientIdType)).toSet[String]
 
-  def firstClientDetailsFieldFor(clientService: String): FieldConfiguration = services(clientService).clientDetails.head
-
-  //TODO this is a stub
-  def clientFactFieldFor(knownFactType: KnownFactType): FieldConfiguration = FieldConfiguration(
-    name = "postcode",
-    regex = "^[A-Z]{1,2}[0-9][0-9A-Z]?\\s?[0-9][A-Z]{2}$|BFPO\\s?[0-9]{1,5}$",
-    inputType = "text",
-    width = 20,
-    ""
-  )
-
+  def firstClientDetailsFieldFor(clientService: String): ClientDetailsConfiguration = services(clientService).clientDetails.head
+  
   def requiresRefining(clientService: String): Boolean = services(clientService).supportedEnrolments.size > 1
 
   def getSupportedEnrolments(clientService: String): Seq[String] = services(clientService).supportedEnrolments
@@ -66,7 +56,7 @@ class ClientServiceConfigurationService @Inject() {
   val utrRegex = "^[0-9]{10}$"
   val urnRegex = "^[A-Z]{2}TRUST[0-9]{8}$"
 
-  def clientDetailForServiceAndClientIdType(clientService: String, clientIdType: String): Option[FieldConfiguration] = services(clientService).clientDetails.find(_.clientIdType == clientIdType)
+  def clientDetailForServiceAndClientIdType(clientService: String, clientIdType: String): Option[ClientDetailsConfiguration] = services(clientService).clientDetails.find(_.clientIdType == clientIdType)
 
   private val services: ListMap[String, ServiceData] = ListMap(
     "HMRC-MTD-IT" -> ServiceData(
@@ -74,7 +64,7 @@ class ClientServiceConfigurationService @Inject() {
       serviceOption = true,
       clientTypes = Set("personal"),
       clientDetails = Seq(
-        FieldConfiguration(
+        ClientDetailsConfiguration(
           name = "nino",
           regex = "[[A-Z]&&[^DFIQUV]][[A-Z]&&[^DFIQUVO]] ?\\d{2} ?\\d{2} ?\\d{2} ?[A-D]{1}",
           inputType = "text",
@@ -94,7 +84,7 @@ class ClientServiceConfigurationService @Inject() {
       serviceOption = true,
       clientTypes = Set("personal"),
       clientDetails = Seq(
-        FieldConfiguration(
+        ClientDetailsConfiguration(
           name = "nino",
           regex = "[[A-Z]&&[^DFIQUV]][[A-Z]&&[^DFIQUVO]] ?\\d{2} ?\\d{2} ?\\d{2} ?[A-D]{1}",
           inputType = "text",
@@ -108,7 +98,7 @@ class ClientServiceConfigurationService @Inject() {
       serviceOption = true,
       clientTypes = Set("personal", "business"),
       clientDetails = Seq(
-        FieldConfiguration(
+        ClientDetailsConfiguration(
           name = "vrn",
           regex = "^[0-9]{9}$",
           inputType = "text",
@@ -123,7 +113,7 @@ class ClientServiceConfigurationService @Inject() {
       supportedEnrolments = Seq("HMRC-TERS-ORG", "HMRC-TERSNT-ORG"), // parent service is always head of the list
       clientTypes = Set("trust"),
       clientDetails = Seq(
-        FieldConfiguration(
+        ClientDetailsConfiguration(
           name = "utr",
           regex = utrRegex,
           inputType = "text",
@@ -138,7 +128,7 @@ class ClientServiceConfigurationService @Inject() {
       supportedEnrolments = Seq("HMRC-TERS-ORG", "HMRC-TERSNT-ORG"), // parent service is always head of the list
       clientTypes = Set("trust"),
       clientDetails = Seq(
-        FieldConfiguration(
+        ClientDetailsConfiguration(
           name = "urn",
           regex = urnRegex,
           inputType = "text",
@@ -152,7 +142,7 @@ class ClientServiceConfigurationService @Inject() {
       serviceOption = true,
       clientTypes = Set("personal", "trust"),
       clientDetails = Seq(
-        FieldConfiguration(
+        ClientDetailsConfiguration(
           name = "cgtRef",
           regex = "^X[A-Z]CGTP[0-9]{9}$",
           inputType = "text",
@@ -166,7 +156,7 @@ class ClientServiceConfigurationService @Inject() {
       serviceOption = true,
       clientTypes = Set("personal", "business", "trust"),
       clientDetails = Seq(
-        FieldConfiguration(
+        ClientDetailsConfiguration(
           name = "pptRef",
           regex = "^X[A-Z]PPT000[0-9]{7}$",
           inputType = "text",
@@ -180,7 +170,7 @@ class ClientServiceConfigurationService @Inject() {
       serviceOption = true,
       clientTypes = Set("business", "trust"),
       clientDetails = Seq(
-        FieldConfiguration(
+        ClientDetailsConfiguration(
           name = "cbcId",
           regex = "^X[A-Z]CBC[0-9]{10}$",
           inputType = "text",
@@ -194,7 +184,7 @@ class ClientServiceConfigurationService @Inject() {
       serviceOption = true,
       clientTypes = Set("business", "trust"),
       clientDetails = Seq(
-        FieldConfiguration(
+        ClientDetailsConfiguration(
           name = "PlrId",
           regex = "^X[A-Z]{1}PLR[0-9]{10}$",
           inputType = "text",

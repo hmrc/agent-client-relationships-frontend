@@ -194,6 +194,7 @@ class AgentFastTrackControllerSpec extends ComponentSpecHelper with AuthStubs wi
   "POST /agents/fast-track/agentFastTrack" should {
     validFastTrackRequests.foreach(fastTrackFormData => s"redirect to the next page and store journey data for ${fastTrackFormData.service} service for ${fastTrackFormData.clientIdentifierType} and knownFacts: ${fastTrackFormData.knownFact}" in {
       authoriseAsAgent()
+      //TODO - test with different patterns
       val clientDetailsResponse: Option[ClientDetailsResponse] = Some(toClientRelationship(fastTrackFormData, Some(KnownFactType.PostalCode)))
       givenClientRelationshipFor(fastTrackFormData.service, fastTrackFormData.clientIdentifier, Json.toJson(clientDetailsResponse).toString)
 

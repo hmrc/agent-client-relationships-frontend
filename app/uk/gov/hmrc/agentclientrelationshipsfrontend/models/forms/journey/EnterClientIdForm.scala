@@ -18,11 +18,11 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey
 
 import play.api.data.Forms.*
 import play.api.data.Form
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.common.FieldConfiguration
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.common.ClientDetailsConfiguration
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.helpers.TextFormFieldHelper.textFieldMapping
 
 object EnterClientIdForm {
-  def form(clientDetail: FieldConfiguration, journeyType: String): Form[String] = {
+  def form(clientDetail: ClientDetailsConfiguration, journeyType: String): Form[String] = {
     Form(
       single(
         clientDetail.name -> textFieldMapping(clientDetail.name, s"clientId.${clientDetail.name}", clientDetail.regex)

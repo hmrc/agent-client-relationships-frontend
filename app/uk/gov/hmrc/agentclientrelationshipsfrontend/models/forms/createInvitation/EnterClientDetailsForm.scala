@@ -16,15 +16,15 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.createInvitation
 
-import play.api.data.Forms.*
 import play.api.data.Form
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.common.FieldConfiguration
+import play.api.data.Forms.*
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.common.ClientDetailsConfiguration
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.helpers.DateFormFieldHelper.dateFieldMapping
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.helpers.TextFormFieldHelper.{emptyMapping, textFieldMapping}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.helpers.TextFormFieldHelper.textFieldMapping
 
 object EnterClientDetailsForm {
   
-  def form(clientDetail: FieldConfiguration): Form[String] = {
+  def form(clientDetail: ClientDetailsConfiguration): Form[String] = {
     Form(
       single(
         clientDetail.inputType match {
