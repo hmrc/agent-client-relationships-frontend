@@ -16,4 +16,4 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.models.common
 
-case class FieldConfiguration(name: String, regex: String, inputType: String, width: Int, clientIdType: String)
+case class KnownFactsConfiguration(name: String, regex: String, inputType: String, width: Int)

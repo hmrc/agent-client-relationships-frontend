@@ -15,14 +15,14 @@
  *@
 
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.models.KnownFactType
-@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.common.FieldConfiguration
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.common.KnownFactsConfiguration
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.AgentJourneyRequest
 
 @this(
         layout: Layout
 )
 
-@(form: Form[?], inputField: FieldConfiguration)(implicit request: AgentJourneyRequest[?], messages: Messages)
+@(form: Form[?], inputField: KnownFactsConfiguration)(implicit request: AgentJourneyRequest[?], messages: Messages)
 
 @key = @{
     "clientFact"

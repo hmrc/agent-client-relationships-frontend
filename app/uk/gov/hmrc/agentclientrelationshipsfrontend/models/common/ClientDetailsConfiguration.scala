@@ -14,10 +14,6 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey
+package uk.gov.hmrc.agentclientrelationshipsfrontend.models.common
 
-enum JourneyErrorType(val name: String):
-  case NotFound extends JourneyErrorType("client-not-found")
-  case NotRegistered extends JourneyErrorType("not-registered")
-
-  override def toString: String = name
+case class ClientDetailsConfiguration(name: String, regex: String, inputType: String, width: Int, clientIdType: String)

@@ -43,7 +43,7 @@ class AgentFastTrackController @Inject()(mcc: MessagesControllerComponents,
 
   private def checkKnownFact(knownFact:String, clientDetailsResponse: ClientDetailsResponse):Boolean = {
     val validKnownFact = clientDetailsResponse.knownFactType
-      .map(serviceConfig.clientFactFieldFor).map(_.regex)
+      .map(_.fieldConfiguration.regex)
       .exists(stripWhiteSpaces(knownFact).matches)
     
     val matchedKnownFact = clientDetailsResponse.knownFacts.contains(knownFact)

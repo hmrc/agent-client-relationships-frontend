@@ -20,13 +20,12 @@ import play.api.i18n.I18nSupport
 import play.api.mvc.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
-import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.routes
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, JourneyType, JourneyErrorType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, JourneyErrorType, JourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.JourneyErrorPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 @Singleton
 class JourneyErrorController @Inject()(mcc: MessagesControllerComponents,

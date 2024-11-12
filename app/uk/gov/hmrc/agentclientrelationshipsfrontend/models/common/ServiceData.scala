@@ -23,7 +23,7 @@ case class ServiceData(
                         supportedEnrolments: Seq[String] = Seq.empty,
                         serviceName: String,
                         clientTypes: Set[String],
-                        clientDetails: Seq[FieldConfiguration],
+                        clientDetails: Seq[ClientDetailsConfiguration],
                         journeyErrors: Map[JourneyType, JourneyErrors] = Map(
                           JourneyType.AuthorisationRequest -> JourneyErrors(), 
                           JourneyType.AgentCancelAuthorisation -> JourneyErrors()
