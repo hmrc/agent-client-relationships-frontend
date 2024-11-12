@@ -57,7 +57,7 @@ class ComfirmClientSpec extends ViewSpecSupport {
     s"Confirm client view for ${j.journeyType}" should {
       implicit val journeyRequest: AgentJourneyRequest[?] = new AgentJourneyRequest("", j, request)
 
-      val form: Form[Boolean] = ConfirmationForm.form(ClientConfirmationFieldName)
+      val form: Form[Boolean] = ConfirmationForm.form(ClientConfirmationFieldName, clientName)
       val view: HtmlFormat.Appendable = viewTemplate(form)
       val doc: Document = Jsoup.parse(view.body)
       "have the right title" in {

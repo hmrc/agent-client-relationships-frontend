@@ -21,12 +21,11 @@ import play.api.data.Forms.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.helpers.FormFieldHelper
 
 object ConfirmationForm extends FormFieldHelper {
-  def form(fieldName: String): Form[Boolean] = Form(
+  def form(fieldName: String, clientName: String): Form[Boolean] = Form(
     single(
       fieldName -> optional(boolean)
-        .verifying(mandatoryFieldErrorMessage(fieldName), _.isDefined)
+        .verifying(mandatoryBoolean(fieldName, clientName))
         .transform(_.getOrElse(false), Some(_))
     )
   )
-  
 }
