@@ -315,3 +315,55 @@ trackRequests.filter-status.Expired=Daeth y cais i ben gan i’r cleient fethu a
 trackRequests.filter-status.ClientCancelledAuthorisation=Derbyniwyd gan y cleient. Gwnaeth y cleient ganslo’i awdurdodiad yn nes ymlaen
 trackRequests.filter-status.HMRCCancelledAuthorisation=Derbyniwyd gan y cleient. Gwnaeth CThEM ganslo’ch awdurdodiad yn nes ymlaen
 trackRequests.filter-status.Declined.HMRC-CBC=Cafodd cais {0} i reoli adroddiadau gwlad-wrth-wlad y cleient ei wrthod.
+
+# ________________________________________________________________________________
+# Journey error headings
+# ________________________________________________________________________________
+
+journeyError.client-not-found.header=Nid oeddem yn gallu dod o hyd i’ch cleient
+journeyError.not-registered.header=Mae angen i’ch cleient gofrestru ar gyfer Hunanasesiad
+journeyError.not-authorised.header=Nid ydych wedi eich awdurdodi
+journeyError.pending-authorisation-exists.header=Rydych eisoes wedi creu cais am awdurdodiad ar gyfer y gwasanaeth treth hwn
+journeyError.client-insolvent.header=Ni allwch greu cais am awdurdodiad gan fod y cleient hwn yn ansolfent
+
+# ________________________________________________________________________________
+# Journey error partials
+# ________________________________________________________________________________
+
+genericNotFound.description=Nid oeddem yn gallu dod o hyd i gleient yn ein cofnodion gan ddefnyddio’r manylion a roesoch i ni.
+genericNotFound.advice=Gwiriwch y manylion a rhowch gynnig arall arni.
+
+# ________________________________________________________________________________
+
+clientNotRegistered.p1=Ni allwch greu cais am awdurdodiad ar gyfer y cleient hwn hyd nes ei fod wedi cofrestru ar gyfer Hunanasesiad a bod ganddo Gyfeirnod Unigryw y Trethdalwr ar gyfer Hunanasesiad.
+clientNotRegistered.h2=Yr hyn i’w wneud nesaf
+clientNotRegistered.p2=Gofynnwch i’ch cleient <a href="{0}">gofrestru ar gyfer Hunanasesiad</a>. Ar Ã´l iddo gofrestru, bydd yn cael Cyfeirnod Unigryw y Trethdalwr ar gyfer Hunanasesiad.
+clientNotRegistered.p3=Wedyn, gallwch <a href="{0}">greu cais am awdurdodiad i’w anfon ato</a>.
+clientNotRegistered.return=Dychwelyd i’ch ceisiadau am awdurdodiad
+
+# ________________________________________________________________________________
+# Not authorised to de-auth
+# ________________________________________________________________________________
+notAuthorised.HMRC-MTD-IT.p=Nid yw’r cleient hwn wedi’ch awdurdodi i reoli ei gyfrif Troi Treth yn Ddigidol ar gyfer Treth Incwm.
+notAuthorised.PERSONAL-INCOME-RECORD.p=Nid yw’r cleient hwn wedi’ch awdurdodi i fwrw golwg dros ei gofnod incwm.
+notAuthorised.HMRC-MTD-VAT.p=Nid yw’r cleient hwn wedi’ch awdurdodi i reoli ei TAW.
+notAuthorised.HMRC-TERS-ORG.p=Nid yw’r cleient hwn wedi’ch awdurdodi i gynnal ymddiriedolaeth nac ystâd.
+notAuthorised.HMRC-TERSNT-ORG.p=Nid yw’r cleient hwn wedi’ch awdurdodi i gynnal ymddiriedolaeth nac ystâd.
+notAuthorised.HMRC-CGT-PD.p=Nid yw’r cleient hwn wedi’ch awdurdodi i reoli ei Dreth Enillion Cyfalaf ar warediadau eiddo yn y DU.
+notAuthorised.HMRC-PPT-ORG.p=Nid yw’r cleient hwn wedi’ch awdurdodi i reoli ei Dreth Deunydd Pacio Plastig.
+notAuthorised.HMRC-CBC-ORG.p=Nid yw’r cleient hwn wedi’ch awdurdodi i reoli ei adroddiadau gwlad-wrth-wlad.
+notAuthorised.HMRC-CBC-NONUK-ORG.p=Nid yw’r cleient hwn wedi’ch awdurdodi i reoli ei adroddiadau gwlad-wrth-wlad.
+
+# ________________________________________________________________________________
+# Pending authorisation already exists
+# ________________________________________________________________________________
+
+clientAlreadyInvited.p=Ni allwch fynd yn eich blaen hyd nes bod {0} wedi derbyn y cysylltiad at y cais am awdurdodiad.
+clientAlreadyInvited.p2=Ail-anfonwch y cysylltiad at y cais am awdurdodiad a grÃ«wyd pan wnaethoch ofyn i {0} eich awdurdodi yn y lle cyntaf:
+clientAlreadyInvited.h2=Yr hyn y gallwch ei wneud nesaf
+
+# ________________________________________________________________________________
+# Client insolvent
+# ________________________________________________________________________________
+
+clientInsolvent.p=Ni all cleientiaid awdurdodi asiant ar eu rhan pan fyddan nhw’n ansolfent.

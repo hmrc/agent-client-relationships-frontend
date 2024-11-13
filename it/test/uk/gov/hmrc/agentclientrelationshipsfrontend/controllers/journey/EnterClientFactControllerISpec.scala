@@ -35,7 +35,7 @@ class EnterClientFactControllerISpec extends ComponentSpecHelper with AuthStubs 
     Some("personal"),
     Some("HMRC-MTD-IT"),
     Some(testNino),
-    Some(ClientDetailsResponse("", None, None, Seq(testPostcode), Some(KnownFactType.PostalCode)))
+    Some(ClientDetailsResponse("", None, None, Seq(testPostcode), Some(KnownFactType.PostalCode), false, None))
   )
 
   val journeyService: JourneyService = app.injector.instanceOf[JourneyService]
@@ -69,7 +69,7 @@ class EnterClientFactControllerISpec extends ComponentSpecHelper with AuthStubs 
         "postcode" -> Seq(testPostcode)
       ))
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe "routes.ConfirmClientController.show(journeyType).url"
+      result.header("Location").value shouldBe routes.ConfirmClientController.show(JourneyType.AuthorisationRequest).url
     }
     "redirect to client-not-found when submitting a mismatching KF" in {
       authoriseAsAgent()
@@ -108,11 +108,11 @@ class EnterClientFactControllerISpec extends ComponentSpecHelper with AuthStubs 
     "redirect to the next page after storing answer for ITSA" in {
       authoriseAsAgent()
       await(journeyService.saveJourney(testItsaJourney(JourneyType.AgentCancelAuthorisation)))
-      val result = post(routes.EnterClientFactController.onSubmit(JourneyType.AgentCancelAuthorisation).url)(Map(
+      val result = post(routes.EnterClientFactController.onSubmit(JourneyType.AgentCancelAuthorisation).url)(body = Map(
         "postcode" -> Seq(testPostcode)
       ))
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe "routes.ConfirmClientController.show(journeyType).url"
+      result.header("Location").value shouldBe routes.ConfirmClientController.show(JourneyType.AgentCancelAuthorisation).url
     }
     "redirect to client-not-found when submitting a mismatching KF" in {
       authoriseAsAgent()
@@ -126,7 +126,7 @@ class EnterClientFactControllerISpec extends ComponentSpecHelper with AuthStubs 
     "show an error when no selection is made" in {
       authoriseAsAgent()
       await(journeyService.saveJourney(testItsaJourney(JourneyType.AgentCancelAuthorisation)))
-      val result = post(routes.EnterClientFactController.onSubmit(JourneyType.AgentCancelAuthorisation).url)("")
+      val result = post(routes.EnterClientFactController.onSubmit(JourneyType.AgentCancelAuthorisation).url)(body = Map("postcode" -> Seq("")))
       result.status shouldBe BAD_REQUEST
     }
   }

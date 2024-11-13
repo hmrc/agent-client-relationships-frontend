@@ -22,7 +22,10 @@ case class ClientDetailsResponse(name: String,
                                  status: Option[ClientStatus],
                                  isOverseas: Option[Boolean],
                                  knownFacts: Seq[String],
-                                 knownFactType: Option[KnownFactType])
+                                 knownFactType: Option[KnownFactType],
+                                 hasPendingInvitations: Boolean = false,
+                                 hasExistingRelationshipFor: Option[String]
+                                )
 
 object ClientDetailsResponse {
   implicit val format: OFormat[ClientDetailsResponse] = Json.format[ClientDetailsResponse]

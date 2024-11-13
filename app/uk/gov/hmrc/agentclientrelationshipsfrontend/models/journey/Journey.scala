@@ -17,7 +17,7 @@
 package uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey
 
 import play.api.libs.json.{Json, OFormat}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsResponse, KnownFactType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsResponse, ClientStatus, KnownFactType}
 
 case class Journey(journeyType: JourneyType,
                    clientType: Option[String] = None,
@@ -26,7 +26,7 @@ case class Journey(journeyType: JourneyType,
                    clientDetailsResponse: Option[ClientDetailsResponse] = None,
                    knownFact: Option[String] = None,
                    agentType: Option[String] = None,
-                   clientConfirmed: Boolean = false,
+                   clientConfirmed: Option[Boolean] = None,
                    refinedService: Option[Boolean] = None):
 
   def getClientTypeWithDefault: String = clientType.getOrElse("")
@@ -39,11 +39,19 @@ case class Journey(journeyType: JourneyType,
 
   def getKnownFactType: KnownFactType = clientDetailsResponse.flatMap(_.knownFactType)getOrElse(throw new RuntimeException("known fact is not defined"))
 
-  // TODO: Implement this method for real when our clientDetailsResponse contains
-  //  everything we need such as existing invitations or authorisations
-  def hasErrors(journeyType: JourneyType): Boolean = journeyType match
-    case JourneyType.AuthorisationRequest => clientDetailsResponse.exists(_.status.nonEmpty)
-    case JourneyType.AgentCancelAuthorisation => clientService.isEmpty
+  def getErrorCode(journeyType: JourneyType, clientDetails: ClientDetailsResponse): Option[JourneyErrorType] = journeyType match
+    case JourneyType.AuthorisationRequest => clientDetails match {
+      case ClientDetailsResponse(_, Some(ClientStatus.Insolvent), _, _, _, _, _) => Some(JourneyErrorType.ClientStatusInsolvent)
+      case ClientDetailsResponse(_, Some(_), _, _, _, _, _) => Some(JourneyErrorType.ClientStatusInvalid)
+      case ClientDetailsResponse(_, None, _, _, _, true, _) => Some(JourneyErrorType.ClientAlreadyInvited)
+      case ClientDetailsResponse(_, None, _, _, _, false, Some(service)) if service == clientService.get => Some(JourneyErrorType.AuthorisationExists)
+      case ClientDetailsResponse(_, None, _, _, _, false, _) => None
+    }
+    case JourneyType.AgentCancelAuthorisation => clientDetails match {
+      case ClientDetailsResponse(_, _, _, _, _, _, Some(service)) if service == clientService.get => None
+      case ClientDetailsResponse(_, _, _, _, _, _, Some(_)) => Some(JourneyErrorType.NoAuthorisationExists)
+      case ClientDetailsResponse(_, _, _, _, _, _, None) => Some(JourneyErrorType.NoAuthorisationExists)
+    }
 
 object Journey:
   implicit lazy val format: OFormat[Journey] = Json.format[Journey]

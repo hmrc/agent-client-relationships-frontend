@@ -19,5 +19,10 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey
 enum JourneyErrorType(val name: String):
   case NotFound extends JourneyErrorType("client-not-found")
   case NotRegistered extends JourneyErrorType("not-registered")
+  case ClientAlreadyInvited extends JourneyErrorType("already-authorisation-pending")
+  case AuthorisationExists extends JourneyErrorType("authorisation-exists")
+  case NoAuthorisationExists extends JourneyErrorType("not-authorised")
+  case ClientStatusInsolvent extends JourneyErrorType("client-insolvent")
+  case ClientStatusInvalid extends JourneyErrorType("client-status-invalid")
 
   override def toString: String = name
