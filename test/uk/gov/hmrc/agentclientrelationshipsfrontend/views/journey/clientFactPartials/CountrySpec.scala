@@ -53,12 +53,10 @@ class CountrySpec extends ViewSpecSupport {
         "have a select element" in {
           doc.select("select").size() shouldBe 1
         }
-        "have country options" in {
+        "render a select element with country options" in {
           val expectedElement = TestSelect(
-            "Which country is your client’s contact address in?",
-            None,
             "countryCode",
-            testCountries
+            Seq(("", "")) ++ testCountries
           )
           doc.extractSelectElement().value shouldBe expectedElement
         }
