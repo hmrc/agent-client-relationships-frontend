@@ -240,12 +240,13 @@ error.client-details.cgtRef.invalid=Enter the client’s Capital Gains Tax accou
 # ________________________________________________________________________________
 # Confirm Client
 # ________________________________________________________________________________
-confirm-client.title=Is this the client you want authorisation from?
-confirm-client.header=Is {0} the client you want authorisation from?
-error.confirm-client.required=Select yes if you want to ask this client for authorisation
-accepted.true=Yes
-accepted.false=No - I need to start over again
-error.accepted.required=Select yes if you want to ask this client for authorisation
+confirmClient.title=Is this the client you want authorisation from?
+confirmClient.authorisation-request.header=Is {0} the client you want authorisation from?
+confirmClient.agent-cancel-authorisation.header=Is your cancellation request for {0}?
+confirmClient.authorisation-request.error.required=Select ‘yes’ if you want {0} to authorise you as an agent
+confirmClient.agent-cancel-authorisation.error.required=Select ‘yes’ if {0} is the client you want to cancel authorisation for
+confirmClient.true=Yes
+confirmClient.false=No - I need to start over again
 
 
 # ________________________________________________________________________________

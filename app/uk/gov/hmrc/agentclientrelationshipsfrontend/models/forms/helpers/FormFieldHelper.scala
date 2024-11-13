@@ -20,6 +20,13 @@ import play.api.data.validation.*
 
 trait FormFieldHelper {
 
+  protected def mandatoryBoolean(errorMessageKey: String, args: String*): Constraint[Option[Boolean]] = Constraint[Option[Boolean]] { fieldValue =>
+    if (fieldValue.isDefined)
+      Valid
+    else
+      Invalid(ValidationError(mandatoryFieldErrorMessage(errorMessageKey), args*))
+  }
+
   protected def invalidMandatoryField(messageKey: String, inputFieldClass: String): Invalid = {
     Invalid(ValidationError(mandatoryFieldErrorMessage(messageKey), "inputFieldClass" -> inputFieldClass))
   }
@@ -27,9 +34,9 @@ trait FormFieldHelper {
   protected def invalidInput(messageKey: String, inputFieldClass: String): Invalid = {
     Invalid(ValidationError(invalidInputErrorMessage(messageKey), "inputFieldClass" -> inputFieldClass))
   }
-  
+
   protected def mandatoryFieldErrorMessage(messageKey: String): String = s"$messageKey.error.required"
-  
+
   protected def invalidInputErrorMessage(messageKey: String): String = s"$messageKey.error.invalid"
-  
+
 }
