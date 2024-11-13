@@ -43,6 +43,7 @@ trait Selectors {
   val hint = ".govuk-hint"
   val formGroup = ".govuk-form-group"
   val input = ".govuk-input"
+  val select = ".govuk-select"
 
   val table = ".govuk-table"
   val tableCaption = ".govuk-table__caption"

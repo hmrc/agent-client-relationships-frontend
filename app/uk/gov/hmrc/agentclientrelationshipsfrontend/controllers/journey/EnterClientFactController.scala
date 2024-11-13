@@ -21,7 +21,7 @@ import play.api.i18n.I18nSupport
 import play.api.mvc.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.CountryNamesLoader
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.KnownFactType
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsResponse, KnownFactType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.common.KnownFactsConfiguration
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.EnterClientFactForm
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, Journey, JourneyType}
@@ -46,11 +46,11 @@ class EnterClientFactController @Inject()(mcc: MessagesControllerComponents,
   private val countries = countryNamesLoader.load
   private val validCountryCodes = countries.keys.toSet
 
-  private def knownFactField(journey: Journey): KnownFactsConfiguration =
-    if(journey.clientDetailsResponse.get.knownFactType.get == KnownFactType.CountryCode) then
-      journey.clientDetailsResponse.get.knownFactType.get.fieldConfiguration.copy(validOptions = Some(countries.toSeq))
+  private def knownFactField(knownFactType: KnownFactType): KnownFactsConfiguration =
+    if knownFactType == KnownFactType.CountryCode then
+      knownFactType.fieldConfiguration.copy(validOptions = Some(countries.toSeq))
     else
-    journey.clientDetailsResponse.get.knownFactType.get.fieldConfiguration
+      knownFactType.fieldConfiguration
 
   private def knownFactForm(journey: Journey): Form[String] = EnterClientFactForm.form(
     journey.getKnowFactType.fieldConfiguration,
@@ -68,7 +68,7 @@ class EnterClientFactController @Inject()(mcc: MessagesControllerComponents,
       else
         Ok(enterKnownFactPage(
           knownFactForm(journey).fill(journey.knownFact.getOrElse("")),
-          knownFactField(journey)
+          knownFactField(journey.clientDetailsResponse.get.knownFactType.getOrElse(throw RuntimeException("Known fact type is missing")))
         ))
 
 
@@ -82,7 +82,7 @@ class EnterClientFactController @Inject()(mcc: MessagesControllerComponents,
         formWithErrors => {
           Future.successful(BadRequest(enterKnownFactPage(
             formWithErrors,
-            knownFactField(journey)
+            knownFactField(journey.clientDetailsResponse.get.knownFactType.getOrElse(throw RuntimeException("Known fact type is missing")))
           )))
         },
         knownFact => {
