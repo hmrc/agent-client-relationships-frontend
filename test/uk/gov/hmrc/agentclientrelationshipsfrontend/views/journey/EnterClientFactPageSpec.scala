@@ -84,8 +84,7 @@ class EnterClientFactPageSpec extends ViewSpecSupport {
         val form = EnterClientFactForm.form(
           knownFactType.fieldConfiguration,
           service,
-          if knownFactType.fieldConfiguration.inputType == "select" then Seq("") //TODO finish this when adding countries
-          else Nil
+          Set("FR", "DE")
         )
         val view: HtmlFormat.Appendable = viewTemplate(form, knownFactType.fieldConfiguration)
         val doc: Document = Jsoup.parse(view.body)

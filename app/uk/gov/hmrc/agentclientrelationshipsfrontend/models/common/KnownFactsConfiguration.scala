@@ -16,4 +16,4 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.models.common
 
-case class KnownFactsConfiguration(name: String, regex: String, inputType: String, width: Int)
+case class KnownFactsConfiguration(name: String, regex: String, inputType: String, width: Int, validOptions: Option[Seq[(String, String)]] = None)

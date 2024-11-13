@@ -17,9 +17,11 @@
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.models.KnownFactType
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.models.common.KnownFactsConfiguration
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.AgentJourneyRequest
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.clientFactPartials._
 
 @this(
-        layout: Layout
+        layout: Layout,
+        countryCodePartial: Country
 )
 
 @(form: Form[?], inputField: KnownFactsConfiguration)(implicit request: AgentJourneyRequest[?], messages: Messages)
@@ -49,7 +51,7 @@
     @{
         knownFactType match {
             case KnownFactType.PostalCode => "postcodeHtmlTemplate(form, inputField, messagePrefix)"
-            case KnownFactType.CountryCode => "countryCodeHtmlTemplate(form, inputField, messagePrefix)"
+            case KnownFactType.CountryCode => countryCodePartial(form, inputField, messagePrefix)
             case KnownFactType.Email => "emailHtmlTemplate(form, inputField, messagePrefix)"
             case KnownFactType.Date => "dateHtmlTemplate(form, inputField, messagePrefix)"
         }

@@ -31,6 +31,7 @@ trait ViewSpecHelper extends Selectors {
   case class TestLink(text: String, href: String)
   case class TestRadioGroup(legend: String, options: List[(String, String)], hint: Option[String])
   case class TestInputField(label: String, hint: Option[String], inputName: String)
+  case class TestSelect(inputName: String, options: Seq[(String, String)])
 
   private val elementToLink: Element => TestLink = element => TestLink(element.text(), element.attr("href"))
 
@@ -71,6 +72,13 @@ trait ViewSpecHelper extends Selectors {
         label = elem.select(label).first().text(),
         hint = elem.select(hint).toList.headOption.map(_.text),
         inputName = elem.select(input).attr("name")
+      )
+    }
+
+    def extractSelectElement(index: Int = 1): Option[TestSelect] = extractByIndex(select, index).map { elem =>
+      TestSelect(
+        inputName = elem.select(select).attr("name"),
+        options = elem.select("option").toList.map(el => (el.attr("value"), el.text()))
       )
     }
 }
