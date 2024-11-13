@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.createInvitation
+package uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey
 
 import play.api.data.Form
 import play.api.data.Forms.*

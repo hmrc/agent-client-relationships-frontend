@@ -162,12 +162,13 @@ error.client-details.cgtRef.invalid=Nodwch gyfeirnod cyfrif Treth Enillion Cyfal
 # ________________________________________________________________________________
 # Confirm Client
 # ________________________________________________________________________________
-confirm-client.title=Ai hwn yw’r cleient yr hoffech gael awdurdodiad ganddo?
-confirm-client.header=Ai {0} yw’r cleient rydych am awdurdodiad ganddo?
-confirm-client.error.required=Dewiswch ‘Iawn’ os hoffech ofyn i’r cleient hwn am awdurdodiad
-confirm-client.true=Iawn
-confirm-client.false=Na – mae angen i mi ddechrau eto
-error.accepted.required=Dewiswch ‘Iawn’ os hoffech ofyn i’r cleient hwn am awdurdodiad
+confirmClient.title=Ai hwn yw’r cleient yr hoffech gael awdurdodiad ganddo?
+confirmClient.authorisation-request.header=Ai {0} yw’r cleient rydych am awdurdodiad ganddo?
+confirmClient.agent-cancel-authorisation.header=<translation needed>
+confirmClient.authorisation-request.error.required=Dewiswch ‘Iawn’ os hoffech ofyn i’r cleient hwn am awdurdodiad
+confirmClient.agent-cancel-authorisation.error.required=<translation needed> 
+confirmClient.true=Iawn
+confirmClient.false=Na – mae angen i mi ddechrau eto
 
 #Track invitation requests
 trackRequests.title=Rheoli eich ceisiadau diweddar am awdurdodiad

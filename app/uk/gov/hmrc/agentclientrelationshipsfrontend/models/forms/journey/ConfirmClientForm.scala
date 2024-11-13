@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.createInvitation
+package uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey
 
 import play.api.data.*
 import play.api.data.Forms.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.helpers.FormFieldHelper
 
-object ConfirmationForm extends FormFieldHelper {
-  def form(fieldName: String, clientName: String): Form[Boolean] = Form(
+object ConfirmClientForm extends FormFieldHelper {
+  def form(fieldName: String, clientName: String, journeyType: String): Form[Boolean] = Form(
     single(
       fieldName -> optional(boolean)
-        .verifying(mandatoryBoolean(fieldName, clientName))
+        .verifying(mandatoryBoolean(s"$fieldName.$journeyType", clientName))
         .transform(_.getOrElse(false), Some(_))
     )
   )

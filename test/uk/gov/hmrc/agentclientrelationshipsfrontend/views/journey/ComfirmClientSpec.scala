@@ -21,8 +21,7 @@ import org.jsoup.nodes.Document
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.common.ServiceData
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.createInvitation.ConfirmationForm
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.EnterClientIdForm
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.ConfirmClientForm
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.support.ViewSpecSupport
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.ConfirmClient
@@ -45,11 +44,14 @@ class ComfirmClientSpec extends ViewSpecSupport {
   val clientName = "TestName"
 
   object Expected {
-    val label = s"Is $clientName the client you want authorisation from?"
+    val authorisationLabel = s"Is $clientName the client you want authorisation from?"
+    val deAuthorisationLabel = s"Is your cancellation request for $clientName?"
+    val authorisationTitle = s"$authorisationLabel - Ask a client to authorise you - GOV.UK"
+    val deAuthorisationTitle = s"$deAuthorisationLabel - Cancel a client’s authorisation - GOV.UK"
     val radioTrue = "Yes"
     val radioFalse = "No - I need to start over again"
-    val formError = "Select what you want the client to authorise you to do"
-    val errorRequired = s"Select ‘yes’ if you want $clientName to authorise you as an agent"
+    val authorisationErrorRequired = s"Select ‘yes’ if you want $clientName to authorise you as an agent"
+    val deAuthorisationErrorRequired = s"Select ‘yes’ if $clientName is the client you want to cancel authorisation for"
     val buttonContent = "Continue"
   }
 
@@ -57,30 +59,40 @@ class ComfirmClientSpec extends ViewSpecSupport {
     s"Confirm client view for ${j.journeyType}" should {
       implicit val journeyRequest: AgentJourneyRequest[?] = new AgentJourneyRequest("", j, request)
 
-      val form: Form[Boolean] = ConfirmationForm.form(ClientConfirmationFieldName, clientName)
+      val title = if(j.journeyType == JourneyType.AuthorisationRequest) Expected.authorisationTitle else
+        Expected.deAuthorisationTitle
+      val form: Form[Boolean] = ConfirmClientForm.form(ClientConfirmationFieldName, clientName, j.journeyType.toString)
       val view: HtmlFormat.Appendable = viewTemplate(form)
       val doc: Document = Jsoup.parse(view.body)
+
       "have the right title" in {
-        doc.title() shouldBe s"${Expected.label} - Ask a client to authorise you - GOV.UK"
+        doc.title() shouldBe title
       }
+
       "have a language switcher" in {
         doc.hasLanguageSwitch shouldBe true
       }
+
       "render input Radio form for confirm client page" in {
         doc.mainContent.extractRadios() shouldBe Some(TestRadioGroup(
-          legend = Expected.label,
+          legend = if(j.journeyType == JourneyType.AuthorisationRequest) Expected.authorisationLabel else
+            Expected.deAuthorisationLabel,
           options = List((Expected.radioTrue, "true"), (Expected.radioFalse, "false")),
           hint = None
         ))
       }
+
       "have a submission button" in {
         doc.mainContent.extractText(button, 1).value shouldBe Expected.buttonContent
       }
+
       "render error for the correct journey" in {
+        val expectedError = if(j.journeyType == JourneyType.AuthorisationRequest) Expected.authorisationErrorRequired else
+          Expected.deAuthorisationErrorRequired
         val formWithErrors = form.bind(Map.empty)
         val viewWithErrors: HtmlFormat.Appendable = viewTemplate(formWithErrors)
         val docWithErrors: Document = Jsoup.parse(viewWithErrors.body)
-        docWithErrors.mainContent.extractText(errorSummaryList, 1).value shouldBe Expected.errorRequired
+        docWithErrors.mainContent.extractText(errorSummaryList, 1).value shouldBe expectedError
       }
     })
 }

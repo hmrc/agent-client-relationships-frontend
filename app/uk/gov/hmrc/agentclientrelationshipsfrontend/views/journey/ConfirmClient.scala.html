@@ -33,15 +33,21 @@
 @(form: Form[Boolean])(implicit request: AgentJourneyRequest[?], messages: Messages)
 
 @key = @{
-    "confirm-client"
+    "confirmClient"
 }
 @pageTitle = @{
-    messages("confirm-client.header", request.journey.clientDetailsResponse.get.name)
+    messages(s"$key.$journeyKey.header", request.journey.clientDetailsResponse.get.name)
+}
+
+@journeyKey = @{
+    request.journey.journeyType.toString
 }
 
 @layout(
     pageTitle = pageTitle,
     optionalForm = Some(form),
+    serviceName = Some(messages(s"$journeyKey.service.name"))
+
 ) {
 
     @formWithCSRF(action = routes.ServiceRefinementController.onSubmit(request.journey.journeyType)) {
