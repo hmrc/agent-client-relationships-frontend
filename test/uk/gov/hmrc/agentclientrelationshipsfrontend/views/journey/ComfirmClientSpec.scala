@@ -20,7 +20,7 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.common.{FieldConfiguration, ServiceData}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.common.ServiceData
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.createInvitation.ConfirmationForm
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.EnterClientIdForm
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.*
