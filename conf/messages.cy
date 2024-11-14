@@ -107,6 +107,15 @@ clientService.HMRC-CBC-ORG.business=Rheoli ei adroddiadau gwlad-wrth-wlad
 clientService.HMRC-PILLAR2-ORG.business=Rheoli ei drethi atodol Colofn 2
 clientService.HMRC-PILLAR2-ORG.trust=Rheoli ei drethi atodol Colofn 2
 
+#-------------------------------------------------------------------------------------------
+# Enter Client Fact
+# -------------------------------------------------------------------------------------------
+
+clientFact.HMRC-CGT-PD.countryCode.label=Beth yw gwlad cyfeiriad cyswllt eich cleient?
+clientFact.HMRC-CGT-PD.countryCode.hint=Mae’n rhaid i hwn gyd-fynd â gwlad cyfeiriad cyswllt eich cleient yn ei gyfrif Treth Enillion Cyfalaf ar eiddo yn y DU. Dechreuwch deipio enw’r wlad.
+clientFact.HMRC-CGT-PD.countryCode.error.required=Nodwch wlad cyfeiriad cyswllt eich cleient
+
+
 # -------------------------------------------------------------------------------------------
 # Enter Known Facts
 # -------------------------------------------------------------------------------------------

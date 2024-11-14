@@ -175,7 +175,10 @@ clientFact.HMRC-MTD-VAT.date.label=When did the client’s VAT registration star
 clientFact.HMRC-CGT-PD.postcode.label=What is your client’s postcode?
 
 #TODO do we want to update the service answer we hold when the backend returns that it’s an overseas user or are we leaving that up to the submission at the end?
+
 clientFact.HMRC-CGT-PD.countryCode.label=Which country is your client’s contact address in?
+clientFact.HMRC-CGT-PD.countryCode.hint=This must match the country of the client’s contact address in their Capital Gains Tax on UK property account. Start typing the country.
+clientFact.HMRC-CGT-PD.countryCode.error.required=Enter the country of your client’s contact address
 
 clientFact.HMRC-PPT-ORG.date.label=When did your client’s registration start for Plastic Packaging Tax?
 

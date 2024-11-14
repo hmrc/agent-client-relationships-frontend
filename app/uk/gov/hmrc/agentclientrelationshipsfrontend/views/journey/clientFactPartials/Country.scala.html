@@ -48,7 +48,7 @@
         AccessibleAutocomplete(
             showAllValues = true
         )
-    )))
+    )).withFormField(form(field.name)))
 
     @govukButton(Button(
         content = Text(messages("continue.button")),
