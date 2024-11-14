@@ -59,5 +59,12 @@ class EmailSpec extends ViewSpecSupport {
           )
           doc.extractInputField().value shouldBe expectedElement
         }
+
+        "render an error message when form has errors" in {
+          val formWithErrors = form.bind(Map("email" -> ""))
+          val viewWithErrors: HtmlFormat.Appendable = viewTemplate(formWithErrors, KnownFactType.Email.fieldConfiguration)
+          val docWithErrors: Document = Jsoup.parse(viewWithErrors.body)
+          docWithErrors.select("p.govuk-error-message").text() shouldBe "Error: Enter your client’s email address"
+        }
       }))
 }

@@ -18,7 +18,7 @@
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.routes
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.models.common.KnownFactsConfiguration
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.AgentJourneyRequest
-@import uk.gov.hmrc.govukfrontend.views.Implicits.RichSelect
+@import uk.gov.hmrc.govukfrontend.views.Implicits.RichInput
 
 @this(
         formWithCSRF: FormWithCSRF,
@@ -39,7 +39,7 @@
             Text(messages(s"$messageKeyPrefix.hint")))) else None,
         label = Label(content = Text(messages(s"$key.label")), isPageHeading = true, classes = "govuk-label--xl"),
         classes = "govuk-!-margin-bottom-4"
-    )
+    ).withFormField(form(field.name)))
     )
 
     @govukButton(Button(
