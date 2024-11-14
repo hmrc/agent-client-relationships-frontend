@@ -33,11 +33,12 @@ class EmailSpec extends ViewSpecSupport {
   private val agentCancelAuthorisationJourney: Journey = Journey(JourneyType.AgentCancelAuthorisation)
 
   List(authorisationRequestJourney, agentCancelAuthorisationJourney).foreach(j =>
-      s"EnterClientFactPage for email ${j.journeyType.toString} view" should {
+    List("HMRC-CBC-ORG","HMRC-CBC-NONUK-ORG").foreach(enrolment =>
+      s"EnterClientFactPage for email ${j.journeyType.toString} view for $enrolment" should {
         implicit val journeyRequest: AgentJourneyRequest[?] = new AgentJourneyRequest(
           "",
           j.copy(
-            clientService = Some("HMRC-CBC-ORG"),
+            clientService = Some(enrolment),
             clientDetailsResponse = Some(ClientDetailsResponse("", None, None, Nil, Some(KnownFactType.Email)))
           ),
           request
@@ -58,5 +59,5 @@ class EmailSpec extends ViewSpecSupport {
           )
           doc.extractInputField().value shouldBe expectedElement
         }
-      })
+      }))
 }
