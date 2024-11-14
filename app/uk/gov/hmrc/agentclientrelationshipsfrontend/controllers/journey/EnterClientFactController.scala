@@ -21,11 +21,11 @@ import play.api.i18n.I18nSupport
 import play.api.mvc.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.CountryNamesLoader
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsResponse, KnownFactType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.KnownFactType
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.common.KnownFactsConfiguration
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.EnterClientFactForm
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, Journey, JourneyType}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{AgentClientRelationshipsService, ClientServiceConfigurationService, JourneyService}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{ClientServiceConfigurationService, JourneyService}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.EnterClientFactPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
@@ -36,7 +36,6 @@ import scala.concurrent.{ExecutionContext, Future}
 class EnterClientFactController @Inject()(mcc: MessagesControllerComponents,
                                           serviceConfig: ClientServiceConfigurationService,
                                           journeyService: JourneyService,
-                                          agentClientRelationshipsService: AgentClientRelationshipsService,
                                           enterKnownFactPage: EnterClientFactPage,
                                           actions: Actions,
                                           countryNamesLoader: CountryNamesLoader
@@ -53,7 +52,7 @@ class EnterClientFactController @Inject()(mcc: MessagesControllerComponents,
       knownFactType.fieldConfiguration
 
   private def knownFactForm(journey: Journey): Form[String] = EnterClientFactForm.form(
-    journey.getKnowFactType.fieldConfiguration,
+    journey.getKnownFactType.fieldConfiguration,
     journey.getService,
     validCountryCodes
   )
@@ -65,11 +64,16 @@ class EnterClientFactController @Inject()(mcc: MessagesControllerComponents,
       val journey = journeyRequest.journey
 
       if journey.clientDetailsResponse.isEmpty || journey.clientId.isEmpty then Redirect(routes.SelectClientTypeController.show(journeyType))
-      else
+      else {
+        val form = journey.knownFact match {
+          case Some(fact) => knownFactForm(journey).fill(fact)
+          case None => knownFactForm(journey)
+        }
         Ok(enterKnownFactPage(
-          knownFactForm(journey).fill(journey.knownFact.getOrElse("")),
+          form,
           knownFactField(journey.clientDetailsResponse.get.knownFactType.getOrElse(throw RuntimeException("Known fact type is missing")))
         ))
+      }
 
 
   def onSubmit(journeyType: JourneyType): Action[AnyContent] = actions.getJourney(journeyType).async:

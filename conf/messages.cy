@@ -172,6 +172,54 @@ error.client-details.cgtRef.required=Nodwch gyfeirnod cyfrif Treth Enillion Cyfa
 error.client-details.cgtRef.invalid=Nodwch gyfeirnod cyfrif Treth Enillion Cyfalaf y cleient yn y fformat cywir
 
 
+#-------------------------------------------------------------------------------------------
+# Enter Client Fact
+# -------------------------------------------------------------------------------------------
+
+clientFact.PERSONAL-INCOME-RECORD.date.label=Beth yw dyddiad geni eich cleient?
+clientFact.PERSONAL-INCOME-RECORD.date.hint=Er enghraifft, 22 7 1981.
+clientFact.PERSONAL-INCOME-RECORD.date.error.required=Nodwch ddyddiad geni’ch cleient
+clientFact.PERSONAL-INCOME-RECORD.date.error.invalid=Mae’n rhaid i’r dyddiad geni fod yn ddyddiad dilys
+clientFact.PERSONAL-INCOME-RECORD.date.error.day.required=Mae’n rhaid i’r dyddiad geni gynnwys diwrnod
+clientFact.PERSONAL-INCOME-RECORD.date.error.month.required=Mae’n rhaid i’r dyddiad geni gynnwys mis
+clientFact.PERSONAL-INCOME-RECORD.date.error.year.required=Mae’n rhaid i’r dyddiad geni gynnwys blwyddyn
+clientFact.PERSONAL-INCOME-RECORD.date.error.day-month.required=Mae’n rhaid i’r dyddiad geni gynnwys diwrnod a mis
+clientFact.PERSONAL-INCOME-RECORD.date.error.day-year.required=Mae’n rhaid i’r dyddiad geni gynnwys diwrnod a blwyddyn
+clientFact.PERSONAL-INCOME-RECORD.date.error.month-year.required=Mae’n rhaid i’r dyddiad geni gynnwys mis a blwyddyn
+
+clientFact.HMRC-MTD-VAT.date.label=<translation needed>
+clientFact.HMRC-MTD-VAT.date.hint=<translation needed>
+clientFact.HMRC-MTD-VAT.date.error.required=Nodwch ddyddiad cofrestru TAW eich cleient
+clientFact.HMRC-MTD-VAT.date.error.invalid=Nodwch ddyddiad cofrestru TAW dilys
+clientFact.HMRC-MTD-VAT.date.error.day.required=Mae’n rhaid i’r dyddiad cofrestru TAW gynnwys diwrnod
+clientFact.HMRC-MTD-VAT.date.error.month.required=Mae’n rhaid i’r dyddiad cofrestru TAW gynnwys mis
+clientFact.HMRC-MTD-VAT.date.error.year.required=Mae’n rhaid i’r dyddiad cofrestru TAW gynnwys blwyddyn
+clientFact.HMRC-MTD-VAT.date.error.day-month.required=Mae’n rhaid i’r dyddiad cofrestru TAW gynnwys diwrnod a mis
+clientFact.HMRC-MTD-VAT.date.error.day-year.required=Mae’n rhaid i’r dyddiad cofrestru TAW gynnwys diwrnod a blwyddyn
+clientFact.HMRC-MTD-VAT.date.error.month-year.required=Mae’n rhaid i’r dyddiad cofrestru TAW gynnwys mis a blwyddyn
+
+clientFact.HMRC-PPT-ORG.date.label=<translation needed>
+clientFact.HMRC-PPT-ORG.date.hint=Er enghraifft, 31 8 2022.
+clientFact.HMRC-PPT-ORG.date.error.required=Nodwch ddyddiad cofrestru eich cleient ar gyfer Treth Deunydd Pacio Plastig
+clientFact.HMRC-PPT-ORG.date.error.invalid=Nodwch ddyddiad cofrestru ar gyfer Treth Deunydd Pacio Plastig sy’n ddilys
+clientFact.HMRC-PPT-ORG.date.error.day.required=Mae’n rhaid i’r dyddiad cofrestru ar gyfer Treth Deunydd Pacio Plastig gynnwys diwrnod
+clientFact.HMRC-PPT-ORG.date.error.month.required=Mae’n rhaid i’r dyddiad cofrestru ar gyfer Treth Deunydd Pacio Plastig gynnwys mis
+clientFact.HMRC-PPT-ORG.date.error.year.required=Mae’n rhaid i’r dyddiad cofrestru ar gyfer Treth Deunydd Pacio Plastig gynnwys blwyddyn
+clientFact.HMRC-PPT-ORG.date.error.day-month.required=Mae’n rhaid i’r dyddiad cofrestru ar gyfer Treth Deunydd Pacio Plastig gynnwys diwrnod a mis
+clientFact.HMRC-PPT-ORG.date.error.day-year.required=Mae’n rhaid i’r dyddiad cofrestru ar gyfer Treth Deunydd Pacio Plastig gynnwys diwrnod a blwyddyn
+clientFact.HMRC-PPT-ORG.date.error.month-year.required=Mae’n rhaid i’r dyddiad cofrestru ar gyfer Treth Deunydd Pacio Plastig gynnwys mis a blwyddyn
+
+clientFact.HMRC-PILLAR2-ORG.date.label=<translation needed>
+clientFact.HMRC-PILLAR2-ORG.date.hint=<translation needed>
+clientFact.HMRC-PILLAR2-ORG.date.error.required=Nodwch ddyddiad cofrestru eich cleient ar gyfer rhoi gwybod am drethi atodol Colofn 2
+clientFact.HMRC-PILLAR2-ORG.date.error.invalid=Nodwch ddyddiad cofrestru ar gyfer trethi atodol Colofn 2 eich cleient
+clientFact.HMRC-PILLAR2-ORG.date.error.day.required=Mae’n rhaid i’r dyddiad cofrestru ar gyfer trethi atodol Colofn 2 gynnwys diwrnod
+clientFact.HMRC-PILLAR2-ORG.date.error.month.required=Mae’n rhaid i’r dyddiad cofrestru ar gyfer trethi atodol Colofn 2 gynnwys mis
+clientFact.HMRC-PILLAR2-ORG.date.error.year.required=Mae’n rhaid i’r dyddiad cofrestru ar gyfer trethi atodol Colofn 2 gynnwys blwyddyn
+clientFact.HMRC-PILLAR2-ORG.date.error.day-month.required=Mae’n rhaid i’r dyddiad cofrestru ar gyfer trethi atodol Colofn 2 gynnwys diwrnod a mis
+clientFact.HMRC-PILLAR2-ORG.date.error.day-year.required=Mae’n rhaid i’r dyddiad cofrestru ar gyfer trethi atodol Colofn 2 gynnwys diwrnod a blwyddyn
+clientFact.HMRC-PILLAR2-ORG.date.error.month-year.required=Mae’n rhaid i’r dyddiad cofrestru ar gyfer trethi atodol Colofn 2 gynnwys mis a blwyddyn
+
 # ________________________________________________________________________________
 # Confirm Client
 # ________________________________________________________________________________

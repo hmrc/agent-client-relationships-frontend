@@ -169,8 +169,26 @@ clientId.PlrId.error.required=Enter your client’s  date of registration to rep
 clientFact.HMRC-MTD-IT.postcode.label=What is your client’s postcode?
 
 clientFact.PERSONAL-INCOME-RECORD.date.label=What is your client’s date of birth?
+clientFact.PERSONAL-INCOME-RECORD.date.hint=For example, 22 7 1981.
+clientFact.PERSONAL-INCOME-RECORD.date.error.required=Enter your client’s date of birth
+clientFact.PERSONAL-INCOME-RECORD.date.error.invalid=Date of birth must be a valid date
+clientFact.PERSONAL-INCOME-RECORD.date.error.day.required=Date of birth must include a day
+clientFact.PERSONAL-INCOME-RECORD.date.error.month.required=Date of birth must include a month
+clientFact.PERSONAL-INCOME-RECORD.date.error.year.required=Date of birth must include a year
+clientFact.PERSONAL-INCOME-RECORD.date.error.day-month.required=Date of birth must include a day and month
+clientFact.PERSONAL-INCOME-RECORD.date.error.day-year.required=Date of birth must include a day and year
+clientFact.PERSONAL-INCOME-RECORD.date.error.month-year.required=Date of birth must include a month and year
 
 clientFact.HMRC-MTD-VAT.date.label=When did the client’s VAT registration start?
+clientFact.HMRC-MTD-VAT.date.hint=The date of registration is on the client’s VAT certificate. For example, 31 8 2015.
+clientFact.HMRC-MTD-VAT.date.error.required=Enter your client’s VAT registration date
+clientFact.HMRC-MTD-VAT.date.error.invalid=Enter a valid VAT registration date
+clientFact.HMRC-MTD-VAT.date.error.day.required=VAT registration date must include a day
+clientFact.HMRC-MTD-VAT.date.error.month.required=VAT registration date must include a month
+clientFact.HMRC-MTD-VAT.date.error.year.required=VAT registration date must include a year
+clientFact.HMRC-MTD-VAT.date.error.day-month.required=VAT registration date must include a day and month
+clientFact.HMRC-MTD-VAT.date.error.day-year.required=VAT registration date must include a day and year
+clientFact.HMRC-MTD-VAT.date.error.month-year.required=VAT registration date must include a month and year
 
 clientFact.HMRC-CGT-PD.postcode.label=What is your client’s postcode?
 
@@ -178,6 +196,15 @@ clientFact.HMRC-CGT-PD.postcode.label=What is your client’s postcode?
 clientFact.HMRC-CGT-PD.countryCode.label=Which country is your client’s contact address in?
 
 clientFact.HMRC-PPT-ORG.date.label=When did your client’s registration start for Plastic Packaging Tax?
+clientFact.HMRC-PPT-ORG.date.hint=For example, 31 8 2022.
+clientFact.HMRC-PPT-ORG.date.error.required=Enter your client’s Plastic Packaging Tax registration date
+clientFact.HMRC-PPT-ORG.date.error.invalid=Enter a valid Plastic Packaging Tax registration date
+clientFact.HMRC-PPT-ORG.date.error.day.required=Plastic Packaging Tax registration date must include a day
+clientFact.HMRC-PPT-ORG.date.error.month.required=Plastic Packaging Tax registration date must include a month
+clientFact.HMRC-PPT-ORG.date.error.year.required=Plastic Packaging Tax registration date must include a year
+clientFact.HMRC-PPT-ORG.date.error.day-month.required=Plastic Packaging Tax registration date must include a day and month
+clientFact.HMRC-PPT-ORG.date.error.day-year.required=Plastic Packaging Tax registration date must include a day and year
+clientFact.HMRC-PPT-ORG.date.error.month-year.required=Plastic Packaging Tax registration date must include a month and year
 
 clientFact.HMRC-CBC-ORG.email.label=What is your client’s Country-by-Country contact email address?
 clientFact.HMRC-CBC-ORG.email.hint=This is the email your client gave to HMRC for Country-by-Country reporting.
@@ -190,6 +217,15 @@ clientFact.HMRC-CBC-NONUK-ORG.email.error.invalid=Enter your client’s email ad
 clientFact.HMRC-CBC-NONUK-ORG.email.error.required=Enter your client’s email address
 
 clientFact.HMRC-PILLAR2-ORG.date.label=What is your client’s registration date for Pillar 2 top-up taxes?
+clientFact.HMRC-PILLAR2-ORG.date.hint=The current filing member can find it on their Pillar 2 top-up taxes homepage. For example, 27 3 2026.
+clientFact.HMRC-PILLAR2-ORG.date.error.required=Enter your client’s date of registration to report Pillar 2 top-up taxes
+clientFact.HMRC-PILLAR2-ORG.date.error.invalid=Enter a valid Pillar 2 top-up taxes registration date
+clientFact.HMRC-PILLAR2-ORG.date.error.day.required=Pillar 2 top-up taxes registration date must include a day
+clientFact.HMRC-PILLAR2-ORG.date.error.month.required=Pillar 2 top-up taxes registration date must include a month
+clientFact.HMRC-PILLAR2-ORG.date.error.year.required=Pillar 2 top-up taxes registration date must include a year
+clientFact.HMRC-PILLAR2-ORG.date.error.day-month.required=Pillar 2 top-up taxes registration date must include a day and month
+clientFact.HMRC-PILLAR2-ORG.date.error.day-year.required=Pillar 2 top-up taxes registration date must include a day and year
+clientFact.HMRC-PILLAR2-ORG.date.error.month-year.required=Pillar 2 top-up taxes registration date must include a month and year
 
 #-------------------------------------------------------------------------------------------
 # Enter Known Facts
