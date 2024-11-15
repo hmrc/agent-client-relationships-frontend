@@ -167,6 +167,9 @@ clientId.PlrId.error.required=Enter your client’s  date of registration to rep
 # -------------------------------------------------------------------------------------------
 
 clientFact.HMRC-MTD-IT.postcode.label=What is your client’s postcode?
+clientFact.HMRC-MTD-IT.postcode.hint=For sole traders who are signed up to Making Tax Digital for Income Tax, use the postcode from their business address.<br /><br />For any other type of client, use their home postcode.
+clientFact.HMRC-MTD-IT.postcode.error.required=Enter your client’s postcode
+clientFact.HMRC-MTD-IT.postcode.error.invalid=Enter a real postcode
 
 clientFact.PERSONAL-INCOME-RECORD.date.label=What is your client’s date of birth?
 clientFact.PERSONAL-INCOME-RECORD.date.hint=For example, 22 7 1981.
