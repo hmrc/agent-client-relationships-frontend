@@ -60,5 +60,11 @@ class CountrySpec extends ViewSpecSupport {
           )
           doc.extractSelectElement().value shouldBe expectedElement
         }
+        "render an error message when form has errors" in {
+          val formWithErrors = form.bind(Map("countryCode" -> "invalid"))
+          val viewWithErrors: HtmlFormat.Appendable = viewTemplate(formWithErrors, KnownFactType.CountryCode.fieldConfiguration.copy(validOptions = Some(testCountries)))
+          val docWithErrors: Document = Jsoup.parse(viewWithErrors.body)
+          docWithErrors.select("p.govuk-error-message").text() shouldBe "Error: Enter the country of your client’s contact address"
+        }
       })
 }
