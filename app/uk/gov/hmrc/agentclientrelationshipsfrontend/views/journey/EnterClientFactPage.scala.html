@@ -21,7 +21,8 @@
 
 @this(
         layout: Layout,
-        countryCodePartial: Country
+        countryCodePartial: Country,
+        emailPartial: Email
 )
 
 @(form: Form[?], inputField: KnownFactsConfiguration)(implicit request: AgentJourneyRequest[?], messages: Messages)
@@ -52,7 +53,7 @@
         knownFactType match {
             case KnownFactType.PostalCode => "postcodeHtmlTemplate(form, inputField, messagePrefix)"
             case KnownFactType.CountryCode => countryCodePartial(form, inputField, messagePrefix)
-            case KnownFactType.Email => "emailHtmlTemplate(form, inputField, messagePrefix)"
+            case KnownFactType.Email => emailPartial(form, inputField, messagePrefix)
             case KnownFactType.Date => "dateHtmlTemplate(form, inputField, messagePrefix)"
         }
     }

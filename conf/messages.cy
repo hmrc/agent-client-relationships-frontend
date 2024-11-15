@@ -107,6 +107,19 @@ clientService.HMRC-CBC-ORG.business=Rheoli ei adroddiadau gwlad-wrth-wlad
 clientService.HMRC-PILLAR2-ORG.business=Rheoli ei drethi atodol Colofn 2
 clientService.HMRC-PILLAR2-ORG.trust=Rheoli ei drethi atodol Colofn 2
 
+#-------------------------------------------------------------------------------------------
+# Enter Client Fact
+# -------------------------------------------------------------------------------------------
+
+clientFact.HMRC-CBC-ORG.email.label=<translation needed>
+clientFact.HMRC-CBC-ORG.email.hint=<translation needed>
+clientFact.HMRC-CBC-ORG.email.error.invalid=<translation needed>
+clientFact.HMRC-CBC-ORG.email.error.required=<translation needed>
+clientFact.HMRC-CBC-NONUK-ORG.email.label=<translation needed>
+clientFact.HMRC-CBC-NONUK-ORG.email.hint=<translation needed>
+clientFact.HMRC-CBC-NONUK-ORG.email.error.invalid=<translation needed>
+clientFact.HMRC-CBC-NONUK-ORG.email.error.required=<translation needed>
+
 # -------------------------------------------------------------------------------------------
 # Enter Known Facts
 # -------------------------------------------------------------------------------------------
