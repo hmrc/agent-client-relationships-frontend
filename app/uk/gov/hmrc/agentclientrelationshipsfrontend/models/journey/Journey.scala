@@ -37,7 +37,7 @@ case class Journey(journeyType: JourneyType,
 
   def getClientDetailsResponse: ClientDetailsResponse = clientDetailsResponse.getOrElse(throw new RuntimeException("client details are not defined"))
 
-  def getKnowFactType: KnownFactType = clientDetailsResponse.flatMap(_.knownFactType)getOrElse(throw new RuntimeException("known fact is not defined"))
+  def getKnownFactType: KnownFactType = clientDetailsResponse.flatMap(_.knownFactType)getOrElse(throw new RuntimeException("known fact is not defined"))
 
   // TODO: Implement this method for real when our clientDetailsResponse contains
   //  everything we need such as existing invitations or authorisations

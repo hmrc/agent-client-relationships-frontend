@@ -74,8 +74,14 @@ equal the page heading (H1) content *@
 
 @content = {
     @optionalForm.map { form =>
-        @if(form.hasErrors) {
-            @govukErrorSummary(ErrorSummary().withFormErrorsAsText(form))
+        @form.errors.headOption.map { error =>
+            @govukErrorSummary(ErrorSummary(
+                title = Text(messages("error.heading")),
+                errorList = Seq(ErrorLink(
+                    href = if(error.key == "date") Some("#date.day") else Some(s"#${error.key}"),
+                    content = Text(messages(error.message, error.args: _*))
+                ))
+            ))
         }
     }
     @contentBlock
