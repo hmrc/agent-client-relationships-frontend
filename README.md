@@ -44,7 +44,11 @@ Feature flags exist for each service and for requirement of known facts.
 
 It should then be listening on port 9448
 
-    browse http://localhost:9448/agent-client-relationships/agents
+    browse http://localhost:9448/agent-client-relationships/authorisation-request
+
+or
+
+    browse http://localhost:9448/agent-client-relationships/agent-cancel-authorisation
 
 ## Endpoints
 All Endpoints require Authentication.

@@ -21,6 +21,7 @@
 
 @this(
         layout: Layout,
+        postalCodePartial: Postcode,
         countryCodePartial: Country,
         emailPartial: Email,
         datePartial: Date
@@ -52,7 +53,7 @@
 
     @{
         knownFactType match {
-            case KnownFactType.PostalCode => "postcodeHtmlTemplate(form, inputField, messagePrefix)"
+            case KnownFactType.PostalCode => postalCodePartial(form, inputField, messagePrefix)
             case KnownFactType.CountryCode => countryCodePartial(form, inputField, messagePrefix)
             case KnownFactType.Email => emailPartial(form, inputField, messagePrefix)
             case KnownFactType.Date => datePartial(form, inputField, messagePrefix)
