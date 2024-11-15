@@ -183,6 +183,14 @@ clientFact.HMRC-CGT-PD.countryCode.error.required=Enter the country of your clie
 clientFact.HMRC-PPT-ORG.date.label=When did your client’s registration start for Plastic Packaging Tax?
 
 clientFact.HMRC-CBC-ORG.email.label=What is your client’s Country-by-Country contact email address?
+clientFact.HMRC-CBC-ORG.email.hint=This is the email your client gave to HMRC for Country-by-Country reporting.
+clientFact.HMRC-CBC-ORG.email.error.invalid=Enter your client’s email address in the correct format, like name@example.com
+clientFact.HMRC-CBC-ORG.email.error.required=Enter your client’s email address
+
+clientFact.HMRC-CBC-NONUK-ORG.email.label=What is your client’s Country-by-Country contact email address?
+clientFact.HMRC-CBC-NONUK-ORG.email.hint=This is the email your client gave to HMRC for Country-by-Country reporting.
+clientFact.HMRC-CBC-NONUK-ORG.email.error.invalid=Enter your client’s email address in the correct format, like name@example.com
+clientFact.HMRC-CBC-NONUK-ORG.email.error.required=Enter your client’s email address
 
 clientFact.HMRC-PILLAR2-ORG.date.label=What is your client’s registration date for Pillar 2 top-up taxes?
 
