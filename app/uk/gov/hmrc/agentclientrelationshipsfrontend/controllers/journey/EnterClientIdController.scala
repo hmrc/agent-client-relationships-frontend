@@ -74,6 +74,7 @@ class EnterClientIdController @Inject()(mcc: MessagesControllerComponents,
                 clientId = Some(clientId),
                 clientDetailsResponse = clientDetailsResponse,
                 clientConfirmed = None,
+                knownFact = None,
                 agentType = None
               ))
               nextPage <- if clientDetailsResponse.nonEmpty then

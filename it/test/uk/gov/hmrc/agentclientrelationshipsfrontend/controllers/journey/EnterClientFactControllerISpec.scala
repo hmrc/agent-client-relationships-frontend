@@ -80,6 +80,24 @@ class EnterClientFactControllerISpec extends ComponentSpecHelper with AuthStubs 
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe routes.JourneyErrorController.show(JourneyType.AuthorisationRequest, JourneyErrorType.NotRegistered).url
     }
+    "unset existing answers when submitting a new answer" in {
+      authoriseAsAgent()
+      await(journeyService.saveJourney(testItsaJourney(JourneyType.AuthorisationRequest).copy(knownFact = Some("ZZ1 1AA"), clientConfirmed = Some(true))))
+      val result = post(routes.EnterClientFactController.onSubmit(JourneyType.AuthorisationRequest).url)(Map(
+        "postcode" -> Seq(testPostcode)
+      ))
+      val updatedJourney = await(journeyService.getJourney()(request))
+      updatedJourney.get.clientConfirmed shouldBe None
+    }
+    "leave existing answers intact when submitting the same answer" in {
+      authoriseAsAgent()
+      await(journeyService.saveJourney(testItsaJourney(JourneyType.AuthorisationRequest).copy(knownFact = Some(testPostcode), clientConfirmed = Some(true))))
+      val result = post(routes.EnterClientFactController.onSubmit(JourneyType.AuthorisationRequest).url)(Map(
+        "postcode" -> Seq(testPostcode)
+      ))
+      val updatedJourney = await(journeyService.getJourney()(request))
+      updatedJourney.get.clientConfirmed shouldBe Some(true)
+    }
     "show an error when no selection is made" in {
       authoriseAsAgent()
       await(journeyService.saveJourney(testItsaJourney(JourneyType.AuthorisationRequest)))
@@ -122,6 +140,24 @@ class EnterClientFactControllerISpec extends ComponentSpecHelper with AuthStubs 
       ))
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe routes.JourneyErrorController.show(JourneyType.AgentCancelAuthorisation, JourneyErrorType.NotFound).url
+    }
+    "unset existing answers when submitting a new answer" in {
+      authoriseAsAgent()
+      await(journeyService.saveJourney(testItsaJourney(JourneyType.AgentCancelAuthorisation).copy(knownFact = Some("ZZ1 1AA"), clientConfirmed = Some(true))))
+      val result = post(routes.EnterClientFactController.onSubmit(JourneyType.AgentCancelAuthorisation).url)(Map(
+        "postcode" -> Seq(testPostcode)
+      ))
+      val updatedJourney = await(journeyService.getJourney()(request))
+      updatedJourney.get.clientConfirmed shouldBe None
+    }
+    "leave existing answers intact when submitting the same answer" in {
+      authoriseAsAgent()
+      await(journeyService.saveJourney(testItsaJourney(JourneyType.AgentCancelAuthorisation).copy(knownFact = Some(testPostcode), clientConfirmed = Some(true))))
+      val result = post(routes.EnterClientFactController.onSubmit(JourneyType.AgentCancelAuthorisation).url)(Map(
+        "postcode" -> Seq(testPostcode)
+      ))
+      val updatedJourney = await(journeyService.getJourney()(request))
+      updatedJourney.get.clientConfirmed shouldBe Some(true)
     }
     "show an error when no selection is made" in {
       authoriseAsAgent()
