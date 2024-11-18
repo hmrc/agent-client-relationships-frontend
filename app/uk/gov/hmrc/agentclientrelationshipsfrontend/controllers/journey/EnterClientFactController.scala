@@ -95,7 +95,7 @@ class EnterClientFactController @Inject()(mcc: MessagesControllerComponents,
               knownFact = Some(knownFact),
               clientConfirmed = None,
               agentType = None
-            )) if !journey.knownFact.contains(knownFact) // if user changes known fact answer then clean up session / store if never answered
+            ))
             redirectUrl <-
               if journey.clientDetailsResponse.exists(_.knownFacts.contains(knownFact)) then
                 journeyService.nextPageUrl(journeyType)
