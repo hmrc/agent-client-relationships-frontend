@@ -26,7 +26,10 @@
 @this(
         layout: Layout,
         clientNotFound: ClientNotFound,
-        clientNotRegistered: ClientNotRegistered
+        clientNotRegistered: ClientNotRegistered,
+        notAuthorised: NotAuthorised,
+        clientInsolvent: ClientInsolvent,
+        clientStatusInvalid: ClientStatusInvalid
 )
 
 @(journeyType: JourneyType, errorCode: JourneyErrorType)(implicit request: AgentJourneyRequest[?], messages: Messages, appConfig: AppConfig)
@@ -41,6 +44,9 @@
      errorCode match {
       case JourneyErrorType.NotFound => clientNotFound()
       case JourneyErrorType.NotRegistered => clientNotRegistered()
+      case JourneyErrorType.NoAuthorisationExists => notAuthorised()
+      case JourneyErrorType.ClientStatusInsolvent => clientInsolvent()
+      case JourneyErrorType.ClientStatusInvalid => clientStatusInvalid()
       case _ => HtmlFormat.empty
      }
     }

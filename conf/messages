@@ -194,9 +194,6 @@ clientFact.HMRC-MTD-VAT.date.error.day-year.required=VAT registration date must 
 clientFact.HMRC-MTD-VAT.date.error.month-year.required=VAT registration date must include a month and year
 
 clientFact.HMRC-CGT-PD.postcode.label=What is your client’s postcode?
-
-#TODO do we want to update the service answer we hold when the backend returns that it’s an overseas user or are we leaving that up to the submission at the end?
-
 clientFact.HMRC-CGT-PD.countryCode.label=Which country is your client’s contact address in?
 clientFact.HMRC-CGT-PD.countryCode.hint=This must match the country of the client’s contact address in their Capital Gains Tax on UK property account. Start typing the country.
 clientFact.HMRC-CGT-PD.countryCode.error.required=Enter the country of your client’s contact address
@@ -390,6 +387,9 @@ trackRequests.filter-status.Declined.HMRC-CBC={0} request to manage the client�
 
 journeyError.client-not-found.header=We could not find your client
 journeyError.not-registered.header=Your client needs to register for Self Assessment
+journeyError.not-authorised.header=You have not been authorised
+journeyError.pending-authorisation-exists.header=You already created an authorisation request for this tax service
+journeyError.client-insolvent.header=You cannot create an authorisation request because this client is insolvent
 
 # ________________________________________________________________________________
 # Journey error partials
@@ -407,3 +407,28 @@ clientNotRegistered.p3=Then you can <a class="govuk-link" href={0}>create an aut
 clientNotRegistered.return=Return to your authorisation requests
 
 # ________________________________________________________________________________
+# Not authorised to de-auth
+# ________________________________________________________________________________
+notAuthorised.HMRC-MTD-IT.p=This client has not authorised you to manage their Making Tax Digital for Income Tax.
+notAuthorised.PERSONAL-INCOME-RECORD.p=This client has not authorised you to view their Income record.
+notAuthorised.HMRC-MTD-VAT.p=This client has not authorised you to manage their VAT.
+notAuthorised.HMRC-TERS-ORG.p=This client has not authorised you to maintain a trust or an estate.
+notAuthorised.HMRC-TERSNT-ORG.p=This client has not authorised you to maintain a trust or an estate.
+notAuthorised.HMRC-CGT-PD.p=This client has not authorised you to manage their Capital Gains Tax on UK property account.
+notAuthorised.HMRC-PPT-ORG.p=This client has not authorised you to manage their Plastic Packaging Tax.
+notAuthorised.HMRC-CBC-ORG.p=This client has not authorised you to manage their country-by-country reports
+notAuthorised.HMRC-CBC-NONUK-ORG.p=This client has not authorised you to manage their country-by-country reports
+
+# ________________________________________________________________________________
+# Pending authorisation already exists
+# ________________________________________________________________________________
+
+clientAlreadyInvited.p=You cannot continue until {0} has accepted the authorisation request link.
+clientAlreadyInvited.p2=Resend the authorisation request link that was created when you originally asked {0} to authorise you:
+clientAlreadyInvited.h2=What you can do next
+
+# ________________________________________________________________________________
+# Client insolvent
+# ________________________________________________________________________________
+
+clientInsolvent.p=Clients cannot authorise an agent on their behalf when they are insolvent.

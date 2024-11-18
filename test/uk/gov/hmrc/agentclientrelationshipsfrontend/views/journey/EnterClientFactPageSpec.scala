@@ -76,7 +76,7 @@ class EnterClientFactPageSpec extends ViewSpecSupport {
           "",
           j.copy(
             clientService = Some(service),
-            clientDetailsResponse = Some(ClientDetailsResponse("", None, None, Nil, Some(knownFactType)))
+            clientDetailsResponse = Some(ClientDetailsResponse("", None, None, Nil, Some(knownFactType), false, None))
           ),
           request
         )

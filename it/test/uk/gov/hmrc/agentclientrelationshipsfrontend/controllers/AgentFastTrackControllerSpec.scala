@@ -180,7 +180,9 @@ class AgentFastTrackControllerSpec extends ComponentSpecHelper with AuthStubs wi
      status = None,
      isOverseas = None,
      knownFacts = agentFastTrackRequest.knownFact.toSeq,
-     knownFactType = knownFactType
+     knownFactType = knownFactType,
+     hasPendingInvitations = false,
+     hasExistingRelationshipFor = None
    )
 
   val journeyService: JourneyService = app.injector.instanceOf[JourneyService]
@@ -203,8 +205,7 @@ class AgentFastTrackControllerSpec extends ComponentSpecHelper with AuthStubs wi
 
       fastTrackFormData.service match{
         case "HMRC-TERS-ORG" | "HMRC-TERSNT-ORG" => result.header("Location").value shouldBe journeyRoutes.ServiceRefinementController.show(journeyType).url
-        //TODO - replace with url
-        case _ => result.header("Location").value shouldBe "routes.ConfirmClientController.show(journeyType).url"
+        case _ => result.header("Location").value shouldBe journeyRoutes.ConfirmClientController.show(journeyType).url
       }
 
       whenReady(journeyService.getJourney()) { result =>

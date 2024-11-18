@@ -18,14 +18,27 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey
 
 import play.api.http.Status.{BAD_REQUEST, OK}
 import play.api.test.Helpers.*
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{Journey, JourneyType, JourneyErrorType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsResponse, KnownFactType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{Journey, JourneyErrorType, JourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.JourneyService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentSpecHelper}
 
 class JourneyErrorControllerISpec extends ComponentSpecHelper with AuthStubs {
 
-  private val authorisationRequestJourney: Journey = Journey(JourneyType.AuthorisationRequest, clientType = Some("personal"))
-  private val agentCancelAuthorisationJourney: Journey = Journey(JourneyType.AgentCancelAuthorisation, clientType = Some("personal"))
+  private val authorisationRequestJourney: Journey = Journey(
+    JourneyType.AuthorisationRequest,
+    clientType = Some("personal"),
+    clientService = Some("HMRC-MTD-IT"),
+    clientId = Some("AB123"),
+    clientDetailsResponse = Some(ClientDetailsResponse("Test Name", None, None, Seq("AA11AA"), Some(KnownFactType.PostalCode), false, None))
+  )
+  private val agentCancelAuthorisationJourney: Journey = Journey(
+    JourneyType.AgentCancelAuthorisation,
+    clientType = Some("personal"),
+    clientService = Some("HMRC-MTD-IT"),
+    clientId = Some("AB123"),
+    clientDetailsResponse = Some(ClientDetailsResponse("Test Name", None, None, Seq("AA11AA"), Some(KnownFactType.PostalCode), false, None))
+  )
 
   val journeyService: JourneyService = app.injector.instanceOf[JourneyService]
 
@@ -36,8 +49,8 @@ class JourneyErrorControllerISpec extends ComponentSpecHelper with AuthStubs {
 
   List(authorisationRequestJourney, agentCancelAuthorisationJourney).foreach(j =>
     JourneyErrorType.values.foreach(errorCode =>
-      s"GET /${j.journeyType.toString}/error/$errorCode" should {
-        "display the error page" in {
+      s"GET /${j.journeyType.toString}/exit/$errorCode" should {
+        "display the exit page" in {
           authoriseAsAgent()
           await(journeyService.saveJourney(j))
           val result = get(routes.JourneyErrorController.show(j.journeyType, errorCode).url)

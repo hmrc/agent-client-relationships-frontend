@@ -103,7 +103,6 @@ trait ComponentSpecHelper
         .post(body)
     )
 
-
   def post(uri: String)(body: Map[String, Seq[String]]): WSResponse =
     await(
       buildClient(uri)

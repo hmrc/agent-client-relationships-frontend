@@ -73,7 +73,7 @@ class EnterClientIdController @Inject()(mcc: MessagesControllerComponents,
               _ <- journeyService.saveJourney(journey.copy(
                 clientId = Some(clientId),
                 clientDetailsResponse = clientDetailsResponse,
-                clientConfirmed = false,
+                clientConfirmed = None,
                 agentType = None
               ))
               nextPage <- if clientDetailsResponse.nonEmpty then

@@ -38,7 +38,7 @@ class PostcodeSpec extends ViewSpecSupport {
           "",
           j.copy(
             clientService = Some("HMRC-CGT-PD"),
-            clientDetailsResponse = Some(ClientDetailsResponse("", None, None, Nil, Some(KnownFactType.PostalCode)))
+            clientDetailsResponse = Some(ClientDetailsResponse("", None, None, Nil, Some(KnownFactType.PostalCode), false, None))
           ),
           request
         )

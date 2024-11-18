@@ -38,7 +38,7 @@ class CountrySpec extends ViewSpecSupport {
           "",
           j.copy(
             clientService = Some("HMRC-CGT-PD"),
-            clientDetailsResponse = Some(ClientDetailsResponse("", None, None, Nil, Some(KnownFactType.CountryCode)))
+            clientDetailsResponse = Some(ClientDetailsResponse("", None, None, Nil, Some(KnownFactType.CountryCode), false, None))
           ),
           request
         )

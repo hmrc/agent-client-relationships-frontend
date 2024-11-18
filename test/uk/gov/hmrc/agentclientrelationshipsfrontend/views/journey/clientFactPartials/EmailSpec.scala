@@ -39,7 +39,7 @@ class EmailSpec extends ViewSpecSupport {
           "",
           j.copy(
             clientService = Some(enrolment),
-            clientDetailsResponse = Some(ClientDetailsResponse("", None, None, Nil, Some(KnownFactType.Email)))
+            clientDetailsResponse = Some(ClientDetailsResponse("", None, None, Nil, Some(KnownFactType.Email), false, None))
           ),
           request
         )

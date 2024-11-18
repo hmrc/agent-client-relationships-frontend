@@ -37,6 +37,8 @@ class JourneyErrorController @Inject()(mcc: MessagesControllerComponents,
     journeyRequest =>
       given AgentJourneyRequest[?] = journeyRequest
 
+      if(journeyRequest.journey.clientService.isEmpty) Redirect(appConfig.agentServicesAccountHomeUrl)
+      else
       Ok(journeyErrorPage(
         journeyType,
         errorCode

@@ -24,21 +24,21 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.models.common.ServiceData
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.ConfirmClientForm
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.support.ViewSpecSupport
-import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.ConfirmClient
+import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.ConfirmClientPage
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.ClientConfirmationFieldName
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.ClientDetailsResponse
 
-class ComfirmClientSpec extends ViewSpecSupport {
+class ConfirmClientPageSpec extends ViewSpecSupport {
 
-  val viewTemplate: ConfirmClient = app.injector.instanceOf[ConfirmClient]
+  val viewTemplate: ConfirmClientPage = app.injector.instanceOf[ConfirmClientPage]
 
   private val authorisationRequestJourney: Journey = Journey(
     JourneyType.AuthorisationRequest,
-    clientDetailsResponse = Some(ClientDetailsResponse("TestName", None, None, Nil, None))
+    clientDetailsResponse = Some(ClientDetailsResponse("TestName", None, None, Nil, None, false, None))
   )
   private val agentCancelAuthorisationJourney: Journey = Journey(
     JourneyType.AgentCancelAuthorisation,
-    clientDetailsResponse = Some(ClientDetailsResponse("TestName", None, None, Nil, None))
+    clientDetailsResponse = Some(ClientDetailsResponse("TestName", None, None, Nil, None, false, None))
   )
 
   val clientName = "TestName"

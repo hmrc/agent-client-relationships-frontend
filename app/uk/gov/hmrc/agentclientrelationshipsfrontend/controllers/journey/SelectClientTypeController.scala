@@ -66,7 +66,7 @@ class SelectClientTypeController @Inject()(mcc: MessagesControllerComponents,
             clientService = None,
             clientId = None,
             clientDetailsResponse = None,
-            clientConfirmed = false,
+            clientConfirmed = None,
             agentType = None
           )
           journeyService.saveJourney(newJourney).flatMap { _ =>

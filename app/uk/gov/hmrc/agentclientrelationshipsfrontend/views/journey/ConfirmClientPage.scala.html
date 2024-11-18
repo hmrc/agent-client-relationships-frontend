@@ -15,7 +15,7 @@
  *@
 
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.Layout
-@import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.components.{SubmitButton, InputRadios}
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.components.SubmitButton
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.routes
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.AgentJourneyRequest
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyType.AuthorisationRequest
@@ -26,7 +26,7 @@
         layout: Layout,
         govukDetails: GovukDetails,
         formWithCSRF: FormWithCSRF,
-        inputRadio: GovukRadios,
+        govukRadios: GovukRadios,
         submitButton: SubmitButton
 )
 
@@ -47,11 +47,10 @@
     pageTitle = pageTitle,
     optionalForm = Some(form),
     serviceName = Some(messages(s"$journeyKey.service.name"))
-
 ) {
 
-    @formWithCSRF(action = routes.ServiceRefinementController.onSubmit(request.journey.journeyType)) {
-        @inputRadio(Radios(
+    @formWithCSRF(action = routes.ConfirmClientController.onSubmit(request.journey.journeyType)) {
+        @govukRadios(Radios(
             fieldset = Some(Fieldset(
                 legend = Some(Legend(
                     content = Text(pageTitle),
@@ -66,7 +65,7 @@
                     value = Some(trueOrFalse)
                 )
             )
-        )))).withFormField(form(ClientConfirmationFieldName, request.journey.clientDetailsResponse.get.name)))
+        ).withFormField(form(ClientConfirmationFieldName)))
 
         @submitButton()
     }

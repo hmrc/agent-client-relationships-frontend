@@ -51,7 +51,9 @@ class AgentClientRelationshipsServiceSpec extends AnyWordSpecLike with Matchers 
     None,
     None,
     Seq("testId"),
-    Some(KnownFactType.PostalCode)
+    Some(KnownFactType.PostalCode),
+    false,
+    None
   )
   val testJourney: Journey = Journey(
     JourneyType.AuthorisationRequest,

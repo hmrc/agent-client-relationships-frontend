@@ -72,7 +72,7 @@ class ServiceRefinementController @Inject()(mcc: MessagesControllerComponents,
             clientService = Some(clientService),
             clientId = None,
             clientDetailsResponse = None,
-            clientConfirmed = false,
+            clientConfirmed = None,
             agentType = None,
             refinedService = Some(true)
           )
