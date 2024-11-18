@@ -91,7 +91,7 @@ class EnterClientFactController @Inject()(mcc: MessagesControllerComponents,
         },
         knownFact => {
           for
-            _ <- journeyService.saveJourney(journey.copy(
+            _ <- if journey.knownFact.contains(knownFact) then Future.successful(()) else journeyService.saveJourney(journey.copy(
               knownFact = Some(knownFact),
               clientConfirmed = None,
               agentType = None
