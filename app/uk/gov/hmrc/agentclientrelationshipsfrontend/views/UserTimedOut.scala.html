@@ -19,37 +19,38 @@
 @this(
         layout: Layout,
         h1: h1,
-        p: p,
-        a: a,
         govukButton: GovukButton
 )
 
-@(continueUrl: Option[String], isAgent: Boolean)(implicit request: Request[?], messages: Messages, appConfig: AppConfig)
+@(continueUrl: Option[String], serviceHeader: Option[String] = None)(implicit request: Request[?], messages: Messages, appConfig: AppConfig)
 
 @timeString = @{
     val timeout = appConfig.timeoutDialogTimeoutSeconds
     if(timeout < 60) s"$timeout ${messages("timed-out.seconds")}" else s"${timeout / 60} ${messages("timed-out.minutes")}"
 }
+@title = @{messages("timed-out.header")}
+@clientHeader = @{messages("service.name.clients")}
+@serviceName = @{serviceHeader.getOrElse(clientHeader)}
 
 @layout(
-    pageTitle = messages("timed-out.header"),
-    serviceName = Some(if(isAgent) messages("service.name.agents.auth") else messages("service.name.clients"))
+    pageTitle = title,
+    serviceName = Some(serviceName)
 ) {
 
-    @h1(messages("timed-out.header"))
-    @p() { @messages("timed-out.p1", timeString) }
+    @h1(title)
+    <p class="govuk-body">@messages("timed-out.p1", timeString)</p>
 
     @continueUrl.map { url =>
-        @if(isAgent) {
-            @p() {
-                @a(url, messages("timed-out.p2.link"))
-                @messages("timed-out.p2.end")
-            }
-        } else {
+        @if(serviceName.matches(clientHeader)) {
             @govukButton(Button(
                 content = Text(messages("timed-out.button")),
                 href = Some(url)
             ))
+        } else {
+            <p class="govuk-body">
+                <a href="@{url}" class="govuk-link">@messages("timed-out.p2.link")</a>
+                @messages("timed-out.p2.end")
+            </p>
         }
     }
 }

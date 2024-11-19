@@ -54,7 +54,10 @@
     @if(isSignedIn) {
         @hmrcTimeoutDialogHelper(
             signOutUrl = signOutUrl.get,
-            timeoutUrl = Some(routes.TimedOutController.timedOut.url)
+            timeoutUrl = Some(routes.TimedOutController.timedOut(
+                continueUrl = s"${appConfig.appExternalUrl}${request.uri}",
+                serviceHeader = service
+            ).url)
         )
     }
     @autocompleteCss()

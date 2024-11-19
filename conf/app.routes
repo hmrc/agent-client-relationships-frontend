@@ -8,7 +8,7 @@ GET         /track-requests                                                     
 GET         /track-requests/page/:pageNumber                                            uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.TrackRequestsController.show(pageNumber: Int)
 POST        /track-requests                                                             uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.TrackRequestsController.submitFilters
 # Sign out/Timed out ---------------------------------------------------------------------------------------------------------
-GET         /timed-out                                                                  uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.TimedOutController.timedOut
+GET         /timed-out                                                                  uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.TimedOutController.timedOut(continueUrl: String, serviceHeader: String)
 GET         /sign-out                                                                   uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.SignOutController.signOut
 
 # Auth/IV --------------------------------------------------------------------------------------------------------------------
