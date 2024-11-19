@@ -382,18 +382,18 @@ trackRequests.filter-status.HMRCCancelledAuthorisation=Accepted by client. HMRC 
 trackRequests.filter-status.Declined.HMRC-CBC={0} request to manage the client’s country-by-country reports was declined.
 
 # ________________________________________________________________________________
-# Journey error headings
+# Journey exit headings
 # ________________________________________________________________________________
 
-journeyError.client-not-found.header=We could not find your client
-journeyError.not-registered.header=Your client needs to register for Self Assessment
-journeyError.not-authorised.header=You have not been authorised
-journeyError.pending-authorisation-exists.header=You already created an authorisation request for this tax service
-journeyError.client-insolvent.header=You cannot create an authorisation request because this client is insolvent
-journeyError.authorisation-already-exists.header=You are already authorised
+journeyExit.client-not-found.header=We could not find your client
+journeyExit.not-registered.header=Your client needs to register for Self Assessment
+journeyExit.not-authorised.header=You have not been authorised
+journeyExit.pending-authorisation-exists.header=You already created an authorisation request for this tax service
+journeyExit.client-insolvent.header=You cannot create an authorisation request because this client is insolvent
+journeyExit.authorisation-already-exists.header=You are already authorised
 
 # ________________________________________________________________________________
-# Journey error partials
+# Journey exit partials
 # ________________________________________________________________________________
 
 genericNotFound.description=We could not find a client in our records using the details you gave us.
