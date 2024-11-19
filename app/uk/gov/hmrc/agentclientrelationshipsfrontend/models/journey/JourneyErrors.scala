@@ -17,5 +17,5 @@
 package uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey
 
 case class JourneyErrors(
-                          notFound: JourneyErrorType = JourneyErrorType.NotFound
+                          notFound: JourneyExitType = JourneyExitType.NotFound
                         )

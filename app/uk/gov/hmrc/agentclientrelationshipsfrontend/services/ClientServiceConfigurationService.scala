@@ -17,7 +17,7 @@
 package uk.gov.hmrc.agentclientrelationshipsfrontend.services
 
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.common.{ClientDetailsConfiguration, ServiceData}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{JourneyErrorType, JourneyErrors, JourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{JourneyExitType, JourneyErrors, JourneyType}
 
 import javax.inject.{Inject, Singleton}
 import scala.collection.immutable.ListMap
@@ -51,7 +51,7 @@ class ClientServiceConfigurationService @Inject() {
     case _ => clientService
   } else ""
 
-  def getNotFoundError(journeyType: JourneyType, clientService: String): JourneyErrorType = services(clientService).journeyErrors(journeyType).notFound
+  def getNotFoundError(journeyType: JourneyType, clientService: String): JourneyExitType = services(clientService).journeyErrors(journeyType).notFound
 
   def supportsAgentRoles(clientService: String): Boolean = false // TODO: implement this using a similar pattern to supportedEnrolments
 
@@ -76,7 +76,7 @@ class ClientServiceConfigurationService @Inject() {
       ),
       journeyErrors = Map(
         JourneyType.AuthorisationRequest -> JourneyErrors(
-          notFound = JourneyErrorType.NotRegistered
+          notFound = JourneyExitType.NotRegistered
         ),
         JourneyType.AgentCancelAuthorisation -> JourneyErrors()
       )

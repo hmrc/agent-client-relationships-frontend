@@ -18,7 +18,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey
 
 import play.api.http.Status.{BAD_REQUEST, OK}
 import play.api.test.Helpers.*
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{Journey, JourneyErrorType, JourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{Journey, JourneyExitType, JourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsResponse, ClientStatus, KnownFactType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.JourneyService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentSpecHelper}
@@ -115,7 +115,7 @@ class ConfirmClientControllerISpec extends ComponentSpecHelper with AuthStubs {
         "confirmClient" -> Seq("true")
       ))
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe routes.JourneyErrorController.show(JourneyType.AuthorisationRequest, JourneyErrorType.AuthorisationAlreadyExists).url
+      result.header("Location").value shouldBe routes.JourneyExitController.show(JourneyType.AuthorisationRequest, JourneyExitType.AuthorisationAlreadyExists).url
     }
 
     "redirect to check your answers page when confirming client to deAuth with existing authorisation" in {
@@ -135,7 +135,7 @@ class ConfirmClientControllerISpec extends ComponentSpecHelper with AuthStubs {
         "confirmClient" -> Seq("true")
       ))
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe routes.JourneyErrorController.show(JourneyType.AgentCancelAuthorisation, JourneyErrorType.NoAuthorisationExists).url
+      result.header("Location").value shouldBe routes.JourneyExitController.show(JourneyType.AgentCancelAuthorisation, JourneyExitType.NoAuthorisationExists).url
     }
 
     "redirect to client-insolvent page when client is insolvent" in {
@@ -145,7 +145,7 @@ class ConfirmClientControllerISpec extends ComponentSpecHelper with AuthStubs {
         "confirmClient" -> Seq("true")
       ))
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe routes.JourneyErrorController.show(JourneyType.AuthorisationRequest, JourneyErrorType.ClientStatusInsolvent).url
+      result.header("Location").value shouldBe routes.JourneyExitController.show(JourneyType.AuthorisationRequest, JourneyExitType.ClientStatusInsolvent).url
     }
 
     "redirect to client-status-invalid page when client status is invalid" in {
@@ -155,7 +155,7 @@ class ConfirmClientControllerISpec extends ComponentSpecHelper with AuthStubs {
         "confirmClient" -> Seq("true")
       ))
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe routes.JourneyErrorController.show(JourneyType.AuthorisationRequest, JourneyErrorType.ClientStatusInvalid).url
+      result.header("Location").value shouldBe routes.JourneyExitController.show(JourneyType.AuthorisationRequest, JourneyExitType.ClientStatusInvalid).url
     }
 
     "redirect to start again when not confirming client" in {

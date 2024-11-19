@@ -16,13 +16,13 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey
 
-enum JourneyErrorType(val name: String):
-  case NotFound extends JourneyErrorType("client-not-found")
-  case NotRegistered extends JourneyErrorType("not-registered")
-  case ClientAlreadyInvited extends JourneyErrorType("already-authorisation-pending")
-  case AuthorisationAlreadyExists extends JourneyErrorType("authorisation-already-exists")
-  case NoAuthorisationExists extends JourneyErrorType("not-authorised")
-  case ClientStatusInsolvent extends JourneyErrorType("client-insolvent")
-  case ClientStatusInvalid extends JourneyErrorType("client-status-invalid")
+enum JourneyExitType(val name: String):
+  case NotFound extends JourneyExitType("client-not-found")
+  case NotRegistered extends JourneyExitType("not-registered")
+  case ClientAlreadyInvited extends JourneyExitType("already-authorisation-pending")
+  case AuthorisationAlreadyExists extends JourneyExitType("authorisation-already-exists")
+  case NoAuthorisationExists extends JourneyExitType("not-authorised")
+  case ClientStatusInsolvent extends JourneyExitType("client-insolvent")
+  case ClientStatusInvalid extends JourneyExitType("client-status-invalid")
 
   override def toString: String = name

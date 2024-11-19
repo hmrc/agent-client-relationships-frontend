@@ -63,7 +63,7 @@ class JourneyService @Inject()(journeyRepository: JourneyRepository,
         else if (journey.clientConfirmed.isEmpty) routes.ConfirmClientController.show(journeyType).url
         else if (journey.clientConfirmed.contains(false)) routes.StartJourneyController.startJourney(journeyType).url
         else if (serviceConfig.supportsAgentRoles(journey.clientService.get) && journey.agentType.isEmpty) "routes.SelectAgentRoleController.show(journeyType).url"
-        else if (journey.getErrorCode(journeyType, journey.getClientDetailsResponse).nonEmpty) routes.JourneyErrorController.show(journeyType, journey.getErrorCode(journeyType, journey.getClientDetailsResponse).get).url
+        else if (journey.getExitType(journeyType, journey.getClientDetailsResponse).nonEmpty) routes.JourneyExitController.show(journeyType, journey.getExitType(journeyType, journey.getClientDetailsResponse).get).url
         else "routes.CheckYourAnswersController.show(journeyType).url"
       }
       case _ => routes.StartJourneyController.startJourney(journeyType).url

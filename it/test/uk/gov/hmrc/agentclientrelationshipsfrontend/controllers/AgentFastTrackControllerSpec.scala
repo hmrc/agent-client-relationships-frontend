@@ -241,7 +241,7 @@ class AgentFastTrackControllerSpec extends ComponentSpecHelper with AuthStubs wi
       val result = post(fastTrackRoutes.AgentFastTrackController.agentFastTrack.url)(toFastTrackRequests(fastTrackFormData))
       result.status shouldBe SEE_OTHER
 
-      result.header("Location").value shouldBe journeyRoutes.JourneyErrorController.show(journeyType, serviceConfig.getNotFoundError(journeyType, fastTrackFormData.service)).url
+      result.header("Location").value shouldBe journeyRoutes.JourneyExitController.show(journeyType, serviceConfig.getNotFoundError(journeyType, fastTrackFormData.service)).url
 
       whenReady(journeyService.getJourney()) { result =>
         result should contain(toJourney(fastTrackFormData, clientDetailsResponse).copy(knownFact = None))
@@ -257,7 +257,7 @@ class AgentFastTrackControllerSpec extends ComponentSpecHelper with AuthStubs wi
       val result = post(fastTrackRoutes.AgentFastTrackController.agentFastTrack.url)(toFastTrackRequests(fastTrackFormData))
       result.status shouldBe SEE_OTHER
 
-      result.header("Location").value shouldBe journeyRoutes.JourneyErrorController.show(journeyType, serviceConfig.getNotFoundError(journeyType, fastTrackFormData.service)).url
+      result.header("Location").value shouldBe journeyRoutes.JourneyExitController.show(journeyType, serviceConfig.getNotFoundError(journeyType, fastTrackFormData.service)).url
 
       whenReady(journeyService.getJourney()) { result =>
         result should contain(toJourney(fastTrackFormData, clientDetailsResponse).copy(knownFact = None))

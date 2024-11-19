@@ -22,22 +22,22 @@ import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.support.ViewSpecSupport
-import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.JourneyErrorPage
+import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.JourneyExitPage
 
-class JourneyErrorPageSpec extends ViewSpecSupport {
+class JourneyExitPageSpec extends ViewSpecSupport {
 
-  val viewTemplate: JourneyErrorPage = app.injector.instanceOf[JourneyErrorPage]
+  val viewTemplate: JourneyExitPage = app.injector.instanceOf[JourneyExitPage]
 
   private val authorisationRequestJourney: Journey = Journey(JourneyType.AuthorisationRequest)
   private val agentCancelAuthorisationJourney: Journey = Journey(JourneyType.AgentCancelAuthorisation)
 
   case class ExpectedStrings(authorisationTitle: String, cancelAuthorisationTitle: String)
-  private val supportedErrorCodes: Map[JourneyErrorType, ExpectedStrings] = Map(
-    JourneyErrorType.NotFound -> ExpectedStrings(
+  private val supportedErrorCodes: Map[JourneyExitType, ExpectedStrings] = Map(
+    JourneyExitType.NotFound -> ExpectedStrings(
       authorisationTitle = "We could not find your client - Ask a client to authorise you - GOV.UK",
       cancelAuthorisationTitle = "We could not find your client - Cancel a client’s authorisation - GOV.UK"
     ),
-    JourneyErrorType.NotRegistered ->  ExpectedStrings(
+    JourneyExitType.NotRegistered ->  ExpectedStrings(
       authorisationTitle = "Your client needs to register for Self Assessment - Ask a client to authorise you - GOV.UK",
       cancelAuthorisationTitle = "Your client needs to register for Self Assessment - Cancel a client’s authorisation - GOV.UK"
     )
