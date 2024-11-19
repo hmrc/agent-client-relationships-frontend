@@ -461,3 +461,24 @@ authorisationAlreadyExists.HMRC-CBC-NONUK-ORG.p1=This client has already authori
 authorisationAlreadyExists.HMRC-PILLAR2-ORG.p1=This client has already authorised you to manage their Pillar 2 top-up taxes.
 authorisationAlreadyExists.p2=You do not need to ask them to authorise you for this service again.
 authorisationAlreadyExists.return=Return to your authorisation requests
+# Authorise agent start page
+# ________________________________________________________________________________
+
+authoriseAgentStartPage.h1.=Authorise {0} to {1}
+
+authoriseAgentStartPage.p1.HMRC-MTD-IT=You need to sign in with the user ID you use for Income Tax.
+authoriseAgentStartPage.p1.PERSONAL-INCOME-RECORD=You need to sign in with the user ID you use for your Income Record.
+authoriseAgentStartPage.p1.HMRC-MTD-VAT=You need to sign in with the user ID you use for VAT.
+authoriseAgentStartPage.p1.HMRC-CGT-PD=You need to sign in with the user ID you use for Capital Gains Tax on UK property account.
+authoriseAgentStartPage.p1.HMRC-PPT-ORG=You need to sign in with the user ID you use for Plastic Packaging Tax.
+authoriseAgentStartPage.p1.HMRC-CBC-ORG=You need to sign in with the user ID you use for Country-by-country Reports.
+authoriseAgentStartPage.p1.HMRC-CBC-NONUK=You need to sign in with the user ID you use for Country-by-country Reports.
+authoriseAgentStartPage.p1.HMRC-PILLAR2-ORG=You need to sign in with the user ID you use for Pillar 2 top-up taxes.
+authoriseAgentStartPage.p1.HMRC-TERS-ORG=You need to sign in with the user ID you use for Trust or an Estate.
+authoriseAgentStartPage.p1.HMRC-TERSNT-ORG=You need to sign in with the user ID you use for Trust or an Estate.
+authoriseAgentStartPage.p2=If you do not have sign in details,you'll be able to create some.
+authoriseAgentStartPage.link.text1=Start now
+authoriseAgentStartPage.link.text2=I do not want {0} to act for me.
+
+
+
