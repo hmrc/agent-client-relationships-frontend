@@ -44,7 +44,7 @@ case class Journey(journeyType: JourneyType,
       case ClientDetailsResponse(_, Some(ClientStatus.Insolvent), _, _, _, _, _) => Some(JourneyErrorType.ClientStatusInsolvent)
       case ClientDetailsResponse(_, Some(_), _, _, _, _, _) => Some(JourneyErrorType.ClientStatusInvalid)
       case ClientDetailsResponse(_, None, _, _, _, true, _) => Some(JourneyErrorType.ClientAlreadyInvited)
-      case ClientDetailsResponse(_, None, _, _, _, false, Some(service)) if service == clientService.get => Some(JourneyErrorType.AuthorisationExists)
+      case ClientDetailsResponse(_, None, _, _, _, false, Some(service)) if service == clientService.get => Some(JourneyErrorType.AuthorisationAlreadyExists)
       case ClientDetailsResponse(_, None, _, _, _, false, _) => None
     }
     case JourneyType.AgentCancelAuthorisation => clientDetails match {

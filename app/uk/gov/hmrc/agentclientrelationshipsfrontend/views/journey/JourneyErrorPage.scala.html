@@ -29,7 +29,8 @@
         clientNotRegistered: ClientNotRegistered,
         notAuthorised: NotAuthorised,
         clientInsolvent: ClientInsolvent,
-        clientStatusInvalid: ClientStatusInvalid
+        clientStatusInvalid: ClientStatusInvalid,
+        authorisationAlreadyExists: AuthorisationAlreadyExists
 )
 
 @(journeyType: JourneyType, errorCode: JourneyErrorType)(implicit request: AgentJourneyRequest[?], messages: Messages, appConfig: AppConfig)
@@ -47,6 +48,7 @@
       case JourneyErrorType.NoAuthorisationExists => notAuthorised()
       case JourneyErrorType.ClientStatusInsolvent => clientInsolvent()
       case JourneyErrorType.ClientStatusInvalid => clientStatusInvalid()
+      case JourneyErrorType.AuthorisationAlreadyExists => authorisationAlreadyExists()
       case _ => HtmlFormat.empty
      }
     }

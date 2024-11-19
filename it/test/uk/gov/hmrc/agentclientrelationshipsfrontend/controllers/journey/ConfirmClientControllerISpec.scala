@@ -115,7 +115,7 @@ class ConfirmClientControllerISpec extends ComponentSpecHelper with AuthStubs {
         "confirmClient" -> Seq("true")
       ))
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe routes.JourneyErrorController.show(JourneyType.AuthorisationRequest, JourneyErrorType.AuthorisationExists).url
+      result.header("Location").value shouldBe routes.JourneyErrorController.show(JourneyType.AuthorisationRequest, JourneyErrorType.AuthorisationAlreadyExists).url
     }
 
     "redirect to check your answers page when confirming client to deAuth with existing authorisation" in {

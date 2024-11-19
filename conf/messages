@@ -390,6 +390,7 @@ journeyError.not-registered.header=Your client needs to register for Self Assess
 journeyError.not-authorised.header=You have not been authorised
 journeyError.pending-authorisation-exists.header=You already created an authorisation request for this tax service
 journeyError.client-insolvent.header=You cannot create an authorisation request because this client is insolvent
+journeyError.authorisation-already-exists.header=You are already authorised
 
 # ________________________________________________________________________________
 # Journey error partials
@@ -432,3 +433,20 @@ clientAlreadyInvited.h2=What you can do next
 # ________________________________________________________________________________
 
 clientInsolvent.p=Clients cannot authorise an agent on their behalf when they are insolvent.
+
+# ________________________________________________________________________________
+# Active authorisation already exists
+# ________________________________________________________________________________
+
+authorisationAlreadyExists.HMRC-MTD-IT.p1=This client has already authorised you to manage their Making Tax Digital for Income Tax.
+authorisationAlreadyExists.PERSONAL-INCOME-RECORD.p1=This client has already authorised you to view their Income record.
+authorisationAlreadyExists.HMRC-MTD-VAT.p1=This client has already authorised you to manage their VAT.
+authorisationAlreadyExists.HMRC-TERS-ORG.p1=This client has already authorised you to maintain a trust or an estate.
+authorisationAlreadyExists.HMRC-TERSNT-ORG.p1=This client has already authorised you to maintain a trust or an estate.
+authorisationAlreadyExists.HMRC-CGT-PD.p1=This client has already authorised you to manage their Capital Gains Tax on UK property account.
+authorisationAlreadyExists.HMRC-PPT-ORG.p1=This client has already authorised you to manage their Plastic Packaging Tax.
+authorisationAlreadyExists.HMRC-CBC-ORG.p1=This client has already authorised you to manage their country-by-country reports.
+authorisationAlreadyExists.HMRC-CBC-NONUK-ORG.p1=This client has already authorised you to manage their country-by-country reports.
+authorisationAlreadyExists.HMRC-PILLAR2-ORG.p1=This client has already authorised you to manage their Pillar 2 top-up taxes.
+authorisationAlreadyExists.p2=You do not need to ask them to authorise you for this service again.
+authorisationAlreadyExists.return=Return to your authorisation requests
