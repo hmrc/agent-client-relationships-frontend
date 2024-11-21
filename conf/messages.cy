@@ -317,17 +317,18 @@ trackRequests.filter-status.HMRCCancelledAuthorisation=Derbyniwyd gan y cleient.
 trackRequests.filter-status.Declined.HMRC-CBC=Cafodd cais {0} i reoli adroddiadau gwlad-wrth-wlad y cleient ei wrthod.
 
 # ________________________________________________________________________________
-# Journey error headings
+# Journey exit headings
 # ________________________________________________________________________________
 
-journeyError.client-not-found.header=Nid oeddem yn gallu dod o hyd i’ch cleient
-journeyError.not-registered.header=Mae angen i’ch cleient gofrestru ar gyfer Hunanasesiad
-journeyError.not-authorised.header=Nid ydych wedi eich awdurdodi
-journeyError.pending-authorisation-exists.header=Rydych eisoes wedi creu cais am awdurdodiad ar gyfer y gwasanaeth treth hwn
-journeyError.client-insolvent.header=Ni allwch greu cais am awdurdodiad gan fod y cleient hwn yn ansolfent
+journeyExit.client-not-found.header=Nid oeddem yn gallu dod o hyd i’ch cleient
+journeyExit.not-registered.header=Mae angen i’ch cleient gofrestru ar gyfer Hunanasesiad
+journeyExit.not-authorised.header=Nid ydych wedi eich awdurdodi
+journeyExit.pending-authorisation-exists.header=Rydych eisoes wedi creu cais am awdurdodiad ar gyfer y gwasanaeth treth hwn
+journeyExit.client-insolvent.header=Ni allwch greu cais am awdurdodiad gan fod y cleient hwn yn ansolfent
+journeyExit.authorisation-already-exists.header=Rydych eisoes wedi’ch awdurdodi
 
 # ________________________________________________________________________________
-# Journey error partials
+# Journey exit partials
 # ________________________________________________________________________________
 
 genericNotFound.description=Nid oeddem yn gallu dod o hyd i gleient yn ein cofnodion gan ddefnyddio’r manylion a roesoch i ni.
@@ -367,3 +368,19 @@ clientAlreadyInvited.h2=Yr hyn y gallwch ei wneud nesaf
 # ________________________________________________________________________________
 
 clientInsolvent.p=Ni all cleientiaid awdurdodi asiant ar eu rhan pan fyddan nhw’n ansolfent.
+
+# ________________________________________________________________________________
+# Active authorisation already exists
+# ________________________________________________________________________________
+
+authorisationAlreadyExists.HMRC-MTD-IT.p1=Mae’r cleient hwn eisoes wedi’ch awdurdodi i reoli ei gyfrif Troi Treth yn Ddigidol ar gyfer Treth Incwm.
+authorisationAlreadyExists.PERSONAL-INCOME-RECORD.p1=Mae’r cleient hwn eisoes wedi’ch awdurdodi i fwrw golwg dros ei gofnod incwm.
+authorisationAlreadyExists.HMRC-MTD-VAT.p1=Mae’r cleient hwn eisoes wedi’ch awdurdodi i reoli ei TAW.
+authorisationAlreadyExists.HMRC-TERS-ORG.p1=Mae’r cleient hwn eisoes wedi’ch awdurdodi i gynnal ymddiriedolaeth neu ystâd.
+authorisationAlreadyExists.HMRC-TERSNT-ORG.p1=Mae’r cleient hwn eisoes wedi’ch awdurdodi i gynnal ymddiriedolaeth neu ystâd.
+authorisationAlreadyExists.HMRC-CGT-PD.p1=Mae’r cleient hwn eisoes wedi’ch awdurdodi i reoli ei Dreth Enillion Cyfalaf ar warediadau eiddo yn y DU.
+authorisationAlreadyExists.HMRC-PPT-ORG.p1=Mae’r cleient hwn eisoes wedi’ch awdurdodi i reoli ei Dreth Deunydd Pacio Plastig.
+authorisationAlreadyExists.HMRC-CBC-ORG.p1=<translation needed>
+authorisationAlreadyExists.HMRC-CBC-NONUK-ORG.p1=<translation needed>
+authorisationAlreadyExists.HMRC-PILLAR2-ORG.p1=<translation needed>
+authorisationAlreadyExists.p2=Nid oes yn rhaid i chi ofyn iddo eich awdurdodi ar gyfer y gwasanaeth hwn eto.

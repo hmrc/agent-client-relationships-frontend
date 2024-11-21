@@ -83,7 +83,7 @@ class AgentFastTrackController @Inject()(mcc: MessagesControllerComponents,
 
           nextPage <- (clientDetails, checkedKnownFact) match
             case (Some(_), None | Some(true)) => journeyService.nextPageUrl(journeyType)
-            case _ => Future.successful(routes.JourneyErrorController.show(journeyType, serviceConfig.getNotFoundError(journeyType, agentFastTrackFormData.service)).url)
+            case _ => Future.successful(routes.JourneyExitController.show(journeyType, serviceConfig.getNotFoundError(journeyType, agentFastTrackFormData.service)).url)
         } yield Redirect(nextPage)
       }
     )

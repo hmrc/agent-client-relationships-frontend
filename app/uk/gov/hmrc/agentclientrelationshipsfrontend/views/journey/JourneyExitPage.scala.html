@@ -17,10 +17,10 @@
 @import play.twirl.api.{Format, HtmlFormat}
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.Layout
-@import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.agentErrors._
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.agentExitPartials._
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.components.SubmitButton
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.routes
-@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{JourneyErrorType, JourneyType, AgentJourneyRequest}
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{JourneyExitType, JourneyType, AgentJourneyRequest}
 
 
 @this(
@@ -29,24 +29,26 @@
         clientNotRegistered: ClientNotRegistered,
         notAuthorised: NotAuthorised,
         clientInsolvent: ClientInsolvent,
-        clientStatusInvalid: ClientStatusInvalid
+        clientStatusInvalid: ClientStatusInvalid,
+        authorisationAlreadyExists: AuthorisationAlreadyExists
 )
 
-@(journeyType: JourneyType, errorCode: JourneyErrorType)(implicit request: AgentJourneyRequest[?], messages: Messages, appConfig: AppConfig)
+@(journeyType: JourneyType, exitType: JourneyExitType)(implicit request: AgentJourneyRequest[?], messages: Messages, appConfig: AppConfig)
 
-@key = @{"journeyError"}
-@pageTitle = @{messages(s"$key.$errorCode.header")}
+@key = @{"journeyExit"}
+@pageTitle = @{messages(s"$key.$exitType.header")}
 
 @layout(pageTitle, serviceName = Some(messages(s"${journeyType.toString}.service.name"))) {
 
     <h1 class="govuk-heading-xl">@pageTitle</h1>
     @{
-     errorCode match {
-      case JourneyErrorType.NotFound => clientNotFound()
-      case JourneyErrorType.NotRegistered => clientNotRegistered()
-      case JourneyErrorType.NoAuthorisationExists => notAuthorised()
-      case JourneyErrorType.ClientStatusInsolvent => clientInsolvent()
-      case JourneyErrorType.ClientStatusInvalid => clientStatusInvalid()
+     exitType match {
+      case JourneyExitType.NotFound => clientNotFound()
+      case JourneyExitType.NotRegistered => clientNotRegistered()
+      case JourneyExitType.NoAuthorisationExists => notAuthorised()
+      case JourneyExitType.ClientStatusInsolvent => clientInsolvent()
+      case JourneyExitType.ClientStatusInvalid => clientStatusInvalid()
+      case JourneyExitType.AuthorisationAlreadyExists => authorisationAlreadyExists()
       case _ => HtmlFormat.empty
      }
     }

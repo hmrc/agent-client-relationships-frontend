@@ -100,7 +100,7 @@ class EnterClientFactController @Inject()(mcc: MessagesControllerComponents,
               if journey.clientDetailsResponse.exists(_.knownFacts.contains(knownFact)) then
                 journeyService.nextPageUrl(journeyType)
               else
-                Future.successful(routes.JourneyErrorController.show(journeyType, serviceConfig.getNotFoundError(journeyType, journey.getService)).url)
+                Future.successful(routes.JourneyExitController.show(journeyType, serviceConfig.getNotFoundError(journeyType, journey.getService)).url)
           yield
             Redirect(redirectUrl)
         }

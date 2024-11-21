@@ -16,25 +16,21 @@
 
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.AgentJourneyRequest
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.routes
-@import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.{routes => trackRoutes}
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
-@import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.agentErrors._
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.agentExitPartials._
 
 @this(
         govukButton: GovukButton
 )
 
 @()(implicit request: AgentJourneyRequest[?], messages: Messages)
-@key = @{"clientAlreadyInvited"}
-@clientName = @{request.journey.getClientDetailsResponse.name}
+@key = @{"notAuthorised"}
+@serviceKey = @{request.journey.clientService.getOrElse("")}
 
-<p class="govuk-body">@messages(s"$key.p", clientName)</p>
-<h2 class="govuk-heading-l">@messages(s"$key.h2")</h2>
-<p class="govuk-body">@messages(s"$key.p2", clientName)</p>
-<p class="govuk-body">https://tax.service.gov.uk/agent-client-relationships/appoint-someone-to-deal-with-HMRC-for-you/123545/abc-accountants</p>
+<p class="govuk-body">@messages(s"$key.$serviceKey.p")</p>
 
 @govukButton(Button(
-    id = Some("trackRequestsButton"),
-    href = Some(trackRoutes.TrackRequestsController.show(1).url),
-    content = Text(messages("track-requests.button"))
+    id = Some("startAgainButton"),
+    href = Some(routes.StartJourneyController.startJourney(request.journey.journeyType).url),
+    content = Text(messages("start-over.button"))
 ))

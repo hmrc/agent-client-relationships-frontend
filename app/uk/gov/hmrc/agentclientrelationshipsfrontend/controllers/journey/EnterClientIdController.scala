@@ -79,7 +79,7 @@ class EnterClientIdController @Inject()(mcc: MessagesControllerComponents,
               ))
               nextPage <- if clientDetailsResponse.nonEmpty then
                 journeyService.nextPageUrl(journeyType) else
-                Future.successful(routes.JourneyErrorController.show(
+                Future.successful(routes.JourneyExitController.show(
                   journeyType, 
                   serviceConfig.getNotFoundError(journeyType, journey.getService)).url
                 )

@@ -17,7 +17,7 @@
 package uk.gov.hmrc.agentclientrelationshipsfrontend.binders
 
 import play.api.mvc.PathBindable
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{JourneyErrorType, JourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{JourneyExitType, JourneyType}
 
 object UrlBinders:
   implicit val journeyTypeBinder: PathBindable[JourneyType] = getJourneyTypeBinder
@@ -32,15 +32,15 @@ object UrlBinders:
     override def unbind(key: String, value: JourneyType): String =
       value.toString
 
-  implicit val journeyErrorTypeBinder: PathBindable[JourneyErrorType] = getJourneyErrorTypeBinder
+  implicit val journeyExitTypeBinder: PathBindable[JourneyExitType] = getJourneyExitTypeBinder
 
-  private def getJourneyErrorTypeBinder = new PathBindable[JourneyErrorType]:
+  private def getJourneyExitTypeBinder = new PathBindable[JourneyExitType]:
 
-    override def bind(key: String, value: String): Either[String, JourneyErrorType] =
-      JourneyErrorType.values
+    override def bind(key: String, value: String): Either[String, JourneyExitType] =
+      JourneyExitType.values
         .find(_.toString == value).map(Right(_))
-        .getOrElse(Left(s"Invalid journey error type: $value"))
+        .getOrElse(Left(s"Invalid journey exit type: $value"))
 
-    override def unbind(key: String, value: JourneyErrorType): String =
+    override def unbind(key: String, value: JourneyExitType): String =
       value.toString
 

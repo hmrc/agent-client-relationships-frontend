@@ -19,11 +19,11 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey
 import play.api.http.Status.{BAD_REQUEST, OK}
 import play.api.test.Helpers.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsResponse, KnownFactType}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{Journey, JourneyErrorType, JourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{Journey, JourneyExitType, JourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.JourneyService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentSpecHelper}
 
-class JourneyErrorControllerISpec extends ComponentSpecHelper with AuthStubs {
+class JourneyExitControllerISpec extends ComponentSpecHelper with AuthStubs {
 
   private val authorisationRequestJourney: Journey = Journey(
     JourneyType.AuthorisationRequest,
@@ -48,12 +48,12 @@ class JourneyErrorControllerISpec extends ComponentSpecHelper with AuthStubs {
   }
 
   List(authorisationRequestJourney, agentCancelAuthorisationJourney).foreach(j =>
-    JourneyErrorType.values.foreach(errorCode =>
-      s"GET /${j.journeyType.toString}/exit/$errorCode" should {
+    JourneyExitType.values.foreach(exitType =>
+      s"GET /${j.journeyType.toString}/exit/$exitType" should {
         "display the exit page" in {
           authoriseAsAgent()
           await(journeyService.saveJourney(j))
-          val result = get(routes.JourneyErrorController.show(j.journeyType, errorCode).url)
+          val result = get(routes.JourneyExitController.show(j.journeyType, exitType).url)
           result.status shouldBe OK
         }
       }))
