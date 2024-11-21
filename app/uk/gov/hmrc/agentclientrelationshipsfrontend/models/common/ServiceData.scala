@@ -22,6 +22,7 @@ case class ServiceData(
                         serviceOption: Boolean = false,
                         supportedEnrolments: Seq[String] = Seq.empty,
                         serviceName: String,
+                        urlPart: String,
                         clientTypes: Set[String],
                         clientDetails: Seq[ClientDetailsConfiguration],
                         journeyErrors: Map[JourneyType, JourneyErrors] = Map(

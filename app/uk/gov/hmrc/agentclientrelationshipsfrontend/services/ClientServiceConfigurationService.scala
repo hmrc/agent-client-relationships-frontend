@@ -29,6 +29,8 @@ class ClientServiceConfigurationService @Inject() {
   def allClientTypes: Set[String] = services.flatMap(_._2.clientTypes).toSet[String]
   
   def getService(serviceName: String): Option[ServiceData] = services.get(serviceName)
+  
+  def validateUrlPart(urlPart: String): Boolean = services.exists(_._2.urlPart == urlPart) 
 
   def clientServicesFor(clientType: String): Seq[String] = services.filter(_._2.serviceOption == true).filter(_._2.clientTypes.contains(clientType)).keys.toSeq
 
@@ -63,6 +65,7 @@ class ClientServiceConfigurationService @Inject() {
   private val services: ListMap[String, ServiceData] = ListMap(
     "HMRC-MTD-IT" -> ServiceData(
       serviceName = "HMRC-MTD-IT",
+      urlPart = "income-tax",
       serviceOption = true,
       clientTypes = Set("personal"),
       clientDetails = Seq(
@@ -83,6 +86,7 @@ class ClientServiceConfigurationService @Inject() {
     ),
     "PERSONAL-INCOME-RECORD" -> ServiceData(
       serviceName = "PERSONAL-INCOME-RECORD",
+      urlPart = "income-record-viewer",
       serviceOption = true,
       clientTypes = Set("personal"),
       clientDetails = Seq(
@@ -97,6 +101,7 @@ class ClientServiceConfigurationService @Inject() {
     ),
     "HMRC-MTD-VAT" -> ServiceData(
       serviceName = "HMRC-MTD-VAT",
+      urlPart = "vat",
       serviceOption = true,
       clientTypes = Set("personal", "business"),
       clientDetails = Seq(
@@ -111,6 +116,7 @@ class ClientServiceConfigurationService @Inject() {
     ),
     "HMRC-TERS-ORG" -> ServiceData(
       serviceName = "HMRC-TERS-ORG",
+      urlPart = "trusts-and-estates",
       serviceOption = true,
       supportedEnrolments = Seq("HMRC-TERS-ORG", "HMRC-TERSNT-ORG"), // parent service is always head of the list
       clientTypes = Set("trust"),
@@ -126,6 +132,7 @@ class ClientServiceConfigurationService @Inject() {
     ),
     "HMRC-TERSNT-ORG" -> ServiceData(
       serviceName = "HMRC-TERSNT-ORG",
+      urlPart = "trusts-and-estates-non-taxable",
       serviceOption = false,
       supportedEnrolments = Seq("HMRC-TERS-ORG", "HMRC-TERSNT-ORG"), // parent service is always head of the list
       clientTypes = Set("trust"),
@@ -141,6 +148,7 @@ class ClientServiceConfigurationService @Inject() {
     ),
     "HMRC-CGT-PD" -> ServiceData(
       serviceName = "HMRC-CGT-PD",
+      urlPart = "capital-gains-tax-uk-property",
       serviceOption = true,
       clientTypes = Set("personal", "trust"),
       clientDetails = Seq(
@@ -155,6 +163,7 @@ class ClientServiceConfigurationService @Inject() {
     ),
     "HMRC-PPT-ORG" -> ServiceData(
       serviceName = "HMRC-PPT-ORG",
+      urlPart = "plastic-packaging-tax",
       serviceOption = true,
       clientTypes = Set("personal", "business", "trust"),
       clientDetails = Seq(
@@ -169,6 +178,7 @@ class ClientServiceConfigurationService @Inject() {
     ),
     "HMRC-CBC-ORG" -> ServiceData(
       serviceName = "HMRC-CBC-ORG",
+      urlPart = "country-by-country-reporting",
       serviceOption = true,
       clientTypes = Set("business", "trust"),
       clientDetails = Seq(
@@ -183,6 +193,7 @@ class ClientServiceConfigurationService @Inject() {
     ),
     "HMRC-PILLAR2-ORG" -> ServiceData(
       serviceName = "HMRC-PILLAR2-ORG",
+      urlPart = "pillar-2",
       serviceOption = true,
       clientTypes = Set("business", "trust"),
       clientDetails = Seq(
