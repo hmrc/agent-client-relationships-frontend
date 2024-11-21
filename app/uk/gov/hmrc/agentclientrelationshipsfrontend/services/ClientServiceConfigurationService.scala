@@ -46,14 +46,17 @@ class ClientServiceConfigurationService @Inject() {
 
   def getSupportedEnrolments(clientService: String): Seq[String] = services(clientService).supportedEnrolments
   
-  def getServiceForForm(clientService: String): String = if clientService.nonEmpty then getSupportedEnrolments(clientService) match {
-    case enrols: Seq[String] if enrols.size > 1 => enrols.head // the head of the list is the parent service
+  def getServiceForForm(clientService: String): String = if clientService.nonEmpty then (getSupportedAgentRoles(clientService), getSupportedEnrolments(clientService)) match {
+    case (_, enrols): (Seq[String], Seq[String]) if enrols.size > 1 => enrols.head // the head of the list is the parent service
+    case (roles, _): (Seq[String], Seq[String]) if roles.size > 1 => roles.head // the head of the list is the parent service
     case _ => clientService
   } else ""
 
   def getNotFoundError(journeyType: JourneyType, clientService: String): JourneyExitType = services(clientService).journeyErrors(journeyType).notFound
 
-  def supportsAgentRoles(clientService: String): Boolean = false // TODO: implement this using a similar pattern to supportedEnrolments
+  def supportsAgentRoles(clientService: String): Boolean =  services(clientService).supportedAgentRoles.size > 1
+
+  def getSupportedAgentRoles(clientService: String): Seq[String] = services(clientService).supportedAgentRoles
 
   val utrRegex = "^[0-9]{10}$"
   val urnRegex = "^[A-Z]{2}TRUST[0-9]{8}$"
@@ -64,6 +67,28 @@ class ClientServiceConfigurationService @Inject() {
     "HMRC-MTD-IT" -> ServiceData(
       serviceName = "HMRC-MTD-IT",
       serviceOption = true,
+      supportedAgentRoles = Seq("HMRC-MTD-IT", "HMRC-MTD-IT-SUPP"),
+      clientTypes = Set("personal"),
+      clientDetails = Seq(
+        ClientDetailsConfiguration(
+          name = "nino",
+          regex = "[[A-Z]&&[^DFIQUV]][[A-Z]&&[^DFIQUVO]] ?\\d{2} ?\\d{2} ?\\d{2} ?[A-D]{1}",
+          inputType = "text",
+          width = 10,
+          clientIdType = "ni"
+        )
+      ),
+      journeyErrors = Map(
+        JourneyType.AuthorisationRequest -> JourneyErrors(
+          notFound = JourneyExitType.NotRegistered
+        ),
+        JourneyType.AgentCancelAuthorisation -> JourneyErrors()
+      )
+    ),
+    "HMRC-MTD-IT-SUPP" -> ServiceData(
+      serviceName = "HMRC-MTD-IT-SUPP",
+      serviceOption = false,
+      supportedAgentRoles = Seq("HMRC-MTD-IT", "HMRC-MTD-IT-SUPP"),
       clientTypes = Set("personal"),
       clientDetails = Seq(
         ClientDetailsConfiguration(
