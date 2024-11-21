@@ -53,7 +53,9 @@ class ClientServiceConfigurationService @Inject() {
 
   def getNotFoundError(journeyType: JourneyType, clientService: String): JourneyExitType = services(clientService).journeyErrors(journeyType).notFound
 
-  def supportsAgentRoles(clientService: String): Boolean = false // TODO: implement this using a similar pattern to supportedEnrolments
+  def supportsAgentRoles(clientService: String): Boolean =  services(clientService).supportedAgentRoles.size > 1
+
+  def getSupportedAgentRoles(clientService: String): Seq[String] = services(clientService).supportedAgentRoles
 
   val utrRegex = "^[0-9]{10}$"
   val urnRegex = "^[A-Z]{2}TRUST[0-9]{8}$"
@@ -64,6 +66,7 @@ class ClientServiceConfigurationService @Inject() {
     "HMRC-MTD-IT" -> ServiceData(
       serviceName = "HMRC-MTD-IT",
       serviceOption = true,
+      supportedAgentRoles = Seq("HMRC-MTD-IT", "HMRC-MTD-IT-SUPP"),
       clientTypes = Set("personal"),
       clientDetails = Seq(
         ClientDetailsConfiguration(

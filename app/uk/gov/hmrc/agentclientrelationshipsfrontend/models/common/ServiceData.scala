@@ -20,6 +20,7 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{JourneyError
 
 case class ServiceData(
                         serviceOption: Boolean = false,
+                        supportedAgentRoles: Seq[String] = Seq.empty,
                         supportedEnrolments: Seq[String] = Seq.empty,
                         serviceName: String,
                         clientTypes: Set[String],
