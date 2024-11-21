@@ -86,7 +86,7 @@ class ClientServiceConfigurationService @Inject() {
       )
     ),
     "HMRC-MTD-IT-SUPP" -> ServiceData(
-      serviceName = "HMRC-MTD-IT",
+      serviceName = "HMRC-MTD-IT-SUPP",
       serviceOption = false,
       supportedAgentRoles = Seq("HMRC-MTD-IT", "HMRC-MTD-IT-SUPP"),
       clientTypes = Set("personal"),
