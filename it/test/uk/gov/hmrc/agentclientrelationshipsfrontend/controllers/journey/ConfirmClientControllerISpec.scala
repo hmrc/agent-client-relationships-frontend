@@ -26,9 +26,19 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentS
 class ConfirmClientControllerISpec extends ComponentSpecHelper with AuthStubs {
 
   val testNino: String = "AB123456C"
+  val testCgtRef: String = "XMCGTP123456789"
   val testPostcode: String = "AA11AA"
 
   def noAuthJourney(journeyType: JourneyType): Journey = Journey(
+    journeyType,
+    Some("personal"),
+    Some("HMRC-CGT-PD"),
+    Some(testCgtRef),
+    Some(ClientDetailsResponse("Test Name", None, None, Seq(testPostcode), Some(KnownFactType.PostalCode), false, None)),
+    Some(testPostcode)
+  )
+
+  def noAuthJourneyWithSupportedRoles(journeyType: JourneyType): Journey = Journey(
     journeyType,
     Some("personal"),
     Some("HMRC-MTD-IT"),
@@ -40,17 +50,17 @@ class ConfirmClientControllerISpec extends ComponentSpecHelper with AuthStubs {
   def alreadyAuthJourney(journeyType: JourneyType): Journey = Journey(
     journeyType,
     Some("personal"),
-    Some("HMRC-MTD-IT"),
-    Some(testNino),
-    Some(ClientDetailsResponse("Test Name", None, None, Seq(testPostcode), Some(KnownFactType.PostalCode), false, Some("HMRC-MTD-IT"))),
+    Some("HMRC-CGT-PD"),
+    Some(testCgtRef),
+    Some(ClientDetailsResponse("Test Name", None, None, Seq(testPostcode), Some(KnownFactType.PostalCode), false, Some("HMRC-CGT-PD"))),
     Some(testPostcode)
   )
 
   def existingPendingRequestJourney: Journey = Journey(
     JourneyType.AuthorisationRequest,
     Some("personal"),
-    Some("HMRC-MTD-IT"),
-    Some(testNino),
+    Some("HMRC-CGT-PD"),
+    Some(testCgtRef),
     Some(ClientDetailsResponse("Test Name", None, None, Seq(testPostcode), Some(KnownFactType.PostalCode), true, None)),
     Some(testPostcode)
   )
@@ -58,8 +68,8 @@ class ConfirmClientControllerISpec extends ComponentSpecHelper with AuthStubs {
   def clientInsolventJourney: Journey = Journey(
     JourneyType.AuthorisationRequest,
     Some("personal"),
-    Some("HMRC-MTD-IT"),
-    Some(testNino),
+    Some("HMRC-CGT-PD"),
+    Some(testCgtRef),
     Some(ClientDetailsResponse("Test Name", Some(ClientStatus.Insolvent), None, Seq(testPostcode), Some(KnownFactType.PostalCode), false, None)),
     Some(testPostcode)
   )
@@ -67,8 +77,8 @@ class ConfirmClientControllerISpec extends ComponentSpecHelper with AuthStubs {
   def clientStatusInvalidJourney: Journey = Journey(
     JourneyType.AuthorisationRequest,
     Some("personal"),
-    Some("HMRC-MTD-IT"),
-    Some(testNino),
+    Some("HMRC-CGT-PD"),
+    Some(testCgtRef),
     Some(ClientDetailsResponse("Test Name", Some(ClientStatus.Deregistered), None, Seq(testPostcode), Some(KnownFactType.PostalCode), false, None)),
     Some(testPostcode)
   )
@@ -98,6 +108,15 @@ class ConfirmClientControllerISpec extends ComponentSpecHelper with AuthStubs {
   }
 
   "POST /authorisation-request/confirm-client" should {
+    "redirect to select agent role page when service has supported roles and client is confirmed" in {
+      authoriseAsAgent()
+      await(journeyService.saveJourney(noAuthJourneyWithSupportedRoles(JourneyType.AuthorisationRequest)))
+      val result = post(routes.ConfirmClientController.onSubmit(JourneyType.AuthorisationRequest).url)(Map(
+        "confirmClient" -> Seq("true")
+      ))
+      result.status shouldBe SEE_OTHER
+      result.header("Location").value shouldBe "routes.SelectAgentRoleController.show(journeyType).url"
+    }
     "redirect to check your answers after confirming client on authorisation-request journey" in {
       authoriseAsAgent()
       await(journeyService.saveJourney(noAuthJourney(JourneyType.AuthorisationRequest)))
