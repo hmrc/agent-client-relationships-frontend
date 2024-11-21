@@ -21,11 +21,11 @@ import play.api.data.Forms.{optional, single, text}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.helpers.FormFieldHelper
 
 object SelectFromOptionsForm extends FormFieldHelper {
-  def form(fieldName: String, options: Seq[String], journeyType: String): Form[String] = {
+  def form(fieldName: String, options: Seq[String], journeyType: String, args: String*): Form[String] = {
     Form[String](
       single(
         fieldName -> optional(text)
-          .verifying(mandatoryFieldErrorMessage(s"$fieldName.$journeyType"), _.fold(false)(options.contains))
+          .verifying(mandatoryRadio(s"$fieldName.$journeyType", options, args*))
           .transform(_.getOrElse(""), (Some(_)): String => Option[String])
       )
     )

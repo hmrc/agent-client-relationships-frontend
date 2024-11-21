@@ -39,12 +39,12 @@ case class Journey(journeyType: JourneyType,
 
   def getKnownFactType: KnownFactType = clientDetailsResponse.flatMap(_.knownFactType)getOrElse(throw new RuntimeException("known fact is not defined"))
 
-  def getExitType(journeyType: JourneyType, clientDetails: ClientDetailsResponse): Option[JourneyExitType] = journeyType match
+  def getExitType(journeyType: JourneyType, clientDetails: ClientDetailsResponse, supportsAgentRoles: Boolean = false): Option[JourneyExitType] = journeyType match
     case JourneyType.AuthorisationRequest => clientDetails match {
       case ClientDetailsResponse(_, Some(ClientStatus.Insolvent), _, _, _, _, _) => Some(JourneyExitType.ClientStatusInsolvent)
       case ClientDetailsResponse(_, Some(_), _, _, _, _, _) => Some(JourneyExitType.ClientStatusInvalid)
       case ClientDetailsResponse(_, None, _, _, _, true, _) => Some(JourneyExitType.ClientAlreadyInvited)
-      case ClientDetailsResponse(_, None, _, _, _, false, Some(service)) if service == clientService.get => Some(JourneyExitType.AuthorisationAlreadyExists)
+      case ClientDetailsResponse(_, None, _, _, _, false, Some(service)) if !supportsAgentRoles && service == clientService.get => Some(JourneyExitType.AuthorisationAlreadyExists)
       case ClientDetailsResponse(_, None, _, _, _, false, _) => None
     }
     case JourneyType.AgentCancelAuthorisation => clientDetails match {

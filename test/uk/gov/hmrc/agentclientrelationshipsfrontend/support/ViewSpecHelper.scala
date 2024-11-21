@@ -63,7 +63,7 @@ trait ViewSpecHelper extends Selectors {
       TestRadioGroup(
         legend = element.select(fieldSetLegend).first().text(),
         options = element.select(".govuk-radios__item").toList.map(el => (el.select("label").text(), el.select("input").attr("value"))),
-        hint = element.select(hint).toList.headOption.map(_.text)
+        hint = element.select(fieldSetHint).toList.headOption.map(_.text)
       )
     }
 

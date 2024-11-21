@@ -238,6 +238,36 @@ confirmClient.agent-cancel-authorisation.error.required=<translation needed>
 confirmClient.true=Iawn
 confirmClient.false=Na – mae angen i mi ddechrau eto
 
+# ________________________________________________________________________________
+# Select agent role
+# ________________________________________________________________________________
+
+selectAgentRole.HMRC-MTD-IT.newRelationship.header=<translation needed>
+selectAgentRole.HMRC-MTD-IT.newRelationship.legend=<translation needed>
+selectAgentRole.HMRC-MTD-IT.newRelationship.guidance=<translation needed>
+selectAgentRole.HMRC-MTD-IT.newRelationship.option=<translation needed>
+selectAgentRole.HMRC-MTD-IT-SUPP.newRelationship.option=<translation needed>
+selectAgentRole.HMRC-MTD-IT.newRelationship.hint=<translation needed>
+selectAgentRole.HMRC-MTD-IT-SUPP.newRelationship.hint=<translation needed>
+agentRole.authorisation-request.error.required=<translation needed>
+
+selectAgentRole.HMRC-MTD-IT.mainToSupporting.header=<translation needed>
+selectAgentRole.HMRC-MTD-IT.mainToSupporting.intro=<translation needed>
+selectAgentRole.HMRC-MTD-IT.mainToSupporting.guidance=<translation needed>
+selectAgentRole.HMRC-MTD-IT.mainToSupporting.legend=<translation needed>
+selectAgentRole.HMRC-MTD-IT.mainToSupporting.option=<translation needed>
+selectAgentRole.HMRC-MTD-IT-SUPP.mainToSupporting.option=<translation needed>
+selectAgentRole.HMRC-MTD-IT-SUPP.mainToSupporting.hint=<translation needed>
+
+selectAgentRole.HMRC-MTD-IT.supportingToMain.header=<translation needed>
+selectAgentRole.HMRC-MTD-IT.supportingToMain.intro=<translation needed>
+selectAgentRole.HMRC-MTD-IT.supportingToMain.guidance=<translation needed>
+selectAgentRole.HMRC-MTD-IT.supportingToMain.legend=<translation needed>
+selectAgentRole.HMRC-MTD-IT.supportingToMain.option=<translation needed>
+selectAgentRole.HMRC-MTD-IT-SUPP.supportingToMain.option=<translation needed>
+selectAgentRole.HMRC-MTD-IT.supportingToMain.hint=<translation needed>
+
+
 #Track invitation requests
 trackRequests.title=Rheoli eich ceisiadau diweddar am awdurdodiad
 trackRequests.intro=Gwirio statws eich ceisiadau am awdurdodiad i gleientiaid yn ystod y {0} o ddiwrnodau diwethaf, neu ganslo ceisiadau ac awdurdodiadau nad oes eu hangen mwyach.
@@ -326,6 +356,7 @@ journeyExit.not-authorised.header=Nid ydych wedi eich awdurdodi
 journeyExit.pending-authorisation-exists.header=Rydych eisoes wedi creu cais am awdurdodiad ar gyfer y gwasanaeth treth hwn
 journeyExit.client-insolvent.header=Ni allwch greu cais am awdurdodiad gan fod y cleient hwn yn ansolfent
 journeyExit.authorisation-already-exists.header=Rydych eisoes wedi’ch awdurdodi
+journeyExit.no-change-of-agent-role.header=<translation needed>
 
 # ________________________________________________________________________________
 # Journey exit partials

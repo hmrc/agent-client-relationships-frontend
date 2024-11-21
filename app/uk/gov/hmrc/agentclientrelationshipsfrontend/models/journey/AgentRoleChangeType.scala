@@ -16,14 +16,9 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey
 
-enum JourneyExitType(val name: String):
-  case NotFound extends JourneyExitType("client-not-found")
-  case NotRegistered extends JourneyExitType("not-registered")
-  case ClientAlreadyInvited extends JourneyExitType("already-authorisation-pending")
-  case AuthorisationAlreadyExists extends JourneyExitType("authorisation-already-exists")
-  case NoAuthorisationExists extends JourneyExitType("not-authorised")
-  case ClientStatusInsolvent extends JourneyExitType("client-insolvent")
-  case ClientStatusInvalid extends JourneyExitType("client-status-invalid")
-  case NoChangeOfAgentRole extends JourneyExitType("no-change-of-agent-role")
+enum AgentRoleChangeType(val name: String):
+  case MainToSupporting extends AgentRoleChangeType("mainToSupporting")
+  case SupportingToMain extends AgentRoleChangeType("supportingToMain")
+  case NewRelationship extends AgentRoleChangeType("newRelationship")
 
   override def toString: String = name

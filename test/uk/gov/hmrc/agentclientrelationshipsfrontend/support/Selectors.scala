@@ -40,6 +40,7 @@ trait Selectors {
   val errorSummaryList = ".govuk-error-summary__list"
   val fieldSet = ".govuk-fieldset"
   val fieldSetLegend = ".govuk-fieldset__legend"
+  val fieldSetHint = ".govuk-fieldset > .govuk-hint"
   val hint = ".govuk-hint"
   val formGroup = ".govuk-form-group"
   val input = ".govuk-input"

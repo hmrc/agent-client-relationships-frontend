@@ -1,0 +1,81 @@
+@*
+ * Copyright 2024 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.Layout
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.components.SubmitButton
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.routes
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentRoleChangeType, AgentJourneyRequest}
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyType.AuthorisationRequest
+@import uk.gov.hmrc.govukfrontend.views.html.components.implicits.RichRadios
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.AgentRoleFieldName
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
+
+@this(
+        layout: Layout,
+        formWithCSRF: FormWithCSRF,
+        govukRadios: GovukRadios,
+        submitButton: SubmitButton,
+        h1: h1
+)
+
+@(form: Form[String], options: Seq[String], agentRoleChangeType: AgentRoleChangeType)(implicit request: AgentJourneyRequest[?], messages: Messages, appConfig: AppConfig)
+
+@key = @{"selectAgentRole"}
+@journeyKey = @{request.journey.journeyType.toString}
+@serviceKey = @{request.journey.getServiceWithDefault}
+@clientName = @{request.journey.getClientDetailsResponse.name}
+@pageTitle = @{messages(s"$key.$serviceKey.${agentRoleChangeType.toString}.header", clientName)}
+@legend = @{messages(s"$key.$serviceKey.${agentRoleChangeType.toString}.legend", clientName)}
+@sortedOptions = @{if agentRoleChangeType.equals(AgentRoleChangeType.MainToSupporting) then options.reverse else options}
+
+@layout(
+    pageTitle = pageTitle,
+    optionalForm = Some(form),
+    serviceName = Some(messages(s"$journeyKey.service.name"))
+) {
+
+    @h1(pageTitle)
+
+    @if(messages.isDefinedAt(s"$key.$serviceKey.${agentRoleChangeType.toString}.intro")) {
+      <p class="govuk-body">@messages(s"$key.$serviceKey.${agentRoleChangeType.toString}.intro", clientName)</p>
+    }
+
+    <p class="govuk-body">@Html(messages(s"$key.$serviceKey.${agentRoleChangeType.toString}.guidance", appConfig.guidanceUrlForAgentRoles))</p>
+
+    @formWithCSRF(action = routes.SelectAgentRoleController.onSubmit(request.journey.journeyType)) {
+        @govukRadios(Radios(
+            fieldset = Some(Fieldset(
+                legend = Some(Legend(
+                    content = Text(legend),
+                    isPageHeading = false,
+                    classes = if legend == pageTitle then "govuk-visually-hidden" else "govuk-fieldset__legend--m"
+                ))
+            )),
+            items = sortedOptions.map(option =>
+                RadioItem(
+                    content = Text(messages(s"$key.$option.${agentRoleChangeType.toString}.option")),
+                    hint =  if messages.isDefinedAt(s"$key.$option.${agentRoleChangeType.toString}.hint") then Some(Hint(
+                        content = HtmlContent(messages(s"$key.$option.${agentRoleChangeType.toString}.hint", clientName))
+                    )) else None,
+                    value = Some(option)
+                )
+            )
+        ).withFormField(form(AgentRoleFieldName)))
+
+        @submitButton()
+    }
+
+}
