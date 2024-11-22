@@ -85,27 +85,6 @@ class ClientServiceConfigurationService @Inject() {
         JourneyType.AgentCancelAuthorisation -> JourneyErrors()
       )
     ),
-    "HMRC-MTD-IT-SUPP" -> ServiceData(
-      serviceName = "HMRC-MTD-IT-SUPP",
-      serviceOption = false,
-      supportedAgentRoles = Seq("HMRC-MTD-IT", "HMRC-MTD-IT-SUPP"),
-      clientTypes = Set("personal"),
-      clientDetails = Seq(
-        ClientDetailsConfiguration(
-          name = "nino",
-          regex = "[[A-Z]&&[^DFIQUV]][[A-Z]&&[^DFIQUVO]] ?\\d{2} ?\\d{2} ?\\d{2} ?[A-D]{1}",
-          inputType = "text",
-          width = 10,
-          clientIdType = "ni"
-        )
-      ),
-      journeyErrors = Map(
-        JourneyType.AuthorisationRequest -> JourneyErrors(
-          notFound = JourneyExitType.NotRegistered
-        ),
-        JourneyType.AgentCancelAuthorisation -> JourneyErrors()
-      )
-    ),
     "PERSONAL-INCOME-RECORD" -> ServiceData(
       serviceName = "PERSONAL-INCOME-RECORD",
       serviceOption = true,

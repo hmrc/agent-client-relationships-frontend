@@ -115,7 +115,7 @@ class ConfirmClientControllerISpec extends ComponentSpecHelper with AuthStubs {
         "confirmClient" -> Seq("true")
       ))
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe "routes.SelectAgentRoleController.show(journeyType).url"
+      result.header("Location").value shouldBe routes.SelectAgentRoleController.show(JourneyType.AuthorisationRequest).url
     }
     "redirect to check your answers after confirming client on authorisation-request journey" in {
       authoriseAsAgent()

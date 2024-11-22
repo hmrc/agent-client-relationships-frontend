@@ -297,13 +297,33 @@ confirmClient.false=No - I need to start over again
 
 
 # ________________________________________________________________________________
-# Agent Type
+# Select agent role
 # ________________________________________________________________________________
-agentType.title=How do you want to act for your client? <need content>
-agentType.header=How do you want to act for {0}?
-agentType.main=As their main agent
-agentType.supporting=As a supporting agent
-error.agentType.required=Required <need content>
+
+selectAgentRole.HMRC-MTD-IT.newRelationship.header=How do you want to act for {0}?
+selectAgentRole.HMRC-MTD-IT.newRelationship.legend=How do you want to act for {0}?
+selectAgentRole.HMRC-MTD-IT.newRelationship.guidance=Read the guidance about <a href={0} class="govuk-link" target="_blank" rel="noreferrer noopener">the difference between main agents and supporting agents (opens in new tab)</a>.
+selectAgentRole.HMRC-MTD-IT.newRelationship.option=As their main agent
+selectAgentRole.HMRC-MTD-IT-SUPP.newRelationship.option=As a supporting agent
+selectAgentRole.HMRC-MTD-IT.newRelationship.hint=If your client accepts this request, we will remove any existing main agent they have for Making Tax Digital for Income Tax.
+selectAgentRole.HMRC-MTD-IT-SUPP.newRelationship.hint=Your client can have any number of these, but supporting agents only carry out some business tax functions and cannot submit end-of-year tax returns.
+agentRole.authorisation-request.error.required=Select how you want to act for {0}
+
+selectAgentRole.HMRC-MTD-IT.mainToSupporting.header=You are already an agent for {0}
+selectAgentRole.HMRC-MTD-IT.mainToSupporting.intro=You are authorised as a main agent to manage {0}’s Making Tax Digital for Income Tax.
+selectAgentRole.HMRC-MTD-IT.mainToSupporting.guidance=Read the guidance about <a href={0} class="govuk-link" target="_blank" rel="noreferrer noopener">the difference between main agents and supporting agents (opens in new tab)</a>.
+selectAgentRole.HMRC-MTD-IT.mainToSupporting.legend=Do you want to change how you act for this client?
+selectAgentRole.HMRC-MTD-IT.mainToSupporting.option=No
+selectAgentRole.HMRC-MTD-IT-SUPP.mainToSupporting.option=Yes, I want to become their supporting agent instead
+selectAgentRole.HMRC-MTD-IT-SUPP.mainToSupporting.hint=If {0} accepts this request, you’ll lose access to some of their Income Tax information and will not be able to submit their end-of-year tax returns.
+
+selectAgentRole.HMRC-MTD-IT.supportingToMain.header=You are already an agent for {0}
+selectAgentRole.HMRC-MTD-IT.supportingToMain.intro=You are authorised as a supporting agent to help manage {0}’s Making Tax Digital for Income Tax.
+selectAgentRole.HMRC-MTD-IT.supportingToMain.guidance=Read the guidance about <a href={0} class="govuk-link" target="_blank" rel="noreferrer noopener">the difference between main agents and supporting agents (opens in new tab)</a>.
+selectAgentRole.HMRC-MTD-IT.supportingToMain.legend=Do you want to change how you act for this client?
+selectAgentRole.HMRC-MTD-IT.supportingToMain.option=Yes, I want to become their main agent instead
+selectAgentRole.HMRC-MTD-IT-SUPP.supportingToMain.option=No
+selectAgentRole.HMRC-MTD-IT.supportingToMain.hint=If {0} accepts this request, you’ll get access to all the Income Tax information you need to deal with HMRC on their behalf.
 
 
 # ________________________________________________________________________________
@@ -391,6 +411,7 @@ journeyExit.not-authorised.header=You have not been authorised
 journeyExit.pending-authorisation-exists.header=You already created an authorisation request for this tax service
 journeyExit.client-insolvent.header=You cannot create an authorisation request because this client is insolvent
 journeyExit.authorisation-already-exists.header=You are already authorised
+journeyExit.no-change-of-agent-role.header=You have not changed how you act for this client
 
 # ________________________________________________________________________________
 # Journey exit partials

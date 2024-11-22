@@ -32,6 +32,7 @@ class AppConfig @Inject()(servicesConfig: ServicesConfig, config: Configuration)
   val agentServicesAccountLimitedUrl: String = asaFrontendExternalUrl + getConfString("agent-services-account-frontend.account-limited")
   val agentServicesAccountHomeUrl: String = asaFrontendExternalUrl + getConfString("agent-services-account-frontend.home")
   val guidanceUrlSaSignup = s"${govUkExternalUrl}/register-for-self-assessment/self-employed"
+  val guidanceUrlForAgentRoles = s"${govUkExternalUrl}/" // TODO: We need this url to be complete
   val ivUpliftUrl: String = getConfString("identity-verification-frontend.uplift-url")
   val signInUrl: String = getString("bas-gateway.url")
   val subscriptionUrl: String = getConfString("agent-subscription-frontend.subscription-url")

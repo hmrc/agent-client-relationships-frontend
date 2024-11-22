@@ -27,6 +27,13 @@ trait FormFieldHelper {
       Invalid(ValidationError(mandatoryFieldErrorMessage(errorMessageKey), args*))
   }
 
+  protected def mandatoryRadio(errorMessageKey: String, options: Seq[String], args: String*): Constraint[Option[String]] = Constraint[Option[String]] { fieldValue =>
+    if (fieldValue.isDefined && options.contains(fieldValue.get))
+      Valid
+    else
+      Invalid(ValidationError(mandatoryFieldErrorMessage(errorMessageKey), args*))
+  }
+
   protected def invalidMandatoryField(messageKey: String, inputFieldClass: String): Invalid = {
     Invalid(ValidationError(mandatoryFieldErrorMessage(messageKey), "inputFieldClass" -> inputFieldClass))
   }
