@@ -230,63 +230,10 @@ clientFact.HMRC-PILLAR2-ORG.date.error.day-month.required=Pillar 2 top-up taxes 
 clientFact.HMRC-PILLAR2-ORG.date.error.day-year.required=Pillar 2 top-up taxes registration date must include a day and year
 clientFact.HMRC-PILLAR2-ORG.date.error.month-year.required=Pillar 2 top-up taxes registration date must include a month and year
 
-#-------------------------------------------------------------------------------------------
-# Enter Known Facts
-# -------------------------------------------------------------------------------------------
-
-# Nino
-client-details.nino.label=National Insurance number
-client-details.nino.hint=For example, QQ 12 34 56 C
-error.client-details.nino.invalid=National Insurance number must be 2 letters, 6 numbers, then A, B, C or D, like QQ 12 34 56 C
-error.client-details.nino.required=Enter your client’s National Insurance number
-
-# Postcode
-client-details.postcode.label=Postcode
-client-details.postcode.hint=This is the postcode of your client’s registered address
-error.client-details.postcode.invalid=Enter a real postcode
-error.client-details.postcode.required=Enter your client’s postcode
-
-# Date of Birth
-client-details.dob.label=Date of birth
-client-details.dob.hint=For example, 31 3 1980
-error.client-details.dob.required=Enter your client’s date of birth
-error.client-details.dob.invalid=Date of birth must be a valid date
-error.client-details.dob.day.required=Date of birth must include a day
-error.client-details.dob.month.required=Date of birth must include a month
-error.client-details.dob.year.required=Date of birth must include a year
-error.client-details.dob.day-month.required=Date of birth must include a day and month
-error.client-details.dob.day-year.required=Date of birth must include a day and year
-error.client-details.dob.month-year.required=Date of birth must include a month and year
-
-# Plastic Packaging Tax Reference
-client-details.pptRef.label=Plastic Packaging Tax reference
-client-details.pptRef.hint=This is 15 characters, for example XMPPT0000000001. Your client received this when they registered for Plastic Packaging Tax.
-error.client-details.pptRef.required=Enter your client’s Plastic Packaging Tax reference
-error.client-details.pptRef.invalid=Enter the client’s Plastic Packaging Tax reference in the correct format
-
-# Plastic Packaging Tax Registration Date
-client-details.registrationDate.label=Plastic Packaging Tax registration date
-client-details.registrationDate.hint=For example, 21 8 2021
-error.client-details.registrationDate.invalid=Enter a valid Plastic Packaging Tax registration date
-error.client-details.registrationDate.required=Enter your client’s Plastic Packaging Tax registration date
-error.client-details.registrationDate.day.required=Plastic Packaging Tax registration date must include a day
-error.client-details.registrationDate.month.required=Plastic Packaging Tax registration date must include a month
-error.client-details.registrationDate.year.required=Plastic Packaging Tax registration date must include a year
-error.client-details.registrationDate.day-month.required=Plastic Packaging Tax registration date must include a day and month
-error.client-details.registrationDate.day-year.required=Plastic Packaging Tax registration date must include a day and year
-error.client-details.registrationDate.month-year.required=Plastic Packaging Tax registration date must include a month and year
-
-# Capital Gains Tax account reference
-identify-client.HMRC-CGT-PD.header=What is your client’s Capital Gains Tax on UK property account number?
-client-details.cgtRef.label=What is your client’s Capital Gains Tax on UK property account number?
-client-details.cgtRef.hint=This will help us match their details against information we hold. This is 15 characters, for example XYCGTP123456789. Your client received this when they created their account.
-error.client-details.cgtRef.required=Enter the client’s Capital Gains Tax account reference
-error.client-details.cgtRef.invalid=Enter the client’s Capital Gains Tax account reference in the correct format
-
-
 # ________________________________________________________________________________
 # Confirm Client
 # ________________________________________________________________________________
+
 confirmClient.title=Is this the client you want authorisation from?
 confirmClient.authorisation-request.header=Is {0} the client you want authorisation from?
 confirmClient.agent-cancel-authorisation.header=Is your cancellation request for {0}?
@@ -294,7 +241,6 @@ confirmClient.authorisation-request.error.required=Select ‘yes’ if you want 
 confirmClient.agent-cancel-authorisation.error.required=Select ‘yes’ if {0} is the client you want to cancel authorisation for
 confirmClient.true=Yes
 confirmClient.false=No - I need to start over again
-
 
 # ________________________________________________________________________________
 # Select agent role
@@ -325,23 +271,66 @@ selectAgentRole.HMRC-MTD-IT.supportingToMain.option=Yes, I want to become their 
 selectAgentRole.HMRC-MTD-IT-SUPP.supportingToMain.option=No
 selectAgentRole.HMRC-MTD-IT.supportingToMain.hint=If {0} accepts this request, you’ll get access to all the Income Tax information you need to deal with HMRC on their behalf.
 
-
 # ________________________________________________________________________________
 # Check Your Answers
 # ________________________________________________________________________________
-cya.header=Check your answers
-cya.h2=Authorisation details
-cya.clientType.label=Type of client
-cya.clientService.label=What you want to do for the client
-cya.clientName.label=Client name
-cya.agentType.label=How you want to act for them
-cya.confirmAndSend.button=Confirm and send
-cya.changeLink=Change
+checkYourAnswers.header=Check your answers
+checkYourAnswers.h2=Authorisation details for {0}
+checkYourAnswers.clientService.label=What do you want to do for the client
+checkYourAnswers.agentType.label=How do you want to act for them
 
+checkYourAnswers.confirmAndSend.button=Confirm and send
+checkYourAnswers.change=Change
+
+checkYourAnswers.PERSONAL-INCOME-RECORD=View their Income record
+checkYourAnswers.HMRC-MTD-IT=Manage their Making Tax Digital for Income Tax
+checkYourAnswers.HMRC-PPT-ORG=Manage their Plastic Packaging Tax
+checkYourAnswers.HMRC-CGT-PD=Manage their Capital Gains Tax on UK property account
+checkYourAnswers.HMRC-CBC-ORG=Manage their country-by-country reports
+checkYourAnswers.HMRC-CBC-ORG=Manage their country-by-country reports
+checkYourAnswers.HMRC-MTD-VAT=Manage their VAT
+checkYourAnswers.HMRC-PILLAR2-ORG=Manage their Pillar 2 top-up taxes
+checkYourAnswers.HMRC-TERS-ORG=Maintain their trust or an estate
+
+# ________________________________________________________________________________
+# Agent confirm cancellation of authorisation
+# ________________________________________________________________________________
+
+confirmCancellation.header=Confirm cancellation
+confirmCancellation.legend=Do you want to cancel your authorisation for this client?
+confirmCancellation.true=Yes
+confirmCancellation.false=No - I need to start again
+confirmCancellation.agent-cancel-authorisation.error.required=Select ‘yes’ if you want to cancel authorisation for this client
+
+confirmCancellation.HMRC-MTD-IT.current-status=You are currently authorised as the main agent to manage {0}’s Making Tax Digital for Income Tax.
+confirmCancellation.HMRC-MTD-IT-SUPP.current-status=You are currently authorised as a supporting agent to manage {0}’s Making Tax Digital for Income Tax.
+confirmCancellation.PERSONAL-INCOME-RECORD.current-status=You are currently authorised as the agent to view the Income record for {0}.
+confirmCancellation.HMRC-MTD-VAT.current-status=You are currently authorised as the agent to manage {0}’s VAT.
+confirmCancellation.HMRC-TERS-ORG.current-status=You are currently authorised as the agent to maintain {0}’s trust or an estate.
+confirmCancellation.HMRC-TERSNT-ORG.current-status=You are currently authorised as the agent to maintain {0}’s trust or an estate.
+confirmCancellation.HMRC-CGT-PD.current-status=You are currently authorised as the agent to manage {0}’s Capital Gains Tax on UK property account.
+confirmCancellation.HMRC-PPT-ORG.current-status=You are currently authorised as the agent to manage Plastic Packaging Tax for {0}.
+confirmCancellation.HMRC-CBC-ORG.current-status=You are currently authorised as the agent to manage country-by-country reports for {0}.
+confirmCancellation.HMRC-CBC-NONUK-ORG.current-status=You are currently authorised as the agent to manage {0}’s country-by-country reports.
+confirmCancellation.HMRC-PILLAR2-ORG.current-status=You are currently authorised as the agent to manage {0}’s Pillar 2 top-up taxes.
+
+confirmCancellation.HMRC-MTD-IT.outcome=If you cancel your authorisation, you will not be able to manage Making Tax Digital for Income Tax for {0}.
+confirmCancellation.PERSONAL-INCOME-RECORD.outcome=If you cancel this request, you will not be able to view the Income record for this client.
+confirmCancellation.HMRC-MTD-VAT.outcome=If you cancel your authorisation, you will not be able to manage their VAT for {0}.
+confirmCancellation.HMRC-TERS-ORG.outcome=If you cancel your authorisation, you will not be able to maintain a trust or an estate on behalf of {0}.
+confirmCancellation.HMRC-TERSNT-ORG.outcome=If you cancel your authorisation, you will not be able to maintain a trust or an estate on behalf of {0}.
+confirmCancellation.HMRC-CGT-PD.outcome=If you cancel your authorisation, you will not be able to manage Capital Gains Tax on UK property account for {0}.
+confirmCancellation.HMRC-PPT-ORG.outcome=If you cancel your authorisation, you will not be able to manage Plastic Packaging Tax for {0}.
+confirmCancellation.HMRC-CBC-ORG.outcome=If you cancel your authorisation, you will not be able to manage country-by-country reports for {0}.
+confirmCancellation.HMRC-CBC-NONUK-ORG.outcome=If you cancel your authorisation, you will not be able to manage The Trust of {0} country-by-country reports.
+confirmCancellation.HMRC-PILLAR2-ORG.outcome=If you cancel your authorisation, you will not be able to manage {0}’s Pillar 2 top-up taxes.
+
+confirmCancellation.HMRC-MTD-IT.inset=Cancelling this authorisation will not automatically cancel any authorisation for this client for Self Assessment.
 
 # ________________________________________________________________________________
 # Invitation Created
 # ________________________________________________________________________________
+
 invitationCreated.header=You''ve created an authorisation request
 invitationCreated.panel.body=Client: {0}
 invitationCreated.h2=Next steps
@@ -355,6 +344,7 @@ invitationCreated.agentHome=Go to your agent services account homepage
 # ________________________________________________________________________________
 # Track requests
 # ________________________________________________________________________________
+
 trackRequests.title=Manage your recent authorisation requests
 trackRequests.intro=Check the status of your authorisation requests to clients in the last 30 days, or cancel requests and authorisations you no longer need.
 trackRequests.empty=You have no recent authorisation requests

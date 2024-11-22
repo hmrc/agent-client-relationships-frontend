@@ -124,7 +124,7 @@ class ConfirmClientControllerISpec extends ComponentSpecHelper with AuthStubs {
         "confirmClient" -> Seq("true")
       ))
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe "routes.CheckYourAnswersController.show(journeyType).url"
+      result.header("Location").value shouldBe routes.CheckYourAnswersController.show(JourneyType.AuthorisationRequest).url
     }
 
     "redirect to authorisation-exists exit page when confirming client with existing authorisation" in {
@@ -144,7 +144,7 @@ class ConfirmClientControllerISpec extends ComponentSpecHelper with AuthStubs {
         "confirmClient" -> Seq("true")
       ))
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe "routes.CheckYourAnswersController.show(journeyType).url"
+      result.header("Location").value shouldBe routes.CheckYourAnswersController.show(JourneyType.AgentCancelAuthorisation).url
     }
 
     "redirect to not-authorised exist page when confirming client to deAuth with no existing authorisation" in {

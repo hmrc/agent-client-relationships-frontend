@@ -39,6 +39,14 @@ class JourneyService @Inject()(journeyRepository: JourneyRepository,
     journeyRepository.putSession(dataKey, journey).map(_ => ())
   }
 
+  def createAuthorisationRequest(journey: Journey)(implicit request: Request[?]): Future[String] = {
+    agentClientRelationshipsConnector.createInvitation(journey)
+  }
+
+  def cancelAuthorisation(journey: Journey)(implicit request: Request[?]): Future[Unit] = {
+    agentClientRelationshipsConnector.cancelAuthorisation(journey)
+  }
+
   def getJourney()(implicit request: Request[Any]): Future[Option[Journey]] =
     journeyRepository.getFromSession(dataKey)
 
@@ -63,8 +71,8 @@ class JourneyService @Inject()(journeyRepository: JourneyRepository,
         else if (journey.clientConfirmed.isEmpty) routes.ConfirmClientController.show(journeyType).url
         else if (journey.clientConfirmed.contains(false)) routes.StartJourneyController.startJourney(journeyType).url
         else if (journeyType == JourneyType.AuthorisationRequest && serviceConfig.supportsAgentRoles(journey.getService) && journey.agentType.isEmpty) routes.SelectAgentRoleController.show(journeyType).url
-        else if (journey.getExitType(journeyType, journey.getClientDetailsResponse, serviceConfig.supportsAgentRoles(journey.getService)).nonEmpty) routes.JourneyExitController.show(journeyType, journey.getExitType(journeyType, journey.getClientDetailsResponse, serviceConfig.supportsAgentRoles(journey.getService)).get).url
-        else "routes.CheckYourAnswersController.show(journeyType).url"
+        else if (journey.getExitType(journeyType, journey.getClientDetailsResponse, serviceConfig.getSupportedAgentRoles(journey.getService)).nonEmpty) routes.JourneyExitController.show(journeyType, journey.getExitType(journeyType, journey.getClientDetailsResponse, serviceConfig.getSupportedAgentRoles(journey.getService)).get).url
+        else routes.CheckYourAnswersController.show(journeyType).url
       }
       case _ => routes.StartJourneyController.startJourney(journeyType).url
     }

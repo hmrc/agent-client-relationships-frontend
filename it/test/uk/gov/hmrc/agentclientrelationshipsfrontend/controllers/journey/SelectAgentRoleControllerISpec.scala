@@ -95,7 +95,7 @@ class SelectAgentRoleControllerISpec extends ComponentSpecHelper with AuthStubs 
         "agentRole" -> Seq(role)
       ))
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe "routes.CheckYourAnswersController.show(journeyType).url"
+      result.header("Location").value shouldBe routes.CheckYourAnswersController.show(journeyType).url
     })
 
     List("HMRC-MTD-IT", "HMRC-MTD-IT-SUPP").foreach(role => s"redirect to the CYA page after storing valid answer $role for change of relationship" in {
@@ -106,7 +106,7 @@ class SelectAgentRoleControllerISpec extends ComponentSpecHelper with AuthStubs 
         "agentRole" -> Seq(role)
       ))
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe "routes.CheckYourAnswersController.show(journeyType).url"
+      result.header("Location").value shouldBe routes.CheckYourAnswersController.show(journeyType).url
     })
 
     "redirect to the 'agent role not changed' page after submitting no change for main role" in {
