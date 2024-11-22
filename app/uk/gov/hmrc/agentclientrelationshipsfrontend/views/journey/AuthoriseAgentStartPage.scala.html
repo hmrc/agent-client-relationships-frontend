@@ -35,11 +35,14 @@
     }
 }
 
-@h1(messages(s"$key.h1.${agentName}))
+@h1 = @{
+    messages(s"$key.h1.${agentName}")
+}
 
-@p (messages (s"$key.p1", $taxServiceName)))
+<p>@messages(s"$key.p1", taxServiceName)</p>
 
-@p(messages(s"$key.p2")))
+<p>@messages(s"$key.p2")</p>
+
 
 <a href=s"/authorisation-response/$uid/$taxService/consent-information" role="button" draggable="false" class="govuk-button govuk-button--start" data-module="govuk-button">
     @messages(s"$key.link.text1")
@@ -49,6 +52,5 @@
 </a>
 
 <a href=s"/authorisation-response/$uid/$taxService/decline-request" class="govuk-link govuk-body">@messages(s"$key.link.text2")</a>
-
 
 
