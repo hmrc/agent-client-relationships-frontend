@@ -17,33 +17,38 @@
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client
 
 import com.google.inject.Inject
-import play.api.mvc.{Action, AnyContent, Result}
-import play.mvc._
+import play.api.i18n.I18nSupport
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.connectors.AgentClientRelationshipsConnector
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.invitationLink.ValidateLinkResponse
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.invitationLink.ValidateLinkPartsResponse
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.ClientServiceConfigurationService
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import uk.gov.hmrc.play.http.HeaderCarrierConverter
 
 import javax.inject.Singleton
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class StartController @Inject()(agentClientRelationshipsConnector: AgentClientRelationshipsConnector,
-                                serviceConfigurationService: ClientServiceConfigurationService
-                                            )(implicit executionContext: ExecutionContext,
-                                              appConfig: AppConfig){
+                                serviceConfigurationService: ClientServiceConfigurationService,
+                                mcc: MessagesControllerComponents
+                                            )(implicit val executionContext: ExecutionContext,
+                                              appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport:
 
- def show(uid: String, normalizedAgentName: String, taxService: String): Action[AnyContent] = Action.async { _ =>
-   if serviceConfigurationService.validateUrlPart(taxService) then 
-     agentClientRelationshipsConnector
-       .validateLinkParts(uid, normalizedAgentName)
-       .map {
-         case Left("AGENT_NOT_FOUND") => Redirect("routes.ClientErrorController.show(AGENT_NOT_FOUND)")
-         case Left("AGENT_SUSPENDED") => Redirect("routes.ClientErrorController.show(AGENT_SUSPENDED)") 
-         case Left("SERVER_ERROR") => Redirect("routes.ClientErrorController.show(SERVER_ERROR)")
-         case Right(_) => Rediirect("ok")
-       }
-   else Future.successful(NotFound(""))
- }
+ def show(uid: String, normalizedAgentName: String, taxService: String): Action[AnyContent] = Action.async:
 
-}
+  implicit request =>
+     given HeaderCarrier = HeaderCarrierConverter.fromRequest(request)
+
+     if serviceConfigurationService.validateUrlPart(taxService) then
+       agentClientRelationshipsConnector
+         .validateLinkParts(uid, normalizedAgentName)
+         .map {
+           case Left("AGENT_NOT_FOUND") => Redirect("routes.ClientExitController.show(AGENT_NOT_FOUND)")
+           case Left("AGENT_SUSPENDED") => Redirect("routes.ClientExitController.show(AGENT_SUSPENDED)")
+           case Left("SERVER_ERROR") => Redirect("routes.ClientExitController.show(SERVER_ERROR)")
+           case Right(_) => Ok("APB-8935")
+         }
+     else Future.successful(NotFound("TODO: NOT FOUND for Client controller/template"))

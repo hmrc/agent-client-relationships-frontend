@@ -18,6 +18,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.connectors
 
 import play.api.libs.json.{JsObject, Json}
 import play.api.test.Helpers.*
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.invitationLink.ValidateLinkPartsResponse
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsResponse, ClientStatus, KnownFactType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.ComponentSpecHelper
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.WiremockHelper.stubGet
@@ -30,10 +31,14 @@ class AgentClientRelationshipsConnectorISpec extends ComponentSpecHelper {
 
   def getClientDetailsUrl(service: String, clientId: String) = s"/agent-client-relationships/client/$service/details/$clientId"
 
+  def getValidateLinkResponseUrl(uid: String, normalizedAgentName: String) = s"/agent-client-relationships/agent-reference/uid/$uid/$normalizedAgentName"
+
   val testClientId = "clientId"
   val testService = "HMRC-MTD-IT"
   val testName = "Test Name"
   val testPostCode = "AA1 1AA"
+  val testUid = "ABCD"
+  val testNormalizedAgentName = "abc_ltd"
   val testClientDetailsResponse: ClientDetailsResponse = ClientDetailsResponse(
     testName,
     Some(ClientStatus.Insolvent),
@@ -50,6 +55,14 @@ class AgentClientRelationshipsConnectorISpec extends ComponentSpecHelper {
     "knownFacts" -> Json.arr(testPostCode),
     "knownFactType" -> "PostalCode",
     "hasPendingInvitations" -> false
+  )
+
+  val testValidateLinkResponse: ValidateLinkPartsResponse = ValidateLinkPartsResponse(
+    testName
+  )
+
+  val testValidateLinkResponseJson: JsObject = Json.obj(
+    "name" -> testName,
   )
 
   "getClientDetails" should {
@@ -74,4 +87,32 @@ class AgentClientRelationshipsConnectorISpec extends ComponentSpecHelper {
       intercept[UpstreamErrorResponse](await(result))
     }
   }
+
+  "validateLinkParts" should {
+
+    "return a Right containing ValidateLinkPartsResponse" in {
+      stubGet(getValidateLinkResponseUrl(testUid, testNormalizedAgentName), OK, testValidateLinkResponseJson.toString)
+      val result = testConnector.validateLinkParts(testUid, testNormalizedAgentName)
+      await(result) shouldBe Right(testValidateLinkResponse)
+    }
+
+    "return a Left containing AGENT_NOT_FOUND" in {
+      stubGet(getValidateLinkResponseUrl(testUid, testNormalizedAgentName), NOT_FOUND, "")
+      val result = testConnector.validateLinkParts(testUid, testNormalizedAgentName)
+      await(result) shouldBe Left("AGENT_NOT_FOUND")
+    }
+
+    "return a Left containing AGENT_SUSPENDED" in {
+      stubGet(getValidateLinkResponseUrl(testUid, testNormalizedAgentName), FORBIDDEN, "")
+      val result = testConnector.validateLinkParts(testUid, testNormalizedAgentName)
+      await(result) shouldBe Left("AGENT_SUSPENDED")
+    }
+
+    "return a Left containing SERVER_ERROR" in {
+      stubGet(getValidateLinkResponseUrl(testUid, testNormalizedAgentName), SERVICE_UNAVAILABLE, "")
+      val result = testConnector.validateLinkParts(testUid, testNormalizedAgentName)
+      await(result) shouldBe Left("SERVER_ERROR")
+    }
+  }
+
 }

@@ -17,15 +17,13 @@
 package uk.gov.hmrc.agentclientrelationshipsfrontend.connectors
 
 import play.api.http.Status.{FORBIDDEN, NOT_FOUND, OK}
-import play.api.mvc.Results.NotFound
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.invitationLink.ValidateLinkResponse
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.invitationLink.ValidateLinkPartsResponse
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{AuthorisationRequest, ClientDetailsResponse, Invitation, PageInfo}
 import uk.gov.hmrc.http.HttpReads.Implicits.*
 import uk.gov.hmrc.http.client.HttpClientV2
-import uk.gov.hmrc.http.{ForbiddenException, HeaderCarrier, HttpResponse, StringContextOps}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps}
 
-import java.net.URL
 import java.time.LocalDate
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -56,12 +54,12 @@ class AgentClientRelationshipsConnector @Inject()(appConfig: AppConfig,
 
   def getAvailableStatusFilters: Future[List[String]] = Future.successful(availableFilters)
   
-  def validateLinkParts(uid: String, normalizedAgentName: String)(implicit hc: HeaderCarrier): Future[Either[String, ValidateLinkResponse]] =
+  def validateLinkParts(uid: String, normalizedAgentName: String)(implicit hc: HeaderCarrier): Future[Either[String, ValidateLinkPartsResponse]] =
     httpV2
       .get(url"$agentClientRelationshipsUrl/agent-reference/uid/$uid/$normalizedAgentName")
       .execute[HttpResponse]
       .map(response => response.status match {
-        case OK => Right(response.json.as[ValidateLinkResponse])
+        case OK => Right(response.json.as[ValidateLinkPartsResponse])
         case NOT_FOUND => Left("AGENT_NOT_FOUND") 
         case FORBIDDEN => Left("AGENT_SUSPENDED") 
         case _ => Left("SERVER_ERROR")

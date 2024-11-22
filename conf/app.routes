@@ -45,4 +45,4 @@ GET        /:journeyType/exit/:exitType                                         
 POST        /agents/fast-track                                                          uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.AgentFastTrackController.agentFastTrack
 
 # Client URLs --------------------------------------------------------------------------------------------------------------
-GET        /appoint-someone-to-deal-with-HMRC-for-you/:uid/:normalizedAgentName/:taxService uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.AuthorisationStartController.show(uid: String, normalizedAgentName: String, taxService: String)
+GET        /appoint-someone-to-deal-with-HMRC-for-you/:uid/:normalizedAgentName/:taxService uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.StartController.show(uid: String, normalizedAgentName: String, taxService: String)

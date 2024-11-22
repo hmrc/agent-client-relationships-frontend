@@ -18,11 +18,11 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.models.invitationLink
 
 import play.api.libs.json.*
 
-case class ValidateLinkResponse(
+case class ValidateLinkPartsResponse(
   name: String
 )
 
-object ValidateLinkResponse {
-  implicit val format: OFormat[ValidateLinkResponse] = Json.format[ValidateLinkResponse]
+object ValidateLinkPartsResponse {
+  implicit val format: OFormat[ValidateLinkPartsResponse] = Json.format[ValidateLinkPartsResponse]
   
 }
