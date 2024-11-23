@@ -481,7 +481,7 @@ authoriseAgentStartPage.p1.plastic-packaging-tax=You need to sign in with the us
 authoriseAgentStartPage.p1.country-by-country-reporting=You need to sign in with the user ID you use for Country-by-country Reports.
 authoriseAgentStartPage.p1.pillar-2=You need to sign in with the user ID you use for Pillar 2 top-up taxes.
 authoriseAgentStartPage.p1.trusts-and-estates=You need to sign in with the user ID you use for maintaining your trust or estate.
-authoriseAgentStartPage.p2=If you do not have sign in details,you'll be able to create some.
+authoriseAgentStartPage.p2=If you do not have sign in details, you‘ll be able to create some.
 authoriseAgentStartPage.link.text1=Start now
 authoriseAgentStartPage.link.text2=I do not want {0} to act for me.
 

@@ -48,6 +48,15 @@ class AuthoriseAgentStartPageSpec extends ViewSpecSupport {
       case _                        => s"Authorise $agentName to manage your ${taxServiceNames(taxService)}"
     }
     
+    def p1Expected(taxService: String): String = taxService match {
+      case "income-record-viewer"   => "You need to sign in with the user ID you use for your personal tax account."
+      case "trusts-and-estates"     => "You need to sign in with the user ID you use for maintaining your trust or estate."
+      case _                        => s"You need to sign in with the user ID you use for ${taxServiceNames(taxService)}."
+    }
+      
+      
+     
+    
 //    val incomeTaxH1 = s"Authorise $agentName to manage your Income Tax "
 //    val personalIncomeRecordH1 = s"Authorise $agentName to view your Income Record"
 //    val pptH1 = s"Authorise $agentName to manage your Plastic Packaging Tax"
@@ -76,20 +85,20 @@ class AuthoriseAgentStartPageSpec extends ViewSpecSupport {
 
         val view: HtmlFormat.Appendable = viewTemplate(agentName, elem, "uid")
         val doc: Document = Jsoup.parse(view.body)
-        doc.mainContent.extractText(h1, 1).get shouldBe h1Expected(elem)
+        doc.extractText(h1, 1).get shouldBe h1Expected(elem)
       }
-    }
+      
+      s"include the correct p1 text for $elem" in {
+        val view: HtmlFormat.Appendable = viewTemplate(agentName, elem, "uid")
+        val doc: Document = Jsoup.parse(view.body)
+        doc.extractText(p, 1).get shouldBe p1Expected(elem)
+      }
 
-
-    "have the right title" in {
-    }
-
-    "have the right p1" in {
-
-    }
-
-    "have the right p2" in {
-
+      s"include the correct p2 text for $elem" in {
+        val view: HtmlFormat.Appendable = viewTemplate(agentName, elem, "uid")
+        val doc: Document = Jsoup.parse(view.body)
+        doc.extractText(p, 2).get shouldBe "If you do not have sign in details, you‘ll be able to create some."
+      }
     }
 
     "have a correctLink content" in {
