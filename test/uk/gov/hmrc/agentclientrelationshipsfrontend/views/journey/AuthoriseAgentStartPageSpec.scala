@@ -38,90 +38,52 @@ class AuthoriseAgentStartPageSpec extends ViewSpecSupport {
     "country-by-country-reporting" -> "Country-by-country Reports",
     "pillar-2" -> "Pillar 2 top-up taxes",
     "trusts-and-estates" -> "Trust or an Estate"
-  ) 
+  )
 
 
+  def h1Expected(taxService: String): String = taxService match {
+    case "income-record-viewer" => s"Authorise $agentName to view your Income Record"
+    case "trusts-and-estates" => s"Authorise $agentName to maintain your Trust or an Estate"
+    case _ => s"Authorise $agentName to manage your ${taxServiceNames(taxService)}"
+  }
 
-    def h1Expected(taxService: String): String = taxService match {
-      case "income-record-viewer"   => s"Authorise $agentName to view your Income Record"
-      case "trusts-and-estates"     => s"Authorise $agentName to maintain your Trust or an Estate"
-      case _                        => s"Authorise $agentName to manage your ${taxServiceNames(taxService)}"
-    }
-    
-    def p1Expected(taxService: String): String = taxService match {
-      case "income-record-viewer"   => "You need to sign in with the user ID you use for your personal tax account."
-      case "trusts-and-estates"     => "You need to sign in with the user ID you use for maintaining your trust or estate."
-      case _                        => s"You need to sign in with the user ID you use for ${taxServiceNames(taxService)}."
-    }
-      
-      
-     
-    
-//    val incomeTaxH1 = s"Authorise $agentName to manage your Income Tax "
-//    val personalIncomeRecordH1 = s"Authorise $agentName to view your Income Record"
-//    val pptH1 = s"Authorise $agentName to manage your Plastic Packaging Tax"
-//    val cgtH1 = s"Authorise $agentName to manage your Capital Gains Tax on UK property account"
-//    val vatH1 = s"Authorise $agentName to manage your VAT"
-//    val pillar2H1 = s"Authorise $agentName to manage your Pillar 2 top-up taxes"
-//    val trustEstateH1 = s"Authorise $agentName to maintain your Trust or an Estate"
-//    val cbcH1 = s"Authorise $agentName to manage your Country-by-country Reports"
-//    val incomeTaxP1 = "You need to sign in with the user ID you use for Income Tax."
-//    val personalIncomeRecordP1 = "You need to sign in with the user ID you use for your personal tax account."
-//    val pptP1 = "You need to sign in with the user ID you use for Plastic Packaging Tax."
-//    val cgtP1 = "You need to sign in with the user ID you use for Capital Gains Tax on UK property account."
-//    val vatP1 = "You need to sign in with the user ID you use for VAT."
-//    val pillar2P1 = "You need to sign in with the user ID you use for Pillar 2 top-up taxes."
-//    val trustsEstateP1 = "You need to sign in with the user ID you use for maintaining your trust or estate."
-//    val cbcP1 = "You need to sign in with the user ID you use for Country-by-country Reports."
-//    val p2Content = "If you do not have sign in details,you'll be able to create some."
-//    val link1Content = "Start now"
-//    val link2Content = s"I do not want $agentName to act for me."
+  def p1Expected(taxService: String): String = taxService match {
+    case "income-record-viewer" => "You need to sign in with the user ID you use for your personal tax account."
+    case "trusts-and-estates" => "You need to sign in with the user ID you use for maintaining your trust or estate."
+    case _ => s"You need to sign in with the user ID you use for ${taxServiceNames(taxService)}."
+  }
+
 
   "AuthoriseAgentStartPage for authorisation journey view" should {
 
 
-    for (elem <- taxServiceNames.keySet.toList) {
-      s"include the correct H1 text for $elem" in {
-
-        val view: HtmlFormat.Appendable = viewTemplate(agentName, elem, "uid")
-        val doc: Document = Jsoup.parse(view.body)
-        doc.extractText(h1, 1).get shouldBe h1Expected(elem)
-      }
-      
-      s"include the correct p1 text for $elem" in {
-        val view: HtmlFormat.Appendable = viewTemplate(agentName, elem, "uid")
-        val doc: Document = Jsoup.parse(view.body)
-        doc.extractText(p, 1).get shouldBe p1Expected(elem)
+    val uid = "uid"
+    for (taxService <- taxServiceNames.keySet.toList) {
+      val view: HtmlFormat.Appendable = viewTemplate(agentName, taxService, uid)
+      val doc: Document = Jsoup.parse(view.body)
+      s"include the correct H1 text for $taxService" in {
+        doc.mainContent.extractText(h1, 1).value shouldBe h1Expected(taxService)
       }
 
-      s"include the correct p2 text for $elem" in {
-        val view: HtmlFormat.Appendable = viewTemplate(agentName, elem, "uid")
-        val doc: Document = Jsoup.parse(view.body)
-        doc.extractText(p, 2).get shouldBe "If you do not have sign in details, you‘ll be able to create some."
+      s"include the correct p1 text for $taxService" in {
+        doc.mainContent.extractText(p, 1).value shouldBe p1Expected(taxService)
       }
+
+      s"include the correct p2 text for $taxService" in {
+        doc.mainContent.extractText(p, 2).value shouldBe "If you do not have sign in details, you‘ll be able to create some."
+      }
+      s"have correct link button for $taxService" in {
+        val expectedUrl = s"/authorisation-response/$uid/$taxService/consent-information"
+        doc.mainContent.extractLinkButton(1).value shouldBe TestLink("Start now", expectedUrl)
+      }
+      s"have correct link for $taxService" in {
+        val expectedUrl = s"/authorisation-response/$uid/$taxService/decline-request"
+        doc.mainContent.extractLink(1).value shouldBe TestLink(s"I do not want $agentName to act for me.", expectedUrl)
+      }
+
+
     }
 
-    "have a correctLink content" in {
-
-    }
-
-
-    //    def pMessage(taxService: String): String = taxService match {
-    //      case "income-tax" => expected.incomeTaxP1
-    //      case "personal-income-record" => expected.personalIncomeRecordP1
-    //      case "plastic-packaging-tax" => expected.pptP1
-    //      case "capital-gains-tax-uk-property" => expected.cgtP1
-    //      case "vat" => expected.vatP1
-    //      case "pillar-2" => expected.pillar2P1
-    //      case "trusts-and-estates" => expected.trustsEstateP1
-    //      case "country-by-country-reporting" => expected.cbcP1
-    //    }
-
-    //    def p2Message(): String = expected.p2Content
-    //
-    //    def link1Message(): String = expected.link1Content
-    //
-    //    def link2Message(): String = expected.link2Content
   }
 
 
