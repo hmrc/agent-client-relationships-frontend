@@ -425,6 +425,8 @@ trackRequests.filter-status.Declined.HMRC-CBC={0} request to manage the client�
 # Journey exit headings
 # ________________________________________________________________________________
 
+# Agent Journey
+
 journeyExit.client-not-found.header=We could not find your client
 journeyExit.not-registered.header=Your client needs to register for Self Assessment
 journeyExit.not-authorised.header=You have not been authorised
@@ -433,8 +435,15 @@ journeyExit.client-insolvent.header=You cannot create an authorisation request b
 journeyExit.authorisation-already-exists.header=You are already authorised
 journeyExit.no-change-of-agent-role.header=You have not changed how you act for this client
 
+# Client Journey
+
+journeyExit.agent-suspended=You cannot appoint this tax agent
+journeyExit.no-outstanding-requests=There are no outstanding authorisation requests for you to respond to
+journeyExit.cannot-find-auth-request=We cannot find this authorisation request
+journeyExit.auth-request-expired=This authorisation request has already expired
+
 # ________________________________________________________________________________
-# Journey exit partials
+# Agent Journey exit partials
 # ________________________________________________________________________________
 
 genericNotFound.description=We could not find a client in our records using the details you gave us.
@@ -491,6 +500,8 @@ authorisationAlreadyExists.HMRC-CBC-NONUK-ORG.p1=This client has already authori
 authorisationAlreadyExists.HMRC-PILLAR2-ORG.p1=This client has already authorised you to manage their Pillar 2 top-up taxes.
 authorisationAlreadyExists.p2=You do not need to ask them to authorise you for this service again.
 authorisationAlreadyExists.return=Return to your authorisation requests
+
+# ________________________________________________________________________________
 # Authorise agent start page
 # ________________________________________________________________________________
 
@@ -571,6 +582,33 @@ consentInformation.section2.p1=You can withdraw consent at any time by using <a 
 consentInformation.section3.h2=Before you decide
 consentInformation.section3.p1=Select ‘continue’ to learn what {0} can do when you authorise them to manage your {1}.
 
+# ________________________________________________________________________________
+# Client journey exit partials
+# ________________________________________________________________________________
 
+# ________________________________________________________________________________
+# You cannot appoint this tax agent (Agent suspended)
+# ________________________________________________________________________________
+agentSuspended.p1=This tax agent cannot manage your Making Tax Digital for Income Tax at this time.
+agentSuspended.p2=If you have any questions, contact the tax agent who sent you this request.
+agentSuspended.signout-link=Finish and sign out
 
+# ________________________________________________________________________________
+# There are no outstanding authorisation requests for you to respond to
+# ________________________________________________________________________________
+noOutstandingRequests.p1= If you think this is wrong, contact the agent who sent you the request or <a href={0} class="govuk-link" target="_blank" rel="noreferrer noopener">view your request history</a>.
 
+# ________________________________________________________________________________
+# This authorisation request has already expired
+# ________________________________________________________________________________
+authorisationRequestExpired.p1=This request expired on {0}. For details, <a href={1} class="govuk-link" target="_blank" rel="noreferrer noopener">view your history</a> to check for any expired, cancelled or outstanding requests.
+authorisationRequestExpired.p2=If your agent has sent you a recent request, <a href={0} class="govuk-link" target="_blank" rel="noreferrer noopener">make sure you have signed up to the tax service you need.
+authorisationRequestExpired.p3=You could also check you have signed in with the correct Government Gateway user ID. It must be the same one you used to sign up to the tax service the authorisation request is for.
+authorisationRequestExpired.p4=<a href={0} class="govuk-link" target="_blank" rel="noreferrer noopener">Sign in with the Government Gateway user ID</a> you use for managing your personal tax affairs.
+
+# ________________________________________________________________________________
+# We cannot find this authorisation request
+# ________________________________________________________________________________
+cannotFindAuthRequest.p1=We cannot find a request from {0}.
+cannotFindAuthRequest.p2=<a href={0} class="govuk-link" target="_blank" rel="noreferrer noopener">Make sure you have signed up for the tax service you need.</a> Ask your agent if you are not sure.
+cannotFindAuthRequest.p3=You need to sign in with the correct Government Gateway user ID. It is possible to have more than one, so make sure it is the same one you used to sign up to the tax service the authorisation request is for.<a href={0} class="govuk-link" target="_blank" rel="noreferrer noopener">Try signing in with a different Government Gateway user ID</a> (the one that you use for managing your personal tax affairs).
