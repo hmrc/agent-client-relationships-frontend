@@ -22,6 +22,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.connectors.AgentClientRelationshipsConnector
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.invitationLink.ValidateLinkPartsResponse
+import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.AuthoriseAgentStartPage
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.ClientServiceConfigurationService
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
