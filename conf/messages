@@ -461,3 +461,29 @@ authorisationAlreadyExists.HMRC-CBC-NONUK-ORG.p1=This client has already authori
 authorisationAlreadyExists.HMRC-PILLAR2-ORG.p1=This client has already authorised you to manage their Pillar 2 top-up taxes.
 authorisationAlreadyExists.p2=You do not need to ask them to authorise you for this service again.
 authorisationAlreadyExists.return=Return to your authorisation requests
+# Authorise agent start page
+# ________________________________________________________________________________
+
+authoriseAgentStartPage.h1.income-tax=Authorise {0} to manage your Income Tax
+authoriseAgentStartPage.h1.income-record-viewer=Authorise {0} to view your Income Record
+authoriseAgentStartPage.h1.vat=Authorise {0} to manage your VAT
+authoriseAgentStartPage.h1.capital-gains-tax-uk-property=Authorise {0} to manage your Capital Gains Tax on UK property account
+authoriseAgentStartPage.h1.plastic-packaging-tax=Authorise {0} to manage your Plastic Packaging Tax
+authoriseAgentStartPage.h1.country-by-country-reporting=Authorise {0} to manage your Country-by-country Reports
+authoriseAgentStartPage.h1.pillar-2=Authorise {0} to manage your Pillar 2 top-up taxes
+authoriseAgentStartPage.h1.trusts-and-estates=Authorise {0} to maintain your Trust or an Estate
+
+authoriseAgentStartPage.p1.income-tax=You need to sign in with the user ID you use for Income Tax.
+authoriseAgentStartPage.p1.income-record-viewer=You need to sign in with the user ID you use for your personal tax account.
+authoriseAgentStartPage.p1.vat=You need to sign in with the user ID you use for VAT.
+authoriseAgentStartPage.p1.capital-gains-tax-uk-property=You need to sign in with the user ID you use for Capital Gains Tax on UK property account.
+authoriseAgentStartPage.p1.plastic-packaging-tax=You need to sign in with the user ID you use for Plastic Packaging Tax.
+authoriseAgentStartPage.p1.country-by-country-reporting=You need to sign in with the user ID you use for Country-by-country Reports.
+authoriseAgentStartPage.p1.pillar-2=You need to sign in with the user ID you use for Pillar 2 top-up taxes.
+authoriseAgentStartPage.p1.trusts-and-estates=You need to sign in with the user ID you use for maintaining your trust or estate.
+authoriseAgentStartPage.p2=If you do not have sign in details, you‘ll be able to create some.
+authoriseAgentStartPage.link.text1=Start now
+authoriseAgentStartPage.link.text2=I do not want {0} to act for me.
+
+
+
