@@ -32,7 +32,7 @@ class ClientDetailsResponseSpec extends AnyWordSpecLike with Matchers {
     isOverseas = Some(false),
     knownFacts = Seq(testPostCode),
     knownFactType = Some(KnownFactType.PostalCode),
-    hasPendingInvitations = false,
+    hasPendingInvitation = false,
     hasExistingRelationshipFor = None
   )
   val testClientDetailsResponseJson: JsObject = Json.obj(
@@ -41,7 +41,7 @@ class ClientDetailsResponseSpec extends AnyWordSpecLike with Matchers {
     "isOverseas" -> false,
     "knownFacts" -> Json.arr(testPostCode),
     "knownFactType" -> "PostalCode",
-    "hasPendingInvitations" -> false
+    "hasPendingInvitation" -> false
   )
   "ClientDetailsResponse format" should {
     "write an object to a json" in {

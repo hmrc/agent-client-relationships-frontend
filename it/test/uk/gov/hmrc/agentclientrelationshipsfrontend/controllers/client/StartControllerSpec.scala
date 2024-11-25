@@ -43,7 +43,7 @@ class StartControllerSpec extends ComponentSpecHelper with ScalaFutures with Aut
     "pillar-2",
     "trusts-and-estates")
 
-  def getValidateLinkResponseUrl(uid: String, normalizedAgentName: String) = s"/agent-client-relationships/agent-reference/uid/$uid/$normalizedAgentName"
+  def getValidateLinkResponseUrl(uid: String, normalizedAgentName: String) = s"/agent-client-relationships/agent/agent-reference/uid/$uid/$normalizedAgentName"
 
   val testValidateLinkResponseJson: JsObject = Json.obj(
     "name" -> testName,

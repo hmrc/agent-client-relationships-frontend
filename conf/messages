@@ -17,6 +17,7 @@ button.copy=Copy link to clipboard
 button.copied=Link copied
 start-over.button=Start over
 start-again.button=Start again
+track-requests.button=Manage recent authorisation requests
 
 # -------------------------------------------------------------------------------------------
 # Timeout/Auth/IV error pages
@@ -284,13 +285,15 @@ checkYourAnswers.change=Change
 
 checkYourAnswers.PERSONAL-INCOME-RECORD=View their Income record
 checkYourAnswers.HMRC-MTD-IT=Manage their Making Tax Digital for Income Tax
+checkYourAnswers.HMRC-MTD-IT-SUPP=Manage their Making Tax Digital for Income Tax
 checkYourAnswers.HMRC-PPT-ORG=Manage their Plastic Packaging Tax
 checkYourAnswers.HMRC-CGT-PD=Manage their Capital Gains Tax on UK property account
 checkYourAnswers.HMRC-CBC-ORG=Manage their country-by-country reports
-checkYourAnswers.HMRC-CBC-ORG=Manage their country-by-country reports
+checkYourAnswers.HMRC-CBC-NONUK-ORG=Manage their country-by-country reports
 checkYourAnswers.HMRC-MTD-VAT=Manage their VAT
 checkYourAnswers.HMRC-PILLAR2-ORG=Manage their Pillar 2 top-up taxes
 checkYourAnswers.HMRC-TERS-ORG=Maintain their trust or an estate
+checkYourAnswers.HMRC-TERSNT-ORG=Maintain their trust or an estate
 
 # ________________________________________________________________________________
 # Agent confirm cancellation of authorisation
@@ -328,18 +331,29 @@ confirmCancellation.HMRC-PILLAR2-ORG.outcome=If you cancel your authorisation, y
 confirmCancellation.HMRC-MTD-IT.inset=Cancelling this authorisation will not automatically cancel any authorisation for this client for Self Assessment.
 
 # ________________________________________________________________________________
-# Invitation Created
+# Confirmation page
 # ________________________________________________________________________________
 
-invitationCreated.header=You''ve created an authorisation request
-invitationCreated.panel.body=Client: {0}
-invitationCreated.h2=Next steps
-invitationCreated.list.one=Copy this authorisation request link and send it to your client:
-invitationCreated.list.two=Tell your client to select this link. They will then be asked to sign in.
-invitationCreated.list.three=Ask your client to authorise you by {0} – they have {1} days to respond before your request expires.
-invitationCreated.list.four=We will email you at {0} to update you on the status of this request.
-invitationCreated.createAnother=Create another authorisation request
-invitationCreated.agentHome=Go to your agent services account homepage
+authorisationRequestComplete.header=You’ve created an authorisation request
+authorisationRequestComplete.panel.body=Client: {0}
+authorisationRequestComplete.h2=Next steps
+authorisationRequestComplete.list.one=Copy this authorisation request link and send it to your client:
+authorisationRequestComplete.list.two=Tell your client to select this link. They will then be asked to sign in.
+authorisationRequestComplete.list.three=Ask your client to authorise you by {0} – they have {1} days to respond before your request expires.
+authorisationRequestComplete.list.four=We will email you at {0} to update you on the status of this request.
+authorisationRequestComplete.createAnother=Create another authorisation request
+authorisationRequestComplete.agentHome=Go to your agent services account homepage
+
+agentCancelAuthorisationComplete.header=Authorisation cancelled
+agentCancelAuthorisationComplete.h2=What this means
+agentCancelAuthorisationComplete.p1={0} is no longer authorised to manage {1}’s {2}.
+agentCancelAuthorisationComplete.HMRC-MTD-IT.h2=If you’re still authorised to manage Self Assessment for this client
+agentCancelAuthorisationComplete.p2=You might still have an authorisation in place for this client’s Self Assessment. To check or cancel it, you will need to:
+agentCancelAuthorisationComplete.list-one=sign out of your agent services account
+agentCancelAuthorisationComplete.list-two=sign into your HMRC online services for agents account
+agentCancelAuthorisationComplete.list-three=follow the instructions for deleting the client from your client list
+agentCancelAuthorisationComplete.print=Print this page
+agentCancelAuthorisationComplete.agentHome=Return to agent services account homepage
 
 # ________________________________________________________________________________
 # Track requests
@@ -436,7 +450,7 @@ notAuthorised.HMRC-CBC-NONUK-ORG.p=This client has not authorised you to manage 
 # ________________________________________________________________________________
 
 clientAlreadyInvited.p=You cannot continue until {0} has accepted the authorisation request link.
-clientAlreadyInvited.p2=Resend the authorisation request link that was created when you originally asked {0} to authorise you:
+clientAlreadyInvited.p2=Resend the authorisation request link that was created when you originally asked {0} to authorise you.
 clientAlreadyInvited.h2=What you can do next
 
 # ________________________________________________________________________________

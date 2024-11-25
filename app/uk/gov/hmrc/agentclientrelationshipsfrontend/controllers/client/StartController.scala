@@ -51,4 +51,4 @@ class StartController @Inject()(agentClientRelationshipsConnector: AgentClientRe
            case Left(_) => Redirect("routes.ClientExitController.show(SERVER_ERROR)")
            case Right(_) => Ok(authoriseAgentStartPage(normalizedAgentName, taxService, uid))
          }
-     else Future.successful(NotFound("TODO: NOT FOUND for Client controller/template"))
+     else Future.successful(NotFound(s"TODO: NOT FOUND urlPart ${taxService} for Client controller/template"))

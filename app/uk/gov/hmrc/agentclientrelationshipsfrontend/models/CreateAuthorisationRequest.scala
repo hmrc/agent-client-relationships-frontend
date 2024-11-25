@@ -18,15 +18,13 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.models
 
 import play.api.libs.json.{Json, OFormat}
 
-case class ClientDetailsResponse(name: String,
-                                 status: Option[ClientStatus],
-                                 isOverseas: Option[Boolean],
-                                 knownFacts: Seq[String],
-                                 knownFactType: Option[KnownFactType],
-                                 hasPendingInvitation: Boolean = false,
-                                 hasExistingRelationshipFor: Option[String]
-                                )
+case class CreateAuthorisationRequest(
+                                       inputSuppliedClientId: String,
+                                       inputSuppliedClientIdType: String,
+                                       clientName: String,
+                                       inputService: String
+                                     )
 
-object ClientDetailsResponse {
-  implicit val format: OFormat[ClientDetailsResponse] = Json.format[ClientDetailsResponse]
+object CreateAuthorisationRequest {
+  implicit val format: OFormat[CreateAuthorisationRequest] = Json.format[CreateAuthorisationRequest]
 }

@@ -30,7 +30,7 @@ class ClientServiceConfigurationService @Inject() {
   
   def getService(serviceName: String): Option[ServiceData] = services.get(serviceName)
   
-  def validateUrlPart(urlPart: String): Boolean = services.exists(_._2.urlPart == urlPart) 
+  def validateUrlPart(urlPart: String): Boolean = services.exists(_._2.urlPart == urlPart)
 
   def clientServicesFor(clientType: String): Seq[String] = services.filter(_._2.serviceOption == true).filter(_._2.clientTypes.contains(clientType)).keys.toSeq
 
@@ -65,6 +65,8 @@ class ClientServiceConfigurationService @Inject() {
 
   def clientDetailForServiceAndClientIdType(clientService: String, clientIdType: String): Option[ClientDetailsConfiguration] = services(clientService).clientDetails.find(_.clientIdType == clientIdType)
 
+  def getUrlPart(clientService: String): String = services(getServiceForForm(clientService)).urlPart
+
   private val services: ListMap[String, ServiceData] = ListMap(
     "HMRC-MTD-IT" -> ServiceData(
       serviceName = "HMRC-MTD-IT",
@@ -86,6 +88,22 @@ class ClientServiceConfigurationService @Inject() {
           notFound = JourneyExitType.NotRegistered
         ),
         JourneyType.AgentCancelAuthorisation -> JourneyErrors()
+      )
+    ),
+    "HMRC-MTD-IT-SUPP" -> ServiceData(
+      serviceName = "HMRC-MTD-IT-SUPP",
+      urlPart = "income-tax",
+      serviceOption = false,
+      supportedAgentRoles = Seq("HMRC-MTD-IT", "HMRC-MTD-IT-SUPP"),
+      clientTypes = Set("personal"),
+      clientDetails = Seq(
+        ClientDetailsConfiguration(
+          name = "nino",
+          regex = "[[A-Z]&&[^DFIQUV]][[A-Z]&&[^DFIQUVO]] ?\\d{2} ?\\d{2} ?\\d{2} ?[A-D]{1}",
+          inputType = "text",
+          width = 10,
+          clientIdType = "ni"
+        )
       )
     ),
     "PERSONAL-INCOME-RECORD" -> ServiceData(

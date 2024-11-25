@@ -24,7 +24,7 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.config.CountryNamesLoader
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.KnownFactType
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.common.KnownFactsConfiguration
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.EnterClientFactForm
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, Journey, JourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, Journey, JourneyExitType, JourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{ClientServiceConfigurationService, JourneyService}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.EnterClientFactPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
@@ -94,13 +94,15 @@ class EnterClientFactController @Inject()(mcc: MessagesControllerComponents,
             _ <- if journey.knownFact.contains(knownFact) then Future.successful(()) else journeyService.saveJourney(journey.copy(
               knownFact = Some(knownFact),
               clientConfirmed = None,
-              agentType = None
+              agentType = None,
+              confirmationClientName = None,
+              journeyComplete = None
             ))
             redirectUrl <-
               if journey.clientDetailsResponse.exists(_.knownFacts.contains(knownFact)) then
                 journeyService.nextPageUrl(journeyType)
               else
-                Future.successful(routes.JourneyExitController.show(journeyType, serviceConfig.getNotFoundError(journeyType, journey.getService)).url)
+                Future.successful(routes.JourneyExitController.show(journeyType, JourneyExitType.NotFound).url)
           yield
             Redirect(redirectUrl)
         }

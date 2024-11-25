@@ -16,11 +16,14 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.connectors
 
-import play.api.http.Status.{FORBIDDEN, NOT_FOUND, OK}
+import play.api.http.Status.*
+import play.api.libs.json.Json
+import play.api.libs.ws.JsonBodyWritables.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.invitationLink.ValidateLinkPartsResponse
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.Journey
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{AuthorisationRequest, ClientDetailsResponse, Invitation, PageInfo}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, Journey}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.*
+import uk.gov.hmrc.agentclientrelationshipsfrontend.services.ClientServiceConfigurationService
 import uk.gov.hmrc.http.HttpReads.Implicits.*
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps}
@@ -31,6 +34,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class AgentClientRelationshipsConnector @Inject()(appConfig: AppConfig,
+                                                  serviceConfig: ClientServiceConfigurationService,
                                                   httpV2: HttpClientV2
                                                  )(implicit executionContext: ExecutionContext):
 
@@ -40,8 +44,35 @@ class AgentClientRelationshipsConnector @Inject()(appConfig: AppConfig,
     .get(url"$agentClientRelationshipsUrl/client/$service/details/$clientId")
     .execute[Option[ClientDetailsResponse]]
 
-  def createInvitation(journey: Journey): Future[String] = Future.successful("3d358ba5-cc1a-4baa-8965-75f8e7814005")
-  def cancelAuthorisation(journey: Journey): Future[Unit] = Future.successful(())
+  def createAuthorisationRequest(journey: Journey)(implicit hc: HeaderCarrier, request: AgentJourneyRequest[?]): Future[String] = {
+    val clientIdType = serviceConfig.firstClientDetailsFieldFor(journey.getService).clientIdType
+    httpV2
+      .post(url"$agentClientRelationshipsUrl/agent/${request.arn}/authorisation-request")
+      .withBody(Json.toJson(CreateAuthorisationRequest(journey.clientId.get, clientIdType, journey.getClientDetailsResponse.name, journey.agentType.getOrElse(journey.getService))))
+      .execute[HttpResponse].map { response => response.status match {
+          case CREATED => (response.json \ "invitationId").as[String]
+          case _ => throw new RuntimeException(s"Failed to create authorisation request: ${response.body}")
+        }
+      }
+  }
+
+  def cancelAuthorisation(journey: Journey)(implicit hc: HeaderCarrier, request: AgentJourneyRequest[?]): Future[Unit] = httpV2
+    .delete(url"$agentClientRelationshipsUrl/agent/${request.arn}/service/${journey.getService}/client/${serviceConfig.firstClientDetailsFieldFor(journey.getService).clientIdType}/${journey.clientId.get}")
+    .execute[HttpResponse].map { response => response.status match {
+      case NO_CONTENT => ()
+      case _ => throw new RuntimeException(s"Failed to cancel authorisation: ${response.body}")
+    }}
+
+
+  def getAuthorisationRequest(invitationId: String)(implicit headerCarrier: HeaderCarrier, request: AgentJourneyRequest[?]): Future[Option[AuthorisationRequestInfo]] = {
+    httpV2.get(url"$agentClientRelationshipsUrl/agent/${request.arn}/authorisation-request-info/$invitationId")
+      .execute[Option[AuthorisationRequestInfo]]
+  }
+
+  def getAgentDetails()(implicit hc: HeaderCarrier, request: AgentJourneyRequest[?]): Future[Option[AgentDetails]] = httpV2
+    .get(url"$agentClientRelationshipsUrl/agent/${request.arn}/details")
+    .execute[Option[AgentDetails]]
+
   def getInvitation(invitationId: String): Future[Invitation] = Future.successful(Invitation(invitationId, LocalDate.now().plusDays(21), "Troy Barnes"))
 
   def getPagedRequests(arn: String, createdOnOrAfter: LocalDate, pageInfo: PageInfo, filtersApplied: Option[Map[String, Seq[String]]]): Future[List[AuthorisationRequest]] =
@@ -57,7 +88,7 @@ class AgentClientRelationshipsConnector @Inject()(appConfig: AppConfig,
   
   def validateLinkParts(uid: String, normalizedAgentName: String)(implicit hc: HeaderCarrier): Future[Either[String, ValidateLinkPartsResponse]] =
     httpV2
-      .get(url"$agentClientRelationshipsUrl/agent-reference/uid/$uid/$normalizedAgentName")
+      .get(url"$agentClientRelationshipsUrl/agent/agent-reference/uid/$uid/$normalizedAgentName")
       .execute[HttpResponse]
       .map(response => response.status match {
         case OK => Right(response.json.as[ValidateLinkPartsResponse])
@@ -66,7 +97,6 @@ class AgentClientRelationshipsConnector @Inject()(appConfig: AppConfig,
         case _ => Left("SERVER_ERROR")
       }
       )
-
 
   // stubbing the back end
   private val stubbedAuthorisationRequests: List[AuthorisationRequest] = List(
@@ -128,4 +158,3 @@ class AgentClientRelationshipsConnector @Inject()(appConfig: AppConfig,
     "ClientCancelledAuthorisation",
     "HMRCCancelledAuthorisation"
   )
-

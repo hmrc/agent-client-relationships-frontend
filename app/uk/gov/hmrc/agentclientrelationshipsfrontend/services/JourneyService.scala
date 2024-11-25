@@ -17,8 +17,7 @@
 package uk.gov.hmrc.agentclientrelationshipsfrontend.services
 
 import play.api.mvc.Request
-import uk.gov.hmrc.agentclientrelationshipsfrontend.connectors.AgentClientRelationshipsConnector
-
+import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.routes
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.repositories.JourneyRepository
@@ -29,22 +28,13 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class JourneyService @Inject()(journeyRepository: JourneyRepository,
-                               agentClientRelationshipsConnector: AgentClientRelationshipsConnector,
                                serviceConfig: ClientServiceConfigurationService
-                                       )(implicit executionContext: ExecutionContext) {
+                                       )(implicit executionContext: ExecutionContext, appConfig: AppConfig) {
 
-  val dataKey = DataKey[Journey]("JourneySessionData")
+  private val dataKey: DataKey[Journey] = DataKey[Journey]("JourneySessionData")
 
   def saveJourney(journey: Journey)(implicit request: Request[?], ec: ExecutionContext): Future[Unit] = {
     journeyRepository.putSession(dataKey, journey).map(_ => ())
-  }
-
-  def createAuthorisationRequest(journey: Journey)(implicit request: Request[?]): Future[String] = {
-    agentClientRelationshipsConnector.createInvitation(journey)
-  }
-
-  def cancelAuthorisation(journey: Journey)(implicit request: Request[?]): Future[Unit] = {
-    agentClientRelationshipsConnector.cancelAuthorisation(journey)
   }
 
   def getJourney()(implicit request: Request[Any]): Future[Option[Journey]] =
@@ -63,6 +53,7 @@ class JourneyService @Inject()(journeyRepository: JourneyRepository,
       journey <- getJourney()
     } yield journey match {
       case Some(journey) if journey.journeyType != journeyType => routes.StartJourneyController.startJourney(journeyType).url
+      case Some(journey) if journey.journeyComplete.nonEmpty => appConfig.agentServicesAccountHomeUrl
       case Some(journey) => {
         if (journey.clientService.isEmpty) routes.SelectClientTypeController.show(journeyType).url
         else if (serviceConfig.requiresRefining(journey.clientService.get) && journey.refinedService.isEmpty) routes.ServiceRefinementController.show(journeyType).url

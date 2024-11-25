@@ -41,7 +41,8 @@
         serviceName: Option[String] = None,
         optionalForm: Option[Form[?]] = None,
         backLinkHref: Option[String] = None,
-        sidebar: Option[Html] = None
+        sidebar: Option[Html] = None,
+        suppressBackLink: Boolean = false
 )(contentBlock: Html)(implicit request: RequestHeader, messages: Messages)
 
 @isSignedIn  = @{request.session.get("authToken").isDefined}
@@ -57,7 +58,7 @@
         )
     }
     @autocompleteCss()
-    <link rel="stylesheet" media="screen" href='@controllers.routes.Assets.versioned("stylesheets/application.css")'>
+    <link rel="stylesheet" media="all" href='@controllers.routes.Assets.versioned("stylesheets/application.css")'>
 }
 @* instead of doing title building at template level we can centralise it here and for
 form submission pages we can pass in hasErrors = form.hasErrors, the required pageTitle should always
@@ -100,7 +101,7 @@ equal the page heading (H1) content *@
             mainContentLayout = sidebar.map(s => twoThirdsOneThirdMainContent(s, pageTitle))
         ),
         isWelshTranslationAvailable = appConfig.welshLanguageSupportEnabled,
-        backLink = Some(backLinkHref.map(BackLink(_, messages("button.back"))).getOrElse(BackLink.mimicsBrowserBackButtonViaJavaScript)),
+        backLink = if suppressBackLink then None else Some(backLinkHref.map(BackLink(_, messages("button.back"))).getOrElse(BackLink.mimicsBrowserBackButtonViaJavaScript)),
         serviceName = Some(service)
   )
 )(content)

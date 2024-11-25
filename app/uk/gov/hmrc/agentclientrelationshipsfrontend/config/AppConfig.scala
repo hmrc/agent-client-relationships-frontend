@@ -36,7 +36,7 @@ class AppConfig @Inject()(servicesConfig: ServicesConfig, config: Configuration)
   val ivUpliftUrl: String = getConfString("identity-verification-frontend.uplift-url")
   val signInUrl: String = getString("bas-gateway.url")
   val subscriptionUrl: String = getConfString("agent-subscription-frontend.subscription-url")
-
+  val guidanceSa =s"${govUkExternalUrl}/guidance/self-assessment-for-agents-online-service"
   // Feature Flags
   val welshLanguageSupportEnabled: Boolean = config.getOptional[Boolean]("features.welsh-language-support").getOrElse(false)
 
@@ -45,6 +45,7 @@ class AppConfig @Inject()(servicesConfig: ServicesConfig, config: Configuration)
   val timeoutDialogTimeoutSeconds: Int = servicesConfig.getInt("timeoutDialog.timeout-seconds")
   val allowedRedirectHosts: Set[String] = config.getOptional[Seq[String]]("allowed-redirect-hosts").getOrElse(Nil).toSet
   val trackRequestsPerPage: Int = servicesConfig.getInt("track-requests-per-page")
+  val authorisationRequestExpiryDays: Int = servicesConfig.getDuration("invitation.expiryDuration").toDays.toInt
 
   // Stub for supported services to be replaced when decision on how to handle this is reached
   val supportedServices: Set[String] =

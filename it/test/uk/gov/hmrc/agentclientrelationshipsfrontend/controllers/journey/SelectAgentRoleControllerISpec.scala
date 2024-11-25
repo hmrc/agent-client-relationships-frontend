@@ -38,7 +38,7 @@ class SelectAgentRoleControllerISpec extends ComponentSpecHelper with AuthStubs 
   val clientDetailsWithOutExisting: ClientDetailsResponse = ClientDetailsResponse(
     name = "Jay Bridger",
     status = None,
-    hasPendingInvitations = false,
+    hasPendingInvitation = false,
     hasExistingRelationshipFor = None,
     knownFactType = Some(KnownFactType.PostalCode),
     knownFacts = Seq(testPostcode),

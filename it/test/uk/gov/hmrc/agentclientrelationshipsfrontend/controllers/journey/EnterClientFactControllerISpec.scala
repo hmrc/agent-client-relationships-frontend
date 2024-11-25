@@ -78,7 +78,7 @@ class EnterClientFactControllerISpec extends ComponentSpecHelper with AuthStubs 
         "postcode" -> Seq("ZZ1 1ZZ")
       ))
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe routes.JourneyExitController.show(JourneyType.AuthorisationRequest, JourneyExitType.NotRegistered).url
+      result.header("Location").value shouldBe routes.JourneyExitController.show(JourneyType.AuthorisationRequest, JourneyExitType.NotFound).url
     }
     "unset existing answers when submitting a new answer" in {
       authoriseAsAgent()

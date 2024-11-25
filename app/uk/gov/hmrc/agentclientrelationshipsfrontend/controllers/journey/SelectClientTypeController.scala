@@ -68,7 +68,9 @@ class SelectClientTypeController @Inject()(mcc: MessagesControllerComponents,
             clientDetailsResponse = None,
             clientConfirmed = None,
             knownFact = None,
-            agentType = None
+            agentType = None,
+            confirmationClientName = None,
+            journeyComplete = None
           )
           journeyService.saveJourney(newJourney).flatMap { _ =>
             // we always want to go to the services page after selecting client type

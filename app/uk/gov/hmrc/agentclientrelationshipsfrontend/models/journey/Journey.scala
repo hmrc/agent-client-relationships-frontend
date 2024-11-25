@@ -27,14 +27,18 @@ case class Journey(journeyType: JourneyType,
                    knownFact: Option[String] = None,
                    agentType: Option[String] = None,
                    clientConfirmed: Option[Boolean] = None,
-                   refinedService: Option[Boolean] = None):
+                   refinedService: Option[Boolean] = None,
+                   journeyComplete: Option[String] = None,
+                   confirmationClientName: Option[String] = None,
+                   confirmationService: Option[String] = None
+                  ):
 
   def getClientTypeWithDefault: String = clientType.getOrElse("")
   def getClientType: String = clientType.getOrElse(throw new RuntimeException("clientType not defined"))
 
   def getServiceWithDefault: String = clientService.getOrElse("")
   def getService: String = clientService.getOrElse(throw new RuntimeException("service not defined"))
-
+  def getClientId: String = clientId.getOrElse(throw new RuntimeException("clientId not defined"))
   def getClientDetailsResponse: ClientDetailsResponse = clientDetailsResponse.getOrElse(throw new RuntimeException("client details are not defined"))
 
   def getKnownFactType: KnownFactType = clientDetailsResponse.flatMap(_.knownFactType)getOrElse(throw new RuntimeException("known fact is not defined"))
