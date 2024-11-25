@@ -39,5 +39,6 @@ object Constants {
   val ClientConfirmationFieldName = "confirmClient"
 
   val AgentRoleFieldName = "agentRole"
+  val ConfirmCancellationFieldName = "confirmCancellation"
 
 }

@@ -17,6 +17,7 @@
 package uk.gov.hmrc.agentclientrelationshipsfrontend.connectors
 
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.Journey
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{AuthorisationRequest, ClientDetailsResponse, Invitation, PageInfo}
 import uk.gov.hmrc.http.HttpReads.Implicits.*
 import uk.gov.hmrc.http.client.HttpClientV2
@@ -37,8 +38,8 @@ class AgentClientRelationshipsConnector @Inject()(appConfig: AppConfig,
     .get(url"$agentClientRelationshipsUrl/client/$service/details/$clientId")
     .execute[Option[ClientDetailsResponse]]
 
-  def createInvitation: Future[String] = Future.successful("3d358ba5-cc1a-4baa-8965-75f8e7814005")
-
+  def createInvitation(journey: Journey): Future[String] = Future.successful("3d358ba5-cc1a-4baa-8965-75f8e7814005")
+  def cancelAuthorisation(journey: Journey): Future[Unit] = Future.successful(())
   def getInvitation(invitationId: String): Future[Invitation] = Future.successful(Invitation(invitationId, LocalDate.now().plusDays(21), "Troy Barnes"))
 
   def getPagedRequests(arn: String, createdOnOrAfter: LocalDate, pageInfo: PageInfo, filtersApplied: Option[Map[String, Seq[String]]]): Future[List[AuthorisationRequest]] =
