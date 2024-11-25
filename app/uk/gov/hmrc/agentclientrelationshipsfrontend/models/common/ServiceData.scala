@@ -23,6 +23,7 @@ case class ServiceData(
                         supportedAgentRoles: Seq[String] = Seq.empty,
                         supportedEnrolments: Seq[String] = Seq.empty,
                         serviceName: String,
+                        urlPart: String,
                         clientTypes: Set[String],
                         clientDetails: Seq[ClientDetailsConfiguration],
                         journeyErrors: Map[JourneyType, JourneyErrors] = Map(

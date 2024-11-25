@@ -16,12 +16,14 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.connectors
 
+import play.api.http.Status.{FORBIDDEN, NOT_FOUND, OK}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.invitationLink.ValidateLinkPartsResponse
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.Journey
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{AuthorisationRequest, ClientDetailsResponse, Invitation, PageInfo}
 import uk.gov.hmrc.http.HttpReads.Implicits.*
 import uk.gov.hmrc.http.client.HttpClientV2
-import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps}
 
 import java.time.LocalDate
 import javax.inject.{Inject, Singleton}
@@ -29,12 +31,12 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class AgentClientRelationshipsConnector @Inject()(appConfig: AppConfig,
-                                                  http: HttpClientV2
+                                                  httpV2: HttpClientV2
                                                  )(implicit executionContext: ExecutionContext):
 
   private val agentClientRelationshipsUrl = s"${appConfig.agentClientRelationshipsBaseUrl}/agent-client-relationships"
 
-  def getClientDetails(service: String, clientId: String)(implicit hc: HeaderCarrier): Future[Option[ClientDetailsResponse]] = http
+  def getClientDetails(service: String, clientId: String)(implicit hc: HeaderCarrier): Future[Option[ClientDetailsResponse]] = httpV2
     .get(url"$agentClientRelationshipsUrl/client/$service/details/$clientId")
     .execute[Option[ClientDetailsResponse]]
 
@@ -52,6 +54,18 @@ class AgentClientRelationshipsConnector @Inject()(appConfig: AppConfig,
   def getAllTaxServices(arn: String, filtersApplied: Option[Map[String, Seq[String]]]): Future[List[String]] = Future.successful(stubbedAuthorisationRequests.map(_.service))
 
   def getAvailableStatusFilters: Future[List[String]] = Future.successful(availableFilters)
+  
+  def validateLinkParts(uid: String, normalizedAgentName: String)(implicit hc: HeaderCarrier): Future[Either[String, ValidateLinkPartsResponse]] =
+    httpV2
+      .get(url"$agentClientRelationshipsUrl/agent-reference/uid/$uid/$normalizedAgentName")
+      .execute[HttpResponse]
+      .map(response => response.status match {
+        case OK => Right(response.json.as[ValidateLinkPartsResponse])
+        case NOT_FOUND => Left("AGENT_NOT_FOUND") 
+        case FORBIDDEN => Left("AGENT_SUSPENDED") 
+        case _ => Left("SERVER_ERROR")
+      }
+      )
 
 
   // stubbing the back end
