@@ -17,7 +17,6 @@
 package uk.gov.hmrc.agentclientrelationshipsfrontend.models
 
 import play.api.libs.json.{Json, OFormat}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.invitationLink.InvitationStatus
 
 import java.time.Instant
 

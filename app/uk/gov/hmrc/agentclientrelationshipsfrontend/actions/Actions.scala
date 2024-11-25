@@ -37,7 +37,7 @@ class Actions @Inject()(
     
   def getFastTrackUrl: ActionBuilder[AgentFastTrackRequestWithRedirectUrls, AnyContent] =
     actionBuilder andThen authActions.agentAuthAction andThen getFastTrackUrlAction.getFastTrackUrlAction
-    
+
   def getClientJourney(taxService: String): ActionBuilder[ClientJourneyRequest, AnyContent]  =
     actionBuilder andThen authActions.clientAuthActionWithEnrolmentCheck(taxService) andThen getJourneyAction.clientJourneyAction
 }

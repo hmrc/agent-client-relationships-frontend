@@ -17,6 +17,7 @@
 package uk.gov.hmrc.agentclientrelationshipsfrontend.binders
 
 import play.api.mvc.PathBindable
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientExitType
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{JourneyExitType, JourneyType}
 
 object UrlBinders:
@@ -44,3 +45,14 @@ object UrlBinders:
     override def unbind(key: String, value: JourneyExitType): String =
       value.toString
 
+  implicit val clientExitTypeBinder: PathBindable[ClientExitType] = getClientExitTypeBinder
+
+  private def getClientExitTypeBinder = new PathBindable[ClientExitType]:
+
+    override def bind(key: String, value: String): Either[String, ClientExitType] =
+      ClientExitType.values
+        .find(_.toString == value).map(Right(_))
+        .getOrElse(Left(s"Invalid client exit type: $value"))
+
+    override def unbind(key: String, value: ClientExitType): String =
+      value.toString

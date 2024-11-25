@@ -18,7 +18,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey
 
 import play.api.http.Status.{BAD_REQUEST, OK}
 import play.api.test.Helpers.*
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, JourneyState, JourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, JourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.AgentJourneyService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentSpecHelper}
 

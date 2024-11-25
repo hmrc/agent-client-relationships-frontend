@@ -20,12 +20,13 @@ import org.scalatest.concurrent.ScalaFutures
 import play.api.libs.json.{JsObject, Json}
 import play.api.test.Helpers.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.connectors.AgentClientRelationshipsConnector
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientExitType.{AgentSuspended, NoOutstandingRequests}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.ClientServiceConfigurationService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.WiremockHelper.stubGet
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentSpecHelper}
 import uk.gov.hmrc.http.HeaderCarrier
 
-class StartControllerSpec extends ComponentSpecHelper with ScalaFutures with AuthStubs {
+class StartControllerISpec extends ComponentSpecHelper with ScalaFutures with AuthStubs {
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
   val testUid = "ABCD"
@@ -58,14 +59,14 @@ class StartControllerSpec extends ComponentSpecHelper with ScalaFutures with Aut
       val result = get(routes.StartController.show(testUid, testNormalizedAgentName, "invalidTaxService").url)
       result.status shouldBe NOT_FOUND
     }
-    
+
     "Redirect to routes.ClientExitController.show(AGENT_NOT_FOUND)" in {
 
       stubGet(getValidateLinkResponseUrl(testUid, testNormalizedAgentName), NOT_FOUND, testValidateLinkResponseJson.toString)
 
       val result = get(routes.StartController.show(testUid, testNormalizedAgentName, testTaxService).url)
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe "routes.ClientExitController.show(AGENT_NOT_FOUND)"
+      result.header("Location").value shouldBe routes.ClientExitController.show(NoOutstandingRequests,testTaxService).url
     }
 
     "Redirect to routes.ClientExitController.show(AGENT_SUSPENDED)" in {
@@ -74,7 +75,7 @@ class StartControllerSpec extends ComponentSpecHelper with ScalaFutures with Aut
 
       val result = get(routes.StartController.show(testUid, testNormalizedAgentName, testTaxService).url)
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe "routes.ClientExitController.show(AGENT_SUSPENDED)"
+      result.header("Location").value shouldBe routes.ClientExitController.show(AgentSuspended, testTaxService).url
     }
 
     "Redirect to routes.ClientExitController.show(SERVER_ERROR)" in {
@@ -85,7 +86,7 @@ class StartControllerSpec extends ComponentSpecHelper with ScalaFutures with Aut
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe "routes.ClientExitController.show(SERVER_ERROR)"
     }
-    
+
     validTaxServiceNames.foreach { taxService =>
       s"Display start page for $taxService" in {
 

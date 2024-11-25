@@ -17,7 +17,7 @@
 package uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey
 
 import play.api.libs.json.{Format, Json}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.invitationLink.InvitationStatus
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.InvitationStatus
 
 import java.time.Instant
 
@@ -33,6 +33,8 @@ case class ClientJourney(
   def getAgentName: String = agentName.getOrElse(throw new RuntimeException("Agent Name is missing"))
   def getInvitationId: String = invitationId.getOrElse(throw new RuntimeException("Invitation Id is missing"))
   def getServiceKey: String = serviceKey.getOrElse(throw new RuntimeException("Service Key is missing"))
+  def getLastModifiedDate: Instant = lastModifiedDate.getOrElse(throw new RuntimeException("last modified date is missing"))
+
 }
 
 object ClientJourney {

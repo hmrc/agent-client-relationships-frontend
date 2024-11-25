@@ -20,12 +20,12 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
+import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.ClientConfirmationFieldName
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.ClientDetailsResponse
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.ConfirmClientForm
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.support.ViewSpecSupport
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.ConfirmClientPage
-import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.ClientConfirmationFieldName
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.ClientDetailsResponse
 
 class ConfirmClientPageSpec extends ViewSpecSupport {
 

@@ -19,7 +19,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.connectors
 import play.api.libs.json.{JsObject, Json}
 import play.api.test.Helpers.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.invitationLink.ValidateLinkPartsResponse
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsResponse, ClientStatus, KnownFactType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsResponse, ClientStatus, KnownFactType, Pending}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.ComponentSpecHelper
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.WiremockHelper.stubGet
 import uk.gov.hmrc.http.{HeaderCarrier, JsValidationException, UpstreamErrorResponse}
@@ -58,11 +58,13 @@ class AgentClientRelationshipsConnectorISpec extends ComponentSpecHelper {
   )
 
   val testValidateLinkResponse: ValidateLinkPartsResponse = ValidateLinkPartsResponse(
-    testName
+      name = testName
   )
 
   val testValidateLinkResponseJson: JsObject = Json.obj(
     "name" -> testName,
+    "status" -> "pending",
+    "lastModifiedDate" -> "11.11.2024"
   )
 
   "getClientDetails" should {
