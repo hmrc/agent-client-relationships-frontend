@@ -49,6 +49,6 @@ class StartController @Inject()(agentClientRelationshipsConnector: AgentClientRe
            case Left("AGENT_NOT_FOUND") => Redirect("routes.ClientExitController.show(AGENT_NOT_FOUND)")
            case Left("AGENT_SUSPENDED") => Redirect("routes.ClientExitController.show(AGENT_SUSPENDED)")
            case Left("SERVER_ERROR") => Redirect("routes.ClientExitController.show(SERVER_ERROR)")
-           case Right(_) => Ok("APB-8935")
+           case Right(_) => Ok(authoriseAgentStartPage(normalizedAgentName, taxService, uid))
          }
      else Future.successful(NotFound("TODO: NOT FOUND for Client controller/template"))
