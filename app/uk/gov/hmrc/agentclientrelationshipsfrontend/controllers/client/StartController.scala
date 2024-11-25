@@ -33,6 +33,7 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class StartController @Inject()(agentClientRelationshipsConnector: AgentClientRelationshipsConnector,
                                 serviceConfigurationService: ClientServiceConfigurationService,
+                                authoriseAgentStartPage: AuthoriseAgentStartPage,
                                 mcc: MessagesControllerComponents
                                             )(implicit val executionContext: ExecutionContext,
                                               appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport:
