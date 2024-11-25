@@ -16,18 +16,16 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey
 
-import play.api.data.Form
-import play.api.data.Forms.{optional, single, text}
+import play.api.data.*
+import play.api.data.Forms.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.helpers.FormFieldHelper
 
-object SelectFromOptionsForm extends FormFieldHelper {
-  def form(fieldName: String, options: Seq[String], journeyType: String, args: String*): Form[String] = {
-    Form[String](
-      single(
-        fieldName -> optional(text)
-          .verifying(mandatoryRadio(s"$fieldName.$journeyType", options, args*))
-          .transform(_.getOrElse(""), (Some(_)): String => Option[String])
-      )
+object ConfirmCancellationForm extends FormFieldHelper {
+  def form(fieldName: String, journeyType: String): Form[Boolean] = Form(
+    single(
+      fieldName -> optional(boolean)
+        .verifying(mandatoryBoolean(s"$fieldName.$journeyType"))
+        .transform(_.getOrElse(false), Some(_))
     )
-  }
+  )
 }

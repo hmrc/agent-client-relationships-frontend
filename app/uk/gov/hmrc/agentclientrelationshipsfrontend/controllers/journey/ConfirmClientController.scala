@@ -63,11 +63,8 @@ class ConfirmClientController @Inject()(mcc: MessagesControllerComponents,
           Future.successful(BadRequest(confirmClientPage(formWithErrors)))
         },
         confirmClient => {
-          // unset any previous answers only if we have not already confirmed client
-          if journey.clientConfirmed.contains(true) then journeyService.nextPageUrl(journeyType).map(Redirect(_))
-          else
-            journeyService.saveJourney(journey.copy(clientConfirmed = Some(confirmClient))).flatMap { _ =>
-              journeyService.nextPageUrl(journeyType).map(Redirect(_))
-            }
+          journeyService.saveJourney(journey.copy(clientConfirmed = Some(confirmClient))).flatMap { _ =>
+            journeyService.nextPageUrl(journeyType).map(Redirect(_))
+          }
         }
       )

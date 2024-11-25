@@ -38,8 +38,7 @@ object Constants {
   val ClientNameFieldName = "clientName"
   val ClientConfirmationFieldName = "confirmClient"
 
-  val AgentTypeFieldName = "agentType"
-  val MainAgentType = "main"
-  val SupportingAgentType = "supporting"
+  val AgentRoleFieldName = "agentRole"
+  val ConfirmCancellationFieldName = "confirmCancellation"
 
 }

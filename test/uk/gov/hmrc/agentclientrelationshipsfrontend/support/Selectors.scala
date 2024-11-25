@@ -40,6 +40,7 @@ trait Selectors {
   val errorSummaryList = ".govuk-error-summary__list"
   val fieldSet = ".govuk-fieldset"
   val fieldSetLegend = ".govuk-fieldset__legend"
+  val fieldSetHint = ".govuk-fieldset > .govuk-hint"
   val hint = ".govuk-hint"
   val formGroup = ".govuk-form-group"
   val input = ".govuk-input"
@@ -57,7 +58,7 @@ trait Selectors {
   val summaryListRow = ".govuk-summary-list__row"
   val summaryListRowKey = ".govuk-summary-list__key"
   val summaryListRowValue = ".govuk-summary-list__value"
-  val summaryListRowAction = ".govuk-summary-list__action"
+  val summaryListRowActions = ".govuk-summary-list__actions"
 
   val notificationBannerTitle = ".govuk-notification-banner__title"
   val notificationBannerContent = ".govuk-notification-banner__content"

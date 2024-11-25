@@ -32,6 +32,7 @@ trait ViewSpecHelper extends Selectors {
   case class TestRadioGroup(legend: String, options: List[(String, String)], hint: Option[String])
   case class TestInputField(label: String, hint: Option[String], inputName: String)
   case class TestSelect(inputName: String, options: Seq[(String, String)])
+  case class TestSummaryList(rows: List[(String, String, String)])
 
   private val elementToLink: Element => TestLink = element => TestLink(element.text(), element.attr("href"))
 
@@ -63,7 +64,7 @@ trait ViewSpecHelper extends Selectors {
       TestRadioGroup(
         legend = element.select(fieldSetLegend).first().text(),
         options = element.select(".govuk-radios__item").toList.map(el => (el.select("label").text(), el.select("input").attr("value"))),
-        hint = element.select(hint).toList.headOption.map(_.text)
+        hint = element.select(fieldSetHint).toList.headOption.map(_.text)
       )
     }
 
@@ -79,6 +80,17 @@ trait ViewSpecHelper extends Selectors {
       TestSelect(
         inputName = elem.select(select).attr("name"),
         options = elem.select("option").toList.map(el => (el.attr("value"), el.text()))
+      )
+    }
+
+    def extractSummaryList(index: Int = 1): Option[TestSummaryList] = extractByIndex(summaryList, index).map { elem =>
+      TestSummaryList(
+        rows = elem.select(summaryListRow).toList.map { row =>
+          val key = row.select(summaryListRowKey).text()
+          val value = row.select(summaryListRowValue).text()
+          val changeLink = row.select(s"$summaryListRowActions > a").attr("href")
+          (key, value, changeLink)
+        }
       )
     }
 }

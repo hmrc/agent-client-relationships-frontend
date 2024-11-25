@@ -30,11 +30,11 @@
         notAuthorised: NotAuthorised,
         clientInsolvent: ClientInsolvent,
         clientStatusInvalid: ClientStatusInvalid,
-        authorisationAlreadyExists: AuthorisationAlreadyExists
+        authorisationAlreadyExists: AuthorisationAlreadyExists,
+        noChangeOfAgentRole: NoChangeOfAgentRole
 )
 
 @(journeyType: JourneyType, exitType: JourneyExitType)(implicit request: AgentJourneyRequest[?], messages: Messages, appConfig: AppConfig)
-
 @key = @{"journeyExit"}
 @pageTitle = @{messages(s"$key.$exitType.header")}
 
@@ -49,6 +49,7 @@
       case JourneyExitType.ClientStatusInsolvent => clientInsolvent()
       case JourneyExitType.ClientStatusInvalid => clientStatusInvalid()
       case JourneyExitType.AuthorisationAlreadyExists => authorisationAlreadyExists()
+      case JourneyExitType.NoChangeOfAgentRole => noChangeOfAgentRole()
       case _ => HtmlFormat.empty
      }
     }

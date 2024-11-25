@@ -38,6 +38,12 @@ POST       /:journeyType/client-fact                                            
 GET        /:journeyType/confirm-client                                                 uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.ConfirmClientController.show(journeyType: JourneyType)
 POST       /:journeyType/confirm-client                                                 uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.ConfirmClientController.onSubmit(journeyType: JourneyType)
 
+GET        /:journeyType/agent-role                                                     uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.SelectAgentRoleController.show(journeyType: JourneyType)
+POST       /:journeyType/agent-role                                                     uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.SelectAgentRoleController.onSubmit(journeyType: JourneyType)
+
+GET        /:journeyType/confirm                                                        uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.CheckYourAnswersController.show(journeyType: JourneyType)
+POST       /:journeyType/confirm                                                        uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.CheckYourAnswersController.onSubmit(journeyType: JourneyType)
+
 GET        /:journeyType/exit/:exitType                                                 uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.JourneyExitController.show(journeyType: JourneyType, exitType: JourneyExitType)
 
 # Fast Track URLs ----------------------------------------------------------------------------------------------------------
