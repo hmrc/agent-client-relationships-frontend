@@ -27,29 +27,50 @@ class ClientExitPageSpec extends ViewSpecSupport {
 
   val viewTemplate: ClientExitPage = app.injector.instanceOf[ClientExitPage]
 
-  case class ExpectedStrings(title: String)
+  case class ExpectedStrings(title: String, paragraphs: List[String])
   private val exitPageContent: Map[ClientExitType, ExpectedStrings] = Map(
     ClientExitType.AgentSuspended -> ExpectedStrings(
-      title = "You cannot appoint this tax agent - Appoint someone to deal with HMRC for you - GOV.UK"
+      title = "You cannot appoint this tax agent - Appoint someone to deal with HMRC for you - GOV.UK",
+
+      List("This tax agent cannot manage your Making Tax Digital for Income Tax at this time.",
+           "If you have any questions, contact the tax agent who sent you this request.")
     ),
     ClientExitType.NoOutstandingRequests ->  ExpectedStrings(
-      title = "There are no outstanding authorisation requests for you to respond to - Appoint someone to deal with HMRC for you - GOV.UK"
+      title = "There are no outstanding authorisation requests for you to respond to - Appoint someone to deal with HMRC for you - GOV.UK",
+
+      List("This tax agent cannot manage your Making Tax Digital for Income Tax at this time.",
+        "If you have any questions, contact the tax agent who sent you this request.")
     ),
     ClientExitType.CannotFindAuthorisationRequest -> ExpectedStrings(
-      title = "We cannot find this authorisation request - Appoint someone to deal with HMRC for you - GOV.UK"
+      title = "We cannot find this authorisation request - Appoint someone to deal with HMRC for you - GOV.UK",
+
+      List("This tax agent cannot manage your Making Tax Digital for Income Tax at this time.",
+        "If you have any questions, contact the tax agent who sent you this request.")
     ),
     ClientExitType.AuthorisationRequestExpired -> ExpectedStrings(
-      title = "This authorisation request has already expired - Appoint someone to deal with HMRC for you - GOV.UK"
+      title = "This authorisation request has already expired - Appoint someone to deal with HMRC for you - GOV.UK",
+
+      List("This tax agent cannot manage your Making Tax Digital for Income Tax at this time.",
+        "If you have any questions, contact the tax agent who sent you this request.")
     )
   )
 
   exitPageContent.map(partialInfo => s"ClientExitPage for ${partialInfo._1} view" should {
-      val expectedStrings = partialInfo._2
-      val view: HtmlFormat.Appendable = viewTemplate(partialInfo._1)
-      val doc: Document = Jsoup.parse(view.body)
-      "have the right title" in {
-        doc.title() shouldBe expectedStrings.title
+    val expectedStrings = partialInfo._2
+    val view: HtmlFormat.Appendable = viewTemplate(partialInfo._1)
+    val doc: Document = Jsoup.parse(view.body)
+    "have the right title" in {
+      doc.title() shouldBe expectedStrings.title
+    }
+
+    "display paragraph content" in {
+      expectedStrings.paragraphs.indices.foreach {
+        index =>
+          doc.select(".govuk-body").get(index).text() shouldBe expectedStrings.paragraphs(index)
       }
+    }
+  
+
       "have a language switcher" in {
 //        doc.hasLanguageSwitch shouldBe true
       }
