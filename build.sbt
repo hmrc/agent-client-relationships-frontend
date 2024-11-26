@@ -24,7 +24,8 @@ lazy val microservice = Project("agent-client-relationships-frontend", file(".")
       "uk.gov.hmrc.play.bootstrap.binders.RedirectUrl",
       "uk.gov.hmrc.agentclientrelationshipsfrontend.binders.UrlBinders._",
       "uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyType",
-      "uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyExitType"
+      "uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyExitType",
+      "uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.ClientExitType"
     )
   )
   .settings(
