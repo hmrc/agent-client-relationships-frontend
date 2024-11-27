@@ -13,6 +13,9 @@ error.heading=Mae problem wedi codi
 
 continue.button=Yn eich blaen
 try-again.button=Rhoi cynnig arall arni
+button.copy=<Translation needed>
+button.copied=<Translation needed>
+start-over.button=Dechrau eto
 start-again.button=Dechrau eto
 
 # -------------------------------------------------------------------------------------------
