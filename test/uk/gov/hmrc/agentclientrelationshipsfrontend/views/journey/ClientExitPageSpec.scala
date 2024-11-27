@@ -19,9 +19,9 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.views.journey
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.twirl.api.HtmlFormat
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.*
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientExitType
 import uk.gov.hmrc.agentclientrelationshipsfrontend.support.ViewSpecSupport
-import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.ClientExitPage
+import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.client.ClientExitPage
 
 class ClientExitPageSpec extends ViewSpecSupport {
 

@@ -24,6 +24,7 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.WiremockHelper.stubPos
 trait AuthStubs {
 
   val testArn = "ARN123456"
+  val testMtdItId = "BFFQ23108443598"
 
   def authoriseAsAgent(arn: String = testArn): StubMapping = stubPost(
     "/auth/authorise",
@@ -34,6 +35,22 @@ trait AuthStubs {
         "identifiers" -> Json.arr(Json.obj(
           "key" -> "AgentReferenceNumber",
           "value" -> arn
+        ))
+      ))
+    ).toString
+  )
+
+  def authoriseAsClient(mtdId: String = testMtdItId): StubMapping = stubPost(
+    "/auth/authorise",
+    OK,
+    Json.obj(
+      "affinityGroup" -> "Individual",
+      "confidenceLevel" -> 250,
+      "allEnrolments" -> Json.arr(Json.obj(
+        "key" -> "HMRC-MTD-IT",
+        "identifiers" -> Json.arr(Json.obj(
+          "key" -> "MTDITID",
+          "value" -> testMtdItId
         ))
       ))
     ).toString

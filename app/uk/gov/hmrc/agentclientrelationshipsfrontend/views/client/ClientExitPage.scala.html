@@ -16,19 +16,19 @@
 
 @import play.twirl.api.HtmlFormat
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
-@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.ClientExitType
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.Layout
-@import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.clientExitPartials.*
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientExitType
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.client.clientExitPartials.*
 
 @this(
-        layout: Layout,
-        agentSuspended: AgentSuspended,
-        authorisationHasExpired: AuthorisationHasExpired,
-        cannotFindAuthRequest: CannotFindAuthRequest,
-        noOutstandingRequests: NoOutstandingRequests,
+    layout: Layout,
+    agentSuspended: AgentSuspended,
+    authorisationHasExpired: AuthorisationHasExpired,
+    cannotFindAuthRequest: CannotFindAuthRequest,
+    noOutstandingRequests: NoOutstandingRequests,
 )
 
-@(exitType: ClientExitType)(implicit request: Request[?], messages: Messages, appConfig: AppConfig)
+@(exitType: ClientExitType)( implicit request: Request[?], messages: Messages, appConfig: AppConfig)
 @key = @{
     "clientExit"
 }

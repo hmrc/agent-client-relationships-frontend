@@ -20,9 +20,10 @@ import com.google.inject.Inject
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.connectors.AgentClientRelationshipsConnector
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.invitationLink.ValidateLinkPartsResponse
-import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.AuthoriseAgentStartPage
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientExitType.*
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.{Accept, Cancelled, Expired, Pending}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.ClientServiceConfigurationService
+import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.AuthoriseAgentStartPage
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.http.HeaderCarrierConverter
@@ -44,9 +45,14 @@ class StartController @Inject()(agentClientRelationshipsConnector: AgentClientRe
        agentClientRelationshipsConnector
          .validateLinkParts(uid, normalizedAgentName)
          .map {
-           case Left("AGENT_NOT_FOUND") => Redirect("routes.ClientExitController.show(AGENT_NOT_FOUND)")
-           case Left("AGENT_SUSPENDED") => Redirect("routes.ClientExitController.show(AGENT_SUSPENDED)")
+           case Left("AGENT_SUSPENDED") => Redirect(routes.ClientExitController.show(AgentSuspended, Some(normalizedAgentName), None))
+           case Left("AGENT_NOT_FOUND") => Redirect(routes.ClientExitController.show(CannotFindAuthorisationRequest, Some(normalizedAgentName), None))
            case Left(_) => Redirect("routes.ClientExitController.show(SERVER_ERROR)")
-           case Right(_) => Ok(authoriseAgentStartPage(normalizedAgentName, taxService, uid))
+           case Right(response) => response.status match {
+             case Expired => Redirect(routes.ClientExitController.show(AuthorisationRequestExpired, None, Some(response.lastModifiedDate)))
+             case Accept => Redirect(routes.ClientExitController.show(AlreadyRespondedToAuthorisationRequest, None, Some(response.lastModifiedDate)))
+             case Cancelled => Redirect(routes.ClientExitController.show(AuthorisationRequestCancelled, None, Some(response.lastModifiedDate)))
+             case Pending => Ok(authoriseAgentStartPage(normalizedAgentName, taxService, uid))
+           }
          }
      else Future.successful(NotFound(s"TODO: NOT FOUND urlPart ${taxService} for Client controller/template"))

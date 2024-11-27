@@ -20,6 +20,7 @@ import org.scalatest.concurrent.ScalaFutures
 import play.api.libs.json.{JsObject, Json}
 import play.api.test.Helpers.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.connectors.AgentClientRelationshipsConnector
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientExitType.AgentSuspended
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.ClientServiceConfigurationService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.WiremockHelper.stubGet
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentSpecHelper}
@@ -74,7 +75,7 @@ class StartControllerSpec extends ComponentSpecHelper with ScalaFutures with Aut
 
       val result = get(routes.StartController.show(testUid, testNormalizedAgentName, testTaxService).url)
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe "routes.ClientExitController.show(AGENT_SUSPENDED)"
+      result.header("Location").value shouldBe routes.ClientExitController.show(AgentSuspended,Some(testNormalizedAgentName)).url
     }
 
     "Redirect to routes.ClientExitController.show(SERVER_ERROR)" in {
