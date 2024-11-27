@@ -76,7 +76,6 @@ clientType.agent-cancel-authorisation.header=Ar gyfer pa fath o gleient yr hoffe
 clientType.personal=Unigolyn neu unig fasnachwr
 clientType.business=Cwmni neu bartneriaeth
 clientType.trust=Ymddiriedolaeth neu ystâd
-
 clientType.authorisation-request.error.required=Dewiswch y math o gleient rydych angen awdurdodiad ganddo
 clientType.agent-cancel-authorisation.error.required=Dewiswch y math o gleient y mae angen i chi ganslo’ch awdurdodiad ar ei gyfer
 
@@ -100,90 +99,77 @@ clientService.HMRC-PPT-ORG.business=Rheoli ei Dreth Deunydd Pacio Plastig
 clientService.HMRC-PPT-ORG.trust=Rheoli ei Treth Deunydd Pacio Plastig ymddiriedolaeth
 clientService.HMRC-CGT-PD.personal=Rheoli ei gyfrif Treth Enillion Cyfalaf ar eiddo yn y DU
 clientService.HMRC-CGT-PD.trust=Rheoli ei cyfrif Treth Enillion Cyfalaf ar eiddo yn y DU ar gyfer ymddiriedolaeth
-select-service.HMRC-MTD-VAT.personal=Rheoli ei TAW
-clientService.HMRC-MTD-VAT.business=Rheoli ei TAW
-clientService.HMRC-TERS-ORG.trust=Cynnal ei ymddiriedolaeth neu ystâd
-clientService.HMRC-TERSNT-ORG.trust=<translation needed>
-clientService.HMRC-CBC-ORG.trust=Rheoli ei adroddiadau gwlad-wrth-wlad
+clientService.HMRC-CBC-ORG.personal=
 clientService.HMRC-CBC-ORG.business=Rheoli ei adroddiadau gwlad-wrth-wlad
+clientService.HMRC-CBC-ORG.trust=Rheoli ei adroddiadau gwlad-wrth-wlad
+clientService.HMRC-MTD-VAT.personal=<Translation needed>
+clientService.HMRC-MTD-VAT.business=Rheoli ei TAW
 clientService.HMRC-PILLAR2-ORG.business=Rheoli ei drethi atodol Colofn 2
 clientService.HMRC-PILLAR2-ORG.trust=Rheoli ei drethi atodol Colofn 2
+clientService.HMRC-TERS-ORG.trust=Cynnal ei ymddiriedolaeth neu ystâd
+clientService.HMRC-TERSNT-ORG.trust=<translation needed>
+
+# -------------------------------------------------------------------------------------------
+# Client service refinement
+# -------------------------------------------------------------------------------------------
+
+clientServiceRefinement.HMRC-TERS-ORG.header=<Translation needed>
+clientServiceRefinement.HMRC-TERSNT-ORG.header=<Translation needed>
+clientServiceRefinement.HMRC-TERS-ORG.option=<Translation needed>
+clientServiceRefinement.HMRC-TERSNT-ORG.option=<Translation needed>
+
+# -------------------------------------------------------------------------------------------
+# Enter Client ID
+# -------------------------------------------------------------------------------------------
+
+clientId.nino.label=<Translation needed>
+clientId.nino.hint=<Translation needed>
+clientId.nino.error.invalid=<Translation needed>
+clientId.nino.error.required=<Translation needed>
+
+clientId.vrn.label=<Translation needed>
+clientId.vrn.hint=<Translation needed>
+clientId.vrn.error.invalid=<Translation needed>
+clientId.vrn.error.required=<Translation needed>
+
+clientId.utr.label=<Translation needed>
+clientId.utr.hint=<Translation needed>
+clientId.utr.error.invalid=<Translation needed>
+clientId.utr.error.required=<Translation needed>
+
+clientId.urn.label=<Translation needed>
+clientId.urn.hint=<Translation needed>
+clientId.urn.error.invalid=<Translation needed>
+clientId.urn.error.required=<Translation needed>
+
+clientId.cgtRef.label=<Translation needed>
+clientId.cgtRef.hint=T<Translation needed>
+clientId.cgtRef.error.invalid=<Translation needed>
+clientId.cgtRef.error.required=<Translation needed>
+
+clientId.pptRef.label=<Translation needed>
+clientId.pptRef.hint=<Translation needed>
+clientId.pptRef.error.invalid=<Translation needed>
+clientId.pptRef.error.required=<Translation needed>
+
+clientId.cbcId.label=<Translation needed>
+clientId.cbcId.hint=<Translation needed>
+clientId.cbcId.error.invalid=<Translation needed>
+clientId.cbcId.error.required=<Translation needed>
+
+clientId.PlrId.label=<Translation needed>
+clientId.PlrId.hint=<Translation needed>
+clientId.PlrId.error.invalid=<Translation needed>
+clientId.PlrId.error.required=<Translation needed>
 
 #-------------------------------------------------------------------------------------------
 # Enter Client Fact
 # -------------------------------------------------------------------------------------------
 
-
-clientFact.HMRC-CGT-PD.countryCode.label=Beth yw gwlad cyfeiriad cyswllt eich cleient?
-clientFact.HMRC-CGT-PD.countryCode.hint=Mae’n rhaid i hwn gyd-fynd â gwlad cyfeiriad cyswllt eich cleient yn ei gyfrif Treth Enillion Cyfalaf ar eiddo yn y DU. Dechreuwch deipio enw’r wlad.
-clientFact.HMRC-CGT-PD.countryCode.error.required=Nodwch wlad cyfeiriad cyswllt eich cleient
-
-
-clientFact.HMRC-CBC-ORG.email.label=<translation needed>
-clientFact.HMRC-CBC-ORG.email.hint=<translation needed>
-clientFact.HMRC-CBC-ORG.email.error.invalid=<translation needed>
-clientFact.HMRC-CBC-ORG.email.error.required=<translation needed>
-clientFact.HMRC-CBC-NONUK-ORG.email.label=<translation needed>
-clientFact.HMRC-CBC-NONUK-ORG.email.hint=<translation needed>
-clientFact.HMRC-CBC-NONUK-ORG.email.error.invalid=<translation needed>
-clientFact.HMRC-CBC-NONUK-ORG.email.error.required=<translation needed>
-
-
-# -------------------------------------------------------------------------------------------
-# Enter Known Facts
-# -------------------------------------------------------------------------------------------
-# Nino
-client-details.nino.label=<translation needed>
-client-details.nino.hint=Er enghraifft, QQ 12 34 56 C
-error.client-details.nino.invalid=Mae’n rhaid i rif Yswiriant Gwladol fod ar ffurf 2 lythyren, yna 6 rhif wedi’u dilyn gan A, B, C neu D, megis QQ 12 34 56 C
-error.client-details.nino.required=Nodwch rif Yswiriant Gwladol eich cleient
-
-# Postcode
-client-details.postcode.label=Cod post
-client-details.postcode.hint=Dyma god post cyfeiriad cofrestredig eich cleient
-error.client-details.postcode.invalid=Nodwch god post go iawn
-error.client-details.postcode.required=Nodwch god post eich cleient
-
-# Date of Birth
-client-details.dob.label=Dyddiad geni
-client-details.dob.hint=Er enghraifft, 31 3 1980
-error.client-details.dob.required=Nodwch ddyddiad geni’ch cleient
-error.client-details.dob.invalid=Mae’n rhaid i’r dyddiad geni fod yn ddyddiad dilys
-error.client-details.dob.day.required=Mae’n rhaid i’r dyddiad geni gynnwys diwrnod
-error.client-details.dob.month.required=Mae’n rhaid i’r dyddiad geni gynnwys mis
-error.client-details.dob.year.required=Mae’n rhaid i’r dyddiad geni gynnwys blwyddyn
-error.client-details.dob.day-month.required=Mae’n rhaid i’r dyddiad geni gynnwys diwrnod a mis
-error.client-details.dob.day-year.required=Mae’n rhaid i’r dyddiad geni gynnwys diwrnod a blwyddyn
-error.client-details.dob.month-year.required=Mae’n rhaid i’r dyddiad geni gynnwys mis a blwyddyn
-
-# Plastic Packaging Tax Reference
-client-details.pptRef.label=Cyfeirnod Treth Deunydd Pacio Plastig
-client-details.pptRef.hint=Mae hyn yn 15 o gymeriadau, er enghraifft XMPPT0000000001. Daeth hyn i law eich cleient pan gofrestrodd ar gyfer Treth Deunydd Pacio Plastig.
-error.client-details.pptRef.required=Nodwch gyfeirnod Treth Deunydd Pacio Plastig eich cleient
-error.client-details.pptRef.invalid=Nodwch gyfeirnod Treth Deunydd Pacio Plastig y cleient yn y fformat cywir
-
-# Plastic Packaging Tax Registration Date
-client-details.registrationDate.label=Dyddiad cofrestru ar gyfer Treth Deunydd Pacio Plastig
-client-details.registrationDate.hint=Er enghraifft, 21 8 2021
-error.client-details.registrationDate.invalid=Nodwch ddyddiad cofrestru ar gyfer Treth Deunydd Pacio Plastig sy’n ddilys
-error.client-details.registrationDate.required=Nodwch ddyddiad cofrestru eich cleient ar gyfer Treth Deunydd Pacio Plastig
-error.client-details.registrationDate.day.required=Mae’n rhaid i’r dyddiad cofrestru ar gyfer Treth Deunydd Pacio Plastig gynnwys diwrnod
-error.client-details.registrationDate.month.required=Mae’n rhaid i’r dyddiad cofrestru ar gyfer Treth Deunydd Pacio Plastig gynnwys mis
-error.client-details.registrationDate.year.required=Mae’n rhaid i’r dyddiad cofrestru ar gyfer Treth Deunydd Pacio Plastig gynnwys blwyddyn
-error.client-details.registrationDate.day-month.required=Mae’n rhaid i’r dyddiad cofrestru ar gyfer Treth Deunydd Pacio Plastig gynnwys diwrnod a mis
-error.client-details.registrationDate.day-year.required=Mae’n rhaid i’r dyddiad cofrestru ar gyfer Treth Deunydd Pacio Plastig gynnwys diwrnod a blwyddyn
-error.client-details.registrationDate.month-year.required=Mae’n rhaid i’r dyddiad cofrestru ar gyfer Treth Deunydd Pacio Plastig gynnwys mis a blwyddyn
-
-# Capital Gains Tax account reference
-client-details.cgtRef.label=Pa rif cyfrif Treth Enillion Cyfalaf ar eiddo yn y DU sydd gan eich cleient?
-client-details.cgtRef.hint=Bydd hyn yn ein helpu i baru ei fanylion â’r wybodaeth sydd gennym. Mae hyn yn 15 o gymeriadau, er enghraifft XYCGTP123456789. Daeth hyn i law eich cleient pan greodd ei gyfrif.
-error.client-details.cgtRef.required=Nodwch gyfeirnod cyfrif Treth Enillion Cyfalaf y cleient
-error.client-details.cgtRef.invalid=Nodwch gyfeirnod cyfrif Treth Enillion Cyfalaf y cleient yn y fformat cywir
-
-
-#-------------------------------------------------------------------------------------------
-# Enter Client Fact
-# -------------------------------------------------------------------------------------------
+clientFact.HMRC-MTD-IT.postcode.label=<translation needed>
+clientFact.HMRC-MTD-IT.postcode.hint=<translation needed>
+clientFact.HMRC-MTD-IT.postcode.error.required=<translation needed>
+clientFact.HMRC-MTD-IT.postcode.error.invalid=<translation needed>
 
 clientFact.PERSONAL-INCOME-RECORD.date.label=Beth yw dyddiad geni eich cleient?
 clientFact.PERSONAL-INCOME-RECORD.date.hint=Er enghraifft, 22 7 1981.
@@ -207,6 +193,11 @@ clientFact.HMRC-MTD-VAT.date.error.day-month.required=Mae’n rhaid i’r dyddia
 clientFact.HMRC-MTD-VAT.date.error.day-year.required=Mae’n rhaid i’r dyddiad cofrestru TAW gynnwys diwrnod a blwyddyn
 clientFact.HMRC-MTD-VAT.date.error.month-year.required=Mae’n rhaid i’r dyddiad cofrestru TAW gynnwys mis a blwyddyn
 
+clientFact.HMRC-CGT-PD.postcode.label=<translation needed>
+clientFact.HMRC-CGT-PD.countryCode.label=Beth yw gwlad cyfeiriad cyswllt eich cleient?
+clientFact.HMRC-CGT-PD.countryCode.hint=Mae’n rhaid i hwn gyd-fynd â gwlad cyfeiriad cyswllt eich cleient yn ei gyfrif Treth Enillion Cyfalaf ar eiddo yn y DU. Dechreuwch deipio enw’r wlad.
+clientFact.HMRC-CGT-PD.countryCode.error.required=Nodwch wlad cyfeiriad cyswllt eich cleient
+
 clientFact.HMRC-PPT-ORG.date.label=<translation needed>
 clientFact.HMRC-PPT-ORG.date.hint=Er enghraifft, 31 8 2022.
 clientFact.HMRC-PPT-ORG.date.error.required=Nodwch ddyddiad cofrestru eich cleient ar gyfer Treth Deunydd Pacio Plastig
@@ -217,6 +208,16 @@ clientFact.HMRC-PPT-ORG.date.error.year.required=Mae’n rhaid i’r dyddiad cof
 clientFact.HMRC-PPT-ORG.date.error.day-month.required=Mae’n rhaid i’r dyddiad cofrestru ar gyfer Treth Deunydd Pacio Plastig gynnwys diwrnod a mis
 clientFact.HMRC-PPT-ORG.date.error.day-year.required=Mae’n rhaid i’r dyddiad cofrestru ar gyfer Treth Deunydd Pacio Plastig gynnwys diwrnod a blwyddyn
 clientFact.HMRC-PPT-ORG.date.error.month-year.required=Mae’n rhaid i’r dyddiad cofrestru ar gyfer Treth Deunydd Pacio Plastig gynnwys mis a blwyddyn
+
+clientFact.HMRC-CBC-ORG.email.label=<translation needed>
+clientFact.HMRC-CBC-ORG.email.hint=<translation needed>
+clientFact.HMRC-CBC-ORG.email.error.invalid=<translation needed>
+clientFact.HMRC-CBC-ORG.email.error.required=<translation needed>
+
+clientFact.HMRC-CBC-NONUK-ORG.email.label=<translation needed>
+clientFact.HMRC-CBC-NONUK-ORG.email.hint=<translation needed>
+clientFact.HMRC-CBC-NONUK-ORG.email.error.invalid=<translation needed>
+clientFact.HMRC-CBC-NONUK-ORG.email.error.required=<translation needed>
 
 clientFact.HMRC-PILLAR2-ORG.date.label=<translation needed>
 clientFact.HMRC-PILLAR2-ORG.date.hint=<translation needed>
@@ -232,6 +233,7 @@ clientFact.HMRC-PILLAR2-ORG.date.error.month-year.required=Mae’n rhaid i’r d
 # ________________________________________________________________________________
 # Confirm Client
 # ________________________________________________________________________________
+
 confirmClient.title=Ai hwn yw’r cleient yr hoffech gael awdurdodiad ganddo?
 confirmClient.authorisation-request.header=Ai {0} yw’r cleient rydych am awdurdodiad ganddo?
 confirmClient.agent-cancel-authorisation.header=<translation needed>
@@ -269,17 +271,95 @@ selectAgentRole.HMRC-MTD-IT.supportingToMain.option=<translation needed>
 selectAgentRole.HMRC-MTD-IT-SUPP.supportingToMain.option=<translation needed>
 selectAgentRole.HMRC-MTD-IT.supportingToMain.hint=<translation needed>
 
+# ________________________________________________________________________________
+# Check Your Answers
+# ________________________________________________________________________________
+checkYourAnswers.header=Check your answers
+checkYourAnswers.h2=Authorisation details for {0}
+checkYourAnswers.clientService.label=What do you want to do for the client
+checkYourAnswers.agentType.label=How do you want to act for them
 
-#Track invitation requests
+checkYourAnswers.confirmAndSend.button=Confirm and send
+checkYourAnswers.change=Change
+
+checkYourAnswers.PERSONAL-INCOME-RECORD=View their Income record
+checkYourAnswers.HMRC-MTD-IT=Manage their Making Tax Digital for Income Tax
+checkYourAnswers.HMRC-PPT-ORG=Manage their Plastic Packaging Tax
+checkYourAnswers.HMRC-CGT-PD=Manage their Capital Gains Tax on UK property account
+checkYourAnswers.HMRC-CBC-ORG=Manage their country-by-country reports
+checkYourAnswers.HMRC-CBC-ORG=Manage their country-by-country reports
+checkYourAnswers.HMRC-MTD-VAT=Manage their VAT
+checkYourAnswers.HMRC-PILLAR2-ORG=Manage their Pillar 2 top-up taxes
+checkYourAnswers.HMRC-TERS-ORG=Maintain their trust or an estate
+
+# ________________________________________________________________________________
+# Agent confirm cancellation of authorisation
+# ________________________________________________________________________________
+
+confirmCancellation.header=Confirm cancellation
+confirmCancellation.legend=Do you want to cancel your authorisation for this client?
+confirmCancellation.true=Yes
+confirmCancellation.false=No - I need to start again
+confirmCancellation.agent-cancel-authorisation.error.required=Select ‘yes’ if you want to cancel authorisation for this client
+
+confirmCancellation.HMRC-MTD-IT.current-status=You are currently authorised as the main agent to manage {0}’s Making Tax Digital for Income Tax.
+confirmCancellation.HMRC-MTD-IT-SUPP.current-status=You are currently authorised as a supporting agent to manage {0}’s Making Tax Digital for Income Tax.
+confirmCancellation.PERSONAL-INCOME-RECORD.current-status=You are currently authorised as the agent to view the Income record for {0}.
+confirmCancellation.HMRC-MTD-VAT.current-status=You are currently authorised as the agent to manage {0}’s VAT.
+confirmCancellation.HMRC-TERS-ORG.current-status=You are currently authorised as the agent to maintain {0}’s trust or an estate.
+confirmCancellation.HMRC-TERSNT-ORG.current-status=You are currently authorised as the agent to maintain {0}’s trust or an estate.
+confirmCancellation.HMRC-CGT-PD.current-status=You are currently authorised as the agent to manage {0}’s Capital Gains Tax on UK property account.
+confirmCancellation.HMRC-PPT-ORG.current-status=You are currently authorised as the agent to manage Plastic Packaging Tax for {0}.
+confirmCancellation.HMRC-CBC-ORG.current-status=You are currently authorised as the agent to manage country-by-country reports for {0}.
+confirmCancellation.HMRC-CBC-NONUK-ORG.current-status=You are currently authorised as the agent to manage {0}’s country-by-country reports.
+confirmCancellation.HMRC-PILLAR2-ORG.current-status=You are currently authorised as the agent to manage {0}’s Pillar 2 top-up taxes.
+
+confirmCancellation.HMRC-MTD-IT.outcome=If you cancel your authorisation, you will not be able to manage Making Tax Digital for Income Tax for {0}.
+confirmCancellation.PERSONAL-INCOME-RECORD.outcome=If you cancel this request, you will not be able to view the Income record for this client.
+confirmCancellation.HMRC-MTD-VAT.outcome=If you cancel your authorisation, you will not be able to manage their VAT for {0}.
+confirmCancellation.HMRC-TERS-ORG.outcome=If you cancel your authorisation, you will not be able to maintain a trust or an estate on behalf of {0}.
+confirmCancellation.HMRC-TERSNT-ORG.outcome=If you cancel your authorisation, you will not be able to maintain a trust or an estate on behalf of {0}.
+confirmCancellation.HMRC-CGT-PD.outcome=If you cancel your authorisation, you will not be able to manage Capital Gains Tax on UK property account for {0}.
+confirmCancellation.HMRC-PPT-ORG.outcome=If you cancel your authorisation, you will not be able to manage Plastic Packaging Tax for {0}.
+confirmCancellation.HMRC-CBC-ORG.outcome=If you cancel your authorisation, you will not be able to manage country-by-country reports for {0}.
+confirmCancellation.HMRC-CBC-NONUK-ORG.outcome=If you cancel your authorisation, you will not be able to manage The Trust of {0} country-by-country reports.
+confirmCancellation.HMRC-PILLAR2-ORG.outcome=If you cancel your authorisation, you will not be able to manage {0}’s Pillar 2 top-up taxes.
+
+confirmCancellation.HMRC-MTD-IT.inset=Cancelling this authorisation will not automatically cancel any authorisation for this client for Self Assessment.
+
+# ________________________________________________________________________________
+# Invitation Created
+# ________________________________________________________________________________
+
+invitationCreated.header=You''ve created an authorisation request
+invitationCreated.panel.body=Client: {0}
+invitationCreated.h2=Next steps
+invitationCreated.list.one=Copy this authorisation request link and send it to your client:
+invitationCreated.list.two=Tell your client to select this link. They will then be asked to sign in.
+invitationCreated.list.three=Ask your client to authorise you by {0} – they have {1} days to respond before your request expires.
+invitationCreated.list.four=We will email you at {0} to update you on the status of this request.
+invitationCreated.createAnother=Create another authorisation request
+invitationCreated.agentHome=Go to your agent services account homepage
+
+# ________________________________________________________________________________
+#Track requests
+# ________________________________________________________________________________
+
 trackRequests.title=Rheoli eich ceisiadau diweddar am awdurdodiad
 trackRequests.intro=Gwirio statws eich ceisiadau am awdurdodiad i gleientiaid yn ystod y {0} o ddiwrnodau diwethaf, neu ganslo ceisiadau ac awdurdodiadau nad oes eu hangen mwyach.
 trackRequests.empty=Nid oes gennych unrhyw geisiadau diweddar am awdurdodiad.
+trackRequests.view=
+trackRequests.action.resend=Resend link
+trackRequests.action.cancel=Cancel request
+trackRequests.action.deauth=Deauthorise
 trackRequests.empty.continue=Dechrau cais am awdurdodiad newydd
 trackRequests.th.client=Manylion y cleient
 trackRequests.table-row-header.clientNameUnknown=Methu adfer enw cleient
 trackRequests.th.service=Cais am awdurdodiad wedi’i anfon
 trackRequests.th.status=Statws
+trackRequests.th.expiryDate=
 trackRequests.th.actions=Camau gweithredu
+trackRequests.resultsCaption=Showing {0} to {1} of {2} requests
 trackRequests.service.HMRC-MTD-IT=Rheoli ei gyfrif Troi Treth yn Ddigidol ar gyfer Treth Incwm
 trackRequests.service.PERSONAL-INCOME-RECORD=Bwrw golwg dros ei gofnod incwm
 trackRequests.service.HMRC-MTD-VAT=Rheoli ei TAW
@@ -291,11 +371,7 @@ trackRequests.service.HMRC-CBC-ORG=Rheoli ei adroddiadau gwlad-wrth-wlad
 trackRequests.service.HMRC-CBC-NONUK-ORG=Rheoli ei adroddiadau gwlad-wrth-wlad
 trackRequests.service.HMRC-CBC=Rheoli adroddiadau gwlad-wrth-wlad
 trackRequests.service.HMRC-PILLAR2-ORG=Rheoli ei drethi atodol Colofn 2
-trackRequests.service.details.HMRC-CBC=Manylion am adroddiadau gwlad-wrth-wlad
-trackRequests.service.clients.HMRC-CBC=Rheoli adroddiadau gwlad-wrth-wlad y cleient
-trackRequests.invitation.identifier.nino=Rhif Yswiriant Gwladol:
-trackRequests.invitation.identifier.vrn=Rhif cofrestru TAW:
-trackRequests.invitation.identifier.MTDITID=Dynodydd Troi Treth yn Ddigidol ar gyfer Treth Incwm
+
 trackRequests.invitation.expires=Yn dod i ben:
 trackRequests.status.Pending=Nid yw’r cleient wedi ymateb eto
 trackRequests.status.Accepted=Derbyniwyd gan y cleient
@@ -303,54 +379,27 @@ trackRequests.status.Partialauth=Derbyniwyd gan y cleient
 trackRequests.status.Rejected=Gwrthodwyd gan y cleient
 trackRequests.status.Expired=Daeth y cais i ben gan i’r cleient fethu ag ymateb mewn pryd
 trackRequests.status.Cancelled=Gwnaethoch ganslo’r cais hwn
-trackRequests.invitation.status.acceptedthencancelledbyagent=Gwnaethoch ganslo’ch awdurdodiad
-trackRequests.invitation.status.acceptedthencancelledbyclient=Derbyniwyd gan y cleient. Gwnaeth y cleient ganslo’i awdurdodiad yn nes ymlaen
-trackRequests.invitation.status.acceptedthencancelledbyhmrc=Derbyniwyd gan y cleient. Gwnaeth CThEM ganslo’ch awdurdodiad yn nes ymlaen
-trackRequests.invitation.status.invalidrelationship=Gwnaethoch ganslo’ch awdurdodiad
-trackRequests.invitations.actions.acceptedthencancelledbyagent=Dechrau cais newydd
-trackRequests.invitations.actions.aria-text=Dechrau cais newydd ar gyfer {0} i {1}
-trackRequests.invitations.actions.acceptedthencancelledbyclient=Dechrau cais newydd
-trackRequests.invitations.actions.acceptedthencancelledbyhmrc=Dechrau cais newydd
-trackRequests.invitations.actions.partialauth.signup=Cofrestru eich cleient (yn agor tab newydd)
-trackRequests.invitations.actions.partialauth.cancel=Canslo’ch awdurdodiad
-trackRequests.invitations.actions.partialauth.cancel.aria-text=Canslo’ch awdurdodiad ar gyfer {0} to {1}
-trackRequests.invitations.actions.pending=Ailanfon cais at y cleient
-trackRequests.invitations.actions.pending.aria-text=Ailanfon cais at gleient {0} i {1}
-trackRequests.invitations.actions.pending.cancel=Canslo’r cais hwn
-trackRequests.invitations.actions.pending.cancel.aria-text=Canslo’r cais hwn ar gyfer {0} i {1}
-trackRequests.invitations.actions.accepted=Canslo’ch awdurdodiad
-trackRequests.invitations.actions.accepted.aria-text=Canslo’ch awdurdodiad ar gyfer {0} to {1}
-trackRequests.invitations.actions.rejected=Dechrau cais newydd
-trackRequests.invitations.actions.expired=Dechrau cais newydd
-trackRequests.invitations.actions.cancelled=Dechrau cais newydd
-trackRequests.invitations.actions.invalidrelationship=Dechrau cais newydd
-trackRequests.pagination.showing=Dangos
-trackRequests.pagination.to=i
-trackRequests.pagination.of=o
-trackRequests.filter-client.label=Chwilio yn Ã´l cleient
-trackRequests.filter-status.label=Hidlo yn Ã´l statws
-trackRequests.filter.filter.button=Hidlo
-trackRequests.filter.clear.button=Clirio pob hidlydd
-trackRequests.filter-status.filter.button=Hidlo
-trackRequests.error.status-empty=Rhaid i chi ddewis statws o’r rhestr
-trackRequests.error.status-invalid=Rhaid i chi ddewis statws o’r rhestr
-trackRequests.error.client-empty=Rhaid i chi ddewis enw o’r rhestr
-trackRequests.error.client-invalid=Rhaid i chi ddewis enw o’r rhestr
-trackRequests.filter-status.AllStatuses=Pob statws
-trackRequests.filter-status.ExpireInNext5Days=Yn dod i ben yn y 5 diwrnod nesaf
-trackRequests.filter-status.ActivityWithinLast5Days=Gweithgarwch yn ystod y 5 diwrnod diwethaf
-trackRequests.filter-status.ClientNotYetResponded=Nid yw’r cleient wedi ymateb eto
-trackRequests.filter-status.AgentCancelledAuthorisation=Gwnaethoch ganslo’ch awdurdodiad
-trackRequests.filter-status.DeclinedByClient=Gwrthodwyd gan y cleient
-trackRequests.filter-status.AcceptedByClient=Derbyniwyd gan y cleient
-trackRequests.filter-status.Expired=Daeth y cais i ben gan i’r cleient fethu ag ymateb mewn pryd
-trackRequests.filter-status.ClientCancelledAuthorisation=Derbyniwyd gan y cleient. Gwnaeth y cleient ganslo’i awdurdodiad yn nes ymlaen
-trackRequests.filter-status.HMRCCancelledAuthorisation=Derbyniwyd gan y cleient. Gwnaeth CThEM ganslo’ch awdurdodiad yn nes ymlaen
-trackRequests.filter-status.Declined.HMRC-CBC=Cafodd cais {0} i reoli adroddiadau gwlad-wrth-wlad y cleient ei wrthod.
+trackRequests.sidebar.clientFilter=Filter by client
+trackRequests.sidebar.statusFilter=Filter by status
+trackRequests.sidebar.applyFilters=Apply filters
+trackRequests.filter-status.selectAll=Select all
+trackRequests.filter-status.ExpireInNext5Days=Expire in the next 5 days
+trackRequests.filter-status.ActivityWithinLast5Days=Activity within the last 5 days
+trackRequests.filter-status.ClientNotYetResponded=Client has not yet responded
+trackRequests.filter-status.AgentCancelledAuthorisation=You cancelled your authorisation
+trackRequests.filter-status.DeclinedByClient=Declined by client
+trackRequests.filter-status.AcceptedByClient=Accepted by client
+trackRequests.filter-status.Expired=Request expired as client did not respond in time
+trackRequests.filter-status.ClientCancelledAuthorisation=Accepted by client. They later cancelled their authorisation
+trackRequests.filter-status.HMRCCancelledAuthorisation=Accepted by client. HMRC later cancelled your authorisation
+trackRequests.filter-status.Declined.HMRC-CBC={0} request to manage the clie
+
 
 # ________________________________________________________________________________
 # Journey exit headings
 # ________________________________________________________________________________
+
+# Agent Journey
 
 journeyExit.client-not-found.header=Nid oeddem yn gallu dod o hyd i’ch cleient
 journeyExit.not-registered.header=Mae angen i’ch cleient gofrestru ar gyfer Hunanasesiad
@@ -360,8 +409,15 @@ journeyExit.client-insolvent.header=Ni allwch greu cais am awdurdodiad gan fod y
 journeyExit.authorisation-already-exists.header=Rydych eisoes wedi’ch awdurdodi
 journeyExit.no-change-of-agent-role.header=<translation needed>
 
+# Client Journey
+
+clientExit.agent-suspended.header=You cannot appoint this tax agent
+clientExit.no-outstanding-requests.header=There are no outstanding authorisation requests for you to respond to
+clientExit.cannot-find-auth-request.header=We cannot find this authorisation request
+clientExit.auth-request-expired.header=This authorisation request has already expired
+
 # ________________________________________________________________________________
-# Journey exit partials
+# Agent Journey exit partials
 # ________________________________________________________________________________
 
 genericNotFound.description=Nid oeddem yn gallu dod o hyd i gleient yn ein cofnodion gan ddefnyddio’r manylion a roesoch i ni.
@@ -417,3 +473,83 @@ authorisationAlreadyExists.HMRC-CBC-ORG.p1=<translation needed>
 authorisationAlreadyExists.HMRC-CBC-NONUK-ORG.p1=<translation needed>
 authorisationAlreadyExists.HMRC-PILLAR2-ORG.p1=<translation needed>
 authorisationAlreadyExists.p2=Nid oes yn rhaid i chi ofyn iddo eich awdurdodi ar gyfer y gwasanaeth hwn eto.
+authorisationAlreadyExists.return=<translation needed>
+
+# ________________________________________________________________________________
+# Authorise agent start page
+# ________________________________________________________________________________
+
+authoriseAgentStartPage.h1.income-tax=Authorise {0} to manage your Income Tax
+authoriseAgentStartPage.h1.income-record-viewer=Authorise {0} to view your Income Record
+authoriseAgentStartPage.h1.vat=Authorise {0} to manage your VAT
+authoriseAgentStartPage.h1.capital-gains-tax-uk-property=Authorise {0} to manage your Capital Gains Tax on UK property account
+authoriseAgentStartPage.h1.plastic-packaging-tax=Authorise {0} to manage your Plastic Packaging Tax
+authoriseAgentStartPage.h1.country-by-country-reporting=Authorise {0} to manage your Country-by-country Reports
+authoriseAgentStartPage.h1.pillar-2=Authorise {0} to manage your Pillar 2 top-up taxes
+authoriseAgentStartPage.h1.trusts-and-estates=Authorise {0} to maintain your Trust or an Estate
+
+authoriseAgentStartPage.p1.income-tax=You need to sign in with the user ID you use for Income Tax.
+authoriseAgentStartPage.p1.income-record-viewer=You need to sign in with the user ID you use for your personal tax account.
+authoriseAgentStartPage.p1.vat=You need to sign in with the user ID you use for VAT.
+authoriseAgentStartPage.p1.capital-gains-tax-uk-property=You need to sign in with the user ID you use for Capital Gains Tax on UK property account.
+authoriseAgentStartPage.p1.plastic-packaging-tax=You need to sign in with the user ID you use for Plastic Packaging Tax.
+authoriseAgentStartPage.p1.country-by-country-reporting=You need to sign in with the user ID you use for Country-by-country Reports.
+authoriseAgentStartPage.p1.pillar-2=You need to sign in with the user ID you use for Pillar 2 top-up taxes.
+authoriseAgentStartPage.p1.trusts-and-estates=You need to sign in with the user ID you use for maintaining your trust or estate.
+authoriseAgentStartPage.p2=If you do not have sign in details, you‘ll be able to create some.
+authoriseAgentStartPage.link.text1=Start now
+authoriseAgentStartPage.link.text2=I do not want {0} to act for me.
+
+# ________________________________________________________________________________
+# Client journey exit partials
+# ________________________________________________________________________________
+
+# ________________________________________________________________________________
+# You cannot appoint this tax agent (Agent suspended)
+# ________________________________________________________________________________
+agentSuspended.p1=This tax agent cannot manage your Making Tax Digital for Income Tax at this time.
+agentSuspended.p2=If you have any questions, contact the tax agent who sent you this request.
+agentSuspended.signout-link=Finish and sign out
+
+# ________________________________________________________________________________
+# There are no outstanding authorisation requests for you to respond to
+# ________________________________________________________________________________
+noOutstandingRequests.p1= If you think this is wrong, contact the agent who sent you the request or <a href={0} class="govuk-link" target="_blank" rel="noreferrer noopener">view your request history</a>.
+
+# ________________________________________________________________________________
+# This authorisation request has already expired
+# ________________________________________________________________________________
+authorisationRequestExpired.p1=This request expired on {0}. For details, <a href={1} class="govuk-link" target="_blank" rel="noreferrer noopener">view your history</a> to check for any expired, cancelled or outstanding requests.
+authorisationRequestExpired.p2=If your agent has sent you a recent request, <a href={0} class="govuk-link" target="_blank" rel="noreferrer noopener">make sure you have signed up to the tax service you need.
+authorisationRequestExpired.p3=You could also check you have signed in with the correct Government Gateway user ID. It must be the same one you used to sign up to the tax service the authorisation request is for.
+authorisationRequestExpired.p4=<a href={0} class="govuk-link" target="_blank" rel="noreferrer noopener">Sign in with the Government Gateway user ID</a> you use for managing your personal tax affairs.
+
+# ________________________________________________________________________________
+# We cannot find this authorisation request
+# ________________________________________________________________________________
+cannotFindAuthRequest.p1=We cannot find a request from {0}.
+cannotFindAuthRequest.p2=<a href={0} class="govuk-link" target="_blank" rel="noreferrer noopener">Make sure you have signed up for the tax service you need.</a> Ask your agent if you are not sure.
+cannotFindAuthRequest.p3=You need to sign in with the correct Government Gateway user ID. It is possible to have more than one, so make sure it is the same one you used to sign up to the tax service the authorisation request is for.<a href={0} class="govuk-link" target="_blank" rel="noreferrer noopener">Try signing in with a different Government Gateway user ID</a> (the one that you use for managing your personal tax affairs).
+
+# ________________________________________________________________________________
+# This authorisation request has been cancelled
+# ________________________________________________________________________________
+authorisationRequestCancelled.p1=This request has been cancelled by your agent on {0}. For details, <a href={1} class="govuk-link" target="_blank" rel="noreferrer noopener">view your history</a> to check for any expired, cancelled or outstanding requests.
+authorisationRequestCancelled.p2=If your agent has sent you a recent request, <a href={0} class="govuk-link" target="_blank" rel="noreferrer noopener">make sure you have signed up to the tax service you need.
+authorisationRequestCancelled.p3=You could also check you have signed in with the correct Government Gateway user ID. It must be the same one you used to sign up to the tax service the authorisation request is for.
+authorisationRequestCancelled.p4=<a href={0} class="govuk-link" target="_blank" rel="noreferrer noopener">Sign in with the Government Gateway user ID</a> you use for managing your personal tax affairs.
+
+# ________________________________________________________________________________
+# This authorisation request has already been responded to
+# ________________________________________________________________________________
+authorisationRequestRespondedTo.p1=This request has already been responded to on {0}. For details, <a href={1} class="govuk-link" target="_blank" rel="noreferrer noopener">view your history</a> to check for any expired, cancelled or outstanding requests.
+authorisationRequestRespondedTo.p2=If your agent has sent you a recent request, <a href={0} class="govuk-link" target="_blank" rel="noreferrer noopener">make sure you have signed up to the tax service you need.
+authorisationRequestRespondedTo.p3=You could also check you have signed in with the correct Government Gateway user ID. It must be the same one you used to sign up to the tax service the authorisation request is for.
+authorisationRequestRespondedTo.p4=<a href={0} class="govuk-link" target="_blank" rel="noreferrer noopener">Sign in with the Government Gateway user ID</a> you use for managing your personal tax affairs.
+
+# ________________________________________________________________________________
+# Page not found
+# ________________________________________________________________________________
+pageNotFound.p1=If you have typed the web address, check it is correct.
+pageNotFound.p2=If you pasted the web address, check you have copied the entire address.
+pageNotFound.p3=If the

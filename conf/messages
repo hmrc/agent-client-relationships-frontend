@@ -382,7 +382,9 @@ trackRequests.view=View request
 trackRequests.action.resend=Resend link
 trackRequests.action.cancel=Cancel request
 trackRequests.action.deauth=Deauthorise
+trackRequests.empty.continue=
 trackRequests.th.client=Client
+trackRequests.table-row-header.clientNameUnknown=Methu adfer enw cleient
 trackRequests.th.service=Service
 trackRequests.th.status=Status
 trackRequests.th.expiryDate=Expires
@@ -400,6 +402,7 @@ trackRequests.service.HMRC-CBC-NONUK-ORG=Manage their country-by-country reports
 trackRequests.service.HMRC-CBC=Manage country-by-country reports
 trackRequests.service.HMRC-PILLAR2-ORG=Manage their Pillar 2 top-up taxes
 
+trackRequests.invitation.expires=Yn dod i ben:
 trackRequests.status.Pending=Client has not yet responded
 trackRequests.expires=Expires on {0}
 trackRequests.status.Accepted=Accepted by client
@@ -420,6 +423,7 @@ trackRequests.filter-status.Expired=Request expired as client did not respond in
 trackRequests.filter-status.ClientCancelledAuthorisation=Accepted by client. They later cancelled their authorisation
 trackRequests.filter-status.HMRCCancelledAuthorisation=Accepted by client. HMRC later cancelled your authorisation
 trackRequests.filter-status.Declined.HMRC-CBC={0} request to manage the client’s country-by-country reports was declined.
+
 
 # ________________________________________________________________________________
 # Journey exit headings
