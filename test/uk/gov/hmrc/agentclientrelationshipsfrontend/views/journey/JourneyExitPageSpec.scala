@@ -18,7 +18,6 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.views.journey
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.support.ViewSpecSupport

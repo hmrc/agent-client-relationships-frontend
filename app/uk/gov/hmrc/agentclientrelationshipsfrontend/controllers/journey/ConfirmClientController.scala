@@ -22,7 +22,7 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.ClientConfirmationFieldName
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.ConfirmClientForm
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, JourneyType}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{ClientServiceConfigurationService, JourneyService}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.services.JourneyService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.ConfirmClientPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
@@ -31,7 +31,6 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class ConfirmClientController @Inject()(mcc: MessagesControllerComponents,
-                                        serviceConfig: ClientServiceConfigurationService,
                                         journeyService: JourneyService,
                                         confirmClientPage: ConfirmClientPage,
                                         actions: Actions

@@ -26,7 +26,6 @@ import play.api.http.Status.{FORBIDDEN, OK, SEE_OTHER}
 import play.api.mvc.*
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{defaultAwaitTimeout, redirectLocation, status}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.AuthActions
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.routes
 import uk.gov.hmrc.auth.core.*

@@ -20,7 +20,7 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.agentclientrelationshipsfrontend.support.ViewSpecSupport
-import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.auth.{IvLockedOut, IvTechDifficulties}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.auth.IvTechDifficulties
 
 class IvTechDifficultiesSpec extends ViewSpecSupport {
 

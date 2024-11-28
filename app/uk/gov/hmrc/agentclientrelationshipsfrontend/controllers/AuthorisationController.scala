@@ -34,7 +34,6 @@ import scala.concurrent.{ExecutionContext, Future}
 class AuthorisationController @Inject()(mcc: MessagesControllerComponents,
                                         identityVerificationConnector: IdentityVerificationConnector,
                                         cannotConfirmIdentityView: CannotConfirmIdentity,
-                                        errorCannotViewRequestView: ErrorCannotViewRequest,
                                         notAuthorisedAsClientView: NotAuthorisedAsClient,
                                         ivTechDifficultiesView: IvTechDifficulties,
                                         ivLockedOutView: IvLockedOut,

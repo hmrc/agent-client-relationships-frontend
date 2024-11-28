@@ -27,7 +27,6 @@ class TimedOutController @Inject()(mcc: MessagesControllerComponents) extends Fr
 
   def timedOut: Action[AnyContent] = Action.async:
     request =>
-      given MessagesRequest[AnyContent] = request
       // previously the destination of sign out was determined by MainTemplate code
       // instead we could do that in here
       Future.successful(Ok("Timed out"))

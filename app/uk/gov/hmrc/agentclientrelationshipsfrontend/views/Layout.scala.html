@@ -29,7 +29,6 @@
         appConfig: AppConfig,
         hmrcStandardPage: HmrcStandardPage,
         govukErrorSummary: GovukErrorSummary,
-        hmrcLanguageSelectHelper: HmrcLanguageSelectHelper,
         autocompleteCss: HmrcAccessibleAutocompleteCss,
         autocompleteJavascript: HmrcAccessibleAutocompleteJavascript,
         hmrcTimeoutDialogHelper: HmrcTimeoutDialogHelper,
@@ -79,7 +78,7 @@ equal the page heading (H1) content *@
                 title = Text(messages("error.heading")),
                 errorList = Seq(ErrorLink(
                     href = if(error.key == "date") Some("#date.day") else Some(s"#${error.key}"),
-                    content = Text(messages(error.message, error.args: _*))
+                    content = Text(messages(error.message, error.args*))
                 ))
             ))
         }

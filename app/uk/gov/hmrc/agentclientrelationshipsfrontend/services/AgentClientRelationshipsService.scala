@@ -22,11 +22,10 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.Journey
 import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
 
 @Singleton
-class AgentClientRelationshipsService @Inject()(agentClientRelationshipsConnector: AgentClientRelationshipsConnector
-                                               )(implicit executionContext: ExecutionContext) {
+class AgentClientRelationshipsService @Inject()(agentClientRelationshipsConnector: AgentClientRelationshipsConnector) {
 
   def getClientDetails(clientId: String, journey: Journey)(implicit hc: HeaderCarrier): Future[Option[ClientDetailsResponse]] =
     agentClientRelationshipsConnector.getClientDetails(journey.getService, clientId)
