@@ -28,7 +28,12 @@
     noOutstandingRequests: NoOutstandingRequests,
 )
 
-@(exitType: ClientExitType)( implicit request: Request[?], messages: Messages, appConfig: AppConfig)
+@(exitType: ClientExitType)(
+        implicit request: Request[?],
+        messages: Messages,
+        appConfig: AppConfig,
+        lastModifiedDate: Option[String])
+
 @key = @{
     "clientExit"
 }

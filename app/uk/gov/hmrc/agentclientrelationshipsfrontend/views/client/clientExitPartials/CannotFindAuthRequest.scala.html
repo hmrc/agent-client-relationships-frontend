@@ -26,6 +26,6 @@
     "cannotFindAuthRequest"
 }
 
-<p class="govuk-body">@messages(s"$key.p1", "<AGENT NAME>")</p>
-<p class="govuk-body">@messages(s"$key.p2", s"${appConfig.guidanceAuthoriseAgent}")</p>
+<p class="govuk-body">@messages(s"$key.p1")</p>
+<p class="govuk-body">@Html(messages(s"$key.p2", s"${appConfig.guidanceAuthoriseAgent}"))</p>
 <p class="govuk-body">@messages(s"$key.p3"), @Some(routes.SignOutController.signOut.url), </p>

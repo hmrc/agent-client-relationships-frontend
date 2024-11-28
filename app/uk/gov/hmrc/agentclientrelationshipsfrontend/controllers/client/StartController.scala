@@ -21,7 +21,7 @@ import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.connectors.AgentClientRelationshipsConnector
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientExitType.*
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.{Accept, Cancelled, Expired, Pending}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.invitationLink.{Accept, Cancelled, Expired, Pending}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.ClientServiceConfigurationService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.AuthoriseAgentStartPage
 import uk.gov.hmrc.http.HeaderCarrier
@@ -53,6 +53,7 @@ class StartController @Inject()(agentClientRelationshipsConnector: AgentClientRe
              case Accept => Redirect(routes.ClientExitController.show(AlreadyRespondedToAuthorisationRequest, None, Some(response.lastModifiedDate)))
              case Cancelled => Redirect(routes.ClientExitController.show(AuthorisationRequestCancelled, None, Some(response.lastModifiedDate)))
              case Pending => Ok(authoriseAgentStartPage(normalizedAgentName, taxService, uid))
+             case _ => Redirect("routes.ClientExitController.show(SERVER_ERROR)")
            }
          }
      else Future.successful(NotFound(s"TODO: NOT FOUND urlPart ${taxService} for Client controller/template"))

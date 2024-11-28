@@ -17,14 +17,11 @@
 package uk.gov.hmrc.agentclientrelationshipsfrontend.models.invitationLink
 
 import play.api.libs.json.*
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.InvitationStatus
-
-import java.time.Instant
 
 case class ValidateLinkPartsResponse(
   name: String,
   status: InvitationStatus,
-  lastModifiedDate: Instant
+  lastModifiedDate: String
 )
 
 object ValidateLinkPartsResponse {

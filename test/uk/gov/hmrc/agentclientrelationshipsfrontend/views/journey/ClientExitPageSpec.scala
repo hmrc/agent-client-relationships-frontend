@@ -38,14 +38,16 @@ class ClientExitPageSpec extends ViewSpecSupport {
     ClientExitType.NoOutstandingRequests ->  ExpectedStrings(
       title = "There are no outstanding authorisation requests for you to respond to - Appoint someone to deal with HMRC for you - GOV.UK",
 
-      List("This tax agent cannot manage your Making Tax Digital for Income Tax at this time.",
-        "If you have any questions, contact the tax agent who sent you this request.")
+      List("If you think this is wrong, contact the agent who sent you the request or view your request history.")
     ),
     ClientExitType.CannotFindAuthorisationRequest -> ExpectedStrings(
       title = "We cannot find this authorisation request - Appoint someone to deal with HMRC for you - GOV.UK",
 
-      List("This tax agent cannot manage your Making Tax Digital for Income Tax at this time.",
-        "If you have any questions, contact the tax agent who sent you this request.")
+      List("We cannot find a request from <AGENT NAME>.",
+        "Make sure you have the signed up for tax service you need. Ask your agent if your not sure.",
+        "You need to sign in with the correct Government Gateway user ID. It is possible to have more than one, " +
+          "make sure it is the same one you have used to sign up for the tax service the authorisation request is for." +
+          "Trying to sign in with a different Government Gateway user ID(the one that you use for managing your personal tax affairs).")
     ),
     ClientExitType.AuthorisationRequestExpired -> ExpectedStrings(
       title = "This authorisation request has already expired - Appoint someone to deal with HMRC for you - GOV.UK",
@@ -57,8 +59,9 @@ class ClientExitPageSpec extends ViewSpecSupport {
 
   exitPageContent.map(partialInfo => s"ClientExitPage for ${partialInfo._1} view" should {
     val expectedStrings = partialInfo._2
-    val view: HtmlFormat.Appendable = viewTemplate(partialInfo._1)
+    val view: HtmlFormat.Appendable = viewTemplate(partialInfo._1)(lastModifiedDate = Some("10/10/10"))
     val doc: Document = Jsoup.parse(view.body)
+
     "have the right title" in {
       doc.title() shouldBe expectedStrings.title
     }
@@ -69,7 +72,6 @@ class ClientExitPageSpec extends ViewSpecSupport {
           doc.select(".govuk-body").get(index).text() shouldBe expectedStrings.paragraphs(index)
       }
     }
-  
 
       "have a language switcher" in {
 //        doc.hasLanguageSwitch shouldBe true
