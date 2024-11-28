@@ -491,6 +491,8 @@ authorisationAlreadyExists.HMRC-CBC-NONUK-ORG.p1=This client has already authori
 authorisationAlreadyExists.HMRC-PILLAR2-ORG.p1=This client has already authorised you to manage their Pillar 2 top-up taxes.
 authorisationAlreadyExists.p2=You do not need to ask them to authorise you for this service again.
 authorisationAlreadyExists.return=Return to your authorisation requests
+
+# ________________________________________________________________________________
 # Authorise agent start page
 # ________________________________________________________________________________
 
@@ -573,4 +575,47 @@ consentInformation.section3.p1=Select ‘continue’ to learn what {0} can do wh
 
 
 
+# ________________________________________________________________________________
+# Client journey check your answer page
+# ________________________________________________________________________________
+checkYourAnswer.title=Check your answer
+checkYourAnswer.HMRC-MTD-IT.question=Do you want {0} to be your main agent for Making Tax Digital for Income Tax?
+checkYourAnswer.HMRC-MTD-IT-SUPP.question=Do you want {0} to be your supporting agent for Making Tax Digital for Income Tax?
+checkYourAnswer.PERSONAL-INCOME-RECORD.question=Do you want {0} to be your agent for Income Record Viewer?
+checkYourAnswer.HMRC-MTD-VAT.question=Do you want {0} to be your agent for VAT?
+checkYourAnswer.HMRC-CGT-PD.question=Do you want {0} to be your agent for Capital Gains Tax on UK property account?
+checkYourAnswer.HMRC-PPT-ORG.question=Do you want {0} to be your agent for Plastic Packaging Tax?
+checkYourAnswer.HMRC-CBC-ORG.question=Do you want {0} to be your agent for Country-by-country reporting?
+checkYourAnswer.HMRC-CBC-NONUK-ORG.question=Do you want {0} to be your agent for Country-by-country reporting?
+checkYourAnswer.HMRC-PILLAR2-ORG.question=Do you want {0} to be your agent for Pillar 2 Top-up Taxes?
+checkYourAnswer.HMRC-TERS-ORG.question=Do you want {0} to be your agent for Trusts and Estates?
+checkYourAnswer.HMRC-TERSNT-ORG.question=Do you want {0} to be your agent for Trusts and Estates?
+checkYourAnswer.true=Yes
+checkYourAnswer.false=No
+checkYourAnswer.h2=Declaration
+checkYourAnswer.declarationYes.p1.HMRC-MTD-IT=I understand how {0} will be able to act on my behalf. I confirm that HMRC can allow {0} to act as my main agent for Making Tax Digital for Income Tax.
+checkYourAnswer.declarationYes.p1.HMRC-MTD-IT-SUPP=I understand how {0} will be able to act on my behalf. I confirm that HMRC can allow {0} to act as my supporting agent for Making Tax Digital for Income Tax.
+checkYourAnswer.declarationYes.p1.PERSONAL-INCOME-RECORD=I understand how {0} will be able to act on my behalf. I confirm that HMRC can allow {0} to act as my agent for Income Record Viewer.
+checkYourAnswer.declarationYes.p1.HMRC-MTD-VAT=I understand how {0} will be able to act on my behalf. I confirm that HMRC can allow {0} to act as my agent for VAT.
+checkYourAnswer.declarationYes.p1.HMRC-CGT-PD=I understand how {0} will be able to act on my behalf. I confirm that HMRC can allow {0} to act as my agent for Capital Gains Tax on UK property account.
+checkYourAnswer.declarationYes.p1.HMRC-PPT-ORG=I understand how {0} will be able to act on my behalf. I confirm that HMRC can allow {0} to act as my agent for Plastic Packaging Tax.
+checkYourAnswer.declarationYes.p1.HMRC-CBC-ORG=I understand how {0} will be able to act on my behalf. I confirm that HMRC can allow {0} to act as my agent for Country-by-country reporting.
+checkYourAnswer.declarationYes.p1.HMRC-CBC-NONUK-ORG=I understand how {0} will be able to act on my behalf. I confirm that HMRC can allow {0} to act as my agent for Country-by-country reporting.
+checkYourAnswer.declarationYes.p1.HMRC-PILLAR2-ORG=I understand how {0} will be able to act on my behalf. I confirm that HMRC can allow {0} to act as my agent for Pillar 2 Top-up Taxes.
+checkYourAnswer.declarationYes.p1.HMRC-TERS-ORG=I understand how {0} will be able to act on my behalf. I confirm that HMRC can allow {0} to act as my agent for Trusts and Estates.
+checkYourAnswer.declarationYes.p1.HMRC-TERSNT-ORG=I understand how {0} will be able to act on my behalf. I confirm that HMRC can allow {0} to act as my agent for Trusts and Estates.
+checkYourAnswer.declarationNo.p1.HMRC-MTD-IT=Declining this request from {0} means they will not be able to act as your main agent for Making Tax Digital for Income Tax.
+checkYourAnswer.declarationNo.p1.HMRC-MTD-IT-SUPP=Declining this request from {0} means they will not be able to act as your supporting agent for Making Tax Digital for Income Tax.
+checkYourAnswer.declarationNo.p1.PERSONAL-INCOME-RECORD=Declining this request from {0} means they will not be able to act as your agent for Income Record Viewer.
+checkYourAnswer.declarationNo.p1.HMRC-MTD-VAT=Declining this request from {0} means they will not be able to act as your agent for VAT.
+checkYourAnswer.declarationNo.p1.HMRC-CGT-PD=Declining this request from {0} means they will not be able to act as your agent for Capital Gains Tax on UK property account.
+checkYourAnswer.declarationNo.p1.HMRC-PPT-ORG=Declining this request from {0} means they will not be able to act as your agent for Plastic Packaging Tax.
+checkYourAnswer.declarationNo.p1.HMRC-CBC-ORG=Declining this request from {0} means they will not be able to act as your agent for Country-by-country reporting.
+checkYourAnswer.declarationNo.p1.HMRC-CBC-NONUK-ORG=Declining this request from {0} means they will not be able to act as your agent for Country-by-country reporting.
+checkYourAnswer.declarationNo.p1.HMRC-PILLAR2-ORG=Declining this request from {0} means they will not be able to act as your agent for Pillar 2 Top-up Taxes.
+checkYourAnswer.declarationNo.p1.HMRC-TERS-ORG=Declining this request from {0} means they will not be able to act as your agent for Trusts and Estates.
+checkYourAnswer.declarationNo.p1.HMRC-TERSNT-ORG=Declining this request from {0} means they will not be able to act as your agent for Trusts and Estates.
+checkYourAnswer.declarationNo.p2=You can change your mind later - just send them another request.
+checkYourAnswer.acceptAndSend.button=Accept and send
+checkYourAnswer.change=Change
 

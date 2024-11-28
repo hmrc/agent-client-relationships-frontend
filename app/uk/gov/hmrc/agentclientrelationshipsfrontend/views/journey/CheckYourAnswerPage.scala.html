@@ -1,0 +1,82 @@
+@*
+ * Copyright 2024 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.govukfrontend.views.html.components._
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.Layout
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.components.SubmitButton
+
+@this(
+        layout: Layout,
+        govukButton: GovukButton,
+        govukSummaryList: GovukSummaryList,
+        formWithCSRF: FormWithCSRF
+)
+
+@(agentName: String, invitationId: String, taxService: String, choice: Boolean)(implicit request: Request[?], messages: Messages)
+
+@key = @{
+    "checkYourAnswer"
+}
+@pageTitle = @{
+    messages(s"$key.title")
+}
+
+@layout(
+    pageTitle,
+    serviceName = Some(messages("service.name.clients"))
+) {
+
+    <h1 class="govuk-heading-xl">@pageTitle</h1>
+
+    @govukSummaryList(SummaryList(
+        rows = Seq(
+            SummaryListRow(
+                key = Key(
+                    content = Text(messages(s"$key.$taxService.question", agentName))
+                ),
+                value = Value(
+                    content = Text(messages(s"$key.$choice"))
+                ),
+                actions = Some(Actions(
+                    items = Seq(
+                        ActionItem(
+                            href = s"/agent-client-relationships/authorisation-response/confirm-consent/$invitationId",
+                            content = Text(messages(s"$key.change")),
+                            visuallyHiddenText = Some(messages(s"$key.$taxService.question"))
+                        )
+                    )
+                ))
+            ))))
+
+    <h2 class="govuk-heading-l">@messages(s"$key.h2")</h2>
+
+    <p class="govuk-body">
+        @messages(s"$key.${if choice then "declarationYes" else "declarationNo"}.p1.$taxService", agentName)
+    </p>
+
+    @if(!choice) {
+        <p class="govuk-body">@messages(s"$key.declarationNo.p2")</p>
+    }
+
+    @formWithCSRF(action = play.api.mvc.Call("post", "routes.CheckYourAnswerController.onSubmit(choice)")) {
+        @govukButton(Button(
+            attributes = Map("id" -> "submitAuthorisationButton"),
+            inputType = Some("submit"),
+            content = Text(messages("checkYourAnswer.acceptAndSend.button"))
+        ))
+    }
+
+}
