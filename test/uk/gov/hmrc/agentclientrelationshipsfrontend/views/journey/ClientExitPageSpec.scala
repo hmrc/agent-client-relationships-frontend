@@ -28,14 +28,15 @@ class ClientExitPageSpec extends ViewSpecSupport {
   val viewTemplate: ClientExitPage = app.injector.instanceOf[ClientExitPage]
 
   case class ExpectedStrings(title: String, paragraphs: List[String])
+
   private val exitPageContent: Map[ClientExitType, ExpectedStrings] = Map(
     ClientExitType.AgentSuspended -> ExpectedStrings(
       title = "You cannot appoint this tax agent - Appoint someone to deal with HMRC for you - GOV.UK",
 
       List("This tax agent cannot manage your Making Tax Digital for Income Tax at this time.",
-           "If you have any questions, contact the tax agent who sent you this request.")
+        "If you have any questions, contact the tax agent who sent you this request.")
     ),
-    ClientExitType.NoOutstandingRequests ->  ExpectedStrings(
+    ClientExitType.NoOutstandingRequests -> ExpectedStrings(
       title = "There are no outstanding authorisation requests for you to respond to - Appoint someone to deal with HMRC for you - GOV.UK",
 
       List("If you think this is wrong, contact the agent who sent you the request or view your request history.")
@@ -43,23 +44,47 @@ class ClientExitPageSpec extends ViewSpecSupport {
     ClientExitType.CannotFindAuthorisationRequest -> ExpectedStrings(
       title = "We cannot find this authorisation request - Appoint someone to deal with HMRC for you - GOV.UK",
 
-      List("We cannot find a request from <AGENT NAME>.",
-        "Make sure you have the signed up for tax service you need. Ask your agent if your not sure.",
+      List("We cannot find a request from Agent Name.",
+        "Make sure you have signed up for the tax service you need. Ask your agent if you are not sure.",
         "You need to sign in with the correct Government Gateway user ID. It is possible to have more than one, " +
-          "make sure it is the same one you have used to sign up for the tax service the authorisation request is for." +
-          "Trying to sign in with a different Government Gateway user ID(the one that you use for managing your personal tax affairs).")
+          "so make sure it is the same one you used to sign up to the tax service the authorisation request is for. " +
+          "Try signing in with a different Government Gateway user ID (the one that you use for managing your personal tax affairs).")
     ),
     ClientExitType.AuthorisationRequestExpired -> ExpectedStrings(
       title = "This authorisation request has already expired - Appoint someone to deal with HMRC for you - GOV.UK",
 
-      List("This tax agent cannot manage your Making Tax Digital for Income Tax at this time.",
-        "If you have any questions, contact the tax agent who sent you this request.")
+      List("This request expired on 11.11.2024. For details, view your history to check for any expired, cancelled or" +
+        " outstanding requests.",
+        "If your agent has sent you a recent request, make sure you have signed up to the tax service you need.",
+        "You could also check you have signed in with the correct Government Gateway user ID. It must be the same one" +
+          " you used to sign up to the tax service the authorisation request is for.",
+        "Sign in with the Government Gateway user ID you use for managing your personal tax affairs.")
+    ),
+    ClientExitType.AuthorisationRequestCancelled -> ExpectedStrings(
+      title = "This authorisation request request has been cancelled - Appoint someone to deal with HMRC for you - GOV.UK",
+
+      List("This request was cancelled by your agent on 11.11.2024. For details, view your history to check for any expired," +
+        " cancelled or outstanding requests.",
+        "If your agent has sent you a recent request, make sure you have signed up to the tax service you need.",
+        "You could also check you have signed in with the correct Government Gateway user ID. It must be the same one you" +
+          " used to sign up to the tax service the authorisation request is for.",
+        "Sign in with the Government Gateway user ID you use for managing your personal tax affairs."),
+    ),
+    ClientExitType.AlreadyRespondedToAuthorisationRequest -> ExpectedStrings(
+      title = "This authorisation request has already been responded to - Appoint someone to deal with HMRC for you - GOV.UK",
+
+      List("This request has already been responded to on 11.11.2024. For details, view your history to check for any" +
+        " expired, cancelled or outstanding requests.",
+        "If your agent has sent you a recent request, make sure you have signed up to the tax service you need.",
+        "You could also check you have signed in with the correct Government Gateway user ID. It must be the same one" +
+          " you used to sign up to the tax service the authorisation request is for.",
+        "Sign in with the Government Gateway user ID you use for managing your personal tax affairs.")
     )
   )
 
   exitPageContent.map(partialInfo => s"ClientExitPage for ${partialInfo._1} view" should {
     val expectedStrings = partialInfo._2
-    val view: HtmlFormat.Appendable = viewTemplate(partialInfo._1)(lastModifiedDate = Some("10/10/10"))
+    val view: HtmlFormat.Appendable = viewTemplate(partialInfo._1, Some("Agent Name"), Some("11.11.2024"))
     val doc: Document = Jsoup.parse(view.body)
 
     "have the right title" in {
@@ -73,8 +98,8 @@ class ClientExitPageSpec extends ViewSpecSupport {
       }
     }
 
-      "have a language switcher" in {
-//        doc.hasLanguageSwitch shouldBe true
-      }
-    })
+    "have a language switcher" in {
+      doc.hasLanguageSwitch shouldBe true
+    }
+  })
 }

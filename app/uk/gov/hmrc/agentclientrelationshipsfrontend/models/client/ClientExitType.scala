@@ -23,6 +23,5 @@ enum ClientExitType(val name: String):
   case AuthorisationRequestExpired extends ClientExitType("auth-request-expired")
   case AuthorisationRequestCancelled extends ClientExitType("auth-request-cancelled")
   case AlreadyRespondedToAuthorisationRequest extends ClientExitType("already-responded-auth-request")
-  case NotFound extends ClientExitType("not-found")
 
   override def toString: String = name

@@ -37,4 +37,4 @@ class ClientExitController @Inject()(mcc: MessagesControllerComponents,
   def show(exitType: ClientExitType, normalizedAgentName: Option[String] = None, lastModifiedDate: Option[String] = None): Action[AnyContent] = actions.authenticateClient:
     clientRequest =>
       given ClientRequest[?] = clientRequest
-        Ok(clientExitPage(exitType)(lastModifiedDate = lastModifiedDate))
+      Ok(clientExitPage(exitType, normalizedAgentName, lastModifiedDate))

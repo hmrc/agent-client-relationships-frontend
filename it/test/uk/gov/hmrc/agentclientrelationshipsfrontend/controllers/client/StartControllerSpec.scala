@@ -75,7 +75,7 @@ class StartControllerSpec extends ComponentSpecHelper with ScalaFutures with Aut
 
       val result = get(routes.StartController.show(testUid, testNormalizedAgentName, testTaxService).url)
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe routes.ClientExitController.show(AgentSuspended,Some(testNormalizedAgentName)).url
+      result.header("Location").value shouldBe routes.ClientExitController.show(AgentSuspended,None,None).url
     }
 
     "Redirect to routes.ClientExitController.show(SERVER_ERROR)" in {

@@ -16,23 +16,21 @@
 
 @import play.twirl.api.HtmlFormat
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
-@import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.Layout
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientExitType
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.Layout
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.client.clientExitPartials.*
 
 @this(
-    layout: Layout,
-    agentSuspended: AgentSuspended,
-    authorisationHasExpired: AuthorisationHasExpired,
-    cannotFindAuthRequest: CannotFindAuthRequest,
-    noOutstandingRequests: NoOutstandingRequests,
+        layout: Layout,
+        agentSuspended: AgentSuspended,
+        authorisationHasExpired: AuthorisationHasExpired,
+        cannotFindAuthRequest: CannotFindAuthRequest,
+        noOutstandingRequests: NoOutstandingRequests,
+        authorisationHasBeenCancelled: AuthorisationHasBeenCancelled,
+        authorisationHasAlreadyBeenResponded: AuthorisationHasAlreadyBeenResponded
 )
 
-@(exitType: ClientExitType)(
-        implicit request: Request[?],
-        messages: Messages,
-        appConfig: AppConfig,
-        lastModifiedDate: Option[String])
+@(exitType: ClientExitType, normalizedAgentName: Option[String] = None, lastModifiedDate: Option[String] = None)(implicit request: Request[?], messages: Messages, appConfig: AppConfig)
 
 @key = @{
     "clientExit"
@@ -49,8 +47,11 @@
     @{
         exitType match {
             case ClientExitType.AgentSuspended => agentSuspended()
-            case ClientExitType.AuthorisationRequestExpired => authorisationHasExpired()
-            case ClientExitType.CannotFindAuthorisationRequest => cannotFindAuthRequest()
+            case ClientExitType.AuthorisationRequestExpired => authorisationHasExpired(expiryDate = lastModifiedDate.get)
+            case ClientExitType.CannotFindAuthorisationRequest => cannotFindAuthRequest(normalizedAgentName.get)
+            case ClientExitType.NoOutstandingRequests => noOutstandingRequests()
+            case ClientExitType.AuthorisationRequestCancelled => authorisationHasBeenCancelled(expiryDate = lastModifiedDate.get)
+            case ClientExitType.AlreadyRespondedToAuthorisationRequest => authorisationHasAlreadyBeenResponded(respondedToDate = lastModifiedDate.get)
             case ClientExitType.NoOutstandingRequests => noOutstandingRequests()
             case _ => HtmlFormat.empty
         }
