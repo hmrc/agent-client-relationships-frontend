@@ -19,7 +19,6 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client
 import com.google.inject.Inject
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.connectors.AgentClientRelationshipsConnector
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.invitationLink.ValidateLinkPartsResponse
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.AuthoriseAgentStartPage
@@ -36,8 +35,7 @@ class StartController @Inject()(agentClientRelationshipsConnector: AgentClientRe
                                 serviceConfigurationService: ClientServiceConfigurationService,
                                 authoriseAgentStartPage: AuthoriseAgentStartPage,
                                 mcc: MessagesControllerComponents
-                                            )(implicit val executionContext: ExecutionContext,
-                                              appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport:
+                                            )(implicit val executionContext: ExecutionContext) extends FrontendController(mcc) with I18nSupport:
 
  def show(uid: String, normalizedAgentName: String, taxService: String): Action[AnyContent] = Action.async:
 
@@ -50,7 +48,7 @@ class StartController @Inject()(agentClientRelationshipsConnector: AgentClientRe
          .map {
            case Left("AGENT_NOT_FOUND") => Redirect("routes.ClientExitController.show(AGENT_NOT_FOUND)")
            case Left("AGENT_SUSPENDED") => Redirect("routes.ClientExitController.show(AGENT_SUSPENDED)")
-           case Left("SERVER_ERROR") => Redirect("routes.ClientExitController.show(SERVER_ERROR)")
+           case Left(_) => Redirect("routes.ClientExitController.show(SERVER_ERROR)")
            case Right(_) => Ok(authoriseAgentStartPage(normalizedAgentName, taxService, uid))
          }
      else Future.successful(NotFound("TODO: NOT FOUND for Client controller/template"))

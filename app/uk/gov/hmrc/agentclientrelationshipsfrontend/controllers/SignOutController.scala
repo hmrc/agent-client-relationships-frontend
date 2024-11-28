@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers
 
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, MessagesRequest}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}
@@ -27,7 +27,6 @@ class SignOutController @Inject()(mcc: MessagesControllerComponents) extends Fro
 
   def signOut: Action[AnyContent] = Action.async:
     request =>
-      given MessagesRequest[AnyContent] = request 
       // previously the destination of sign out was determined by MainTemplate code
       // instead we could do that in here
       Future.successful(Ok("Signed out").withNewSession)

@@ -29,7 +29,6 @@
 @(form: Form[?], field: KnownFactsConfiguration, messageKeyPrefix: String)(implicit request: AgentJourneyRequest[?], messages: Messages)
 
 @key = @{messageKeyPrefix}
-@validOptions = @{field.validOptions.getOrElse(Seq.empty)}
 @formWithCSRF(action = routes.EnterClientFactController.onSubmit(request.journey.journeyType)) {
 
     @govukInput(Input(

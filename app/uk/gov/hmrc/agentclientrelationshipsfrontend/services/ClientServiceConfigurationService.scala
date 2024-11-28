@@ -49,8 +49,8 @@ class ClientServiceConfigurationService @Inject() {
   def getSupportedEnrolments(clientService: String): Seq[String] = services(clientService).supportedEnrolments
   
   def getServiceForForm(clientService: String): String = if clientService.nonEmpty then (getSupportedAgentRoles(clientService), getSupportedEnrolments(clientService)) match {
-    case (_, enrols): (Seq[String], Seq[String]) if enrols.size > 1 => enrols.head // the head of the list is the parent service
-    case (roles, _): (Seq[String], Seq[String]) if roles.size > 1 => roles.head // the head of the list is the parent service
+    case (_, enrols) if enrols.size > 1 => enrols.head // the head of the list is the parent service
+    case (roles, _) if roles.size > 1 => roles.head // the head of the list is the parent service
     case _ => clientService
   } else ""
 

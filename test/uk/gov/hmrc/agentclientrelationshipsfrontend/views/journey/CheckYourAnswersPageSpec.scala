@@ -18,11 +18,8 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.views.journey
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.ClientConfirmationFieldName
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsResponse, KnownFactType}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.ConfirmCancellationForm
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.support.ViewSpecSupport
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.CheckYourAnswersPage
@@ -35,7 +32,6 @@ class CheckYourAnswersPageSpec extends ViewSpecSupport {
   private val exampleKnownFact: String = "AA11AA"
   private val clientName = "Test Name"
   private val servicesWithoutAgentRoles = Seq("PERSONAL-INCOME-RECORD", "HMRC-MTD-VAT", "HMRC-CGT-PD", "HMRC-PPT-ORG", "HMRC-CBC-ORG", "HMRC-PILLAR2-ORG", "HMRC-TERS-ORG")
-  private val servicesWithAgentRoles = Seq("HMRC-MTD-IT")
   private val basicClientDetails = ClientDetailsResponse(clientName, None, None, Seq(exampleKnownFact), Some(KnownFactType.PostalCode), false, None)
   private val basicJourney: Journey = Journey(
     journeyType = journeyType,
