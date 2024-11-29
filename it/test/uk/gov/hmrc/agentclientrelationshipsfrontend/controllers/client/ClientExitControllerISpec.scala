@@ -20,11 +20,14 @@ import org.scalatest.concurrent.ScalaFutures
 import play.api.http.Status.OK
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientExitType
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentSpecHelper}
+import uk.gov.hmrc.http.HeaderCarrier
 
 class ClientExitControllerISpec extends ComponentSpecHelper with AuthStubs with ScalaFutures {
 
+  implicit val hc: HeaderCarrier = HeaderCarrier()
+  
   ClientExitType.values.foreach(exitType =>
-    s"GET /authorisation-response/exit/$exitType" should {
+    s"GET /authorisation-response/exit/$exitType?" should {
       "display the exit page" in {
         authoriseAsClient()
         val result = get(routes.ClientExitController.show(exitType,normalizedAgentName = Some("")).url)

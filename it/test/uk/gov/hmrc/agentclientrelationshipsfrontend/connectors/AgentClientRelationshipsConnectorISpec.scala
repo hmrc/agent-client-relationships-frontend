@@ -18,7 +18,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.connectors
 
 import play.api.libs.json.{JsObject, Json}
 import play.api.test.Helpers.*
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.invitationLink.ValidateLinkPartsResponse
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.invitationLink.{Pending, ValidateLinkPartsResponse}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsResponse, ClientStatus, KnownFactType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.ComponentSpecHelper
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.WiremockHelper.stubGet
@@ -58,7 +58,9 @@ class AgentClientRelationshipsConnectorISpec extends ComponentSpecHelper {
   )
 
   val testValidateLinkResponse: ValidateLinkPartsResponse = ValidateLinkPartsResponse(
-    testName
+    testName,
+    Pending,
+    ""
   )
 
   val testValidateLinkResponseJson: JsObject = Json.obj(
