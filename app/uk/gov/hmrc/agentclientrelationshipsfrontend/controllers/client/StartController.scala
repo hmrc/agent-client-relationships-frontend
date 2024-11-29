@@ -41,19 +41,19 @@ class StartController @Inject()(agentClientRelationshipsConnector: AgentClientRe
  def show(uid: String, normalizedAgentName: String, taxService: String): Action[AnyContent] = Action.async:
   implicit request =>
 
-     if serviceConfigurationService.validateUrlPart(taxService) then
-       agentClientRelationshipsConnector
-         .validateLinkParts(uid, normalizedAgentName)
-         .map {
-           case Left("AGENT_SUSPENDED") => Redirect(routes.ClientExitController.show(AgentSuspended, Some(normalizedAgentName), None))
-           case Left("AGENT_NOT_FOUND") => Redirect(routes.ClientExitController.show(CannotFindAuthorisationRequest, Some(normalizedAgentName), None))
-           case Left(_) => Redirect("routes.ClientExitController.show(SERVER_ERROR)")
-           case Right(response) => response.status match {
-             case Expired => Redirect(routes.ClientExitController.show(AuthorisationRequestExpired, None, Some(response.lastModifiedDate)))
-             case Accept => Redirect(routes.ClientExitController.show(AlreadyRespondedToAuthorisationRequest, None, Some(response.lastModifiedDate)))
-             case Cancelled => Redirect(routes.ClientExitController.show(AuthorisationRequestCancelled, None, Some(response.lastModifiedDate)))
-             case Pending => Ok(authoriseAgentStartPage(normalizedAgentName, taxService, uid))
-             case _ => Redirect("routes.ClientExitController.show(SERVER_ERROR)")
-           }
-         }
-     else Future.successful(NotFound(s"TODO: NOT FOUND urlPart ${taxService} for Client controller/template"))
+      if serviceConfigurationService.validateUrlPart(taxService) then
+        agentClientRelationshipsConnector
+          .validateLinkParts(uid, normalizedAgentName)
+          .map {
+            case Left("AGENT_SUSPENDED") => Redirect(routes.ClientExitController.show(AgentSuspended, Some(normalizedAgentName), None))
+            case Left("AGENT_NOT_FOUND") => Redirect(routes.ClientExitController.show(CannotFindAuthorisationRequest, Some(normalizedAgentName), None))
+            case Left(_) => Redirect("routes.ClientExitController.show(SERVER_ERROR)")
+            case Right(response) => response.status match {
+              case Expired => Redirect(routes.ClientExitController.show(AuthorisationRequestExpired, None, Some(response.lastModifiedDate)))
+              case Accept => Redirect(routes.ClientExitController.show(AlreadyRespondedToAuthorisationRequest, None, Some(response.lastModifiedDate)))
+              case Cancelled => Redirect(routes.ClientExitController.show(AuthorisationRequestCancelled, None, Some(response.lastModifiedDate)))
+              case Pending => Ok(authoriseAgentStartPage(normalizedAgentName, taxService, uid))
+              case _ => Redirect("routes.ClientExitController.show(SERVER_ERROR)")
+            }
+          }
+      else Future.successful(NotFound("TODO: NOT FOUND for Client controller/template"))

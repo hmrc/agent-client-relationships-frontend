@@ -52,7 +52,6 @@
             case ClientExitType.NoOutstandingRequests => noOutstandingRequests()
             case ClientExitType.AuthorisationRequestCancelled => authorisationHasBeenCancelled(expiryDate = lastModifiedDate.get)
             case ClientExitType.AlreadyRespondedToAuthorisationRequest => authorisationHasAlreadyBeenResponded(respondedToDate = lastModifiedDate.get)
-            case ClientExitType.NoOutstandingRequests => noOutstandingRequests()
             case _ => HtmlFormat.empty
         }
     }

@@ -17,9 +17,7 @@
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.routes
 
-@this(
-        govukButton: GovukButton
-)
+@this()
 
 @(normalizedAgentName: String)(implicit request: Request[?], messages: Messages, appConfig: AppConfig)
 @key = @{
