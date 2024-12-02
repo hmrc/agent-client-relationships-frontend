@@ -181,7 +181,7 @@ class AgentFastTrackControllerSpec extends ComponentSpecHelper with AuthStubs wi
      isOverseas = None,
      knownFacts = agentFastTrackRequest.knownFact.toSeq,
      knownFactType = knownFactType,
-     hasPendingInvitations = false,
+     hasPendingInvitation = false,
      hasExistingRelationshipFor = None
    )
 

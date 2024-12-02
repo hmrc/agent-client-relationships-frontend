@@ -19,7 +19,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey
 enum JourneyExitType(val name: String):
   case NotFound extends JourneyExitType("client-not-found")
   case NotRegistered extends JourneyExitType("not-registered")
-  case ClientAlreadyInvited extends JourneyExitType("already-authorisation-pending")
+  case ClientAlreadyInvited extends JourneyExitType("pending-authorisation-exists")
   case AuthorisationAlreadyExists extends JourneyExitType("authorisation-already-exists")
   case NoAuthorisationExists extends JourneyExitType("not-authorised")
   case ClientStatusInsolvent extends JourneyExitType("client-insolvent")

@@ -36,7 +36,7 @@ class EnterClientIdControllerISpec extends ComponentSpecHelper with AuthStubs {
     "isOverseas" -> false,
     "knownFacts" -> Json.arr("anything"),
     "knownFactType" -> "PostalCode",
-    "hasPendingInvitations" -> false
+    "hasPendingInvitation" -> false
   )
 
   val exampleNino: String = "AB123456C"

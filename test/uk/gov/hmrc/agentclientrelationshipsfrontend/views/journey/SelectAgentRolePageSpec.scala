@@ -51,7 +51,7 @@ class SelectAgentRolePageSpec extends ViewSpecSupport {
   val clientDetailsWithOutExisting: ClientDetailsResponse = ClientDetailsResponse(
     name = testClientName,
     status = None,
-    hasPendingInvitations = false,
+    hasPendingInvitation = false,
     hasExistingRelationshipFor = None,
     knownFactType = Some(KnownFactType.PostalCode),
     knownFacts = Seq(testPostcode),

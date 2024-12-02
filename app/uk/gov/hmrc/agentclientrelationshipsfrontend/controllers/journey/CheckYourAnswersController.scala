@@ -19,13 +19,15 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey
 import play.api.i18n.I18nSupport
 import play.api.mvc.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
+import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.ConfirmCancellationFieldName
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, JourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.ConfirmCancellationForm
-import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{ClientServiceConfigurationService, JourneyService}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, Journey, JourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{AgentClientRelationshipsService, ClientServiceConfigurationService, JourneyService}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.{CheckYourAnswersPage, ConfirmCancellationPage}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
+import java.time.LocalDate
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -33,17 +35,19 @@ import scala.concurrent.{ExecutionContext, Future}
 class CheckYourAnswersController @Inject()(mcc: MessagesControllerComponents,
                                            serviceConfig: ClientServiceConfigurationService,
                                            journeyService: JourneyService,
+                                           agentClientRelationshipsService: AgentClientRelationshipsService,
                                            checkYourAnswersPage: CheckYourAnswersPage,
                                            confirmCancellationPage: ConfirmCancellationPage,
                                            actions: Actions
-                                       )(implicit val executionContext: ExecutionContext) extends FrontendController(mcc) with I18nSupport:
+                                          )(implicit val executionContext: ExecutionContext, appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport:
 
   def show(journeyType: JourneyType): Action[AnyContent] = actions.getJourney(journeyType):
     journeyRequest =>
       given AgentJourneyRequest[?] = journeyRequest
 
       val journey = journeyRequest.journey
-      if journey.clientDetailsResponse.isEmpty then Redirect(routes.EnterClientIdController.show(journey.journeyType))
+      if journey.journeyComplete.nonEmpty then Redirect(appConfig.agentServicesAccountHomeUrl)
+      else if journey.clientDetailsResponse.isEmpty then Redirect(routes.EnterClientIdController.show(journey.journeyType))
       else {
         journeyType match {
           case JourneyType.AuthorisationRequest => Ok(checkYourAnswersPage(serviceConfig.supportsAgentRoles(journey.getService)))
@@ -51,27 +55,37 @@ class CheckYourAnswersController @Inject()(mcc: MessagesControllerComponents,
         }
       }
 
-
   def onSubmit(journeyType: JourneyType): Action[AnyContent] = actions.getJourney(journeyType).async:
     journeyRequest =>
       given AgentJourneyRequest[?] = journeyRequest
 
       val journey = journeyRequest.journey
-
       journeyType match {
-        case JourneyType.AuthorisationRequest => journeyService.createAuthorisationRequest(journey).map { _ =>
-          Redirect("routes.ConfirmationController.show(journey.journeyType).url")
-        }
-        case JourneyType.AgentCancelAuthorisation => ConfirmCancellationForm.form(ConfirmCancellationFieldName, journey.journeyType.toString).bindFromRequest().fold(
-          formWithErrors => {
-            Future.successful(BadRequest(confirmCancellationPage(formWithErrors)))
-          },
-          confirmCancellation => {
-            if(confirmCancellation) then journeyService.cancelAuthorisation(journey).map { _ =>
-              Redirect("routes.ConfirmationController.show(journey.journeyType).url")
-            } else {
-              Future.successful(Redirect(routes.StartJourneyController.startJourney(journey.journeyType)))
-            }
-          }
-        )
+        case JourneyType.AuthorisationRequest => for {
+          invitationId <- agentClientRelationshipsService.createAuthorisationRequest(journey)
+          _ <- journeyService.saveJourney(Journey(
+            journeyType = journey.journeyType,
+            journeyComplete = Some(invitationId)
+          ))
+        } yield Redirect(routes.ConfirmationController.show(journey.journeyType))
+
+        case JourneyType.AgentCancelAuthorisation =>
+          ConfirmCancellationForm.form(ConfirmCancellationFieldName, journey.journeyType.toString)
+            .bindFromRequest()
+            .fold(
+              formWithErrors => {
+                Future.successful(BadRequest(confirmCancellationPage(formWithErrors)))
+              },
+              confirmCancellation => {
+                if confirmCancellation then for {
+                  _ <- agentClientRelationshipsService.cancelAuthorisation(journey)
+                  _ <- journeyService.saveJourney(Journey(
+                    journeyType = journey.journeyType,
+                    confirmationService = journey.clientService,
+                    confirmationClientName = Some(journey.getClientDetailsResponse.name),
+                    journeyComplete = Some(LocalDate.now().toString)
+                  ))
+                } yield Redirect(routes.ConfirmationController.show(journey.journeyType))
+                else Future.successful(Redirect(routes.StartJourneyController.startJourney(journey.journeyType)))
+              })
       }

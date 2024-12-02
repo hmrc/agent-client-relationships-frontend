@@ -17,8 +17,8 @@
 package uk.gov.hmrc.agentclientrelationshipsfrontend.services
 
 import uk.gov.hmrc.agentclientrelationshipsfrontend.connectors.AgentClientRelationshipsConnector
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.ClientDetailsResponse
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.Journey
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{AgentDetails, AuthorisationRequestInfo, ClientDetailsResponse}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, Journey}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.{Inject, Singleton}
@@ -32,4 +32,21 @@ class AgentClientRelationshipsService @Inject()(agentClientRelationshipsConnecto
     
   def getClientDetails(clientId: String, service: String)(implicit hc: HeaderCarrier): Future[Option[ClientDetailsResponse]] =
     agentClientRelationshipsConnector.getClientDetails(service, clientId)
+
+  def createAuthorisationRequest(journey: Journey)(implicit hc: HeaderCarrier, request: AgentJourneyRequest[?]): Future[String] = {
+    agentClientRelationshipsConnector.createAuthorisationRequest(journey)
+  }
+
+  def cancelAuthorisation(journey: Journey)(implicit hc: HeaderCarrier, request: AgentJourneyRequest[?]): Future[Unit] = {
+    agentClientRelationshipsConnector.cancelAuthorisation(journey)
+  }
+
+  def getAuthorisationRequest(invitationId: String)(implicit hc: HeaderCarrier, request: AgentJourneyRequest[?]): Future[Option[AuthorisationRequestInfo]] = {
+    agentClientRelationshipsConnector.getAuthorisationRequest(invitationId)
+  }
+
+  def getAgentDetails()(implicit hc: HeaderCarrier, request: AgentJourneyRequest[?]): Future[Option[AgentDetails]] = {
+    agentClientRelationshipsConnector.getAgentDetails()
+  }
+
 }

@@ -31,7 +31,7 @@ class AgentClientRelationshipsConnectorISpec extends ComponentSpecHelper {
 
   def getClientDetailsUrl(service: String, clientId: String) = s"/agent-client-relationships/client/$service/details/$clientId"
 
-  def getValidateLinkResponseUrl(uid: String, normalizedAgentName: String) = s"/agent-client-relationships/agent-reference/uid/$uid/$normalizedAgentName"
+  def getValidateLinkResponseUrl(uid: String, normalizedAgentName: String) = s"/agent-client-relationships/agent/agent-reference/uid/$uid/$normalizedAgentName"
 
   val testClientId = "clientId"
   val testService = "HMRC-MTD-IT"
@@ -45,7 +45,7 @@ class AgentClientRelationshipsConnectorISpec extends ComponentSpecHelper {
     isOverseas = Some(false),
     knownFacts = Seq(testPostCode),
     knownFactType = Some(KnownFactType.PostalCode),
-    hasPendingInvitations = false,
+    hasPendingInvitation = false,
     hasExistingRelationshipFor = None
   )
   val testClientDetailsResponseJson: JsObject = Json.obj(
@@ -54,7 +54,7 @@ class AgentClientRelationshipsConnectorISpec extends ComponentSpecHelper {
     "isOverseas" -> false,
     "knownFacts" -> Json.arr(testPostCode),
     "knownFactType" -> "PostalCode",
-    "hasPendingInvitations" -> false
+    "hasPendingInvitation" -> false
   )
 
   val testValidateLinkResponse: ValidateLinkPartsResponse = ValidateLinkPartsResponse(

@@ -80,7 +80,9 @@ class SelectAgentRoleController @Inject()(mcc: MessagesControllerComponents,
             Future.successful(Redirect(routes.JourneyExitController.show(journeyType, JourneyExitType.NoChangeOfAgentRole)))
           } else {
             val newJourney = journey.copy(
-              agentType = Some(agentRole)
+              agentType = Some(agentRole),
+              confirmationClientName = None,
+              journeyComplete = None
             )
             journeyService.saveJourney(newJourney).flatMap { _ =>
               journeyService.nextPageUrl(journeyType).map(Redirect(_))

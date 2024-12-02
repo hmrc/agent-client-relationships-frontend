@@ -62,7 +62,10 @@ class ConfirmClientController @Inject()(mcc: MessagesControllerComponents,
           Future.successful(BadRequest(confirmClientPage(formWithErrors)))
         },
         confirmClient => {
-          journeyService.saveJourney(journey.copy(clientConfirmed = Some(confirmClient))).flatMap { _ =>
+          journeyService.saveJourney(journey.copy(
+            clientConfirmed = Some(confirmClient),
+            confirmationClientName = None,
+            journeyComplete = None)).flatMap { _ =>
             journeyService.nextPageUrl(journeyType).map(Redirect(_))
           }
         }

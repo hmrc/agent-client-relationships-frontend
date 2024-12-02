@@ -75,7 +75,9 @@ class EnterClientIdController @Inject()(mcc: MessagesControllerComponents,
                 clientDetailsResponse = clientDetailsResponse,
                 clientConfirmed = None,
                 knownFact = None,
-                agentType = None
+                agentType = None,
+                confirmationClientName = None,
+                journeyComplete = None
               ))
               nextPage <- if clientDetailsResponse.nonEmpty then
                 journeyService.nextPageUrl(journeyType) else
