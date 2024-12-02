@@ -36,7 +36,8 @@ class UserTimedOutSpec extends ViewSpecSupport {
   }
 
   object ExpectedAgent {
-    val title = "You have been signed out - Ask a client to authorise you - GOV.UK"
+    val authorisationRequestTitle = "You have been signed out - Ask a client to authorise you - GOV.UK"
+    val cancelAuthorisationTitle = "You have been signed out - Cancel a client’s authorisation - GOV.UK"
     val heading = "You have been signed out"
     val para1 = "You have not done anything for 15 minutes, so we have signed you out to keep your account secure."
     val linkText1 = "Sign in again"
@@ -45,7 +46,7 @@ class UserTimedOutSpec extends ViewSpecSupport {
 
   "UserTimedOut view" when {
     "viewed as a client" should {
-      val view: HtmlFormat.Appendable = viewTemplate(Some(testUrl), false)
+      val view: HtmlFormat.Appendable = viewTemplate(Some(testUrl))
       val doc: Document = Jsoup.parse(view.body)
       "have the right title" in {
         doc.title() shouldBe ExpectedClient.title
@@ -63,11 +64,31 @@ class UserTimedOutSpec extends ViewSpecSupport {
         doc.mainContent.extractLinkButton(1).value shouldBe TestLink(ExpectedClient.linkText1, testUrl)
       }
     }
-    "viewed as an agent" should {
-      val view: HtmlFormat.Appendable = viewTemplate(Some(testUrl), true)
+    "viewed as an agent on an authorisation request journey" should {
+      val view: HtmlFormat.Appendable = viewTemplate(Some(testUrl), Some("Ask a client to authorise you"))
       val doc: Document = Jsoup.parse(view.body)
       "have the right title" in {
-        doc.title() shouldBe ExpectedAgent.title
+        doc.title() shouldBe ExpectedAgent.authorisationRequestTitle
+      }
+      "have a language switcher" in {
+        doc.hasLanguageSwitch shouldBe true
+      }
+      "have the right heading" in {
+        doc.mainContent.extractText(h1, 1).value shouldBe ExpectedAgent.heading
+      }
+      "have the right paras" in {
+        doc.mainContent.extractText(p, 1).value shouldBe ExpectedAgent.para1
+        doc.mainContent.extractText(p, 2).value shouldBe ExpectedAgent.para2
+      }
+      "have a link" in {
+        doc.mainContent.extractLink(1).value shouldBe TestLink(ExpectedAgent.linkText1, testUrl)
+      }
+    }
+    "viewed as an agent on a cancel authorisation journey" should {
+      val view: HtmlFormat.Appendable = viewTemplate(Some(testUrl), Some("Cancel a client’s authorisation"))
+      val doc: Document = Jsoup.parse(view.body)
+      "have the right title" in {
+        doc.title() shouldBe ExpectedAgent.cancelAuthorisationTitle
       }
       "have a language switcher" in {
         doc.hasLanguageSwitch shouldBe true

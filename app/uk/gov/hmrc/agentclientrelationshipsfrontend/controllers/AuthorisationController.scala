@@ -69,7 +69,7 @@ class AuthorisationController @Inject()(mcc: MessagesControllerComponents,
 
   def ivTimedOut(continueUrl: Option[RedirectUrl]): Action[AnyContent] = Action.async:
     implicit request =>
-      Future.successful(Forbidden(timedOutView(continueUrl.map(UrlHelper.validateRedirectUrl), isAgent = false)))
+      Future.successful(Forbidden(timedOutView(continueUrl.map(UrlHelper.validateRedirectUrl))))
 
   def ivLockedOut: Action[AnyContent] = Action.async:
     implicit request =>

@@ -16,18 +16,23 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers
 
-import play.api.mvc._
+import play.api.mvc.*
+import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
+import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.UserTimedOut
+import uk.gov.hmrc.play.bootstrap.binders.{OnlyRelative, RedirectUrl}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.UrlHelper.validateRedirectUrl
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future
 
 @Singleton
-class TimedOutController @Inject()(mcc: MessagesControllerComponents) extends FrontendController(mcc):
+class TimedOutController @Inject()(
+                                    timedOutView: UserTimedOut,
+                                    mcc: MessagesControllerComponents
+                                  )(implicit appConfig: AppConfig) extends FrontendController(mcc):
 
-  def timedOut: Action[AnyContent] = Action.async:
+  def timedOut(continueUrl: RedirectUrl, serviceHeader: String): Action[AnyContent] = Action.async:
     request =>
-      // previously the destination of sign out was determined by MainTemplate code
-      // instead we could do that in here
-      Future.successful(Ok("Timed out"))
-
+      given MessagesRequest[AnyContent] = request
+      Future.successful(Ok(timedOutView(Some(validateRedirectUrl(continueUrl)), Some(serviceHeader))))
