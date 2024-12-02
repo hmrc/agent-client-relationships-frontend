@@ -19,6 +19,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.models.client
 enum ClientExitType(val name: String):
   case AgentSuspended extends ClientExitType("agent-suspended")
   case NoOutstandingRequests extends ClientExitType("no-outstanding-requests")
+  case CannotFindAuthorisationRequest extends ClientExitType("cannot-find-auth-request")
   case AuthorisationRequestExpired extends ClientExitType("auth-request-expired")
   case AuthorisationRequestCancelled extends ClientExitType("auth-request-cancelled")
   case AlreadyRespondedToAuthorisationRequest extends ClientExitType("already-responded-auth-request")

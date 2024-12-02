@@ -23,7 +23,7 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.connectors.AgentClientRelati
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientExitType.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.invitationLink.{Accept, Cancelled, DeAuthorised, Expired, PartialAuth, Pending, Rejected}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.ClientServiceConfigurationService
-import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.AuthoriseAgentStartPage
+import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.{AuthoriseAgentStartPage, PageNotFound}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.http.HeaderCarrierConverter
@@ -35,6 +35,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class StartController @Inject()(agentClientRelationshipsConnector: AgentClientRelationshipsConnector,
                                 serviceConfigurationService: ClientServiceConfigurationService,
                                 authoriseAgentStartPage: AuthoriseAgentStartPage,
+                                pageNotFound: PageNotFound,
                                 mcc: MessagesControllerComponents
                                             )(implicit val executionContext: ExecutionContext) extends FrontendController(mcc) with I18nSupport:
 

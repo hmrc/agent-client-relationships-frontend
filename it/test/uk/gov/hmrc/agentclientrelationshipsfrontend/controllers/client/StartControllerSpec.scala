@@ -62,11 +62,13 @@ class StartControllerSpec extends ComponentSpecHelper with ScalaFutures with Aut
   val agentClientRelationshipsConnector: AgentClientRelationshipsConnector = app.injector.instanceOf[AgentClientRelationshipsConnector]
 
   "GET /appoint-someone-to-deal-with-HMRC-for-you/:uid/:normalizedAgentName/:taxService" should {
+
     "Return Not Found when tax service name not valid" in {
 
       val result = get(routes.StartController.show(testUid, testNormalizedAgentName, "invalidTaxService").url)
       result.status shouldBe NOT_FOUND
     }
+
     "Redirect to routes.ClientExitController.show(SERVER_ERROR)" in {
 
       stubGet(getValidateLinkResponseUrl(testUid, testNormalizedAgentName), INTERNAL_SERVER_ERROR, testValidateLinkResponseJson(testStatus).toString)
@@ -90,10 +92,8 @@ class StartControllerSpec extends ComponentSpecHelper with ScalaFutures with Aut
 
       val result = get(routes.StartController.show(testUid, testNormalizedAgentName, testTaxService).url)
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe routes.ClientExitController.show(CannotFindAuthorisationRequest, Some(testNormalizedAgentName), None).url
+      result.header("Location").value shouldBe routes.ClientExitController.show(NoOutstandingRequests, Some(testNormalizedAgentName), None).url
     }
-
-    "Redirect to NoOutstandingRequests page when no invitations are found" in {}
     alreadyRespondedStatuses.foreach { status =>
       s"Redirect to Already Responded to when the invitation status is $status" in {
         stubGet(getValidateLinkResponseUrl(testUid, testNormalizedAgentName), OK, testValidateLinkResponseJson(status).toString)
@@ -103,7 +103,7 @@ class StartControllerSpec extends ComponentSpecHelper with ScalaFutures with Aut
       }
     }
 
-    "Redirect to routes.ClientExitController.show(AuthorisationRequestCancelled) when the status is Cancelled" in {
+    "Redirect to routes.ClientExitController.show(NoOutstandingRequests) when the status is Cancelled" in {
       stubGet(getValidateLinkResponseUrl(testUid, testNormalizedAgentName), OK, testValidateLinkResponseJson("cancelled").toString)
 
       val result = get(routes.StartController.show(testUid, testNormalizedAgentName, testTaxService).url)
@@ -122,7 +122,7 @@ class StartControllerSpec extends ComponentSpecHelper with ScalaFutures with Aut
     validTaxServiceNames.foreach { taxService =>
       s"Display start page for $taxService when the status is Pending" in {
 
-        stubGet(getValidateLinkResponseUrl(testUid, testNormalizedAgentName), OK, testValidateLinkResponseJson.toString)
+        stubGet(getValidateLinkResponseUrl(testUid, testNormalizedAgentName), OK, testValidateLinkResponseJson("Pending").toString)
 
         val result = get(routes.StartController.show(testUid, testNormalizedAgentName, taxService).url)
         result.status shouldBe OK
