@@ -26,7 +26,7 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.WiremockHelper.stubGet
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentSpecHelper}
 import uk.gov.hmrc.http.HeaderCarrier
 
-class StartControllerSpec extends ComponentSpecHelper with ScalaFutures with AuthStubs {
+class StartControllerISpec extends ComponentSpecHelper with ScalaFutures with AuthStubs {
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
   val testUid = "ABCD"
@@ -37,7 +37,7 @@ class StartControllerSpec extends ComponentSpecHelper with ScalaFutures with Aut
   val testName = "Test Name"
 
   val alreadyRespondedStatuses: List[String] = List(
-    "accept"
+    "accept", "rejected", "deauthorised", "partialauth"
   )
 
   val validTaxServiceNames: List[String] = List(

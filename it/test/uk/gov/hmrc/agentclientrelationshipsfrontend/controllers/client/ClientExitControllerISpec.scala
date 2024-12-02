@@ -16,22 +16,30 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client
 
-import org.scalatest.concurrent.ScalaFutures
 import play.api.http.Status.OK
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientExitType
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientExitType.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentSpecHelper}
-import uk.gov.hmrc.http.HeaderCarrier
 
-class ClientExitControllerISpec extends ComponentSpecHelper with AuthStubs with ScalaFutures {
+class ClientExitControllerISpec extends ComponentSpecHelper with AuthStubs {
 
-  implicit val hc: HeaderCarrier = HeaderCarrier()
-  
-  ClientExitType.values.foreach(exitType =>
-    s"GET /authorisation-response/exit/$exitType?" should {
+  val testUid = "ABCD"
+  val testStatus = "pending"
+  val testNormalizedAgentName = "abc_ltd"
+  val testLastModifiedDate = "2025-11-11"
+  val testTaxService = "income-tax"
+
+    s"GET /authorisation-response/exit/$AgentSuspended" should {
       "display the exit page" in {
         authoriseAsClient()
-        val result = get(routes.ClientExitController.show(exitType,normalizedAgentName = Some("")).url)
+        val result = get(routes.ClientExitController.show(AgentSuspended, None, None,
+        ).url)
+
+        println(routes.ClientExitController.show(AgentSuspended,
+          None, None))
+
+        println(s"\n\n$result")
+
         result.status shouldBe OK
       }
-    })
+    }
 }

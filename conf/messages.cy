@@ -411,10 +411,12 @@ journeyExit.no-change-of-agent-role.header=<translation needed>
 
 # Client Journey
 
-clientExit.agent-suspended.header=You cannot appoint this tax agent
-clientExit.no-outstanding-requests.header=There are no outstanding authorisation requests for you to respond to
-clientExit.cannot-find-auth-request.header=We cannot find this authorisation request
-clientExit.auth-request-expired.header=This authorisation request has already expired
+clientExit.agent-suspended.header=<translation needed>
+clientExit.no-outstanding-requests.header=<translation needed>
+clientExit.cannot-find-authorisation-request.header=<translation needed>
+clientExit.authorisation-request-expired.header=<translation needed>
+clientExit.already-responded-authorisation-request.header=<translation needed>
+clientExit.authorisation-request-cancelled.header=<translation needed>
 
 # ________________________________________________________________________________
 # Agent Journey exit partials

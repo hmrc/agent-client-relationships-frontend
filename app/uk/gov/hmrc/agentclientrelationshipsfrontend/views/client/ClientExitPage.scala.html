@@ -49,6 +49,7 @@
             case ClientExitType.AgentSuspended => agentSuspended()
             case ClientExitType.AuthorisationRequestExpired => authorisationHasExpired(expiryDate = lastModifiedDate.get)
             case ClientExitType.AuthorisationRequestCancelled => authorisationHasBeenCancelled(expiryDate = lastModifiedDate.get)
+            case ClientExitType.CannotFindAuthorisationRequest => cannotFindAuthRequest(normalizedAgentName = normalizedAgentName.get)
             case ClientExitType.NoOutstandingRequests => noOutstandingRequests()
             case ClientExitType.AlreadyRespondedToAuthorisationRequest => authorisationHasAlreadyBeenResponded(respondedToDate = lastModifiedDate.get)
         }

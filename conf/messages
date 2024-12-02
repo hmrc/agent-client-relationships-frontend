@@ -443,10 +443,10 @@ journeyExit.no-change-of-agent-role.header=You have not changed how you act for 
 
 clientExit.agent-suspended.header=You cannot appoint this tax agent
 clientExit.no-outstanding-requests.header=There are no outstanding authorisation requests for you to respond to
-clientExit.cannot-find-auth-request.header=We cannot find this authorisation request
-clientExit.auth-request-expired.header=This authorisation request has already expired
-clientExit.already-responded-auth-request.header=This authorisation request has already been responded to
-clientExit.auth-request-cancelled.header=This authorisation request request has been cancelled
+clientExit.cannot-find-authorisation-request.header=We cannot find this authorisation request
+clientExit.authorisation-request-expired.header=This authorisation request has already expired
+clientExit.already-responded-authorisation-request.header=This authorisation request has already been responded to
+clientExit.authorisation-request-cancelled.header=This authorisation request request has been cancelled
 
 # ________________________________________________________________________________
 # Agent Journey exit partials
