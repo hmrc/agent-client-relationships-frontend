@@ -15,7 +15,6 @@ continue.button=Continue
 try-again.button=Try again
 button.copy=Copy link to clipboard
 button.copied=Link copied
-start-over.button=Start over
 start-again.button=Start again
 track-requests.button=Manage recent authorisation requests
 
@@ -241,7 +240,7 @@ confirmClient.agent-cancel-authorisation.header=Is your cancellation request for
 confirmClient.authorisation-request.error.required=Select ‘yes’ if you want {0} to authorise you as an agent
 confirmClient.agent-cancel-authorisation.error.required=Select ‘yes’ if {0} is the client you want to cancel authorisation for
 confirmClient.true=Yes
-confirmClient.false=No - I need to start over again
+confirmClient.false=No - I need to start again
 
 # ________________________________________________________________________________
 # Select agent role
