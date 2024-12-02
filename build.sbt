@@ -8,7 +8,7 @@ lazy val microservice = Project("agent-client-relationships-frontend", file(".")
   .enablePlugins(play.sbt.PlayScala, SbtDistributablesPlugin)
   .disablePlugins(JUnitXmlReportPlugin)
   .settings(
-    PlayKeys.playDefaultPort := 9448,
+    PlayKeys.playDefaultPort := 9435,
     libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test,
     scalacOptions ++= Seq(
       "-Wconf:src=routes/.*:s",

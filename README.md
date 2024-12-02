@@ -42,13 +42,13 @@ Feature flags exist for each service and for requirement of known facts.
     sm2 --stop AGENT_CLIENT_RELATIONSHIPS_FRONTEND
     sbt run
 
-It should then be listening on port 9448
+It should then be listening on port 9435
 
-    browse http://localhost:9448/agent-client-relationships/authorisation-request
+    browse http://localhost:9435/agent-client-relationships/authorisation-request
 
 or
 
-    browse http://localhost:9448/agent-client-relationships/agent-cancel-authorisation
+    browse http://localhost:9435/agent-client-relationships/agent-cancel-authorisation
 
 ## Endpoints
 All Endpoints require Authentication.
