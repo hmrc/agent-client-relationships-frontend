@@ -19,6 +19,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers
 import play.api.mvc.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.UserTimedOut
+import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}
@@ -30,8 +31,8 @@ class TimedOutController @Inject()(
                                     mcc: MessagesControllerComponents
                                   )(implicit appConfig: AppConfig) extends FrontendController(mcc):
 
-  def timedOut(continueUrl: String, serviceHeader: String): Action[AnyContent] = Action.async:
+  def timedOut(continueUrl: RedirectUrl, serviceHeader: String): Action[AnyContent] = Action.async:
     request =>
       given MessagesRequest[AnyContent] = request
-      Future.successful(Ok(timedOutView(Some(continueUrl), Some(serviceHeader))))
+      Future.successful(Ok(timedOutView(Some(continueUrl.toString), Some(serviceHeader))))
 

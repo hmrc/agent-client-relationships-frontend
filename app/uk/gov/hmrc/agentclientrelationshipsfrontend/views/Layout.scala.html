@@ -24,6 +24,7 @@
 @import uk.gov.hmrc.hmrcfrontend.views.html.components.implicits.RichErrorSummary
 @import uk.gov.hmrc.hmrcfrontend.views.viewmodels.hmrcstandardpage._
 @import views.html.helper.CSPNonce
+@import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl
 
 @this(
         appConfig: AppConfig,
@@ -55,7 +56,7 @@
         @hmrcTimeoutDialogHelper(
             signOutUrl = signOutUrl.get,
             timeoutUrl = Some(routes.TimedOutController.timedOut(
-                continueUrl = s"${appConfig.appExternalUrl}${request.uri}",
+                continueUrl = RedirectUrl(s"${appConfig.appExternalUrl}${request.uri}"),
                 serviceHeader = service
             ).url)
         )

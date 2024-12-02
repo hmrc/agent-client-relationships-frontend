@@ -15,6 +15,7 @@
  *@
 
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
+@import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl
 
 @this(
         layout: Layout,
@@ -44,7 +45,7 @@
         @if(serviceName.matches(clientHeader)) {
             @govukButton(Button(
                 content = Text(messages("timed-out.button")),
-                href = Some(url)
+                href = Some(url),
             ))
         } else {
             <p class="govuk-body">
