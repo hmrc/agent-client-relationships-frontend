@@ -92,7 +92,7 @@ class CheckYourAnswersPageSpec extends ViewSpecSupport {
 
       "render a summary list" in {
         doc.mainContent.extractSummaryList() shouldBe Some(TestSummaryList(
-         rows = List(("What do you want to do for the client", serviceLabels(service), "/agent-client-relationships/authorisation-request")),
+         rows = List(("What you want to do for the client", serviceLabels(service), "/agent-client-relationships/authorisation-request")),
         ))
       }
 
@@ -124,8 +124,8 @@ class CheckYourAnswersPageSpec extends ViewSpecSupport {
       "render a summary list" in {
         doc.mainContent.extractSummaryList() shouldBe Some(TestSummaryList(
           rows = List(
-            ("What do you want to do for the client", serviceLabels("HMRC-MTD-IT"), "/agent-client-relationships/authorisation-request"),
-            ("How do you want to act for them", roleLabels(role), "/agent-client-relationships/authorisation-request/agent-role")
+            ("What you want to do for the client", serviceLabels("HMRC-MTD-IT"), "/agent-client-relationships/authorisation-request"),
+            ("How you want to act for them", roleLabels(role), "/agent-client-relationships/authorisation-request/agent-role")
           )
         ))
       }
