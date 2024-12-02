@@ -14,7 +14,6 @@ error.heading=Mae problem wedi codi
 continue.button=Yn eich blaen
 try-again.button=Rhoi cynnig arall arni
 start-again.button=Dechrau eto
-start-again.button=Dechrau eto
 
 # -------------------------------------------------------------------------------------------
 # Timeout/Auth/IV error pages

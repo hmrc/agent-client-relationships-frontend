@@ -276,8 +276,8 @@ selectAgentRole.HMRC-MTD-IT.supportingToMain.hint=If {0} accepts this request, y
 # ________________________________________________________________________________
 checkYourAnswers.header=Check your answers
 checkYourAnswers.h2=Authorisation details for {0}
-checkYourAnswers.clientService.label=What do you want to do for the client
-checkYourAnswers.agentType.label=How do you want to act for them
+checkYourAnswers.clientService.label=What you want to do for the client
+checkYourAnswers.agentType.label=How you want to act for them
 
 checkYourAnswers.confirmAndSend.button=Confirm and send
 checkYourAnswers.change=Change
