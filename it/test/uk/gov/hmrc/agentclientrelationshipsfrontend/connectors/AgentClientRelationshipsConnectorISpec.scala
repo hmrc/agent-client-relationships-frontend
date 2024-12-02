@@ -58,13 +58,15 @@ class AgentClientRelationshipsConnectorISpec extends ComponentSpecHelper {
   )
 
   val testValidateLinkResponse: ValidateLinkPartsResponse = ValidateLinkPartsResponse(
-    testName,
-    Pending,
-    ""
+      name = testName,
+      status = Pending,
+      lastModifiedDate = "11.11.2024"
   )
 
   val testValidateLinkResponseJson: JsObject = Json.obj(
     "name" -> testName,
+    "status" -> "pending",
+    "lastModifiedDate" -> "11.11.2024"
   )
 
   "getClientDetails" should {
