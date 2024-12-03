@@ -37,7 +37,7 @@ class GetJourneyAction @Inject()(agentJourneyService: AgentJourneyService,
 
     override def invokeBlock[A](request: AgentRequest[A], block: AgentJourneyRequest[A] => Future[Result]): Future[Result] =
       given AgentRequest[A] = request
-      agentJourneyService.getJourney().flatMap {
+      agentJourneyService.getJourney.flatMap {
         case Some(journey) if journey.journeyType == journeyTypeFromUrl =>
           block(new AgentJourneyRequest(request.arn, journey, request.request))
         case _ =>
@@ -49,7 +49,7 @@ class GetJourneyAction @Inject()(agentJourneyService: AgentJourneyService,
         
       override def invokeBlock[A](request: Request[A], block: ClientJourneyRequest[A] => Future[Result]): Future[Result] =
         given Request[A] = request
-        clientJourneyService.getJourney().flatMap {
+        clientJourneyService.getJourney.flatMap {
           mJourney => block(ClientJourneyRequest(mJourney.getOrElse(ClientJourney(journeyType = ClientResponse)), request))
         }
         

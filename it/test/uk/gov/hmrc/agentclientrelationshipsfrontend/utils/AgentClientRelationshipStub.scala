@@ -18,7 +18,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.utils
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.test.Helpers.{NOT_FOUND, OK}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.WiremockHelper.stubGet
+import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.WiremockHelper.{stubGet, stubPost}
 
 trait AgentClientRelationshipStub {
 
@@ -28,4 +28,9 @@ trait AgentClientRelationshipStub {
   def givenNotFoundForServiceAndClient(service: String, clientId: String): StubMapping = stubGet(
     s"/agent-client-relationships/client/$service/details/$clientId", NOT_FOUND, "")
 
+  def givenAcceptAuthorisation(invitationId: String, status: Int): StubMapping = stubPost(
+    s"/agent-client-relationships/authorisation-response/accept/$invitationId", status, "")
+
+  def givenRejectAuthorisation(invitationId: String, status: Int): StubMapping = stubPost(
+    s"/agent-client-relationships/authorisation-response/reject/$invitationId", status, "")
 }

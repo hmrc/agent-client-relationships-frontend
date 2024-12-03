@@ -18,8 +18,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey
 
 import play.api.libs.json.{Format, Json}
 
-case class ClientJourney(
-                          journeyType: JourneyType, consent: Option[Boolean] = None)
+case class ClientJourney(journeyType: JourneyType, invitationId: Option[String] = None, consent: Option[Boolean] = None)
 
 object ClientJourney {
   implicit val format: Format[ClientJourney] = Json.format[ClientJourney]

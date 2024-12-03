@@ -19,6 +19,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.connectors
 import play.api.http.Status.*
 import play.api.libs.json.Json
 import play.api.libs.ws.JsonBodyWritables.*
+import play.api.http.Status.{FORBIDDEN, NOT_FOUND, NO_CONTENT, OK}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.invitationLink.ValidateLinkPartsResponse
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, AgentJourney}
@@ -95,8 +96,21 @@ class AgentClientRelationshipsConnector @Inject()(appConfig: AppConfig,
         case NOT_FOUND => Left("AGENT_NOT_FOUND") 
         case FORBIDDEN => Left("AGENT_SUSPENDED") 
         case _ => Left("SERVER_ERROR")
-      }
-      )
+      })
+
+  def acceptAuthorisation(invitationId: String)(implicit hc: HeaderCarrier): Future[Unit] =
+    val url = s"$agentClientRelationshipsUrl/authorisation-response/accept/$invitationId"
+    httpV2.post(url"$url").execute[HttpResponse].map(response => response.status match {
+      case NO_CONTENT => ()
+      case status => throw new Exception(s"Unexpected status $status received when accepting invitation")
+    })
+
+  def rejectAuthorisation(invitationId: String)(implicit hc: HeaderCarrier): Future[Unit] =
+    val url = s"$agentClientRelationshipsUrl/authorisation-response/reject/$invitationId"
+    httpV2.post(url"$url").execute[HttpResponse].map(response => response.status match {
+      case NO_CONTENT => ()
+      case status => throw new Exception(s"Unexpected status $status received when rejecting invitation")
+    })
 
   // stubbing the back end
   private val stubbedAuthorisationRequests: List[AuthorisationRequest] = List(
