@@ -90,35 +90,16 @@
         )
     )))
 
-    @govukCheckboxes(Checkboxes(
-        name = "select-all",
-        fieldset = Some(Fieldset(
-            legend = Some(Legend(
-                content = Text(messages(s"$key.sidebar.statusFilter")),
-                classes = "govuk-fieldset__legend--m"
-            )),
-            classes = "govuk-fieldset--m"
+    @govukSelect(Select(
+        id = "statusFilter",
+        name = "statusFilter",
+        label = Label(content = Text(messages(s"$key.sidebar.statusFilter")), classes = "govuk-label--m"),
+        items = Seq(SelectItem(value = Some("all"), text = "")) ++ statusFilters.map(name => SelectItem(
+            value = Some(name),
+            text = name,
+            selected = appliedFilters.flatMap(_.get("statusFilter")).flatMap(_.headOption).contains(name)
         )),
-        classes = "govuk-checkboxes--small",
-        items = Seq(CheckboxItem(value = "all", content = Text(messages(s"$key.filter-status.selectAll"))))
-    ))
-
-    @govukCheckboxes(Checkboxes(
-        name = "statusFilter[]",
-        fieldset = Some(Fieldset(
-            legend = Some(Legend(
-                content = Text(messages(s"$key.sidebar.statusFilter")),
-                classes = "govuk-fieldset__legend--m govuk-visually-hidden"
-            )),
-            classes = "govuk-fieldset--m"
-        )),
-        classes = "govuk-checkboxes--small",
-        items = statusFilters.zipWithIndex.map(name => CheckboxItem(
-            name = Some(s"statusFilter[${name._2 + 1}]"),
-            value = name._1,
-            content = Text(messages(s"$key.filter-status.${name._1}")),
-            checked = appliedFilters.flatMap(_.get(s"statusFilter[${name._2 + 1}]")).flatMap(_.headOption).contains(name._1)
-        )).toSeq
+        classes = "govuk-!-margin-bottom-4"
     ))
 
     @govukButton(Button(
