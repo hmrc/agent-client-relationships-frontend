@@ -98,6 +98,22 @@ class AgentClientRelationshipsConnector @Inject()(appConfig: AppConfig,
       }
       )
 
+  def validateInvitation(uid: String, serviceKeys: Seq[String])(implicit hc: HeaderCarrier): Future[Either[String, ValidateInvitationResponse]] =
+    httpV2
+      .post(url"$agentClientRelationshipsUrl/client/validate-invitation")
+      .withBody(Json.obj(
+        "uid" -> uid,
+        "serviceKeys" -> serviceKeys
+      ))
+      .execute[HttpResponse]
+      .map(response => response.status match {
+        case OK => Right(response.json.as[ValidateInvitationResponse])
+        case FORBIDDEN => Left("AGENT_SUSPENDED")
+        case NOT_FOUND => Left("INVITATION_OR_AGENT_RECORD_NOT_FOUND")
+        case _ => Left("SERVER_ERROR")
+      }
+      )
+
   // stubbing the back end
   private val stubbedAuthorisationRequests: List[AuthorisationRequest] = List(
     AuthorisationRequest("ABC1", Some(LocalDate.now().plusDays(1)), "Troy Barnes", "HMRC-MTD-VAT", "Pending"),
