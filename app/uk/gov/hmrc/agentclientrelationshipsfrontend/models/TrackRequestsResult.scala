@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,20 +15,18 @@
  */
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.models
+
 import play.api.libs.json.{Json, OFormat}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.InvitationStatus
 
-import java.time.{Instant, LocalDate}
+case class TrackRequestsResult(
+                                pageNumber: Int,
+                                requests: Seq[Invitation],
+                                clientNames: Seq[String],
+                                availableFilters: Seq[String],
+                                filtersApplied: Option[Map[String, String]],
+                                totalResults: Int
+                              )
 
-case class Invitation(
-                       invitationId: String,
-                       service: String,
-                       expiryDate: LocalDate,
-                       clientName: String,
-                       status: InvitationStatus,
-                       lastUpdated: Instant
-                     )
-
-object Invitation {
-  implicit val format: OFormat[Invitation] = Json.format[Invitation]
+object TrackRequestsResult {
+  implicit val format: OFormat[TrackRequestsResult] = Json.format[TrackRequestsResult]
 }

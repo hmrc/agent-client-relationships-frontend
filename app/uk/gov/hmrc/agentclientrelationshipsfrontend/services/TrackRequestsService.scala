@@ -17,20 +17,18 @@
 package uk.gov.hmrc.agentclientrelationshipsfrontend.services
 
 import uk.gov.hmrc.agentclientrelationshipsfrontend.connectors.AgentClientRelationshipsConnector
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{AuthorisationRequest, PageInfo}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.TrackRequestsResult
+import uk.gov.hmrc.http.HeaderCarrier
 
-import java.time.LocalDate
 import javax.inject.Inject
 import scala.concurrent.Future
 
 class TrackRequestsService @Inject()(acrConnector: AgentClientRelationshipsConnector) {
-  def getRequests(arn: String, pageInfo: PageInfo, filtersApplied: Option[Map[String, Seq[String]]]): Future[List[AuthorisationRequest]] =
-    acrConnector.getPagedRequests(arn, LocalDate.now(), pageInfo, filtersApplied)
-    
-  def getTotalRequests(arn: String, filtersApplied: Option[Map[String, Seq[String]]]): Future[Int] = acrConnector.getTotalRequests(arn, filtersApplied)
-  
-  def getAllClientNames(arn: String, filtersApplied: Option[Map[String, Seq[String]]]): Future[List[String]] = acrConnector.getAllClientNames(arn, filtersApplied)
-  
-  def getStatusFilters: Future[List[String]] = acrConnector.getAvailableStatusFilters
-
+  def trackRequests(
+                     arn: String,
+                     pageNumber: Int,
+                     statusFilter: Option[String],
+                     clientName: Option[String]
+                   )(implicit hc: HeaderCarrier): Future[TrackRequestsResult] =
+    acrConnector.trackRequests(arn, pageNumber, statusFilter, clientName)
 }

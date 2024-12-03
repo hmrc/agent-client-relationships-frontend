@@ -19,15 +19,15 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.connectors
 import play.api.http.Status.*
 import play.api.libs.json.Json
 import play.api.libs.ws.JsonBodyWritables.*
-import play.api.http.Status.{FORBIDDEN, NOT_FOUND, NO_CONTENT, OK}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.invitationLink.ValidateLinkPartsResponse
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, AgentJourneyRequest, ClientJourneyRequest}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.ClientServiceConfigurationService
 import uk.gov.hmrc.http.HttpReads.Implicits.*
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps}
+import views.html.helper.urlEncode
 
 import java.time.LocalDate
 import javax.inject.{Inject, Singleton}
@@ -50,7 +50,8 @@ class AgentClientRelationshipsConnector @Inject()(appConfig: AppConfig,
     httpV2
       .post(url"$agentClientRelationshipsUrl/agent/${request.arn}/authorisation-request")
       .withBody(Json.toJson(CreateAuthorisationRequest(journey.clientId.get, clientIdType, journey.getClientDetailsResponse.name, journey.agentType.getOrElse(journey.getService), journey.getClientType)))
-      .execute[HttpResponse].map { response => response.status match {
+      .execute[HttpResponse].map { response =>
+        response.status match {
           case CREATED => (response.json \ "invitationId").as[String]
           case _ => throw new RuntimeException(s"Failed to create authorisation request: ${response.body}")
         }
@@ -60,10 +61,12 @@ class AgentClientRelationshipsConnector @Inject()(appConfig: AppConfig,
   def cancelAuthorisation(journey: AgentJourney)(implicit hc: HeaderCarrier, request: AgentJourneyRequest[?]): Future[Unit] = httpV2
     .post(url"$agentClientRelationshipsUrl/agent/${request.arn}/remove-authorisation")
     .withBody(Json.obj("clientId" -> journey.getClientId, "service" -> journey.getService))
-    .execute[HttpResponse].map { response => response.status match {
-      case NO_CONTENT => ()
-      case _ => throw new RuntimeException(s"Failed to cancel authorisation: ${response.body}")
-    }}
+    .execute[HttpResponse].map { response =>
+      response.status match {
+        case NO_CONTENT => ()
+        case _ => throw new RuntimeException(s"Failed to cancel authorisation: ${response.body}")
+      }
+    }
 
 
   def getAuthorisationRequest(invitationId: String)(implicit headerCarrier: HeaderCarrier, request: AgentJourneyRequest[?]): Future[Option[AuthorisationRequestInfo]] = {
@@ -80,26 +83,33 @@ class AgentClientRelationshipsConnector @Inject()(appConfig: AppConfig,
     .get(url"$agentClientRelationshipsUrl/agent/${request.arn}/details")
     .execute[Option[AgentDetails]]
 
-  def getInvitation(invitationId: String): Future[Invitation] = Future.successful(Invitation(invitationId, LocalDate.now().plusDays(21), "Troy Barnes"))
+  def trackRequests(
+                     arn: String,
+                     pageNumber: Int,
+                     statusFilter: Option[String],
+                     clientName: Option[String]
+                   )(implicit hc: HeaderCarrier): Future[TrackRequestsResult] = {
+    val queryParams: List[(String, String)] =
+        List("pageNumber" -> s"$pageNumber") ++
+        List("pageSize" -> s"${appConfig.trackRequestsPageSize}") ++
+        statusFilter.fold[List[(String, String)]](List.empty)(statusFilter => List("statusFilter" -> statusFilter)) ++
+        clientName.fold[List[(String, String)]](List.empty)(clientName => List("clientName" -> urlEncode(clientName)))
+    httpV2
+      .get(url"$agentClientRelationshipsUrl/agent/$arn/authorisation-requests?$queryParams")
+      .execute[HttpResponse]
+      .map(response => response.status match {
+        case OK => response.json.as[TrackRequestsResult]
+        case status => throw new Exception(s"Unexpected status $status received when calling track requests")
+      })
+  }
 
-  def getPagedRequests(arn: String, createdOnOrAfter: LocalDate, pageInfo: PageInfo, filtersApplied: Option[Map[String, Seq[String]]]): Future[List[AuthorisationRequest]] =
-    Future.successful(stubbedAuthorisationRequests.slice(pageInfo.offset, pageInfo.offset + appConfig.trackRequestsPerPage))
-
-  def getTotalRequests(arn: String, filtersApplied: Option[Map[String, Seq[String]]]): Future[Int] = Future.successful(stubbedAuthorisationRequests.size)
-
-  def getAllClientNames(arn: String, filtersApplied: Option[Map[String, Seq[String]]]): Future[List[String]] = Future.successful(stubbedAuthorisationRequests.map(_.clientName))
-
-  def getAllTaxServices(arn: String, filtersApplied: Option[Map[String, Seq[String]]]): Future[List[String]] = Future.successful(stubbedAuthorisationRequests.map(_.service))
-
-  def getAvailableStatusFilters: Future[List[String]] = Future.successful(availableFilters)
-  
   def validateLinkParts(uid: String, normalizedAgentName: String)(implicit hc: HeaderCarrier): Future[Either[String, ValidateLinkPartsResponse]] =
     httpV2
       .get(url"$agentClientRelationshipsUrl/agent/agent-reference/uid/$uid/$normalizedAgentName")
       .execute[HttpResponse]
       .map(response => response.status match {
         case OK => Right(response.json.as[ValidateLinkPartsResponse])
-        case NOT_FOUND => Left("AGENT_NOT_FOUND") 
+        case NOT_FOUND => Left("AGENT_NOT_FOUND")
         case FORBIDDEN => Left("AGENT_SUSPENDED")
         case status => throw new Exception(s"Unexpected status $status received when validating link")
       })
@@ -131,8 +141,7 @@ class AgentClientRelationshipsConnector @Inject()(appConfig: AppConfig,
         case FORBIDDEN => Left("AGENT_SUSPENDED")
         case NOT_FOUND => Left("INVITATION_OR_AGENT_RECORD_NOT_FOUND")
         case status => throw new Exception(s"Unexpected status $status received when fetching invitation")
-      }
-      )
+      })
 
   // stubbing the back end
   private val stubbedAuthorisationRequests: List[AuthorisationRequest] = List(
