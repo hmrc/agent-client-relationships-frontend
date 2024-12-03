@@ -415,7 +415,7 @@ clientExit.agent-suspended.header=<translation needed>
 clientExit.no-outstanding-requests.header=<translation needed>
 clientExit.cannot-find-authorisation-request.header=<translation needed>
 clientExit.authorisation-request-expired.header=<translation needed>
-clientExit.already-responded-authorisation-request.header=<translation needed>
+clientExit.authorisation-request-already-responded-to.header=<translation needed>
 clientExit.authorisation-request-cancelled.header=<translation needed>
 
 # ________________________________________________________________________________
