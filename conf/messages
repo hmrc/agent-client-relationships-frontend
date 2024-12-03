@@ -354,6 +354,18 @@ agentCancelAuthorisationComplete.list-three=follow the instructions for deleting
 agentCancelAuthorisationComplete.print=Print this page
 agentCancelAuthorisationComplete.agentHome=Return to agent services account homepage
 
+agentCancelAuthorisationComplete.PERSONAL-INCOME-RECORD=income record
+agentCancelAuthorisationComplete.HMRC-MTD-IT=Making Tax Digital for Income Tax
+agentCancelAuthorisationComplete.HMRC-MTD-IT-SUPP=Making Tax Digital for Income Tax
+agentCancelAuthorisationComplete.HMRC-PPT-ORG=Plastic Packaging Tax
+agentCancelAuthorisationComplete.HMRC-CGT-PD=Capital Gains Tax on UK property account
+agentCancelAuthorisationComplete.HMRC-CBC-ORG=country-by-country reports
+agentCancelAuthorisationComplete.HMRC-CBC-NONUK-ORG=country-by-country reports
+agentCancelAuthorisationComplete.HMRC-MTD-VAT=VAT
+agentCancelAuthorisationComplete.HMRC-PILLAR2-ORG=Pillar 2 top-up taxes
+agentCancelAuthorisationComplete.HMRC-TERS-ORG=trust or an estate
+agentCancelAuthorisationComplete.HMRC-TERSNT-ORG=trust or an estate
+
 # ________________________________________________________________________________
 # Track requests
 # ________________________________________________________________________________

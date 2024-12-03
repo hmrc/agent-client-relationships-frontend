@@ -46,7 +46,7 @@
         content = Text(DisplayDate.displayDateForLangFromString(response.date))
     ))
     <h2 class="govuk-heading-m">@messages(s"$key.h2")</h2>
-    <p class="govuk-body">@messages(s"$key.p1", response.agentName, response.clientName, messages(s"checkYourAnswers.${response.service}"))</p>
+    <p class="govuk-body">@messages(s"$key.p1", response.agentName, response.clientName, messages(s"$key.${response.service}"))</p>
     @if(messages.isDefinedAt(s"$key.${response.service}.h2")) {
         <h2 class="govuk-heading-m">@messages(s"$key.${response.service}.h2")</h2>
         <p class="govuk-body">@messages(s"$key.p2")</p>
