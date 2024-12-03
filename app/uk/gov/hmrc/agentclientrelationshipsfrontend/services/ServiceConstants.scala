@@ -39,4 +39,5 @@ trait ServiceConstants:
   val HMRCCGTPD: String = "HMRC-CGT-PD"
   val HMRCPPTORG: String = "HMRC-PPT-ORG"
   val HMRCCBCORG: String = "HMRC-CBC-ORG"
+  val HMRCCBCNONUKORG: String = "HMRC-CBC-NONUK-ORG"
   val HMRCPILLAR2ORG: String = "HMRC-PILLAR2-ORG"

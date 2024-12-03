@@ -48,4 +48,27 @@ trait AuthStubs {
       "allEnrolments" -> Json.arr()
     ).toString
   )
+  def authoriseAsClientWithEnrolments(enrolment: String, affinityGroup: String = "Individual"): StubMapping = stubPost(
+    "/auth/authorise",
+    OK,
+    Json.obj(
+      "authorisedEnrolments" -> Json.arr(Json.obj(
+        "key" -> enrolment,
+        "identifiers" -> Json.arr(Json.obj(
+          "key" -> "AnyIdentifier",
+          "value" -> "AnyValue"
+        ))
+      )),
+      "affinityGroup" -> affinityGroup,
+      "confidenceLevel" -> 250,
+      "allEnrolments" -> Json.arr(Json.obj(
+        "key" -> enrolment,
+        "identifiers" -> Json.arr(Json.obj(
+          "key" -> "AnyIdentifier",
+          "value" -> "AnyValue"
+        ))
+      ))
+    ).toString
+  )
+
 }
