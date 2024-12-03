@@ -22,21 +22,25 @@ import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 @Singleton
 class AppConfig @Inject()(servicesConfig: ServicesConfig, config: Configuration):
-  // Base Urls
+  // Base Urls (for use by connectors)
   val ivFrontendBaseUrl: String = baseUrl("identity-verification-frontend")
   val agentClientRelationshipsBaseUrl: String = baseUrl("agent-client-relationships")
-  val govUkExternalUrl: String = s"${getConfString("gov-uk.external-url")}"
-  // Urls
-  val appExternalUrl: String = getConfString("agent-client-relationships-frontend.external-url")
+
+  // Service Urls
+  val appExternalUrl: String = getConfString("agent-client-relationships-frontend.external-url") // Use for redirects back to ACR frontend so they work locally
   val asaFrontendExternalUrl: String = getConfString("agent-services-account-frontend.external-url")
   val agentServicesAccountLimitedUrl: String = asaFrontendExternalUrl + getConfString("agent-services-account-frontend.account-limited")
   val agentServicesAccountHomeUrl: String = asaFrontendExternalUrl + getConfString("agent-services-account-frontend.home")
-  val guidanceUrlSaSignup = s"${govUkExternalUrl}/register-for-self-assessment/self-employed"
-  val guidanceUrlForAgentRoles = s"${govUkExternalUrl}/" // TODO: We need this url to be complete
   val ivUpliftUrl: String = getConfString("identity-verification-frontend.uplift-url")
-  val signInUrl: String = getString("bas-gateway.url")
+  val signInUrl: String = getString("sign-in.url")
   val subscriptionUrl: String = getConfString("agent-subscription-frontend.subscription-url")
-  val guidanceSa =s"${govUkExternalUrl}/guidance/self-assessment-for-agents-online-service"
+
+  // GovUk Urls
+  val govUkUrl: String = getString("gov-uk.url")
+  val guidanceUrlSaSignup = s"$govUkUrl/register-for-self-assessment/self-employed"
+  val guidanceUrlForAgentRoles = s"$govUkUrl/" // TODO: We need this url to be complete
+  val guidanceSa = s"$govUkUrl/guidance/self-assessment-for-agents-online-service"
+
   // Feature Flags
   val welshLanguageSupportEnabled: Boolean = config.getOptional[Boolean]("features.welsh-language-support").getOrElse(false)
 
