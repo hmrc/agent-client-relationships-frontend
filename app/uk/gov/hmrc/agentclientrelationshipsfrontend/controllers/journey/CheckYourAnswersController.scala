@@ -22,8 +22,8 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.ConfirmCancellationFieldName
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.ConfirmCancellationForm
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, Journey, JourneyType}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{AgentClientRelationshipsService, ClientServiceConfigurationService, JourneyService}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, AgentJourney, JourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{AgentClientRelationshipsService, ClientServiceConfigurationService, AgentJourneyService}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.{CheckYourAnswersPage, ConfirmCancellationPage}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
@@ -34,14 +34,14 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class CheckYourAnswersController @Inject()(mcc: MessagesControllerComponents,
                                            serviceConfig: ClientServiceConfigurationService,
-                                           journeyService: JourneyService,
+                                           journeyService: AgentJourneyService,
                                            agentClientRelationshipsService: AgentClientRelationshipsService,
                                            checkYourAnswersPage: CheckYourAnswersPage,
                                            confirmCancellationPage: ConfirmCancellationPage,
                                            actions: Actions
                                           )(implicit val executionContext: ExecutionContext, appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport:
 
-  def show(journeyType: JourneyType): Action[AnyContent] = actions.getJourney(journeyType):
+  def show(journeyType: JourneyType): Action[AnyContent] = actions.getAgentJourney(journeyType):
     journeyRequest =>
       given AgentJourneyRequest[?] = journeyRequest
 
@@ -55,7 +55,7 @@ class CheckYourAnswersController @Inject()(mcc: MessagesControllerComponents,
         }
       }
 
-  def onSubmit(journeyType: JourneyType): Action[AnyContent] = actions.getJourney(journeyType).async:
+  def onSubmit(journeyType: JourneyType): Action[AnyContent] = actions.getAgentJourney(journeyType).async:
     journeyRequest =>
       given AgentJourneyRequest[?] = journeyRequest
 
@@ -63,7 +63,7 @@ class CheckYourAnswersController @Inject()(mcc: MessagesControllerComponents,
       journeyType match {
         case JourneyType.AuthorisationRequest => for {
           invitationId <- agentClientRelationshipsService.createAuthorisationRequest(journey)
-          _ <- journeyService.saveJourney(Journey(
+          _ <- journeyService.saveJourney(AgentJourney(
             journeyType = journey.journeyType,
             journeyComplete = Some(invitationId)
           ))
@@ -79,7 +79,7 @@ class CheckYourAnswersController @Inject()(mcc: MessagesControllerComponents,
               confirmCancellation => {
                 if confirmCancellation then for {
                   _ <- agentClientRelationshipsService.cancelAuthorisation(journey)
-                  _ <- journeyService.saveJourney(Journey(
+                  _ <- journeyService.saveJourney(AgentJourney(
                     journeyType = journey.journeyType,
                     confirmationService = journey.clientService,
                     confirmationClientName = Some(journey.getClientDetailsResponse.name),

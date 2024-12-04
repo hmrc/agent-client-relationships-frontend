@@ -21,7 +21,7 @@ import org.jsoup.nodes.Document
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.common.KnownFactsConfiguration
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.EnterClientFactForm
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, Journey}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, AgentJourney}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyType.AuthorisationRequest
 import uk.gov.hmrc.agentclientrelationshipsfrontend.support.ViewSpecSupport
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.clientFactPartials.Date
@@ -31,7 +31,7 @@ class DateSpec extends ViewSpecSupport {
   val template: Date = app.injector.instanceOf[Date]
   val fieldConfig: KnownFactsConfiguration = KnownFactsConfiguration("date", "", "text", 20)
   implicit val journeyRequest: AgentJourneyRequest[?] =
-    new AgentJourneyRequest("", Journey(journeyType = AuthorisationRequest), request)
+    new AgentJourneyRequest("", AgentJourney(journeyType = AuthorisationRequest), request)
 
   val listOfServices: Seq[String] = Seq("PERSONAL-INCOME-RECORD", "HMRC-MTD-VAT", "HMRC-PPT-ORG", "HMRC-PILLAR2-ORG")
 

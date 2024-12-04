@@ -20,7 +20,7 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.AuthorisationRequestInfo
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, Journey, JourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, AgentJourney, JourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.support.ViewSpecSupport
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.CreateAuthorisationRequestCompletePage
 
@@ -54,7 +54,7 @@ class CreateAuthorisationRequestCompletePageSpec extends ViewSpecSupport {
     expiryDate = LocalDate.of(2025, 1, 1)
   )
 
-  private val completeJourney: Journey = Journey(
+  private val completeJourney: AgentJourney = AgentJourney(
     JourneyType.AuthorisationRequest,
     journeyComplete = Some(testInvitationId)
   )

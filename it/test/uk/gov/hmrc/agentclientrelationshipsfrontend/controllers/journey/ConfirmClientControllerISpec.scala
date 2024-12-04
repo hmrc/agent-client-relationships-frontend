@@ -18,9 +18,9 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey
 
 import play.api.http.Status.{BAD_REQUEST, OK}
 import play.api.test.Helpers.*
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{Journey, JourneyExitType, JourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, JourneyExitType, JourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsResponse, ClientStatus, KnownFactType}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.services.JourneyService
+import uk.gov.hmrc.agentclientrelationshipsfrontend.services.AgentJourneyService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentSpecHelper}
 
 class ConfirmClientControllerISpec extends ComponentSpecHelper with AuthStubs {
@@ -29,7 +29,7 @@ class ConfirmClientControllerISpec extends ComponentSpecHelper with AuthStubs {
   val testCgtRef: String = "XMCGTP123456789"
   val testPostcode: String = "AA11AA"
 
-  def noAuthJourney(journeyType: JourneyType): Journey = Journey(
+  def noAuthJourney(journeyType: JourneyType): AgentJourney = AgentJourney(
     journeyType,
     Some("personal"),
     Some("HMRC-CGT-PD"),
@@ -38,7 +38,7 @@ class ConfirmClientControllerISpec extends ComponentSpecHelper with AuthStubs {
     Some(testPostcode)
   )
 
-  def noAuthJourneyWithSupportedRoles(journeyType: JourneyType): Journey = Journey(
+  def noAuthJourneyWithSupportedRoles(journeyType: JourneyType): AgentJourney = AgentJourney(
     journeyType,
     Some("personal"),
     Some("HMRC-MTD-IT"),
@@ -47,7 +47,7 @@ class ConfirmClientControllerISpec extends ComponentSpecHelper with AuthStubs {
     Some(testPostcode)
   )
 
-  def alreadyAuthJourney(journeyType: JourneyType): Journey = Journey(
+  def alreadyAuthJourney(journeyType: JourneyType): AgentJourney = AgentJourney(
     journeyType,
     Some("personal"),
     Some("HMRC-CGT-PD"),
@@ -56,7 +56,7 @@ class ConfirmClientControllerISpec extends ComponentSpecHelper with AuthStubs {
     Some(testPostcode)
   )
 
-  def existingPendingRequestJourney: Journey = Journey(
+  def existingPendingRequestJourney: AgentJourney = AgentJourney(
     JourneyType.AuthorisationRequest,
     Some("personal"),
     Some("HMRC-CGT-PD"),
@@ -65,7 +65,7 @@ class ConfirmClientControllerISpec extends ComponentSpecHelper with AuthStubs {
     Some(testPostcode)
   )
 
-  def clientInsolventJourney: Journey = Journey(
+  def clientInsolventJourney: AgentJourney = AgentJourney(
     JourneyType.AuthorisationRequest,
     Some("personal"),
     Some("HMRC-CGT-PD"),
@@ -74,7 +74,7 @@ class ConfirmClientControllerISpec extends ComponentSpecHelper with AuthStubs {
     Some(testPostcode)
   )
 
-  def clientStatusInvalidJourney: Journey = Journey(
+  def clientStatusInvalidJourney: AgentJourney = AgentJourney(
     JourneyType.AuthorisationRequest,
     Some("personal"),
     Some("HMRC-CGT-PD"),
@@ -83,7 +83,7 @@ class ConfirmClientControllerISpec extends ComponentSpecHelper with AuthStubs {
     Some(testPostcode)
   )
 
-  val journeyService: JourneyService = app.injector.instanceOf[JourneyService]
+  val journeyService: AgentJourneyService = app.injector.instanceOf[AgentJourneyService]
 
   override def beforeEach(): Unit = {
     await(journeyService.deleteAllAnswersInSession(request))
@@ -93,7 +93,7 @@ class ConfirmClientControllerISpec extends ComponentSpecHelper with AuthStubs {
   "GET /authorisation-request/confirm-client" should {
     "redirect to enter client id when it is missing" in {
       authoriseAsAgent()
-      await(journeyService.saveJourney(Journey(journeyType = JourneyType.AuthorisationRequest, clientType = Some("personal"), clientService = Some("HMRC-MTD-IT"))))
+      await(journeyService.saveJourney(AgentJourney(journeyType = JourneyType.AuthorisationRequest, clientType = Some("personal"), clientService = Some("HMRC-MTD-IT"))))
       val result = get(routes.ConfirmClientController.show(JourneyType.AuthorisationRequest).url)
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe routes.EnterClientIdController.show(JourneyType.AuthorisationRequest).url

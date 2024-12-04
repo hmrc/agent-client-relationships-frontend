@@ -28,6 +28,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers.{defaultAwaitTimeout, redirectLocation, status}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.routes
+import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{ClientServiceConfigurationService, ServiceConstants}
 import uk.gov.hmrc.auth.core.*
 import uk.gov.hmrc.auth.core.AffinityGroup.{Agent, Individual, Organisation}
 import uk.gov.hmrc.auth.core.ConfidenceLevel.{L200, L250, L50}
@@ -38,17 +39,18 @@ import uk.gov.hmrc.http.HeaderCarrier
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class AuthActionsSpec extends AnyWordSpecLike with Matchers with OptionValues with BeforeAndAfterEach with GuiceOneAppPerSuite {
+class AuthActionsSpec extends AnyWordSpecLike with Matchers with OptionValues with BeforeAndAfterEach with GuiceOneAppPerSuite with ServiceConstants {
 
   class FakeController(authAction: AuthActions,
                        actionBuilder: DefaultActionBuilder) {
     def agentAuth(): Action[AnyContent] = (actionBuilder andThen authAction.agentAuthAction) { _ => Results.Ok }
 
-    def clientAuth(): Action[AnyContent] = (actionBuilder andThen authAction.clientAuthAction) { _ => Results.Ok }
+    def clientAuth(taxService: String): Action[AnyContent] = (actionBuilder andThen authAction.clientAuthActionWithEnrolmentCheck(taxService)) { _ => Results.Ok }
   }
 
   val mockAuthConnector: AuthConnector = mock[AuthConnector]
   val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
+  val serviceConfig: ClientServiceConfigurationService = new ClientServiceConfigurationService
   val defaultActionBuilder: DefaultActionBuilder = app.injector.instanceOf[DefaultActionBuilder]
 
   given ExecutionContext = app.injector.instanceOf[ExecutionContext]
@@ -60,7 +62,7 @@ class AuthActionsSpec extends AnyWordSpecLike with Matchers with OptionValues wi
 
   def failingControllerSetup(exception: Throwable): FakeController = {
     new FakeController(
-      new AuthActions(FakeFailingAuthConnector(exception), appConfig),
+      new AuthActions(FakeFailingAuthConnector(exception), appConfig, serviceConfig),
       defaultActionBuilder
     )
   }
@@ -75,7 +77,7 @@ class AuthActionsSpec extends AnyWordSpecLike with Matchers with OptionValues wi
     )
 
     new FakeController(
-      new AuthActions(FakePassingAuthConnector(Future.successful(enrolments)), appConfig),
+      new AuthActions(FakePassingAuthConnector(Future.successful(enrolments)), appConfig, serviceConfig),
       defaultActionBuilder
     )
   }
@@ -85,10 +87,10 @@ class AuthActionsSpec extends AnyWordSpecLike with Matchers with OptionValues wi
   }
 
   def clientControllerSetup(affinityGroup: AffinityGroup, confidenceLevel: ConfidenceLevel, enrolments: Set[Enrolment]): FakeController = {
-    val retriaval = Future.successful(Some(affinityGroup) ~ confidenceLevel ~ Enrolments(enrolments))
+    val retrieval = Future.successful(Some(affinityGroup) ~ confidenceLevel ~ Enrolments(enrolments))
 
     new FakeController(
-      new AuthActions(FakePassingAuthConnector(retriaval), appConfig),
+      new AuthActions(FakePassingAuthConnector(retrieval), appConfig, serviceConfig),
       defaultActionBuilder
     )
   }
@@ -132,67 +134,93 @@ class AuthActionsSpec extends AnyWordSpecLike with Matchers with OptionValues wi
   }
 
   "clientAuthAction" should {
-    "authorise an individual client with CL250" in {
-      val controller = clientControllerSetup(Individual, L250, Set(Enrolment("HMRC-MTD-IT")))
-      val result = controller.clientAuth()(fakeRequest)
+    s"authorise an individual client for $incomeTax with CL250" in {
+      val controller = clientControllerSetup(Individual, L250, Set(Enrolment(HMRCMTDIT)))
+
+      val result = controller.clientAuth(incomeTax)(fakeRequest)
 
       status(result) shouldBe OK
     }
-    "authorise an individual CGT client with CL50" in {
-      val controller = clientControllerSetup(Individual, L50, Set(Enrolment("HMRC-CGT-PD")))
-      val result = controller.clientAuth()(fakeRequest)
+    s"redirect to routes.ClientExitHandler.show(INSUFFICIENT_ENROLMENTS) for $incomeTax" in {
+      val controller = clientControllerSetup(Individual, L250, Set(Enrolment(HMRCMTDVAT)))
+
+      val result = controller.clientAuth(incomeTax)(fakeRequest)
+
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result).get shouldBe "routes.ClientExitHandler.show(INSUFFICIENT_ENROLMENTS)"
+    }
+
+    s"authorise an individual client for $incomeRecordViewer with CL250" in {
+      val controller = clientControllerSetup(Individual, L250, Set(Enrolment(HMRCNI)))
+
+      val result = controller.clientAuth(incomeRecordViewer)(fakeRequest)
+
+      status(result) shouldBe OK
+    }
+    s"redirect to routes.ClientExitHandler.show(INSUFFICIENT_ENROLMENTS) for $incomeRecordViewer" in {
+      val controller = clientControllerSetup(Individual, L250, Set(Enrolment(HMRCMTDVAT)))
+
+      val result = controller.clientAuth(incomeRecordViewer)(fakeRequest)
+
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result).get shouldBe "routes.ClientExitHandler.show(INSUFFICIENT_ENROLMENTS)"
+    }
+
+    s"authorise an individual $capitalGainsTaxUkProperty client with CL50" in {
+      val controller = clientControllerSetup(Individual, L50, Set(Enrolment(HMRCCGTPD)))
+      val result = controller.clientAuth(capitalGainsTaxUkProperty)(fakeRequest)
 
       status(result) shouldBe OK
     }
     "authorise an organisation client with CL50" in {
-      val controller = clientControllerSetup(Organisation, L50, Set(Enrolment("HMRC-CGT-PD")))
-      val result = controller.clientAuth()(fakeRequest)
+      val controller = clientControllerSetup(Organisation, L50, Set(Enrolment(HMRCMTDVAT)))
+      val result = controller.clientAuth(vat)(fakeRequest)
 
       status(result) shouldBe OK
     }
     "authorise an organisation ITSA client with CL250" in {
-      val controller = clientControllerSetup(Organisation, L250, Set(Enrolment("HMRC-MTD-IT")))
-      val result = controller.clientAuth()(fakeRequest)
+      val controller = clientControllerSetup(Organisation, L250, Set(Enrolment(HMRCMTDIT)))
+      val result = controller.clientAuth(incomeTax)(fakeRequest)
 
       status(result) shouldBe OK
     }
     "redirect an individual client with less than CL250 to IV" in {
-      val controller = clientControllerSetup(Individual, L200, Set(Enrolment("HMRC-MTD-IT")))
-      val result = controller.clientAuth()(fakeRequest)
+      val controller = clientControllerSetup(Individual, L200, Set(Enrolment(HMRCMTDIT)))
+      val result = controller.clientAuth(incomeTax)(fakeRequest)
 
       status(result) shouldBe SEE_OTHER
       redirectLocation(result).value should startWith("http://localhost:9938/mdtp/uplift")
     }
     "redirect an organisation ITSA client with less than CL250 to IV" in {
-      val controller = clientControllerSetup(Organisation, L200, Set(Enrolment("HMRC-MTD-IT")))
-      val result = controller.clientAuth()(fakeRequest)
+      val controller = clientControllerSetup(Organisation, L200, Set(Enrolment(HMRCMTDIT)))
+      val result = controller.clientAuth(incomeTax)(fakeRequest)
 
       status(result) shouldBe SEE_OTHER
       redirectLocation(result).value should startWith("http://localhost:9938/mdtp/uplift")
     }
     "redirect an agent to Cannot view request page" in {
       val controller = clientControllerSetup(Agent, L50, Set(Enrolment("HMRC-AS-AGENT")))
-      val result = controller.clientAuth()(fakeRequest)
+      val result = controller.clientAuth(incomeTax)(fakeRequest)
 
       status(result) shouldBe SEE_OTHER
       redirectLocation(result).value shouldBe routes.AuthorisationController.cannotViewRequest.url
     }
     "redirect a user without session to the login" in {
       val controller = failingControllerSetup(BearerTokenExpired(""))
-      val result = controller.clientAuth()(fakeRequest)
+      val result = controller.clientAuth(incomeTax)(fakeRequest)
 
       status(result) shouldBe SEE_OTHER
       redirectLocation(result).value should startWith("http://localhost:9553/bas-gateway/sign-in")
     }
     "block a client without required enrolments (can't happen in theory)" in {
       val controller = failingControllerSetup(InsufficientEnrolments(""))
-      val result = controller.clientAuth()(fakeRequest)
+      val result = controller.clientAuth(incomeTax)(fakeRequest)
 
       status(result) shouldBe FORBIDDEN
     }
     "block a client with the wrong auth provider" in {
       val controller = failingControllerSetup(UnsupportedAuthProvider(""))
-      val result = controller.clientAuth()(fakeRequest)
+      val result = controller.clientAuth(incomeTax)(fakeRequest)
 
       status(result) shouldBe FORBIDDEN
     }

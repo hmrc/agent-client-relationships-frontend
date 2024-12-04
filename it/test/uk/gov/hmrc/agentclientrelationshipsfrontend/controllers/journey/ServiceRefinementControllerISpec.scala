@@ -17,15 +17,14 @@
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey
 
 import play.api.http.Status.{BAD_REQUEST, OK}
-import play.api.libs.json.{JsObject, Json}
 import play.api.test.Helpers.*
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{Journey, JourneyState, JourneyType}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.services.JourneyService
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, JourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.services.AgentJourneyService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentSpecHelper}
 
 class ServiceRefinementControllerISpec extends ComponentSpecHelper with AuthStubs {
 
-  val journeyService: JourneyService = app.injector.instanceOf[JourneyService]
+  val journeyService: AgentJourneyService = app.injector.instanceOf[AgentJourneyService]
 
   override def beforeEach(): Unit = {
     await(journeyService.deleteAllAnswersInSession(request))
@@ -33,7 +32,7 @@ class ServiceRefinementControllerISpec extends ComponentSpecHelper with AuthStub
   }
 
   "GET /authorisation-request/refine-service" should {
-    val journey = Journey(journeyType = JourneyType.AuthorisationRequest, clientType = Some("trust"), clientService = Some("HMRC-TERS-ORG"))
+    val journey = AgentJourney(journeyType = JourneyType.AuthorisationRequest, clientType = Some("trust"), clientService = Some("HMRC-TERS-ORG"))
     "redirect to ASA dashboard when no journey session present" in {
       authoriseAsAgent()
       val result = get(routes.ServiceRefinementController.show(JourneyType.AuthorisationRequest).url)
@@ -56,7 +55,7 @@ class ServiceRefinementControllerISpec extends ComponentSpecHelper with AuthStub
   }
 
   "POST /authorisation-request/refine-service" should {
-    val journey = Journey(journeyType = JourneyType.AuthorisationRequest, clientType = Some("trust"), clientService = Some("HMRC-TERS-ORG"))
+    val journey = AgentJourney(journeyType = JourneyType.AuthorisationRequest, clientType = Some("trust"), clientService = Some("HMRC-TERS-ORG"))
     "redirect to the next page after storing answer" in {
       authoriseAsAgent()
       await(journeyService.saveJourney(journey))
@@ -76,7 +75,7 @@ class ServiceRefinementControllerISpec extends ComponentSpecHelper with AuthStub
   }
 
   "GET /agent-cancel-authorisation/refine-service" should {
-    val journey = Journey(journeyType = JourneyType.AgentCancelAuthorisation, clientType = Some("trust"), clientService = Some("HMRC-TERS-ORG"))
+    val journey = AgentJourney(journeyType = JourneyType.AgentCancelAuthorisation, clientType = Some("trust"), clientService = Some("HMRC-TERS-ORG"))
     "redirect to ASA dashboard when no journey session present" in {
       authoriseAsAgent()
       val result = get(routes.ServiceRefinementController.show(JourneyType.AgentCancelAuthorisation).url)
@@ -99,7 +98,7 @@ class ServiceRefinementControllerISpec extends ComponentSpecHelper with AuthStub
   }
 
   "POST /agent-cancel-authorisation/refine-service" should {
-    val journey = Journey(journeyType = JourneyType.AgentCancelAuthorisation, clientType = Some("trust"), clientService = Some("HMRC-TERS-ORG"))
+    val journey = AgentJourney(journeyType = JourneyType.AgentCancelAuthorisation, clientType = Some("trust"), clientService = Some("HMRC-TERS-ORG"))
     "redirect to the enter client id page after storing answer" in {
       authoriseAsAgent()
       await(journeyService.saveJourney(journey))

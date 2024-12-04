@@ -19,13 +19,13 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey
 import play.api.http.Status.{BAD_REQUEST, OK}
 import play.api.test.Helpers.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsResponse, KnownFactType}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{Journey, JourneyExitType, JourneyType}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.services.JourneyService
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, JourneyExitType, JourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.services.AgentJourneyService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentSpecHelper}
 
 class SelectAgentRoleControllerISpec extends ComponentSpecHelper with AuthStubs {
 
-  val journeyService: JourneyService = app.injector.instanceOf[JourneyService]
+  val journeyService: AgentJourneyService = app.injector.instanceOf[AgentJourneyService]
   val journeyType: JourneyType = JourneyType.AuthorisationRequest // this controller is only used on AuthorisationRequest journeys
 
   override def beforeEach(): Unit = {
@@ -48,7 +48,7 @@ class SelectAgentRoleControllerISpec extends ComponentSpecHelper with AuthStubs 
   val clientDetailsWithExistingMain: ClientDetailsResponse = clientDetailsWithOutExisting.copy(hasExistingRelationshipFor = Some("HMRC-MTD-IT"))
   val clientDetailsWithExistingSupp: ClientDetailsResponse = clientDetailsWithOutExisting.copy(hasExistingRelationshipFor = Some("HMRC-MTD-IT-SUPP"))
 
-  private val journey = Journey(
+  private val journey = AgentJourney(
     journeyType = journeyType,
     clientType = Some("personal"),
     clientService = Some("HMRC-MTD-IT"),
@@ -58,7 +58,7 @@ class SelectAgentRoleControllerISpec extends ComponentSpecHelper with AuthStubs 
     agentType = None
   )
 
-  val agentRoleJourneys: Seq[Journey] = List(
+  val agentRoleJourneys: Seq[AgentJourney] = List(
     journey,
     journey.copy(clientDetailsResponse = Some(clientDetailsWithExistingMain)),
     journey.copy(clientDetailsResponse = Some(clientDetailsWithExistingSupp))

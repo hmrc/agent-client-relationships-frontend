@@ -20,7 +20,7 @@ import play.api.i18n.I18nSupport
 import play.api.mvc.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.{Actions, AgentRequest}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyType
-import uk.gov.hmrc.agentclientrelationshipsfrontend.services.JourneyService
+import uk.gov.hmrc.agentclientrelationshipsfrontend.services.AgentJourneyService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}
@@ -28,12 +28,12 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class StartJourneyController @Inject()(mcc: MessagesControllerComponents,
-                                       journeyService: JourneyService,
+                                       journeyService: AgentJourneyService,
                                        actions: Actions
                                       )(implicit val executionContext: ExecutionContext) extends FrontendController(mcc) with I18nSupport:
   
   
-  def startJourney(journeyType: JourneyType): Action[AnyContent] = actions.authenticate.async:
+  def startJourney(journeyType: JourneyType): Action[AnyContent] = actions.agentAuthenticate.async:
     request =>
       given AgentRequest[?] = request
       

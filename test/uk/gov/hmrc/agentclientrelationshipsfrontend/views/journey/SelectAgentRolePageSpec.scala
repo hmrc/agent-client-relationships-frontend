@@ -61,7 +61,7 @@ class SelectAgentRolePageSpec extends ViewSpecSupport {
   val clientDetailsWithExistingMain: ClientDetailsResponse = clientDetailsWithOutExisting.copy(hasExistingRelationshipFor = Some(mainRole))
   val clientDetailsWithExistingSupp: ClientDetailsResponse = clientDetailsWithOutExisting.copy(hasExistingRelationshipFor = Some(supportingRole))
 
-  private val journey = Journey(
+  private val journey = AgentJourney(
     journeyType = journeyType,
     clientType = Some("personal"),
     clientService = Some("HMRC-MTD-IT"),
@@ -71,7 +71,7 @@ class SelectAgentRolePageSpec extends ViewSpecSupport {
     agentType = None
   )
 
-  val agentRoleJourneys: Seq[(Journey, AgentRoleChangeType)] = Seq(
+  val agentRoleJourneys: Seq[(AgentJourney, AgentRoleChangeType)] = Seq(
     (journey, AgentRoleChangeType.NewRelationship),
     (journey.copy(clientDetailsResponse = Some(clientDetailsWithExistingMain)), AgentRoleChangeType.MainToSupporting),
     (journey.copy(clientDetailsResponse = Some(clientDetailsWithExistingSupp)), AgentRoleChangeType.SupportingToMain)

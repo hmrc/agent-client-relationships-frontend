@@ -18,9 +18,9 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey
 
 import play.api.libs.json.{JsObject, Json}
 import play.api.test.Helpers.*
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{Journey, JourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, JourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsResponse, KnownFactType}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.services.JourneyService
+import uk.gov.hmrc.agentclientrelationshipsfrontend.services.AgentJourneyService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.WiremockHelper.{stubDelete, stubPost}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentSpecHelper}
 
@@ -39,7 +39,7 @@ class CheckYourAnswersControllerISpec extends ComponentSpecHelper with AuthStubs
   private val existingAgentRoles = Seq(Some("HMRC-MTD-IT"), Some("HMRC-MTD-IT-SUPP"), None)
 
   private val basicClientDetails = ClientDetailsResponse("Test Name", None, None, Seq(exampleKnownFact), Some(KnownFactType.PostalCode), false, None)
-  private val basicJourney: Journey = Journey(
+  private val basicJourney: AgentJourney = AgentJourney(
     journeyType = JourneyType.AuthorisationRequest,
     clientType = Some("personal"),
     clientService = Some("HMRC-MTD-IT"),
@@ -50,19 +50,19 @@ class CheckYourAnswersControllerISpec extends ComponentSpecHelper with AuthStubs
     agentType = None
   )
 
-  def singleAgentRequestJourney(service: String): Journey = basicJourney.copy(
+  def singleAgentRequestJourney(service: String): AgentJourney = basicJourney.copy(
     clientService = Some(service),
     clientDetailsResponse = Some(basicClientDetails.copy(hasExistingRelationshipFor = None)),
     agentType = None
   )
 
-  def agentRoleBasedRequestJourney(service: String, existingRole: Option[String]): Journey = basicJourney.copy(
+  def agentRoleBasedRequestJourney(service: String, existingRole: Option[String]): AgentJourney = basicJourney.copy(
     clientService = Some(service),
     clientDetailsResponse = Some(basicClientDetails.copy(hasExistingRelationshipFor = existingRole)),
     agentType = if existingRole.contains("HMRC-MTD-IT-SUPP") then Some("HMRC-MTD-IT") else Some("HMRC-MTD-IT-SUPP")
   )
 
-  def existingAuthCancellationJourney(existingAuth: String): Journey = basicJourney.copy(
+  def existingAuthCancellationJourney(existingAuth: String): AgentJourney = basicJourney.copy(
     journeyType = JourneyType.AgentCancelAuthorisation,
     clientService = Some(existingAuth),
     clientDetailsResponse = Some(basicClientDetails.copy(hasExistingRelationshipFor = Some(existingAuth)))
@@ -94,7 +94,7 @@ class CheckYourAnswersControllerISpec extends ComponentSpecHelper with AuthStubs
   def cancelAuthorisationUrl(service: String, clientId: String) =
     s"/agent-client-relationships/agent/$testArn/service/$service/client/${getFieldName(service)}/$clientId"
 
-  val journeyService: JourneyService = app.injector.instanceOf[JourneyService]
+  val journeyService: AgentJourneyService = app.injector.instanceOf[AgentJourneyService]
 
   override def beforeEach(): Unit = {
     await(journeyService.deleteAllAnswersInSession(request))
@@ -104,7 +104,7 @@ class CheckYourAnswersControllerISpec extends ComponentSpecHelper with AuthStubs
   "GET /authorisation-request/confirm" should {
     "redirect to enter client id when client details are missing" in {
       authoriseAsAgent()
-      await(journeyService.saveJourney(Journey(journeyType = JourneyType.AuthorisationRequest, clientType = Some("personal"), clientService = Some("HMRC-MTD-IT"))))
+      await(journeyService.saveJourney(AgentJourney(journeyType = JourneyType.AuthorisationRequest, clientType = Some("personal"), clientService = Some("HMRC-MTD-IT"))))
       val result = get(routes.CheckYourAnswersController.show(JourneyType.AuthorisationRequest).url)
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe routes.EnterClientIdController.show(JourneyType.AuthorisationRequest).url

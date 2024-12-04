@@ -24,7 +24,7 @@ import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar.mock
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.connectors.AgentClientRelationshipsConnector
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{Journey, JourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, JourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsResponse, KnownFactType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.AgentClientRelationshipsService
 import uk.gov.hmrc.http.HeaderCarrier
@@ -55,7 +55,7 @@ class AgentClientRelationshipsServiceSpec extends AnyWordSpecLike with Matchers 
     false,
     None
   )
-  val testJourney: Journey = Journey(
+  val testJourney: AgentJourney = AgentJourney(
     JourneyType.AuthorisationRequest,
     Some("testType"),
     Some("testService")

@@ -20,7 +20,7 @@ import play.api.test.Helpers.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyType
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentSpecHelper}
 
-class StartJourneyControllerISpec extends ComponentSpecHelper with AuthStubs {
+class StartAgentJourneyControllerISpec extends ComponentSpecHelper with AuthStubs {
 
   "GET /authorisation-request/" should {
     "redirect to the select client type page" in {

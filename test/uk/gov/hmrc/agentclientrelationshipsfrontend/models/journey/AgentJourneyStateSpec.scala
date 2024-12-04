@@ -20,17 +20,17 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import play.api.libs.json.{JsError, JsString, JsSuccess, Json}
 
-class JourneyTypeSpec extends AnyWordSpecLike with Matchers {
+class AgentJourneyStateSpec extends AnyWordSpecLike with Matchers {
 
-  "JourneyType format" should {
-    JourneyType.values.foreach(value => s"write $value to a json string and read it back" in {
+  "JourneyState format" should {
+    JourneyState.values.foreach(value => s"write $value to a json string and read it back" in {
       val jsString = JsString(value.toString)
-      Json.toJson[JourneyType](value) shouldBe jsString
-      Json.fromJson[JourneyType](jsString) shouldBe JsSuccess(value)
+      Json.toJson[JourneyState](value) shouldBe jsString
+      Json.fromJson[JourneyState](jsString) shouldBe JsSuccess(value)
     })
 
     "fail to read an unknown value" in {
-      Json.fromJson[JourneyType](JsString("invalid")) shouldBe JsError("Invalid JourneyType")
+      Json.fromJson[JourneyState](JsString("invalid")) shouldBe JsError("Invalid JourneyState")
     }
   }
 

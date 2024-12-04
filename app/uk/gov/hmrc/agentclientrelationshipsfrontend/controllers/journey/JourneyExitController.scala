@@ -33,7 +33,7 @@ class JourneyExitController @Inject()(mcc: MessagesControllerComponents,
                                       actions: Actions
                                        )(implicit val executionContext: ExecutionContext, appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport:
 
-  def show(journeyType: JourneyType, exitType: JourneyExitType): Action[AnyContent] = actions.getJourney(journeyType):
+  def show(journeyType: JourneyType, exitType: JourneyExitType): Action[AnyContent] = actions.getAgentJourney(journeyType):
     journeyRequest =>
       given AgentJourneyRequest[?] = journeyRequest
 

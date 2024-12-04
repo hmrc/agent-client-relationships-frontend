@@ -29,12 +29,12 @@ import play.api.mvc.*
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsJson, defaultAwaitTimeout, redirectLocation, status}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{Journey, JourneyType}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.services.JourneyService
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, ClientJourney, JourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{AgentJourneyService, ClientJourneyService}
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class GetJourneyActionSpec extends AnyWordSpecLike with Matchers with OptionValues with BeforeAndAfterEach with GuiceOneAppPerSuite:
+class GetAgentJourneyActionSpec extends AnyWordSpecLike with Matchers with OptionValues with BeforeAndAfterEach with GuiceOneAppPerSuite:
 
   val fakeAuthAction: ActionRefiner[Request, AgentRequest] = new ActionRefiner[Request, AgentRequest] {
     override def refine[A](request: Request[A]): Future[Either[Result, AgentRequest[A]]] =
@@ -44,49 +44,51 @@ class GetJourneyActionSpec extends AnyWordSpecLike with Matchers with OptionValu
   class FakeController(getJourneyAction: GetJourneyAction,
                        actionBuilder: DefaultActionBuilder) {
     def route(journeyTypeFromUrl: JourneyType): Action[AnyContent] =
-      (actionBuilder andThen fakeAuthAction andThen getJourneyAction.journeyAction(journeyTypeFromUrl)) {
+      (actionBuilder andThen fakeAuthAction andThen getJourneyAction.agentJourneyAction(journeyTypeFromUrl)) {
         journeyRequest =>
           Results.Ok(Json.toJson(journeyRequest.journey).toString)
       }
   }
 
-  val mockJourneyService: JourneyService = mock[JourneyService]
+  val mockAgentJourneyService: AgentJourneyService = mock[AgentJourneyService]
+  val mockClientJourneyService: ClientJourneyService = mock[ClientJourneyService]
   val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
   val defaultActionBuilder: DefaultActionBuilder = app.injector.instanceOf[DefaultActionBuilder]
 
   given ExecutionContext = app.injector.instanceOf[ExecutionContext]
 
   override def afterEach(): Unit = {
-    reset(mockJourneyService)
+    reset(mockAgentJourneyService)
+    reset(mockClientJourneyService)
     super.afterEach()
   }
 
   val testController = new FakeController(
-    new GetJourneyAction(mockJourneyService, appConfig),
+    new GetJourneyAction(mockAgentJourneyService, mockClientJourneyService, appConfig),
     defaultActionBuilder
   )
 
   val fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
   val testArn = "testArn"
 
-  "journeyAction" should {
+  "agentJourneyAction" should {
     "successfully retrieve journey and continue if it matches the url journey type" in {
-      val testJourney = Journey(
+      val testJourney = AgentJourney(
         JourneyType.AuthorisationRequest
       )
-      when(mockJourneyService.getJourney()(any()))
+      when(mockAgentJourneyService.getJourney(any(), any()))
         .thenReturn(Future.successful(Some(testJourney)))
 
       val result = testController.route(JourneyType.AuthorisationRequest)(fakeRequest)
 
       status(result) shouldBe OK
-      contentAsJson(result).as[Journey] shouldBe testJourney
+      contentAsJson(result).as[AgentJourney] shouldBe testJourney
     }
     "successfully retrieve journey and redirect to ASA if it does not match the url journey type" in {
-      val testJourney = Journey(
+      val testJourney = AgentJourney(
         JourneyType.AuthorisationRequest
       )
-      when(mockJourneyService.getJourney()(any()))
+      when(mockAgentJourneyService.getJourney(any(), any()))
         .thenReturn(Future.successful(Some(testJourney)))
 
       val result = testController.route(JourneyType.AgentCancelAuthorisation)(fakeRequest)
@@ -95,7 +97,7 @@ class GetJourneyActionSpec extends AnyWordSpecLike with Matchers with OptionValu
       redirectLocation(result).value shouldBe "http://localhost:9401/agent-services-account/home"
     }
     "redirect to ASA if it cannot retrieve journey" in {
-      when(mockJourneyService.getJourney()(any()))
+      when(mockAgentJourneyService.getJourney(any(), any()))
         .thenReturn(Future.successful(None))
 
       val result = testController.route(JourneyType.AuthorisationRequest)(fakeRequest)

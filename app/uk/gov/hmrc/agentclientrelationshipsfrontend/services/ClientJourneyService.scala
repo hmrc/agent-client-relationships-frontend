@@ -16,21 +16,18 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.services
 
-import play.api.libs.json.Format
-import play.api.mvc.Request
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyType
+import com.google.inject.{Inject, Singleton}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{ClientJourney, JourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.repositories.JourneyRepository
 import uk.gov.hmrc.mongo.cache.DataKey
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
-trait JourneyService[T]:
-  val journeyRepository: JourneyRepository
-  val serviceConfig: ClientServiceConfigurationService
-  val dataKey: DataKey[T]
-  def saveJourney(journey: T)(implicit request: Request[?], ec: ExecutionContext, format: Format[T]): Future[Unit] =
-    journeyRepository.putSession(dataKey, journey).map(_ => ())
-  def getJourney(implicit request: Request[Any], format: Format[T]): Future[Option[T]] =
-    journeyRepository.getFromSession(dataKey)
-  def deleteAllAnswersInSession(implicit request: Request[Any]): Future[Unit] =
-    journeyRepository.cacheRepo.deleteEntity(request)
+@Singleton
+class ClientJourneyService @Inject()(val journeyRepository: JourneyRepository,
+                                     val serviceConfig: ClientServiceConfigurationService)(implicit executionContext: ExecutionContext, appConfig: AppConfig) extends JourneyService[ClientJourney] {
+
+  override val dataKey: DataKey[ClientJourney] = DataKey("ClientJourneySessionData")
+  
+}

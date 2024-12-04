@@ -28,7 +28,7 @@ import scala.concurrent.duration.DurationInt
 class JourneyRepository @Inject()(mongo: MongoComponent)(implicit ec: ExecutionContext)
   extends SessionCacheRepository(
     mongoComponent = mongo,
-    collectionName = "client-relationships",
+    collectionName = "journey",
     ttl = 15.minutes,
     timestampSupport = new CurrentTimestampSupport(),
     sessionIdKey = SessionKeys.sessionId

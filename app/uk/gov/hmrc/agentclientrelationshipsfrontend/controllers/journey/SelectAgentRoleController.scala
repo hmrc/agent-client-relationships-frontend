@@ -23,8 +23,8 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.AgentRoleFieldName
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.ClientDetailsResponse
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.SelectFromOptionsForm
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, AgentRoleChangeType, Journey, JourneyExitType, JourneyType}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{ClientServiceConfigurationService, JourneyService}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, AgentRoleChangeType, AgentJourney, JourneyExitType, JourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{ClientServiceConfigurationService, AgentJourneyService}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.SelectAgentRolePage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
@@ -34,12 +34,12 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class SelectAgentRoleController @Inject()(mcc: MessagesControllerComponents,
                                           serviceConfig: ClientServiceConfigurationService,
-                                          journeyService: JourneyService,
+                                          journeyService: AgentJourneyService,
                                           selectAgentRolePage: SelectAgentRolePage,
                                           actions: Actions
                                        )(implicit val executionContext: ExecutionContext, appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport:
   
-  private def getAgentRoleChangeType(journey: Journey, options: Seq[String]): AgentRoleChangeType = {
+  private def getAgentRoleChangeType(journey: AgentJourney, options: Seq[String]): AgentRoleChangeType = {
     journey.getClientDetailsResponse.hasExistingRelationshipFor match {
       case Some(existing) if options.head == existing => AgentRoleChangeType.MainToSupporting
       case Some(_) => AgentRoleChangeType.SupportingToMain
@@ -47,7 +47,7 @@ class SelectAgentRoleController @Inject()(mcc: MessagesControllerComponents,
     }
   }
 
-  def show(journeyType: JourneyType): Action[AnyContent] = actions.getJourney(journeyType):
+  def show(journeyType: JourneyType): Action[AnyContent] = actions.getAgentJourney(journeyType):
     journeyRequest =>
       given AgentJourneyRequest[?] = journeyRequest
       val journey = journeyRequest.journey
@@ -62,7 +62,7 @@ class SelectAgentRoleController @Inject()(mcc: MessagesControllerComponents,
       }
       
 
-  def onSubmit(journeyType: JourneyType): Action[AnyContent] = actions.getJourney(journeyType).async:
+  def onSubmit(journeyType: JourneyType): Action[AnyContent] = actions.getAgentJourney(journeyType).async:
     journeyRequest =>
       given AgentJourneyRequest[?] = journeyRequest
       val journey = journeyRequest.journey

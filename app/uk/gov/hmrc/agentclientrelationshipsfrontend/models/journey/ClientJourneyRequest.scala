@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,7 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey
 
-import play.api.mvc.Request
-import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.AgentRequest
+import play.api.mvc.{Request, WrappedRequest}
 
-class AgentJourneyRequest[A](override val arn: String,
-                             val journey: AgentJourney,
-                             override val request: Request[A])
-  extends AgentRequest[A](arn, request)
+class ClientJourneyRequest[A](val journey: ClientJourney,
+                              val request: Request[A]) extends WrappedRequest[A](request)

@@ -20,8 +20,8 @@ import play.api.http.Status.{BAD_REQUEST, OK}
 import play.api.libs.json.{JsObject, Json}
 import play.api.test.Helpers.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{AgentCancelAuthorisationResponse, AuthorisationRequestInfo}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{Journey, JourneyType}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.services.JourneyService
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, JourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.services.AgentJourneyService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.WiremockHelper.stubGet
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentSpecHelper}
 
@@ -64,19 +64,19 @@ class ConfirmationControllerISpec extends ComponentSpecHelper with AuthStubs {
     )
   )
 
-  private val completeCancellationJourney: Journey = Journey(
+  private val completeCancellationJourney: AgentJourney = AgentJourney(
     JourneyType.AgentCancelAuthorisation,
     journeyComplete = Some("2024-12-25"),
     confirmationClientName = Some(testClientName),
     confirmationService = Some("HMRC-MTD-IT")
   )
 
-  private val completeCreateAuthorisationRequestJourney: Journey = Journey(
+  private val completeCreateAuthorisationRequestJourney: AgentJourney = AgentJourney(
     JourneyType.AuthorisationRequest,
     journeyComplete = Some(testInvitationId)
   )
 
-  val journeyService: JourneyService = app.injector.instanceOf[JourneyService]
+  val journeyService: AgentJourneyService = app.injector.instanceOf[AgentJourneyService]
 
   override def beforeEach(): Unit = {
     await(journeyService.deleteAllAnswersInSession(request))

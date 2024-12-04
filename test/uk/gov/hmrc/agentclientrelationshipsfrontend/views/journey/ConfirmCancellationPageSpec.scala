@@ -37,7 +37,7 @@ class ConfirmCancellationPageSpec extends ViewSpecSupport {
 
   private val services = Seq("HMRC-MTD-IT", "PERSONAL-INCOME-RECORD", "HMRC-MTD-VAT", "HMRC-CGT-PD", "HMRC-PPT-ORG", "HMRC-CBC-ORG", "HMRC-PILLAR2-ORG", "HMRC-TERS-ORG")
   private val basicClientDetails = ClientDetailsResponse(clientName, None, None, Seq(exampleKnownFact), Some(KnownFactType.PostalCode), false, None)
-  private val basicJourney: Journey = Journey(
+  private val basicJourney: AgentJourney = AgentJourney(
     journeyType = journeyType,
     clientType = Some("personal"),
     clientService = Some("HMRC-MTD-IT"),
