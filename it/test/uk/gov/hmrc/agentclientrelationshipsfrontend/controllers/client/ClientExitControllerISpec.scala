@@ -17,10 +17,12 @@
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client
 
 import play.api.http.Status.OK
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientExitType
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientExitType.*
-import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentSpecHelper}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.ComponentSpecHelper
+import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.client.clientExitPartials.{AgentSuspended, NoOutstandingRequests}
 
-class ClientExitControllerISpec extends ComponentSpecHelper with AuthStubs {
+class ClientExitControllerISpec extends ComponentSpecHelper {
 
   val testUid = "ABCD"
   val testStatus = "pending"
@@ -28,18 +30,26 @@ class ClientExitControllerISpec extends ComponentSpecHelper with AuthStubs {
   val testLastModifiedDate = "2025-11-11"
   val testTaxService = "income-tax"
 
-    s"GET /authorisation-response/exit/$AgentSuspended" should {
+  val exitTypesWithoutModifiedDate: List[ClientExitType] = List(AgentSuspended, NoOutstandingRequests)
+
+  val exitTypesWithModifiedDate: List[ClientExitType] = List(CannotFindAuthorisationRequest,AuthorisationRequestExpired,AuthorisationRequestCancelled)
+
+  exitTypesWithoutModifiedDate.foreach(exitType =>
+    s"GET /authorisation-response/exit/$exitType/$testNormalizedAgentName/" should {
       "display the exit page" in {
-        authoriseAsClient()
-        val result = get(routes.ClientExitController.show(AgentSuspended, None, None,
-        ).url)
-
-        println(routes.ClientExitController.show(AgentSuspended,
-          None, None))
-
-        println(s"\n\n$result")
+        println(routes.ClientExitController.show(exitType, testNormalizedAgentName, "").url)
+        val result = get(routes.ClientExitController.show(exitType, testNormalizedAgentName, "").url)
 
         result.status shouldBe OK
       }
-    }
+    })
+
+  exitTypesWithModifiedDate.foreach(exitType =>
+    s"GET /authorisation-response/exit/$exitType/$testNormalizedAgentName/$testLastModifiedDate" should {
+      "display the exit page" in {
+        val result = get(routes.ClientExitController.show(exitType, testNormalizedAgentName, testLastModifiedDate).url)
+
+        result.status shouldBe OK
+      }
+    })
 }

@@ -30,7 +30,7 @@
         authorisationHasAlreadyBeenResponded: AuthorisationHasAlreadyBeenResponded
 )
 
-@(exitType: ClientExitType, normalizedAgentName: Option[String] = None, lastModifiedDate: Option[String] = None)(implicit request: Request[?], messages: Messages, appConfig: AppConfig)
+@(exitType: ClientExitType, normalizedAgentName: String, lastModifiedDate: String)(implicit request: Request[?], messages: Messages, appConfig: AppConfig)
 
 @key = @{
     "clientExit"
@@ -47,11 +47,11 @@
     @{
         exitType match {
             case ClientExitType.AgentSuspended => agentSuspended()
-            case ClientExitType.AuthorisationRequestExpired => authorisationHasExpired(expiryDate = lastModifiedDate.get)
-            case ClientExitType.AuthorisationRequestCancelled => authorisationHasBeenCancelled(expiryDate = lastModifiedDate.get)
-            case ClientExitType.CannotFindAuthorisationRequest => cannotFindAuthRequest(normalizedAgentName = normalizedAgentName.get)
+            case ClientExitType.AuthorisationRequestExpired => authorisationHasExpired(expiryDate = lastModifiedDate)
+            case ClientExitType.AuthorisationRequestCancelled => authorisationHasBeenCancelled(expiryDate = lastModifiedDate)
+            case ClientExitType.CannotFindAuthorisationRequest => cannotFindAuthRequest(normalizedAgentName = normalizedAgentName)
             case ClientExitType.NoOutstandingRequests => noOutstandingRequests()
-            case ClientExitType.AlreadyRespondedToAuthorisationRequest => authorisationHasAlreadyBeenResponded(respondedToDate = lastModifiedDate.get)
+            case ClientExitType.AlreadyRespondedToAuthorisationRequest => authorisationHasAlreadyBeenResponded(respondedToDate = lastModifiedDate)
         }
     }
 }

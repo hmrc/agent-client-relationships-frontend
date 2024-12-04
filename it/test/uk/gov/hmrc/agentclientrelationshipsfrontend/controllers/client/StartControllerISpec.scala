@@ -84,22 +84,24 @@ class StartControllerISpec extends ComponentSpecHelper with ScalaFutures with Au
 
       val result = get(routes.StartController.show(testUid, testNormalizedAgentName, testTaxService).url)
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe routes.ClientExitController.show(AgentSuspended, Some(testNormalizedAgentName), None).url
+      result.header("Location").value shouldBe routes.ClientExitController.show(AgentSuspended, testNormalizedAgentName, "").url
     }
 
     "Redirect to routes.ClientExitController.show(AGENT_NOT_FOUND) if there are no invitations found" in {
       stubGet(getValidateLinkResponseUrl(testUid, testNormalizedAgentName), NOT_FOUND, testValidateLinkResponseJson(testStatus).toString)
 
+      println(routes.ClientExitController.show(NoOutstandingRequests, testNormalizedAgentName, "").url)
+
       val result = get(routes.StartController.show(testUid, testNormalizedAgentName, testTaxService).url)
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe routes.ClientExitController.show(NoOutstandingRequests, Some(testNormalizedAgentName), None).url
+      result.header("Location").value shouldBe routes.ClientExitController.show(NoOutstandingRequests, testNormalizedAgentName, "").url
     }
     alreadyRespondedStatuses.foreach { status =>
       s"Redirect to Already Responded to when the invitation status is $status" in {
         stubGet(getValidateLinkResponseUrl(testUid, testNormalizedAgentName), OK, testValidateLinkResponseJson(status).toString)
         val result = get(routes.StartController.show(testUid, testNormalizedAgentName, testTaxService).url)
         result.status shouldBe SEE_OTHER
-        result.header("Location").value shouldBe routes.ClientExitController.show(AlreadyRespondedToAuthorisationRequest, None, Some(testLastModifiedDate)).url
+        result.header("Location").value shouldBe routes.ClientExitController.show(AlreadyRespondedToAuthorisationRequest, testNormalizedAgentName, testLastModifiedDate).url
       }
     }
 
@@ -108,7 +110,7 @@ class StartControllerISpec extends ComponentSpecHelper with ScalaFutures with Au
 
       val result = get(routes.StartController.show(testUid, testNormalizedAgentName, testTaxService).url)
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe routes.ClientExitController.show(AuthorisationRequestCancelled, None, Some(testLastModifiedDate)).url
+      result.header("Location").value shouldBe routes.ClientExitController.show(AuthorisationRequestCancelled, testNormalizedAgentName, testLastModifiedDate).url
     }
 
     "Redirect to routes.ClientExitController.show(AuthorisationRequestExpired) when the status is Expired" in {
@@ -116,7 +118,7 @@ class StartControllerISpec extends ComponentSpecHelper with ScalaFutures with Au
 
       val result = get(routes.StartController.show(testUid, testNormalizedAgentName, testTaxService).url)
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe routes.ClientExitController.show(AuthorisationRequestExpired, None, Some(testLastModifiedDate)).url
+      result.header("Location").value shouldBe routes.ClientExitController.show(AuthorisationRequestExpired, testNormalizedAgentName, testLastModifiedDate).url
     }
 
     validTaxServiceNames.foreach { taxService =>

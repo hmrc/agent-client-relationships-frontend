@@ -64,7 +64,7 @@ class ClientExitPageSpec extends ViewSpecSupport {
 
   "ClientExitPage for AgentSuspended view" should {
 
-    val view: HtmlFormat.Appendable = viewTemplate(AgentSuspended, Some("Agent Name"), Some("11.11.2024"))
+    val view: HtmlFormat.Appendable = viewTemplate(AgentSuspended, "Agent Name", "11.11.2024")
     val doc: Document = Jsoup.parse(view.body)
 
     "have the right title" in {
@@ -88,7 +88,7 @@ class ClientExitPageSpec extends ViewSpecSupport {
 
   "ClientExitPage for NoOutstandingRequests view" should {
 
-    val view: HtmlFormat.Appendable = viewTemplate(NoOutstandingRequests, Some("Agent Name"), Some("11.11.2024"))
+    val view: HtmlFormat.Appendable = viewTemplate(NoOutstandingRequests, "Agent Name", "11.11.2024")
     val doc: Document = Jsoup.parse(view.body)
 
     "have the right title" in {
@@ -111,7 +111,7 @@ class ClientExitPageSpec extends ViewSpecSupport {
 
   "ClientExitPage for CannotFindAuthorisationRequest view" should {
 
-    val view: HtmlFormat.Appendable = viewTemplate(CannotFindAuthorisationRequest, Some("Agent Name"), Some("11.11.2024"))
+    val view: HtmlFormat.Appendable = viewTemplate(CannotFindAuthorisationRequest, "Agent Name", "11.11.2024")
     val doc: Document = Jsoup.parse(view.body)
 
     "have the right title" in {
@@ -135,7 +135,7 @@ class ClientExitPageSpec extends ViewSpecSupport {
   }
   "ClientExitPage for AuthorisationRequestExpired view" should {
 
-    val view: HtmlFormat.Appendable = viewTemplate(AuthorisationRequestExpired, Some("Agent Name"), Some("11.11.2024"))
+    val view: HtmlFormat.Appendable = viewTemplate(AuthorisationRequestExpired, "Agent Name", "11.11.2024")
     val doc: Document = Jsoup.parse(view.body)
 
     "have the right title" in {
@@ -161,7 +161,7 @@ class ClientExitPageSpec extends ViewSpecSupport {
 
   "ClientExitPage for AuthorisationRequestCancelled view" should {
 
-    val view: HtmlFormat.Appendable = viewTemplate(AuthorisationRequestCancelled, Some("Agent Name"), Some("11.11.2024"))
+    val view: HtmlFormat.Appendable = viewTemplate(AuthorisationRequestCancelled, "Agent Name", "11.11.2024")
     val doc: Document = Jsoup.parse(view.body)
 
     "have the right title" in {
@@ -187,7 +187,7 @@ class ClientExitPageSpec extends ViewSpecSupport {
 
   "ClientExitPage for AlreadyRespondedToAuthorisationRequest view" should {
 
-    val view: HtmlFormat.Appendable = viewTemplate(AlreadyRespondedToAuthorisationRequest, Some("Agent Name"), Some("11.11.2024"))
+    val view: HtmlFormat.Appendable = viewTemplate(AlreadyRespondedToAuthorisationRequest, "Agent Name", "11.11.2024")
     val doc: Document = Jsoup.parse(view.body)
 
     "have the right title" in {
