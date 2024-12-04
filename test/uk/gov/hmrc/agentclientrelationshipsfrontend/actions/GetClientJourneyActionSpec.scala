@@ -95,7 +95,7 @@ class GetClientJourneyActionSpec extends AnyWordSpecLike with Matchers with Opti
       val result = testController.route()(fakeRequest)
 
       status(result) shouldBe OK
-      //contentAsJson(result).as[ClientJourney] shouldBe ClientJourney(journeyType = ClientResponse)
+      contentAsJson(result).as[ClientJourney] shouldBe ClientJourney(journeyType = ClientResponse)
 
     }
   }
