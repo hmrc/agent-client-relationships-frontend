@@ -37,7 +37,6 @@ class ClientExitControllerISpec extends ComponentSpecHelper {
   exitTypesWithoutModifiedDate.foreach(exitType =>
     s"GET /authorisation-response/exit/$exitType/$testNormalizedAgentName/" should {
       "display the exit page" in {
-        println(routes.ClientExitController.show(exitType, testNormalizedAgentName, "").url)
         val result = get(routes.ClientExitController.show(exitType, testNormalizedAgentName, "").url)
 
         result.status shouldBe OK

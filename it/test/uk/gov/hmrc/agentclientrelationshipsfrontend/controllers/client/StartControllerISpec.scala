@@ -89,9 +89,7 @@ class StartControllerISpec extends ComponentSpecHelper with ScalaFutures with Au
 
     "Redirect to routes.ClientExitController.show(AGENT_NOT_FOUND) if there are no invitations found" in {
       stubGet(getValidateLinkResponseUrl(testUid, testNormalizedAgentName), NOT_FOUND, testValidateLinkResponseJson(testStatus).toString)
-
-      println(routes.ClientExitController.show(NoOutstandingRequests, testNormalizedAgentName, "").url)
-
+      
       val result = get(routes.StartController.show(testUid, testNormalizedAgentName, testTaxService).url)
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe routes.ClientExitController.show(NoOutstandingRequests, testNormalizedAgentName, "").url
