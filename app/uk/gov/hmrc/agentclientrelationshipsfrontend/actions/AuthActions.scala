@@ -22,7 +22,7 @@ import play.api.mvc.{ActionFunction, Request, Result, WrappedRequest}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.{AsAgent, CgtPd, MtdIncomeTax}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.routes
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.AuthorisedClient
+import uk.gov.hmrc.agentclientrelationshipsfrontend.services.ClientServiceConfigurationService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.UrlHelper
 import uk.gov.hmrc.auth.core.*
 import uk.gov.hmrc.auth.core.AuthProvider.GovernmentGateway
@@ -39,13 +39,10 @@ class AgentRequest[A](val arn: String,
                       val request: Request[A])
   extends WrappedRequest[A](request)
 
-class ClientRequest[A](val client: AuthorisedClient,
-                       val request: Request[A])
-  extends WrappedRequest[A](request)
-
 @Singleton
 class AuthActions @Inject()(val authConnector: AuthConnector,
-                            appConfig: AppConfig
+                            appConfig: AppConfig,
+                            serviceConfig: ClientServiceConfigurationService
                            )(implicit ec: ExecutionContext)
   extends AuthorisedFunctions with Logging {
 
@@ -72,14 +69,21 @@ class AuthActions @Inject()(val authConnector: AuthConnector,
         .recover {
           handleFailure(isAgent = true)
         }
+  private def userHasEnrolmentForTaxService(taxService: String, enrols:Enrolments): Boolean =
+    enrols.enrolments.map(_.key).intersect(serviceConfig.getServiceKeys(taxService).getOrElse(Set.empty)).nonEmpty
 
-  def clientAuthAction: ActionFunction[Request, ClientRequest] = new ActionFunction[Request, ClientRequest]:
+  def clientAuthActionWithEnrolmentCheck(taxService: String): ActionFunction[Request, Request] = new ActionFunction[Request, Request]:
     val executionContext: ExecutionContext = ec
 
-    override def invokeBlock[A](request: Request[A], block: ClientRequest[A] => Future[Result]): Future[Result] =
+    override def invokeBlock[A](request: Request[A], block: Request[A] => Future[Result]): Future[Result] =
       given Request[A] = request
-
       given HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
+
+      def enrolmentCheck(enrols: Enrolments): Future[Result] =
+        if userHasEnrolmentForTaxService(taxService, enrols) then
+          block(request)
+        else
+          Future.successful(Redirect("routes.ClientExitHandler.show(INSUFFICIENT_ENROLMENTS)"))
 
       authorised(AuthProviders(GovernmentGateway))
         .retrieve(affinityGroup and confidenceLevel and allEnrolments) {
@@ -87,13 +91,13 @@ class AuthActions @Inject()(val authConnector: AuthConnector,
             (affinity, confidence) match {
               case (AffinityGroup.Individual, cl) =>
                 withConfidenceLevelUplift(cl, enrols) {
-                  block(ClientRequest(AuthorisedClient(affinity, enrols), request))
+                  enrolmentCheck(enrols)
                 }
               case (AffinityGroup.Organisation, cl) =>
                 if enrols.enrolments.map(_.key).contains(MtdIncomeTax) then withConfidenceLevelUplift(cl, enrols) {
-                  block(ClientRequest(AuthorisedClient(affinity, enrols), request))
+                  enrolmentCheck(enrols)
                 }
-                else block(ClientRequest(AuthorisedClient(affinity, enrols), request))
+                else enrolmentCheck(enrols)
               case (AffinityGroup.Agent, _) =>
                 Future.successful(Redirect(routes.AuthorisationController.cannotViewRequest))
               case (affinityGroup, _) =>

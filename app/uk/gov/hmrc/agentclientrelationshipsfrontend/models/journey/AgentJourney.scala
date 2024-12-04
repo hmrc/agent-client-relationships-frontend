@@ -19,18 +19,18 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey
 import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsResponse, ClientStatus, KnownFactType}
 
-case class Journey(journeyType: JourneyType,
-                   clientType: Option[String] = None,
-                   clientService: Option[String] = None,
-                   clientId: Option[String] = None,
-                   clientDetailsResponse: Option[ClientDetailsResponse] = None,
-                   knownFact: Option[String] = None,
-                   agentType: Option[String] = None,
-                   clientConfirmed: Option[Boolean] = None,
-                   refinedService: Option[Boolean] = None,
-                   journeyComplete: Option[String] = None,
-                   confirmationClientName: Option[String] = None,
-                   confirmationService: Option[String] = None
+case class AgentJourney(journeyType: JourneyType,
+                        clientType: Option[String] = None,
+                        clientService: Option[String] = None,
+                        clientId: Option[String] = None,
+                        clientDetailsResponse: Option[ClientDetailsResponse] = None,
+                        knownFact: Option[String] = None,
+                        agentType: Option[String] = None,
+                        clientConfirmed: Option[Boolean] = None,
+                        refinedService: Option[Boolean] = None,
+                        journeyComplete: Option[String] = None,
+                        confirmationClientName: Option[String] = None,
+                        confirmationService: Option[String] = None
                   ):
 
   def getClientTypeWithDefault: String = clientType.getOrElse("")
@@ -57,7 +57,7 @@ case class Journey(journeyType: JourneyType,
       case ClientDetailsResponse(_, _, _, _, _, _, None) => Some(JourneyExitType.NoAuthorisationExists)
     }
 
-object Journey:
-  implicit lazy val format: OFormat[Journey] = Json.format[Journey]
+object AgentJourney:
+  implicit lazy val format: OFormat[AgentJourney] = Json.format[AgentJourney]
 
 

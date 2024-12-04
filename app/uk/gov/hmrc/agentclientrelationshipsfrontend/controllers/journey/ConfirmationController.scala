@@ -41,7 +41,7 @@ class ConfirmationController @Inject()(mcc: MessagesControllerComponents,
   private def makeClientLink(authorisationRequestInfo: AuthorisationRequestInfo): String =
     s"${appConfig.appExternalUrl}/agent-client-relationships/appoint-someone-to-deal-with-HMRC-for-you/${authorisationRequestInfo.agentReference}/${authorisationRequestInfo.normalizedAgentName}/${serviceConfig.getUrlPart(authorisationRequestInfo.service)}"
 
-  def show(journeyType: JourneyType): Action[AnyContent] = actions.getJourney(journeyType).async:
+  def show(journeyType: JourneyType): Action[AnyContent] = actions.getAgentJourney(journeyType).async:
     journeyRequest =>
       given AgentJourneyRequest[?] = journeyRequest
 

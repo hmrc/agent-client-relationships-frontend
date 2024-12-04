@@ -29,8 +29,8 @@ class CountrySpec extends ViewSpecSupport {
 
   val viewTemplate: EnterClientFactPage = app.injector.instanceOf[EnterClientFactPage]
 
-  private val authorisationRequestJourney: Journey = Journey(JourneyType.AuthorisationRequest)
-  private val agentCancelAuthorisationJourney: Journey = Journey(JourneyType.AgentCancelAuthorisation)
+  private val authorisationRequestJourney: AgentJourney = AgentJourney(JourneyType.AuthorisationRequest)
+  private val agentCancelAuthorisationJourney: AgentJourney = AgentJourney(JourneyType.AgentCancelAuthorisation)
 
   List(authorisationRequestJourney, agentCancelAuthorisationJourney).foreach(j =>
       s"EnterClientFactPage for country code ${j.journeyType.toString} view" should {

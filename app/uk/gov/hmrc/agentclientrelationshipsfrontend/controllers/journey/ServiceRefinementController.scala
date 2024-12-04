@@ -22,7 +22,7 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.ClientServiceFieldName
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.SelectFromOptionsForm
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, JourneyType}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{ClientServiceConfigurationService, JourneyService}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{ClientServiceConfigurationService, AgentJourneyService}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.ServiceRefinementPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
@@ -32,12 +32,12 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class ServiceRefinementController @Inject()(mcc: MessagesControllerComponents,
                                             serviceConfig: ClientServiceConfigurationService,
-                                            journeyService: JourneyService,
+                                            journeyService: AgentJourneyService,
                                             serviceRefinementPage: ServiceRefinementPage,
                                             actions: Actions
                                        )(implicit val executionContext: ExecutionContext) extends FrontendController(mcc) with I18nSupport:
   
-  def show(journeyType: JourneyType): Action[AnyContent] = actions.getJourney(journeyType):
+  def show(journeyType: JourneyType): Action[AnyContent] = actions.getAgentJourney(journeyType):
     journeyRequest =>
       given AgentJourneyRequest[?] = journeyRequest
       val journey = journeyRequest.journey
@@ -55,7 +55,7 @@ class ServiceRefinementController @Inject()(mcc: MessagesControllerComponents,
       }
       
 
-  def onSubmit(journeyType: JourneyType): Action[AnyContent] = actions.getJourney(journeyType).async:
+  def onSubmit(journeyType: JourneyType): Action[AnyContent] = actions.getAgentJourney(journeyType).async:
     journeyRequest =>
       given AgentJourneyRequest[?] = journeyRequest
       val journey = journeyRequest.journey

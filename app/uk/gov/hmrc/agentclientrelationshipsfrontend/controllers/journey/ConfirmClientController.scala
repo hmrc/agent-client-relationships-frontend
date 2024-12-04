@@ -22,7 +22,7 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.ClientConfirmationFieldName
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.ConfirmClientForm
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, JourneyType}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.services.JourneyService
+import uk.gov.hmrc.agentclientrelationshipsfrontend.services.AgentJourneyService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.ConfirmClientPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
@@ -31,12 +31,12 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class ConfirmClientController @Inject()(mcc: MessagesControllerComponents,
-                                        journeyService: JourneyService,
+                                        journeyService: AgentJourneyService,
                                         confirmClientPage: ConfirmClientPage,
                                         actions: Actions
                                        )(implicit val executionContext: ExecutionContext) extends FrontendController(mcc) with I18nSupport:
 
-  def show(journeyType: JourneyType): Action[AnyContent] = actions.getJourney(journeyType):
+  def show(journeyType: JourneyType): Action[AnyContent] = actions.getAgentJourney(journeyType):
     journeyRequest =>
       given AgentJourneyRequest[?] = journeyRequest
 
@@ -50,7 +50,7 @@ class ConfirmClientController @Inject()(mcc: MessagesControllerComponents,
       }
 
 
-  def onSubmit(journeyType: JourneyType): Action[AnyContent] = actions.getJourney(journeyType).async:
+  def onSubmit(journeyType: JourneyType): Action[AnyContent] = actions.getAgentJourney(journeyType).async:
     journeyRequest =>
       given AgentJourneyRequest[?] = journeyRequest
 

@@ -21,7 +21,7 @@ import play.api.libs.json.Json
 import play.api.libs.ws.JsonBodyWritables.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.invitationLink.ValidateLinkPartsResponse
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, Journey}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, AgentJourney}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.ClientServiceConfigurationService
 import uk.gov.hmrc.http.HttpReads.Implicits.*
@@ -44,7 +44,7 @@ class AgentClientRelationshipsConnector @Inject()(appConfig: AppConfig,
     .get(url"$agentClientRelationshipsUrl/client/$service/details/$clientId")
     .execute[Option[ClientDetailsResponse]]
 
-  def createAuthorisationRequest(journey: Journey)(implicit hc: HeaderCarrier, request: AgentJourneyRequest[?]): Future[String] = {
+  def createAuthorisationRequest(journey: AgentJourney)(implicit hc: HeaderCarrier, request: AgentJourneyRequest[?]): Future[String] = {
     val clientIdType = serviceConfig.firstClientDetailsFieldFor(journey.getService).clientIdType
     httpV2
       .post(url"$agentClientRelationshipsUrl/agent/${request.arn}/authorisation-request")
@@ -56,7 +56,7 @@ class AgentClientRelationshipsConnector @Inject()(appConfig: AppConfig,
       }
   }
 
-  def cancelAuthorisation(journey: Journey)(implicit hc: HeaderCarrier, request: AgentJourneyRequest[?]): Future[Unit] = httpV2
+  def cancelAuthorisation(journey: AgentJourney)(implicit hc: HeaderCarrier, request: AgentJourneyRequest[?]): Future[Unit] = httpV2
     .delete(url"$agentClientRelationshipsUrl/agent/${request.arn}/service/${journey.getService}/client/${serviceConfig.firstClientDetailsFieldFor(journey.getService).clientIdType}/${journey.clientId.get}")
     .execute[HttpResponse].map { response => response.status match {
       case NO_CONTENT => ()

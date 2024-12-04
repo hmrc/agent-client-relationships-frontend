@@ -19,20 +19,20 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey
 import play.api.http.Status.{BAD_REQUEST, OK}
 import play.api.test.Helpers.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsResponse, KnownFactType}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{Journey, JourneyExitType, JourneyType}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.services.JourneyService
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, JourneyExitType, JourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.services.AgentJourneyService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentSpecHelper}
 
-class JourneyExitControllerISpec extends ComponentSpecHelper with AuthStubs {
+class AgentJourneyExitControllerISpec extends ComponentSpecHelper with AuthStubs {
 
-  private val authorisationRequestJourney: Journey = Journey(
+  private val authorisationRequestJourney: AgentJourney = AgentJourney(
     JourneyType.AuthorisationRequest,
     clientType = Some("personal"),
     clientService = Some("HMRC-MTD-IT"),
     clientId = Some("AB123"),
     clientDetailsResponse = Some(ClientDetailsResponse("Test Name", None, None, Seq("AA11AA"), Some(KnownFactType.PostalCode), false, None))
   )
-  private val agentCancelAuthorisationJourney: Journey = Journey(
+  private val agentCancelAuthorisationJourney: AgentJourney = AgentJourney(
     JourneyType.AgentCancelAuthorisation,
     clientType = Some("personal"),
     clientService = Some("HMRC-MTD-IT"),
@@ -40,7 +40,7 @@ class JourneyExitControllerISpec extends ComponentSpecHelper with AuthStubs {
     clientDetailsResponse = Some(ClientDetailsResponse("Test Name", None, None, Seq("AA11AA"), Some(KnownFactType.PostalCode), false, None))
   )
 
-  val journeyService: JourneyService = app.injector.instanceOf[JourneyService]
+  val journeyService: AgentJourneyService = app.injector.instanceOf[AgentJourneyService]
 
   override def beforeEach(): Unit = {
     await(journeyService.deleteAllAnswersInSession(request))

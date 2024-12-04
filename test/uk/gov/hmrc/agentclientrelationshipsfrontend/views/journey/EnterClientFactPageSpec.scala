@@ -29,8 +29,8 @@ class EnterClientFactPageSpec extends ViewSpecSupport {
 
   val viewTemplate: EnterClientFactPage = app.injector.instanceOf[EnterClientFactPage]
 
-  private val authorisationRequestJourney: Journey = Journey(JourneyType.AuthorisationRequest)
-  private val agentCancelAuthorisationJourney: Journey = Journey(JourneyType.AgentCancelAuthorisation)
+  private val authorisationRequestJourney: AgentJourney = AgentJourney(JourneyType.AuthorisationRequest)
+  private val agentCancelAuthorisationJourney: AgentJourney = AgentJourney(JourneyType.AgentCancelAuthorisation)
 
   case class ExpectedStrings(authorisationTitle: String, cancelAuthorisationTitle: String)
 

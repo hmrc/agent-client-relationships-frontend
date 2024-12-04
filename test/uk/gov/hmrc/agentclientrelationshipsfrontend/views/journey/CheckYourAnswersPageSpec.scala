@@ -33,7 +33,7 @@ class CheckYourAnswersPageSpec extends ViewSpecSupport {
   private val clientName = "Test Name"
   private val servicesWithoutAgentRoles = Seq("PERSONAL-INCOME-RECORD", "HMRC-MTD-VAT", "HMRC-CGT-PD", "HMRC-PPT-ORG", "HMRC-CBC-ORG", "HMRC-PILLAR2-ORG", "HMRC-TERS-ORG")
   private val basicClientDetails = ClientDetailsResponse(clientName, None, None, Seq(exampleKnownFact), Some(KnownFactType.PostalCode), false, None)
-  private val basicJourney: Journey = Journey(
+  private val basicJourney: AgentJourney = AgentJourney(
     journeyType = journeyType,
     clientType = Some("personal"),
     clientService = Some("HMRC-MTD-IT"),
@@ -44,12 +44,12 @@ class CheckYourAnswersPageSpec extends ViewSpecSupport {
     agentType = None
   )
 
-  def singleAgentRequestJourney(service: String): Journey = basicJourney.copy(
+  def singleAgentRequestJourney(service: String): AgentJourney = basicJourney.copy(
     clientService = Some(service),
     agentType = None
   )
 
-  def agentRoleBasedRequestJourney(service: String, role: String): Journey = basicJourney.copy(
+  def agentRoleBasedRequestJourney(service: String, role: String): AgentJourney = basicJourney.copy(
     clientService = Some(service),
     agentType = Some(role)
   )

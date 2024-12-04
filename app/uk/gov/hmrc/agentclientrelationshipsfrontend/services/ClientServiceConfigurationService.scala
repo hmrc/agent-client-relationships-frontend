@@ -23,14 +23,15 @@ import javax.inject.{Inject, Singleton}
 import scala.collection.immutable.ListMap
 
 @Singleton
-class ClientServiceConfigurationService @Inject() {
+class ClientServiceConfigurationService @Inject() extends ServiceConstants {
+
   def orderedClientTypes: Seq[String] = Seq("personal", "business", "trust")
 
   def allClientTypes: Set[String] = services.flatMap(_._2.clientTypes).toSet[String]
   
   def getService(serviceName: String): Option[ServiceData] = services.get(serviceName)
   
-  def validateUrlPart(urlPart: String): Boolean = services.exists(_._2.urlPart == urlPart)
+  def validateUrlPart(urlPartKey: String): Boolean = getServiceKeys(urlPartKey).nonEmpty
 
   def clientServicesFor(clientType: String): Seq[String] = services.filter(_._2.serviceOption == true).filter(_._2.clientTypes.contains(clientType)).keys.toSeq
 
@@ -65,14 +66,16 @@ class ClientServiceConfigurationService @Inject() {
 
   def clientDetailForServiceAndClientIdType(clientService: String, clientIdType: String): Option[ClientDetailsConfiguration] = services(clientService).clientDetails.find(_.clientIdType == clientIdType)
 
-  def getUrlPart(clientService: String): String = services(getServiceForForm(clientService)).urlPart
+  def getServiceKeys(taxService: String): Option[Set[String]] = services.find(_._2.urlPart.contains(taxService)).map((_, serviceData) => serviceData.urlPart(taxService))
 
+  def getUrlPart(clientService: String): String = services(getServiceForForm(clientService)).urlPart.head._1
+  
   private val services: ListMap[String, ServiceData] = ListMap(
-    "HMRC-MTD-IT" -> ServiceData(
-      serviceName = "HMRC-MTD-IT",
-      urlPart = "income-tax",
+    HMRCMTDIT -> ServiceData(
+      serviceName = HMRCMTDIT,
+      urlPart = Map(incomeTax -> Set(HMRCMTDIT, HMRCNI, HMRCPT)),
       serviceOption = true,
-      supportedAgentRoles = Seq("HMRC-MTD-IT", "HMRC-MTD-IT-SUPP"),
+      supportedAgentRoles = Seq(HMRCMTDIT, HMRCMTDITSUPP),
       clientTypes = Set("personal"),
       clientDetails = Seq(
         ClientDetailsConfiguration(
@@ -90,11 +93,11 @@ class ClientServiceConfigurationService @Inject() {
         JourneyType.AgentCancelAuthorisation -> JourneyErrors()
       )
     ),
-    "HMRC-MTD-IT-SUPP" -> ServiceData(
-      serviceName = "HMRC-MTD-IT-SUPP",
-      urlPart = "income-tax",
+    HMRCMTDITSUPP -> ServiceData(
+      serviceName = HMRCMTDITSUPP,
+      urlPart = Map(incomeTax -> Set(HMRCMTDIT, HMRCNI, HMRCPT)),
       serviceOption = false,
-      supportedAgentRoles = Seq("HMRC-MTD-IT", "HMRC-MTD-IT-SUPP"),
+      supportedAgentRoles = Seq(HMRCMTDIT, HMRCMTDITSUPP),
       clientTypes = Set("personal"),
       clientDetails = Seq(
         ClientDetailsConfiguration(
@@ -106,9 +109,9 @@ class ClientServiceConfigurationService @Inject() {
         )
       )
     ),
-    "PERSONAL-INCOME-RECORD" -> ServiceData(
-      serviceName = "PERSONAL-INCOME-RECORD",
-      urlPart = "income-record-viewer",
+    PERSONALINCOMERECORD -> ServiceData(
+      serviceName = PERSONALINCOMERECORD,
+      urlPart = Map(incomeRecordViewer -> Set(HMRCNI, HMRCPT)),
       serviceOption = true,
       clientTypes = Set("personal"),
       clientDetails = Seq(
@@ -121,9 +124,9 @@ class ClientServiceConfigurationService @Inject() {
         )
       )
     ),
-    "HMRC-MTD-VAT" -> ServiceData(
-      serviceName = "HMRC-MTD-VAT",
-      urlPart = "vat",
+    HMRCMTDVAT -> ServiceData(
+      serviceName = HMRCMTDVAT,
+      urlPart = Map(vat -> Set(HMRCMTDVAT)),
       serviceOption = true,
       clientTypes = Set("personal", "business"),
       clientDetails = Seq(
@@ -136,11 +139,11 @@ class ClientServiceConfigurationService @Inject() {
         )
       )
     ),
-    "HMRC-TERS-ORG" -> ServiceData(
-      serviceName = "HMRC-TERS-ORG",
-      urlPart = "trusts-and-estates",
+    HMRCTERSORG -> ServiceData(
+      serviceName = HMRCTERSORG,
+      urlPart = Map(trustsAndEstates -> Set(HMRCTERSORG)),
       serviceOption = true,
-      supportedEnrolments = Seq("HMRC-TERS-ORG", "HMRC-TERSNT-ORG"), // parent service is always head of the list
+      supportedEnrolments = Seq(HMRCTERSORG, HMRCTERSNTORG), // parent service is always head of the list
       clientTypes = Set("trust"),
       clientDetails = Seq(
         ClientDetailsConfiguration(
@@ -152,11 +155,11 @@ class ClientServiceConfigurationService @Inject() {
         )
       )
     ),
-    "HMRC-TERSNT-ORG" -> ServiceData(
-      serviceName = "HMRC-TERSNT-ORG",
-      urlPart = "trusts-and-estates-non-taxable",
+    HMRCTERSNTORG -> ServiceData(
+      serviceName = HMRCTERSNTORG,
+      urlPart = Map(trustsAndEstateNonTaxable -> Set(HMRCTERSNTORG)),
       serviceOption = false,
-      supportedEnrolments = Seq("HMRC-TERS-ORG", "HMRC-TERSNT-ORG"), // parent service is always head of the list
+      supportedEnrolments = Seq(HMRCTERSORG, HMRCTERSNTORG), // parent service is always head of the list
       clientTypes = Set("trust"),
       clientDetails = Seq(
         ClientDetailsConfiguration(
@@ -168,9 +171,9 @@ class ClientServiceConfigurationService @Inject() {
         )
       )
     ),
-    "HMRC-CGT-PD" -> ServiceData(
-      serviceName = "HMRC-CGT-PD",
-      urlPart = "capital-gains-tax-uk-property",
+    HMRCCGTPD -> ServiceData(
+      serviceName = HMRCCGTPD,
+      urlPart = Map(capitalGainsTaxUkProperty -> Set(HMRCCGTPD)),
       serviceOption = true,
       clientTypes = Set("personal", "trust"),
       clientDetails = Seq(
@@ -183,9 +186,9 @@ class ClientServiceConfigurationService @Inject() {
         )
       )
     ),
-    "HMRC-PPT-ORG" -> ServiceData(
-      serviceName = "HMRC-PPT-ORG",
-      urlPart = "plastic-packaging-tax",
+    HMRCPPTORG -> ServiceData(
+      serviceName = HMRCPPTORG,
+      urlPart = Map(plasticPackagingTax -> Set(HMRCPPTORG)),
       serviceOption = true,
       clientTypes = Set("personal", "business", "trust"),
       clientDetails = Seq(
@@ -198,9 +201,9 @@ class ClientServiceConfigurationService @Inject() {
         )
       )
     ),
-    "HMRC-CBC-ORG" -> ServiceData(
-      serviceName = "HMRC-CBC-ORG",
-      urlPart = "country-by-country-reporting",
+    HMRCCBCORG -> ServiceData(
+      serviceName = HMRCCBCORG,
+      urlPart = Map(countryByCountryReporting -> Set(HMRCCBCORG)),
       serviceOption = true,
       clientTypes = Set("business", "trust"),
       clientDetails = Seq(
@@ -213,9 +216,9 @@ class ClientServiceConfigurationService @Inject() {
         )
       )
     ),
-    "HMRC-PILLAR2-ORG" -> ServiceData(
-      serviceName = "HMRC-PILLAR2-ORG",
-      urlPart = "pillar-2",
+    HMRCPILLAR2ORG -> ServiceData(
+      serviceName = HMRCPILLAR2ORG,
+      urlPart = Map(pillar2 -> Set(HMRCPILLAR2ORG)),
       serviceOption = true,
       clientTypes = Set("business", "trust"),
       clientDetails = Seq(

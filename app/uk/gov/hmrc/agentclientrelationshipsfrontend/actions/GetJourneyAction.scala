@@ -17,29 +17,41 @@
 package uk.gov.hmrc.agentclientrelationshipsfrontend.actions
 
 import play.api.mvc.Results.Redirect
-import play.api.mvc.{ActionFunction, Result}
+import play.api.mvc.{ActionFunction, Request, Result}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, JourneyType}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.services.JourneyService
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyType.ClientResponse
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, ClientJourney, ClientJourneyRequest, JourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{AgentJourneyService, ClientJourneyService}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class GetJourneyAction @Inject()(journeyService: JourneyService,
+class GetJourneyAction @Inject()(agentJourneyService: AgentJourneyService,
+                                 clientJourneyService: ClientJourneyService, 
                                  appConfig: AppConfig
                                 )(implicit ec: ExecutionContext) {
 
-  def journeyAction(journeyTypeFromUrl: JourneyType): ActionFunction[AgentRequest, AgentJourneyRequest] = new ActionFunction[AgentRequest, AgentJourneyRequest]:
+  def agentJourneyAction(journeyTypeFromUrl: JourneyType): ActionFunction[AgentRequest, AgentJourneyRequest] = new ActionFunction[AgentRequest, AgentJourneyRequest]:
     override protected def executionContext: ExecutionContext = ec
 
     override def invokeBlock[A](request: AgentRequest[A], block: AgentJourneyRequest[A] => Future[Result]): Future[Result] =
       given AgentRequest[A] = request
-      journeyService.getJourney().flatMap {
+      agentJourneyService.getJourney().flatMap {
         case Some(journey) if journey.journeyType == journeyTypeFromUrl =>
           block(new AgentJourneyRequest(request.arn, journey, request.request))
         case _ =>
           Future.successful(Redirect(appConfig.agentServicesAccountHomeUrl))
       }
+      
+  def clientJourneyAction: ActionFunction[Request, ClientJourneyRequest] = new ActionFunction[Request, ClientJourneyRequest]:
+    override protected def executionContext: ExecutionContext = ec
+        
+      override def invokeBlock[A](request: Request[A], block: ClientJourneyRequest[A] => Future[Result]): Future[Result] =
+        given Request[A] = request
+        clientJourneyService.getJourney().flatMap {
+          mJourney => block(ClientJourneyRequest(mJourney.getOrElse(ClientJourney(journeyType = ClientResponse)), request))
+        }
+        
 
 }

@@ -18,16 +18,16 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey
 
 import play.api.http.Status.{BAD_REQUEST, OK}
 import play.api.test.Helpers.*
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{Journey, JourneyType}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.services.JourneyService
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, JourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.services.AgentJourneyService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentSpecHelper}
 
 class SelectClientTypeControllerISpec extends ComponentSpecHelper with AuthStubs {
 
-  private val authorisationRequestJourney: Journey = Journey(JourneyType.AuthorisationRequest)
-  private val agentCancelAuthorisationJourney: Journey = Journey(JourneyType.AgentCancelAuthorisation)
+  private val authorisationRequestJourney: AgentJourney = AgentJourney(JourneyType.AuthorisationRequest)
+  private val agentCancelAuthorisationJourney: AgentJourney = AgentJourney(JourneyType.AgentCancelAuthorisation)
 
-  val journeyService: JourneyService = app.injector.instanceOf[JourneyService]
+  val journeyService: AgentJourneyService = app.injector.instanceOf[AgentJourneyService]
 
   override def beforeEach(): Unit = {
     await(journeyService.deleteAllAnswersInSession(request))

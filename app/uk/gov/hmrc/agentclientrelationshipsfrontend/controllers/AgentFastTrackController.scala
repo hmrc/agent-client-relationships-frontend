@@ -23,7 +23,7 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.routes
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.AgentFastTrackForm
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyType
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsResponse, FastTrackErrors}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{AgentClientRelationshipsService, ClientServiceConfigurationService, JourneyService}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{AgentClientRelationshipsService, ClientServiceConfigurationService, AgentJourneyService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.*
@@ -31,7 +31,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class AgentFastTrackController @Inject()(mcc: MessagesControllerComponents,
-                                         journeyService: JourneyService,
+                                         journeyService: AgentJourneyService,
                                          serviceConfig: ClientServiceConfigurationService,
                                          actions: Actions,
                                          agentClientRelationshipsService: AgentClientRelationshipsService

@@ -31,11 +31,11 @@ class ConfirmClientPageSpec extends ViewSpecSupport {
 
   val viewTemplate: ConfirmClientPage = app.injector.instanceOf[ConfirmClientPage]
 
-  private val authorisationRequestJourney: Journey = Journey(
+  private val authorisationRequestJourney: AgentJourney = AgentJourney(
     JourneyType.AuthorisationRequest,
     clientDetailsResponse = Some(ClientDetailsResponse("TestName", None, None, Nil, None, false, None))
   )
-  private val agentCancelAuthorisationJourney: Journey = Journey(
+  private val agentCancelAuthorisationJourney: AgentJourney = AgentJourney(
     JourneyType.AgentCancelAuthorisation,
     clientDetailsResponse = Some(ClientDetailsResponse("TestName", None, None, Nil, None, false, None))
   )

@@ -30,8 +30,8 @@ class EnterClientIdPageSpec extends ViewSpecSupport {
 
   val viewTemplate: EnterClientIdPage = app.injector.instanceOf[EnterClientIdPage]
 
-  private val authorisationRequestJourney: Journey = Journey(JourneyType.AuthorisationRequest)
-  private val agentCancelAuthorisationJourney: Journey = Journey(JourneyType.AgentCancelAuthorisation)
+  private val authorisationRequestJourney: AgentJourney = AgentJourney(JourneyType.AuthorisationRequest)
+  private val agentCancelAuthorisationJourney: AgentJourney = AgentJourney(JourneyType.AgentCancelAuthorisation)
 
   val ninoField: ClientDetailsConfiguration = ClientDetailsConfiguration(
     name = "nino",

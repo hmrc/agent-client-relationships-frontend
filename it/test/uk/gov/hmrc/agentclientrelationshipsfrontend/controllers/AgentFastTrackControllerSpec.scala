@@ -23,9 +23,9 @@ import play.api.test.Helpers.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.routes as journeyRoutes
 import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.routes as fastTrackRoutes
 import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.testOnly.routes as testRoutes
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{Journey, JourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, JourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{AgentFastTrackRequest, ClientDetailsResponse, KnownFactType}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{ClientServiceConfigurationService, JourneyService}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{ClientServiceConfigurationService, AgentJourneyService}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AgentClientRelationshipStub, AuthStubs, ComponentSpecHelper}
 
 class AgentFastTrackControllerSpec extends ComponentSpecHelper with AuthStubs with AgentClientRelationshipStub with ScalaFutures {
@@ -165,7 +165,7 @@ class AgentFastTrackControllerSpec extends ComponentSpecHelper with AuthStubs wi
      "knownFact" -> agentFastTrackRequest.knownFact.fold(Seq.empty)(Seq(_))
    )
 
-   def toJourney(agentFastTrackRequest: AgentFastTrackRequest,clientDetailsResponse: Option[ClientDetailsResponse], journeyType: JourneyType = journeyType): Journey =
+   def toJourney(agentFastTrackRequest: AgentFastTrackRequest,clientDetailsResponse: Option[ClientDetailsResponse], journeyType: JourneyType = journeyType): AgentJourney =
      journeyService.newJourney(JourneyType.AuthorisationRequest)
        .copy(
          clientService = Some(agentFastTrackRequest.service),
@@ -185,7 +185,7 @@ class AgentFastTrackControllerSpec extends ComponentSpecHelper with AuthStubs wi
      hasExistingRelationshipFor = None
    )
 
-  val journeyService: JourneyService = app.injector.instanceOf[JourneyService]
+  val journeyService: AgentJourneyService = app.injector.instanceOf[AgentJourneyService]
   val serviceConfig: ClientServiceConfigurationService = app.injector.instanceOf[ClientServiceConfigurationService]
 
   override def beforeEach(): Unit = {

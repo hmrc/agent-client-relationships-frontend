@@ -20,14 +20,15 @@ import play.api.libs.json.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyType.inverseMapping
 
 enum JourneyType:
-  case AuthorisationRequest, AgentCancelAuthorisation
+  case AuthorisationRequest, AgentCancelAuthorisation, ClientResponse
 
   override def toString: String = inverseMapping(this)
 
 object JourneyType:
   val mapping: Map[String, JourneyType] = Map(
     "authorisation-request" -> AuthorisationRequest,
-    "agent-cancel-authorisation" -> AgentCancelAuthorisation
+    "agent-cancel-authorisation" -> AgentCancelAuthorisation,
+    "client-response" -> ClientResponse
   )
   val inverseMapping: Map[JourneyType, String] = mapping.map(_.swap)
 

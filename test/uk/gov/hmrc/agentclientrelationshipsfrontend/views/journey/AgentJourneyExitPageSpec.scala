@@ -23,12 +23,12 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.support.ViewSpecSupport
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.JourneyExitPage
 
-class JourneyExitPageSpec extends ViewSpecSupport {
+class AgentJourneyExitPageSpec extends ViewSpecSupport {
 
   val viewTemplate: JourneyExitPage = app.injector.instanceOf[JourneyExitPage]
 
-  private val authorisationRequestJourney: Journey = Journey(JourneyType.AuthorisationRequest)
-  private val agentCancelAuthorisationJourney: Journey = Journey(JourneyType.AgentCancelAuthorisation)
+  private val authorisationRequestJourney: AgentJourney = AgentJourney(JourneyType.AuthorisationRequest)
+  private val agentCancelAuthorisationJourney: AgentJourney = AgentJourney(JourneyType.AgentCancelAuthorisation)
 
   case class ExpectedStrings(authorisationTitle: String, cancelAuthorisationTitle: String)
   private val supportedErrorCodes: Map[JourneyExitType, ExpectedStrings] = Map(

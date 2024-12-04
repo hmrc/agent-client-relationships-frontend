@@ -18,7 +18,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.services
 
 import uk.gov.hmrc.agentclientrelationshipsfrontend.connectors.AgentClientRelationshipsConnector
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{AgentDetails, AuthorisationRequestInfo, ClientDetailsResponse}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, Journey}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, AgentJourney}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.{Inject, Singleton}
@@ -27,17 +27,17 @@ import scala.concurrent.Future
 @Singleton
 class AgentClientRelationshipsService @Inject()(agentClientRelationshipsConnector: AgentClientRelationshipsConnector) {
 
-  def getClientDetails(clientId: String, journey: Journey)(implicit hc: HeaderCarrier): Future[Option[ClientDetailsResponse]] =
+  def getClientDetails(clientId: String, journey: AgentJourney)(implicit hc: HeaderCarrier): Future[Option[ClientDetailsResponse]] =
     agentClientRelationshipsConnector.getClientDetails(journey.getService, clientId)
     
   def getClientDetails(clientId: String, service: String)(implicit hc: HeaderCarrier): Future[Option[ClientDetailsResponse]] =
     agentClientRelationshipsConnector.getClientDetails(service, clientId)
 
-  def createAuthorisationRequest(journey: Journey)(implicit hc: HeaderCarrier, request: AgentJourneyRequest[?]): Future[String] = {
+  def createAuthorisationRequest(journey: AgentJourney)(implicit hc: HeaderCarrier, request: AgentJourneyRequest[?]): Future[String] = {
     agentClientRelationshipsConnector.createAuthorisationRequest(journey)
   }
 
-  def cancelAuthorisation(journey: Journey)(implicit hc: HeaderCarrier, request: AgentJourneyRequest[?]): Future[Unit] = {
+  def cancelAuthorisation(journey: AgentJourney)(implicit hc: HeaderCarrier, request: AgentJourneyRequest[?]): Future[Unit] = {
     agentClientRelationshipsConnector.cancelAuthorisation(journey)
   }
 

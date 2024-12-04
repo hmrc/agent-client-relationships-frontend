@@ -47,7 +47,7 @@ class ServiceRefinementPageSpec extends ViewSpecSupport {
 
   "ServiceRefinementPage for authorisation request view" should {
     implicit val journeyRequest: AgentJourneyRequest[?] =
-      new AgentJourneyRequest("", Journey(journeyType = AuthorisationRequest, clientType = Some("trust"), clientService = Some("HMRC-TERS-ORG")), request)
+      new AgentJourneyRequest("", AgentJourney(journeyType = AuthorisationRequest, clientType = Some("trust"), clientService = Some("HMRC-TERS-ORG")), request)
     val refinementForm: Form[String] = SelectFromOptionsForm.form("clientService", optionsForTrust, AuthorisationRequest.toString)
     val view: HtmlFormat.Appendable = viewTemplate(refinementForm, optionsForTrust)
     val doc: Document = Jsoup.parse(view.body)
@@ -90,7 +90,7 @@ class ServiceRefinementPageSpec extends ViewSpecSupport {
 
   "ServiceRefinementPage for cancel authorisation view" should {
     implicit val journeyRequest: AgentJourneyRequest[?] =
-      new AgentJourneyRequest("", Journey(journeyType = AgentCancelAuthorisation, clientType = Some("trust"), clientService = Some("HMRC-TERS-ORG")), request)
+      new AgentJourneyRequest("", AgentJourney(journeyType = AgentCancelAuthorisation, clientType = Some("trust"), clientService = Some("HMRC-TERS-ORG")), request)
     val refinementForm: Form[String] = SelectFromOptionsForm.form("clientService", optionsForTrust, AgentCancelAuthorisation.toString)
     val view: HtmlFormat.Appendable = viewTemplate(refinementForm, optionsForTrust)
     val doc: Document = Jsoup.parse(view.body)

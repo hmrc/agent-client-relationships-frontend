@@ -24,8 +24,8 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.config.CountryNamesLoader
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.KnownFactType
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.common.KnownFactsConfiguration
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.EnterClientFactForm
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, Journey, JourneyExitType, JourneyType}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{ClientServiceConfigurationService, JourneyService}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, AgentJourney, JourneyExitType, JourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{ClientServiceConfigurationService, AgentJourneyService}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.EnterClientFactPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
@@ -35,7 +35,7 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class EnterClientFactController @Inject()(mcc: MessagesControllerComponents,
                                           serviceConfig: ClientServiceConfigurationService,
-                                          journeyService: JourneyService,
+                                          journeyService: AgentJourneyService,
                                           enterKnownFactPage: EnterClientFactPage,
                                           actions: Actions,
                                           countryNamesLoader: CountryNamesLoader
@@ -51,13 +51,13 @@ class EnterClientFactController @Inject()(mcc: MessagesControllerComponents,
     else
       knownFactType.fieldConfiguration
 
-  private def knownFactForm(journey: Journey): Form[String] = EnterClientFactForm.form(
+  private def knownFactForm(journey: AgentJourney): Form[String] = EnterClientFactForm.form(
     journey.getKnownFactType.fieldConfiguration,
     journey.getService,
     validCountryCodes
   )
 
-  def show(journeyType: JourneyType): Action[AnyContent] = actions.getJourney(journeyType):
+  def show(journeyType: JourneyType): Action[AnyContent] = actions.getAgentJourney(journeyType):
     journeyRequest =>
       given AgentJourneyRequest[?] = journeyRequest
 
@@ -76,7 +76,7 @@ class EnterClientFactController @Inject()(mcc: MessagesControllerComponents,
       }
 
 
-  def onSubmit(journeyType: JourneyType): Action[AnyContent] = actions.getJourney(journeyType).async:
+  def onSubmit(journeyType: JourneyType): Action[AnyContent] = actions.getAgentJourney(journeyType).async:
     journeyRequest =>
       given AgentJourneyRequest[?] = journeyRequest
 

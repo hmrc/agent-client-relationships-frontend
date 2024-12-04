@@ -18,18 +18,18 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey
 
 import play.api.http.Status.{BAD_REQUEST, OK}
 import play.api.test.Helpers.*
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{Journey, JourneyState, JourneyType}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.services.JourneyService
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, JourneyState, JourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.services.AgentJourneyService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentSpecHelper}
 
 class SelectServiceControllerISpec extends ComponentSpecHelper with AuthStubs {
 
-  private val personalAuthorisationRequestJourney: Journey = Journey(journeyType = JourneyType.AuthorisationRequest, clientType = Some("personal"))
-  private val businessAuthorisationRequestJourney: Journey = Journey(journeyType = JourneyType.AuthorisationRequest, clientType = Some("business"))
-  private val trustAuthorisationRequestJourney: Journey = Journey(journeyType = JourneyType.AuthorisationRequest, clientType = Some("trust"))
-  private val personalAgentCancelAuthorisationJourney: Journey = Journey(JourneyType.AgentCancelAuthorisation, clientType = Some("personal"))
-  private val businessAgentCancelAuthorisationJourney: Journey = Journey(JourneyType.AgentCancelAuthorisation, clientType = Some("business"))
-  private val trustAgentCancelAuthorisationJourney: Journey = Journey(JourneyType.AgentCancelAuthorisation, clientType = Some("trust"))
+  private val personalAuthorisationRequestJourney: AgentJourney = AgentJourney(journeyType = JourneyType.AuthorisationRequest, clientType = Some("personal"))
+  private val businessAuthorisationRequestJourney: AgentJourney = AgentJourney(journeyType = JourneyType.AuthorisationRequest, clientType = Some("business"))
+  private val trustAuthorisationRequestJourney: AgentJourney = AgentJourney(journeyType = JourneyType.AuthorisationRequest, clientType = Some("trust"))
+  private val personalAgentCancelAuthorisationJourney: AgentJourney = AgentJourney(JourneyType.AgentCancelAuthorisation, clientType = Some("personal"))
+  private val businessAgentCancelAuthorisationJourney: AgentJourney = AgentJourney(JourneyType.AgentCancelAuthorisation, clientType = Some("business"))
+  private val trustAgentCancelAuthorisationJourney: AgentJourney = AgentJourney(JourneyType.AgentCancelAuthorisation, clientType = Some("trust"))
 
   private val optionsForPersonal: Seq[String] = Seq("HMRC-MTD-IT", "PERSONAL-INCOME-RECORD", "HMRC-MTD-VAT", "HMRC-CGT-PD", "HMRC-PPT-ORG")
   private val optionsForBusiness: Seq[String] = Seq("HMRC-MTD-VAT", "HMRC-PPT-ORG", "HMRC-CBC-ORG", "HMRC-PILLAR2-ORG")
@@ -43,18 +43,18 @@ class SelectServiceControllerISpec extends ComponentSpecHelper with AuthStubs {
     "trust" -> optionsForTrust
   )
 
-  private val allClientTypeAuthJourneys: List[Journey] = List(
+  private val allClientTypeAuthJourneys: List[AgentJourney] = List(
     personalAuthorisationRequestJourney,
     businessAuthorisationRequestJourney,
     trustAuthorisationRequestJourney
   )
-  private val allClientTypeDeAuthJourneys: List[Journey] = List(
+  private val allClientTypeDeAuthJourneys: List[AgentJourney] = List(
     personalAgentCancelAuthorisationJourney,
     businessAgentCancelAuthorisationJourney,
     trustAgentCancelAuthorisationJourney
   )
 
-  val journeyService: JourneyService = app.injector.instanceOf[JourneyService]
+  val journeyService: AgentJourneyService = app.injector.instanceOf[AgentJourneyService]
 
   override def beforeEach(): Unit = {
     await(journeyService.deleteAllAnswersInSession(request))
@@ -70,7 +70,7 @@ class SelectServiceControllerISpec extends ComponentSpecHelper with AuthStubs {
     }
     "redirect to the journey start when no client type present" in {
       authoriseAsAgent()
-      await(journeyService.saveJourney(Journey(journeyType = JourneyType.AuthorisationRequest, clientType = None)))
+      await(journeyService.saveJourney(AgentJourney(journeyType = JourneyType.AuthorisationRequest, clientType = None)))
       val result = get(routes.SelectServiceController.show(JourneyType.AuthorisationRequest).url)
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe routes.SelectClientTypeController.show(JourneyType.AuthorisationRequest).url
@@ -126,7 +126,7 @@ class SelectServiceControllerISpec extends ComponentSpecHelper with AuthStubs {
     }
     "redirect to the journey start when no client type present" in {
       authoriseAsAgent()
-      await(journeyService.saveJourney(Journey(journeyType = JourneyType.AgentCancelAuthorisation, clientType = None)))
+      await(journeyService.saveJourney(AgentJourney(journeyType = JourneyType.AgentCancelAuthorisation, clientType = None)))
       val result = get(routes.SelectServiceController.show(JourneyType.AgentCancelAuthorisation).url)
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe routes.SelectClientTypeController.show(JourneyType.AgentCancelAuthorisation).url
