@@ -31,7 +31,7 @@ class ClientServiceConfigurationService @Inject() extends ServiceConstants {
   
   def getService(serviceName: String): Option[ServiceData] = services.get(serviceName)
   
-  def validateUrlPart(urlPartKey: String): Boolean = getServiceKeys(urlPartKey).nonEmpty
+  def validateUrlPart(urlPartKey: String): Boolean = getServiceKeysForUrlPart(urlPartKey).nonEmpty
 
   def clientServicesFor(clientType: String): Seq[String] = services.filter(_._2.serviceOption == true).filter(_._2.clientTypes.contains(clientType)).keys.toSeq
 
@@ -66,7 +66,10 @@ class ClientServiceConfigurationService @Inject() extends ServiceConstants {
 
   def clientDetailForServiceAndClientIdType(clientService: String, clientIdType: String): Option[ClientDetailsConfiguration] = services(clientService).clientDetails.find(_.clientIdType == clientIdType)
 
-  def getServiceKeys(taxService: String): Option[Set[String]] = services.find(_._2.urlPart.contains(taxService)).map((_, serviceData) => serviceData.urlPart(taxService))
+  def getServiceKeysForUrlPart(taxService: String): Set[String] = services
+    .find(_._2.urlPart.contains(taxService))
+    .map((_, serviceData) => serviceData.urlPart(taxService))
+    .getOrElse(throw new RuntimeException("Cannot find service keys for URL part"))
 
   def getUrlPart(clientService: String): String = services(getServiceForForm(clientService)).urlPart.head._1
   

@@ -98,7 +98,7 @@ class AgentClientRelationshipsConnector @Inject()(appConfig: AppConfig,
       }
       )
 
-  def validateInvitation(uid: String, serviceKeys: Seq[String])(implicit hc: HeaderCarrier): Future[Either[String, ValidateInvitationResponse]] =
+  def validateInvitation(uid: String, serviceKeys: Set[String])(implicit hc: HeaderCarrier): Future[Either[String, ValidateInvitationResponse]] =
     httpV2
       .post(url"$agentClientRelationshipsUrl/client/validate-invitation")
       .withBody(Json.obj(

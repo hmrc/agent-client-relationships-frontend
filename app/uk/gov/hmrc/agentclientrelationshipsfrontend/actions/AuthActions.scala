@@ -70,7 +70,7 @@ class AuthActions @Inject()(val authConnector: AuthConnector,
           handleFailure(isAgent = true)
         }
   private def userHasEnrolmentForTaxService(taxService: String, enrols:Enrolments): Boolean =
-    enrols.enrolments.map(_.key).intersect(serviceConfig.getServiceKeys(taxService).getOrElse(Set.empty)).nonEmpty
+    enrols.enrolments.map(_.key).intersect(serviceConfig.getServiceKeysForUrlPart(taxService)).nonEmpty
 
   def clientAuthActionWithEnrolmentCheck(taxService: String): ActionFunction[Request, Request] = new ActionFunction[Request, Request]:
     val executionContext: ExecutionContext = ec

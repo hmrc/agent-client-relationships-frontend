@@ -14,24 +14,22 @@
  * limitations under the License.
  *@
 
-@import play.twirl.api.{Format, HtmlFormat}
-@import play.api.mvc.Request
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.Layout
-@import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.components.SubmitButton
-@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{JourneyExitType, JourneyType, AgentJourneyRequest}
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.ClientJourneyRequest
 
 @this(
         layout: Layout,
         govukButton: GovukButton
 )
 
-@(agentName: String, taxService: String)(implicit request: AgentJourneyRequest[?], messages: Messages, appConfig: AppConfig)
-@*TODO: Change request Type*@
+@()(implicit request: ClientJourneyRequest[?], messages: Messages, appConfig: AppConfig)
 
-@key: String = @{"consentInformation"}
-@pageTitle: String = @{messages(s"$key.$taxService.header")}
-@serviceName: String = @{messages(s"$taxService.name")}
+@key = @{"consentInformation"}
+@agentName = @{request.journey.getAgentName}
+@serviceKey = @{request.journey.getServiceKey}
+@pageTitle = @{messages(s"$key.$serviceKey.header")}
+@serviceName = @{messages("client.service.name")}
 
 @layout(pageTitle, Some(serviceName)) {
  <h1 class="govuk-heading-xl">@pageTitle</h1>

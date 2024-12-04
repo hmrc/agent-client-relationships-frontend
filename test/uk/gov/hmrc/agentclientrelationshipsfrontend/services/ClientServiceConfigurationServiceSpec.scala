@@ -27,34 +27,34 @@ class ClientServiceConfigurationServiceSpec extends AnyWordSpecLike with Matcher
 
   "getServiceKeys" should {
       s"return enrolments supported by $incomeTax" in {
-        services.getServiceKeys(incomeTax).get shouldBe Set(HMRCMTDIT, HMRCNI, HMRCPT)
+        services.getServiceKeysForUrlPart(incomeTax).get shouldBe Set(HMRCMTDIT, HMRCNI, HMRCPT)
       }
       s"return enrolments supported by $vat" in {
-        services.getServiceKeys(vat).get shouldBe Set(HMRCMTDVAT)
+        services.getServiceKeysForUrlPart(vat).get shouldBe Set(HMRCMTDVAT)
       }
       s"return enrolments supported by $capitalGainsTaxUkProperty" in {
-      services.getServiceKeys(capitalGainsTaxUkProperty).get shouldBe Set(HMRCCGTPD)
+      services.getServiceKeysForUrlPart(capitalGainsTaxUkProperty).get shouldBe Set(HMRCCGTPD)
       }
       s"return enrolments supported by $trustsAndEstates" in {
-      services.getServiceKeys(trustsAndEstates).get shouldBe Set(HMRCTERSORG)
+      services.getServiceKeysForUrlPart(trustsAndEstates).get shouldBe Set(HMRCTERSORG)
       }
       s"return enrolments supported by $trustsAndEstateNonTaxable" in {
-      services.getServiceKeys(trustsAndEstateNonTaxable).get shouldBe Set(HMRCTERSNTORG)
+      services.getServiceKeysForUrlPart(trustsAndEstateNonTaxable).get shouldBe Set(HMRCTERSNTORG)
       }
       s"return enrolments supported by $pillar2" in {
-        services.getServiceKeys(pillar2).get shouldBe Set(HMRCPILLAR2ORG)
+        services.getServiceKeysForUrlPart(pillar2).get shouldBe Set(HMRCPILLAR2ORG)
       }
       s"return enrolments supported by $incomeRecordViewer" in {
-      services.getServiceKeys(incomeRecordViewer).get shouldBe Set(HMRCNI, HMRCPT)
+      services.getServiceKeysForUrlPart(incomeRecordViewer).get shouldBe Set(HMRCNI, HMRCPT)
       }
       s"return enrolments supported by $plasticPackagingTax" in {
-      services.getServiceKeys(plasticPackagingTax).get shouldBe Set(HMRCPPTORG)
+      services.getServiceKeysForUrlPart(plasticPackagingTax).get shouldBe Set(HMRCPPTORG)
       }
       s"return enrolments supported by $countryByCountryReporting" in {
-      services.getServiceKeys(countryByCountryReporting).get shouldBe Set(HMRCCBCORG)
+      services.getServiceKeysForUrlPart(countryByCountryReporting).get shouldBe Set(HMRCCBCORG)
      }
       "return None when service is unknown" in {
-      services.getServiceKeys("unknown") shouldBe None
+      services.getServiceKeysForUrlPart("unknown") shouldBe None
     }
   }
 }

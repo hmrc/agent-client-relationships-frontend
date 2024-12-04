@@ -16,16 +16,19 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client
 
-import com.google.inject.Inject
 import play.api.i18n.I18nSupport
 import play.api.mvc.*
-import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.connectors.AgentClientRelationshipsConnector
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.ClientServiceConfigurationService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.client.ConsentInformationPage
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.play.http.HeaderCarrierConverter
+import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
+import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.ClientJourney
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyType.ClientResponse
+import uk.gov.hmrc.agentclientrelationshipsfrontend.services.ClientJourneyService
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -34,23 +37,34 @@ import scala.concurrent.{ExecutionContext, Future}
 class ConsentInformationController @Inject()(agentClientRelationshipsConnector: AgentClientRelationshipsConnector,
                                              serviceConfigurationService: ClientServiceConfigurationService,
                                              consentInformationPage: ConsentInformationPage,
-                                             mcc: MessagesControllerComponents
-                                            )(implicit val executionContext: ExecutionContext) extends FrontendController(mcc) with I18nSupport:
+                                             mcc: MessagesControllerComponents,
+                                             actions: Actions,
+                                             journeyService: ClientJourneyService
+                                            )(implicit val executionContext: ExecutionContext, appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport:
 
-  def show(uid: String, taxService: String): Action[AnyContent] = Action.async:
+  def show(uid: String, taxService: String): Action[AnyContent] = actions.getClientJourney(taxService).async:
 
     implicit request =>
       given HeaderCarrier = HeaderCarrierConverter.fromRequest(request)
-
-      val serviceKeys: Seq[String] = Seq("test")
       
-      if serviceConfigurationService.validateUrlPart(taxService) then
+      if serviceConfigurationService.validateUrlPart(taxService) then {
+        val serviceKeys: Set[String] = serviceConfigurationService.getServiceKeysForUrlPart(taxService)
+
         agentClientRelationshipsConnector
           .validateInvitation(uid, serviceKeys)
-          .map {
-            case Left("AGENT_SUSPENDED") => Redirect("routes.ClientExitController.show(AGENT_SUSPENDED)")
-            case Left("INVITATION_OR_AGENT_RECORD_NOT_FOUND") => Redirect("routes.ClientExitController.show(INVITATION_OR_AGENT_RECORD_NOT_FOUND)")
-            case Left(_) => Redirect("routes.ClientExitController.show(SERVER_ERROR)")
-            case Right(_) => Ok(consentInformationPage(agentName, taxService))
+          .flatMap {
+            case Left("AGENT_SUSPENDED") => Future.successful(Redirect("routes.ClientExitController.show(AGENT_SUSPENDED)"))
+            case Left("INVITATION_OR_AGENT_RECORD_NOT_FOUND") => Future.successful(Redirect("routes.ClientExitController.show(INVITATION_OR_AGENT_RECORD_NOT_FOUND)"))
+            case Left(_) => Future.successful(Redirect("routes.ClientExitController.show(SERVER_ERROR)"))
+            case Right(response) => {
+              journeyService.saveJourney(request.journey.copy(
+                invitationId = Some(response.invitationId),
+                serviceKey = Some(response.serviceKey),
+                agentName = Some(response.agentName),
+                status = Some(response.status),
+                lastModifiedDate = Some(response.lastModifiedDate)
+              )).map (_ => Ok(consentInformationPage()))
+            }
           }
+      }
       else Future.successful(NotFound(s"TODO: NOT FOUND urlPart ${taxService} for Client controller/template"))
