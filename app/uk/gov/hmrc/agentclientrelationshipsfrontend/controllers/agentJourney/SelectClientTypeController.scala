@@ -14,73 +14,67 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey
+package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentJourney
 
 import play.api.i18n.I18nSupport
 import play.api.mvc.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
-import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.ClientServiceFieldName
+import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.ClientTypeFieldName
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.SelectFromOptionsForm
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, JourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{ClientServiceConfigurationService, AgentJourneyService}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.agentJourney.ServiceRefinementPage
+import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.agentJourney.SelectClientTypePage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class ServiceRefinementController @Inject()(mcc: MessagesControllerComponents,
-                                            serviceConfig: ClientServiceConfigurationService,
-                                            journeyService: AgentJourneyService,
-                                            serviceRefinementPage: ServiceRefinementPage,
-                                            actions: Actions
-                                       )(implicit val executionContext: ExecutionContext) extends FrontendController(mcc) with I18nSupport:
+class SelectClientTypeController @Inject()(mcc: MessagesControllerComponents,
+                                           serviceConfig: ClientServiceConfigurationService,
+                                           journeyService: AgentJourneyService,
+                                           selectClientTypePage: SelectClientTypePage,
+                                           actions: Actions
+                                          )(implicit val executionContext: ExecutionContext) extends FrontendController(mcc) with I18nSupport:
   
   def show(journeyType: JourneyType): Action[AnyContent] = actions.getAgentJourney(journeyType):
     journeyRequest =>
       given AgentJourneyRequest[?] = journeyRequest
       val journey = journeyRequest.journey
-      if journey.getServiceWithDefault.isEmpty then Redirect(routes.SelectClientTypeController.show(journey.journeyType))
-      else {
-        val options = serviceConfig.getSupportedEnrolments(journey.getService)
-        val prepop = journey.refinedService match {
-          case Some(true) => journey.getService
-          case _ => ""
-        }
-        Ok(serviceRefinementPage(
-          form = SelectFromOptionsForm.form(ClientServiceFieldName, options, journey.journeyType.toString).fill(prepop),
-          options
-        ))
-      }
+      Ok(selectClientTypePage(
+        form = SelectFromOptionsForm.form(ClientTypeFieldName, serviceConfig.orderedClientTypes, journey.journeyType.toString).fill(journey.getClientTypeWithDefault),
+        clientTypes = serviceConfig.orderedClientTypes
+      ))
       
 
   def onSubmit(journeyType: JourneyType): Action[AnyContent] = actions.getAgentJourney(journeyType).async:
     journeyRequest =>
       given AgentJourneyRequest[?] = journeyRequest
       val journey = journeyRequest.journey
-      val options = serviceConfig.getSupportedEnrolments(journey.getServiceWithDefault)
-      SelectFromOptionsForm.form(ClientServiceFieldName, options, journeyType.toString).bindFromRequest().fold(
+
+      SelectFromOptionsForm.form(ClientTypeFieldName, serviceConfig.orderedClientTypes, journey.journeyType.toString).bindFromRequest().fold(
         formWithErrors => {
-          Future.successful(BadRequest(serviceRefinementPage(
-            formWithErrors,
-            options
+          Future.successful(BadRequest(selectClientTypePage(
+            form = formWithErrors,
+            clientTypes = serviceConfig.orderedClientTypes
           )))
         },
-        clientService => {
-          val newJourney = journey.copy(
-            clientService = Some(clientService),
+        clientType => {
+          // unset any previous answers if client type is changed
+          val newJourney = if (journey.clientType.contains(clientType)) journey else journey.copy(
+            clientType = Some(clientType),
+            clientService = None,
             clientId = None,
             clientDetailsResponse = None,
             clientConfirmed = None,
             knownFact = None,
             agentType = None,
             confirmationClientName = None,
-            refinedService = Some(true),
             journeyComplete = None
           )
-          
           journeyService.saveJourney(newJourney).flatMap { _ =>
-            journeyService.nextPageUrl(journeyType).map(Redirect(_))}
+            // we always want to go to the services page after selecting client type
+            Future.successful(Redirect(routes.SelectServiceController.show(journey.journeyType).url))
+          }
         }
-  )
+      )

@@ -18,7 +18,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.services
 
 import play.api.mvc.Request
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
-import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.routes
+import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentJourney.routes
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.repositories.JourneyRepository
 import uk.gov.hmrc.mongo.cache.DataKey

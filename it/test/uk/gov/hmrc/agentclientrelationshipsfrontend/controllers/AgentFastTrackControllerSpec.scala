@@ -20,7 +20,7 @@ import org.scalatest.concurrent.Futures.whenReady
 import org.scalatest.concurrent.ScalaFutures
 import play.api.libs.json.Json
 import play.api.test.Helpers.*
-import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.routes as journeyRoutes
+import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentJourney.routes as journeyRoutes
 import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.routes as fastTrackRoutes
 import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.testOnly.routes as testRoutes
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, JourneyType}

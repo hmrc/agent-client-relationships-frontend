@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey
+package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentJourney
 
 import play.api.libs.json.{JsObject, Json}
 import play.api.test.Helpers.*

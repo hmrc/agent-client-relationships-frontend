@@ -19,7 +19,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
-import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.routes
+import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.agentJourney.routes
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.AgentFastTrackForm
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyType
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsResponse, FastTrackErrors}
