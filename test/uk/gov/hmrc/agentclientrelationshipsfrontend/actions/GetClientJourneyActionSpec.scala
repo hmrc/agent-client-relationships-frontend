@@ -88,7 +88,7 @@ class GetClientJourneyActionSpec extends AnyWordSpecLike with Matchers with Opti
       contentAsJson(result).as[ClientJourney] shouldBe testJourney
     }
 
-    "create a new journey if it cannot retrieve journey" in {
+    "create a new journey if one doesn't exist in Mongo" in {
       when(mockClientJourneyService.getJourney(any(), any()))
         .thenReturn(Future.successful(None))
 
