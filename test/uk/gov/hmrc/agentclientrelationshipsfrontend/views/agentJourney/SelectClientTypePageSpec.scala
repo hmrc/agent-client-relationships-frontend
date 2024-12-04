@@ -23,7 +23,7 @@ import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.SelectFromOptionsForm
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey._
 import uk.gov.hmrc.agentclientrelationshipsfrontend.support.ViewSpecSupport
-import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.SelectClientTypePage
+import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.agentJourney.SelectClientTypePage
 
 class SelectClientTypePageSpec extends ViewSpecSupport {
 

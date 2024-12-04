@@ -20,7 +20,7 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.agentclientrelationshipsfrontend.support.ViewSpecSupport
-import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.AuthoriseAgentStartPage
+import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.agentJourney.AuthoriseAgentStartPage
 
 import scala.language.postfixOps
 

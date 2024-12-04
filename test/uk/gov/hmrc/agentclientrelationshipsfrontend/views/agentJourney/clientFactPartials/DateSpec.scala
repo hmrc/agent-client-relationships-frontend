@@ -24,7 +24,7 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.EnterCl
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, AgentJourney}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyType.AuthorisationRequest
 import uk.gov.hmrc.agentclientrelationshipsfrontend.support.ViewSpecSupport
-import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.clientFactPartials.Date
+import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.agentJourney.clientFactPartials.Date
 
 class DateSpec extends ViewSpecSupport {
 

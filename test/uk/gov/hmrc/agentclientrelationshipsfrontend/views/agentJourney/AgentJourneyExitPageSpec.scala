@@ -21,7 +21,7 @@ import org.jsoup.nodes.Document
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.support.ViewSpecSupport
-import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.JourneyExitPage
+import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.agentJourney.JourneyExitPage
 
 class AgentJourneyExitPageSpec extends ViewSpecSupport {
 

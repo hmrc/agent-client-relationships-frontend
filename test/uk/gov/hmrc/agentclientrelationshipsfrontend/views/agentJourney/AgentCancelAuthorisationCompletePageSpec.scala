@@ -22,7 +22,7 @@ import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.AgentCancelAuthorisationResponse
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, AgentJourney, JourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.support.ViewSpecSupport
-import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.AgentCancelAuthorisationCompletePage
+import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.agentJourney.AgentCancelAuthorisationCompletePage
 
 import scala.language.postfixOps
 

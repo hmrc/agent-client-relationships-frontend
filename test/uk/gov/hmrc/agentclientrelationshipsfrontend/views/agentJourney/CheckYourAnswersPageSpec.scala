@@ -22,7 +22,7 @@ import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsResponse, KnownFactType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.support.ViewSpecSupport
-import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.CheckYourAnswersPage
+import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.agentJourney.CheckYourAnswersPage
 
 class CheckYourAnswersPageSpec extends ViewSpecSupport {
 

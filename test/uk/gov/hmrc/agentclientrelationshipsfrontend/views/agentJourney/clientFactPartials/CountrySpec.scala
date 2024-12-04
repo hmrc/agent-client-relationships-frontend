@@ -23,7 +23,7 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.EnterCl
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsResponse, KnownFactType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.support.ViewSpecSupport
-import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.EnterClientFactPage
+import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.agentJourney.EnterClientFactPage
 
 class CountrySpec extends ViewSpecSupport {
 

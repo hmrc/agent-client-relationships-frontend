@@ -24,7 +24,7 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.models.common.ClientDetailsC
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.EnterClientIdForm
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.support.ViewSpecSupport
-import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.EnterClientIdPage
+import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.agentJourney.EnterClientIdPage
 
 class EnterClientIdPageSpec extends ViewSpecSupport {
 

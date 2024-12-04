@@ -25,7 +25,7 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.Confirm
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsResponse, KnownFactType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.support.ViewSpecSupport
-import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.ConfirmCancellationPage
+import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.agentJourney.ConfirmCancellationPage
 
 class ConfirmCancellationPageSpec extends ViewSpecSupport {
 

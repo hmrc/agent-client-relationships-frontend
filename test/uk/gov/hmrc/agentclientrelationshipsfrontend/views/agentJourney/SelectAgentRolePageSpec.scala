@@ -24,7 +24,7 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsRespons
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.SelectFromOptionsForm
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.support.ViewSpecSupport
-import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.SelectAgentRolePage
+import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.agentJourney.SelectAgentRolePage
 
 class SelectAgentRolePageSpec extends ViewSpecSupport {
 

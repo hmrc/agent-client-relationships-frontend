@@ -24,7 +24,7 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.SelectF
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyType.{AgentCancelAuthorisation, AuthorisationRequest}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.support.ViewSpecSupport
-import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.ServiceRefinementPage
+import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.agentJourney.ServiceRefinementPage
 
 class ServiceRefinementPageSpec extends ViewSpecSupport {
 
