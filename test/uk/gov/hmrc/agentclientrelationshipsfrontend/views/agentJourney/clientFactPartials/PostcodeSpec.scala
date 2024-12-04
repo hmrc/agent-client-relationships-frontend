@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.agentclientrelationshipsfrontend.views.journey.clientFactPartials
+package uk.gov.hmrc.agentclientrelationshipsfrontend.views.agentJourney.clientFactPartials
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -25,7 +25,7 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsRespons
 import uk.gov.hmrc.agentclientrelationshipsfrontend.support.ViewSpecSupport
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.EnterClientFactPage
 
-class EmailSpec extends ViewSpecSupport {
+class PostcodeSpec extends ViewSpecSupport {
 
   val viewTemplate: EnterClientFactPage = app.injector.instanceOf[EnterClientFactPage]
 
@@ -33,38 +33,24 @@ class EmailSpec extends ViewSpecSupport {
   private val agentCancelAuthorisationJourney: AgentJourney = AgentJourney(JourneyType.AgentCancelAuthorisation)
 
   List(authorisationRequestJourney, agentCancelAuthorisationJourney).foreach(j =>
-    List("HMRC-CBC-ORG","HMRC-CBC-NONUK-ORG").foreach(enrolment =>
-      s"EnterClientFactPage for email ${j.journeyType.toString} view for $enrolment" should {
+      s"EnterClientFactPage for postcode ${j.journeyType.toString} view" should {
         implicit val journeyRequest: AgentJourneyRequest[?] = new AgentJourneyRequest(
           "",
           j.copy(
-            clientService = Some(enrolment),
-            clientDetailsResponse = Some(ClientDetailsResponse("", None, None, Nil, Some(KnownFactType.Email), false, None))
+            clientService = Some("HMRC-CGT-PD"),
+            clientDetailsResponse = Some(ClientDetailsResponse("", None, None, Nil, Some(KnownFactType.PostalCode), false, None))
           ),
           request
         )
         val form = EnterClientFactForm.form(
-          KnownFactType.Email.fieldConfiguration,
-          "HMRC-CBC-ORG",
-          Set.empty[String]
+          KnownFactType.PostalCode.fieldConfiguration,
+          "HMRC-CGT-PD",
+          Set.empty
         )
-        val view: HtmlFormat.Appendable = viewTemplate(form, KnownFactType.Email.fieldConfiguration)
+        val view: HtmlFormat.Appendable = viewTemplate(form, KnownFactType.PostalCode.fieldConfiguration)
         val doc: Document = Jsoup.parse(view.body)
-        "have an input element" in {
+        "have a text input element" in {
           doc.select("input").size() shouldBe 1
         }
-        "render an input element" in {
-          val expectedElement = TestInputField(
-            "What is your client’s Country-by-Country contact email address?",Some("This is the email your client gave to HMRC for Country-by-Country reporting."),"email"
-          )
-          doc.extractInputField().value shouldBe expectedElement
-        }
-
-        "render an error message when form has errors" in {
-          val formWithErrors = form.bind(Map("email" -> ""))
-          val viewWithErrors: HtmlFormat.Appendable = viewTemplate(formWithErrors, KnownFactType.Email.fieldConfiguration)
-          val docWithErrors: Document = Jsoup.parse(viewWithErrors.body)
-          docWithErrors.select("p.govuk-error-message").text() shouldBe "Error: Enter your client’s email address"
-        }
-      }))
+      })
 }

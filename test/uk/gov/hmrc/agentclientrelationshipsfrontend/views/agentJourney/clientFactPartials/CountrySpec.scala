@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.agentclientrelationshipsfrontend.views.journey.clientFactPartials
+package uk.gov.hmrc.agentclientrelationshipsfrontend.views.agentJourney.clientFactPartials
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -25,7 +25,7 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsRespons
 import uk.gov.hmrc.agentclientrelationshipsfrontend.support.ViewSpecSupport
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.EnterClientFactPage
 
-class PostcodeSpec extends ViewSpecSupport {
+class CountrySpec extends ViewSpecSupport {
 
   val viewTemplate: EnterClientFactPage = app.injector.instanceOf[EnterClientFactPage]
 
@@ -33,24 +33,38 @@ class PostcodeSpec extends ViewSpecSupport {
   private val agentCancelAuthorisationJourney: AgentJourney = AgentJourney(JourneyType.AgentCancelAuthorisation)
 
   List(authorisationRequestJourney, agentCancelAuthorisationJourney).foreach(j =>
-      s"EnterClientFactPage for postcode ${j.journeyType.toString} view" should {
+      s"EnterClientFactPage for country code ${j.journeyType.toString} view" should {
         implicit val journeyRequest: AgentJourneyRequest[?] = new AgentJourneyRequest(
           "",
           j.copy(
             clientService = Some("HMRC-CGT-PD"),
-            clientDetailsResponse = Some(ClientDetailsResponse("", None, None, Nil, Some(KnownFactType.PostalCode), false, None))
+            clientDetailsResponse = Some(ClientDetailsResponse("", None, None, Nil, Some(KnownFactType.CountryCode), false, None))
           ),
           request
         )
+        val testCountries = Seq(("FR", "France"), ("DE", "Germany"))
         val form = EnterClientFactForm.form(
-          KnownFactType.PostalCode.fieldConfiguration,
+          KnownFactType.CountryCode.fieldConfiguration,
           "HMRC-CGT-PD",
-          Set.empty
+          Set("FR", "DE")
         )
-        val view: HtmlFormat.Appendable = viewTemplate(form, KnownFactType.PostalCode.fieldConfiguration)
+        val view: HtmlFormat.Appendable = viewTemplate(form, KnownFactType.CountryCode.fieldConfiguration.copy(validOptions = Some(testCountries)))
         val doc: Document = Jsoup.parse(view.body)
-        "have a text input element" in {
-          doc.select("input").size() shouldBe 1
+        "have a select element" in {
+          doc.select("select").size() shouldBe 1
+        }
+        "render a select element with country options" in {
+          val expectedElement = TestSelect(
+            "countryCode",
+            Seq(("", "")) ++ testCountries
+          )
+          doc.extractSelectElement().value shouldBe expectedElement
+        }
+        "render an error message when form has errors" in {
+          val formWithErrors = form.bind(Map("countryCode" -> "invalid"))
+          val viewWithErrors: HtmlFormat.Appendable = viewTemplate(formWithErrors, KnownFactType.CountryCode.fieldConfiguration.copy(validOptions = Some(testCountries)))
+          val docWithErrors: Document = Jsoup.parse(viewWithErrors.body)
+          docWithErrors.select("p.govuk-error-message").text() shouldBe "Error: Enter the country of your client’s contact address"
         }
       })
 }

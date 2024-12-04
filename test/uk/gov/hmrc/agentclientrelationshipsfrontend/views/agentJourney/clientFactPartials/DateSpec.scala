@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.agentclientrelationshipsfrontend.views.journey.clientFactPartials
+package uk.gov.hmrc.agentclientrelationshipsfrontend.views.agentJourney.clientFactPartials
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
