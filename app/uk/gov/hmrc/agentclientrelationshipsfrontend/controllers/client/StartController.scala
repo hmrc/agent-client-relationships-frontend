@@ -35,7 +35,7 @@ class StartController @Inject()(agentClientRelationshipsConnector: AgentClientRe
                                 serviceConfigurationService: ClientServiceConfigurationService,
                                 authoriseAgentStartPage: AuthoriseAgentStartPage,
                                 mcc: MessagesControllerComponents
-                                            )(implicit val executionContext: ExecutionContext) extends FrontendController(mcc) with I18nSupport:
+                               )(implicit val executionContext: ExecutionContext) extends FrontendController(mcc) with I18nSupport:
 
  def show(uid: String, normalizedAgentName: String, taxService: String): Action[AnyContent] = Action.async:
 
@@ -49,6 +49,6 @@ class StartController @Inject()(agentClientRelationshipsConnector: AgentClientRe
            case Left("AGENT_NOT_FOUND") => Redirect("routes.ClientExitController.show(AGENT_NOT_FOUND)")
            case Left("AGENT_SUSPENDED") => Redirect("routes.ClientExitController.show(AGENT_SUSPENDED)")
            case Left(_) => Redirect("routes.ClientExitController.show(SERVER_ERROR)")
-           case Right(_) => Ok(authoriseAgentStartPage(normalizedAgentName, taxService, uid))
+           case Right(response) => Ok(authoriseAgentStartPage(response.name, taxService, uid))
          }
-     else Future.successful(NotFound(s"TODO: NOT FOUND urlPart ${taxService} for Client controller/template"))
+     else Future.successful(NotFound(s"TODO: NOT FOUND urlPart $taxService for Client controller/template"))
