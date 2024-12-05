@@ -17,10 +17,11 @@
 package uk.gov.hmrc.agentclientrelationshipsfrontend.services
 
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.common.{ClientDetailsConfiguration, ServiceData}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{JourneyExitType, JourneyErrors, JourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{JourneyErrors, JourneyExitType, JourneyType}
 
 import javax.inject.{Inject, Singleton}
 import scala.collection.immutable.ListMap
+import scala.util.Try
 
 @Singleton
 class ClientServiceConfigurationService @Inject() extends ServiceConstants {
@@ -31,7 +32,7 @@ class ClientServiceConfigurationService @Inject() extends ServiceConstants {
   
   def getService(serviceName: String): Option[ServiceData] = services.get(serviceName)
   
-  def validateUrlPart(urlPartKey: String): Boolean = getServiceKeysForUrlPart(urlPartKey).nonEmpty
+  def validateUrlPart(urlPartKey: String): Boolean = Try(getServiceKeysForUrlPart(urlPartKey)).isSuccess
 
   def clientServicesFor(clientType: String): Seq[String] = services.filter(_._2.serviceOption == true).filter(_._2.clientTypes.contains(clientType)).keys.toSeq
 
@@ -67,7 +68,7 @@ class ClientServiceConfigurationService @Inject() extends ServiceConstants {
   def clientDetailForServiceAndClientIdType(clientService: String, clientIdType: String): Option[ClientDetailsConfiguration] = services(clientService).clientDetails.find(_.clientIdType == clientIdType)
 
   def getServiceKeysForUrlPart(taxService: String): Set[String] = services
-    .find(_._2.urlPart.contains(taxService))
+    .find(_._2.urlPart.keySet.contains(taxService))
     .map((_, serviceData) => serviceData.urlPart(taxService))
     .getOrElse(throw new RuntimeException("Cannot find service keys for URL part"))
 

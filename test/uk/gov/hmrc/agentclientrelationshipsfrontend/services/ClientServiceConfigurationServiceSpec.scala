@@ -27,34 +27,34 @@ class ClientServiceConfigurationServiceSpec extends AnyWordSpecLike with Matcher
 
   "getServiceKeys" should {
       s"return enrolments supported by $incomeTax" in {
-        services.getServiceKeysForUrlPart(incomeTax).get shouldBe Set(HMRCMTDIT, HMRCNI, HMRCPT)
+        services.getServiceKeysForUrlPart(incomeTax) shouldBe Set(HMRCMTDIT, HMRCNI, HMRCPT)
       }
       s"return enrolments supported by $vat" in {
-        services.getServiceKeysForUrlPart(vat).get shouldBe Set(HMRCMTDVAT)
+        services.getServiceKeysForUrlPart(vat) shouldBe Set(HMRCMTDVAT)
       }
       s"return enrolments supported by $capitalGainsTaxUkProperty" in {
-      services.getServiceKeysForUrlPart(capitalGainsTaxUkProperty).get shouldBe Set(HMRCCGTPD)
+      services.getServiceKeysForUrlPart(capitalGainsTaxUkProperty) shouldBe Set(HMRCCGTPD)
       }
       s"return enrolments supported by $trustsAndEstates" in {
-      services.getServiceKeysForUrlPart(trustsAndEstates).get shouldBe Set(HMRCTERSORG)
+      services.getServiceKeysForUrlPart(trustsAndEstates) shouldBe Set(HMRCTERSORG)
       }
       s"return enrolments supported by $trustsAndEstateNonTaxable" in {
-      services.getServiceKeysForUrlPart(trustsAndEstateNonTaxable).get shouldBe Set(HMRCTERSNTORG)
+      services.getServiceKeysForUrlPart(trustsAndEstateNonTaxable) shouldBe Set(HMRCTERSNTORG)
       }
       s"return enrolments supported by $pillar2" in {
-        services.getServiceKeysForUrlPart(pillar2).get shouldBe Set(HMRCPILLAR2ORG)
+        services.getServiceKeysForUrlPart(pillar2) shouldBe Set(HMRCPILLAR2ORG)
       }
       s"return enrolments supported by $incomeRecordViewer" in {
-      services.getServiceKeysForUrlPart(incomeRecordViewer).get shouldBe Set(HMRCNI, HMRCPT)
+      services.getServiceKeysForUrlPart(incomeRecordViewer) shouldBe Set(HMRCNI, HMRCPT)
       }
       s"return enrolments supported by $plasticPackagingTax" in {
-      services.getServiceKeysForUrlPart(plasticPackagingTax).get shouldBe Set(HMRCPPTORG)
+      services.getServiceKeysForUrlPart(plasticPackagingTax) shouldBe Set(HMRCPPTORG)
       }
       s"return enrolments supported by $countryByCountryReporting" in {
-      services.getServiceKeysForUrlPart(countryByCountryReporting).get shouldBe Set(HMRCCBCORG)
+      services.getServiceKeysForUrlPart(countryByCountryReporting) shouldBe Set(HMRCCBCORG)
      }
-      "return None when service is unknown" in {
-      services.getServiceKeysForUrlPart("unknown") shouldBe None
+      "throw runtime exception when service is unknown" in {
+        intercept[RuntimeException](services.getServiceKeysForUrlPart("unknown"))
     }
   }
 }

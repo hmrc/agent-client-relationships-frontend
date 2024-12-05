@@ -50,9 +50,9 @@ GET        /:journeyType/exit/:exitType                                         
 
 # Client Journey URLs ----------------------------------------------------------------------------------------------------------
 
-GET        /appoint-someone-to-deal-with-HMRC-for-you/:taxService/:uid/:normalizedAgentName             uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.StartController.show(uid: String, normalizedAgentName: String, taxService: String)
+GET        /appoint-someone-to-deal-with-HMRC-for-you/:uid/:normalizedAgentName/:taxService             uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.StartController.show(uid: String, normalizedAgentName: String, taxService: String)
 
-GET        /authorisation-response/:taxService/:uid/consent-information                                 uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.ConsentInformationController.show(uid: String, taxService: String)
+GET        /authorisation-response/:uid/:taxService/consent-information                                 uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.ConsentInformationController.show(uid: String, taxService: String)
 
 # Fast Track URLs ----------------------------------------------------------------------------------------------------------
 + nocsrf
