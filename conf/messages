@@ -18,6 +18,32 @@ button.copied=Link copied
 start-again.button=Start again
 track-requests.button=Manage recent authorisation requests
 
+
+
+# -------------------------------------------------------------------------------------------
+# Generic tax service messages
+# -------------------------------------------------------------------------------------------
+PERSONAL-INCOME-RECORD=Personal Income Record
+HMRC-MTD-IT=Making Tax Digital for Income Tax
+HMRC-PPT-ORG=Plastic Packaging Tax
+HMRC-CGT-PD=Capital Gains Tax on UK property account
+HMRC-CBC-ORG=Country-by-country reports
+HMRC-MTD-VAT=Making Tax Digital for VAT
+HMRC-PILLAR2-ORG=Pillar 2 top-up taxes
+HMRC-TERS-ORG=Trusts and estates
+HMRC-TERSNT-ORG=Trusts and estates
+
+agentRole.HMRC-MTD-IT=main agent
+agentRole.HMRC-MTD-IT-SUPP=supporting agent
+agentRole.PERSONAL-INCOME-RECORD=agent
+agentRole.HMRC-MTD-VAT=agent
+agentRole.HMRC-TERS-ORG=agent
+agentRole.HMRC-TERSNT-ORG=agent
+agentRole.HMRC-CGT-PD=agent
+agentRole.HMRC-PPT-ORG=agent
+agentRole.HMRC-CBC-ORG=agent
+agentRole.HMRC-CBC-NONUK-ORG=agent
+
 # -------------------------------------------------------------------------------------------
 # Timeout/Auth/IV error pages
 # -------------------------------------------------------------------------------------------
@@ -497,6 +523,14 @@ authoriseAgentStartPage.p1.trusts-and-estates=You need to sign in with the user 
 authoriseAgentStartPage.p2=If you do not have sign in details, you‘ll be able to create some.
 authoriseAgentStartPage.link.text1=Start now
 authoriseAgentStartPage.link.text2=I do not want {0} to act for me.
+
+# ________________________________________________________________________________
+# Client consent information page (warm-up page)
+# ________________________________________________________________________________
+
+consentInformation.header=Information you need before you authorise an agent
+consentInformation.p1={0} want to be authorised as your {1} for {2}.
+
 
 
 

@@ -18,17 +18,13 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client
 
 import play.api.i18n.I18nSupport
 import play.api.mvc.*
-import uk.gov.hmrc.agentclientrelationshipsfrontend.connectors.AgentClientRelationshipsConnector
-import uk.gov.hmrc.agentclientrelationshipsfrontend.services.ClientServiceConfigurationService
-import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.client.ConsentInformationPage
-import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import uk.gov.hmrc.play.http.HeaderCarrierConverter
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{ClientJourney, ClientJourneyRequest}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyType.ClientResponse
-import uk.gov.hmrc.agentclientrelationshipsfrontend.services.ClientJourneyService
+import uk.gov.hmrc.agentclientrelationshipsfrontend.connectors.AgentClientRelationshipsConnector
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.invitationLink.Pending
+import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{ClientJourneyService, ClientServiceConfigurationService}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.client.ConsentInformationPage
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -39,7 +35,7 @@ class ConsentInformationController @Inject()(agentClientRelationshipsConnector: 
                                              consentInformationPage: ConsentInformationPage,
                                              mcc: MessagesControllerComponents,
                                              actions: Actions,
-                                             journeyService: ClientJourneyService
+                                             clientJourneyService: ClientJourneyService
                                             )(implicit val executionContext: ExecutionContext, appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport:
 
   def show(uid: String, taxService: String): Action[AnyContent] = actions.getClientJourney(taxService).async:
@@ -53,13 +49,17 @@ class ConsentInformationController @Inject()(agentClientRelationshipsConnector: 
             case Left("INVITATION_OR_AGENT_RECORD_NOT_FOUND") => Future.successful(Redirect("routes.ClientExitController.show(INVITATION_OR_AGENT_RECORD_NOT_FOUND)"))
             case Left(_) => Future.successful(Redirect("routes.ClientExitController.show(SERVER_ERROR)"))
             case Right(response) => {
-              journeyService.saveJourney(journeyRequest.journey.copy(
+              val newJourney = journeyRequest.journey.copy(
                 invitationId = Some(response.invitationId),
                 serviceKey = Some(response.serviceKey),
                 agentName = Some(response.agentName),
                 status = Some(response.status),
                 lastModifiedDate = Some(response.lastModifiedDate)
-              )).map (_ => Ok(consentInformationPage()))
+              )
+              clientJourneyService.saveJourney(newJourney).map (_ => response.status match {
+                case (Pending) => Ok(consentInformationPage(newJourney))
+                case _ => Redirect("routes.ClientExitController.show(AGENT_SUSPENDED)")
+              })
             }
           }
       else Future.successful(NotFound(s"TODO: NOT FOUND urlPart ${taxService} for Client controller/template"))

@@ -17,28 +17,33 @@
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.Layout
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.ClientJourneyRequest
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.ClientJourney
 
 @this(
         layout: Layout,
         govukButton: GovukButton
 )
 
-@()(implicit request: ClientJourneyRequest[?], messages: Messages, appConfig: AppConfig)
+@(journey: ClientJourney)(implicit request: ClientJourneyRequest[?], messages: Messages, appConfig: AppConfig)
 
 @key = @{"consentInformation"}
-@agentName = @{request.journey.getAgentName}
-@serviceKey = @{request.journey.getServiceKey}
-@pageTitle = @{messages(s"$key.$serviceKey.header")}
-@serviceName = @{messages("client.service.name")}
+@serviceKey = @{journey.getServiceKey}
+@agentName = @{journey.getAgentName}
+@invitationId = @{journey.getInvitationId}
+@pageTitle = @{messages(s"$key.header")}
+@serviceName = @{messages("service.name.clients")}
+@agentRole = @{messages(s"agentRole.$serviceKey")}
+@taxServiceName = @{messages(serviceKey)}
 
 @layout(pageTitle, Some(serviceName)) {
+ <h2 class="govuk-caption-l">@messages(serviceKey)</h2>
  <h1 class="govuk-heading-xl">@pageTitle</h1>
- <p class="govuk-body">@messages(s"$key.$serviceName.p1")</p>
+ <p class="govuk-body">@messages(s"$key.p1", agentName, agentRole, taxServiceName)</p>
  <p class="govuk-body">@messages(s"$key.$serviceName.p2")</p>
 
  @govukButton(Button(
   id = Some("continueButton"),
-  href = Some(s"routes.xxxJourneyController.xxx.url"),
+  href = Some(s"/agent-client-relationships/clients/consent/$invitationId"),
   content = Text(messages("continue.button"))
  ))
 }
