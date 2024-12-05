@@ -23,15 +23,17 @@ track-requests.button=Manage recent authorisation requests
 # -------------------------------------------------------------------------------------------
 # Generic tax service messages
 # -------------------------------------------------------------------------------------------
-PERSONAL-INCOME-RECORD=Personal Income Record
+PERSONAL-INCOME-RECORD=Income Record Viewer
 HMRC-MTD-IT=Making Tax Digital for Income Tax
+HMRC-MTD-IT-SUPP=Making Tax Digital for Income Tax
 HMRC-PPT-ORG=Plastic Packaging Tax
 HMRC-CGT-PD=Capital Gains Tax on UK property account
 HMRC-CBC-ORG=Country-by-country reports
-HMRC-MTD-VAT=Making Tax Digital for VAT
-HMRC-PILLAR2-ORG=Pillar 2 top-up taxes
-HMRC-TERS-ORG=Trusts and estates
-HMRC-TERSNT-ORG=Trusts and estates
+HMRC-CBC-NONUK-ORG=Country-by-country reports
+HMRC-MTD-VAT=VAT
+HMRC-PILLAR2-ORG=Pillar 2 Top-up Taxes
+HMRC-TERS-ORG=Trusts and Estates
+HMRC-TERSNT-ORG=Trusts and Estates
 
 agentRole.HMRC-MTD-IT=main agent
 agentRole.HMRC-MTD-IT-SUPP=supporting agent
@@ -43,6 +45,19 @@ agentRole.HMRC-CGT-PD=agent
 agentRole.HMRC-PPT-ORG=agent
 agentRole.HMRC-CBC-ORG=agent
 agentRole.HMRC-CBC-NONUK-ORG=agent
+agentRole.HMRC-PILLAR2-ORG=agent
+
+indefiniteAgentRole.HMRC-MTD-IT=a main agent
+indefiniteAgentRole.HMRC-MTD-IT-SUPP=a supporting agent
+indefiniteAgentRole.PERSONAL-INCOME-RECORD=an agent
+indefiniteAgentRole.HMRC-MTD-VAT=an agent
+indefiniteAgentRole.HMRC-TERS-ORG=an agent
+indefiniteAgentRole.HMRC-TERSNT-ORG=an agent
+indefiniteAgentRole.HMRC-CGT-PD=an agent
+indefiniteAgentRole.HMRC-PPT-ORG=an agent
+indefiniteAgentRole.HMRC-CBC-ORG=an agent
+indefiniteAgentRole.HMRC-CBC-NONUK-ORG=an agent
+indefiniteAgentRole.HMRC-PILLAR2-ORG=an agent
 
 # -------------------------------------------------------------------------------------------
 # Timeout/Auth/IV error pages
@@ -529,7 +544,32 @@ authoriseAgentStartPage.link.text2=I do not want {0} to act for me.
 # ________________________________________________________________________________
 
 consentInformation.header=Information you need before you authorise an agent
-consentInformation.p1={0} want to be authorised as your {1} for {2}.
+
+consentInformation.HMRC-MTD-IT.p1={0} want to be authorised as your {1} for {2}.
+consentInformation.HMRC-MTD-IT.p2=When you have an agent for {0}, you can choose how much support you want from them.
+consentInformation.HMRC-MTD-IT.p3=There are 2 levels of support to choose from:
+consentInformation.HMRC-MTD-IT.li1=a ‘main agent’ can complete most tasks on your behalf
+consentInformation.HMRC-MTD-IT.li2=a ‘supporting agent’ can carry out some tasks, but they cannot submit end-of-year tax returns or see payment information
+consentInformation.HMRC-MTD-IT.guidance=Read the guidance about <a href={0} class="govuk-link" target="_blank" rel="noreferrer noopener">the difference between main agents and supporting agents (opens in new tab)</a>.
+
+consentInformation.HMRC-MTD-IT-SUPP.p1={0} want to be authorised as your {1} for {2}.
+consentInformation.HMRC-MTD-IT-SUPP.p2=When you have an agent for {0}, you can choose how much support you want from them.
+consentInformation.HMRC-MTD-IT-SUPP.p3=There are 2 levels of support to choose from:
+consentInformation.HMRC-MTD-IT-SUPP.li1=a ‘main agent’ can complete most tasks on your behalf
+consentInformation.HMRC-MTD-IT-SUPP.li2=a ‘supporting agent’ can carry out some tasks, but they cannot submit end-of-year tax returns or see payment information
+consentInformation.HMRC-MTD-IT-SUPP.guidance=Read the guidance about <a href={0} class="govuk-link" target="_blank" rel="noreferrer noopener">the difference between main agents and supporting agents (opens in new tab)</a>.
+
+consentInformation.h2=What it means to give consent to an agent
+consentInformation.p1=Giving your consent means employees of {0} will be able to access your {1} data.
+consentInformation.p2=Your consent lasts until you tell us that {0} can no longer act on your behalf.
+consentInformation.p3=If you appoint an overseas agent to act for you, we will need to share your data outside the UK.
+consentInformation.p4=For details about how we store and process your information, see our <a href="{0}" class="govuk-link" target="_blank" rel="noreferrer noopener">privacy notice (opens in a new tab)</a>.
+
+consentInformation.section2.h2=How to remove consent
+consentInformation.section2.p1=You can withdraw consent at any time by using <a href="{0}" class="govuk-link">Manage who can deal with HMRC for you</a>.
+
+consentInformation.section3.h2=Before you decide
+consentInformation.section3.p1=Select ‘continue’ to learn what {0} can do when you authorise them to manage your {1}.
 
 
 

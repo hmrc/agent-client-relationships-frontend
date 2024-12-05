@@ -21,7 +21,7 @@ import play.api.mvc.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.connectors.AgentClientRelationshipsConnector
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.invitationLink.Pending
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.invitationLink.{Cancelled, Expired, Pending}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{ClientJourneyService, ClientServiceConfigurationService}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.client.ConsentInformationPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
@@ -45,9 +45,9 @@ class ConsentInformationController @Inject()(agentClientRelationshipsConnector: 
       if serviceConfigurationService.validateUrlPart(taxService) then agentClientRelationshipsConnector
           .validateInvitation(uid, serviceConfigurationService.getServiceKeysForUrlPart(taxService))
           .flatMap {
-            case Left("AGENT_SUSPENDED") => Future.successful(Redirect("routes.ClientExitController.show(AGENT_SUSPENDED)"))
-            case Left("INVITATION_OR_AGENT_RECORD_NOT_FOUND") => Future.successful(Redirect("routes.ClientExitController.show(INVITATION_OR_AGENT_RECORD_NOT_FOUND)"))
-            case Left(_) => Future.successful(Redirect("routes.ClientExitController.show(SERVER_ERROR)"))
+            case Left("AGENT_SUSPENDED") => Future.successful(Redirect("routes.ClientExitController.show(ClientExitType.AgentSuspended)"))
+            case Left("INVITATION_OR_AGENT_RECORD_NOT_FOUND") => Future.successful(Redirect("routes.ClientExitController.show(ClientExitType.NotFound)"))
+            case Left(_) => Future.successful(Redirect("routes.ClientExitController.show(ClientExitType.ServerError)"))
             case Right(response) => {
               val newJourney = journeyRequest.journey.copy(
                 invitationId = Some(response.invitationId),
@@ -57,8 +57,10 @@ class ConsentInformationController @Inject()(agentClientRelationshipsConnector: 
                 lastModifiedDate = Some(response.lastModifiedDate)
               )
               clientJourneyService.saveJourney(newJourney).map (_ => response.status match {
-                case (Pending) => Ok(consentInformationPage(newJourney))
-                case _ => Redirect("routes.ClientExitController.show(AGENT_SUSPENDED)")
+                case Pending => Ok(consentInformationPage(newJourney))
+                case Expired => Redirect("routes.ClientExitController.show(ClientExitType.Expired)")
+                case Cancelled => Redirect("routes.ClientExitController.show(ClientExitType.Cancelled)")
+                case _ => Redirect("routes.ClientExitController.show(ClientExitType.AlreadyRespondedAuthorisationRequest)")
               })
             }
           }
