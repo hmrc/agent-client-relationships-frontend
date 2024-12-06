@@ -145,7 +145,7 @@ class ClientServiceConfigurationService @Inject() extends ServiceConstants {
     ),
     HMRCTERSORG -> ServiceData(
       serviceName = HMRCTERSORG,
-      urlPart = Map(trustsAndEstates -> Set(HMRCTERSORG)),
+      urlPart = Map(trustsAndEstates -> Set(HMRCTERSORG, HMRCTERSNTORG)),
       serviceOption = true,
       supportedEnrolments = Seq(HMRCTERSORG, HMRCTERSNTORG), // parent service is always head of the list
       clientTypes = Set("trust"),
@@ -161,7 +161,7 @@ class ClientServiceConfigurationService @Inject() extends ServiceConstants {
     ),
     HMRCTERSNTORG -> ServiceData(
       serviceName = HMRCTERSNTORG,
-      urlPart = Map(trustsAndEstateNonTaxable -> Set(HMRCTERSNTORG)),
+      urlPart = Map(trustsAndEstates -> Set(HMRCTERSORG, HMRCTERSNTORG)),
       serviceOption = false,
       supportedEnrolments = Seq(HMRCTERSORG, HMRCTERSNTORG), // parent service is always head of the list
       clientTypes = Set("trust"),

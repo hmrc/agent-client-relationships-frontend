@@ -59,11 +59,8 @@ class ConsentInformationPageSpec extends ViewSpecSupport {
     val title = s"$heading - Appoint someone to deal with HMRC for you - GOV.UK"
     val p1Main = s"$agentName want to be authorised as your main agent for Making Tax Digital for Income Tax."
     val p1Supporting = s"$agentName want to be authorised as your supporting agent for Making Tax Digital for Income Tax."
-
     def p1(serviceKey: String) = s"$agentName want to be authorised as your agent for ${taxServiceNames(serviceKey)}."
-
     val p2 = s"When you have an agent for Making Tax Digital for Income Tax, you can choose how much support you want from them."
-
     def section1p1(serviceKey: String) = s"Giving your consent means employees of $agentName will be able to access your ${taxServiceNames(serviceKey)} data."
   }
 
