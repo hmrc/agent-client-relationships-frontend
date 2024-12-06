@@ -38,7 +38,7 @@ class CheckYourAnswerController @Inject()(mcc: MessagesControllerComponents,
 
   def show: Action[AnyContent] = actions.clientAuthenticate:
     implicit request =>
-      if (request.journey.consent.isDefined) Ok(checkYourAnswerPage())
+      if request.journey.consent.isDefined then Ok(checkYourAnswerPage())
       else BadRequest // TODO implement tailored page which gives some guidance to user
 
   def submit: Action[AnyContent] = actions.clientAuthenticate.async:
