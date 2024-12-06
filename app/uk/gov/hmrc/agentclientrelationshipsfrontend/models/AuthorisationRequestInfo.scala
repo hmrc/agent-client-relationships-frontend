@@ -17,9 +17,8 @@
 package uk.gov.hmrc.agentclientrelationshipsfrontend.models
 
 import play.api.libs.functional.syntax.*
-import play.api.libs.json.{Format, JsString, Reads, Writes, __}
+import play.api.libs.json.{Reads, __}
 
-import java.time.format.DateTimeFormatter
 import java.time.LocalDate
 
 case class AuthorisationRequestInfo(

@@ -20,11 +20,11 @@ import play.api.libs.json.{JsObject, Json}
 import play.api.test.Helpers.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.invitationLink.ValidateLinkPartsResponse
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsResponse, ClientStatus, KnownFactType}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.ComponentSpecHelper
+import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AgentClientRelationshipStub, ComponentSpecHelper}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.WiremockHelper.stubGet
 import uk.gov.hmrc.http.{HeaderCarrier, JsValidationException, UpstreamErrorResponse}
 
-class AgentClientRelationshipsConnectorISpec extends ComponentSpecHelper {
+class AgentClientRelationshipsConnectorISpec extends ComponentSpecHelper with AgentClientRelationshipStub {
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
   val testConnector: AgentClientRelationshipsConnector = app.injector.instanceOf[AgentClientRelationshipsConnector]
@@ -115,4 +115,23 @@ class AgentClientRelationshipsConnectorISpec extends ComponentSpecHelper {
     }
   }
 
+  "acceptAuthorisation" should:
+
+    "return nothing when a 204 status is received" in:
+      givenAcceptAuthorisation("ABC123", NO_CONTENT)
+      await(testConnector.acceptAuthorisation("ABC123")) shouldEqual ()
+
+    "throw an exception when a non-204 status is received" in:
+      givenAcceptAuthorisation("ABC123", INTERNAL_SERVER_ERROR)
+      intercept[Exception](await(testConnector.acceptAuthorisation("ABC123")))
+
+  "rejectAuthorisation" should :
+
+    "return nothing when a 204 status is received" in:
+      givenRejectAuthorisation("ABC123", NO_CONTENT)
+      await(testConnector.rejectAuthorisation("ABC123")) shouldEqual ()
+
+    "throw an exception when a non-204 status is received" in:
+      givenRejectAuthorisation("ABC123", INTERNAL_SERVER_ERROR)
+      intercept[Exception](await(testConnector.rejectAuthorisation("ABC123")))
 }

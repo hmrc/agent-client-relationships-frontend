@@ -39,4 +39,13 @@ trait AuthStubs {
     ).toString
   )
 
+  def authoriseAsClient(): StubMapping = stubPost(
+    "/auth/authorise",
+    OK,
+    Json.obj(
+      "affinityGroup" -> "Individual",
+      "confidenceLevel" -> 250,
+      "allEnrolments" -> Json.arr()
+    ).toString
+  )
 }

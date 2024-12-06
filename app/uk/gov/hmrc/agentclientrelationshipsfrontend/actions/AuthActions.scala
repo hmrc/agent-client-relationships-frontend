@@ -112,6 +112,38 @@ class AuthActions @Inject()(val authConnector: AuthConnector,
           handleFailure(isAgent = false)
         }
 
+   def clientAuthAction: ActionFunction[Request, Request] = new ActionFunction[Request, Request]:
+
+      val executionContext: ExecutionContext = ec
+
+      override def invokeBlock[A](request: Request[A], block: Request[A] => Future[Result]): Future[Result] =
+        given Request[A] = request
+
+        given HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
+
+        authorised(AuthProviders(GovernmentGateway))
+          .retrieve(affinityGroup and confidenceLevel and allEnrolments):
+            case Some(affinity) ~ confidence ~ enrols =>
+              (affinity, confidence) match {
+                case (AffinityGroup.Individual, cl) =>
+                  withConfidenceLevelUplift(cl, enrols):
+                    block(request)
+                case (AffinityGroup.Organisation, cl) =>
+                  if enrols.enrolments.map(_.key).contains(MtdIncomeTax) then withConfidenceLevelUplift(cl, enrols):
+                    block(request)
+                  else block(request)
+                case (AffinityGroup.Agent, _) =>
+                  Future.successful(Redirect(routes.AuthorisationController.cannotViewRequest))
+                case (affinityGroup, _) =>
+                  logger.warn(s"unknown affinity group: $affinityGroup - cannot determine auth status")
+                  Future.successful(Forbidden)
+              }
+            case _ =>
+              logger.warn("the logged in client had no affinity group")
+              Future.successful(Forbidden)
+          .recover:
+            handleFailure(isAgent = false)
+
   private def withConfidenceLevelUplift(currentLevel: ConfidenceLevel, enrols: Enrolments)
                                        (body: => Future[Result])
                                        (implicit request: Request[?]): Future[Result] = {

@@ -34,10 +34,13 @@ class Actions @Inject()(
 
   def agentAuthenticate: ActionBuilder[AgentRequest, AnyContent] =
     actionBuilder andThen authActions.agentAuthAction
-    
+
   def getFastTrackUrl: ActionBuilder[AgentFastTrackRequestWithRedirectUrls, AnyContent] =
     actionBuilder andThen authActions.agentAuthAction andThen getFastTrackUrlAction.getFastTrackUrlAction
-    
-  def getClientJourney(taxService: String): ActionBuilder[ClientJourneyRequest, AnyContent]  =
+
+  def getClientJourney(taxService: String): ActionBuilder[ClientJourneyRequest, AnyContent] =
     actionBuilder andThen authActions.clientAuthActionWithEnrolmentCheck(taxService) andThen getJourneyAction.clientJourneyAction
+
+  def clientAuthenticate: ActionBuilder[ClientJourneyRequest, AnyContent] =
+    actionBuilder andThen authActions.clientAuthAction andThen getJourneyAction.clientJourneyAction
 }
