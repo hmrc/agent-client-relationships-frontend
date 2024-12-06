@@ -36,10 +36,7 @@ class ClientServiceConfigurationServiceSpec extends AnyWordSpecLike with Matcher
       services.getServiceKeysForUrlPart(capitalGainsTaxUkProperty) shouldBe Set(HMRCCGTPD)
       }
       s"return enrolments supported by $trustsAndEstates" in {
-      services.getServiceKeysForUrlPart(trustsAndEstates) shouldBe Set(HMRCTERSORG)
-      }
-      s"return enrolments supported by $trustsAndEstateNonTaxable" in {
-      services.getServiceKeysForUrlPart(trustsAndEstateNonTaxable) shouldBe Set(HMRCTERSNTORG)
+      services.getServiceKeysForUrlPart(trustsAndEstates) shouldBe Set(HMRCTERSORG, HMRCTERSNTORG)
       }
       s"return enrolments supported by $pillar2" in {
         services.getServiceKeysForUrlPart(pillar2) shouldBe Set(HMRCPILLAR2ORG)
