@@ -14,9 +14,9 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.govukfrontend.views.html.components._
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.Layout
-@import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.components.SubmitButton
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.ClientJourneyRequest
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.routes
 
 @this(
         layout: Layout,
@@ -25,11 +25,16 @@
         formWithCSRF: FormWithCSRF
 )
 
-@(agentName: String, invitationId: String, taxService: String, choice: Boolean)(implicit request: Request[?], messages: Messages)
+@()(implicit request: ClientJourneyRequest[?], messages: Messages)
 
 @key = @{
     "checkYourAnswer"
 }
+@journey = @{request.journey}
+@serviceKey = @{journey.getServiceKey}
+@agentName = @{journey.getAgentName}
+@choice = @{journey.getConsent}
+@invitationId = @{journey.getInvitationId}
 @pageTitle = @{
     messages(s"$key.title")
 }
@@ -45,7 +50,7 @@
         rows = Seq(
             SummaryListRow(
                 key = Key(
-                    content = Text(messages(s"$key.$taxService.question", agentName))
+                    content = Text(messages(s"$key.$serviceKey.question", agentName))
                 ),
                 value = Value(
                     content = Text(messages(s"$key.$choice"))
@@ -55,7 +60,7 @@
                         ActionItem(
                             href = s"/agent-client-relationships/authorisation-response/confirm-consent/$invitationId",
                             content = Text(messages(s"$key.change")),
-                            visuallyHiddenText = Some(messages(s"$key.$taxService.question"))
+                            visuallyHiddenText = Some(messages(s"$key.$serviceKey.question"))
                         )
                     )
                 ))
@@ -64,14 +69,14 @@
     <h2 class="govuk-heading-l">@messages(s"$key.h2")</h2>
 
     <p class="govuk-body">
-        @messages(s"$key.${if choice then "declarationYes" else "declarationNo"}.p1.$taxService", agentName)
+        @messages(s"$key.${if choice then "declarationYes" else "declarationNo"}.p1.$serviceKey", agentName)
     </p>
 
     @if(!choice) {
         <p class="govuk-body">@messages(s"$key.declarationNo.p2")</p>
     }
 
-    @formWithCSRF(action = play.api.mvc.Call("post", "routes.CheckYourAnswerController.onSubmit(choice)")) {
+    @formWithCSRF(routes.CheckYourAnswerController.submit) {
         @govukButton(Button(
             attributes = Map("id" -> "submitAuthorisationButton"),
             inputType = Some("submit"),

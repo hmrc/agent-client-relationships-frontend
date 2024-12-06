@@ -14,21 +14,40 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.agentclientrelationshipsfrontend.views.journey
+package uk.gov.hmrc.agentclientrelationshipsfrontend.views.client
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import org.scalatest.matchers.should.Matchers.shouldBe
 import play.twirl.api.HtmlFormat
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.invitationLink.Pending
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{ClientJourney, ClientJourneyRequest, JourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.support.ViewSpecSupport
-import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.CheckYourAnswerPage
+import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.client.CheckYourAnswerPage
+
+import java.time.Instant
 
 
 class CheckYourAnswerPageSpec extends ViewSpecSupport {
 
-  val viewTemplate: CheckYourAnswerPage = app.injector.instanceOf[CheckYourAnswerPage]
   val agentName: String = "ABC Accountants"
-  val invitationId = "123456"
+  val invitationId: String = "AB1234567890"
+  val serviceKey: String = "HMRC-MTD-IT"
+  val status: String = "Pending"
+  val lastModifiedDate: String = "2024-12-01T12:00:00Z"
+
+  val journey: ClientJourney = ClientJourney(
+    journeyType = JourneyType.ClientResponse
+  )
+
+  def journeyForService(serviceKey: String, choice: Boolean): ClientJourney = journey.copy(
+    consent = Some(choice),
+    serviceKey = Some(serviceKey),
+    invitationId = Some(invitationId),
+    agentName = Some(agentName),
+    status = Some(Pending),
+    lastModifiedDate = Some(Instant.parse(lastModifiedDate))
+  )
+  val viewTemplate: CheckYourAnswerPage = app.injector.instanceOf[CheckYourAnswerPage]
   val taxServiceNames: Map[String, String] = Map(
     "HMRC-MTD-IT" -> "Making Tax Digital for Income Tax",
     "HMRC-MTD-IT-SUPP" -> "Making Tax Digital for Income Tax",
@@ -91,7 +110,11 @@ class CheckYourAnswerPageSpec extends ViewSpecSupport {
     for (choice <- Seq("Yes", "No")) {
       taxServiceNames.keySet.foreach {
         taxService =>
-          val view: HtmlFormat.Appendable = viewTemplate(agentName, invitationId, taxService, choice = choice == "Yes")
+          implicit val journeyRequest: ClientJourneyRequest[?] = new ClientJourneyRequest(journeyForService(
+            serviceKey = taxService,
+            choice = choice == "Yes"
+          ), request)
+          val view: HtmlFormat.Appendable = viewTemplate()
           val doc: Document = Jsoup.parse(view.body)
 
           s"have the correct page title when choice is $choice for $taxService" in {

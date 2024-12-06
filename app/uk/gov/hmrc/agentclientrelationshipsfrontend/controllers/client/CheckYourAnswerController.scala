@@ -23,19 +23,22 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.connectors.AgentClientRelationshipsConnector
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.client.CheckYourAnswerPage
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class CheckYourAnswerController @Inject()(mcc: MessagesControllerComponents,
                                           actions: Actions,
-                                          agentClientRelationshipsConnector: AgentClientRelationshipsConnector)
+                                          agentClientRelationshipsConnector: AgentClientRelationshipsConnector,
+                                          checkYourAnswerPage: CheckYourAnswerPage
+                                         )
                                          (implicit ec: ExecutionContext,
                                           appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport:
 
   def show: Action[AnyContent] = actions.clientAuthenticate:
     implicit request =>
-      if (request.journey.consent.isDefined) Ok // TODO render view
+      if (request.journey.consent.isDefined) Ok(checkYourAnswerPage())
       else BadRequest // TODO implement tailored page which gives some guidance to user
 
   def submit: Action[AnyContent] = actions.clientAuthenticate.async:
