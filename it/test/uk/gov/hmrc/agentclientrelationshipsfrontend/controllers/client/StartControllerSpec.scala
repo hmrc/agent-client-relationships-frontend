@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client
 
+import org.jsoup.Jsoup
 import org.scalatest.concurrent.ScalaFutures
 import play.api.libs.json.{JsObject, Json}
 import play.api.test.Helpers.*
@@ -29,9 +30,9 @@ class StartControllerSpec extends ComponentSpecHelper with ScalaFutures with Aut
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
   val testUid = "ABCD"
-  val testNormalizedAgentName = "abc_ltd"
+  val testNormalizedAgentName = "test-name"
   val testTaxService = "income-tax"
-  val testName = "Test Name"
+  val testAgentName = "Test Name"
 
   val validTaxServiceNames: List[String] = List(
     "income-tax",
@@ -46,7 +47,7 @@ class StartControllerSpec extends ComponentSpecHelper with ScalaFutures with Aut
   def getValidateLinkResponseUrl(uid: String, normalizedAgentName: String) = s"/agent-client-relationships/agent/agent-reference/uid/$uid/$normalizedAgentName"
 
   val testValidateLinkResponseJson: JsObject = Json.obj(
-    "name" -> testName,
+    "name" -> testAgentName,
   )
 
   val serviceConfigurationService: ClientServiceConfigurationService = app.injector.instanceOf[ClientServiceConfigurationService]
@@ -93,6 +94,8 @@ class StartControllerSpec extends ComponentSpecHelper with ScalaFutures with Aut
 
         val result = get(routes.StartController.show(testUid, testNormalizedAgentName, taxService).url)
         result.status shouldBe OK
+        val body = Jsoup.parse(result.body)
+        body.select("h1").text() should include(testAgentName)
       }
 
     }
