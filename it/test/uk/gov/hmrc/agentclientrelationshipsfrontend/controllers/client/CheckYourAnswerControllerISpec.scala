@@ -18,17 +18,27 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client
 
 import play.api.http.Status.*
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.invitationLink.Pending
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.ClientJourney
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyType.ClientResponse
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.ClientJourneyService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AgentClientRelationshipStub, AuthStubs, ComponentSpecHelper}
 
+import java.time.Instant
+
 class CheckYourAnswerControllerISpec extends ComponentSpecHelper with AuthStubs with AgentClientRelationshipStub:
 
   val journeyService: ClientJourneyService = app.injector.instanceOf[ClientJourneyService]
 
-  val journeyModel: ClientJourney = ClientJourney(ClientResponse, invitationId = Some("ABC123"), consent = Some(true))
-
+  val journeyModel: ClientJourney = ClientJourney(
+    ClientResponse,
+    consent = Some(true),
+    serviceKey = Some("HMRC-MTD-IT"),
+    invitationId = Some("ABC123"),
+    agentName = Some("ABC Accountants"),
+    status = Some(Pending),
+    lastModifiedDate = Some(Instant.parse("2024-12-01T12:00:00Z"))
+  )
   override def beforeEach(): Unit = {
     await(journeyService.deleteAllAnswersInSession(request))
     super.beforeEach()

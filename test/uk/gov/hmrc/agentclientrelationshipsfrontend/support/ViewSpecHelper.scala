@@ -29,9 +29,13 @@ trait ViewSpecHelper extends Selectors {
 
 
   case class TestLink(text: String, href: String)
+
   case class TestRadioGroup(legend: String, options: List[(String, String)], hint: Option[String])
+
   case class TestInputField(label: String, hint: Option[String], inputName: String)
+
   case class TestSelect(inputName: String, options: Seq[(String, String)])
+
   case class TestSummaryList(rows: List[(String, String, String)])
 
   private val elementToLink: Element => TestLink = element => TestLink(element.text(), element.attr("href"))

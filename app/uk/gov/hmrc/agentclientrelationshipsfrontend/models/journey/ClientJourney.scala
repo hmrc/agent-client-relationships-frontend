@@ -33,6 +33,7 @@ case class ClientJourney(
   def getAgentName: String = agentName.getOrElse(throw new RuntimeException("Agent Name is missing"))
   def getInvitationId: String = invitationId.getOrElse(throw new RuntimeException("Invitation Id is missing"))
   def getServiceKey: String = serviceKey.getOrElse(throw new RuntimeException("Service Key is missing"))
+  def getConsent: Boolean = consent.getOrElse(throw new RuntimeException("Consent value is missing"))
 }
 
 object ClientJourney {
