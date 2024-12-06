@@ -38,9 +38,7 @@ class StartController @Inject()(agentClientRelationshipsConnector: AgentClientRe
                                )(implicit val executionContext: ExecutionContext) extends FrontendController(mcc) with I18nSupport:
 
  def show(uid: String, normalizedAgentName: String, taxService: String): Action[AnyContent] = Action.async:
-
   implicit request =>
-     given HeaderCarrier = HeaderCarrierConverter.fromRequest(request)
 
      if serviceConfigurationService.validateUrlPart(taxService) then
        agentClientRelationshipsConnector

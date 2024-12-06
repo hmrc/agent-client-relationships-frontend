@@ -1,0 +1,73 @@
+@*
+ * Copyright 2024 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.Layout
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.ClientJourneyRequest
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.ClientJourney
+@import play.twirl.api.Html
+
+@this(
+        layout: Layout,
+        govukButton: GovukButton
+)
+
+@(journey: ClientJourney)(implicit request: ClientJourneyRequest[?], messages: Messages, appConfig: AppConfig)
+
+@key = @{"consentInformation"}
+@serviceKey = @{journey.getServiceKey}
+@agentName = @{journey.getAgentName}
+@invitationId = @{journey.getInvitationId}
+@pageTitle = @{messages(s"$key.header")}
+@serviceName = @{messages("service.name.clients")}
+@agentRole = @{messages(s"agentRole.$serviceKey")}
+@indefiniteAgentRole = @{messages(s"indefiniteAgentRole.$serviceKey")}
+@taxServiceName = @{messages(serviceKey)}
+
+@layout(pageTitle, Some(serviceName)) {
+
+  <h2 class="govuk-caption-xl">@messages(serviceKey)</h2>
+  <h1 class="govuk-heading-xl">@pageTitle</h1>
+  <p class="govuk-body">@Html(messages(s"$key.p1", agentName, agentRole, taxServiceName))</p>
+
+  @if(messages.isDefinedAt(s"$key.$serviceKey.p2")) {
+    <p class="govuk-body">@messages(s"$key.$serviceKey.p2", taxServiceName)</p>
+    <p class="govuk-body">@messages(s"$key.$serviceKey.p3")</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>@messages(s"$key.$serviceKey.li1")</li>
+      <li>@messages(s"$key.$serviceKey.li2")</li>
+    </ul>
+    <p class="govuk-body">@Html(messages(s"$key.$serviceKey.guidance", appConfig.guidanceUrlForAgentRoles))</p>
+  }
+
+  <h2 class="govuk-heading-l">@messages(s"$key.section1.h2")</h2>
+  <p class="govuk-body">@messages(s"$key.section1.p1", agentName, taxServiceName)</p>
+  <p class="govuk-body">@messages(s"$key.section1.p2", agentName)</p>
+  <p class="govuk-body">@messages(s"$key.section1.p3", agentName)</p>
+  <p class="govuk-body">@Html(messages(s"$key.section1.p4", appConfig.privacyPolicyUrl))</p>
+
+  <h2 class="govuk-heading-l">@messages(s"$key.section2.h2")</h2>
+  <p class="govuk-body">@Html(messages(s"$key.section2.p1", "routes.MYTAController.show()"))</p>
+
+  <h2 class="govuk-heading-l">@messages(s"$key.section3.h2")</h2>
+  <p class="govuk-body">@Html(messages(s"$key.section3.p1", indefiniteAgentRole, taxServiceName))</p>
+
+  @govukButton(Button(
+      id = Some("continueButton"),
+      href = Some(s"/agent-client-relationships/clients/consent/$invitationId"),
+      content = Text(messages("continue.button"))
+  ))
+}

@@ -72,11 +72,11 @@ class AuthoriseAgentStartPageSpec extends ViewSpecSupport {
         doc.mainContent.extractText(p, 2).value shouldBe "If you do not have sign in details, you‘ll be able to create some."
       }
       s"have correct link button for $taxService" in {
-        val expectedUrl = s"/authorisation-response/$uid/$taxService/consent-information"
+        val expectedUrl = s"/agent-client-relationships/authorisation-response/$uid/$taxService/consent-information"
         doc.mainContent.extractLinkButton(1).value shouldBe TestLink("Start now", expectedUrl)
       }
       s"have correct link for $taxService" in {
-        val expectedUrl = s"/authorisation-response/$uid/$taxService/decline-request"
+        val expectedUrl = s"/agent-client-relationships/authorisation-response/$uid/$taxService/decline-request"
         doc.mainContent.extractLink(1).value shouldBe TestLink(s"I do not want $agentName to act for me.", expectedUrl)
       }
 

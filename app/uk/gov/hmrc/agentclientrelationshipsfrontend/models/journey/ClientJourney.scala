@@ -17,8 +17,23 @@
 package uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey
 
 import play.api.libs.json.{Format, Json}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.invitationLink.InvitationStatus
 
-case class ClientJourney(journeyType: JourneyType, invitationId: Option[String] = None, consent: Option[Boolean] = None)
+import java.time.Instant
+
+case class ClientJourney(
+                          journeyType: JourneyType,
+                          consent: Option[Boolean] = None,
+                          invitationId: Option[String] = None,
+                          serviceKey: Option[String] = None,
+                          agentName: Option[String] = None,
+                          status: Option[InvitationStatus] = None,
+                          lastModifiedDate: Option[Instant] = None
+                        ) {
+  def getAgentName: String = agentName.getOrElse(throw new RuntimeException("Agent Name is missing"))
+  def getInvitationId: String = invitationId.getOrElse(throw new RuntimeException("Invitation Id is missing"))
+  def getServiceKey: String = serviceKey.getOrElse(throw new RuntimeException("Service Key is missing"))
+}
 
 object ClientJourney {
   implicit val format: Format[ClientJourney] = Json.format[ClientJourney]

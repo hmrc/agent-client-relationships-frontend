@@ -40,6 +40,7 @@ class AppConfig @Inject()(servicesConfig: ServicesConfig, config: Configuration)
   val guidanceUrlSaSignup = s"$govUkUrl/register-for-self-assessment/self-employed"
   val guidanceUrlForAgentRoles = s"$govUkUrl/" // TODO: We need this url to be complete
   val guidanceSa = s"$govUkUrl/guidance/self-assessment-for-agents-online-service"
+  val privacyPolicyUrl = s"$govUkUrl/government/publications/data-protection-act-dpa-information-hm-revenue-and-customs-hold-about-you/data-protection-act-dpa-information-hm-revenue-and-customs-hold-about-you"
 
   // Feature Flags
   val welshLanguageSupportEnabled: Boolean = config.getOptional[Boolean]("features.welsh-language-support").getOrElse(false)
