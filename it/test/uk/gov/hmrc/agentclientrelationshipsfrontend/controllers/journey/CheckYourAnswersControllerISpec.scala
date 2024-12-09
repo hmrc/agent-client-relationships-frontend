@@ -21,7 +21,7 @@ import play.api.test.Helpers.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, JourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsResponse, KnownFactType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.AgentJourneyService
-import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.WiremockHelper.{stubDelete, stubPost}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.WiremockHelper.stubPost
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentSpecHelper}
 
 class CheckYourAnswersControllerISpec extends ComponentSpecHelper with AuthStubs {
@@ -77,22 +77,9 @@ class CheckYourAnswersControllerISpec extends ComponentSpecHelper with AuthStubs
   val exampleCbcId: String = "XMCBC1234567890"
   val examplePlrId: String = "XMPLR1234567890"
 
-  private def getFieldName(service: String) = service match {
-    case "HMRC-MTD-IT" => "ni"
-    case "PERSONAL-INCOME-RECORD" => "ni"
-    case "HMRC-TERS-ORG" => "utr"
-    case "HMRC-TERSNT-ORG" => "urn"
-    case "HMRC-MTD-VAT" => "vrn"
-    case "HMRC-CGT-PD" => "CGTPDRef"
-    case "HMRC-PPT-ORG" => "EtmpRegistrationNumber"
-    case "HMRC-CBC-ORG" => "cbcId"
-    case "HMRC-PILLAR2-ORG" => "PLRID"
-  }
-
   def createAuthorisationRequestUrl = s"/agent-client-relationships/agent/$testArn/authorisation-request"
 
-  def cancelAuthorisationUrl(service: String, clientId: String) =
-    s"/agent-client-relationships/agent/$testArn/service/$service/client/${getFieldName(service)}/$clientId"
+  def cancelAuthorisationUrl = s"/agent-client-relationships/agent/$testArn/remove-authorisation"
 
   val journeyService: AgentJourneyService = app.injector.instanceOf[AgentJourneyService]
 
@@ -167,7 +154,7 @@ class CheckYourAnswersControllerISpec extends ComponentSpecHelper with AuthStubs
   "POST /agent-cancel-authorisation/confirm" should {
     servicesWithSingleAgentRole.foreach(service => s"redirect to authorisation cancelled for $service page when confirmed" in {
       authoriseAsAgent()
-      stubDelete(cancelAuthorisationUrl(service, exampleClientId), NO_CONTENT, "")
+      stubPost(cancelAuthorisationUrl, NO_CONTENT, "")
       await(journeyService.saveJourney(existingAuthCancellationJourney(service)))
       val result = post(routes.CheckYourAnswersController.onSubmit(JourneyType.AgentCancelAuthorisation).url)(Map(
         "confirmCancellation" -> Seq("true")
@@ -177,7 +164,7 @@ class CheckYourAnswersControllerISpec extends ComponentSpecHelper with AuthStubs
     })
     servicesWithAgentRoles.foreach(service => s"redirect to authorisation cancelled for $service page when confirmed" in {
       authoriseAsAgent()
-      stubDelete(cancelAuthorisationUrl(service, exampleClientId), NO_CONTENT, "")
+      stubPost(cancelAuthorisationUrl, NO_CONTENT, "")
       await(journeyService.saveJourney(existingAuthCancellationJourney(service)))
       val result = post(routes.CheckYourAnswersController.onSubmit(JourneyType.AgentCancelAuthorisation).url)(Map(
         "confirmCancellation" -> Seq("true")
