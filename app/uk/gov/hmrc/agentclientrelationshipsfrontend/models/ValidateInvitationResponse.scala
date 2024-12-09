@@ -25,7 +25,8 @@ case class ValidateInvitationResponse(invitationId: String,
                                       serviceKey: String,
                                       agentName: String,
                                       status: InvitationStatus,
-                                      lastModifiedDate: Instant
+                                      lastModifiedDate: Instant,
+                                      existingMainAgent: Option[ExistingMainAgent] = None
                                      )
 
 object ValidateInvitationResponse {

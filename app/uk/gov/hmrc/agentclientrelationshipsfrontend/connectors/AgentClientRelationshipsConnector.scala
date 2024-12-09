@@ -96,7 +96,7 @@ class AgentClientRelationshipsConnector @Inject()(appConfig: AppConfig,
         case OK => Right(response.json.as[ValidateLinkPartsResponse])
         case NOT_FOUND => Left("AGENT_NOT_FOUND") 
         case FORBIDDEN => Left("AGENT_SUSPENDED")
-        case status => throw new Exception(s"Unexpected status $status received when fetching invitation")
+        case status => throw new Exception(s"Unexpected status $status received when validating agent reference link")
       })
 
   def acceptAuthorisation(invitationId: String)(implicit hc: HeaderCarrier): Future[Unit] =
@@ -125,9 +125,8 @@ class AgentClientRelationshipsConnector @Inject()(appConfig: AppConfig,
         case OK => Right(response.json.as[ValidateInvitationResponse])
         case FORBIDDEN => Left("AGENT_SUSPENDED")
         case NOT_FOUND => Left("INVITATION_OR_AGENT_RECORD_NOT_FOUND")
-        case _ => Left("SERVER_ERROR")
-      }
-      )
+        case status => throw new Exception(s"Unexpected status $status received when fetching invitation")
+      })
 
   // stubbing the back end
   private val stubbedAuthorisationRequests: List[AuthorisationRequest] = List(

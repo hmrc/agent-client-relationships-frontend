@@ -46,23 +46,25 @@ class ConsentInformationController @Inject()(agentClientRelationshipsConnector: 
       given Request[?] = journeyRequest.request
 
       if serviceConfigurationService.validateUrlPart(taxService) then agentClientRelationshipsConnector
-        .validateInvitation(uid, serviceConfigurationService.getServiceKeysForUrlPart(taxService))
-        .flatMap {
-          case Left("AGENT_SUSPENDED") => Future.successful(Redirect(routes.ClientExitController.showUnauthorised(AgentSuspended)))
-          case Left("INVITATION_OR_AGENT_RECORD_NOT_FOUND") => Future.successful(Redirect(routes.ClientExitController.showUnauthorised(NoOutstandingRequests)))
-          case Right(response) =>
-            val newJourney = journeyRequest.journey.copy(
-              invitationId = Some(response.invitationId),
-              serviceKey = Some(response.serviceKey),
-              agentName = Some(response.agentName),
-              status = Some(response.status),
-              lastModifiedDate = Some(response.lastModifiedDate)
-            )
-            clientJourneyService.saveJourney(newJourney).map(_ => response.status match {
-              case Pending => Ok(consentInformationPage(newJourney))
-              case Expired => Redirect(routes.ClientExitController.showClient(AuthorisationRequestExpired))
-              case Cancelled => Redirect(routes.ClientExitController.showClient(AuthorisationRequestCancelled))
-              case _ => Redirect(routes.ClientExitController.showClient(AlreadyRespondedToAuthorisationRequest))
-            })
-        }
+          .validateInvitation(uid, serviceConfigurationService.getServiceKeysForUrlPart(taxService))
+          .flatMap {
+            case Left("AGENT_SUSPENDED") => Future.successful(Redirect(routes.ClientExitController.showUnauthorised(AgentSuspended)))
+            case Left("INVITATION_OR_AGENT_RECORD_NOT_FOUND") => Future.successful(Redirect(routes.ClientExitController.showUnauthorised(NoOutstandingRequests)))
+            case Right(response) => {
+              val newJourney = journeyRequest.journey.copy(
+                invitationId = Some(response.invitationId),
+                serviceKey = Some(response.serviceKey),
+                agentName = Some(response.agentName),
+                status = Some(response.status),
+                lastModifiedDate = Some(response.lastModifiedDate),
+                existingMainAgent = response.existingMainAgent
+              )
+              clientJourneyService.saveJourney(newJourney).map (_ => response.status match {
+                case Pending => Ok(consentInformationPage(newJourney))
+                case Expired => Redirect(routes.ClientExitController.showClient(AuthorisationRequestExpired))
+                case Cancelled => Redirect(routes.ClientExitController.showClient(AuthorisationRequestCancelled))
+                case _ => Redirect(routes.ClientExitController.showClient(AlreadyRespondedToAuthorisationRequest))
+              })
+            }
+          }
       else Future.successful(NotFound(pageNotFound()))
