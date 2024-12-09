@@ -21,9 +21,11 @@ import play.api.mvc.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.connectors.AgentClientRelationshipsConnector
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.invitationLink.{Cancelled, Expired, Pending}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.{Cancelled, Expired, Pending}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientExitType.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{ClientJourneyService, ClientServiceConfigurationService}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.client.ConsentInformationPage
+import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.PageNotFound
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}
@@ -33,6 +35,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class ConsentInformationController @Inject()(agentClientRelationshipsConnector: AgentClientRelationshipsConnector,
                                              serviceConfigurationService: ClientServiceConfigurationService,
                                              consentInformationPage: ConsentInformationPage,
+                                             pageNotFound: PageNotFound,
                                              mcc: MessagesControllerComponents,
                                              actions: Actions,
                                              clientJourneyService: ClientJourneyService
@@ -41,27 +44,26 @@ class ConsentInformationController @Inject()(agentClientRelationshipsConnector: 
   def show(uid: String, taxService: String): Action[AnyContent] = actions.getClientJourney(taxService).async:
     implicit journeyRequest =>
       given Request[?] = journeyRequest.request
-      
+
       if serviceConfigurationService.validateUrlPart(taxService) then agentClientRelationshipsConnector
-          .validateInvitation(uid, serviceConfigurationService.getServiceKeysForUrlPart(taxService))
-          .flatMap {
-            case Left("AGENT_SUSPENDED") => Future.successful(Redirect("routes.ClientExitController.show(ClientExitType.AgentSuspended).url"))
-            case Left("INVITATION_OR_AGENT_RECORD_NOT_FOUND") => Future.successful(Redirect("routes.ClientExitController.show(ClientExitType.NotFound).url"))
-            case Left(_) => Future.successful(Redirect("routes.ClientExitController.show(ClientExitType.ServerError).url"))
-            case Right(response) => {
-              val newJourney = journeyRequest.journey.copy(
-                invitationId = Some(response.invitationId),
-                serviceKey = Some(response.serviceKey),
-                agentName = Some(response.agentName),
-                status = Some(response.status),
-                lastModifiedDate = Some(response.lastModifiedDate)
-              )
-              clientJourneyService.saveJourney(newJourney).map (_ => response.status match {
-                case Pending => Ok(consentInformationPage(newJourney))
-                case Expired => Redirect("routes.ClientExitController.show(ClientExitType.Expired).url")
-                case Cancelled => Redirect("routes.ClientExitController.show(ClientExitType.Cancelled).url")
-                case _ => Redirect("routes.ClientExitController.show(ClientExitType.AlreadyResponded).url")
-              })
-            }
-          }
-      else Future.successful(NotFound(s"TODO: NOT FOUND urlPart ${taxService} for Client controller/template"))
+        .validateInvitation(uid, serviceConfigurationService.getServiceKeysForUrlPart(taxService))
+        .flatMap {
+          case Left("AGENT_SUSPENDED") => Future.successful(Redirect(routes.ClientExitController.show(AgentSuspended, taxService)))
+          case Left("INVITATION_OR_AGENT_RECORD_NOT_FOUND") => Future.successful(Redirect(routes.ClientExitController.show(CannotFindAuthorisationRequest, taxService)))
+          case Left(_) => Future.successful(Redirect("routes.ClientExitController.show(ClientExitType.ServerError)"))
+          case Right(response) =>
+            val newJourney = journeyRequest.journey.copy(
+              invitationId = Some(response.invitationId),
+              serviceKey = Some(response.serviceKey),
+              agentName = Some(response.agentName),
+              status = Some(response.status),
+              lastModifiedDate = Some(response.lastModifiedDate)
+            )
+            clientJourneyService.saveJourney(newJourney).map(_ => response.status match {
+              case Pending => Ok(consentInformationPage(newJourney))
+              case Expired => Redirect(routes.ClientExitController.show(AuthorisationRequestExpired, taxService))
+              case Cancelled => Redirect(routes.ClientExitController.show(AuthorisationRequestCancelled, taxService))
+              case _ => Redirect(routes.ClientExitController.show(AlreadyRespondedToAuthorisationRequest, taxService))
+            })
+        }
+      else Future.successful(NotFound(pageNotFound()))

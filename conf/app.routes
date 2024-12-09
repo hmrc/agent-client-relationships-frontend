@@ -48,18 +48,19 @@ GET        /:journeyType/confirmation                                           
 
 GET        /:journeyType/exit/:exitType                                                 uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.JourneyExitController.show(journeyType: JourneyType, exitType: JourneyExitType)
 
+
+# Fast Track URLs ----------------------------------------------------------------------------------------------------------
++ nocsrf
+POST        /agents/fast-track                                                          uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.AgentFastTrackController.agentFastTrack
+
 # Client Journey URLs ----------------------------------------------------------------------------------------------------------
 
 GET        /appoint-someone-to-deal-with-HMRC-for-you/:uid/:normalizedAgentName/:taxService             uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.StartController.show(uid: String, normalizedAgentName: String, taxService: String)
 
 GET        /authorisation-response/:uid/:taxService/consent-information                                 uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.ConsentInformationController.show(uid: String, taxService: String)
 
-# Fast Track URLs ----------------------------------------------------------------------------------------------------------
-+ nocsrf
-POST        /agents/fast-track                                                          uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.AgentFastTrackController.agentFastTrack
-
-# Client URLs --------------------------------------------------------------------------------------------------------------
-GET        /appoint-someone-to-deal-with-HMRC-for-you/:uid/:normalizedAgentName/:taxService uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.StartController.show(uid: String, normalizedAgentName: String, taxService: String)
+GET        /authorisation-response/exit/:exitType/:taxService                                           uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.ClientExitController.show(exitType: ClientExitType, taxService: String)
 
 GET        /authorisation-response/check-answer                                         uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.CheckYourAnswerController.show
+
 POST       /authorisation-response/check-answer                                         uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.CheckYourAnswerController.submit

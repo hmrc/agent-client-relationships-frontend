@@ -18,16 +18,16 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.actions
 
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
-import org.scalatest.{BeforeAndAfterEach, OptionValues}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
+import org.scalatest.{BeforeAndAfterEach, OptionValues}
 import org.scalatestplus.mockito.MockitoSugar.mock
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.http.Status.OK
 import play.api.libs.json.Json
-import play.api.mvc.{Action, ActionRefiner, AnyContent, AnyContentAsEmpty, DefaultActionBuilder, Request, Result, Results}
+import play.api.mvc.*
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{contentAsJson, defaultAwaitTimeout, redirectLocation, status}
+import play.api.test.Helpers.{contentAsJson, defaultAwaitTimeout, status}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyType.ClientResponse
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{ClientJourney, JourneyType}

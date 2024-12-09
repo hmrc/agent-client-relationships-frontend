@@ -18,7 +18,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.services
 
 import com.google.inject.{Inject, Singleton}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{ClientJourney, JourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.ClientJourney
 import uk.gov.hmrc.agentclientrelationshipsfrontend.repositories.JourneyRepository
 import uk.gov.hmrc.mongo.cache.DataKey
 

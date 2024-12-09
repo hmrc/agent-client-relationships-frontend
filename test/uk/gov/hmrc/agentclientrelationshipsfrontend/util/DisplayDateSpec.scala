@@ -24,7 +24,7 @@ import play.api.mvc.{AnyContentAsEmpty, Cookie}
 import play.api.test.FakeRequest
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.DisplayDate.*
 
-import java.time.LocalDate
+import java.time.{Instant, LocalDate, LocalDateTime, ZoneOffset}
 
 class DisplayDateSpec extends AnyWordSpecLike with Matchers with OptionValues with ScalaFutures {
 
@@ -73,5 +73,8 @@ class DisplayDateSpec extends AnyWordSpecLike with Matchers with OptionValues wi
 
     }
   }
-
+  "display the date correctly for an ExitPage" in {
+    val date: Instant = LocalDateTime.of(2024, 1, 10, 0, 0).toInstant(ZoneOffset.UTC)
+    displayInstant(date) shouldBe "10/01/2024"
+  }
 }
