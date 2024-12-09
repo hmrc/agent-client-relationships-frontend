@@ -620,16 +620,10 @@ checkYourAnswer.acceptAndSend.button=Accept and send
 checkYourAnswer.change=Change
 
 # ________________________________________________________________________________
-# Client journey exit partials
+# Unauthorised exit partials
 # ________________________________________________________________________________
-
-clientExit.agent-suspended.header=You cannot appoint this tax agent
-clientExit.no-outstanding-requests.header=There are no outstanding authorisation requests for you to respond to
-clientExit.cannot-find-authorisation-request.header=We cannot find this authorisation request
-clientExit.authorisation-request-expired.header=This authorisation request has already expired
-clientExit.authorisation-request-already-responded-to.header=This authorisation request has already been responded to
-clientExit.authorisation-request-cancelled.header=This authorisation request request has been cancelled
-pageNotFound.header=Page not found
+unauthorisedExit.agent-suspended.header=You cannot appoint this tax agent
+unauthorisedExit.no-outstanding-requests.header=There are no outstanding authorisation requests for you to respond to
 
 # ________________________________________________________________________________
 # You cannot appoint this tax agent (Agent suspended)
@@ -644,10 +638,20 @@ agentSuspended.signout-link=Finish and sign out
 noOutstandingRequests.p1= If you think this is wrong, contact the agent who sent you the request or <a href={0} class="govuk-link" target="_blank" rel="noreferrer noopener">view your request history</a>.
 
 # ________________________________________________________________________________
+# Client journey exit partials
+# ________________________________________________________________________________
+
+clientExit.cannot-find-authorisation-request.header=We cannot find this authorisation request
+clientExit.authorisation-request-expired.header=This authorisation request has already expired
+clientExit.authorisation-request-already-responded-to.header=This authorisation request has already been responded to
+clientExit.authorisation-request-cancelled.header=This authorisation request request has been cancelled
+pageNotFound.header=Page not found
+
+# ________________________________________________________________________________
 # This authorisation request has already expired
 # ________________________________________________________________________________
 authorisationRequestExpired.p1=This request expired on {0}. For details, <a href={1} class="govuk-link" target="_blank" rel="noreferrer noopener">view your history</a> to check for any expired, cancelled or outstanding requests.
-authorisationRequestExpired.p2=If your agent has sent you a recent request, <a href={0} class="govuk-link" target="_blank" rel="noreferrer noopener">make sure you have signed up to the tax service you need.
+authorisationRequestExpired.p2=If your agent has sent you a recent request, <a href={0} class="govuk-link" target="_blank" rel="noreferrer noopener">make sure you have signed up to the tax service you need.</a>
 authorisationRequestExpired.p3=You could also check you have signed in with the correct Government Gateway user ID. It must be the same one you used to sign up to the tax service the authorisation request is for.
 authorisationRequestExpired.p4=<a href={0} class="govuk-link" target="_blank" rel="noreferrer noopener">Sign in with the Government Gateway user ID</a> you use for managing your personal tax affairs.
 
@@ -670,13 +674,13 @@ authorisationRequestCancelled.p4=<a href={0} class="govuk-link" target="_blank" 
 # This authorisation request has already been responded to
 # ________________________________________________________________________________
 authorisationRequestRespondedTo.p1=This request has already been responded to on {0}. For details, <a href={1} class="govuk-link" target="_blank" rel="noreferrer noopener">view your history</a> to check for any expired, cancelled or outstanding requests.
-authorisationRequestRespondedTo.p2=If your agent has sent you a recent request, <a href={0} class="govuk-link" target="_blank" rel="noreferrer noopener">make sure you have signed up to the tax service you need.
+authorisationRequestRespondedTo.p2=If your agent has sent you a recent request, <a href={0} class="govuk-link" target="_blank" rel="noreferrer noopener">make sure you have signed up to the tax service you need.</a>
 authorisationRequestRespondedTo.p3=You could also check you have signed in with the correct Government Gateway user ID. It must be the same one you used to sign up to the tax service the authorisation request is for.
 authorisationRequestRespondedTo.p4=<a href={0} class="govuk-link" target="_blank" rel="noreferrer noopener">Sign in with the Government Gateway user ID</a> you use for managing your personal tax affairs.
 
 # ________________________________________________________________________________
 # Page not found
 # ________________________________________________________________________________
-pageNotFound.p1=If you have typed the web address, check it is correct.
-pageNotFound.p2=If you pasted the web address, check you have copied the entire address.
-pageNotFound.p3=If the web address is correct, contact the tax agent who sent you request if you still want to authorise them.
+pageNotFound.p1=If you typed the web address, check it is correct.
+pageNotFound.p2=If you pasted the web address, check you copied the entire address.
+pageNotFound.p3=If the web address is correct, contact the tax agent who sent you the request if you still want to authorise them.

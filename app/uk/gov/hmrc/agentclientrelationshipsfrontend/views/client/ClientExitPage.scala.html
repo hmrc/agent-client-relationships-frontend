@@ -14,19 +14,16 @@
  * limitations under the License.
  *@
 
-@import play.twirl.api.HtmlFormat
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientExitType
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.ClientJourneyRequest
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.Layout
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.client.clientExitPartials.*
-@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.ClientJourneyRequest
 
 @this(
         layout: Layout,
-        agentSuspended: AgentSuspended,
         authorisationHasExpired: AuthorisationHasExpired,
         cannotFindAuthRequest: CannotFindAuthRequest,
-        noOutstandingRequests: NoOutstandingRequests,
         authorisationHasBeenCancelled: AuthorisationHasBeenCancelled,
         authorisationHasAlreadyBeenResponded: AuthorisationHasAlreadyBeenResponded
 )
@@ -36,25 +33,18 @@
 @agentName = @{request.journey.getAgentName}
 @lastModifiedDate = @{request.journey.getLastModifiedDate}
 
-@key = @{
-    "clientExit"
-}
+@key = @{"clientExit"}
+@serviceName = @{messages("service.name.clients")}
+@pageTitle = @{messages(s"$key.$exitType.header")}
 
-@pageTitle = @{
-    messages(s"$key.$exitType.header")
-}
-
-@layout(pageTitle = pageTitle,
-    serviceName = Some(messages(s"service.name.clients"))) {
+@layout(pageTitle, Some(serviceName)) {
 
     <h1 class="govuk-heading-xl">@pageTitle</h1>
     @{
         exitType match {
-            case ClientExitType.AgentSuspended => agentSuspended()
             case ClientExitType.AuthorisationRequestExpired => authorisationHasExpired(expiryDate = lastModifiedDate)
             case ClientExitType.AuthorisationRequestCancelled => authorisationHasBeenCancelled(expiryDate = lastModifiedDate)
             case ClientExitType.CannotFindAuthorisationRequest => cannotFindAuthRequest(normalizedAgentName = agentName)
-            case ClientExitType.NoOutstandingRequests => noOutstandingRequests()
             case ClientExitType.AlreadyRespondedToAuthorisationRequest => authorisationHasAlreadyBeenResponded(respondedToDate = lastModifiedDate)
         }
     }

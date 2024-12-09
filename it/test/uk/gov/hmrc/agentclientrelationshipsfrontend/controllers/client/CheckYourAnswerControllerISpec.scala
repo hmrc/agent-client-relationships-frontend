@@ -18,7 +18,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client
 
 import play.api.http.Status.*
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.invitationLink.Pending
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.Pending
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.ClientJourney
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyType.ClientResponse
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.ClientJourneyService

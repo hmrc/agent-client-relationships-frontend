@@ -26,7 +26,6 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyType.C
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{ClientJourneyService, ClientServiceConfigurationService}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.WiremockHelper.stubPost
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentSpecHelper}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.PageNotFound
 import uk.gov.hmrc.http.HeaderCarrier
 
 class ConsentInformationControllerISpec extends ComponentSpecHelper with ScalaFutures with AuthStubs {
@@ -81,10 +80,10 @@ class ConsentInformationControllerISpec extends ComponentSpecHelper with ScalaFu
       stubPost(validateInvitationUrl, FORBIDDEN, "")
       val result = get(routes.ConsentInformationController.show(testUid, "income-tax").url)
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe routes.ClientExitController.show(ClientExitType.AgentSuspended, "income-tax").url
+      result.header("Location").value shouldBe routes.ClientExitController.showUnauthorised(ClientExitType.AgentSuspended).url
     }
 
-    taxServices.foreach { case (taxService, taxServiceKey) =>
+    taxServices.keySet.foreach { taxService =>
       s"Display consent information page for $taxService" in {
         authoriseAsClientWithEnrolments(taxServices(taxService))
         await(journeyService.saveJourney(ClientJourney(journeyType = ClientResponse)))
@@ -98,7 +97,7 @@ class ConsentInformationControllerISpec extends ComponentSpecHelper with ScalaFu
         stubPost(validateInvitationUrl, OK, testValidateInvitationResponseJson(taxServices(taxService), "Expired").toString())
         val result = get(routes.ConsentInformationController.show(testUid, taxService).url)
         result.status shouldBe SEE_OTHER
-        result.header("Location").value shouldBe routes.ClientExitController.show(ClientExitType.AuthorisationRequestExpired, taxService).url
+        result.header("Location").value shouldBe routes.ClientExitController.showClient(ClientExitType.AuthorisationRequestExpired).url
       }
       s"Redirect correctly to cancelled exit page for $taxService" in {
         authoriseAsClientWithEnrolments(taxServices(taxService))
@@ -106,7 +105,7 @@ class ConsentInformationControllerISpec extends ComponentSpecHelper with ScalaFu
         stubPost(validateInvitationUrl, OK, testValidateInvitationResponseJson(taxServices(taxService), "Cancelled").toString())
         val result = get(routes.ConsentInformationController.show(testUid, taxService).url)
         result.status shouldBe SEE_OTHER
-        result.header("Location").value shouldBe routes.ClientExitController.show(ClientExitType.AuthorisationRequestCancelled, taxService).url
+        result.header("Location").value shouldBe routes.ClientExitController.showClient(ClientExitType.AuthorisationRequestCancelled).url
       }
       s"Redirect correctly to already responded exit page for $taxService" in {
         authoriseAsClientWithEnrolments(taxServices(taxService))
@@ -114,7 +113,7 @@ class ConsentInformationControllerISpec extends ComponentSpecHelper with ScalaFu
         stubPost(validateInvitationUrl, OK, testValidateInvitationResponseJson(taxServices(taxService), "Accepted").toString())
         val result = get(routes.ConsentInformationController.show(testUid, taxService).url)
         result.status shouldBe SEE_OTHER
-        result.header("Location").value shouldBe routes.ClientExitController.show(ClientExitType.AlreadyRespondedToAuthorisationRequest, taxService).url
+        result.header("Location").value shouldBe routes.ClientExitController.showClient(ClientExitType.AlreadyRespondedToAuthorisationRequest).url
       }
     }
   }

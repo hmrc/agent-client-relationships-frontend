@@ -21,7 +21,7 @@ import play.api.mvc.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientExitType
-import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.client.ClientExitPage
+import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.client.{ClientExitPage, UnauthorisedExitPage}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}
@@ -29,11 +29,16 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class ClientExitController @Inject()(mcc: MessagesControllerComponents,
-                                     clientExitPage: ClientExitPage
-                                    ) (implicit val executionContext: ExecutionContext,
-                                       actions: Actions,
-                                       appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport:
+                                     clientExitPage: ClientExitPage,
+                                     unauthorisedExitPage: UnauthorisedExitPage,
+                                     actions: Actions
+                                    )(implicit val executionContext: ExecutionContext,
+                                      appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport:
 
-  def show(exitType: ClientExitType, taxService: String): Action[AnyContent] = actions.getClientJourney(taxService).async:
+  def showClient(exitType: ClientExitType): Action[AnyContent] = actions.clientAuthenticate.async:
     implicit request =>
       Future.successful(Ok(clientExitPage(exitType)))
+
+  def showUnauthorised(exitType: ClientExitType): Action[AnyContent] = Action.async:
+    implicit request =>
+      Future.successful(Ok(unauthorisedExitPage(exitType)))

@@ -48,9 +48,8 @@ class ConsentInformationController @Inject()(agentClientRelationshipsConnector: 
       if serviceConfigurationService.validateUrlPart(taxService) then agentClientRelationshipsConnector
         .validateInvitation(uid, serviceConfigurationService.getServiceKeysForUrlPart(taxService))
         .flatMap {
-          case Left("AGENT_SUSPENDED") => Future.successful(Redirect(routes.ClientExitController.show(AgentSuspended, taxService)))
-          case Left("INVITATION_OR_AGENT_RECORD_NOT_FOUND") => Future.successful(Redirect(routes.ClientExitController.show(CannotFindAuthorisationRequest, taxService)))
-          case Left(_) => Future.successful(Redirect("routes.ClientExitController.show(ClientExitType.ServerError)"))
+          case Left("AGENT_SUSPENDED") => Future.successful(Redirect(routes.ClientExitController.showUnauthorised(AgentSuspended)))
+          case Left("INVITATION_OR_AGENT_RECORD_NOT_FOUND") => Future.successful(Redirect(routes.ClientExitController.showUnauthorised(CannotFindAuthorisationRequest)))
           case Right(response) =>
             val newJourney = journeyRequest.journey.copy(
               invitationId = Some(response.invitationId),
@@ -61,9 +60,9 @@ class ConsentInformationController @Inject()(agentClientRelationshipsConnector: 
             )
             clientJourneyService.saveJourney(newJourney).map(_ => response.status match {
               case Pending => Ok(consentInformationPage(newJourney))
-              case Expired => Redirect(routes.ClientExitController.show(AuthorisationRequestExpired, taxService))
-              case Cancelled => Redirect(routes.ClientExitController.show(AuthorisationRequestCancelled, taxService))
-              case _ => Redirect(routes.ClientExitController.show(AlreadyRespondedToAuthorisationRequest, taxService))
+              case Expired => Redirect(routes.ClientExitController.showClient(AuthorisationRequestExpired))
+              case Cancelled => Redirect(routes.ClientExitController.showClient(AuthorisationRequestCancelled))
+              case _ => Redirect(routes.ClientExitController.showClient(AlreadyRespondedToAuthorisationRequest))
             })
         }
       else Future.successful(NotFound(pageNotFound()))

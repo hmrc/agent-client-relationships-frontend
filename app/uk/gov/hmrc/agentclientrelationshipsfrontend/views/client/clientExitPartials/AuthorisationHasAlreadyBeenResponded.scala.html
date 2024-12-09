@@ -29,9 +29,7 @@
     messages(s"$key.header")
 }
 
-@layout(pageTitle) {
-    <p class="govuk-body">@Html(messages(s"$key.p1", displayInstant(respondedToDate), s"${appConfig.acmExternalUrl}#history"))</p>
-    <p class="govuk-body">@Html(messages(s"$key.p2", s"${appConfig.guidanceAuthoriseAgent}"))</p>
-    <p class="govuk-body">@messages(s"$key.p3")</p>
-    <p class="govuk-body">@Html(messages(s"$key.p4", s"${appConfig.signInUrl}"))</p>
-}
+<p class="govuk-body">@Html(messages(s"$key.p1", displayInstant(respondedToDate), s"${appConfig.acmExternalUrl}#history"))</p>
+<p class="govuk-body">@Html(messages(s"$key.p2", s"${appConfig.guidanceAuthoriseAgent}"))</p>
+<p class="govuk-body">@messages(s"$key.p3")</p>
+<p class="govuk-body">@Html(messages(s"$key.p4", s"${appConfig.signInUrl}"))</p>
