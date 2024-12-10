@@ -21,12 +21,9 @@
 
 @this(layout: Layout)
 
-@(respondedToDate: Instant)(implicit request: Request[?], messages: Messages, appConfig: AppConfig)
+@(respondedToDate: Instant)(implicit messages: Messages, appConfig: AppConfig)
 @key = @{
     "authorisationRequestRespondedTo"
-}
-@pageTitle = @{
-    messages(s"$key.header")
 }
 
 <p class="govuk-body">@Html(messages(s"$key.p1", displayInstant(respondedToDate), s"${appConfig.acmExternalUrl}#history"))</p>

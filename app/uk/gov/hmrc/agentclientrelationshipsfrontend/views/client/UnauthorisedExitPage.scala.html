@@ -24,13 +24,12 @@
         agentSuspended: AgentSuspended,
         noOutstandingRequests: NoOutstandingRequests
 )
-@(exitType: ClientExitType)(implicit request: Request[?], messages: Messages, appConfig: AppConfig)
+@(exitType: ClientExitType)(implicit request: RequestHeader, messages: Messages, appConfig: AppConfig)
 @key = @{"unauthorisedExit"}
 @serviceName = @{messages("service.name.clients")}
 @pageTitle = @{messages(s"$key.$exitType.header")}
 
 @layout(pageTitle, Some(serviceName)) {
-
     <h1 class="govuk-heading-xl">@pageTitle</h1>
     @{
         exitType match {

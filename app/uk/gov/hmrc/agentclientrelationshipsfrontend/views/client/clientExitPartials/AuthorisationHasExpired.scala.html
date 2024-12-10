@@ -20,7 +20,7 @@
 
 @this()
 
-@(expiryDate: Instant)( implicit request: Request[?], messages: Messages, appConfig: AppConfig)
+@(expiryDate: Instant)( implicit messages: Messages, appConfig: AppConfig)
 @key = @{
     "authorisationRequestExpired"
 }

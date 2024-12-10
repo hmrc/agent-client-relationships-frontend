@@ -44,7 +44,7 @@
         exitType match {
             case ClientExitType.AuthorisationRequestExpired => authorisationHasExpired(expiryDate = lastModifiedDate)
             case ClientExitType.AuthorisationRequestCancelled => authorisationHasBeenCancelled(expiryDate = lastModifiedDate)
-            case ClientExitType.CannotFindAuthorisationRequest => cannotFindAuthRequest(normalizedAgentName = agentName)
+            case ClientExitType.CannotFindAuthorisationRequest => cannotFindAuthRequest(agentName = agentName)
             case ClientExitType.AlreadyRespondedToAuthorisationRequest => authorisationHasAlreadyBeenResponded(respondedToDate = lastModifiedDate)
         }
     }

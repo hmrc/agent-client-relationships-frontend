@@ -49,6 +49,6 @@ class StartController @Inject()(agentClientRelationshipsConnector: AgentClientRe
           .map {
             case Left("AGENT_SUSPENDED") => Redirect(routes.ClientExitController.showUnauthorised(AgentSuspended))
             case Left("AGENT_NOT_FOUND") => Redirect(routes.ClientExitController.showUnauthorised(NoOutstandingRequests))
-            case Right(_) => Ok(authoriseAgentStartPage(normalizedAgentName, taxService, uid))
+            case Right(response) => Ok(authoriseAgentStartPage(response.name, taxService, uid))
           }
       else Future.successful(NotFound(pageNotFound()))

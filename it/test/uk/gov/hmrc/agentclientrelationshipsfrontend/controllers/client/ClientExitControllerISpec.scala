@@ -17,6 +17,7 @@
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client
 
 import play.api.http.Status.OK
+import play.api.libs.json.{JsObject, Json}
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientExitType.*
@@ -33,12 +34,31 @@ class ClientExitControllerISpec extends ComponentSpecHelper with AuthStubs {
 
   val alreadyRespondedStatus: List[InvitationStatus] = List(Accepted, Rejected, DeAuthorised, PartialAuth)
 
+  val testName = "Test Name"
+
+  def testValidateInvitationResponseJson(taxService: String, status: String = "Pending"): JsObject = Json.obj(
+    "invitationId" -> "AB1234567890",
+    "serviceKey" -> taxService,
+    "agentName" -> testName,
+    "status" -> status,
+    "lastModifiedDate" -> "2024-12-01T12:00:00Z"
+  )
+  val validateInvitationUrl = s"/agent-client-relationships/client/validate-invitation"
+
   def journeyModel(status: Option[InvitationStatus]): ClientJourney = ClientJourney(
     ClientResponse,
+    consent = Some(true),
+    serviceKey = Some("HMRC-MTD-IT"),
+    invitationId = Some("ABC123"),
     agentName = Some("ABC Accountants"),
     status = status,
     lastModifiedDate = Some(Instant.parse("2024-12-01T12:00:00Z"))
   )
+
+  override def beforeEach(): Unit = {
+    await(journeyService.deleteAllAnswersInSession(request))
+    super.beforeEach()
+  }
 
     s"GET /authorisation-response/exit/agent-suspended" should {
       "display the exit page" in {
@@ -58,25 +78,16 @@ class ClientExitControllerISpec extends ComponentSpecHelper with AuthStubs {
       }
     }
 
-    s"GET /authorisation-response/exit/cannot-find-authorisation-request" should {
-      "display the exit page" in {
-        authoriseAsClient()
-        await(journeyService.saveJourney(journeyModel(None)))
-        val result = get(routes.ClientExitController.showClient(CannotFindAuthorisationRequest).url)
-
-        result.status shouldBe OK
-      }
-    }
-
     s"GET /authorisation-response/exit/authorisation-request-cancelled" should {
       "display the exit page" in {
-        authoriseAsClient()
+        authoriseAsClientWithEnrolments("HMRC-MTD-IT")
         await(journeyService.saveJourney(journeyModel(Some(Cancelled))))
         val result = get(routes.ClientExitController.showClient(AuthorisationRequestCancelled).url)
 
         result.status shouldBe OK
       }
     }
+
 
     s"GET /authorisation-response/exit/authorisation-request-expired" should {
       "display the exit page" in {

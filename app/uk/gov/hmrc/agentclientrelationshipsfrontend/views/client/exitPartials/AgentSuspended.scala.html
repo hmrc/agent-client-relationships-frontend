@@ -19,7 +19,7 @@
 
 @this()
 
-@()(implicit request: Request[?], messages: Messages, appConfig:AppConfig)
+@()(implicit messages: Messages, appConfig:AppConfig)
 @key = @{"agentSuspended"}
 
 <p class="govuk-body">@messages(s"$key.p1")</p>

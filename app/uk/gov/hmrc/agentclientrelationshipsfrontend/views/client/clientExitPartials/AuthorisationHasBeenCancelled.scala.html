@@ -15,12 +15,14 @@
  *@
 
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.ClientJourneyRequest
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.DisplayDate.displayInstant
+
 @import java.time.Instant
 
 @this()
 
-@(expiryDate: Instant)(implicit request: Request[?], messages: Messages, appConfig: AppConfig)
+@(expiryDate: Instant)(implicit messages: Messages, appConfig: AppConfig)
 @key = @{
     "authorisationRequestCancelled"
 }

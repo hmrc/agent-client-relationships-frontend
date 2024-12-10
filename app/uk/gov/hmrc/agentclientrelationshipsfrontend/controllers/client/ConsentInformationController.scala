@@ -49,7 +49,7 @@ class ConsentInformationController @Inject()(agentClientRelationshipsConnector: 
         .validateInvitation(uid, serviceConfigurationService.getServiceKeysForUrlPart(taxService))
         .flatMap {
           case Left("AGENT_SUSPENDED") => Future.successful(Redirect(routes.ClientExitController.showUnauthorised(AgentSuspended)))
-          case Left("INVITATION_OR_AGENT_RECORD_NOT_FOUND") => Future.successful(Redirect(routes.ClientExitController.showUnauthorised(CannotFindAuthorisationRequest)))
+          case Left("INVITATION_OR_AGENT_RECORD_NOT_FOUND") => Future.successful(Redirect(routes.ClientExitController.showUnauthorised(NoOutstandingRequests)))
           case Right(response) =>
             val newJourney = journeyRequest.journey.copy(
               invitationId = Some(response.invitationId),
