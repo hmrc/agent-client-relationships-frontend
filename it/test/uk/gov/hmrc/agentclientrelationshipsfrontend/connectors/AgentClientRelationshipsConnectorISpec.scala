@@ -108,10 +108,9 @@ class AgentClientRelationshipsConnectorISpec extends ComponentSpecHelper with Ag
       await(result) shouldBe Left("AGENT_SUSPENDED")
     }
 
-    "return a Left containing SERVER_ERROR" in {
+    "return error status if service service unavailable" in {
       stubGet(getValidateLinkResponseUrl(testUid, testNormalizedAgentName), SERVICE_UNAVAILABLE, "")
-      val result = testConnector.validateLinkParts(testUid, testNormalizedAgentName)
-      await(result) shouldBe Left("SERVER_ERROR")
+      intercept[Exception](await(testConnector.validateLinkParts(testUid, testNormalizedAgentName)))
     }
   }
 

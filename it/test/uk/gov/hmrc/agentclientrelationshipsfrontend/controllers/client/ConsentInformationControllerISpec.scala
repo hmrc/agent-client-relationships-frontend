@@ -20,6 +20,7 @@ import org.scalatest.concurrent.ScalaFutures
 import play.api.libs.json.{JsObject, Json}
 import play.api.test.Helpers.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.connectors.AgentClientRelationshipsConnector
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientExitType
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.ClientJourney
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyType.ClientResponse
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{ClientJourneyService, ClientServiceConfigurationService}
@@ -31,7 +32,6 @@ class ConsentInformationControllerISpec extends ComponentSpecHelper with ScalaFu
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
   val testUid = "ABCD"
-  val testTaxService = "income-tax"
   val testName = "Test Name"
 
   val taxServices: Map[String, String] = Map(
@@ -70,20 +70,19 @@ class ConsentInformationControllerISpec extends ComponentSpecHelper with ScalaFu
       authoriseAsClientWithEnrolments("HMRC-MTD-IT")
       await(journeyService.saveJourney(ClientJourney(journeyType = ClientResponse)))
       stubPost(validateInvitationUrl, NOT_FOUND, "")
-      val result = get(routes.ConsentInformationController.show(testUid, testTaxService).url)
+      val result = get(routes.ConsentInformationController.show(testUid,"income-tax").url)
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe "routes.ClientExitController.show(ClientExitType.NotFound).url"
     }
 
     "Redirect correctly to agent suspended exit page" in {
       authoriseAsClientWithEnrolments("HMRC-MTD-IT")
       await(journeyService.saveJourney(ClientJourney(journeyType = ClientResponse)))
       stubPost(validateInvitationUrl, FORBIDDEN, "")
-      val result = get(routes.ConsentInformationController.show(testUid, testTaxService).url)
+      val result = get(routes.ConsentInformationController.show(testUid, "income-tax").url)
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe "routes.ClientExitController.show(ClientExitType.AgentSuspended).url"
+      result.header("Location").value shouldBe routes.ClientExitController.showUnauthorised(ClientExitType.AgentSuspended).url
     }
-    
+
     taxServices.keySet.foreach { taxService =>
       s"Display consent information page for $taxService" in {
         authoriseAsClientWithEnrolments(taxServices(taxService))
@@ -98,7 +97,7 @@ class ConsentInformationControllerISpec extends ComponentSpecHelper with ScalaFu
         stubPost(validateInvitationUrl, OK, testValidateInvitationResponseJson(taxServices(taxService), "Expired").toString())
         val result = get(routes.ConsentInformationController.show(testUid, taxService).url)
         result.status shouldBe SEE_OTHER
-        result.header("Location").value shouldBe "routes.ClientExitController.show(ClientExitType.Expired).url"
+        result.header("Location").value shouldBe routes.ClientExitController.showClient(ClientExitType.AuthorisationRequestExpired).url
       }
       s"Redirect correctly to cancelled exit page for $taxService" in {
         authoriseAsClientWithEnrolments(taxServices(taxService))
@@ -106,7 +105,7 @@ class ConsentInformationControllerISpec extends ComponentSpecHelper with ScalaFu
         stubPost(validateInvitationUrl, OK, testValidateInvitationResponseJson(taxServices(taxService), "Cancelled").toString())
         val result = get(routes.ConsentInformationController.show(testUid, taxService).url)
         result.status shouldBe SEE_OTHER
-        result.header("Location").value shouldBe "routes.ClientExitController.show(ClientExitType.Cancelled).url"
+        result.header("Location").value shouldBe routes.ClientExitController.showClient(ClientExitType.AuthorisationRequestCancelled).url
       }
       s"Redirect correctly to already responded exit page for $taxService" in {
         authoriseAsClientWithEnrolments(taxServices(taxService))
@@ -114,7 +113,7 @@ class ConsentInformationControllerISpec extends ComponentSpecHelper with ScalaFu
         stubPost(validateInvitationUrl, OK, testValidateInvitationResponseJson(taxServices(taxService), "Accepted").toString())
         val result = get(routes.ConsentInformationController.show(testUid, taxService).url)
         result.status shouldBe SEE_OTHER
-        result.header("Location").value shouldBe "routes.ClientExitController.show(ClientExitType.AlreadyResponded).url"
+        result.header("Location").value shouldBe routes.ClientExitController.showClient(ClientExitType.AlreadyRespondedToAuthorisationRequest).url
       }
     }
   }

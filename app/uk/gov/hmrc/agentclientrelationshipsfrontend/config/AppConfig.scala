@@ -29,6 +29,7 @@ class AppConfig @Inject()(servicesConfig: ServicesConfig, config: Configuration)
   // Service Urls
   val appExternalUrl: String = getConfString("agent-client-relationships-frontend.external-url") // Use for redirects back to ACR frontend so they work locally
   val asaFrontendExternalUrl: String = getConfString("agent-services-account-frontend.external-url")
+  val acmExternalUrl: String = getConfString("agent-client-management-frontend.external-url")
   val agentServicesAccountLimitedUrl: String = asaFrontendExternalUrl + getConfString("agent-services-account-frontend.account-limited")
   val agentServicesAccountHomeUrl: String = asaFrontendExternalUrl + getConfString("agent-services-account-frontend.home")
   val ivUpliftUrl: String = getConfString("identity-verification-frontend.uplift-url")
@@ -40,6 +41,7 @@ class AppConfig @Inject()(servicesConfig: ServicesConfig, config: Configuration)
   val guidanceUrlSaSignup = s"$govUkUrl/register-for-self-assessment/self-employed"
   val guidanceUrlForAgentRoles = s"$govUkUrl/" // TODO: We need this url to be complete
   val guidanceSa = s"$govUkUrl/guidance/self-assessment-for-agents-online-service"
+  val guidanceAuthoriseAgent = s"$govUkUrl/guidance/authorise-an-agent-to-deal-with-certain-tax-services-for-you"
   val privacyPolicyUrl = s"$govUkUrl/government/publications/data-protection-act-dpa-information-hm-revenue-and-customs-hold-about-you/data-protection-act-dpa-information-hm-revenue-and-customs-hold-about-you"
 
   // Feature Flags

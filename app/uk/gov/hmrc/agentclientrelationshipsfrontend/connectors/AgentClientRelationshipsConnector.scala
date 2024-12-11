@@ -94,8 +94,8 @@ class AgentClientRelationshipsConnector @Inject()(appConfig: AppConfig,
       .map(response => response.status match {
         case OK => Right(response.json.as[ValidateLinkPartsResponse])
         case NOT_FOUND => Left("AGENT_NOT_FOUND") 
-        case FORBIDDEN => Left("AGENT_SUSPENDED") 
-        case _ => Left("SERVER_ERROR")
+        case FORBIDDEN => Left("AGENT_SUSPENDED")
+        case status => throw new Exception(s"Unexpected status $status received when fetching invitation")
       })
 
   def acceptAuthorisation(invitationId: String)(implicit hc: HeaderCarrier): Future[Unit] =

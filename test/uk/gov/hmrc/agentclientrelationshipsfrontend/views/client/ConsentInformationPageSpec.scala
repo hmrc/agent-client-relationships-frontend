@@ -19,7 +19,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.views.client
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.twirl.api.HtmlFormat
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.invitationLink.Pending
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.Pending
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{ClientJourney, ClientJourneyRequest, JourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.support.ViewSpecSupport
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.client.ConsentInformationPage

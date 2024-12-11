@@ -18,7 +18,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.utils
 
 import play.api.mvc.Request
 
-import java.time.LocalDate
+import java.time.{Instant, LocalDate, ZoneId}
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 import scala.util.Try
@@ -62,6 +62,12 @@ object DisplayDate {
   def displayDateForLangFromString(strDate: String)(implicit request: Request[_]): String = {
     val localDate = Try(LocalDate.parse(strDate))
     localDate.map(d => displayDateForLang(Some(d))).getOrElse(strDate)
+  }
+
+  def displayInstant(instant: Instant): String = {
+    val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+    val date = instant.atZone(ZoneId.of("Europe/London")).toLocalDate.format(formatter)
+    date
   }
 
 }

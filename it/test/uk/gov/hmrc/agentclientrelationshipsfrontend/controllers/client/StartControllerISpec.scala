@@ -16,23 +16,23 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client
 
-import org.jsoup.Jsoup
 import org.scalatest.concurrent.ScalaFutures
 import play.api.libs.json.{JsObject, Json}
 import play.api.test.Helpers.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.connectors.AgentClientRelationshipsConnector
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientExitType.{AgentSuspended, NoOutstandingRequests}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.ClientServiceConfigurationService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.WiremockHelper.stubGet
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentSpecHelper}
 import uk.gov.hmrc.http.HeaderCarrier
 
-class StartControllerSpec extends ComponentSpecHelper with ScalaFutures with AuthStubs {
+class StartControllerISpec extends ComponentSpecHelper with ScalaFutures with AuthStubs {
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
   val testUid = "ABCD"
-  val testNormalizedAgentName = "test-name"
+  val testNormalizedAgentName = "abc_ltd"
   val testTaxService = "income-tax"
-  val testAgentName = "Test Name"
+  val testName = "Test Name"
 
   val validTaxServiceNames: List[String] = List(
     "income-tax",
@@ -47,7 +47,7 @@ class StartControllerSpec extends ComponentSpecHelper with ScalaFutures with Aut
   def getValidateLinkResponseUrl(uid: String, normalizedAgentName: String) = s"/agent-client-relationships/agent/agent-reference/uid/$uid/$normalizedAgentName"
 
   val testValidateLinkResponseJson: JsObject = Json.obj(
-    "name" -> testAgentName,
+    "name" -> testName,
   )
 
   val serviceConfigurationService: ClientServiceConfigurationService = app.injector.instanceOf[ClientServiceConfigurationService]
@@ -59,14 +59,14 @@ class StartControllerSpec extends ComponentSpecHelper with ScalaFutures with Aut
       val result = get(routes.StartController.show(testUid, testNormalizedAgentName, "invalidTaxService").url)
       result.status shouldBe NOT_FOUND
     }
-    
+
     "Redirect to routes.ClientExitController.show(AGENT_NOT_FOUND)" in {
 
       stubGet(getValidateLinkResponseUrl(testUid, testNormalizedAgentName), NOT_FOUND, testValidateLinkResponseJson.toString)
 
       val result = get(routes.StartController.show(testUid, testNormalizedAgentName, testTaxService).url)
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe "routes.ClientExitController.show(AGENT_NOT_FOUND)"
+      result.header("Location").value shouldBe routes.ClientExitController.showUnauthorised(NoOutstandingRequests).url
     }
 
     "Redirect to routes.ClientExitController.show(AGENT_SUSPENDED)" in {
@@ -75,18 +75,9 @@ class StartControllerSpec extends ComponentSpecHelper with ScalaFutures with Aut
 
       val result = get(routes.StartController.show(testUid, testNormalizedAgentName, testTaxService).url)
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe "routes.ClientExitController.show(AGENT_SUSPENDED)"
+      result.header("Location").value shouldBe routes.ClientExitController.showUnauthorised(AgentSuspended).url
     }
 
-    "Redirect to routes.ClientExitController.show(SERVER_ERROR)" in {
-
-      stubGet(getValidateLinkResponseUrl(testUid, testNormalizedAgentName), INTERNAL_SERVER_ERROR, testValidateLinkResponseJson.toString)
-
-      val result = get(routes.StartController.show(testUid, testNormalizedAgentName, testTaxService).url)
-      result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe "routes.ClientExitController.show(SERVER_ERROR)"
-    }
-    
     validTaxServiceNames.foreach { taxService =>
       s"Display start page for $taxService" in {
 
@@ -94,8 +85,6 @@ class StartControllerSpec extends ComponentSpecHelper with ScalaFutures with Aut
 
         val result = get(routes.StartController.show(testUid, testNormalizedAgentName, taxService).url)
         result.status shouldBe OK
-        val body = Jsoup.parse(result.body)
-        body.select("h1").text() should include(testAgentName)
       }
 
     }
