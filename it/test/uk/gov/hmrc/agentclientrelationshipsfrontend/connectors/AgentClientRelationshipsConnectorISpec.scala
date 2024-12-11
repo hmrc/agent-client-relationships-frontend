@@ -19,6 +19,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.connectors
 import play.api.libs.json.{JsObject, Json}
 import play.api.test.Helpers.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.invitationLink.ValidateLinkPartsResponse
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, AgentJourneyRequest, JourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsResponse, ClientStatus, KnownFactType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AgentClientRelationshipStub, ComponentSpecHelper}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.WiremockHelper.stubGet
@@ -33,6 +34,7 @@ class AgentClientRelationshipsConnectorISpec extends ComponentSpecHelper with Ag
 
   def getValidateLinkResponseUrl(uid: String, normalizedAgentName: String) = s"/agent-client-relationships/agent/agent-reference/uid/$uid/$normalizedAgentName"
 
+  val testArn = "TARN0000001"
   val testClientId = "clientId"
   val testService = "HMRC-MTD-IT"
   val testName = "Test Name"
@@ -55,6 +57,18 @@ class AgentClientRelationshipsConnectorISpec extends ComponentSpecHelper with Ag
     "knownFacts" -> Json.arr(testPostCode),
     "knownFactType" -> "PostalCode",
     "hasPendingInvitation" -> false
+  )
+
+  private val basicClientDetails = ClientDetailsResponse(testName, None, None, Seq(testPostCode), Some(KnownFactType.PostalCode), false, None)
+  private val basicJourney: AgentJourney = AgentJourney(
+    journeyType = JourneyType.AgentCancelAuthorisation,
+    clientType = Some("personal"),
+    clientService = Some("HMRC-MTD-IT"),
+    clientId = Some(testClientId),
+    clientDetailsResponse = Some(basicClientDetails),
+    knownFact = Some(testPostCode),
+    clientConfirmed = Some(true),
+    agentType = None
   )
 
   val testValidateLinkResponse: ValidateLinkPartsResponse = ValidateLinkPartsResponse(
@@ -133,4 +147,10 @@ class AgentClientRelationshipsConnectorISpec extends ComponentSpecHelper with Ag
     "throw an exception when a non-204 status is received" in:
       givenRejectAuthorisation("ABC123", INTERNAL_SERVER_ERROR)
       intercept[Exception](await(testConnector.rejectAuthorisation("ABC123")))
+
+  "cancelAuthorisation" should:
+    "return nothing when a 204 status is received" in:
+      givenCancelAuthorisation(testArn)
+      implicit val journeyRequest: AgentJourneyRequest[?] = new AgentJourneyRequest(testArn, basicJourney, request)
+      await(testConnector.cancelAuthorisation(basicJourney)) shouldEqual ()
 }

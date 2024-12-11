@@ -17,6 +17,7 @@
 package uk.gov.hmrc.agentclientrelationshipsfrontend.utils
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
+import play.api.http.Status.NO_CONTENT
 import play.api.test.Helpers.{NOT_FOUND, OK}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.WiremockHelper.{stubGet, stubPost}
 
@@ -33,4 +34,7 @@ trait AgentClientRelationshipStub {
 
   def givenRejectAuthorisation(invitationId: String, status: Int): StubMapping = stubPost(
     s"/agent-client-relationships/authorisation-response/reject/$invitationId", status, "")
+
+  def givenCancelAuthorisation(arn: String): StubMapping = stubPost(
+    s"/agent-client-relationships/agent/$arn/remove-authorisation", NO_CONTENT, "")
 }
