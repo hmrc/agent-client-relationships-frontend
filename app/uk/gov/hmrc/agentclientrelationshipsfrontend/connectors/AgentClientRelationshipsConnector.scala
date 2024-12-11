@@ -58,7 +58,8 @@ class AgentClientRelationshipsConnector @Inject()(appConfig: AppConfig,
   }
 
   def cancelAuthorisation(journey: AgentJourney)(implicit hc: HeaderCarrier, request: AgentJourneyRequest[?]): Future[Unit] = httpV2
-    .delete(url"$agentClientRelationshipsUrl/agent/${request.arn}/service/${journey.getService}/client/${serviceConfig.firstClientDetailsFieldFor(journey.getService).clientIdType}/${journey.clientId.get}")
+    .post(url"$agentClientRelationshipsUrl/agent/${request.arn}/remove-authorisation")
+    .withBody(Json.obj("clientId" -> journey.getClientId, "service" -> journey.getService))
     .execute[HttpResponse].map { response => response.status match {
       case NO_CONTENT => ()
       case _ => throw new RuntimeException(s"Failed to cancel authorisation: ${response.body}")
