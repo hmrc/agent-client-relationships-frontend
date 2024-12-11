@@ -19,10 +19,10 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.models
 import play.api.libs.json.{Json, OFormat}
 
 case class CreateAuthorisationRequest(
-                                       inputSuppliedClientId: String,
-                                       inputSuppliedClientIdType: String,
+                                       clientId: String,
+                                       suppliedClientIdType: String,
                                        clientName: String,
-                                       inputService: String
+                                       service: String
                                      )
 
 object CreateAuthorisationRequest {
