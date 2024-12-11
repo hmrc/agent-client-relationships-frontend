@@ -83,6 +83,7 @@ class AuthActions @Inject()(val authConnector: AuthConnector,
         if userHasEnrolmentForTaxService(taxService, enrols) then
           block(request)
         else
+          //TODO: add exit type for insufficient_enrolments
           Future.successful(Redirect("routes.ClientExitHandler.show(INSUFFICIENT_ENROLMENTS)"))
 
       authorised(AuthProviders(GovernmentGateway))

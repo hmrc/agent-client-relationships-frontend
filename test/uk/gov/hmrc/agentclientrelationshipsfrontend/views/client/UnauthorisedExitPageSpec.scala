@@ -21,10 +21,8 @@ import org.jsoup.nodes.Document
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientExitType.*
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyType.ClientResponse
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{ClientJourney, ClientJourneyRequest}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.support.ViewSpecSupport
-import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.client.{ClientExitPage, UnauthorisedExitPage}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.client.UnauthorisedExitPage
 
 import java.time.{Instant, LocalDateTime, ZoneOffset}
 
@@ -87,7 +85,7 @@ class UnauthorisedExitPageSpec extends ViewSpecSupport {
 
     "have the correct link in the details component content" in {
 
-      doc.mainContent.extractLink(1).value shouldBe TestLink("view your request history", "http://localhost:9568#history")
+      doc.mainContent.extractLink(1).value shouldBe TestLink("view your request history", "http://localhost:9568/manage-your-tax-agents#history")
     }
   }
 }

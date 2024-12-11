@@ -88,7 +88,7 @@ class ClientExitPageSpec extends ViewSpecSupport {
 
     "have the correct link in the details component content" in {
 
-      doc.mainContent.extractLink(1).value shouldBe TestLink("Make sure you have signed up for the tax service you need.", "https://www.gov.uk/authorise-an-agent-to-deal-with-certain-tax-services-for-you")
+      doc.mainContent.extractLink(1).value shouldBe TestLink("Make sure you have signed up for the tax service you need.", "https://www.gov.uk/guidance/authorise-an-agent-to-deal-with-certain-tax-services-for-you")
     }
   }
 
@@ -115,7 +115,7 @@ class ClientExitPageSpec extends ViewSpecSupport {
 
     "have the correct link in the details component content" in {
 
-      doc.mainContent.extractLink(1).value shouldBe TestLink("view your history", "http://localhost:9568#history")
+      doc.mainContent.extractLink(1).value shouldBe TestLink("view your history", "http://localhost:9568/manage-your-tax-agents#history")
     }
   }
 
@@ -142,7 +142,7 @@ class ClientExitPageSpec extends ViewSpecSupport {
 
     "have the correct link in the details component content" in {
 
-      doc.mainContent.extractLink(1).value shouldBe TestLink("view your history", "http://localhost:9568#history")
+      doc.mainContent.extractLink(1).value shouldBe TestLink("view your history", "http://localhost:9568/manage-your-tax-agents#history")
     }
   }
 
@@ -169,7 +169,7 @@ class ClientExitPageSpec extends ViewSpecSupport {
 
     "have the correct link in the details component content" in {
 
-      doc.mainContent.extractLink(2).value shouldBe TestLink("make sure you have signed up to the tax service you need.", "https://www.gov.uk/authorise-an-agent-to-deal-with-certain-tax-services-for-you")
+      doc.mainContent.extractLink(2).value shouldBe TestLink("make sure you have signed up to the tax service you need.", "https://www.gov.uk/guidance/authorise-an-agent-to-deal-with-certain-tax-services-for-you")
     }
   }
 }
