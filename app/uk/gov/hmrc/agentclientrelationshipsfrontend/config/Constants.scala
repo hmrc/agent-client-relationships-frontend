@@ -16,7 +16,9 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.config
 
-object Constants {
+import uk.gov.hmrc.agentclientrelationshipsfrontend.services.ServiceConstants
+
+object Constants extends ServiceConstants {
   
   // agent enrolment
   val AsAgent = "HMRC-AS-AGENT"
@@ -40,5 +42,6 @@ object Constants {
 
   val AgentRoleFieldName = "agentRole"
   val ConfirmCancellationFieldName = "confirmCancellation"
+  val ConfirmConsentFieldName = "confirmConsent"
 
 }

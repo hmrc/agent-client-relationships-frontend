@@ -27,6 +27,7 @@ case class ClientJourney(
                           invitationId: Option[String] = None,
                           serviceKey: Option[String] = None,
                           agentName: Option[String] = None,
+                          existingAgentName: Option[String] = None,
                           status: Option[InvitationStatus] = None,
                           lastModifiedDate: Option[Instant] = None
                         ) {

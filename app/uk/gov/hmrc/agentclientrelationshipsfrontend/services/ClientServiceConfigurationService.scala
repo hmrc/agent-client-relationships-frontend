@@ -73,6 +73,8 @@ class ClientServiceConfigurationService @Inject() extends ServiceConstants {
     .getOrElse(throw new RuntimeException("Cannot find service keys for URL part"))
 
   def getUrlPart(clientService: String): String = services(getServiceForForm(clientService)).urlPart.head._1
+
+  val supportingAgentServices: Seq[String] = Seq(HMRCMTDITSUPP)
   
   private val services: ListMap[String, ServiceData] = ListMap(
     HMRCMTDIT -> ServiceData(

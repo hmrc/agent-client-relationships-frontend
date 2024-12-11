@@ -573,7 +573,116 @@ consentInformation.section2.p1=You can withdraw consent at any time by using <a 
 consentInformation.section3.h2=Before you decide
 consentInformation.section3.p1=Select ‘continue’ to learn what {0} can do when you authorise them to manage your {1}.
 
+# ________________________________________________________________________________
+# Client confirm consent
+# ________________________________________________________________________________
 
+confirmConsent.h1=Authorise an agent
+confirmConsent.agent=agent
+confirmConsent.mainAgent=<strong>main agent</strong>
+confirmConsent.suppAgent=<strong>supporting agent</strong>
+confirmConsent.p1={0} want to be authorised as your {1} for {2}.
+confirmConsent.warning.agent=You can have 1 agent for {0}. If you authorise {1}, we will remove {2} as your existing agent.
+confirmConsent.warning.mainAgent=You can have 1 main agent for {0}. If you authorise {1}, we will remove {2} as your existing main agent.
+confirmConsent.warning.mainToSupp=If you authorise {0} as your supporting agent, you will no longer have a main agent for {1}.
+confirmConsent.suppAgent.details.heading=What a supporting agent cannot do
+confirmConsent.suppAgent.details.p1=A supporting agent can only carry out limited tax-related tasks for you. For example, they cannot:
+confirmConsent.suppAgent.details.list.item1=submit end-of-year tax returns
+confirmConsent.suppAgent.details.list.item2=estimate tax and view final calculation
+confirmConsent.suppAgent.details.list.item3=view tax amounts owed and paid
+confirmConsent.suppAgent.details.list.item4=deal with penalties for late payment and late submission
+confirmConsent.h2=Read carefully: we need your consent
+confirmConsent.p2=If you agree that {0} can act as your {1} for {2}, they will be able to:
+confirmConsent.legend=Do you want {0} to be authorised as your {1} for {2}?
+confirmConsent.true=Yes
+confirmConsent.false=No
+confirmConsent.error.required=Select yes if you want {0} to be your {1} for {2}
+confirmConsent.form.agent=agent
+confirmConsent.form.mainAgent=main agent
+confirmConsent.form.suppAgent=supporting agent
+
+confirmConsent.HMRC-MTD-IT.list.item1=sign you up or opt you out
+confirmConsent.HMRC-MTD-IT.list.item2=contact HMRC about your current and previous returns
+confirmConsent.HMRC-MTD-IT.list.item3=view and change your details, such as sources of income
+confirmConsent.HMRC-MTD-IT.list.item4=provide repayment bank details to HMRC when repayment is due
+confirmConsent.HMRC-MTD-IT.list.item5=view and submit your updates (income and expenses)
+confirmConsent.HMRC-MTD-IT.list.item6=submit your end-of-year tax return
+confirmConsent.HMRC-MTD-IT.list.item7=view your calculations and amounts owed and paid
+confirmConsent.HMRC-MTD-IT.list.item8=manage your Making Tax Digital for Income Tax using software
+confirmConsent.HMRC-MTD-IT.list.item9=access your Self Assessment details, such as your name, address, National Insurance number and Unique Taxpayer Reference
+confirmConsent.HMRC-MTD-IT.list.item10=receive copies of penalty notices for late payment or late submission
+confirmConsent.HMRC-MTD-IT.list.item11=view and appeal against penalties issued for late payment or late submission
+confirmConsent.HMRC-MTD-IT.list.item12=cancel your Self Assessment registration
+
+confirmConsent.HMRC-MTD-IT-SUPP.list.item1=sign you up or opt you out
+confirmConsent.HMRC-MTD-IT-SUPP.list.item2=contact HMRC about your current and previous returns
+confirmConsent.HMRC-MTD-IT-SUPP.list.item3=view your personal and business details, including name, address, National Insurance number and Unique Taxpayer Reference
+confirmConsent.HMRC-MTD-IT-SUPP.list.item4=view and amend your designatory business details
+confirmConsent.HMRC-MTD-IT-SUPP.list.item5=view and amend your sources of income
+confirmConsent.HMRC-MTD-IT-SUPP.list.item6=find and choose compatible software and use it to manage your Making Tax Digital for Income Tax
+confirmConsent.HMRC-MTD-IT-SUPP.list.item7=send quarterly updates
+confirmConsent.HMRC-MTD-IT-SUPP.list.item8=make end of year adjustments
+
+confirmConsent.PERSONAL-INCOME-RECORD.list.item1=access information about:
+confirmConsent.PERSONAL-INCOME-RECORD.list.item2=who you have worked for in the past
+confirmConsent.PERSONAL-INCOME-RECORD.list.item3=taxable benefits like medical insurance and company car
+confirmConsent.PERSONAL-INCOME-RECORD.list.item4=your pensions
+confirmConsent.PERSONAL-INCOME-RECORD.list.item5=your PAYE involvement start and end dates
+
+confirmConsent.HMRC-MTD-VAT.list.item1=contact HMRC about your VAT
+confirmConsent.HMRC-MTD-VAT.list.item2=view and change your VAT and bank details
+confirmConsent.HMRC-MTD-VAT.list.item3=view, change and submit your VAT details
+confirmConsent.HMRC-MTD-VAT.list.item4=view your VAT payments and liabilities
+confirmConsent.HMRC-MTD-VAT.list.item5=manage your VAT through software
+confirmConsent.HMRC-MTD-VAT.list.item6=cancel your VAT registration
+confirmConsent.HMRC-MTD-VAT.list.item7=appeal a late submission or late payment penalty
+confirmConsent.HMRC-MTD-VAT.list.item8=access your:
+confirmConsent.HMRC-MTD-VAT.list.item9=VAT registration details, such as your business and contact details
+confirmConsent.HMRC-MTD-VAT.list.item10=submitted VAT Returns
+confirmConsent.HMRC-MTD-VAT.list.item11=VAT Return calculations
+confirmConsent.HMRC-MTD-VAT.list.item12=amounts owed or paid
+
+confirmConsent.HMRC-TERS-ORG.list.item1=report changes relating to trustees, settlors, beneficiaries, protectors and other individuals in the trust, such as names and addresses, and declare the trust is up to date
+confirmConsent.HMRC-TERS-ORG.list.item2=report changes relating to the estate’s personal representative, such as name and address, and declare the estate is up to date
+
+confirmConsent.HMRC-CGT-PD.list.item1=view, change and submit your current returns
+confirmConsent.HMRC-CGT-PD.list.item2=view and change your previous return details
+confirmConsent.HMRC-CGT-PD.list.item3=view and change your contact preferences
+confirmConsent.HMRC-CGT-PD.list.item4=contact HMRC about your returns, payments and any penalties
+confirmConsent.HMRC-CGT-PD.list.item5=access and update your:
+confirmConsent.HMRC-CGT-PD.list.item6=name and contact details
+confirmConsent.HMRC-CGT-PD.list.item7=residence status
+confirmConsent.HMRC-CGT-PD.list.item8=liability for current and previous tax years
+confirmConsent.HMRC-CGT-PD.list.item9=amounts due and paid
+confirmConsent.HMRC-CGT-PD.list.item10=penalty details
+
+confirmConsent.HMRC-PPT-ORG.list.item1=view your PPT returns
+confirmConsent.HMRC-PPT-ORG.list.item2=submit your PPT returns
+confirmConsent.HMRC-PPT-ORG.list.item3=adjust your PPT returns
+confirmConsent.HMRC-PPT-ORG.list.item4=contact HMRC about your returns
+confirmConsent.HMRC-PPT-ORG.list.item5=provide repayment bank details to HMRC when repayment is due
+confirmConsent.HMRC-PPT-ORG.list.item6=finalise your overall tax position
+confirmConsent.HMRC-PPT-ORG.list.item7=view your calculations and amounts owed and paid
+confirmConsent.HMRC-PPT-ORG.list.item8=manage your PPT using software
+
+confirmConsent.HMRC-CBC-ORG.list.item1=send new country-by-country reports
+confirmConsent.HMRC-CBC-ORG.list.item2=send additional information, corrections or deletions for previous country-by-country reports
+confirmConsent.HMRC-CBC-ORG.list.item3=access a list of any country-by-country reports sent in the last 28 days.
+confirmConsent.HMRC-CBC-ORG.list.item4=contact HMRC about your current and previous reports
+confirmConsent.HMRC-CBC-ORG.list.item5=share information with HMRC about your current or previous country-by-country reports
+confirmConsent.HMRC-CBC-ORG.list.item6=receive information from HMRC about your current or previous country-by-country reports
+confirmConsent.HMRC-CBC-ORG.list.item7=access your CBC ID (country-by-country ID)
+confirmConsent.HMRC-CBC-ORG.list.item8=access and change your country-by-country contact details, such as your contact names, email addresses and telephone numbers
+confirmConsent.HMRC-CBC-ORG.list.item9=access details of any penalties charged
+confirmConsent.HMRC-CBC-ORG.list.item10=appeal late submission penalties
+confirmConsent.HMRC-CBC-ORG.list.item11=provide additional information when appealing late submission penalties
+
+confirmConsent.HMRC-PILLAR2-ORG.list.item1=view, change, and submit your Pillar 2 top-up taxes returns
+confirmConsent.HMRC-PILLAR2-ORG.list.item2=contact HMRC about your current and previous Pillar 2 top-up taxes returns
+confirmConsent.HMRC-PILLAR2-ORG.list.item3=view and change your Pillar 2 top-up taxes details such as your contact details, accounting period and organisation type
+confirmConsent.HMRC-PILLAR2-ORG.list.item4=provide repayment bank details to HMRC when repayment is due
+confirmConsent.HMRC-PILLAR2-ORG.list.item5=finalise your overall tax position
+confirmConsent.HMRC-PILLAR2-ORG.list.item6=view your calculations and amounts owed and paid
 
 # ________________________________________________________________________________
 # Client journey check your answer page
