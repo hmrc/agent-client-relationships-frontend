@@ -18,6 +18,8 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.views.client
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientType.personal
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ExistingMainAgent
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.client.ConfirmConsentForm
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyType.ClientResponse
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{ClientJourney, ClientJourneyRequest}
@@ -28,7 +30,7 @@ class ConfirmConsentPageSpec extends ViewSpecSupport:
 
   val viewTemplate: ConfirmConsentPage = app.injector.instanceOf[ConfirmConsentPage]
   val newAgentName = "ABC Agents"
-  val existingAgentName = "XYZ Agents"
+  val existingAgent: ExistingMainAgent = ExistingMainAgent("XYZ Agents", false)
   val mainRole = "mainAgent"
   val suppRole = "suppAgent"
   val genericRole = "agent"
@@ -44,7 +46,8 @@ class ConfirmConsentPageSpec extends ViewSpecSupport:
   val baseJourneyModel: ClientJourney = ClientJourney(
     ClientResponse,
     invitationId = Some("ABC123"),
-    agentName = Some(newAgentName)
+    agentName = Some(newAgentName),
+    clientType = Some(personal)
   )
 
   val bulletListItemMap: Map[String, Int] = Map(
@@ -77,9 +80,9 @@ class ConfirmConsentPageSpec extends ViewSpecSupport:
       s"Select yes if you want $newAgentName to be your $role for ${messages(service)}"
     val continue = "Continue"
     def warningGeneric(service: String) =
-      s"Warning You can have 1 agent for ${messages(service)}. If you authorise $newAgentName, we will remove $existingAgentName as your existing agent."
+      s"Warning You can have 1 agent for ${messages(service)}. If you authorise $newAgentName, we will remove ${existingAgent.agencyName} as your existing agent."
     def warningMain(service: String) =
-      s"Warning You can have 1 main agent for ${messages(service)}. If you authorise $newAgentName, we will remove $existingAgentName as your existing main agent."
+      s"Warning You can have 1 main agent for ${messages(service)}. If you authorise $newAgentName, we will remove ${existingAgent.agencyName} as your existing main agent."
     def warningMainToSupp(service: String) =
       s"Warning If you authorise $newAgentName as your supporting agent, you will no longer have a main agent for ${messages(service)}."
     val suppDetailsHeading = "What a supporting agent cannot do"
@@ -235,7 +238,7 @@ class ConfirmConsentPageSpec extends ViewSpecSupport:
 
             val form = ConfirmConsentForm.form(newAgentName, genericRole, service)
             implicit val journeyRequest: ClientJourneyRequest[?] = ClientJourneyRequest(
-              baseJourneyModel.copy(serviceKey = Some(service), existingAgentName = Some(existingAgentName)), request)
+              baseJourneyModel.copy(serviceKey = Some(service), existingMainAgent = Some(existingAgent)), request)
             val view = viewTemplate(form, genericRole)
             val doc: Document = Jsoup.parse(view.body)
 
@@ -320,7 +323,7 @@ class ConfirmConsentPageSpec extends ViewSpecSupport:
 
               val form = ConfirmConsentForm.form(newAgentName, mainRole, service)
               implicit val journeyRequest: ClientJourneyRequest[?] = ClientJourneyRequest(
-                baseJourneyModel.copy(serviceKey = Some(service), existingAgentName = Some(existingAgentName)), request)
+                baseJourneyModel.copy(serviceKey = Some(service), existingMainAgent = Some(existingAgent)), request)
               val view = viewTemplate(form, mainRole)
               val doc: Document = Jsoup.parse(view.body)
 
@@ -418,8 +421,9 @@ class ConfirmConsentPageSpec extends ViewSpecSupport:
               s"the tax service is $service" should:
 
                 val form = ConfirmConsentForm.form(newAgentName, suppRole, service)
+                val sameAgent = existingAgent.copy(sameAgent = true)
                 implicit val journeyRequest: ClientJourneyRequest[?] = ClientJourneyRequest(
-                  baseJourneyModel.copy(serviceKey = Some(service), existingAgentName = Some(newAgentName)), request)
+                  baseJourneyModel.copy(serviceKey = Some(service), existingMainAgent = Some(sameAgent)), request)
                 val view = viewTemplate(form, suppRole)
                 val doc: Document = Jsoup.parse(view.body)
 
@@ -434,7 +438,7 @@ class ConfirmConsentPageSpec extends ViewSpecSupport:
 
                 val form = ConfirmConsentForm.form(newAgentName, suppRole, service)
                 implicit val journeyRequest: ClientJourneyRequest[?] = ClientJourneyRequest(
-                  baseJourneyModel.copy(serviceKey = Some(service), existingAgentName = Some(existingAgentName)), request)
+                  baseJourneyModel.copy(serviceKey = Some(service), existingMainAgent = Some(existingAgent)), request)
                 val view = viewTemplate(form, suppRole)
                 val doc: Document = Jsoup.parse(view.body)
 

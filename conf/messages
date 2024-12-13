@@ -645,16 +645,27 @@ confirmConsent.HMRC-MTD-VAT.list.item12=amounts owed or paid
 confirmConsent.HMRC-TERS-ORG.list.item1=report changes relating to trustees, settlors, beneficiaries, protectors and other individuals in the trust, such as names and addresses, and declare the trust is up to date
 confirmConsent.HMRC-TERS-ORG.list.item2=report changes relating to the estate’s personal representative, such as name and address, and declare the estate is up to date
 
-confirmConsent.HMRC-CGT-PD.list.item1=view, change and submit your current returns
-confirmConsent.HMRC-CGT-PD.list.item2=view and change your previous return details
-confirmConsent.HMRC-CGT-PD.list.item3=view and change your contact preferences
-confirmConsent.HMRC-CGT-PD.list.item4=contact HMRC about your returns, payments and any penalties
-confirmConsent.HMRC-CGT-PD.list.item5=access and update your:
-confirmConsent.HMRC-CGT-PD.list.item6=name and contact details
-confirmConsent.HMRC-CGT-PD.list.item7=residence status
-confirmConsent.HMRC-CGT-PD.list.item8=liability for current and previous tax years
-confirmConsent.HMRC-CGT-PD.list.item9=amounts due and paid
-confirmConsent.HMRC-CGT-PD.list.item10=penalty details
+confirmConsent.HMRC-CGT-PD.personal.list.item1=view, change and submit your current returns
+confirmConsent.HMRC-CGT-PD.personal.list.item2=view and change your previous return details
+confirmConsent.HMRC-CGT-PD.personal.list.item3=view and change your contact preferences
+confirmConsent.HMRC-CGT-PD.personal.list.item4=contact HMRC about your returns, payments and any penalties
+confirmConsent.HMRC-CGT-PD.personal.list.item5=access and update your:
+confirmConsent.HMRC-CGT-PD.personal.list.item6=name and contact details
+confirmConsent.HMRC-CGT-PD.personal.list.item7=residence status
+confirmConsent.HMRC-CGT-PD.personal.list.item8=liability for current and previous tax years
+confirmConsent.HMRC-CGT-PD.personal.list.item9=amounts due and paid
+confirmConsent.HMRC-CGT-PD.personal.list.item10=penalty details
+
+confirmConsent.HMRC-CGT-PD.trust.list.item1=view, change and submit the trust’s current returns
+confirmConsent.HMRC-CGT-PD.trust.list.item2=view and change the trust’s previous return details
+confirmConsent.HMRC-CGT-PD.trust.list.item3=view and change the trust’s contact preferences
+confirmConsent.HMRC-CGT-PD.trust.list.item4=contact HMRC about the trust’s returns, payments and any penalties
+confirmConsent.HMRC-CGT-PD.trust.list.item5=access and update the trust’s:
+confirmConsent.HMRC-CGT-PD.trust.list.item6=name and contact details
+confirmConsent.HMRC-CGT-PD.trust.list.item7=residence status
+confirmConsent.HMRC-CGT-PD.trust.list.item8=liability for current and previous tax years
+confirmConsent.HMRC-CGT-PD.trust.list.item9=amounts due and paid
+confirmConsent.HMRC-CGT-PD.trust.list.item10=penalty details
 
 confirmConsent.HMRC-PPT-ORG.list.item1=view your PPT returns
 confirmConsent.HMRC-PPT-ORG.list.item2=submit your PPT returns

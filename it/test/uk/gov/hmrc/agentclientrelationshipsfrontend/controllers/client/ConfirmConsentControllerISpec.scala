@@ -18,7 +18,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client
 
 import play.api.http.Status.*
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.Pending
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.{ExistingMainAgent, Pending}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.ClientJourney
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyType.ClientResponse
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.ClientJourneyService
@@ -36,7 +36,7 @@ class ConfirmConsentControllerISpec extends ComponentSpecHelper with AuthStubs w
     serviceKey = Some("HMRC-MTD-IT"),
     invitationId = Some("ABC123"),
     agentName = Some("ABC Accountants"),
-    existingAgentName = Some("XYZ Accountants"),
+    existingMainAgent = Some(ExistingMainAgent("XYZ Accountants", true)),
     status = Some(Pending),
     lastModifiedDate = Some(Instant.parse("2024-12-01T12:00:00Z"))
   )

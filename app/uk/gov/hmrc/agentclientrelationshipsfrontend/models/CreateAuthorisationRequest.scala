@@ -22,7 +22,8 @@ case class CreateAuthorisationRequest(
                                        clientId: String,
                                        suppliedClientIdType: String,
                                        clientName: String,
-                                       service: String
+                                       service: String,
+                                       clientType: String
                                      )
 
 object CreateAuthorisationRequest {

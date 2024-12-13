@@ -17,7 +17,7 @@
 package uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey
 
 import play.api.libs.json.{Format, Json}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.InvitationStatus
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.{ClientType, ExistingMainAgent, InvitationStatus}
 
 import java.time.Instant
 
@@ -27,16 +27,17 @@ case class ClientJourney(
                           invitationId: Option[String] = None,
                           serviceKey: Option[String] = None,
                           agentName: Option[String] = None,
-                          existingAgentName: Option[String] = None,
                           status: Option[InvitationStatus] = None,
-                          lastModifiedDate: Option[Instant] = None
+                          lastModifiedDate: Option[Instant] = None,
+                          clientType: Option[ClientType] = None,
+                          existingMainAgent: Option[ExistingMainAgent] = None
                         ) {
   def getAgentName: String = agentName.getOrElse(throw new RuntimeException("Agent Name is missing"))
   def getInvitationId: String = invitationId.getOrElse(throw new RuntimeException("Invitation Id is missing"))
   def getServiceKey: String = serviceKey.getOrElse(throw new RuntimeException("Service Key is missing"))
   def getConsent: Boolean = consent.getOrElse(throw new RuntimeException("Consent value is missing"))
   def getLastModifiedDate: Instant = lastModifiedDate.getOrElse(throw new RuntimeException("last modified date is missing"))
-
+  def getClientType: ClientType = clientType.getOrElse(throw new RuntimeException("Client type is missing"))
 }
 
 object ClientJourney {

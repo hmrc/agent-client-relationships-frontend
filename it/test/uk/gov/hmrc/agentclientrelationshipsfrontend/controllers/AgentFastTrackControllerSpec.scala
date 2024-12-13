@@ -47,6 +47,7 @@ class AgentFastTrackControllerSpec extends ComponentSpecHelper with AuthStubs wi
 
 
   val itSaFastTrackRequest: AgentFastTrackRequest = AgentFastTrackRequest(
+    clientType = Some("personal"),
     service = "HMRC-MTD-IT",
     clientIdentifier = nino,
     clientIdentifierType = "ni",
@@ -54,6 +55,7 @@ class AgentFastTrackControllerSpec extends ComponentSpecHelper with AuthStubs wi
   )
 
   val personalIncomeFastTrackRequest: AgentFastTrackRequest = AgentFastTrackRequest(
+    clientType = Some("personal"),
     service = "PERSONAL-INCOME-RECORD",
     clientIdentifier = nino,
     clientIdentifierType = "ni",
@@ -61,6 +63,7 @@ class AgentFastTrackControllerSpec extends ComponentSpecHelper with AuthStubs wi
   )
 
   val vatFastTrackRequest: AgentFastTrackRequest = AgentFastTrackRequest(
+    clientType = Some("business"),
     service = "HMRC-MTD-VAT",
     clientIdentifier = vrn,
     clientIdentifierType = "vrn",
@@ -68,6 +71,7 @@ class AgentFastTrackControllerSpec extends ComponentSpecHelper with AuthStubs wi
   )
 
   val cgtFastTrackRequest: AgentFastTrackRequest = AgentFastTrackRequest(
+    clientType = Some("personal"),
     service = "HMRC-CGT-PD",
     clientIdentifier = cgtPgRef,
     clientIdentifierType = "CGTPDRef",
@@ -75,6 +79,7 @@ class AgentFastTrackControllerSpec extends ComponentSpecHelper with AuthStubs wi
   )
 
   val pptFastTrackRequest: AgentFastTrackRequest = AgentFastTrackRequest(
+    clientType = Some("personal"),
     service = "HMRC-PPT-ORG",
     clientIdentifier = etmpRegistrationNumber,
     clientIdentifierType = "EtmpRegistrationNumber",
@@ -82,6 +87,7 @@ class AgentFastTrackControllerSpec extends ComponentSpecHelper with AuthStubs wi
   )
 
   val cbcFastTrackRequest: AgentFastTrackRequest = AgentFastTrackRequest(
+    clientType = Some("business"),
     service = "HMRC-CBC-ORG",
     clientIdentifier = cbcId,
     clientIdentifierType = "cbcId",
@@ -89,6 +95,7 @@ class AgentFastTrackControllerSpec extends ComponentSpecHelper with AuthStubs wi
   )
 
   val pillar2FastTrackRequest: AgentFastTrackRequest = AgentFastTrackRequest(
+    clientType = Some("business"),
     service = "HMRC-PILLAR2-ORG",
     clientIdentifier = plrid,
     clientIdentifierType = "PLRID",
@@ -96,6 +103,7 @@ class AgentFastTrackControllerSpec extends ComponentSpecHelper with AuthStubs wi
   )
 
   val tersFastTrackRequest: AgentFastTrackRequest = AgentFastTrackRequest(
+    clientType = Some("trust"),
     service = "HMRC-TERS-ORG",
     clientIdentifier = utr,
     clientIdentifierType = "utr",
@@ -103,6 +111,7 @@ class AgentFastTrackControllerSpec extends ComponentSpecHelper with AuthStubs wi
   )
 
   val tersNTFastTrackRequest: AgentFastTrackRequest = AgentFastTrackRequest(
+    clientType = Some("trust"),
     service = "HMRC-TERSNT-ORG",
     clientIdentifier = urn,
     clientIdentifierType = "urn",
@@ -159,6 +168,7 @@ class AgentFastTrackControllerSpec extends ComponentSpecHelper with AuthStubs wi
 
 
   def toFastTrackRequests(agentFastTrackRequest: AgentFastTrackRequest): Map[String, Seq[String]] = Map(
+     "clientType" -> agentFastTrackRequest.clientType.fold(Seq.empty)(Seq(_)),
      "service" -> Seq(agentFastTrackRequest.service),
      "clientIdentifier" -> Seq(agentFastTrackRequest.clientIdentifier),
      "clientIdentifierType" -> Seq(agentFastTrackRequest.clientIdentifierType),

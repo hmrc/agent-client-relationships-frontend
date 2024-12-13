@@ -38,6 +38,7 @@
 @taxServiceName = @{messages(serviceKey)}
 @pageTitle = @{messages(s"$key.h1")}
 @serviceName = @{messages("service.name.clients")}
+@clientType = @{request.journey.getClientType.toString}
 
 @simpleTerms(service: String, numOfBullets: Int) = {
     @for(i <- 1 to numOfBullets) {
@@ -66,7 +67,7 @@
         case PERSONALINCOMERECORD         => simpleTerms(PERSONALINCOMERECORD, 5)
         case HMRCMTDVAT                   => complexTerms(HMRCMTDVAT, 7, 4)
         case HMRCTERSORG | HMRCTERSNTORG  => simpleTerms(HMRCTERSORG, 2)
-        case HMRCCGTPD                    => complexTerms(HMRCCGTPD, 4, 5)
+        case HMRCCGTPD                    => complexTerms(s"$HMRCCGTPD.$clientType", 4, 5)
         case HMRCPPTORG                   => simpleTerms(HMRCPPTORG, 8)
         case HMRCCBCORG                   => simpleTerms(HMRCCBCORG, 11)
         case HMRCPILLAR2ORG               => simpleTerms(HMRCPILLAR2ORG, 6)
@@ -90,11 +91,11 @@
 
     <p class="govuk-body">@Html(messages(s"$key.p1", agentName, agentRole, taxServiceName))</p>
 
-    @{(request.journey.existingAgentName, agentRoleKey) match {
-        case (Some(exAgentName), "suppAgent") if exAgentName == agentName =>
+    @{(request.journey.existingMainAgent, agentRoleKey) match {
+        case (Some(exAgent), "suppAgent") if exAgent.sameAgent =>
             govukWarningText(WarningText(content = Text(messages(s"$key.warning.mainToSupp", agentName, taxServiceName))))
-        case (Some(exAgentName), role) if role != "suppAgent" =>
-            govukWarningText(WarningText(content = Text(messages(s"$key.warning.$agentRoleKey", taxServiceName, agentName, exAgentName))))
+        case (Some(exAgent), role) if role != "suppAgent" =>
+            govukWarningText(WarningText(content = Text(messages(s"$key.warning.$agentRoleKey", taxServiceName, agentName, exAgent.agencyName))))
         case _ => // No warning will render
     }}
 

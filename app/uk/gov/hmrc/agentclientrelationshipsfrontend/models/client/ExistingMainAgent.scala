@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,14 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.agentclientrelationshipsfrontend.models
+package uk.gov.hmrc.agentclientrelationshipsfrontend.models.client
 
-case class AgentFastTrackRequest(clientType: Option[String], service: String, clientIdentifier: String, clientIdentifierType:String, knownFact: Option[String])
+import play.api.libs.json.{Json, OFormat}
+
+case class ExistingMainAgent(
+  agencyName: String,
+  sameAgent: Boolean
+)
+
+object ExistingMainAgent:
+  implicit val format: OFormat[ExistingMainAgent] = Json.format[ExistingMainAgent]

@@ -487,16 +487,27 @@ confirmConsent.HMRC-MTD-VAT.list.item12=y symiau sydd arnoch neu a dalwyd gennyc
 confirmConsent.HMRC-TERS-ORG.list.item1=rhoi gwybod am newidiadau sy’n ymwneud ag ymddiriedolwyr, setlwyr, buddiolwyr, diogelwyr ac unigolion eraill yn yr ymddiriedolaeth – megis enwau a chyfeiriadau’r rhain – a datgan bod yr ymddiriedolaeth yn gyfredol
 confirmConsent.HMRC-TERS-ORG.list.item2=rhoi gwybod am newidiadau sy’n ymwneud â chynrychiolydd personol yr ystâd, megis enwau a chyfeiriadau, a datgan bod yr ystâd yn gyfredol
 
-confirmConsent.HMRC-CGT-PD.list.item1=bwrw golwg dros eich Ffurflenni Treth presennol, eu newid a’u cyflwyno
-confirmConsent.HMRC-CGT-PD.list.item2=bwrw golwg dros fanylion eich Ffurflenni Treth blaenorol, a’u newid
-confirmConsent.HMRC-CGT-PD.list.item3=bwrw golwg dros eich dulliau cysylltu dewisol, a’u newid
-confirmConsent.HMRC-CGT-PD.list.item4=cysylltwch â CThEM am eich ffurflenni Treth, eich taliadau ac unrhyw gosbau
-confirmConsent.HMRC-CGT-PD.list.item5=cyrchu a diweddaru eich:
-confirmConsent.HMRC-CGT-PD.list.item6=eich enw a manylion cyswllt
-confirmConsent.HMRC-CGT-PD.list.item7=eich statws preswyl
-confirmConsent.HMRC-CGT-PD.list.item8=eich rhwymedigaeth ar gyfer y flwyddyn dreth bresennol a blynyddoedd treth blaenorol
-confirmConsent.HMRC-CGT-PD.list.item9=y symiau sy’n ddyledus a’r symiau sydd wedi’u talu gennych
-confirmConsent.HMRC-CGT-PD.list.item10=manylion eich cosbau
+confirmConsent.HMRC-CGT-PD.personal.list.item1=bwrw golwg dros eich Ffurflenni Treth presennol, eu newid a’u cyflwyno
+confirmConsent.HMRC-CGT-PD.personal.list.item2=bwrw golwg dros fanylion eich Ffurflenni Treth blaenorol, a’u newid
+confirmConsent.HMRC-CGT-PD.personal.list.item3=bwrw golwg dros eich dulliau cysylltu dewisol, a’u newid
+confirmConsent.HMRC-CGT-PD.personal.list.item4=cysylltwch â CThEM am eich ffurflenni Treth, eich taliadau ac unrhyw gosbau
+confirmConsent.HMRC-CGT-PD.personal.list.item5=cyrchu a diweddaru eich:
+confirmConsent.HMRC-CGT-PD.personal.list.item6=eich enw a manylion cyswllt
+confirmConsent.HMRC-CGT-PD.personal.list.item7=eich statws preswyl
+confirmConsent.HMRC-CGT-PD.personal.list.item8=eich rhwymedigaeth ar gyfer y flwyddyn dreth bresennol a blynyddoedd treth blaenorol
+confirmConsent.HMRC-CGT-PD.personal.list.item9=y symiau sy’n ddyledus a’r symiau sydd wedi’u talu gennych
+confirmConsent.HMRC-CGT-PD.personal.list.item10=manylion eich cosbau
+
+confirmConsent.HMRC-CGT-PD.trust.list.item1=bwrw golwg dros Ffurflenni Treth presennol yr ymddiriedolaeth, eu newid a’u cyflwyno
+confirmConsent.HMRC-CGT-PD.trust.list.item2=bwrw golwg dros fanylion Ffurflenni Treth blaenorol yr ymddiriedolaeth, a’u newid
+confirmConsent.HMRC-CGT-PD.trust.list.item3=bwrw golwg dros ddulliau cysylltu dewisol yr ymddiriedolaeth, a’u newid
+confirmConsent.HMRC-CGT-PD.trust.list.item4=cysylltwch â CThEM am eich ffurflenni Treth yr ymddiriedolaeth, ei thaliadau ac unrhyw gosbau
+confirmConsent.HMRC-CGT-PD.trust.list.item5=cyrchu a diweddaru?r ymddiriedolaeth:
+confirmConsent.HMRC-CGT-PD.trust.list.item6=enw a manylion cyswllt yr ymddiriedolaeth
+confirmConsent.HMRC-CGT-PD.trust.list.item7=statws preswyl yr ymddiriedolaeth
+confirmConsent.HMRC-CGT-PD.trust.list.item8=rhwymedigaeth yr ymddiriedolaeth ar gyfer y flwyddyn dreth bresennol a blynyddoedd treth blaenorol
+confirmConsent.HMRC-CGT-PD.trust.list.item9=y symiau sy’n ddyledus a’r symiau sydd wedi’u talu gan yr ymddiriedolaeth
+confirmConsent.HMRC-CGT-PD.trust.list.item10=manylion cosbau’r ymddiriedolaeth
 
 confirmConsent.HMRC-PPT-ORG.list.item1=bwrw golwg dros eich Ffurflenni Treth Deunydd Pacio Plastig
 confirmConsent.HMRC-PPT-ORG.list.item2=cyflwyno’ch Ffurflenni Treth Deunydd Pacio Plastig

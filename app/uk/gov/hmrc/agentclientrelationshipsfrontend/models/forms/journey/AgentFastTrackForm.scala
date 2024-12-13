@@ -20,7 +20,9 @@ import play.api.data.Forms.*
 import play.api.data.format.Formats.*
 import play.api.data.validation.*
 import play.api.data.{Form, Mapping}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.HMRCCGTPD
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.AgentFastTrackRequest
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientType
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.ClientServiceConfigurationService
 
 object AgentFastTrackForm {
@@ -42,23 +44,28 @@ object AgentFastTrackForm {
         agentFastTrackRequest.clientIdentifierType)
         .fold(false)(x => agentFastTrackRequest.clientIdentifier.matches(x.regex))
 
-      if (clientIdMatchRegs) Valid
+      val clientTypeRequiredCheck =
+        if(agentFastTrackRequest.service == HMRCCGTPD) agentFastTrackRequest.clientType.isDefined else true
+
+      if (clientIdMatchRegs && clientTypeRequiredCheck) Valid
       else Invalid(ValidationError("INVALID_SUBMISSION"))
     }
 
   def form(clientServiceConfig: ClientServiceConfigurationService): Form[AgentFastTrackRequest] = {
     Form(
       mapping(
+        "clientType" -> optional(lowerCaseText
+          .verifying("UNSUPPORTED_CLIENT_TYPE", ClientType.validValues.contains)),
         "service" -> text
           .verifying("UNSUPPORTED_SERVICE", clientServiceConfig.allSupportedServices.contains(_)),
         "clientIdentifierType" -> text
           .verifying("UNSUPPORTED_CLIENT_ID_TYPE", clientServiceConfig.allSupportedClientTypeIds.contains(_)),
         "clientIdentifier" -> uppercaseNormalizedText.verifying(validateClientId(clientServiceConfig.allClientIdRegex)),
         "knownFact"        -> optional(text)
-      ) { (service, clientIdType, clientId, knownFact) =>
-        AgentFastTrackRequest(service, clientId, clientIdType, knownFact)
+      ) { (clientType, service, clientIdType, clientId, knownFact) =>
+        AgentFastTrackRequest(clientType, service, clientId, clientIdType, knownFact)
       } { request =>
-        Some((request.service, request.clientIdentifierType, request.clientIdentifier, request.knownFact))
+        Some((request.clientType, request.service, request.clientIdentifierType, request.clientIdentifier, request.knownFact))
       }.verifying(validateFastTrackForm(clientServiceConfig))
     )
 
