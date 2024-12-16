@@ -16,6 +16,8 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.services
 
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientType
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientType.{business, personal, trust}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.common.{ClientDetailsConfiguration, ServiceData}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{JourneyErrors, JourneyExitType, JourneyType}
 
@@ -28,13 +30,13 @@ class ClientServiceConfigurationService @Inject() extends ServiceConstants {
 
   def orderedClientTypes: Seq[String] = Seq("personal", "business", "trust")
 
-  def allClientTypes: Set[String] = services.flatMap(_._2.clientTypes).toSet[String]
+  def allClientTypes: Set[String] = services.flatMap(_._2.clientTypes).toSet.map(_.toString)
   
   def getService(serviceName: String): Option[ServiceData] = services.get(serviceName)
   
   def validateUrlPart(urlPartKey: String): Boolean = Try(getServiceKeysForUrlPart(urlPartKey)).isSuccess
 
-  def clientServicesFor(clientType: String): Seq[String] = services.filter(_._2.serviceOption == true).filter(_._2.clientTypes.contains(clientType)).keys.toSeq
+  def clientServicesFor(clientType: String): Seq[String] = services.filter(_._2.serviceOption == true).filter(_._2.clientTypes.contains(ClientType.valueOf(clientType))).keys.toSeq
 
   def allSupportedServices: Set[String] = services.map(_._2.serviceName).toSet[String]
 
@@ -73,6 +75,8 @@ class ClientServiceConfigurationService @Inject() extends ServiceConstants {
     .getOrElse(throw new RuntimeException("Cannot find service keys for URL part"))
 
   def getUrlPart(clientService: String): String = services(getServiceForForm(clientService)).urlPart.head._1
+
+  val supportingAgentServices: Seq[String] = Seq(HMRCMTDITSUPP)
   
   private val services: ListMap[String, ServiceData] = ListMap(
     HMRCMTDIT -> ServiceData(
@@ -80,7 +84,7 @@ class ClientServiceConfigurationService @Inject() extends ServiceConstants {
       urlPart = Map(incomeTax -> Set(HMRCMTDIT, HMRCNI, HMRCPT)),
       serviceOption = true,
       supportedAgentRoles = Seq(HMRCMTDIT, HMRCMTDITSUPP),
-      clientTypes = Set("personal"),
+      clientTypes = Set(personal),
       clientDetails = Seq(
         ClientDetailsConfiguration(
           name = "nino",
@@ -102,7 +106,7 @@ class ClientServiceConfigurationService @Inject() extends ServiceConstants {
       urlPart = Map(incomeTax -> Set(HMRCMTDIT, HMRCNI, HMRCPT)),
       serviceOption = false,
       supportedAgentRoles = Seq(HMRCMTDIT, HMRCMTDITSUPP),
-      clientTypes = Set("personal"),
+      clientTypes = Set(personal),
       clientDetails = Seq(
         ClientDetailsConfiguration(
           name = "nino",
@@ -117,7 +121,7 @@ class ClientServiceConfigurationService @Inject() extends ServiceConstants {
       serviceName = PERSONALINCOMERECORD,
       urlPart = Map(incomeRecordViewer -> Set(HMRCNI, HMRCPT)),
       serviceOption = true,
-      clientTypes = Set("personal"),
+      clientTypes = Set(personal),
       clientDetails = Seq(
         ClientDetailsConfiguration(
           name = "nino",
@@ -132,7 +136,7 @@ class ClientServiceConfigurationService @Inject() extends ServiceConstants {
       serviceName = HMRCMTDVAT,
       urlPart = Map(vat -> Set(HMRCMTDVAT)),
       serviceOption = true,
-      clientTypes = Set("personal", "business"),
+      clientTypes = Set(personal, business),
       clientDetails = Seq(
         ClientDetailsConfiguration(
           name = "vrn",
@@ -148,7 +152,7 @@ class ClientServiceConfigurationService @Inject() extends ServiceConstants {
       urlPart = Map(trustsAndEstates -> Set(HMRCTERSORG, HMRCTERSNTORG)),
       serviceOption = true,
       supportedEnrolments = Seq(HMRCTERSORG, HMRCTERSNTORG), // parent service is always head of the list
-      clientTypes = Set("trust"),
+      clientTypes = Set(trust),
       clientDetails = Seq(
         ClientDetailsConfiguration(
           name = "utr",
@@ -164,7 +168,7 @@ class ClientServiceConfigurationService @Inject() extends ServiceConstants {
       urlPart = Map(trustsAndEstates -> Set(HMRCTERSORG, HMRCTERSNTORG)),
       serviceOption = false,
       supportedEnrolments = Seq(HMRCTERSORG, HMRCTERSNTORG), // parent service is always head of the list
-      clientTypes = Set("trust"),
+      clientTypes = Set(trust),
       clientDetails = Seq(
         ClientDetailsConfiguration(
           name = "urn",
@@ -179,7 +183,7 @@ class ClientServiceConfigurationService @Inject() extends ServiceConstants {
       serviceName = HMRCCGTPD,
       urlPart = Map(capitalGainsTaxUkProperty -> Set(HMRCCGTPD)),
       serviceOption = true,
-      clientTypes = Set("personal", "trust"),
+      clientTypes = Set(personal, trust),
       clientDetails = Seq(
         ClientDetailsConfiguration(
           name = "cgtRef",
@@ -194,7 +198,7 @@ class ClientServiceConfigurationService @Inject() extends ServiceConstants {
       serviceName = HMRCPPTORG,
       urlPart = Map(plasticPackagingTax -> Set(HMRCPPTORG)),
       serviceOption = true,
-      clientTypes = Set("personal", "business", "trust"),
+      clientTypes = Set(personal, business, trust),
       clientDetails = Seq(
         ClientDetailsConfiguration(
           name = "pptRef",
@@ -209,7 +213,7 @@ class ClientServiceConfigurationService @Inject() extends ServiceConstants {
       serviceName = HMRCCBCORG,
       urlPart = Map(countryByCountryReporting -> Set(HMRCCBCORG)),
       serviceOption = true,
-      clientTypes = Set("business", "trust"),
+      clientTypes = Set(business, trust),
       clientDetails = Seq(
         ClientDetailsConfiguration(
           name = "cbcId",
@@ -224,7 +228,7 @@ class ClientServiceConfigurationService @Inject() extends ServiceConstants {
       serviceName = HMRCPILLAR2ORG,
       urlPart = Map(pillar2 -> Set(HMRCPILLAR2ORG)),
       serviceOption = true,
-      clientTypes = Set("business", "trust"),
+      clientTypes = Set(business, trust),
       clientDetails = Seq(
         ClientDetailsConfiguration(
           name = "PlrId",

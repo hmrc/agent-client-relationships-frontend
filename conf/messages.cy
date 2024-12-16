@@ -414,3 +414,125 @@ authorisationAlreadyExists.HMRC-CBC-ORG.p1=<translation needed>
 authorisationAlreadyExists.HMRC-CBC-NONUK-ORG.p1=<translation needed>
 authorisationAlreadyExists.HMRC-PILLAR2-ORG.p1=<translation needed>
 authorisationAlreadyExists.p2=Nid oes yn rhaid i chi ofyn iddo eich awdurdodi ar gyfer y gwasanaeth hwn eto.
+
+# ________________________________________________________________________________
+# Client confirm consent
+# ________________________________________________________________________________
+
+confirmConsent.h1 = <translation needed>
+confirmConsent.agent = <translation needed>
+confirmConsent.mainAgent = <translation needed>
+confirmConsent.suppAgent = <translation needed>
+confirmConsent.p1 = <translation needed>
+confirmConsent.warning.agent = <translation needed>
+confirmConsent.warning.mainAgent = <translation needed>
+confirmConsent.warning.mainToSupp = <translation needed>
+confirmConsent.suppAgent.details.heading=<translation needed>
+confirmConsent.suppAgent.details.p1=<translation needed>
+confirmConsent.suppAgent.details.list.item1=<translation needed>
+confirmConsent.suppAgent.details.list.item2=<translation needed>
+confirmConsent.suppAgent.details.list.item3=<translation needed>
+confirmConsent.suppAgent.details.list.item4=<translation needed>
+confirmConsent.h2 = <translation needed>
+confirmConsent.p2 = <translation needed>
+confirmConsent.legend = <translation needed>
+confirmConsent.true = Iawn
+confirmConsent.false = Na
+confirmConsent.error.required=<translation needed>
+confirmConsent.form.agent=<translation needed>
+confirmConsent.form.mainAgent=<translation needed>
+confirmConsent.form.suppAgent=<translation needed>
+
+confirmConsent.HMRC-MTD-IT.list.item1=eich cofrestru neu eich optio allan
+confirmConsent.HMRC-MTD-IT.list.item2=cysylltu â CThEF yngl’n â’ch Ffurflenni Treth
+confirmConsent.HMRC-MTD-IT.list.item3=bwrw golwg dros a newid eich manylion, megis ffynonellau incwm
+confirmConsent.HMRC-MTD-IT.list.item4=rhoi manylion banc i CThEM ar gyfer ad-daliadau pan fo ad-daliad yn ddyledus
+confirmConsent.HMRC-MTD-IT.list.item5=bwrw golwg dros a chyflwyno’ch diweddariadau (incwm a threuliau)
+confirmConsent.HMRC-MTD-IT.list.item6=<translation needed>
+confirmConsent.HMRC-MTD-IT.list.item7=bwrw golwg dros eich cyfrifiadau a’r symiau dyledus a’r symiau sydd wedi’u talu
+confirmConsent.HMRC-MTD-IT.list.item8=rheoli’ch Troi Treth yn Ddigidol ar gyfer Treth Incwm gan ddefnyddio meddalwedd
+confirmConsent.HMRC-MTD-IT.list.item9=cael mynediad at eich manylion Hunanasesiad, megis eich enw, cyfeiriad, rhif Yswiriant Gwladol a Chyfeirnod Unigryw y Trethdalwr
+confirmConsent.HMRC-MTD-IT.list.item10=<translation needed>
+confirmConsent.HMRC-MTD-IT.list.item11=<translation needed>
+confirmConsent.HMRC-MTD-IT.list.item12=canslo’ch cofrestriad Hunanasesiad
+
+confirmConsent.HMRC-MTD-IT-SUPP.list.item1=<translation needed>
+confirmConsent.HMRC-MTD-IT-SUPP.list.item2=<translation needed>
+confirmConsent.HMRC-MTD-IT-SUPP.list.item3=<translation needed>
+confirmConsent.HMRC-MTD-IT-SUPP.list.item4=<translation needed>
+confirmConsent.HMRC-MTD-IT-SUPP.list.item5=<translation needed>
+confirmConsent.HMRC-MTD-IT-SUPP.list.item6=<translation needed>
+confirmConsent.HMRC-MTD-IT-SUPP.list.item7=<translation needed>
+confirmConsent.HMRC-MTD-IT-SUPP.list.item8=<translation needed>
+
+confirmConsent.PERSONAL-INCOME-RECORD.list.item1=cael mynediad at wybodaeth am y canlynol:
+confirmConsent.PERSONAL-INCOME-RECORD.list.item2=i bwy rydych wedi gweithio yn y gorffennol
+confirmConsent.PERSONAL-INCOME-RECORD.list.item3=buddiannau trethadwy megis yswiriant meddygol ac yswiriant car cwmni
+confirmConsent.PERSONAL-INCOME-RECORD.list.item4=eich pensiynau
+confirmConsent.PERSONAL-INCOME-RECORD.list.item5=dyddiadau dechrau a dod i ben eich rhan yn y broses TWE
+
+confirmConsent.HMRC-MTD-VAT.list.item1=trafod eich TAW gyda CThEM
+confirmConsent.HMRC-MTD-VAT.list.item2=bwrw golwg dros eich manylion TAW a’ch manylion banc, a’u newid
+confirmConsent.HMRC-MTD-VAT.list.item3=bwrw golwg dros eich manylion TAW, eu newid a’u cyflwyno
+confirmConsent.HMRC-MTD-VAT.list.item4=bwrw golwg dros eich taliadau a’ch rhwymedigaethau TAW
+confirmConsent.HMRC-MTD-VAT.list.item5=rheoli’ch TAW drwy ddefnyddio meddalwedd
+confirmConsent.HMRC-MTD-VAT.list.item6=canslo’ch cofrestriad TAW
+confirmConsent.HMRC-MTD-VAT.list.item7=apelio yn erbyn cosb am gyflwyno’n hwyr neu am dalu’n hwyr
+confirmConsent.HMRC-MTD-VAT.list.item8=gweld:
+confirmConsent.HMRC-MTD-VAT.list.item9=manylion eich cofrestriad TAW, megis enw’ch busnes a’ch manylion cyswllt
+confirmConsent.HMRC-MTD-VAT.list.item10=y Ffurflenni TAW a gyflwynwyd gennych
+confirmConsent.HMRC-MTD-VAT.list.item11=cyfrifiadau Ffurflenni TAW
+confirmConsent.HMRC-MTD-VAT.list.item12=y symiau sydd arnoch neu a dalwyd gennych
+
+confirmConsent.HMRC-TERS-ORG.list.item1=rhoi gwybod am newidiadau sy’n ymwneud ag ymddiriedolwyr, setlwyr, buddiolwyr, diogelwyr ac unigolion eraill yn yr ymddiriedolaeth – megis enwau a chyfeiriadau’r rhain – a datgan bod yr ymddiriedolaeth yn gyfredol
+confirmConsent.HMRC-TERS-ORG.list.item2=rhoi gwybod am newidiadau sy’n ymwneud â chynrychiolydd personol yr ystâd, megis enwau a chyfeiriadau, a datgan bod yr ystâd yn gyfredol
+
+confirmConsent.HMRC-CGT-PD.personal.list.item1=bwrw golwg dros eich Ffurflenni Treth presennol, eu newid a’u cyflwyno
+confirmConsent.HMRC-CGT-PD.personal.list.item2=bwrw golwg dros fanylion eich Ffurflenni Treth blaenorol, a’u newid
+confirmConsent.HMRC-CGT-PD.personal.list.item3=bwrw golwg dros eich dulliau cysylltu dewisol, a’u newid
+confirmConsent.HMRC-CGT-PD.personal.list.item4=cysylltwch â CThEM am eich ffurflenni Treth, eich taliadau ac unrhyw gosbau
+confirmConsent.HMRC-CGT-PD.personal.list.item5=cyrchu a diweddaru eich:
+confirmConsent.HMRC-CGT-PD.personal.list.item6=eich enw a manylion cyswllt
+confirmConsent.HMRC-CGT-PD.personal.list.item7=eich statws preswyl
+confirmConsent.HMRC-CGT-PD.personal.list.item8=eich rhwymedigaeth ar gyfer y flwyddyn dreth bresennol a blynyddoedd treth blaenorol
+confirmConsent.HMRC-CGT-PD.personal.list.item9=y symiau sy’n ddyledus a’r symiau sydd wedi’u talu gennych
+confirmConsent.HMRC-CGT-PD.personal.list.item10=manylion eich cosbau
+
+confirmConsent.HMRC-CGT-PD.trust.list.item1=bwrw golwg dros Ffurflenni Treth presennol yr ymddiriedolaeth, eu newid a’u cyflwyno
+confirmConsent.HMRC-CGT-PD.trust.list.item2=bwrw golwg dros fanylion Ffurflenni Treth blaenorol yr ymddiriedolaeth, a’u newid
+confirmConsent.HMRC-CGT-PD.trust.list.item3=bwrw golwg dros ddulliau cysylltu dewisol yr ymddiriedolaeth, a’u newid
+confirmConsent.HMRC-CGT-PD.trust.list.item4=cysylltwch â CThEM am eich ffurflenni Treth yr ymddiriedolaeth, ei thaliadau ac unrhyw gosbau
+confirmConsent.HMRC-CGT-PD.trust.list.item5=cyrchu a diweddaru?r ymddiriedolaeth:
+confirmConsent.HMRC-CGT-PD.trust.list.item6=enw a manylion cyswllt yr ymddiriedolaeth
+confirmConsent.HMRC-CGT-PD.trust.list.item7=statws preswyl yr ymddiriedolaeth
+confirmConsent.HMRC-CGT-PD.trust.list.item8=rhwymedigaeth yr ymddiriedolaeth ar gyfer y flwyddyn dreth bresennol a blynyddoedd treth blaenorol
+confirmConsent.HMRC-CGT-PD.trust.list.item9=y symiau sy’n ddyledus a’r symiau sydd wedi’u talu gan yr ymddiriedolaeth
+confirmConsent.HMRC-CGT-PD.trust.list.item10=manylion cosbau’r ymddiriedolaeth
+
+confirmConsent.HMRC-PPT-ORG.list.item1=bwrw golwg dros eich Ffurflenni Treth Deunydd Pacio Plastig
+confirmConsent.HMRC-PPT-ORG.list.item2=cyflwyno’ch Ffurflenni Treth Deunydd Pacio Plastig
+confirmConsent.HMRC-PPT-ORG.list.item3=addasu’ch Ffurflenni Treth Deunydd Pacio Plastig
+confirmConsent.HMRC-PPT-ORG.list.item4=siarad â CThEM am eich Ffurflenni
+confirmConsent.HMRC-PPT-ORG.list.item5=rhoi manylion banc i CThEM ar gyfer ad-daliadau pan fo ad-daliad yn ddyledus
+confirmConsent.HMRC-PPT-ORG.list.item6=cwblhau’ch sefyllfa dreth gyffredinol
+confirmConsent.HMRC-PPT-ORG.list.item7=bwrw golwg dros eich cyfrifiadau a’r symiau dyledus a’r symiau sydd wedi’u talu
+confirmConsent.HMRC-PPT-ORG.list.item8=rheoli’ch Treth Deunydd Pacio Plastig gan ddefnyddio meddalwedd
+
+confirmConsent.HMRC-CBC-ORG.list.item1=anfon adroddiadau gwlad-wrth-wlad newydd
+confirmConsent.HMRC-CBC-ORG.list.item2=anfon gwybodaeth, cywiriadau neu achosion o ddileu ychwanegol ar gyfer adroddiadau gwlad-wrth-wlad blaenorol
+confirmConsent.HMRC-CBC-ORG.list.item3=cael at restr o unrhyw adroddiadau gwlad-wrth-wlad a anfonwyd yn ystod y 28 diwrnod diwethaf
+confirmConsent.HMRC-CBC-ORG.list.item4=contact HMRC about your current and previous reports
+confirmConsent.HMRC-CBC-ORG.list.item5=rhannu gwybodaeth gyda CThEF am eich adroddiadau gwlad-wrth-wlad presennol neu flaenorol
+confirmConsent.HMRC-CBC-ORG.list.item6=cael gwybodaeth gan CThEF am eich adroddiadau gwlad-wrth-wlad presennol neu flaenorol
+confirmConsent.HMRC-CBC-ORG.list.item7=cael at eich Dynodydd (ID) CBC (Dynodydd (ID))
+confirmConsent.HMRC-CBC-ORG.list.item8=cael at a newid eich manylion cyswllt gwlad-wrth-wlad, fel eich enwau cyswllt, cyfeiriadau e-bost a rhifau ffôn
+confirmConsent.HMRC-CBC-ORG.list.item9=cael at fanylion unrhyw gosbau a godir
+confirmConsent.HMRC-CBC-ORG.list.item10=apelio cosb am gyflwyno’n hwyr
+confirmConsent.HMRC-CBC-ORG.list.item11=rhoi gwybodaeth ychwanegol wrth apelio cosbau am gyflwyno’n hwyr
+
+confirmConsent.HMRC-PILLAR2-ORG.list.item1=bwrw golwg dros, newid a chyflwyno eich Ffurflenni Treth atodol Colofn 2
+confirmConsent.HMRC-PILLAR2-ORG.list.item2=cysylltu â CThEF ynghylch eich Ffurflenni Treth atodol Colofn 2 cyfredol a blaenorol
+confirmConsent.HMRC-PILLAR2-ORG.list.item3=bwrw golwg dros a newid eich manylion mewn perthynas â’r dreth atodol Colofn 2 megis eich manylion cyswllt, cyfnod cyfrifyddu a math o sefydliad
+confirmConsent.HMRC-PILLAR2-ORG.list.item4=rhoi manylion banc i CThEF ar gyfer ad-daliadau pan fo ad-daliad yn ddyledus
+confirmConsent.HMRC-PILLAR2-ORG.list.item5=cwblhau’ch sefyllfa dreth gyffredinol
+confirmConsent.HMRC-PILLAR2-ORG.list.item6=bwrw golwg dros eich cyfrifiadau a’r symiau dyledus a’r symiau sydd wedi’u talu.

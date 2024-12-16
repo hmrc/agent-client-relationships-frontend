@@ -1,0 +1,141 @@
+@*
+ * Copyright 2024 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.*
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.routes
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.ClientJourneyRequest
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.Layout
+@import uk.gov.hmrc.govukfrontend.views.Implicits.RichRadios
+
+@this(layout: Layout,
+      govukButton: GovukButton,
+      govukRadios: GovukRadios,
+      govukWarningText: GovukWarningText,
+      govukDetails: GovukDetails,
+      formWithCSRF: FormWithCSRF)
+
+@(form: Form[Boolean], agentRoleKey: String)(implicit request: ClientJourneyRequest[?], messages: Messages, appConfig: AppConfig)
+
+@key = @{"confirmConsent"}
+@serviceKey = @{request.journey.getServiceKey}
+@agentName = @{request.journey.getAgentName}
+@agentRole = @{messages(s"$key.$agentRoleKey")}
+@agentRoleNoStrong = @{messages(s"$key.form.$agentRoleKey")}
+@taxServiceName = @{messages(serviceKey)}
+@pageTitle = @{messages(s"$key.h1")}
+@serviceName = @{messages("service.name.clients")}
+@clientType = @{request.journey.getClientType.toString}
+
+@simpleTerms(service: String, numOfBullets: Int) = {
+    @for(i <- 1 to numOfBullets) {
+        <li>@messages(s"confirmConsent.$service.list.item$i")</li>
+    }
+}
+
+@complexTerms(service: String, numOfBulletsFirst: Int, numOfBulletsSecond: Int) = {
+    @for(i <- 1 to numOfBulletsFirst) {
+        <li>@messages(s"confirmConsent.$service.list.item$i")</li>
+    }
+    <li>
+        @messages(s"confirmConsent.$service.list.item${numOfBulletsFirst + 1}")
+        <ul class="govuk-list govuk-list--bullet">
+        @for(i <- 1 to numOfBulletsSecond) {
+            <li>@messages(s"confirmConsent.$service.list.item${i + numOfBulletsFirst + 1}")</li>
+        }
+        </ul>
+    </li>
+}
+
+@suitableTerms = @{
+    serviceKey match {
+        case HMRCMTDIT                    => simpleTerms(HMRCMTDIT, 12)
+        case HMRCMTDITSUPP                => simpleTerms(HMRCMTDITSUPP, 8)
+        case PERSONALINCOMERECORD         => simpleTerms(PERSONALINCOMERECORD, 5)
+        case HMRCMTDVAT                   => complexTerms(HMRCMTDVAT, 7, 4)
+        case HMRCTERSORG | HMRCTERSNTORG  => simpleTerms(HMRCTERSORG, 2)
+        case HMRCCGTPD                    => complexTerms(s"$HMRCCGTPD.$clientType", 4, 5)
+        case HMRCPPTORG                   => simpleTerms(HMRCPPTORG, 8)
+        case HMRCCBCORG                   => simpleTerms(HMRCCBCORG, 11)
+        case HMRCPILLAR2ORG               => simpleTerms(HMRCPILLAR2ORG, 6)
+    }
+}
+
+@suppAgentDetails = {
+    <p>@messages("confirmConsent.suppAgent.details.p1")</p>
+    <ul class="govuk-list govuk-list--bullet">
+        <li>@messages("confirmConsent.suppAgent.details.list.item1")</li>
+        <li>@messages("confirmConsent.suppAgent.details.list.item2")</li>
+        <li>@messages("confirmConsent.suppAgent.details.list.item3")</li>
+        <li>@messages("confirmConsent.suppAgent.details.list.item4")</li>
+    </ul>
+}
+
+@layout(pageTitle, Some(serviceName), Some(form)) {
+
+    <h2 class="govuk-caption-xl">@messages(serviceKey)</h2>
+    <h1 class="govuk-heading-xl">@pageTitle</h1>
+
+    <p class="govuk-body">@Html(messages(s"$key.p1", agentName, agentRole, taxServiceName))</p>
+
+    @{(request.journey.existingMainAgent, agentRoleKey) match {
+        case (Some(exAgent), "suppAgent") if exAgent.sameAgent =>
+            govukWarningText(WarningText(content = Text(messages(s"$key.warning.mainToSupp", agentName, taxServiceName))))
+        case (Some(exAgent), role) if role != "suppAgent" =>
+            govukWarningText(WarningText(content = Text(messages(s"$key.warning.$agentRoleKey", taxServiceName, agentName, exAgent.agencyName))))
+        case _ => // No warning will render
+    }}
+
+    @if(agentRoleKey == "suppAgent") {
+        @govukDetails(Details(
+            summary = Text(messages("confirmConsent.suppAgent.details.heading")),
+            content = HtmlContent(suppAgentDetails)
+        ))
+    }
+
+    <h2 class="govuk-heading-l">@messages(s"$key.h2")</h2>
+
+    <p class="govuk-body">@(messages(s"$key.p2", agentName, agentRoleNoStrong, taxServiceName))</p>
+
+    <ul class="govuk-list govuk-list--bullet">
+        @suitableTerms
+    </ul>
+
+    @formWithCSRF(action = routes.ConfirmConsentController.submit) {
+        @govukRadios(Radios(
+            fieldset = Some(Fieldset(
+                legend = Some(Legend(
+                    content = Text(messages(s"$key.legend", agentName, agentRoleNoStrong, taxServiceName)),
+                    isPageHeading = false,
+                    classes = "govuk-fieldset__legend--m"
+                ))
+            )),
+            items = Seq("true", "false").map(trueOrFalse =>
+                RadioItem(
+                    id = Some(ConfirmConsentFieldName),
+                    content = Text(messages(s"$key.$trueOrFalse")),
+                    value = Some(trueOrFalse)
+                )
+            )
+        ).withFormField(form(ConfirmConsentFieldName)))
+
+        @govukButton(Button(
+            id = Some("continueButton"),
+            content = Text(messages("continue.button"))
+        ))
+    }
+}
+

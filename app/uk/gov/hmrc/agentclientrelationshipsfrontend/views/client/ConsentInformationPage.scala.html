@@ -15,6 +15,7 @@
  *@
 
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.routes
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.Layout
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.ClientJourneyRequest
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.ClientJourney
@@ -67,7 +68,7 @@
 
   @govukButton(Button(
       id = Some("continueButton"),
-      href = Some(s"/agent-client-relationships/clients/consent/$invitationId"),
+      href = Some(routes.ConfirmConsentController.show.url),
       content = Text(messages("continue.button"))
   ))
 }

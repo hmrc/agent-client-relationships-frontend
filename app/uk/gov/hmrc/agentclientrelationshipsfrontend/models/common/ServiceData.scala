@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.models.common
 
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientType
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{JourneyErrors, JourneyType}
 
 case class ServiceData(
@@ -24,7 +25,7 @@ case class ServiceData(
                         supportedEnrolments: Seq[String] = Seq.empty,
                         serviceName: String,
                         urlPart: Map[String, Set[String]],
-                        clientTypes: Set[String],
+                        clientTypes: Set[ClientType],
                         clientDetails: Seq[ClientDetailsConfiguration],
                         journeyErrors: Map[JourneyType, JourneyErrors] = Map(
                           JourneyType.AuthorisationRequest -> JourneyErrors(), 

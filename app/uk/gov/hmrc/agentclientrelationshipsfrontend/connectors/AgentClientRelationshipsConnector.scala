@@ -49,7 +49,7 @@ class AgentClientRelationshipsConnector @Inject()(appConfig: AppConfig,
     val clientIdType = serviceConfig.firstClientDetailsFieldFor(journey.getService).clientIdType
     httpV2
       .post(url"$agentClientRelationshipsUrl/agent/${request.arn}/authorisation-request")
-      .withBody(Json.toJson(CreateAuthorisationRequest(journey.clientId.get, clientIdType, journey.getClientDetailsResponse.name, journey.agentType.getOrElse(journey.getService))))
+      .withBody(Json.toJson(CreateAuthorisationRequest(journey.clientId.get, clientIdType, journey.getClientDetailsResponse.name, journey.agentType.getOrElse(journey.getService), journey.getClientType)))
       .execute[HttpResponse].map { response => response.status match {
           case CREATED => (response.json \ "invitationId").as[String]
           case _ => throw new RuntimeException(s"Failed to create authorisation request: ${response.body}")
