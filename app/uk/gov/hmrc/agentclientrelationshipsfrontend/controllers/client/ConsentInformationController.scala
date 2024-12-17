@@ -56,7 +56,9 @@ class ConsentInformationController @Inject()(agentClientRelationshipsConnector: 
               serviceKey = Some(response.serviceKey),
               agentName = Some(response.agentName),
               status = Some(response.status),
-              lastModifiedDate = Some(response.lastModifiedDate)
+              lastModifiedDate = Some(response.lastModifiedDate),
+              existingMainAgent = response.existingMainAgent,
+              clientType = response.clientType
             )
             clientJourneyService.saveJourney(newJourney).map(_ => response.status match {
               case Pending => Ok(consentInformationPage(newJourney))

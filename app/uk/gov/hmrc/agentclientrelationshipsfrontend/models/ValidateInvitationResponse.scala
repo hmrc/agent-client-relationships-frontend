@@ -17,7 +17,7 @@
 package uk.gov.hmrc.agentclientrelationshipsfrontend.models
 
 import play.api.libs.json.{Json, OFormat}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.InvitationStatus
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.{ClientType, ExistingMainAgent, InvitationStatus}
 
 import java.time.Instant
 
@@ -25,7 +25,9 @@ case class ValidateInvitationResponse(invitationId: String,
                                       serviceKey: String,
                                       agentName: String,
                                       status: InvitationStatus,
-                                      lastModifiedDate: Instant
+                                      lastModifiedDate: Instant,
+                                      existingMainAgent: Option[ExistingMainAgent],
+                                      clientType: Option[ClientType]
                                      )
 
 object ValidateInvitationResponse {
