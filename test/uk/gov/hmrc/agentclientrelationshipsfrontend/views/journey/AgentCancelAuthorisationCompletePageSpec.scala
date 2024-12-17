@@ -20,7 +20,7 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.AgentCancelAuthorisationResponse
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, AgentJourney, JourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, AgentJourney, AgentJourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.support.ViewSpecSupport
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.AgentCancelAuthorisationCompletePage
 
@@ -51,7 +51,7 @@ class AgentCancelAuthorisationCompletePageSpec extends ViewSpecSupport {
   )
 
   private val completeJourney: AgentJourney = AgentJourney(
-    JourneyType.AuthorisationRequest,
+    AgentJourneyType.AuthorisationRequest,
     journeyComplete = Some("2024-12-25"),
     confirmationClientName = Some(testClientName),
     confirmationService = Some("HMRC-MTD-IT")

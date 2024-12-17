@@ -19,7 +19,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey
 import play.api.http.Status.OK
 import play.api.libs.json.{JsObject, Json}
 import play.api.test.Helpers.*
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, JourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, AgentJourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.AgentJourneyService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.WiremockHelper.stubGet
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentSpecHelper}
@@ -64,14 +64,14 @@ class ConfirmationControllerISpec extends ComponentSpecHelper with AuthStubs {
   )
 
   private val completeCancellationJourney: AgentJourney = AgentJourney(
-    JourneyType.AgentCancelAuthorisation,
+    AgentJourneyType.AgentCancelAuthorisation,
     journeyComplete = Some("2024-12-25"),
     confirmationClientName = Some(testClientName),
     confirmationService = Some("HMRC-MTD-IT")
   )
 
   private val completeCreateAuthorisationRequestJourney: AgentJourney = AgentJourney(
-    JourneyType.AuthorisationRequest,
+    AgentJourneyType.AuthorisationRequest,
     journeyComplete = Some(testInvitationId)
   )
 
@@ -85,7 +85,7 @@ class ConfirmationControllerISpec extends ComponentSpecHelper with AuthStubs {
   "GET /authorisation-request/confirmation" should {
     "redirect to ASA dashboard when no journey session present" in {
       authoriseAsAgent()
-      val result = get(routes.ConfirmationController.show(JourneyType.AuthorisationRequest).url)
+      val result = get(routes.ConfirmationController.show(AgentJourneyType.AuthorisationRequest).url)
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe "http://localhost:9401/agent-services-account/home"
     }
@@ -93,7 +93,7 @@ class ConfirmationControllerISpec extends ComponentSpecHelper with AuthStubs {
       authoriseAsAgent()
       stubGet(getAuthorisationRequestUrl, OK, testGetAuthorisationRequestInfoResponse("HMRC-MTD-IT").toString())
       await(journeyService.saveJourney(completeCreateAuthorisationRequestJourney))
-      val result = get(routes.ConfirmationController.show(JourneyType.AuthorisationRequest).url)
+      val result = get(routes.ConfirmationController.show(AgentJourneyType.AuthorisationRequest).url)
       result.status shouldBe OK
     }
   }
@@ -101,7 +101,7 @@ class ConfirmationControllerISpec extends ComponentSpecHelper with AuthStubs {
   "GET /agent-cancel-authorisation/confirmation" should {
     "redirect to ASA dashboard when no journey session present" in {
       authoriseAsAgent()
-      val result = get(routes.ConfirmationController.show(JourneyType.AgentCancelAuthorisation).url)
+      val result = get(routes.ConfirmationController.show(AgentJourneyType.AgentCancelAuthorisation).url)
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe "http://localhost:9401/agent-services-account/home"
     }
@@ -109,7 +109,7 @@ class ConfirmationControllerISpec extends ComponentSpecHelper with AuthStubs {
       authoriseAsAgent()
       stubGet(getAgentDetailsUrl, OK, testGetAgentDetailsResponse.toString())
       await(journeyService.saveJourney(completeCancellationJourney))
-      val result = get(routes.ConfirmationController.show(JourneyType.AgentCancelAuthorisation).url)
+      val result = get(routes.ConfirmationController.show(AgentJourneyType.AgentCancelAuthorisation).url)
       result.status shouldBe OK
     }
   }

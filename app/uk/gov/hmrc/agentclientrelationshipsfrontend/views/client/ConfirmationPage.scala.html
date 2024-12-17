@@ -1,0 +1,68 @@
+@*
+ * Copyright 2024 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.Layout
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.AgentCancelAuthorisationResponse
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.routes
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.ClientJourneyRequest
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.AuthorisationRequestInfoForClient
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.{Accepted, Rejected, PartialAuth}
+@this(
+        layout: Layout,
+        govukPanel: GovukPanel
+)
+
+@(authorisationRequestInfo: AuthorisationRequestInfoForClient)(implicit request: ClientJourneyRequest[?], messages: Messages, appConfig: AppConfig)
+
+@key = @{"clientConfirmation"}
+@decisionKey = @{authorisationRequestInfo.status match {
+    case Accepted | PartialAuth => "accepted"
+    case Rejected => "rejected"
+    case status => throw new RuntimeException(s"Cannot confirm client completion of accept/reject when status is $status")
+}}
+@agentName = @{authorisationRequestInfo.agentName}
+@serviceKey = @{authorisationRequestInfo.service}
+@pageTitle = @{
+    messages(s"$key.$decisionKey.h1", agentName)
+}
+
+@layout(
+    pageTitle = pageTitle,
+    serviceName = Some(messages("service.name.clients")),
+    suppressBackLink = true
+) {
+
+    @govukPanel(Panel(title = Text(pageTitle)))
+
+    @if(messages.isDefinedAt(s"$key.$decisionKey.h2")) {
+        <h2 class="govuk-heading-m">@messages(s"$key.$decisionKey.h2")</h2>
+    }
+
+    <p class="govuk-body">@messages(s"$key.$decisionKey.$serviceKey.p1", agentName)</p>
+
+    <h2 class="govuk-heading-m">@messages(s"$key.section2.h2")</h2>
+    <p class="govuk-body">@Html(messages(s"$key.section2.p1", appConfig.acmExternalUrl))</p>
+    <ul class="govuk-list govuk-list--bullet">
+        <li>@messages(s"$key.section2.li1")</li>
+        <li>@messages(s"$key.section2.li2")</li>
+        <li>@messages(s"$key.section2.li3")</li>
+    </ul>
+    <p class="govuk-body">
+        <a class="govuk-link" href="@{routes.SignOutController.signOut.url}">@messages(s"$key.section2.signOutLink")</a>
+    </p>
+    
+}

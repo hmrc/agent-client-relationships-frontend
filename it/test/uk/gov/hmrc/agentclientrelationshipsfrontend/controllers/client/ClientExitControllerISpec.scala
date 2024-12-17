@@ -22,7 +22,6 @@ import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientExitType.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.ClientJourney
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyType.ClientResponse
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.ClientJourneyService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentSpecHelper}
 
@@ -47,7 +46,7 @@ class ClientExitControllerISpec extends ComponentSpecHelper with AuthStubs {
   val validateInvitationUrl = s"/agent-client-relationships/client/validate-invitation"
 
   def journeyModel(status: Option[InvitationStatus]): ClientJourney = ClientJourney(
-    ClientResponse,
+    "authorisation-response",
     consent = Some(true),
     serviceKey = Some("HMRC-MTD-IT"),
     invitationId = Some("ABC123"),

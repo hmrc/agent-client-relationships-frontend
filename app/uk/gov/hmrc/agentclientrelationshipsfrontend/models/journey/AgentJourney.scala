@@ -19,7 +19,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey
 import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsResponse, ClientStatus, KnownFactType}
 
-case class AgentJourney(journeyType: JourneyType,
+case class AgentJourney(journeyType: AgentJourneyType,
                         clientType: Option[String] = None,
                         clientService: Option[String] = None,
                         clientId: Option[String] = None,
@@ -43,15 +43,15 @@ case class AgentJourney(journeyType: JourneyType,
 
   def getKnownFactType: KnownFactType = clientDetailsResponse.flatMap(_.knownFactType)getOrElse(throw new RuntimeException("known fact is not defined"))
 
-  def getExitType(journeyType: JourneyType, clientDetails: ClientDetailsResponse, supportedAgentRoles: Seq[String] = Seq.empty): Option[JourneyExitType] = journeyType match
-    case JourneyType.AuthorisationRequest => clientDetails match {
+  def getExitType(journeyType: AgentJourneyType, clientDetails: ClientDetailsResponse, supportedAgentRoles: Seq[String] = Seq.empty): Option[JourneyExitType] = journeyType match
+    case AgentJourneyType.AuthorisationRequest => clientDetails match {
       case ClientDetailsResponse(_, Some(ClientStatus.Insolvent), _, _, _, _, _) => Some(JourneyExitType.ClientStatusInsolvent)
       case ClientDetailsResponse(_, Some(_), _, _, _, _, _) => Some(JourneyExitType.ClientStatusInvalid)
       case ClientDetailsResponse(_, None, _, _, _, true, _) => Some(JourneyExitType.ClientAlreadyInvited)
       case ClientDetailsResponse(_, None, _, _, _, false, Some(service)) if supportedAgentRoles.isEmpty && service == clientService.get => Some(JourneyExitType.AuthorisationAlreadyExists)
       case ClientDetailsResponse(_, None, _, _, _, false, _) => None
     }
-    case JourneyType.AgentCancelAuthorisation => clientDetails match {
+    case AgentJourneyType.AgentCancelAuthorisation => clientDetails match {
       case ClientDetailsResponse(_, _, _, _, _, _, Some(service)) if service == clientService.get || supportedAgentRoles.contains(service) => None
       case ClientDetailsResponse(_, _, _, _, _, _, Some(_)) => Some(JourneyExitType.NoAuthorisationExists)
       case ClientDetailsResponse(_, _, _, _, _, _, None) => Some(JourneyExitType.NoAuthorisationExists)

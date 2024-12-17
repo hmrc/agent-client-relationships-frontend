@@ -29,8 +29,7 @@ import play.api.mvc.*
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsJson, defaultAwaitTimeout, status}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyType.ClientResponse
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{ClientJourney, JourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{ClientJourney, AgentJourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{AgentJourneyService, ClientJourneyService}
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -77,7 +76,7 @@ class GetClientJourneyActionSpec extends AnyWordSpecLike with Matchers with Opti
   "clientJourneyAction" should {
     "successfully retrieve journey and continue" in {
       val testJourney = ClientJourney(
-        JourneyType.ClientResponse
+        "authorisation-response"
       )
       when(mockClientJourneyService.getJourney(any(), any()))
         .thenReturn(Future.successful(Some(testJourney)))
@@ -95,7 +94,7 @@ class GetClientJourneyActionSpec extends AnyWordSpecLike with Matchers with Opti
       val result = testController.route()(fakeRequest)
 
       status(result) shouldBe OK
-      contentAsJson(result).as[ClientJourney] shouldBe ClientJourney(journeyType = ClientResponse)
+      contentAsJson(result).as[ClientJourney] shouldBe ClientJourney(journeyType = "authorisation-response")
 
     }
   }

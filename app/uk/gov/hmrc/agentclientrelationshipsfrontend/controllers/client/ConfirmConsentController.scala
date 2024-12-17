@@ -47,7 +47,9 @@ class ConfirmConsentController @Inject()(mcc: MessagesControllerComponents,
       (request.journey.serviceKey, request.journey.agentName) match {
         case (Some(service), Some(agentName)) =>
           val agentRole = determineAgentRole(service)
-          val form = ConfirmConsentForm.form(agentName, agentRole, service)
+          val form = if request.journey.consent.isDefined
+            then ConfirmConsentForm.form(agentName, agentRole, service).fill(request.journey.consent.get)
+            else ConfirmConsentForm.form(agentName, agentRole, service)
           Ok(confirmConsentView(form, agentRole))
         case _ => BadRequest // TODO implement tailored page which gives some guidance to user
       }

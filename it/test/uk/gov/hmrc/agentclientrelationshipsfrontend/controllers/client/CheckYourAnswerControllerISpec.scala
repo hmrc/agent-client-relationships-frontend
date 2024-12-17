@@ -20,7 +20,6 @@ import play.api.http.Status.*
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.Pending
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.ClientJourney
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyType.ClientResponse
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.ClientJourneyService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AgentClientRelationshipStub, AuthStubs, ComponentSpecHelper}
 
@@ -31,13 +30,18 @@ class CheckYourAnswerControllerISpec extends ComponentSpecHelper with AuthStubs 
   val journeyService: ClientJourneyService = app.injector.instanceOf[ClientJourneyService]
 
   val journeyModel: ClientJourney = ClientJourney(
-    ClientResponse,
+    "authorisation-response",
     consent = Some(true),
     serviceKey = Some("HMRC-MTD-IT"),
-    invitationId = Some("ABC123"),
+    invitationId = Some("invitationId"),
     agentName = Some("ABC Accountants"),
     status = Some(Pending),
     lastModifiedDate = Some(Instant.parse("2024-12-01T12:00:00Z"))
+  )
+
+  val completeJourney: ClientJourney = ClientJourney(
+    "authorisation-response",
+    journeyComplete = Some("invitationId")
   )
   override def beforeEach(): Unit = {
     await(journeyService.deleteAllAnswersInSession(request))
@@ -54,12 +58,13 @@ class CheckYourAnswerControllerISpec extends ComponentSpecHelper with AuthStubs 
         val result = get(routes.CheckYourAnswerController.show.url)
         result.status shouldBe OK
 
-    "return status 400 BAD_REQUEST" when:
+    "redirect to MYTA when" when:
 
       "a consent answer is not present in the session" in:
         authoriseAsClient()
         val result = get(routes.CheckYourAnswerController.show.url)
-        result.status shouldBe BAD_REQUEST
+        result.status shouldBe SEE_OTHER
+        result.header("Location").value shouldBe "http://localhost:9568/manage-your-tax-agents"
 
   "The submit action" should:
 
@@ -68,25 +73,26 @@ class CheckYourAnswerControllerISpec extends ComponentSpecHelper with AuthStubs 
       "the user accepts the invitation and a successful response is received from the backend" in:
         authoriseAsClient()
         await(journeyService.saveJourney(journeyModel))
-        givenAcceptAuthorisation("ABC123", NO_CONTENT)
+        givenAcceptAuthorisation("invitationId", NO_CONTENT)
         val result = post(routes.CheckYourAnswerController.submit.url)(Map())
         result.status shouldBe SEE_OTHER
-        result.header("Location").value shouldBe "routes.controllers.client.ConfirmationController.show"
+        result.header("Location").value shouldBe routes.ConfirmationController.show.url
 
       "the user rejects the invitation and a successful response is received from the backend" in:
         authoriseAsClient()
         await(journeyService.saveJourney(journeyModel.copy(consent = Some(false))))
-        givenRejectAuthorisation("ABC123", NO_CONTENT)
+        givenRejectAuthorisation("invitationId", NO_CONTENT)
         val result = post(routes.CheckYourAnswerController.submit.url)(Map())
         result.status shouldBe SEE_OTHER
-        result.header("Location").value shouldBe "routes.controllers.client.ConfirmationController.show"
+        result.header("Location").value shouldBe routes.ConfirmationController.show.url
 
-    "return status 400 BAD_REQUEST" when:
+    "redirect to MYTA" when:
 
       "a consent answer is not present in the session" in:
         authoriseAsClient()
         val result = post(routes.CheckYourAnswerController.submit.url)(Map())
-        result.status shouldBe BAD_REQUEST
+        result.status shouldBe SEE_OTHER
+        result.header("Location").value shouldBe "http://localhost:9568/manage-your-tax-agents"
 
     "return status 500 INTERNAL_SERVER_ERROR" when:
 

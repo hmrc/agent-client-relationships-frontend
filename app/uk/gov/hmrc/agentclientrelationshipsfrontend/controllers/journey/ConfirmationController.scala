@@ -21,7 +21,7 @@ import play.api.mvc.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{AgentCancelAuthorisationResponse, AuthorisationRequestInfo}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, JourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, AgentJourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{AgentClientRelationshipsService, ClientServiceConfigurationService}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.{AgentCancelAuthorisationCompletePage, CreateAuthorisationRequestCompletePage}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
@@ -41,7 +41,7 @@ class ConfirmationController @Inject()(mcc: MessagesControllerComponents,
   private def makeClientLink(authorisationRequestInfo: AuthorisationRequestInfo): String =
     s"${appConfig.appExternalUrl}/agent-client-relationships/appoint-someone-to-deal-with-HMRC-for-you/${authorisationRequestInfo.agentReference}/${authorisationRequestInfo.normalizedAgentName}/${serviceConfig.getUrlPart(authorisationRequestInfo.service)}"
 
-  def show(journeyType: JourneyType): Action[AnyContent] = actions.getAgentJourney(journeyType).async:
+  def show(journeyType: AgentJourneyType): Action[AnyContent] = actions.getAgentJourney(journeyType).async:
     journeyRequest =>
       given AgentJourneyRequest[?] = journeyRequest
 
@@ -49,14 +49,14 @@ class ConfirmationController @Inject()(mcc: MessagesControllerComponents,
       else
         val journeyCompleteString = journeyRequest.journey.journeyComplete.get
         journeyType match
-          case JourneyType.AuthorisationRequest =>
+          case AgentJourneyType.AuthorisationRequest =>
             agentClientRelationshipsService.getAuthorisationRequest(invitationId = journeyCompleteString).map {
               case Some(authorisationRequestInfo) =>
                 Ok(createAuthorisationRequestCompletePage(authorisationRequestInfo, makeClientLink(authorisationRequestInfo)))
               case None =>
                 throw new RuntimeException(s"Authorisation request not found for invitationId: $journeyCompleteString")
             }
-          case JourneyType.AgentCancelAuthorisation =>
+          case AgentJourneyType.AgentCancelAuthorisation =>
             agentClientRelationshipsService.getAgentDetails().map {
               case Some(agentDetails) => Ok(agentCancelAuthorisationCompletePage(AgentCancelAuthorisationResponse(
                 clientName = journeyRequest.journey.confirmationClientName.getOrElse(""),

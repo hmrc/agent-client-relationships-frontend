@@ -21,7 +21,6 @@ import org.jsoup.nodes.Document
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientExitType.*
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyType.ClientResponse
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{ClientJourney, ClientJourneyRequest}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.support.ViewSpecSupport
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.client.ClientExitPage
@@ -38,7 +37,7 @@ class ClientExitPageSpec extends ViewSpecSupport {
   case class ExpectedStrings(title: String, paragraphs: List[String])
 
   private def clientJourney(status:Option[InvitationStatus]): ClientJourney = ClientJourney(
-    journeyType = ClientResponse, agentName = Some(testAgentName), status = status, lastModifiedDate = Some(testLastModifiedDate)
+    journeyType = "authorisation-response", agentName = Some(testAgentName), status = status, lastModifiedDate = Some(testLastModifiedDate)
   )
 
   object Expected {

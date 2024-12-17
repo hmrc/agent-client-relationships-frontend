@@ -20,7 +20,7 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.Pending
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{ClientJourney, ClientJourneyRequest, JourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{ClientJourney, ClientJourneyRequest}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.support.ViewSpecSupport
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.client.ConsentInformationPage
 
@@ -79,7 +79,7 @@ class ConsentInformationPageSpec extends ViewSpecSupport {
   )
 
   val journey: ClientJourney = ClientJourney(
-    journeyType = JourneyType.ClientResponse
+    journeyType = "authorisation-response"
   )
 
   def journeyForService(serviceKey: String): ClientJourney = journey.copy(

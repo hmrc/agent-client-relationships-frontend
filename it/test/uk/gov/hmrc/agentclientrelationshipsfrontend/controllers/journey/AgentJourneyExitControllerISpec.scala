@@ -19,21 +19,21 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey
 import play.api.http.Status.{BAD_REQUEST, OK}
 import play.api.test.Helpers.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsResponse, KnownFactType}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, JourneyExitType, JourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, JourneyExitType, AgentJourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.AgentJourneyService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentSpecHelper}
 
 class AgentJourneyExitControllerISpec extends ComponentSpecHelper with AuthStubs {
 
   private val authorisationRequestJourney: AgentJourney = AgentJourney(
-    JourneyType.AuthorisationRequest,
+    AgentJourneyType.AuthorisationRequest,
     clientType = Some("personal"),
     clientService = Some("HMRC-MTD-IT"),
     clientId = Some("AB123"),
     clientDetailsResponse = Some(ClientDetailsResponse("Test Name", None, None, Seq("AA11AA"), Some(KnownFactType.PostalCode), false, None))
   )
   private val agentCancelAuthorisationJourney: AgentJourney = AgentJourney(
-    JourneyType.AgentCancelAuthorisation,
+    AgentJourneyType.AgentCancelAuthorisation,
     clientType = Some("personal"),
     clientService = Some("HMRC-MTD-IT"),
     clientId = Some("AB123"),

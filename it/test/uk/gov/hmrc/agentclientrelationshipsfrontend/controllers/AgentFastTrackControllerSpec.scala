@@ -23,14 +23,14 @@ import play.api.test.Helpers.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.routes as journeyRoutes
 import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.routes as fastTrackRoutes
 import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.testOnly.routes as testRoutes
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, JourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, AgentJourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{AgentFastTrackRequest, ClientDetailsResponse, KnownFactType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{ClientServiceConfigurationService, AgentJourneyService}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AgentClientRelationshipStub, AuthStubs, ComponentSpecHelper}
 
 class AgentFastTrackControllerSpec extends ComponentSpecHelper with AuthStubs with AgentClientRelationshipStub with ScalaFutures {
 
-  lazy val journeyType: JourneyType = JourneyType.AuthorisationRequest
+  lazy val journeyType: AgentJourneyType = AgentJourneyType.AuthorisationRequest
 
   def getClientDetailsUrl(service: String, clientId: String) = s"/agent-client-relationships/client/$service/details/$clientId"
 
@@ -175,8 +175,8 @@ class AgentFastTrackControllerSpec extends ComponentSpecHelper with AuthStubs wi
      "knownFact" -> agentFastTrackRequest.knownFact.fold(Seq.empty)(Seq(_))
    )
 
-   def toJourney(agentFastTrackRequest: AgentFastTrackRequest,clientDetailsResponse: Option[ClientDetailsResponse], journeyType: JourneyType = journeyType): AgentJourney =
-     journeyService.newJourney(JourneyType.AuthorisationRequest)
+   def toJourney(agentFastTrackRequest: AgentFastTrackRequest,clientDetailsResponse: Option[ClientDetailsResponse], journeyType: AgentJourneyType = journeyType): AgentJourney =
+     journeyService.newJourney(AgentJourneyType.AuthorisationRequest)
        .copy(
          clientService = Some(agentFastTrackRequest.service),
          clientId = Some(agentFastTrackRequest.clientIdentifier),

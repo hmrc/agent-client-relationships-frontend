@@ -27,8 +27,8 @@ class AgentJourneyExitPageSpec extends ViewSpecSupport {
 
   val viewTemplate: JourneyExitPage = app.injector.instanceOf[JourneyExitPage]
 
-  private val authorisationRequestJourney: AgentJourney = AgentJourney(JourneyType.AuthorisationRequest)
-  private val agentCancelAuthorisationJourney: AgentJourney = AgentJourney(JourneyType.AgentCancelAuthorisation)
+  private val authorisationRequestJourney: AgentJourney = AgentJourney(AgentJourneyType.AuthorisationRequest)
+  private val agentCancelAuthorisationJourney: AgentJourney = AgentJourney(AgentJourneyType.AgentCancelAuthorisation)
 
   case class ExpectedStrings(authorisationTitle: String, cancelAuthorisationTitle: String)
   private val supportedErrorCodes: Map[JourneyExitType, ExpectedStrings] = Map(
@@ -46,7 +46,7 @@ class AgentJourneyExitPageSpec extends ViewSpecSupport {
     supportedErrorCodes.map(errorCode => s"JourneyErrorPage for ${errorCode._1} ${j.journeyType.toString} view" should {
       implicit val journeyRequest: AgentJourneyRequest[?] = new AgentJourneyRequest("", j, request)
       val expectedStrings = errorCode._2
-      val title = if (j.journeyType == JourneyType.AuthorisationRequest) expectedStrings.authorisationTitle else expectedStrings.cancelAuthorisationTitle
+      val title = if (j.journeyType == AgentJourneyType.AuthorisationRequest) expectedStrings.authorisationTitle else expectedStrings.cancelAuthorisationTitle
       val view: HtmlFormat.Appendable = viewTemplate(j.journeyType, errorCode._1)
       val doc: Document = Jsoup.parse(view.body)
       "have the right title" in {

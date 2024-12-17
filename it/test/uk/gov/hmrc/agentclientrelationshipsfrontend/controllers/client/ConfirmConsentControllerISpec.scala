@@ -20,7 +20,6 @@ import play.api.http.Status.*
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.{ExistingMainAgent, Pending}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.ClientJourney
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyType.ClientResponse
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.ClientJourneyService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AgentClientRelationshipStub, AuthStubs, ComponentSpecHelper}
 
@@ -31,7 +30,7 @@ class ConfirmConsentControllerISpec extends ComponentSpecHelper with AuthStubs w
   val journeyService: ClientJourneyService = app.injector.instanceOf[ClientJourneyService]
 
   val journeyModel: ClientJourney = ClientJourney(
-    ClientResponse,
+    "authorisation-response",
     consent = Some(true),
     serviceKey = Some("HMRC-MTD-IT"),
     invitationId = Some("ABC123"),
