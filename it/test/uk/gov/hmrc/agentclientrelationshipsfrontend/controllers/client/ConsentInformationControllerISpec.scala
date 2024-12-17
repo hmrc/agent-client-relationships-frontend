@@ -52,7 +52,12 @@ class ConsentInformationControllerISpec extends ComponentSpecHelper with ScalaFu
     "serviceKey" -> taxService,
     "agentName" -> testName,
     "status" -> status,
-    "lastModifiedDate" -> "2024-12-01T12:00:00Z"
+    "lastModifiedDate" -> "2024-12-01T12:00:00Z",
+    "existingMainAgent" -> Json.obj(
+      "agencyName" -> "CFG Solutions",
+      "sameAgent" -> true
+    ),
+    "clientType" -> "personal"
   )
 
   val serviceConfigurationService: ClientServiceConfigurationService = app.injector.instanceOf[ClientServiceConfigurationService]
