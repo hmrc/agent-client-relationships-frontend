@@ -33,11 +33,11 @@ class AgentJourneyService @Inject()(val journeyRepository: JourneyRepository,
 
   override val dataKey: DataKey[AgentJourney] = DataKey("AgentJourneySessionData")
   
-  def newJourney(journeyType: JourneyType): AgentJourney = AgentJourney(
+  def newJourney(journeyType: AgentJourneyType): AgentJourney = AgentJourney(
     journeyType = journeyType
   )
 
-  def nextPageUrl(journeyType: JourneyType)(implicit request: Request[Any]): Future[String] = {
+  def nextPageUrl(journeyType: AgentJourneyType)(implicit request: Request[Any]): Future[String] = {
     for {
       journey <- getJourney()
     } yield journey match {
@@ -50,7 +50,7 @@ class AgentJourneyService @Inject()(val journeyRepository: JourneyRepository,
         else if (journey.clientDetailsResponse.get.knownFactType.nonEmpty && journey.knownFact.isEmpty) routes.EnterClientFactController.show(journeyType).url
         else if (journey.clientConfirmed.isEmpty) routes.ConfirmClientController.show(journeyType).url
         else if (journey.clientConfirmed.contains(false)) routes.StartJourneyController.startJourney(journeyType).url
-        else if (journeyType == JourneyType.AuthorisationRequest && serviceConfig.supportsAgentRoles(journey.getService) && journey.agentType.isEmpty) routes.SelectAgentRoleController.show(journeyType).url
+        else if (journeyType == AgentJourneyType.AuthorisationRequest && serviceConfig.supportsAgentRoles(journey.getService) && journey.agentType.isEmpty) routes.SelectAgentRoleController.show(journeyType).url
         else if (journey.getExitType(journeyType, journey.getClientDetailsResponse, serviceConfig.getSupportedAgentRoles(journey.getService)).nonEmpty) routes.JourneyExitController.show(journeyType, journey.getExitType(journeyType, journey.getClientDetailsResponse, serviceConfig.getSupportedAgentRoles(journey.getService)).get).url
         else routes.CheckYourAnswersController.show(journeyType).url
       }

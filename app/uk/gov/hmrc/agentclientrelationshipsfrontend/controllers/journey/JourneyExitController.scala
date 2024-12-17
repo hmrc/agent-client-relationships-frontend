@@ -20,7 +20,7 @@ import play.api.i18n.I18nSupport
 import play.api.mvc.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, JourneyExitType, JourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, JourneyExitType, AgentJourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.JourneyExitPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
@@ -33,7 +33,7 @@ class JourneyExitController @Inject()(mcc: MessagesControllerComponents,
                                       actions: Actions
                                        )(implicit val executionContext: ExecutionContext, appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport:
 
-  def show(journeyType: JourneyType, exitType: JourneyExitType): Action[AnyContent] = actions.getAgentJourney(journeyType):
+  def show(journeyType: AgentJourneyType, exitType: JourneyExitType): Action[AnyContent] = actions.getAgentJourney(journeyType):
     journeyRequest =>
       given AgentJourneyRequest[?] = journeyRequest
 

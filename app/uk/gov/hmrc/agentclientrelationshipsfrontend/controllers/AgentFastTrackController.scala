@@ -21,7 +21,7 @@ import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
 import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.routes
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.AgentFastTrackForm
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyType
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.AgentJourneyType
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsResponse, FastTrackErrors}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{AgentClientRelationshipsService, ClientServiceConfigurationService, AgentJourneyService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
@@ -37,7 +37,7 @@ class AgentFastTrackController @Inject()(mcc: MessagesControllerComponents,
                                          agentClientRelationshipsService: AgentClientRelationshipsService
                                         )(implicit val executionContext: ExecutionContext) extends FrontendController(mcc) with I18nSupport {
 
-  lazy val journeyType: JourneyType = JourneyType.AuthorisationRequest
+  lazy val journeyType: AgentJourneyType = AgentJourneyType.AuthorisationRequest
 
   private def stripWhiteSpaces(str: String): String = str.trim.replaceAll("\\s", "")
 

@@ -20,7 +20,7 @@
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.agentExitPartials._
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.components.SubmitButton
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.routes
-@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{JourneyExitType, JourneyType, AgentJourneyRequest}
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{JourneyExitType, AgentJourneyType, AgentJourneyRequest}
 
 
 @this(
@@ -35,7 +35,7 @@
         clientAlreadyInvited: ClientAlreadyInvited
 )
 
-@(journeyType: JourneyType, exitType: JourneyExitType)(implicit request: AgentJourneyRequest[?], messages: Messages, appConfig: AppConfig)
+@(journeyType: AgentJourneyType, exitType: JourneyExitType)(implicit request: AgentJourneyRequest[?], messages: Messages, appConfig: AppConfig)
 @key = @{"journeyExit"}
 @pageTitle = @{messages(s"$key.$exitType.header")}
 

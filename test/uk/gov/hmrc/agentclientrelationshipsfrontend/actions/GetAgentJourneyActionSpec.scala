@@ -29,7 +29,7 @@ import play.api.mvc.*
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsJson, defaultAwaitTimeout, redirectLocation, status}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, JourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, AgentJourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{AgentJourneyService, ClientJourneyService}
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -43,7 +43,7 @@ class GetAgentJourneyActionSpec extends AnyWordSpecLike with Matchers with Optio
   }
   class FakeController(getJourneyAction: GetJourneyAction,
                        actionBuilder: DefaultActionBuilder) {
-    def route(journeyTypeFromUrl: JourneyType): Action[AnyContent] =
+    def route(journeyTypeFromUrl: AgentJourneyType): Action[AnyContent] =
       (actionBuilder andThen fakeAuthAction andThen getJourneyAction.agentJourneyAction(journeyTypeFromUrl)) {
         journeyRequest =>
           Results.Ok(Json.toJson(journeyRequest.journey).toString)
@@ -74,24 +74,24 @@ class GetAgentJourneyActionSpec extends AnyWordSpecLike with Matchers with Optio
   "agentJourneyAction" should {
     "successfully retrieve journey and continue if it matches the url journey type" in {
       val testJourney = AgentJourney(
-        JourneyType.AuthorisationRequest
+        AgentJourneyType.AuthorisationRequest
       )
       when(mockAgentJourneyService.getJourney(any(), any()))
         .thenReturn(Future.successful(Some(testJourney)))
 
-      val result = testController.route(JourneyType.AuthorisationRequest)(fakeRequest)
+      val result = testController.route(AgentJourneyType.AuthorisationRequest)(fakeRequest)
 
       status(result) shouldBe OK
       contentAsJson(result).as[AgentJourney] shouldBe testJourney
     }
     "successfully retrieve journey and redirect to ASA if it does not match the url journey type" in {
       val testJourney = AgentJourney(
-        JourneyType.AuthorisationRequest
+        AgentJourneyType.AuthorisationRequest
       )
       when(mockAgentJourneyService.getJourney(any(), any()))
         .thenReturn(Future.successful(Some(testJourney)))
 
-      val result = testController.route(JourneyType.AgentCancelAuthorisation)(fakeRequest)
+      val result = testController.route(AgentJourneyType.AgentCancelAuthorisation)(fakeRequest)
 
       status(result) shouldBe SEE_OTHER
       redirectLocation(result).value shouldBe "http://localhost:9401/agent-services-account/home"
@@ -100,7 +100,7 @@ class GetAgentJourneyActionSpec extends AnyWordSpecLike with Matchers with Optio
       when(mockAgentJourneyService.getJourney(any(), any()))
         .thenReturn(Future.successful(None))
 
-      val result = testController.route(JourneyType.AuthorisationRequest)(fakeRequest)
+      val result = testController.route(AgentJourneyType.AuthorisationRequest)(fakeRequest)
 
       status(result) shouldBe SEE_OTHER
       redirectLocation(result).value shouldBe "http://localhost:9401/agent-services-account/home"

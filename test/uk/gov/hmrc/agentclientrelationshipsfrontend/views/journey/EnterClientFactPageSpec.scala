@@ -29,8 +29,8 @@ class EnterClientFactPageSpec extends ViewSpecSupport {
 
   val viewTemplate: EnterClientFactPage = app.injector.instanceOf[EnterClientFactPage]
 
-  private val authorisationRequestJourney: AgentJourney = AgentJourney(JourneyType.AuthorisationRequest)
-  private val agentCancelAuthorisationJourney: AgentJourney = AgentJourney(JourneyType.AgentCancelAuthorisation)
+  private val authorisationRequestJourney: AgentJourney = AgentJourney(AgentJourneyType.AuthorisationRequest)
+  private val agentCancelAuthorisationJourney: AgentJourney = AgentJourney(AgentJourneyType.AgentCancelAuthorisation)
 
   case class ExpectedStrings(authorisationTitle: String, cancelAuthorisationTitle: String)
 
@@ -80,7 +80,7 @@ class EnterClientFactPageSpec extends ViewSpecSupport {
           ),
           request
         )
-        val title = if j.journeyType == JourneyType.AuthorisationRequest then expectedStrings.authorisationTitle else expectedStrings.cancelAuthorisationTitle
+        val title = if j.journeyType == AgentJourneyType.AuthorisationRequest then expectedStrings.authorisationTitle else expectedStrings.cancelAuthorisationTitle
         val form = EnterClientFactForm.form(
           knownFactType.fieldConfiguration,
           service,

@@ -23,7 +23,7 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.AgentRoleFieldName
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.ClientDetailsResponse
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.SelectFromOptionsForm
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, AgentRoleChangeType, AgentJourney, JourneyExitType, JourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, AgentRoleChangeType, AgentJourney, JourneyExitType, AgentJourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{ClientServiceConfigurationService, AgentJourneyService}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.SelectAgentRolePage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
@@ -47,7 +47,7 @@ class SelectAgentRoleController @Inject()(mcc: MessagesControllerComponents,
     }
   }
 
-  def show(journeyType: JourneyType): Action[AnyContent] = actions.getAgentJourney(journeyType):
+  def show(journeyType: AgentJourneyType): Action[AnyContent] = actions.getAgentJourney(journeyType):
     journeyRequest =>
       given AgentJourneyRequest[?] = journeyRequest
       val journey = journeyRequest.journey
@@ -62,7 +62,7 @@ class SelectAgentRoleController @Inject()(mcc: MessagesControllerComponents,
       }
       
 
-  def onSubmit(journeyType: JourneyType): Action[AnyContent] = actions.getAgentJourney(journeyType).async:
+  def onSubmit(journeyType: AgentJourneyType): Action[AnyContent] = actions.getAgentJourney(journeyType).async:
     journeyRequest =>
       given AgentJourneyRequest[?] = journeyRequest
       val journey = journeyRequest.journey

@@ -22,7 +22,7 @@ import play.api.test.Helpers.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.connectors.AgentClientRelationshipsConnector
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientExitType
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.ClientJourney
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyType.ClientResponse
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.AgentJourneyType.ClientResponse
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{ClientJourneyService, ClientServiceConfigurationService}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.WiremockHelper.stubPost
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentSpecHelper}

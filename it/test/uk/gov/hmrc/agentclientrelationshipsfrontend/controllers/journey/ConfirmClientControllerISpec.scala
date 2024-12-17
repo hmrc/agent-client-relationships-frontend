@@ -18,7 +18,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey
 
 import play.api.http.Status.{BAD_REQUEST, OK}
 import play.api.test.Helpers.*
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, JourneyExitType, JourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, JourneyExitType, AgentJourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsResponse, ClientStatus, KnownFactType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.AgentJourneyService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentSpecHelper}
@@ -29,7 +29,7 @@ class ConfirmClientControllerISpec extends ComponentSpecHelper with AuthStubs {
   val testCgtRef: String = "XMCGTP123456789"
   val testPostcode: String = "AA11AA"
 
-  def noAuthJourney(journeyType: JourneyType): AgentJourney = AgentJourney(
+  def noAuthJourney(journeyType: AgentJourneyType): AgentJourney = AgentJourney(
     journeyType,
     Some("personal"),
     Some("HMRC-CGT-PD"),
@@ -38,7 +38,7 @@ class ConfirmClientControllerISpec extends ComponentSpecHelper with AuthStubs {
     Some(testPostcode)
   )
 
-  def noAuthJourneyWithSupportedRoles(journeyType: JourneyType): AgentJourney = AgentJourney(
+  def noAuthJourneyWithSupportedRoles(journeyType: AgentJourneyType): AgentJourney = AgentJourney(
     journeyType,
     Some("personal"),
     Some("HMRC-MTD-IT"),
@@ -47,7 +47,7 @@ class ConfirmClientControllerISpec extends ComponentSpecHelper with AuthStubs {
     Some(testPostcode)
   )
 
-  def alreadyAuthJourney(journeyType: JourneyType): AgentJourney = AgentJourney(
+  def alreadyAuthJourney(journeyType: AgentJourneyType): AgentJourney = AgentJourney(
     journeyType,
     Some("personal"),
     Some("HMRC-CGT-PD"),
@@ -57,7 +57,7 @@ class ConfirmClientControllerISpec extends ComponentSpecHelper with AuthStubs {
   )
 
   def existingPendingRequestJourney: AgentJourney = AgentJourney(
-    JourneyType.AuthorisationRequest,
+    AgentJourneyType.AuthorisationRequest,
     Some("personal"),
     Some("HMRC-CGT-PD"),
     Some(testCgtRef),
@@ -66,7 +66,7 @@ class ConfirmClientControllerISpec extends ComponentSpecHelper with AuthStubs {
   )
 
   def clientInsolventJourney: AgentJourney = AgentJourney(
-    JourneyType.AuthorisationRequest,
+    AgentJourneyType.AuthorisationRequest,
     Some("personal"),
     Some("HMRC-CGT-PD"),
     Some(testCgtRef),
@@ -75,7 +75,7 @@ class ConfirmClientControllerISpec extends ComponentSpecHelper with AuthStubs {
   )
 
   def clientStatusInvalidJourney: AgentJourney = AgentJourney(
-    JourneyType.AuthorisationRequest,
+    AgentJourneyType.AuthorisationRequest,
     Some("personal"),
     Some("HMRC-CGT-PD"),
     Some(testCgtRef),
@@ -93,12 +93,12 @@ class ConfirmClientControllerISpec extends ComponentSpecHelper with AuthStubs {
   "GET /authorisation-request/confirm-client" should {
     "redirect to enter client id when it is missing" in {
       authoriseAsAgent()
-      await(journeyService.saveJourney(AgentJourney(journeyType = JourneyType.AuthorisationRequest, clientType = Some("personal"), clientService = Some("HMRC-MTD-IT"))))
-      val result = get(routes.ConfirmClientController.show(JourneyType.AuthorisationRequest).url)
+      await(journeyService.saveJourney(AgentJourney(journeyType = AgentJourneyType.AuthorisationRequest, clientType = Some("personal"), clientService = Some("HMRC-MTD-IT"))))
+      val result = get(routes.ConfirmClientController.show(AgentJourneyType.AuthorisationRequest).url)
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe routes.EnterClientIdController.show(JourneyType.AuthorisationRequest).url
+      result.header("Location").value shouldBe routes.EnterClientIdController.show(AgentJourneyType.AuthorisationRequest).url
     }
-    List(noAuthJourney(JourneyType.AuthorisationRequest), noAuthJourney(JourneyType.AgentCancelAuthorisation))
+    List(noAuthJourney(AgentJourneyType.AuthorisationRequest), noAuthJourney(AgentJourneyType.AgentCancelAuthorisation))
       .foreach(j => s"display the confirm client page on ${j.journeyType.toString} journey" in {
         authoriseAsAgent()
         await(journeyService.saveJourney(j))
@@ -110,87 +110,87 @@ class ConfirmClientControllerISpec extends ComponentSpecHelper with AuthStubs {
   "POST /authorisation-request/confirm-client" should {
     "redirect to select agent role page when service has supported roles and client is confirmed" in {
       authoriseAsAgent()
-      await(journeyService.saveJourney(noAuthJourneyWithSupportedRoles(JourneyType.AuthorisationRequest)))
-      val result = post(routes.ConfirmClientController.onSubmit(JourneyType.AuthorisationRequest).url)(Map(
+      await(journeyService.saveJourney(noAuthJourneyWithSupportedRoles(AgentJourneyType.AuthorisationRequest)))
+      val result = post(routes.ConfirmClientController.onSubmit(AgentJourneyType.AuthorisationRequest).url)(Map(
         "confirmClient" -> Seq("true")
       ))
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe routes.SelectAgentRoleController.show(JourneyType.AuthorisationRequest).url
+      result.header("Location").value shouldBe routes.SelectAgentRoleController.show(AgentJourneyType.AuthorisationRequest).url
     }
     "redirect to check your answers after confirming client on authorisation-request journey" in {
       authoriseAsAgent()
-      await(journeyService.saveJourney(noAuthJourney(JourneyType.AuthorisationRequest)))
-      val result = post(routes.ConfirmClientController.onSubmit(JourneyType.AuthorisationRequest).url)(Map(
+      await(journeyService.saveJourney(noAuthJourney(AgentJourneyType.AuthorisationRequest)))
+      val result = post(routes.ConfirmClientController.onSubmit(AgentJourneyType.AuthorisationRequest).url)(Map(
         "confirmClient" -> Seq("true")
       ))
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe routes.CheckYourAnswersController.show(JourneyType.AuthorisationRequest).url
+      result.header("Location").value shouldBe routes.CheckYourAnswersController.show(AgentJourneyType.AuthorisationRequest).url
     }
 
     "redirect to authorisation-exists exit page when confirming client with existing authorisation" in {
       authoriseAsAgent()
-      await(journeyService.saveJourney(alreadyAuthJourney(JourneyType.AuthorisationRequest)))
-      val result = post(routes.ConfirmClientController.onSubmit(JourneyType.AuthorisationRequest).url)(Map(
+      await(journeyService.saveJourney(alreadyAuthJourney(AgentJourneyType.AuthorisationRequest)))
+      val result = post(routes.ConfirmClientController.onSubmit(AgentJourneyType.AuthorisationRequest).url)(Map(
         "confirmClient" -> Seq("true")
       ))
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe routes.JourneyExitController.show(JourneyType.AuthorisationRequest, JourneyExitType.AuthorisationAlreadyExists).url
+      result.header("Location").value shouldBe routes.JourneyExitController.show(AgentJourneyType.AuthorisationRequest, JourneyExitType.AuthorisationAlreadyExists).url
     }
 
     "redirect to check your answers page when confirming client to deAuth with existing authorisation" in {
       authoriseAsAgent()
-      await(journeyService.saveJourney(alreadyAuthJourney(JourneyType.AgentCancelAuthorisation)))
-      val result = post(routes.ConfirmClientController.onSubmit(JourneyType.AgentCancelAuthorisation).url)(Map(
+      await(journeyService.saveJourney(alreadyAuthJourney(AgentJourneyType.AgentCancelAuthorisation)))
+      val result = post(routes.ConfirmClientController.onSubmit(AgentJourneyType.AgentCancelAuthorisation).url)(Map(
         "confirmClient" -> Seq("true")
       ))
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe routes.CheckYourAnswersController.show(JourneyType.AgentCancelAuthorisation).url
+      result.header("Location").value shouldBe routes.CheckYourAnswersController.show(AgentJourneyType.AgentCancelAuthorisation).url
     }
 
     "redirect to not-authorised exist page when confirming client to deAuth with no existing authorisation" in {
       authoriseAsAgent()
-      await(journeyService.saveJourney(noAuthJourney(JourneyType.AgentCancelAuthorisation)))
-      val result = post(routes.ConfirmClientController.onSubmit(JourneyType.AgentCancelAuthorisation).url)(Map(
+      await(journeyService.saveJourney(noAuthJourney(AgentJourneyType.AgentCancelAuthorisation)))
+      val result = post(routes.ConfirmClientController.onSubmit(AgentJourneyType.AgentCancelAuthorisation).url)(Map(
         "confirmClient" -> Seq("true")
       ))
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe routes.JourneyExitController.show(JourneyType.AgentCancelAuthorisation, JourneyExitType.NoAuthorisationExists).url
+      result.header("Location").value shouldBe routes.JourneyExitController.show(AgentJourneyType.AgentCancelAuthorisation, JourneyExitType.NoAuthorisationExists).url
     }
 
     "redirect to client-insolvent page when client is insolvent" in {
       authoriseAsAgent()
       await(journeyService.saveJourney(clientInsolventJourney))
-      val result = post(routes.ConfirmClientController.onSubmit(JourneyType.AuthorisationRequest).url)(Map(
+      val result = post(routes.ConfirmClientController.onSubmit(AgentJourneyType.AuthorisationRequest).url)(Map(
         "confirmClient" -> Seq("true")
       ))
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe routes.JourneyExitController.show(JourneyType.AuthorisationRequest, JourneyExitType.ClientStatusInsolvent).url
+      result.header("Location").value shouldBe routes.JourneyExitController.show(AgentJourneyType.AuthorisationRequest, JourneyExitType.ClientStatusInsolvent).url
     }
 
     "redirect to client-status-invalid page when client status is invalid" in {
       authoriseAsAgent()
       await(journeyService.saveJourney(clientStatusInvalidJourney))
-      val result = post(routes.ConfirmClientController.onSubmit(JourneyType.AuthorisationRequest).url)(Map(
+      val result = post(routes.ConfirmClientController.onSubmit(AgentJourneyType.AuthorisationRequest).url)(Map(
         "confirmClient" -> Seq("true")
       ))
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe routes.JourneyExitController.show(JourneyType.AuthorisationRequest, JourneyExitType.ClientStatusInvalid).url
+      result.header("Location").value shouldBe routes.JourneyExitController.show(AgentJourneyType.AuthorisationRequest, JourneyExitType.ClientStatusInvalid).url
     }
 
     "redirect to start again when not confirming client" in {
       authoriseAsAgent()
-      await(journeyService.saveJourney(noAuthJourney(JourneyType.AgentCancelAuthorisation)))
-      val result = post(routes.ConfirmClientController.onSubmit(JourneyType.AgentCancelAuthorisation).url)(Map(
+      await(journeyService.saveJourney(noAuthJourney(AgentJourneyType.AgentCancelAuthorisation)))
+      val result = post(routes.ConfirmClientController.onSubmit(AgentJourneyType.AgentCancelAuthorisation).url)(Map(
         "confirmClient" -> Seq("false")
       ))
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe routes.StartJourneyController.startJourney(JourneyType.AgentCancelAuthorisation).url
+      result.header("Location").value shouldBe routes.StartJourneyController.startJourney(AgentJourneyType.AgentCancelAuthorisation).url
     }
 
     "show an error when no selection is made" in {
       authoriseAsAgent()
-      await(journeyService.saveJourney(noAuthJourney(JourneyType.AuthorisationRequest)))
-      val result = post(routes.ConfirmClientController.onSubmit(JourneyType.AuthorisationRequest).url)("")
+      await(journeyService.saveJourney(noAuthJourney(AgentJourneyType.AuthorisationRequest)))
+      val result = post(routes.ConfirmClientController.onSubmit(AgentJourneyType.AuthorisationRequest).url)("")
       result.status shouldBe BAD_REQUEST
     }
   }

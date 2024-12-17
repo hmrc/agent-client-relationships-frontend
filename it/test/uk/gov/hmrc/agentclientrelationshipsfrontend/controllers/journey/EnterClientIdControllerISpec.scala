@@ -19,7 +19,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey
 import play.api.http.Status.{BAD_REQUEST, OK}
 import play.api.libs.json.{JsObject, Json}
 import play.api.test.Helpers.*
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, JourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, AgentJourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.AgentJourneyService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.WiremockHelper.stubGet
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentSpecHelper}
@@ -60,12 +60,12 @@ class EnterClientIdControllerISpec extends ComponentSpecHelper with AuthStubs {
     case "HMRC-PILLAR2-ORG" => "PlrId"
   }
 
-  private val personalAuthorisationRequestJourney: AgentJourney = AgentJourney(journeyType = JourneyType.AuthorisationRequest, clientType = Some("personal"))
-  private val businessAuthorisationRequestJourney: AgentJourney = AgentJourney(journeyType = JourneyType.AuthorisationRequest, clientType = Some("business"))
-  private val trustAuthorisationRequestJourney: AgentJourney = AgentJourney(journeyType = JourneyType.AuthorisationRequest, clientType = Some("trust"))
-  private val personalAgentCancelAuthorisationJourney: AgentJourney = AgentJourney(JourneyType.AgentCancelAuthorisation, clientType = Some("personal"))
-  private val businessAgentCancelAuthorisationJourney: AgentJourney = AgentJourney(JourneyType.AgentCancelAuthorisation, clientType = Some("business"))
-  private val trustAgentCancelAuthorisationJourney: AgentJourney = AgentJourney(JourneyType.AgentCancelAuthorisation, clientType = Some("trust"))
+  private val personalAuthorisationRequestJourney: AgentJourney = AgentJourney(journeyType = AgentJourneyType.AuthorisationRequest, clientType = Some("personal"))
+  private val businessAuthorisationRequestJourney: AgentJourney = AgentJourney(journeyType = AgentJourneyType.AuthorisationRequest, clientType = Some("business"))
+  private val trustAuthorisationRequestJourney: AgentJourney = AgentJourney(journeyType = AgentJourneyType.AuthorisationRequest, clientType = Some("trust"))
+  private val personalAgentCancelAuthorisationJourney: AgentJourney = AgentJourney(AgentJourneyType.AgentCancelAuthorisation, clientType = Some("personal"))
+  private val businessAgentCancelAuthorisationJourney: AgentJourney = AgentJourney(AgentJourneyType.AgentCancelAuthorisation, clientType = Some("business"))
+  private val trustAgentCancelAuthorisationJourney: AgentJourney = AgentJourney(AgentJourneyType.AgentCancelAuthorisation, clientType = Some("trust"))
 
   private val optionsForPersonal: Seq[String] = Seq("HMRC-MTD-IT", "PERSONAL-INCOME-RECORD", "HMRC-MTD-VAT", "HMRC-CGT-PD", "HMRC-PPT-ORG")
   private val optionsForBusiness: Seq[String] = Seq("HMRC-MTD-VAT", "HMRC-PPT-ORG", "HMRC-CBC-ORG", "HMRC-PILLAR2-ORG")
@@ -114,22 +114,22 @@ class EnterClientIdControllerISpec extends ComponentSpecHelper with AuthStubs {
   "GET /authorisation-request/client-identifier" should {
     "redirect to ASA dashboard when no journey session present" in {
       authoriseAsAgent()
-      val result = get(routes.EnterClientIdController.show(JourneyType.AuthorisationRequest).url)
+      val result = get(routes.EnterClientIdController.show(AgentJourneyType.AuthorisationRequest).url)
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe "http://localhost:9401/agent-services-account/home"
     }
     "redirect to the journey start when no service present" in {
       authoriseAsAgent()
-      await(journeyService.saveJourney(AgentJourney(journeyType = JourneyType.AuthorisationRequest, clientType = Some("personal"))))
-      val result = get(routes.EnterClientIdController.show(JourneyType.AuthorisationRequest).url)
+      await(journeyService.saveJourney(AgentJourney(journeyType = AgentJourneyType.AuthorisationRequest, clientType = Some("personal"))))
+      val result = get(routes.EnterClientIdController.show(AgentJourneyType.AuthorisationRequest).url)
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe routes.SelectClientTypeController.show(JourneyType.AuthorisationRequest).url
+      result.header("Location").value shouldBe routes.SelectClientTypeController.show(AgentJourneyType.AuthorisationRequest).url
     }
     allClientTypeAuthJourneys.foreach(j =>
         allNonRefinableOptionsForClientType(j.getClientType).foreach(o => s"display the client identifier page for ${j.getClientType} $o" in {
       authoriseAsAgent()
       await(journeyService.saveJourney(j.copy(clientService = Some(o))))
-      val result = get(routes.EnterClientIdController.show(JourneyType.AuthorisationRequest).url)
+      val result = get(routes.EnterClientIdController.show(AgentJourneyType.AuthorisationRequest).url)
       result.status shouldBe OK
     }))
   }
@@ -141,18 +141,18 @@ class EnterClientIdControllerISpec extends ComponentSpecHelper with AuthStubs {
           authoriseAsAgent()
           stubGet(getClientDetailsUrl(o, exampleValueForService(o)), OK, testClientDetailsResponseJson.toString)
           await(journeyService.saveJourney(j.copy(clientService = Some(o))))
-          val result = post(routes.EnterClientIdController.onSubmit(JourneyType.AuthorisationRequest).url)(Map(
+          val result = post(routes.EnterClientIdController.onSubmit(AgentJourneyType.AuthorisationRequest).url)(Map(
             s"${getFieldName(o)}" -> Seq(exampleValueForService(o))
           ))
           result.status shouldBe SEE_OTHER
           val expectedLocation = if (o == "HMRC-TERS-ORG" | o == "HMRC-TERSNT-ORG") "routes.ConfirmClientController.show(journeyType).url"
-          else routes.EnterClientFactController.show(JourneyType.AuthorisationRequest).url
+          else routes.EnterClientFactController.show(AgentJourneyType.AuthorisationRequest).url
           result.header("Location").value shouldBe expectedLocation
         })))
     "show an error when no selection is made" in {
       authoriseAsAgent()
       await(journeyService.saveJourney(personalAuthorisationRequestJourney.copy(clientService = Some("HMRC-MTD-IT"))))
-      val result = post(routes.EnterClientIdController.onSubmit(JourneyType.AuthorisationRequest).url)("")
+      val result = post(routes.EnterClientIdController.onSubmit(AgentJourneyType.AuthorisationRequest).url)("")
       result.status shouldBe BAD_REQUEST
     }
   }
@@ -160,22 +160,22 @@ class EnterClientIdControllerISpec extends ComponentSpecHelper with AuthStubs {
   "GET /agent-cancel-authorisation/client-identifier" should {
     "redirect to ASA dashboard when no journey session present" in {
       authoriseAsAgent()
-      val result = get(routes.EnterClientIdController.show(JourneyType.AgentCancelAuthorisation).url)
+      val result = get(routes.EnterClientIdController.show(AgentJourneyType.AgentCancelAuthorisation).url)
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe "http://localhost:9401/agent-services-account/home"
     }
     "redirect to the journey start when no client type present" in {
       authoriseAsAgent()
-      await(journeyService.saveJourney(AgentJourney(journeyType = JourneyType.AgentCancelAuthorisation, clientType = None)))
-      val result = get(routes.EnterClientIdController.show(JourneyType.AgentCancelAuthorisation).url)
+      await(journeyService.saveJourney(AgentJourney(journeyType = AgentJourneyType.AgentCancelAuthorisation, clientType = None)))
+      val result = get(routes.EnterClientIdController.show(AgentJourneyType.AgentCancelAuthorisation).url)
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe routes.SelectClientTypeController.show(JourneyType.AgentCancelAuthorisation).url
+      result.header("Location").value shouldBe routes.SelectClientTypeController.show(AgentJourneyType.AgentCancelAuthorisation).url
     }
     allClientTypeDeAuthJourneys.foreach(j =>
       allNonRefinableOptionsForClientType(j.getClientType).foreach(o => s"display the the client identifier page for ${j.getClientType} $o" in {
       authoriseAsAgent()
       await(journeyService.saveJourney(j.copy(clientService = Some(o))))
-      val result = get(routes.EnterClientIdController.show(JourneyType.AgentCancelAuthorisation).url)
+      val result = get(routes.EnterClientIdController.show(AgentJourneyType.AgentCancelAuthorisation).url)
       result.status shouldBe OK
     }))
   }
@@ -187,18 +187,18 @@ class EnterClientIdControllerISpec extends ComponentSpecHelper with AuthStubs {
           authoriseAsAgent()
           stubGet(getClientDetailsUrl(o, exampleValueForService(o)), OK, testClientDetailsResponseJson.toString)
           await(journeyService.saveJourney(j.copy(clientService = Some(o))))
-          val result = post(routes.EnterClientIdController.onSubmit(JourneyType.AgentCancelAuthorisation).url)(Map(
+          val result = post(routes.EnterClientIdController.onSubmit(AgentJourneyType.AgentCancelAuthorisation).url)(Map(
             s"${getFieldName(o)}" -> Seq(exampleValueForService(o))
           ))
           result.status shouldBe SEE_OTHER
           val expectedLocation = if (o == "HMRC-TERS-ORG" | o == "HMRC-TERSNT-ORG") "routes.ConfirmClientController.show(journeyType).url"
-          else routes.EnterClientFactController.show(JourneyType.AgentCancelAuthorisation).url
+          else routes.EnterClientFactController.show(AgentJourneyType.AgentCancelAuthorisation).url
           result.header("Location").value shouldBe expectedLocation
         })))
     "show an error when no selection is made" in {
       authoriseAsAgent()
       await(journeyService.saveJourney(personalAgentCancelAuthorisationJourney.copy(clientService = Some("HMRC-MTD-IT"))))
-      val result = post(routes.EnterClientIdController.onSubmit(JourneyType.AgentCancelAuthorisation).url)("")
+      val result = post(routes.EnterClientIdController.onSubmit(AgentJourneyType.AgentCancelAuthorisation).url)("")
       result.status shouldBe BAD_REQUEST
     }
   }

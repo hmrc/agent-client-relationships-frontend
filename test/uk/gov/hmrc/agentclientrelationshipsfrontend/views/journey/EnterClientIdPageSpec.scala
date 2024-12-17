@@ -30,8 +30,8 @@ class EnterClientIdPageSpec extends ViewSpecSupport {
 
   val viewTemplate: EnterClientIdPage = app.injector.instanceOf[EnterClientIdPage]
 
-  private val authorisationRequestJourney: AgentJourney = AgentJourney(JourneyType.AuthorisationRequest)
-  private val agentCancelAuthorisationJourney: AgentJourney = AgentJourney(JourneyType.AgentCancelAuthorisation)
+  private val authorisationRequestJourney: AgentJourney = AgentJourney(AgentJourneyType.AuthorisationRequest)
+  private val agentCancelAuthorisationJourney: AgentJourney = AgentJourney(AgentJourneyType.AgentCancelAuthorisation)
 
   val ninoField: ClientDetailsConfiguration = ClientDetailsConfiguration(
     name = "nino",
@@ -206,7 +206,7 @@ class EnterClientIdPageSpec extends ViewSpecSupport {
       implicit val journeyRequest: AgentJourneyRequest[?] = new AgentJourneyRequest("", j, request)
 
       val serviceStrings: ServiceStrings = mapOfFieldConfiguration(field)._2
-      val title = if (j.journeyType == JourneyType.AuthorisationRequest) serviceStrings.authorisationRequestTitle else serviceStrings.cancelAuthorisationTitle
+      val title = if (j.journeyType == AgentJourneyType.AuthorisationRequest) serviceStrings.authorisationRequestTitle else serviceStrings.cancelAuthorisationTitle
 
       val form: Form[String] = EnterClientIdForm.form(mapOfFieldConfiguration(field)._1, j.journeyType.toString)
       val view: HtmlFormat.Appendable = viewTemplate(form, mapOfFieldConfiguration(field)._1)

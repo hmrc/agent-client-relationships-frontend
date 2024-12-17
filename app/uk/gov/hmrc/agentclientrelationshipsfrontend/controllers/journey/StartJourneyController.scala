@@ -19,7 +19,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey
 import play.api.i18n.I18nSupport
 import play.api.mvc.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.{Actions, AgentRequest}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyType
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.AgentJourneyType
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.AgentJourneyService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
@@ -33,7 +33,7 @@ class StartJourneyController @Inject()(mcc: MessagesControllerComponents,
                                       )(implicit val executionContext: ExecutionContext) extends FrontendController(mcc) with I18nSupport:
   
   
-  def startJourney(journeyType: JourneyType): Action[AnyContent] = actions.agentAuthenticate.async:
+  def startJourney(journeyType: AgentJourneyType): Action[AnyContent] = actions.agentAuthenticate.async:
     request =>
       given AgentRequest[?] = request
       

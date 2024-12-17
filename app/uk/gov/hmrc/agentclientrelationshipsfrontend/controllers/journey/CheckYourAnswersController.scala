@@ -22,7 +22,7 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.ConfirmCancellationFieldName
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.ConfirmCancellationForm
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, AgentJourney, JourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, AgentJourney, AgentJourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{AgentClientRelationshipsService, ClientServiceConfigurationService, AgentJourneyService}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.{CheckYourAnswersPage, ConfirmCancellationPage}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
@@ -41,7 +41,7 @@ class CheckYourAnswersController @Inject()(mcc: MessagesControllerComponents,
                                            actions: Actions
                                           )(implicit val executionContext: ExecutionContext, appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport:
 
-  def show(journeyType: JourneyType): Action[AnyContent] = actions.getAgentJourney(journeyType):
+  def show(journeyType: AgentJourneyType): Action[AnyContent] = actions.getAgentJourney(journeyType):
     journeyRequest =>
       given AgentJourneyRequest[?] = journeyRequest
 
@@ -50,18 +50,18 @@ class CheckYourAnswersController @Inject()(mcc: MessagesControllerComponents,
       else if journey.clientDetailsResponse.isEmpty then Redirect(routes.EnterClientIdController.show(journey.journeyType))
       else {
         journeyType match {
-          case JourneyType.AuthorisationRequest => Ok(checkYourAnswersPage(serviceConfig.supportsAgentRoles(journey.getService)))
-          case JourneyType.AgentCancelAuthorisation => Ok(confirmCancellationPage(ConfirmCancellationForm.form(ConfirmCancellationFieldName, journey.journeyType.toString)))
+          case AgentJourneyType.AuthorisationRequest => Ok(checkYourAnswersPage(serviceConfig.supportsAgentRoles(journey.getService)))
+          case AgentJourneyType.AgentCancelAuthorisation => Ok(confirmCancellationPage(ConfirmCancellationForm.form(ConfirmCancellationFieldName, journey.journeyType.toString)))
         }
       }
 
-  def onSubmit(journeyType: JourneyType): Action[AnyContent] = actions.getAgentJourney(journeyType).async:
+  def onSubmit(journeyType: AgentJourneyType): Action[AnyContent] = actions.getAgentJourney(journeyType).async:
     journeyRequest =>
       given AgentJourneyRequest[?] = journeyRequest
 
       val journey = journeyRequest.journey
       journeyType match {
-        case JourneyType.AuthorisationRequest => for {
+        case AgentJourneyType.AuthorisationRequest => for {
           invitationId <- agentClientRelationshipsService.createAuthorisationRequest(journey)
           _ <- journeyService.saveJourney(AgentJourney(
             journeyType = journey.journeyType,
@@ -69,7 +69,7 @@ class CheckYourAnswersController @Inject()(mcc: MessagesControllerComponents,
           ))
         } yield Redirect(routes.ConfirmationController.show(journey.journeyType))
 
-        case JourneyType.AgentCancelAuthorisation =>
+        case AgentJourneyType.AgentCancelAuthorisation =>
           ConfirmCancellationForm.form(ConfirmCancellationFieldName, journey.journeyType.toString)
             .bindFromRequest()
             .fold(

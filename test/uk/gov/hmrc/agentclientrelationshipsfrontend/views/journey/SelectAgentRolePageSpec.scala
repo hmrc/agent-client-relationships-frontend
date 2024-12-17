@@ -34,7 +34,7 @@ class SelectAgentRolePageSpec extends ViewSpecSupport {
   val testPostcode = "AA1 1AA"
   val mainRole = "HMRC-MTD-IT"
   val supportingRole = "HMRC-MTD-IT-SUPP"
-  val journeyType: JourneyType = JourneyType.AuthorisationRequest
+  val journeyType: AgentJourneyType = AgentJourneyType.AuthorisationRequest
 
   object Expected {
 

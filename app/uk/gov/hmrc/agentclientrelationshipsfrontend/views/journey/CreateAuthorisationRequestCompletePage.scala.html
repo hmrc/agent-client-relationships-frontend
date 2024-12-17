@@ -20,7 +20,7 @@
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.models.AuthorisationRequestInfo
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.DisplayDate
-@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyType
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.AgentJourneyType
 
 @this(
         layout: Layout,
@@ -68,7 +68,7 @@
     </ul>
 
     <p class="govuk-body">
-        <a href="@{routes.StartJourneyController.startJourney(JourneyType.AuthorisationRequest)}" class="govuk-link">@messages(s"$key.createAnother")</a>
+        <a href="@{routes.StartJourneyController.startJourney(AgentJourneyType.AuthorisationRequest)}" class="govuk-link">@messages(s"$key.createAnother")</a>
     </p>
 
     <p class="govuk-body">

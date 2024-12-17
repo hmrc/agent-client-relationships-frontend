@@ -21,7 +21,7 @@ import org.jsoup.nodes.Document
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientExitType.*
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyType.ClientResponse
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.AgentJourneyType.ClientResponse
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{ClientJourney, ClientJourneyRequest}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.support.ViewSpecSupport
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.client.ClientExitPage

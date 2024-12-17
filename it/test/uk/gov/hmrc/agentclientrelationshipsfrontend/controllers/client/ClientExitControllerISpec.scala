@@ -22,7 +22,7 @@ import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientExitType.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.ClientJourney
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyType.ClientResponse
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.AgentJourneyType.ClientResponse
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.ClientJourneyService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentSpecHelper}
 

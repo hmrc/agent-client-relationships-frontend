@@ -19,7 +19,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.connectors
 import play.api.libs.json.{JsObject, Json}
 import play.api.test.Helpers.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.invitationLink.ValidateLinkPartsResponse
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, AgentJourneyRequest, JourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, AgentJourneyRequest, AgentJourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsResponse, ClientStatus, KnownFactType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AgentClientRelationshipStub, ComponentSpecHelper}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.WiremockHelper.stubGet
@@ -61,7 +61,7 @@ class AgentClientRelationshipsConnectorISpec extends ComponentSpecHelper with Ag
 
   private val basicClientDetails = ClientDetailsResponse(testName, None, None, Seq(testPostCode), Some(KnownFactType.PostalCode), false, None)
   private val basicJourney: AgentJourney = AgentJourney(
-    journeyType = JourneyType.AgentCancelAuthorisation,
+    journeyType = AgentJourneyType.AgentCancelAuthorisation,
     clientType = Some("personal"),
     clientService = Some("HMRC-MTD-IT"),
     clientId = Some(testClientId),

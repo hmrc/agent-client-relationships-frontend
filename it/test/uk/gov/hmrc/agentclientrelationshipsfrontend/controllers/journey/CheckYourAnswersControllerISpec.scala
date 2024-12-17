@@ -18,7 +18,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey
 
 import play.api.libs.json.{JsObject, Json}
 import play.api.test.Helpers.*
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, JourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, AgentJourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsResponse, KnownFactType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.AgentJourneyService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.WiremockHelper.stubPost
@@ -40,7 +40,7 @@ class CheckYourAnswersControllerISpec extends ComponentSpecHelper with AuthStubs
 
   private val basicClientDetails = ClientDetailsResponse("Test Name", None, None, Seq(exampleKnownFact), Some(KnownFactType.PostalCode), false, None)
   private val basicJourney: AgentJourney = AgentJourney(
-    journeyType = JourneyType.AuthorisationRequest,
+    journeyType = AgentJourneyType.AuthorisationRequest,
     clientType = Some("personal"),
     clientService = Some("HMRC-MTD-IT"),
     clientId = Some(exampleClientId),
@@ -63,7 +63,7 @@ class CheckYourAnswersControllerISpec extends ComponentSpecHelper with AuthStubs
   )
 
   def existingAuthCancellationJourney(existingAuth: String): AgentJourney = basicJourney.copy(
-    journeyType = JourneyType.AgentCancelAuthorisation,
+    journeyType = AgentJourneyType.AgentCancelAuthorisation,
     clientService = Some(existingAuth),
     clientDetailsResponse = Some(basicClientDetails.copy(hasExistingRelationshipFor = Some(existingAuth)))
   )
@@ -91,16 +91,16 @@ class CheckYourAnswersControllerISpec extends ComponentSpecHelper with AuthStubs
   "GET /authorisation-request/confirm" should {
     "redirect to enter client id when client details are missing" in {
       authoriseAsAgent()
-      await(journeyService.saveJourney(AgentJourney(journeyType = JourneyType.AuthorisationRequest, clientType = Some("personal"), clientService = Some("HMRC-MTD-IT"))))
-      val result = get(routes.CheckYourAnswersController.show(JourneyType.AuthorisationRequest).url)
+      await(journeyService.saveJourney(AgentJourney(journeyType = AgentJourneyType.AuthorisationRequest, clientType = Some("personal"), clientService = Some("HMRC-MTD-IT"))))
+      val result = get(routes.CheckYourAnswersController.show(AgentJourneyType.AuthorisationRequest).url)
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe routes.EnterClientIdController.show(JourneyType.AuthorisationRequest).url
+      result.header("Location").value shouldBe routes.EnterClientIdController.show(AgentJourneyType.AuthorisationRequest).url
     }
     servicesWithSingleAgentRole
       .foreach(service => s"display the CYA page on authorisation request for $service journey" in {
         authoriseAsAgent()
         await(journeyService.saveJourney(singleAgentRequestJourney(service)))
-        val result = get(routes.CheckYourAnswersController.show(JourneyType.AuthorisationRequest).url)
+        val result = get(routes.CheckYourAnswersController.show(AgentJourneyType.AuthorisationRequest).url)
         result.status shouldBe OK
       })
     servicesWithAgentRoles
@@ -108,14 +108,14 @@ class CheckYourAnswersControllerISpec extends ComponentSpecHelper with AuthStubs
         .foreach(role => s"display the CYA page on authorisation request for $service journey when existing role is ${role.getOrElse("none")}" in {
         authoriseAsAgent()
         await(journeyService.saveJourney(agentRoleBasedRequestJourney(service, role)))
-        val result = get(routes.CheckYourAnswersController.show(JourneyType.AuthorisationRequest).url)
+        val result = get(routes.CheckYourAnswersController.show(AgentJourneyType.AuthorisationRequest).url)
         result.status shouldBe OK
       }))
     servicesWithSingleAgentRole
       .foreach(service => s"display the confirm cancellation page for $service journey" in {
         authoriseAsAgent()
         await(journeyService.saveJourney(existingAuthCancellationJourney(service)))
-        val result = get(routes.CheckYourAnswersController.show(JourneyType.AgentCancelAuthorisation).url)
+        val result = get(routes.CheckYourAnswersController.show(AgentJourneyType.AgentCancelAuthorisation).url)
         result.status shouldBe OK
       })
     servicesWithAgentRoles
@@ -123,7 +123,7 @@ class CheckYourAnswersControllerISpec extends ComponentSpecHelper with AuthStubs
         .foreach(role => s"display the confirm cancellation page for $service journey when existing role is $role" in {
         authoriseAsAgent()
         await(journeyService.saveJourney(existingAuthCancellationJourney(service)))
-        val result = get(routes.CheckYourAnswersController.show(JourneyType.AgentCancelAuthorisation).url)
+        val result = get(routes.CheckYourAnswersController.show(AgentJourneyType.AgentCancelAuthorisation).url)
         result.status shouldBe OK
       }))
   }
@@ -133,22 +133,22 @@ class CheckYourAnswersControllerISpec extends ComponentSpecHelper with AuthStubs
       authoriseAsAgent()
       await(journeyService.saveJourney(singleAgentRequestJourney(service)))
       stubPost(createAuthorisationRequestUrl, CREATED, testCreateAuthorisationRequestResponseJson.toString)
-      val result = post(routes.CheckYourAnswersController.onSubmit(JourneyType.AuthorisationRequest).url)(Map(
+      val result = post(routes.CheckYourAnswersController.onSubmit(AgentJourneyType.AuthorisationRequest).url)(Map(
         "confirmed" -> Seq("true")
       ))
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe routes.ConfirmationController.show(JourneyType.AuthorisationRequest).url
+      result.header("Location").value shouldBe routes.ConfirmationController.show(AgentJourneyType.AuthorisationRequest).url
     })
     servicesWithAgentRoles.foreach(service => existingAgentRoles.collect({ case Some(role) if role !== service => role }) // we don't test for None as it should not be possible
       .foreach(role => s"redirect to authorisation request created for $service page when confirmed with existing role as $role" in {
         authoriseAsAgent()
         stubPost(createAuthorisationRequestUrl, CREATED, testCreateAuthorisationRequestResponseJson.toString)
         await(journeyService.saveJourney(agentRoleBasedRequestJourney(service, Some(role))))
-        val result = post(routes.CheckYourAnswersController.onSubmit(JourneyType.AuthorisationRequest).url)(Map(
+        val result = post(routes.CheckYourAnswersController.onSubmit(AgentJourneyType.AuthorisationRequest).url)(Map(
           "confirmed" -> Seq("true")
         ))
         result.status shouldBe SEE_OTHER
-        result.header("Location").value shouldBe routes.ConfirmationController.show(JourneyType.AuthorisationRequest).url
+        result.header("Location").value shouldBe routes.ConfirmationController.show(AgentJourneyType.AuthorisationRequest).url
       }))
   }
   "POST /agent-cancel-authorisation/confirm" should {
@@ -156,37 +156,37 @@ class CheckYourAnswersControllerISpec extends ComponentSpecHelper with AuthStubs
       authoriseAsAgent()
       stubPost(cancelAuthorisationUrl, NO_CONTENT, "")
       await(journeyService.saveJourney(existingAuthCancellationJourney(service)))
-      val result = post(routes.CheckYourAnswersController.onSubmit(JourneyType.AgentCancelAuthorisation).url)(Map(
+      val result = post(routes.CheckYourAnswersController.onSubmit(AgentJourneyType.AgentCancelAuthorisation).url)(Map(
         "confirmCancellation" -> Seq("true")
       ))
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe routes.ConfirmationController.show(JourneyType.AgentCancelAuthorisation).url
+      result.header("Location").value shouldBe routes.ConfirmationController.show(AgentJourneyType.AgentCancelAuthorisation).url
     })
     servicesWithAgentRoles.foreach(service => s"redirect to authorisation cancelled for $service page when confirmed" in {
       authoriseAsAgent()
       stubPost(cancelAuthorisationUrl, NO_CONTENT, "")
       await(journeyService.saveJourney(existingAuthCancellationJourney(service)))
-      val result = post(routes.CheckYourAnswersController.onSubmit(JourneyType.AgentCancelAuthorisation).url)(Map(
+      val result = post(routes.CheckYourAnswersController.onSubmit(AgentJourneyType.AgentCancelAuthorisation).url)(Map(
         "confirmCancellation" -> Seq("true")
       ))
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe routes.ConfirmationController.show(JourneyType.AgentCancelAuthorisation).url
+      result.header("Location").value shouldBe routes.ConfirmationController.show(AgentJourneyType.AgentCancelAuthorisation).url
     })
 
     "redirect to start again when selecting not to confirm cancellation" in {
       authoriseAsAgent()
       await(journeyService.saveJourney(existingAuthCancellationJourney("HMRC-MTD-IT")))
-      val result = post(routes.CheckYourAnswersController.onSubmit(JourneyType.AgentCancelAuthorisation).url)(Map(
+      val result = post(routes.CheckYourAnswersController.onSubmit(AgentJourneyType.AgentCancelAuthorisation).url)(Map(
         "confirmCancellation" -> Seq("false")
       ))
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe routes.StartJourneyController.startJourney(JourneyType.AgentCancelAuthorisation).url
+      result.header("Location").value shouldBe routes.StartJourneyController.startJourney(AgentJourneyType.AgentCancelAuthorisation).url
     }
 
     "show an error when no selection to confirm cancellation is made" in {
       authoriseAsAgent()
       await(journeyService.saveJourney(existingAuthCancellationJourney("HMRC-MTD-IT")))
-      val result = post(routes.CheckYourAnswersController.onSubmit(JourneyType.AgentCancelAuthorisation).url)("")
+      val result = post(routes.CheckYourAnswersController.onSubmit(AgentJourneyType.AgentCancelAuthorisation).url)("")
       result.status shouldBe BAD_REQUEST
     }
   }

@@ -21,7 +21,7 @@ import org.jsoup.nodes.Document
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientType.personal
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ExistingMainAgent
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.client.ConfirmConsentForm
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyType.ClientResponse
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.AgentJourneyType.ClientResponse
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{ClientJourney, ClientJourneyRequest}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.support.ViewSpecSupport
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.client.ConfirmConsentPage

@@ -22,6 +22,9 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.connectors.AgentClientRelationshipsConnector
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.{Rejected, Accepted as ClientAccepted}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.ClientJourney
+import uk.gov.hmrc.agentclientrelationshipsfrontend.services.ClientJourneyService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.client.CheckYourAnswerPage
 
@@ -31,7 +34,8 @@ import scala.concurrent.{ExecutionContext, Future}
 class CheckYourAnswerController @Inject()(mcc: MessagesControllerComponents,
                                           actions: Actions,
                                           agentClientRelationshipsConnector: AgentClientRelationshipsConnector,
-                                          checkYourAnswerPage: CheckYourAnswerPage
+                                          checkYourAnswerPage: CheckYourAnswerPage,
+                                          journeyService: ClientJourneyService
                                          )
                                          (implicit ec: ExecutionContext,
                                           appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport:
@@ -39,19 +43,28 @@ class CheckYourAnswerController @Inject()(mcc: MessagesControllerComponents,
   def show: Action[AnyContent] = actions.clientAuthenticate:
     implicit request =>
       if request.journey.consent.isDefined then Ok(checkYourAnswerPage())
-      else BadRequest // TODO implement tailored page which gives some guidance to user
+      else Redirect(appConfig.acmExternalUrl)
 
   def submit: Action[AnyContent] = actions.clientAuthenticate.async:
     implicit request =>
-      val consentAnswer = request.journey.consent
-      val invitationId = request.journey.invitationId
+      val consentAnswer: Option[Boolean] = request.journey.consent
+      val invitationId: Option[String] = request.journey.invitationId
+
       (consentAnswer, invitationId) match {
-        case (Some(true), Some(invId)) =>
-          agentClientRelationshipsConnector.acceptAuthorisation(invId).map: _ =>
-            Redirect("routes.controllers.client.ConfirmationController.show") // TODO add controller reverse routing
-        case (Some(false), Some(invId)) =>
-          agentClientRelationshipsConnector.rejectAuthorisation(invId).map: _ =>
-            Redirect("routes.controllers.client.ConfirmationController.show") // TODO add controller reverse routing
+        case (Some(true), Some(invId: String)) => for {
+            _ <- agentClientRelationshipsConnector.acceptAuthorisation(invId)
+            _ <- journeyService.saveJourney(ClientJourney(
+              journeyType = request.journey.journeyType,
+              journeyComplete = Some(invId)
+            ))
+          } yield Redirect(routes.ConfirmationController.show)
+        case (Some(false), Some(invId)) => for {
+            _ <- agentClientRelationshipsConnector.rejectAuthorisation(invId)
+            _ <- journeyService.saveJourney(ClientJourney(
+              journeyType = request.journey.journeyType,
+              journeyComplete = Some(invId)
+            ))
+          } yield Redirect(routes.ConfirmationController.show)
         case _ =>
-          Future.successful(BadRequest) // TODO implement tailored page which gives some guidance to user
+          Future.successful(Redirect(appConfig.acmExternalUrl))
       }

@@ -27,7 +27,7 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.CheckYour
 class CheckYourAnswersPageSpec extends ViewSpecSupport {
 
   val viewTemplate: CheckYourAnswersPage = app.injector.instanceOf[CheckYourAnswersPage]
-  private val journeyType = JourneyType.AuthorisationRequest
+  private val journeyType = AgentJourneyType.AuthorisationRequest
   private val exampleClientId: String = "1234567890"
   private val exampleKnownFact: String = "AA11AA"
   private val clientName = "Test Name"
