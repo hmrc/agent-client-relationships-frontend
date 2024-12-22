@@ -126,7 +126,7 @@ class CheckYourAnswerPageSpec extends ViewSpecSupport {
               rows = List((
                 questionSummaryList(taxService),
                 choice,
-                s"/agent-client-relationships/authorisation-response/confirm-consent/$invitationId"
+                s"/agent-client-relationships/authorisation-response/confirm-consent"
               ))
             ))
           }
