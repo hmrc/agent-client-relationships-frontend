@@ -19,7 +19,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.services
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientType
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientType.{business, personal, trust}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.common.{ClientDetailsConfiguration, ServiceData}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{JourneyErrors, JourneyExitType, JourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{JourneyErrors, JourneyExitType, AgentJourneyType}
 
 import javax.inject.{Inject, Singleton}
 import scala.collection.immutable.ListMap
@@ -58,7 +58,7 @@ class ClientServiceConfigurationService @Inject() extends ServiceConstants {
     case _ => clientService
   } else ""
 
-  def getNotFoundError(journeyType: JourneyType, clientService: String): JourneyExitType = services(clientService).journeyErrors(journeyType).notFound
+  def getNotFoundError(journeyType: AgentJourneyType, clientService: String): JourneyExitType = services(clientService).journeyErrors(journeyType).notFound
 
   def supportsAgentRoles(clientService: String): Boolean =  services(clientService).supportedAgentRoles.size > 1
 
@@ -95,10 +95,10 @@ class ClientServiceConfigurationService @Inject() extends ServiceConstants {
         )
       ),
       journeyErrors = Map(
-        JourneyType.AuthorisationRequest -> JourneyErrors(
+        AgentJourneyType.AuthorisationRequest -> JourneyErrors(
           notFound = JourneyExitType.NotRegistered
         ),
-        JourneyType.AgentCancelAuthorisation -> JourneyErrors()
+        AgentJourneyType.AgentCancelAuthorisation -> JourneyErrors()
       )
     ),
     HMRCMTDITSUPP -> ServiceData(

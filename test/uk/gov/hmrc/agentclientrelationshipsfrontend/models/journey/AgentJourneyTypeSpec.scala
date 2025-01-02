@@ -23,14 +23,14 @@ import play.api.libs.json.{JsError, JsString, JsSuccess, Json}
 class AgentJourneyTypeSpec extends AnyWordSpecLike with Matchers {
 
   "JourneyType format" should {
-    JourneyType.values.foreach(value => s"write $value to a json string and read it back" in {
+    AgentJourneyType.values.foreach(value => s"write $value to a json string and read it back" in {
       val jsString = JsString(value.toString)
-      Json.toJson[JourneyType](value) shouldBe jsString
-      Json.fromJson[JourneyType](jsString) shouldBe JsSuccess(value)
+      Json.toJson[AgentJourneyType](value) shouldBe jsString
+      Json.fromJson[AgentJourneyType](jsString) shouldBe JsSuccess(value)
     })
 
     "fail to read an unknown value" in {
-      Json.fromJson[JourneyType](JsString("invalid")) shouldBe JsError("Invalid JourneyType")
+      Json.fromJson[AgentJourneyType](JsString("invalid")) shouldBe JsError("Invalid JourneyType")
     }
   }
 

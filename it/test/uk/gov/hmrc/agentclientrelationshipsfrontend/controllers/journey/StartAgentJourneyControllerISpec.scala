@@ -17,7 +17,7 @@
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey
 
 import play.api.test.Helpers.*
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyType
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.AgentJourneyType
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentSpecHelper}
 
 class StartAgentJourneyControllerISpec extends ComponentSpecHelper with AuthStubs {
@@ -25,18 +25,18 @@ class StartAgentJourneyControllerISpec extends ComponentSpecHelper with AuthStub
   "GET /authorisation-request/" should {
     "redirect to the select client type page" in {
       authoriseAsAgent()
-      val result = get(routes.StartJourneyController.startJourney(JourneyType.AuthorisationRequest).url)
+      val result = get(routes.StartJourneyController.startJourney(AgentJourneyType.AuthorisationRequest).url)
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe routes.SelectClientTypeController.show(JourneyType.AuthorisationRequest).url
+      result.header("Location").value shouldBe routes.SelectClientTypeController.show(AgentJourneyType.AuthorisationRequest).url
     }
   }
 
   "GET /agent-cancel-authorisation/" should {
     "redirect to the select client type page" in {
       authoriseAsAgent()
-      val result = get(routes.StartJourneyController.startJourney(JourneyType.AgentCancelAuthorisation).url)
+      val result = get(routes.StartJourneyController.startJourney(AgentJourneyType.AgentCancelAuthorisation).url)
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe routes.SelectClientTypeController.show(JourneyType.AgentCancelAuthorisation).url
+      result.header("Location").value shouldBe routes.SelectClientTypeController.show(AgentJourneyType.AgentCancelAuthorisation).url
     }
   }
 }

@@ -18,7 +18,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey
 
 import play.api.http.Status.{BAD_REQUEST, OK}
 import play.api.test.Helpers.*
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, JourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, AgentJourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.AgentJourneyService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentSpecHelper}
 
@@ -32,87 +32,87 @@ class ServiceRefinementControllerISpec extends ComponentSpecHelper with AuthStub
   }
 
   "GET /authorisation-request/refine-service" should {
-    val journey = AgentJourney(journeyType = JourneyType.AuthorisationRequest, clientType = Some("trust"), clientService = Some("HMRC-TERS-ORG"))
+    val journey = AgentJourney(journeyType = AgentJourneyType.AuthorisationRequest, clientType = Some("trust"), clientService = Some("HMRC-TERS-ORG"))
     "redirect to ASA dashboard when no journey session present" in {
       authoriseAsAgent()
-      val result = get(routes.ServiceRefinementController.show(JourneyType.AuthorisationRequest).url)
+      val result = get(routes.ServiceRefinementController.show(AgentJourneyType.AuthorisationRequest).url)
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe "http://localhost:9401/agent-services-account/home"
     }
     "redirect to the journey start when no service present" in {
       authoriseAsAgent()
       await(journeyService.saveJourney(journey.copy(clientService = None)))
-      val result = get(routes.ServiceRefinementController.show(JourneyType.AuthorisationRequest).url)
+      val result = get(routes.ServiceRefinementController.show(AgentJourneyType.AuthorisationRequest).url)
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe routes.SelectClientTypeController.show(JourneyType.AuthorisationRequest).url
+      result.header("Location").value shouldBe routes.SelectClientTypeController.show(AgentJourneyType.AuthorisationRequest).url
     }
     "display the refine service page" in {
       authoriseAsAgent()
       await(journeyService.saveJourney(journey))
-      val result = get(routes.ServiceRefinementController.show(JourneyType.AuthorisationRequest).url)
+      val result = get(routes.ServiceRefinementController.show(AgentJourneyType.AuthorisationRequest).url)
       result.status shouldBe OK
     }
   }
 
   "POST /authorisation-request/refine-service" should {
-    val journey = AgentJourney(journeyType = JourneyType.AuthorisationRequest, clientType = Some("trust"), clientService = Some("HMRC-TERS-ORG"))
+    val journey = AgentJourney(journeyType = AgentJourneyType.AuthorisationRequest, clientType = Some("trust"), clientService = Some("HMRC-TERS-ORG"))
     "redirect to the next page after storing answer" in {
       authoriseAsAgent()
       await(journeyService.saveJourney(journey))
-      val result = post(routes.ServiceRefinementController.onSubmit(JourneyType.AuthorisationRequest).url)(Map(
+      val result = post(routes.ServiceRefinementController.onSubmit(AgentJourneyType.AuthorisationRequest).url)(Map(
         "clientService" -> Seq("HMRC-TERSNT-ORG")
       ))
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe routes.EnterClientIdController.show(JourneyType.AuthorisationRequest).url
+      result.header("Location").value shouldBe routes.EnterClientIdController.show(AgentJourneyType.AuthorisationRequest).url
     }
 
     "show an error when no selection is made" in {
       authoriseAsAgent()
       await(journeyService.saveJourney(journey))
-      val result = post(routes.ServiceRefinementController.onSubmit(JourneyType.AuthorisationRequest).url)("")
+      val result = post(routes.ServiceRefinementController.onSubmit(AgentJourneyType.AuthorisationRequest).url)("")
       result.status shouldBe BAD_REQUEST
     }
   }
 
   "GET /agent-cancel-authorisation/refine-service" should {
-    val journey = AgentJourney(journeyType = JourneyType.AgentCancelAuthorisation, clientType = Some("trust"), clientService = Some("HMRC-TERS-ORG"))
+    val journey = AgentJourney(journeyType = AgentJourneyType.AgentCancelAuthorisation, clientType = Some("trust"), clientService = Some("HMRC-TERS-ORG"))
     "redirect to ASA dashboard when no journey session present" in {
       authoriseAsAgent()
-      val result = get(routes.ServiceRefinementController.show(JourneyType.AgentCancelAuthorisation).url)
+      val result = get(routes.ServiceRefinementController.show(AgentJourneyType.AgentCancelAuthorisation).url)
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe "http://localhost:9401/agent-services-account/home"
     }
     "redirect to the journey start when no service present" in {
       authoriseAsAgent()
       await(journeyService.saveJourney(journey.copy(clientService = None)))
-      val result = get(routes.ServiceRefinementController.show(JourneyType.AgentCancelAuthorisation).url)
+      val result = get(routes.ServiceRefinementController.show(AgentJourneyType.AgentCancelAuthorisation).url)
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe routes.SelectClientTypeController.show(JourneyType.AgentCancelAuthorisation).url
+      result.header("Location").value shouldBe routes.SelectClientTypeController.show(AgentJourneyType.AgentCancelAuthorisation).url
     }
     "display the refine service page" in {
       authoriseAsAgent()
       await(journeyService.saveJourney(journey))
-      val result = get(routes.ServiceRefinementController.show(JourneyType.AgentCancelAuthorisation).url)
+      val result = get(routes.ServiceRefinementController.show(AgentJourneyType.AgentCancelAuthorisation).url)
       result.status shouldBe OK
     }
   }
 
   "POST /agent-cancel-authorisation/refine-service" should {
-    val journey = AgentJourney(journeyType = JourneyType.AgentCancelAuthorisation, clientType = Some("trust"), clientService = Some("HMRC-TERS-ORG"))
+    val journey = AgentJourney(journeyType = AgentJourneyType.AgentCancelAuthorisation, clientType = Some("trust"), clientService = Some("HMRC-TERS-ORG"))
     "redirect to the enter client id page after storing answer" in {
       authoriseAsAgent()
       await(journeyService.saveJourney(journey))
-      val result = post(routes.ServiceRefinementController.onSubmit(JourneyType.AgentCancelAuthorisation).url)(Map(
+      val result = post(routes.ServiceRefinementController.onSubmit(AgentJourneyType.AgentCancelAuthorisation).url)(Map(
         "clientService" -> Seq("HMRC-TERS-ORG")
       ))
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe routes.EnterClientIdController.show(JourneyType.AgentCancelAuthorisation).url
+      result.header("Location").value shouldBe routes.EnterClientIdController.show(AgentJourneyType.AgentCancelAuthorisation).url
     }
 
     "show an error when no selection is made" in {
       authoriseAsAgent()
       await(journeyService.saveJourney(journey))
-      val result = post(routes.ServiceRefinementController.onSubmit(JourneyType.AgentCancelAuthorisation).url)("")
+      val result = post(routes.ServiceRefinementController.onSubmit(AgentJourneyType.AgentCancelAuthorisation).url)("")
       result.status shouldBe BAD_REQUEST
     }
   }

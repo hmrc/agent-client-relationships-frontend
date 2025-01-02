@@ -22,7 +22,6 @@ import play.api.test.Helpers.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.connectors.AgentClientRelationshipsConnector
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientExitType
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.ClientJourney
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyType.ClientResponse
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{ClientJourneyService, ClientServiceConfigurationService}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.WiremockHelper.stubPost
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentSpecHelper}
@@ -73,7 +72,7 @@ class ConsentInformationControllerISpec extends ComponentSpecHelper with ScalaFu
     
     "Redirect correctly to NotFound exit page" in {
       authoriseAsClientWithEnrolments("HMRC-MTD-IT")
-      await(journeyService.saveJourney(ClientJourney(journeyType = ClientResponse)))
+      await(journeyService.saveJourney(ClientJourney(journeyType = "authorisation-response")))
       stubPost(validateInvitationUrl, NOT_FOUND, "")
       val result = get(routes.ConsentInformationController.show(testUid,"income-tax").url)
       result.status shouldBe SEE_OTHER
@@ -81,7 +80,7 @@ class ConsentInformationControllerISpec extends ComponentSpecHelper with ScalaFu
 
     "Redirect correctly to agent suspended exit page" in {
       authoriseAsClientWithEnrolments("HMRC-MTD-IT")
-      await(journeyService.saveJourney(ClientJourney(journeyType = ClientResponse)))
+      await(journeyService.saveJourney(ClientJourney(journeyType = "authorisation-response")))
       stubPost(validateInvitationUrl, FORBIDDEN, "")
       val result = get(routes.ConsentInformationController.show(testUid, "income-tax").url)
       result.status shouldBe SEE_OTHER
@@ -91,14 +90,14 @@ class ConsentInformationControllerISpec extends ComponentSpecHelper with ScalaFu
     taxServices.keySet.foreach { taxService =>
       s"Display consent information page for $taxService" in {
         authoriseAsClientWithEnrolments(taxServices(taxService))
-        await(journeyService.saveJourney(ClientJourney(journeyType = ClientResponse)))
+        await(journeyService.saveJourney(ClientJourney(journeyType = "authorisation-response")))
         stubPost(validateInvitationUrl, OK, testValidateInvitationResponseJson(taxServices(taxService)).toString())
         val result = get(routes.ConsentInformationController.show(testUid, taxService).url)
         result.status shouldBe OK
       }
       s"Redirect correctly to expired exit page for $taxService" in {
         authoriseAsClientWithEnrolments(taxServices(taxService))
-        await(journeyService.saveJourney(ClientJourney(journeyType = ClientResponse)))
+        await(journeyService.saveJourney(ClientJourney(journeyType = "authorisation-response")))
         stubPost(validateInvitationUrl, OK, testValidateInvitationResponseJson(taxServices(taxService), "Expired").toString())
         val result = get(routes.ConsentInformationController.show(testUid, taxService).url)
         result.status shouldBe SEE_OTHER
@@ -106,7 +105,7 @@ class ConsentInformationControllerISpec extends ComponentSpecHelper with ScalaFu
       }
       s"Redirect correctly to cancelled exit page for $taxService" in {
         authoriseAsClientWithEnrolments(taxServices(taxService))
-        await(journeyService.saveJourney(ClientJourney(journeyType = ClientResponse)))
+        await(journeyService.saveJourney(ClientJourney(journeyType = "authorisation-response")))
         stubPost(validateInvitationUrl, OK, testValidateInvitationResponseJson(taxServices(taxService), "Cancelled").toString())
         val result = get(routes.ConsentInformationController.show(testUid, taxService).url)
         result.status shouldBe SEE_OTHER
@@ -114,7 +113,7 @@ class ConsentInformationControllerISpec extends ComponentSpecHelper with ScalaFu
       }
       s"Redirect correctly to already responded exit page for $taxService" in {
         authoriseAsClientWithEnrolments(taxServices(taxService))
-        await(journeyService.saveJourney(ClientJourney(journeyType = ClientResponse)))
+        await(journeyService.saveJourney(ClientJourney(journeyType = "authorisation-response")))
         stubPost(validateInvitationUrl, OK, testValidateInvitationResponseJson(taxServices(taxService), "Accepted").toString())
         val result = get(routes.ConsentInformationController.show(testUid, taxService).url)
         result.status shouldBe SEE_OTHER

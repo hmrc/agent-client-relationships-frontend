@@ -740,6 +740,44 @@ checkYourAnswer.acceptAndSend.button=Accept and send
 checkYourAnswer.change=Change
 
 # ________________________________________________________________________________
+# Client confirmation page
+# ________________________________________________________________________________
+
+clientConfirmation.accepted.h1=You have authorised {0}
+clientConfirmation.accepted.h2=What this means
+clientConfirmation.accepted.HMRC-MTD-IT.p1={0} is now your main agent for Making Tax Digital for Income Tax.
+clientConfirmation.accepted.HMRC-MTD-IT-SUPP.p1={0} is now your supporting agent for Making Tax Digital for Income Tax.
+clientConfirmation.accepted.PERSONAL-INCOME-RECORD.p1={0} is now your agent for Income Record Viewer.
+clientConfirmation.accepted.HMRC-MTD-VAT.p1={0} is now your agent for VAT.
+clientConfirmation.accepted.HMRC-CGT-PD.p1={0} is now your agent for Capital Gains Tax on UK property account.
+clientConfirmation.accepted.HMRC-PPT-ORG.p1={0} is now your agent for Plastic Packaging Tax.
+clientConfirmation.accepted.HMRC-CBC-ORG.p1={0} is now your agent for Country-by-country reporting.
+clientConfirmation.accepted.HMRC-CBC-NONUK-ORG.p1={0} is now your agent for Country-by-country reporting.
+clientConfirmation.accepted.HMRC-PILLAR2-ORG.p1={0} is now your agent for Pillar 2 Top-up Taxes.
+clientConfirmation.accepted.HMRC-TERS-ORG.p1={0} is now your agent for Trusts and Estates.
+clientConfirmation.accepted.HMRC-TERSNT-ORG.p1={0} is now your agent for Trusts and Estates.
+
+clientConfirmation.section2.h2=What you can do next
+clientConfirmation.section2.p1=Go to <a href={0} class="govuk-link">Manage who can deal with HMRC for you</a> to:
+clientConfirmation.section2.li1=view any agent requests you need to respond to
+clientConfirmation.section2.li2=check who’s currently allowed to deal with HMRC for you
+clientConfirmation.section2.li3=remove consent if you no longer want an agent to act for you
+clientConfirmation.section2.signOutLink=Finish and sign out
+
+clientConfirmation.rejected.h1=You declined a request from {0}
+clientConfirmation.rejected.HMRC-MTD-IT.p1=You have not given permission for {0} to manage your Making Tax Digital for Income Tax.
+clientConfirmation.rejected.HMRC-MTD-IT-SUPP.p1=You have not given permission for {0} to manage your Making Tax Digital for Income Tax.
+clientConfirmation.rejected.PERSONAL-INCOME-RECORD.p1=You have not given permission for {0} to view your personal income record.
+clientConfirmation.rejected.HMRC-MTD-VAT.p1=You have not given permission for {0} to manage your VAT.
+clientConfirmation.rejected.HMRC-CGT-PD.p1=You have not given permission for {0} to manage your Capital Gains Tax on UK property account.
+clientConfirmation.rejected.HMRC-PPT-ORG.p1=You have not given permission for {0} to manage your Plastic Packaging Tax.
+clientConfirmation.rejected.HMRC-CBC-ORG.p1=You have not given permission for {0} to manage your Country-by-country reporting.
+clientConfirmation.rejected.HMRC-CBC-NONUK-ORG.p1=You have not given permission for {0} to manage your Country-by-country reporting.
+clientConfirmation.rejected.HMRC-PILLAR2-ORG.p1=You have not given permission for {0} to manage your Pillar 2 Top-up Taxes.
+clientConfirmation.rejected.HMRC-TERS-ORG.p1=You have not given permission for {0} to manage a trust or an estate.
+clientConfirmation.rejected.HMRC-TERSNT-ORG.p1=You have not given permission for {0} to manage a trust or an estate.
+
+# ________________________________________________________________________________
 # Unauthorised exit partials
 # ________________________________________________________________________________
 unauthorisedExit.agent-suspended.header=You cannot appoint this tax agent

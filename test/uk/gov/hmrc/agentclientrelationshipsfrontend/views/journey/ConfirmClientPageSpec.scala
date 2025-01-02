@@ -32,11 +32,11 @@ class ConfirmClientPageSpec extends ViewSpecSupport {
   val viewTemplate: ConfirmClientPage = app.injector.instanceOf[ConfirmClientPage]
 
   private val authorisationRequestJourney: AgentJourney = AgentJourney(
-    JourneyType.AuthorisationRequest,
+    AgentJourneyType.AuthorisationRequest,
     clientDetailsResponse = Some(ClientDetailsResponse("TestName", None, None, Nil, None, false, None))
   )
   private val agentCancelAuthorisationJourney: AgentJourney = AgentJourney(
-    JourneyType.AgentCancelAuthorisation,
+    AgentJourneyType.AgentCancelAuthorisation,
     clientDetailsResponse = Some(ClientDetailsResponse("TestName", None, None, Nil, None, false, None))
   )
 
@@ -58,7 +58,7 @@ class ConfirmClientPageSpec extends ViewSpecSupport {
     s"Confirm client view for ${j.journeyType}" should {
       implicit val journeyRequest: AgentJourneyRequest[?] = new AgentJourneyRequest("", j, request)
 
-      val title = if(j.journeyType == JourneyType.AuthorisationRequest) Expected.authorisationTitle else
+      val title = if(j.journeyType == AgentJourneyType.AuthorisationRequest) Expected.authorisationTitle else
         Expected.deAuthorisationTitle
       val form: Form[Boolean] = ConfirmClientForm.form(ClientConfirmationFieldName, clientName, j.journeyType.toString)
       val view: HtmlFormat.Appendable = viewTemplate(form)
@@ -74,7 +74,7 @@ class ConfirmClientPageSpec extends ViewSpecSupport {
 
       "render input Radio form for confirm client page" in {
         doc.mainContent.extractRadios() shouldBe Some(TestRadioGroup(
-          legend = if(j.journeyType == JourneyType.AuthorisationRequest) Expected.authorisationLabel else
+          legend = if(j.journeyType == AgentJourneyType.AuthorisationRequest) Expected.authorisationLabel else
             Expected.deAuthorisationLabel,
           options = List((Expected.radioTrue, "true"), (Expected.radioFalse, "false")),
           hint = None
@@ -86,7 +86,7 @@ class ConfirmClientPageSpec extends ViewSpecSupport {
       }
 
       "render error for the correct journey" in {
-        val expectedError = if(j.journeyType == JourneyType.AuthorisationRequest) Expected.authorisationErrorRequired else
+        val expectedError = if(j.journeyType == AgentJourneyType.AuthorisationRequest) Expected.authorisationErrorRequired else
           Expected.deAuthorisationErrorRequired
         val formWithErrors = form.bind(Map.empty)
         val viewWithErrors: HtmlFormat.Appendable = viewTemplate(formWithErrors)

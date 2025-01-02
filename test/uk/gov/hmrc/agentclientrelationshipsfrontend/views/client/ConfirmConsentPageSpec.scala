@@ -21,7 +21,6 @@ import org.jsoup.nodes.Document
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientType.personal
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ExistingMainAgent
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.client.ConfirmConsentForm
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyType.ClientResponse
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{ClientJourney, ClientJourneyRequest}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.support.ViewSpecSupport
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.client.ConfirmConsentPage
@@ -44,7 +43,7 @@ class ConfirmConsentPageSpec extends ViewSpecSupport:
   val suppRoleServices: Seq[String] = Seq("HMRC-MTD-IT-SUPP")
 
   val baseJourneyModel: ClientJourney = ClientJourney(
-    ClientResponse,
+    "authorisation-response",
     invitationId = Some("ABC123"),
     agentName = Some(newAgentName),
     clientType = Some(personal)

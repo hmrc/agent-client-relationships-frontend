@@ -22,7 +22,7 @@ import play.api.libs.ws.JsonBodyWritables.*
 import play.api.http.Status.{FORBIDDEN, NOT_FOUND, NO_CONTENT, OK}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.invitationLink.ValidateLinkPartsResponse
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, AgentJourney}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, AgentJourneyRequest, ClientJourneyRequest}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.ClientServiceConfigurationService
 import uk.gov.hmrc.http.HttpReads.Implicits.*
@@ -71,6 +71,11 @@ class AgentClientRelationshipsConnector @Inject()(appConfig: AppConfig,
       .execute[Option[AuthorisationRequestInfo]]
   }
 
+  def getAuthorisationRequestForClient(invitationId: String)(implicit headerCarrier: HeaderCarrier, request: ClientJourneyRequest[?]): Future[Option[AuthorisationRequestInfoForClient]] = {
+    httpV2.get(url"$agentClientRelationshipsUrl/client/authorisation-request-info/$invitationId")
+      .execute[Option[AuthorisationRequestInfoForClient]]
+  }
+
   def getAgentDetails()(implicit hc: HeaderCarrier, request: AgentJourneyRequest[?]): Future[Option[AgentDetails]] = httpV2
     .get(url"$agentClientRelationshipsUrl/agent/${request.arn}/details")
     .execute[Option[AgentDetails]]
@@ -96,19 +101,19 @@ class AgentClientRelationshipsConnector @Inject()(appConfig: AppConfig,
         case OK => Right(response.json.as[ValidateLinkPartsResponse])
         case NOT_FOUND => Left("AGENT_NOT_FOUND") 
         case FORBIDDEN => Left("AGENT_SUSPENDED")
-        case status => throw new Exception(s"Unexpected status $status received when fetching invitation")
+        case status => throw new Exception(s"Unexpected status $status received when validating link")
       })
 
   def acceptAuthorisation(invitationId: String)(implicit hc: HeaderCarrier): Future[Unit] =
     val url = s"$agentClientRelationshipsUrl/authorisation-response/accept/$invitationId"
-    httpV2.post(url"$url").execute[HttpResponse].map(response => response.status match {
+    httpV2.put(url"$url").execute[HttpResponse].map(response => response.status match {
       case NO_CONTENT => ()
       case status => throw new Exception(s"Unexpected status $status received when accepting invitation")
     })
 
   def rejectAuthorisation(invitationId: String)(implicit hc: HeaderCarrier): Future[Unit] =
-    val url = s"$agentClientRelationshipsUrl/authorisation-response/reject/$invitationId"
-    httpV2.post(url"$url").execute[HttpResponse].map(response => response.status match {
+    val url = s"$agentClientRelationshipsUrl/client/authorisation-response/reject/$invitationId"
+    httpV2.put(url"$url").execute[HttpResponse].map(response => response.status match {
       case NO_CONTENT => ()
       case status => throw new Exception(s"Unexpected status $status received when rejecting invitation")
     })
@@ -125,7 +130,7 @@ class AgentClientRelationshipsConnector @Inject()(appConfig: AppConfig,
         case OK => Right(response.json.as[ValidateInvitationResponse])
         case FORBIDDEN => Left("AGENT_SUSPENDED")
         case NOT_FOUND => Left("INVITATION_OR_AGENT_RECORD_NOT_FOUND")
-        case _ => Left("SERVER_ERROR")
+        case status => throw new Exception(s"Unexpected status $status received when fetching invitation")
       }
       )
 

@@ -17,42 +17,6 @@ GET         /cannot-confirm-identity                                            
 GET         /iv-timed-out                                                               uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.AuthorisationController.ivTimedOut(continueUrl: Option[RedirectUrl] ?= None)
 GET         /iv-locked-out                                                              uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.AuthorisationController.ivLockedOut
 
-# Agent Journey URLs ----------------------------------------------------------------------------------------------------------
-GET        /:journeyType                                                                uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.StartJourneyController.startJourney(journeyType: JourneyType)
-
-GET        /:journeyType/client-type                                                    uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.SelectClientTypeController.show(journeyType: JourneyType)
-POST       /:journeyType/client-type                                                    uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.SelectClientTypeController.onSubmit(journeyType: JourneyType)
-
-GET        /:journeyType/select-service                                                 uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.SelectServiceController.show(journeyType: JourneyType)
-POST       /:journeyType/select-service                                                 uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.SelectServiceController.onSubmit(journeyType: JourneyType)
-
-GET        /:journeyType/refine-service                                                 uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.ServiceRefinementController.show(journeyType: JourneyType)
-POST       /:journeyType/refine-service                                                 uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.ServiceRefinementController.onSubmit(journeyType: JourneyType)
-
-GET        /:journeyType/client-identifier                                              uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.EnterClientIdController.show(journeyType: JourneyType)
-POST       /:journeyType/client-identifier                                              uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.EnterClientIdController.onSubmit(journeyType: JourneyType)
-
-GET        /:journeyType/client-fact                                                    uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.EnterClientFactController.show(journeyType: JourneyType)
-POST       /:journeyType/client-fact                                                    uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.EnterClientFactController.onSubmit(journeyType: JourneyType)
-
-GET        /:journeyType/confirm-client                                                 uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.ConfirmClientController.show(journeyType: JourneyType)
-POST       /:journeyType/confirm-client                                                 uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.ConfirmClientController.onSubmit(journeyType: JourneyType)
-
-GET        /:journeyType/agent-role                                                     uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.SelectAgentRoleController.show(journeyType: JourneyType)
-POST       /:journeyType/agent-role                                                     uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.SelectAgentRoleController.onSubmit(journeyType: JourneyType)
-
-GET        /:journeyType/confirm                                                        uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.CheckYourAnswersController.show(journeyType: JourneyType)
-POST       /:journeyType/confirm                                                        uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.CheckYourAnswersController.onSubmit(journeyType: JourneyType)
-
-GET        /:journeyType/confirmation                                                   uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.ConfirmationController.show(journeyType: JourneyType)
-
-GET        /:journeyType/exit/:exitType                                                 uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.JourneyExitController.show(journeyType: JourneyType, exitType: JourneyExitType)
-
-
-# Fast Track URLs ----------------------------------------------------------------------------------------------------------
-+ nocsrf
-POST        /agents/fast-track                                                          uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.AgentFastTrackController.agentFastTrack
-
 # Client Journey URLs ----------------------------------------------------------------------------------------------------------
 
 GET        /appoint-someone-to-deal-with-HMRC-for-you/:uid/:normalizedAgentName/:taxService             uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.StartController.show(uid: String, normalizedAgentName: String, taxService: String)
@@ -68,3 +32,41 @@ POST       /authorisation-response/confirm-consent                              
 
 GET        /authorisation-response/check-answer                                         uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.CheckYourAnswerController.show
 POST       /authorisation-response/check-answer                                         uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.CheckYourAnswerController.submit
+
+GET        /authorisation-response/confirmation                                         uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.ConfirmationController.show
+
+# Agent Journey URLs ----------------------------------------------------------------------------------------------------------
+GET        /:journeyType                                                                uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.StartJourneyController.startJourney(journeyType: AgentJourneyType)
+
+GET        /:journeyType/client-type                                                    uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.SelectClientTypeController.show(journeyType: AgentJourneyType)
+POST       /:journeyType/client-type                                                    uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.SelectClientTypeController.onSubmit(journeyType: AgentJourneyType)
+
+GET        /:journeyType/select-service                                                 uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.SelectServiceController.show(journeyType: AgentJourneyType)
+POST       /:journeyType/select-service                                                 uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.SelectServiceController.onSubmit(journeyType: AgentJourneyType)
+
+GET        /:journeyType/refine-service                                                 uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.ServiceRefinementController.show(journeyType: AgentJourneyType)
+POST       /:journeyType/refine-service                                                 uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.ServiceRefinementController.onSubmit(journeyType: AgentJourneyType)
+
+GET        /:journeyType/client-identifier                                              uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.EnterClientIdController.show(journeyType: AgentJourneyType)
+POST       /:journeyType/client-identifier                                              uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.EnterClientIdController.onSubmit(journeyType: AgentJourneyType)
+
+GET        /:journeyType/client-fact                                                    uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.EnterClientFactController.show(journeyType: AgentJourneyType)
+POST       /:journeyType/client-fact                                                    uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.EnterClientFactController.onSubmit(journeyType: AgentJourneyType)
+
+GET        /:journeyType/confirm-client                                                 uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.ConfirmClientController.show(journeyType: AgentJourneyType)
+POST       /:journeyType/confirm-client                                                 uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.ConfirmClientController.onSubmit(journeyType: AgentJourneyType)
+
+GET        /:journeyType/agent-role                                                     uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.SelectAgentRoleController.show(journeyType: AgentJourneyType)
+POST       /:journeyType/agent-role                                                     uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.SelectAgentRoleController.onSubmit(journeyType: AgentJourneyType)
+
+GET        /:journeyType/confirm                                                        uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.CheckYourAnswersController.show(journeyType: AgentJourneyType)
+POST       /:journeyType/confirm                                                        uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.CheckYourAnswersController.onSubmit(journeyType: AgentJourneyType)
+
+GET        /:journeyType/confirmation                                                   uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.ConfirmationController.show(journeyType: AgentJourneyType)
+
+GET        /:journeyType/exit/:exitType                                                 uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.JourneyExitController.show(journeyType: AgentJourneyType, exitType: JourneyExitType)
+
+
+# Fast Track URLs ----------------------------------------------------------------------------------------------------------
++ nocsrf
+POST        /agents/fast-track                                                          uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.AgentFastTrackController.agentFastTrack

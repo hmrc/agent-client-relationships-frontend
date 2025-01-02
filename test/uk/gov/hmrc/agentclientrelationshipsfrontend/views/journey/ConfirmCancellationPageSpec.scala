@@ -30,7 +30,7 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.ConfirmCa
 class ConfirmCancellationPageSpec extends ViewSpecSupport {
 
   val viewTemplate: ConfirmCancellationPage = app.injector.instanceOf[ConfirmCancellationPage]
-  private val journeyType = JourneyType.AgentCancelAuthorisation
+  private val journeyType = AgentJourneyType.AgentCancelAuthorisation
   val exampleClientId: String = "1234567890"
   val exampleKnownFact: String = "AA11AA"
   val clientName = "Test Name"
