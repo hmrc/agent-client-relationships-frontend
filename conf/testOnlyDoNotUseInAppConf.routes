@@ -10,6 +10,6 @@
 # Failing to follow this rule may result in test routes deployed in production.
 
 # Add all the application routes to the prod.routes file
+GET        /agent-client-relationships/test-only/asa-dashboard   uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.testOnly.TestOnlyController.fakeDashboard
+GET        /agent-client-relationships/test-only/fast-track      uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.testOnly.TestOnlyController.getFastTrackForm()
 ->         /                          prod.Routes
-GET        /test-only/asa-dashboard   uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.testOnly.TestOnlyController.fakeDashboard
-GET        /test-only/fast-track      uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.testOnly.TestOnlyController.getFastTrackForm()
