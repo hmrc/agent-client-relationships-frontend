@@ -119,7 +119,7 @@ class AuthActionsSpec extends AnyWordSpecLike with Matchers with OptionValues wi
       val result = controller.agentAuth()(fakeRequest)
 
       status(result) shouldBe SEE_OTHER
-      redirectLocation(result).value should startWith("http://localhost:9553/bas-gateway/sign-in")
+      redirectLocation(result).value should startWith("http://localhost:9099/bas-gateway/sign-in")
     }
     "redirect an agent without the AS enrolment to the subscription url" in {
       val controller = failingControllerSetup(InsufficientEnrolments(""))
@@ -213,7 +213,7 @@ class AuthActionsSpec extends AnyWordSpecLike with Matchers with OptionValues wi
       val result = controller.clientAuthWithEnrolmentCheck(incomeTax)(fakeRequest)
 
       status(result) shouldBe SEE_OTHER
-      redirectLocation(result).value should startWith("http://localhost:9553/bas-gateway/sign-in")
+      redirectLocation(result).value should startWith("http://localhost:9099/bas-gateway/sign-in")
     }
     "block a client without required enrolments (can't happen in theory)" in {
       val controller = failingControllerSetup(InsufficientEnrolments(""))
@@ -278,7 +278,7 @@ class AuthActionsSpec extends AnyWordSpecLike with Matchers with OptionValues wi
       val controller = failingControllerSetup(BearerTokenExpired(""))
       val result = controller.clientAuth()(fakeRequest)
       status(result) shouldBe SEE_OTHER
-      redirectLocation(result).value should startWith("http://localhost:9553/bas-gateway/sign-in")
+      redirectLocation(result).value should startWith("http://localhost:9099/bas-gateway/sign-in")
 
     "block a client without required enrolments (can't happen in theory)" in:
       val controller = failingControllerSetup(InsufficientEnrolments(""))
