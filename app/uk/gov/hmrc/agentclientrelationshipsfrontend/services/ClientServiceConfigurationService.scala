@@ -48,7 +48,7 @@ class ClientServiceConfigurationService @Inject() extends ServiceConstants {
 
   def firstClientDetailsFieldFor(clientService: String): ClientDetailsConfiguration = services(clientService).clientDetails.head
 
-  def requiresRefining(clientService: String): Boolean = services(clientService).supportedEnrolments.size > 1
+  def requiresRefining(clientService: String): Boolean = services(clientService).supportedEnrolments.size > 1 && services(clientService).overseasServiceName.isEmpty
 
   def getSupportedEnrolments(clientService: String): Seq[String] = services(clientService).supportedEnrolments
   
@@ -211,8 +211,27 @@ class ClientServiceConfigurationService @Inject() extends ServiceConstants {
     ),
     HMRCCBCORG -> ServiceData(
       serviceName = HMRCCBCORG,
-      urlPart = Map(countryByCountryReporting -> Set(HMRCCBCORG)),
+      overseasServiceName = Some(HMRCCBCNONUKORG),
+      supportedEnrolments = Seq(HMRCCBCORG, HMRCCBCNONUKORG), // parent service is always head of the list
+      urlPart = Map(countryByCountryReporting -> Set(HMRCCBCORG, HMRCCBCNONUKORG)),
       serviceOption = true,
+      clientTypes = Set(business, trust),
+      clientDetails = Seq(
+        ClientDetailsConfiguration(
+          name = "cbcId",
+          regex = "^X[A-Z]CBC[0-9]{10}$",
+          inputType = "text",
+          width = 20,
+          clientIdType = "cbcId"
+        )
+      )
+    ),
+    HMRCCBCNONUKORG -> ServiceData(
+      serviceName = HMRCCBCNONUKORG,
+      overseasServiceName = Some(HMRCCBCNONUKORG),
+      supportedEnrolments = Seq(HMRCCBCORG, HMRCCBCNONUKORG), // parent service is always head of the list
+      urlPart = Map(countryByCountryReporting -> Set(HMRCCBCORG, HMRCCBCNONUKORG)),
+      serviceOption = false,
       clientTypes = Set(business, trust),
       clientDetails = Seq(
         ClientDetailsConfiguration(

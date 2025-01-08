@@ -69,7 +69,7 @@
         case HMRCTERSORG | HMRCTERSNTORG  => simpleTerms(HMRCTERSORG, 2)
         case HMRCCGTPD                    => complexTerms(s"$HMRCCGTPD.$clientType", 4, 5)
         case HMRCPPTORG                   => simpleTerms(HMRCPPTORG, 8)
-        case HMRCCBCORG                   => simpleTerms(HMRCCBCORG, 11)
+        case HMRCCBCORG | HMRCCBCNONUKORG => simpleTerms(HMRCCBCORG, 11)
         case HMRCPILLAR2ORG               => simpleTerms(HMRCPILLAR2ORG, 6)
     }
 }

@@ -39,7 +39,7 @@ class AgentJourneyService @Inject()(val journeyRepository: JourneyRepository,
 
   def nextPageUrl(journeyType: AgentJourneyType)(implicit request: Request[Any]): Future[String] = {
     for {
-      journey <- getJourney()
+      journey <- getJourney
     } yield journey match {
       case Some(journey) if journey.journeyType != journeyType => routes.StartJourneyController.startJourney(journeyType).url
       case Some(journey) if journey.journeyComplete.nonEmpty => appConfig.agentServicesAccountHomeUrl
