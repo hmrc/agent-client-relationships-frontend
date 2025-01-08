@@ -19,6 +19,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey
 import play.api.http.Status.{BAD_REQUEST, OK}
 import play.api.libs.json.{JsObject, Json}
 import play.api.test.Helpers.*
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsResponse, KnownFactType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, AgentJourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.AgentJourneyService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.WiremockHelper.stubGet
@@ -30,13 +31,35 @@ class EnterClientIdControllerISpec extends ComponentSpecHelper with AuthStubs {
 
   def getClientDetailsUrl(service: String, clientId: String) = s"/agent-client-relationships/client/$service/details/$clientId"
 
-  val testClientDetailsResponseJson: JsObject = Json.obj(
+  def testClientDetailsResponseJson(isTrust: Boolean): JsObject = if isTrust then Json.obj(
     "name" -> "anything",
-    "status" -> "Insolvent",
+    "isOverseas" -> false,
+    "knownFacts" -> Json.arr(),
+    "hasPendingInvitation" -> false
+  ) else Json.obj(
+    "name" -> "anything",
     "isOverseas" -> false,
     "knownFacts" -> Json.arr("anything"),
     "knownFactType" -> "PostalCode",
     "hasPendingInvitation" -> false
+  )
+
+  val testOverseasClientDetailsResponseJson: JsObject = Json.obj(
+    "name" -> "anything",
+    "isOverseas" -> true,
+    "knownFacts" -> Json.arr("anything"),
+    "knownFactType" -> "Email",
+    "hasPendingInvitation" -> false
+  )
+
+  val testOverseasClientDetailsResponse: ClientDetailsResponse = ClientDetailsResponse(
+    name = "anything",
+    status = None,
+    isOverseas = Some(true),
+    knownFacts = Seq("anything"),
+    knownFactType = Some(KnownFactType.Email),
+    hasPendingInvitation = false,
+    hasExistingRelationshipFor = None
   )
 
   val exampleNino: String = "AB123456C"
@@ -62,23 +85,19 @@ class EnterClientIdControllerISpec extends ComponentSpecHelper with AuthStubs {
 
   private val personalAuthorisationRequestJourney: AgentJourney = AgentJourney(journeyType = AgentJourneyType.AuthorisationRequest, clientType = Some("personal"))
   private val businessAuthorisationRequestJourney: AgentJourney = AgentJourney(journeyType = AgentJourneyType.AuthorisationRequest, clientType = Some("business"))
-  private val trustAuthorisationRequestJourney: AgentJourney = AgentJourney(journeyType = AgentJourneyType.AuthorisationRequest, clientType = Some("trust"))
+  private val trustAuthorisationRequestJourney: AgentJourney = AgentJourney(journeyType = AgentJourneyType.AuthorisationRequest, clientType = Some("trust"), refinedService = Some(true))
   private val personalAgentCancelAuthorisationJourney: AgentJourney = AgentJourney(AgentJourneyType.AgentCancelAuthorisation, clientType = Some("personal"))
   private val businessAgentCancelAuthorisationJourney: AgentJourney = AgentJourney(AgentJourneyType.AgentCancelAuthorisation, clientType = Some("business"))
-  private val trustAgentCancelAuthorisationJourney: AgentJourney = AgentJourney(AgentJourneyType.AgentCancelAuthorisation, clientType = Some("trust"))
+  private val trustAgentCancelAuthorisationJourney: AgentJourney = AgentJourney(AgentJourneyType.AgentCancelAuthorisation, clientType = Some("trust"), refinedService = Some(true))
 
   private val optionsForPersonal: Seq[String] = Seq("HMRC-MTD-IT", "PERSONAL-INCOME-RECORD", "HMRC-MTD-VAT", "HMRC-CGT-PD", "HMRC-PPT-ORG")
   private val optionsForBusiness: Seq[String] = Seq("HMRC-MTD-VAT", "HMRC-PPT-ORG", "HMRC-CBC-ORG", "HMRC-PILLAR2-ORG")
-  private val optionsForTrust: Seq[String] = Seq("HMRC-PPT-ORG", "HMRC-CGT-PD", "HMRC-CBC-ORG", "HMRC-PILLAR2-ORG")
+  private val optionsForTrust: Seq[String] = Seq("HMRC-PPT-ORG", "HMRC-TERS-ORG", "HMRC-TERSNT-ORG", "HMRC-CGT-PD", "HMRC-CBC-ORG", "HMRC-PILLAR2-ORG")
 
-  private val allNonRefinableOptionsForClientType = Map(
+  private val allOptionsForClientType = Map(
     "personal" -> optionsForPersonal,
     "business" -> optionsForBusiness,
     "trust" -> optionsForTrust
-  )
-
-  private val allRefinableOptionsForClientType = Map(
-    "trust" -> Seq("HMRC-TERS-ORG")
   )
 
   private def exampleValueForService(service: String): String = service match {
@@ -126,29 +145,47 @@ class EnterClientIdControllerISpec extends ComponentSpecHelper with AuthStubs {
       result.header("Location").value shouldBe routes.SelectClientTypeController.show(AgentJourneyType.AuthorisationRequest).url
     }
     allClientTypeAuthJourneys.foreach(j =>
-        allNonRefinableOptionsForClientType(j.getClientType).foreach(o => s"display the client identifier page for ${j.getClientType} $o" in {
-      authoriseAsAgent()
-      await(journeyService.saveJourney(j.copy(clientService = Some(o))))
-      val result = get(routes.EnterClientIdController.show(AgentJourneyType.AuthorisationRequest).url)
-      result.status shouldBe OK
-    }))
+      allOptionsForClientType(j.getClientType).foreach(o => s"display the client identifier page for ${j.getClientType} $o" in {
+        authoriseAsAgent()
+        await(journeyService.saveJourney(j.copy(clientService = Some(o))))
+        val result = get(routes.EnterClientIdController.show(AgentJourneyType.AuthorisationRequest).url)
+        result.status shouldBe OK
+      }))
   }
 
   "POST /authorisation-request/client-identifier" should {
     allClientTypeAuthJourneys.foreach(j =>
-      allNonRefinableOptionsForClientType.get(j.getClientType).map(allOptions =>
+      allOptionsForClientType.get(j.getClientType).map(allOptions =>
         allOptions.foreach(o => s"redirect to the next page after storing answer of ${exampleValueForService(o)} for ${j.getClientType} $o" in {
           authoriseAsAgent()
-          stubGet(getClientDetailsUrl(o, exampleValueForService(o)), OK, testClientDetailsResponseJson.toString)
-          await(journeyService.saveJourney(j.copy(clientService = Some(o))))
+          stubGet(getClientDetailsUrl(o, exampleValueForService(o)), OK, testClientDetailsResponseJson(o == "HMRC-TERS-ORG" | o == "HMRC-TERSNT-ORG").toString)
+          await(journeyService.saveJourney(j.copy(clientService = Some(o), refinedService = Some(true))))
           val result = post(routes.EnterClientIdController.onSubmit(AgentJourneyType.AuthorisationRequest).url)(Map(
             s"${getFieldName(o)}" -> Seq(exampleValueForService(o))
           ))
           result.status shouldBe SEE_OTHER
-          val expectedLocation = if (o == "HMRC-TERS-ORG" | o == "HMRC-TERSNT-ORG") "routes.ConfirmClientController.show(journeyType).url"
+          val expectedLocation = if o == "HMRC-TERS-ORG" | o == "HMRC-TERSNT-ORG"
+          then routes.ConfirmClientController.show(AgentJourneyType.AuthorisationRequest).url
           else routes.EnterClientFactController.show(AgentJourneyType.AuthorisationRequest).url
           result.header("Location").value shouldBe expectedLocation
         })))
+    "refine service name to use overseas service name if supported and client is overseas" in {
+      authoriseAsAgent()
+      stubGet(getClientDetailsUrl("HMRC-CBC-ORG", exampleCbcId), OK, testOverseasClientDetailsResponseJson.toString)
+      await(journeyService.saveJourney(businessAuthorisationRequestJourney.copy(clientService = Some("HMRC-CBC-ORG"))))
+      val result = post(routes.EnterClientIdController.onSubmit(AgentJourneyType.AuthorisationRequest).url)(Map(
+        "cbcId" -> Seq(exampleCbcId)
+      ))
+      result.status shouldBe SEE_OTHER
+      result.header("Location").value shouldBe routes.EnterClientFactController.show(AgentJourneyType.AuthorisationRequest).url
+      val expectedJourneyWithOverseasServiceName = businessAuthorisationRequestJourney.copy(
+        clientId = Some(exampleCbcId),
+        clientService = Some("HMRC-CBC-NONUK-ORG"),
+        clientDetailsResponse = Some(testOverseasClientDetailsResponse)
+      )
+      val updatedJourney = await(journeyService.getJourney)
+      updatedJourney shouldBe Some(expectedJourneyWithOverseasServiceName)
+    }
     "show an error when no selection is made" in {
       authoriseAsAgent()
       await(journeyService.saveJourney(personalAuthorisationRequestJourney.copy(clientService = Some("HMRC-MTD-IT"))))
@@ -172,26 +209,27 @@ class EnterClientIdControllerISpec extends ComponentSpecHelper with AuthStubs {
       result.header("Location").value shouldBe routes.SelectClientTypeController.show(AgentJourneyType.AgentCancelAuthorisation).url
     }
     allClientTypeDeAuthJourneys.foreach(j =>
-      allNonRefinableOptionsForClientType(j.getClientType).foreach(o => s"display the the client identifier page for ${j.getClientType} $o" in {
-      authoriseAsAgent()
-      await(journeyService.saveJourney(j.copy(clientService = Some(o))))
-      val result = get(routes.EnterClientIdController.show(AgentJourneyType.AgentCancelAuthorisation).url)
-      result.status shouldBe OK
-    }))
+      allOptionsForClientType(j.getClientType).foreach(o => s"display the the client identifier page for ${j.getClientType} $o" in {
+        authoriseAsAgent()
+        await(journeyService.saveJourney(j.copy(clientService = Some(o))))
+        val result = get(routes.EnterClientIdController.show(AgentJourneyType.AgentCancelAuthorisation).url)
+        result.status shouldBe OK
+      }))
   }
 
   "POST /agent-cancel-authorisation/client-identifier" should {
     allClientTypeDeAuthJourneys.foreach(j =>
-      allNonRefinableOptionsForClientType.get(j.getClientType).map(allOptions =>
+      allOptionsForClientType.get(j.getClientType).map(allOptions =>
         allOptions.foreach(o => s"redirect to the next page after storing answer of ${exampleValueForService(o)} for ${j.getClientType} $o" in {
           authoriseAsAgent()
-          stubGet(getClientDetailsUrl(o, exampleValueForService(o)), OK, testClientDetailsResponseJson.toString)
+          stubGet(getClientDetailsUrl(o, exampleValueForService(o)), OK, testClientDetailsResponseJson(o == "HMRC-TERS-ORG" | o == "HMRC-TERSNT-ORG").toString)
           await(journeyService.saveJourney(j.copy(clientService = Some(o))))
           val result = post(routes.EnterClientIdController.onSubmit(AgentJourneyType.AgentCancelAuthorisation).url)(Map(
             s"${getFieldName(o)}" -> Seq(exampleValueForService(o))
           ))
           result.status shouldBe SEE_OTHER
-          val expectedLocation = if (o == "HMRC-TERS-ORG" | o == "HMRC-TERSNT-ORG") "routes.ConfirmClientController.show(journeyType).url"
+          val expectedLocation = if o == "HMRC-TERS-ORG" | o == "HMRC-TERSNT-ORG"
+          then routes.ConfirmClientController.show(AgentJourneyType.AgentCancelAuthorisation).url
           else routes.EnterClientFactController.show(AgentJourneyType.AgentCancelAuthorisation).url
           result.header("Location").value shouldBe expectedLocation
         })))

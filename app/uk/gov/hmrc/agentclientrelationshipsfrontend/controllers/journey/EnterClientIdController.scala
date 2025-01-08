@@ -72,6 +72,9 @@ class EnterClientIdController @Inject()(mcc: MessagesControllerComponents,
               clientDetailsResponse <- agentClientRelationshipsService.getClientDetails(clientId, journey)
               _ <- journeyService.saveJourney(journey.copy(
                 clientId = Some(clientId),
+                clientService = if clientDetailsResponse.isDefined && clientDetailsResponse.get.isOverseas.getOrElse(false)
+                then Some(serviceConfig.getService(journey.getService).get.overseasServiceName.getOrElse(journey.getService))
+                else journey.clientService,
                 clientDetailsResponse = clientDetailsResponse,
                 clientConfirmed = None,
                 knownFact = None,
@@ -82,7 +85,7 @@ class EnterClientIdController @Inject()(mcc: MessagesControllerComponents,
               nextPage <- if clientDetailsResponse.nonEmpty then
                 journeyService.nextPageUrl(journeyType) else
                 Future.successful(routes.JourneyExitController.show(
-                  journeyType, 
+                  journeyType,
                   serviceConfig.getNotFoundError(journeyType, journey.getService)).url
                 )
             } yield Redirect(nextPage)

@@ -24,6 +24,7 @@ case class ServiceData(
                         supportedAgentRoles: Seq[String] = Seq.empty,
                         supportedEnrolments: Seq[String] = Seq.empty,
                         serviceName: String,
+                        overseasServiceName: Option[String] = None,
                         urlPart: Map[String, Set[String]],
                         clientTypes: Set[ClientType],
                         clientDetails: Seq[ClientDetailsConfiguration],
