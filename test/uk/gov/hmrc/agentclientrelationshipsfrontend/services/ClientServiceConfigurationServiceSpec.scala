@@ -48,7 +48,7 @@ class ClientServiceConfigurationServiceSpec extends AnyWordSpecLike with Matcher
       services.getServiceKeysForUrlPart(plasticPackagingTax) shouldBe Set(HMRCPPTORG)
       }
       s"return enrolments supported by $countryByCountryReporting" in {
-      services.getServiceKeysForUrlPart(countryByCountryReporting) shouldBe Set(HMRCCBCORG)
+      services.getServiceKeysForUrlPart(countryByCountryReporting) shouldBe Set(HMRCCBCORG, HMRCCBCNONUKORG)
      }
       "throw runtime exception when service is unknown" in {
         intercept[RuntimeException](services.getServiceKeysForUrlPart("unknown"))
