@@ -76,6 +76,13 @@ class ClientServiceConfigurationService @Inject() extends ServiceConstants {
 
   def getUrlPart(clientService: String): String = services(getServiceForForm(clientService)).urlPart.head._1
 
+  // when a service only supports one client type we can infer the client type from the service when it's missing
+  // from any fast track requests
+  def inferredClientType(clientService: String): Option[String] = {
+    val clientTypes = services(getServiceForForm(clientService)).clientTypes
+    if clientTypes.size == 1 then Some(clientTypes.head.toString) else None
+  }
+
   val supportingAgentServices: Seq[String] = Seq(HMRCMTDITSUPP)
   
   private val services: ListMap[String, ServiceData] = ListMap(

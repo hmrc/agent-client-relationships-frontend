@@ -54,4 +54,15 @@ class ClientServiceConfigurationServiceSpec extends AnyWordSpecLike with Matcher
         intercept[RuntimeException](services.getServiceKeysForUrlPart("unknown"))
     }
   }
+  "inferredClientType" should {
+    "return an inferred client type for services with only one type supported" in {
+      services.inferredClientType(HMRCMTDIT) shouldBe Some("personal")
+    }
+    "return personal for personal income record" in {
+      services.inferredClientType(PERSONALINCOMERECORD) shouldBe Some("personal")
+    }
+    "return None for services with more than one client type supported" in {
+      services.inferredClientType(HMRCMTDVAT) shouldBe None
+    }
+  }
 }

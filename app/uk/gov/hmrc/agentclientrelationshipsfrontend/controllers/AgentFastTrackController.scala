@@ -23,7 +23,7 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.routes
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.AgentFastTrackForm
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.AgentJourneyType
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsResponse, FastTrackErrors}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{AgentClientRelationshipsService, ClientServiceConfigurationService, AgentJourneyService}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{AgentClientRelationshipsService, AgentJourneyService, ClientServiceConfigurationService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.*
@@ -71,8 +71,11 @@ class AgentFastTrackController @Inject()(mcc: MessagesControllerComponents,
             clientDetails.map(checkKnownFact(knownFact, _))
           }
 
+          possiblyInferredClientType = if (agentFastTrackFormData.clientType.isDefined) agentFastTrackFormData.clientType else serviceConfig.inferredClientType(agentFastTrackFormData.service)
+
           newJourney = journeyService.newJourney(journeyType)
             .copy(
+              clientType = possiblyInferredClientType,
               clientService = Some(agentFastTrackFormData.service),
               clientId = Some(agentFastTrackFormData.clientIdentifier),
               clientDetailsResponse = clientDetails,
