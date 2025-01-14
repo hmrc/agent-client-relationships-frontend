@@ -178,6 +178,7 @@ class AgentFastTrackControllerSpec extends ComponentSpecHelper with AuthStubs wi
    def toJourney(agentFastTrackRequest: AgentFastTrackRequest,clientDetailsResponse: Option[ClientDetailsResponse], journeyType: AgentJourneyType = journeyType): AgentJourney =
      journeyService.newJourney(AgentJourneyType.AuthorisationRequest)
        .copy(
+         clientType = agentFastTrackRequest.clientType,
          clientService = Some(agentFastTrackRequest.service),
          clientId = Some(agentFastTrackRequest.clientIdentifier),
          clientDetailsResponse = clientDetailsResponse,
