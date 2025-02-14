@@ -47,14 +47,21 @@ class TrackRequestsPageSpec extends ViewSpecSupport {
     filtersApplied = filtersApplied
   )
 
+  def serviceLabel(service: String): String = service match {
+    case "HMRC-MTD-IT" => "Manage their Making Tax Digital for Income Tax"
+    case "HMRC-MTD-VAT" => "Manage their VAT"
+    case "HMRC-TERS-ORG" => "Maintain a trust or an estate"
+    case "HMRC-CGT-PD" => "Manage their Capital Gains Tax on UK property account"
+  }
+
   object Expected {
     val title = "Manage your recent authorisation requests - Ask a client to authorise you - GOV.UK"
     val heading = "Manage your recent authorisation requests"
-    val resendLink = "Resend link"
-    val cancelRequestLink = "Cancel request"
-    val deAuthoriseLink = "Deauthorise"
-    val startNewLink = "Start a new request"
-    val signClientUpLink = "Sign your client up (opens in a new tab)"
+    def resendLink(service: String) = s"Resend link for client $clientName to ${serviceLabel(service)}"
+    def cancelRequestLink(service: String) = s"Cancel request for client $clientName to ${serviceLabel(service)}"
+    def deAuthoriseLink(service: String) = s"Remove authorisation for client $clientName to ${serviceLabel(service)}"
+    def startNewLink(service: String) = s"Start a new request for client $clientName to ${serviceLabel(service)}"
+    def signClientUpLink(service: String) = s"Sign your client up (opens in a new tab) for client $clientName to ${serviceLabel(service)}"
   }
 
   def statusLabels(status: InvitationStatus): String = status match {
@@ -92,13 +99,13 @@ class TrackRequestsPageSpec extends ViewSpecSupport {
               clientName,
               "Manage their Making Tax Digital for Income Tax",
               s"Client has not yet responded Expires on ${expiryDate.format(dateFormatter)}",
-              s"${Expected.resendLink} ${Expected.cancelRequestLink}"
+              s"${Expected.resendLink("HMRC-MTD-IT")} ${Expected.cancelRequestLink("HMRC-MTD-IT")}"
             ),
             IndexedSeq(
               clientName,
               "Manage their VAT",
               s"Client has not yet responded Expires on ${expiryDate.format(dateFormatter)}",
-              s"${Expected.resendLink} ${Expected.cancelRequestLink}"
+              s"${Expected.resendLink("HMRC-MTD-VAT")} ${Expected.cancelRequestLink("HMRC-MTD-VAT")}"
             )
           )
         )
@@ -156,37 +163,37 @@ class TrackRequestsPageSpec extends ViewSpecSupport {
               clientName,
               "Manage their Making Tax Digital for Income Tax",
               s"Client has not yet responded Expires on ${expiryDate.format(dateFormatter)}",
-              s"${Expected.resendLink} ${Expected.cancelRequestLink}"
+              s"${Expected.resendLink("HMRC-MTD-IT")} ${Expected.cancelRequestLink("HMRC-MTD-IT")}"
             ),
             IndexedSeq(
               clientName,
               "Manage their VAT",
               s"Client has not yet responded Expires on ${expiryDate.format(dateFormatter)}",
-              s"${Expected.resendLink} ${Expected.cancelRequestLink}"
+              s"${Expected.resendLink("HMRC-MTD-VAT")} ${Expected.cancelRequestLink("HMRC-MTD-VAT")}"
             ),
             IndexedSeq(
               clientName,
               "Maintain a trust or an estate",
               s"Accepted by client ${lastUpdated.atZone(ZoneOffset.UTC).toLocalDateTime.format(dateFormatter)}",
-              s"${Expected.deAuthoriseLink}"
+              s"${Expected.deAuthoriseLink("HMRC-TERS-ORG")}"
             ),
             IndexedSeq(
               clientName,
               "Manage their Capital Gains Tax on UK property account",
               s"Declined by client ${lastUpdated.atZone(ZoneOffset.UTC).toLocalDateTime.format(dateFormatter)}",
-              s"${Expected.startNewLink}"
+              s"${Expected.startNewLink("HMRC-CGT-PD")}"
             ),
             IndexedSeq(
               clientName,
               "Manage their VAT",
               s"Authorisation has been removed ${lastUpdated.atZone(ZoneOffset.UTC).toLocalDateTime.format(dateFormatter)}",
-              s"${Expected.startNewLink}"
+              s"${Expected.startNewLink("HMRC-MTD-VAT")}"
             ),
             IndexedSeq(
               clientName,
               "Manage their Making Tax Digital for Income Tax",
               s"Accepted by client ${lastUpdated.atZone(ZoneOffset.UTC).toLocalDateTime.format(dateFormatter)}",
-              s"${Expected.signClientUpLink} ${Expected.deAuthoriseLink}"
+              s"${Expected.signClientUpLink("HMRC-MTD-IT")} ${Expected.deAuthoriseLink("HMRC-MTD-IT")}"
             )
           )
         )
@@ -236,13 +243,13 @@ class TrackRequestsPageSpec extends ViewSpecSupport {
               clientName,
               "Manage their Making Tax Digital for Income Tax",
               s"Accepted by client ${lastUpdated.atZone(ZoneOffset.UTC).toLocalDateTime.format(dateFormatter)}",
-              s"${Expected.signClientUpLink} ${Expected.deAuthoriseLink}"
+              s"${Expected.signClientUpLink("HMRC-MTD-IT")} ${Expected.deAuthoriseLink("HMRC-MTD-IT")}"
             ),
             IndexedSeq(
               clientName,
               "Manage their Making Tax Digital for Income Tax",
               s"Accepted by client ${lastUpdated.atZone(ZoneOffset.UTC).toLocalDateTime.format(dateFormatter)}",
-              s"${Expected.signClientUpLink} ${Expected.deAuthoriseLink}"
+              s"${Expected.signClientUpLink("HMRC-MTD-IT")} ${Expected.deAuthoriseLink("HMRC-MTD-IT")}"
             )
           )
         )

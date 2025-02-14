@@ -67,18 +67,19 @@
 @deAuthLink(id: String) = {
     <a class="govuk-link" href="@{routes.TrackRequestsController.deAuthFromInvitation(id).url}">{messages(s"$key.action.deauth")}</a>
 }
-@actions(status: InvitationStatus, id: String) = {
-    @{status match {
-        case Pending => <a class="govuk-link" href={routes.TrackRequestsController.resendInvitation(id).url}>{messages(s"$key.action.resend")}</a>
-                <br/> <a class="govuk-link" href={routes.TrackRequestsController.cancelInvitation(id).url}>{messages(s"$key.action.cancel")}</a>
-        case PartialAuth => <a class="govuk-link" href={appConfig.signupClientUrl} target="_blank" rel="noreferrer noopener">{messages(s"$key.action.signup")}</a>
-        <br /> <a class="govuk-link" href={routes.TrackRequestsController.deAuthFromInvitation(id).url}>{messages(s"$key.action.deauth")}</a>
-        case Accepted => <a class="govuk-link" href={routes.TrackRequestsController.deAuthFromInvitation(id).url}>{messages(s"$key.action.deauth")}</a>
-        case Rejected | DeAuthorised => <a class="govuk-link" href={routes.TrackRequestsController.restartInvitation(id).url}>{messages(s"$key.action.startNew")}</a>
-        case Expired => <a class="govuk-link" href={routes.TrackRequestsController.restartInvitation(id).url}>{messages(s"$key.action.startNew")}</a>
-        case _ => Html("")
-    }}
+
+@actions(status: InvitationStatus, id: String, client: String, service: String) = {
+        @{status match {
+            case Pending => <a class="govuk-link" href={routes.TrackRequestsController.resendInvitation(id).url}>{messages(s"$key.action.resend")}<span class="govuk-visually-hidden"> {messages(s"$key.action.screenReaderText", client, service)}</span></a>
+                    <br/><a class="govuk-link" href={routes.TrackRequestsController.cancelInvitation(id).url}>{messages(s"$key.action.cancel")}<span class="govuk-visually-hidden"> {messages(s"$key.action.screenReaderText", client, service)}</span></a>
+            case PartialAuth => <a class="govuk-link" href={appConfig.signupClientUrl} target="_blank" rel="noreferrer noopener">{messages(s"$key.action.signup")}<span class="govuk-visually-hidden"> {messages(s"$key.action.screenReaderText", client, service)}</span></a>
+                    <br /><a class="govuk-link" href={routes.TrackRequestsController.deAuthFromInvitation(id).url}>{messages(s"$key.action.deauth")}<span class="govuk-visually-hidden"> {messages(s"$key.action.screenReaderText", client, service)}</span></a>
+            case Accepted => <a class="govuk-link" href={routes.TrackRequestsController.deAuthFromInvitation(id).url}>{messages(s"$key.action.deauth")}<span class="govuk-visually-hidden"> {messages(s"$key.action.screenReaderText", client, service)}</span></a>
+            case Rejected | DeAuthorised => <a class="govuk-link" href={routes.TrackRequestsController.restartInvitation(id).url}>{messages(s"$key.action.startNew")}<span class="govuk-visually-hidden"> {messages(s"$key.action.screenReaderText", client, service)}</span></a>
+            case Expired => <a class="govuk-link" href={routes.TrackRequestsController.restartInvitation(id).url}>{messages(s"$key.action.startNew")}<span class="govuk-visually-hidden"> {messages(s"$key.action.screenReaderText", client, service)}</span></a>
+        }}
 }
+
 @urlForPage(page: Int) = @{
     val filters = result.filtersApplied.map { (m: Map[String, String]) => m.map(kv => s"${kv._1}=${kv._2}") }.getOrElse(Seq.empty).mkString("&")
     if (filters.isEmpty) routes.TrackRequestsController.show(page).url
@@ -156,7 +157,7 @@
                 TableRow(content = Text(r.clientName), attributes = Map("id" -> s"client-name-${r.invitationId}"), classes="govuk-body-s"),
                 TableRow(content = Text(messages(s"$key.service.${r.service}")), attributes = Map("id" -> s"service-name-${r.invitationId}"), classes="govuk-body-s"),
                 TableRow(content = HtmlContent(statusContent(r.status, r.expiryDate, r.lastUpdated)), attributes = Map("id" -> s"status-${r.invitationId}"), classes="govuk-body-s"),
-                TableRow(content = HtmlContent(actions(r.status, r.invitationId)), attributes = Map("id" -> s"actions-${r.invitationId}"), classes="govuk-body-s")
+                TableRow(content = HtmlContent(actions(r.status, r.invitationId, r.clientName, messages(s"$key.service.${r.service}"))), attributes = Map("id" -> s"actions-${r.invitationId}"), classes="govuk-body-s")
             )).toSeq
         ))
         @if(pageInfo.numberOfPages > 1) {
