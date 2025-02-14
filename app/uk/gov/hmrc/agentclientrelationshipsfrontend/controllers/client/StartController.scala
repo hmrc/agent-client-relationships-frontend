@@ -23,10 +23,9 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.connectors.AgentClientRelationshipsConnector
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientExitType.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.ClientServiceConfigurationService
-import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.{AuthoriseAgentStartPage, PageNotFound}
-import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.client.AuthoriseAgentStartPage
+import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.PageNotFound
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import uk.gov.hmrc.play.http.HeaderCarrierConverter
 
 import javax.inject.Singleton
 import scala.concurrent.{ExecutionContext, Future}

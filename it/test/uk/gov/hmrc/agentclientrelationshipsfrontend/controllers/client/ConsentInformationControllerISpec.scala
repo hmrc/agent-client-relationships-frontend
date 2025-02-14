@@ -69,16 +69,24 @@ class ConsentInformationControllerISpec extends ComponentSpecHelper with ScalaFu
   }
 
   "GET /authorisation-response/:uid/:taxService/consent-information" should {
-    
-    "Redirect correctly to NotFound exit page" in {
+
+    "redirect to a InsufficientEnrolments exit page when the URL part is not valid for the user enrolments" in :
+      authoriseAsClientWithEnrolments("HMRC-MTD-IT")
+      await(journeyService.saveJourney(ClientJourney(journeyType = "authorisation-response")))
+      val result = get(routes.DeclineRequestController.show(testUid, "vat").url)
+      result.status shouldBe SEE_OTHER
+      result.header("Location").value shouldBe "routes.ClientExitHandler.show(INSUFFICIENT_ENROLMENTS)" // TODO change to controller action when auth action is updated
+
+    "redirect to NoOutstandingRequests exit page when the invitation data is not found" in {
       authoriseAsClientWithEnrolments("HMRC-MTD-IT")
       await(journeyService.saveJourney(ClientJourney(journeyType = "authorisation-response")))
       stubPost(validateInvitationUrl, NOT_FOUND, "")
       val result = get(routes.ConsentInformationController.show(testUid,"income-tax").url)
       result.status shouldBe SEE_OTHER
+      result.header("Location").value shouldBe routes.ClientExitController.showUnauthorised(ClientExitType.NoOutstandingRequests).url
     }
 
-    "Redirect correctly to agent suspended exit page" in {
+    "redirect to AgentSuspended exit page when the invitation data is not found" in {
       authoriseAsClientWithEnrolments("HMRC-MTD-IT")
       await(journeyService.saveJourney(ClientJourney(journeyType = "authorisation-response")))
       stubPost(validateInvitationUrl, FORBIDDEN, "")

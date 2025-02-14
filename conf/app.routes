@@ -23,6 +23,9 @@ GET        /appoint-someone-to-deal-with-HMRC-for-you/:uid/:normalizedAgentName/
 
 GET        /authorisation-response/:uid/:taxService/consent-information                 uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.ConsentInformationController.show(uid: String, taxService: String)
 
+GET        /authorisation-response/:uid/:taxService/confirm-decline                     uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.DeclineRequestController.show(uid: String, taxService: String)
+POST       /authorisation-response/:uid/:taxService/confirm-decline                     uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.DeclineRequestController.submit(uid: String, taxService: String)
+
 GET        /authorisation-response/exit-auth/:exitType                                  uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.ClientExitController.showClient(exitType: ClientExitType)
 
 GET        /authorisation-response/exit-public/:exitType                                uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.ClientExitController.showUnauthorised(exitType: ClientExitType)

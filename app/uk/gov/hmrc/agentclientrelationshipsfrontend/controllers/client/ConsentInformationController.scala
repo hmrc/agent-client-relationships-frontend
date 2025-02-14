@@ -43,9 +43,8 @@ class ConsentInformationController @Inject()(agentClientRelationshipsConnector: 
 
   def show(uid: String, taxService: String): Action[AnyContent] = actions.getClientJourney(taxService).async:
     implicit journeyRequest =>
-      given Request[?] = journeyRequest.request
 
-      if serviceConfigurationService.validateUrlPart(taxService) then agentClientRelationshipsConnector
+      agentClientRelationshipsConnector
         .validateInvitation(uid, serviceConfigurationService.getServiceKeysForUrlPart(taxService))
         .flatMap {
           case Left("AGENT_SUSPENDED") => Future.successful(Redirect(routes.ClientExitController.showUnauthorised(AgentSuspended)))
@@ -67,4 +66,3 @@ class ConsentInformationController @Inject()(agentClientRelationshipsConnector: 
               case _ => Redirect(routes.ClientExitController.showClient(AlreadyRespondedToAuthorisationRequest))
             })
         }
-      else Future.successful(NotFound(pageNotFound()))

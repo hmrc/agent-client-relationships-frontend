@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.agentclientrelationshipsfrontend.views.journey
+package uk.gov.hmrc.agentclientrelationshipsfrontend.views.client
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.twirl.api.HtmlFormat
+import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.routes
 import uk.gov.hmrc.agentclientrelationshipsfrontend.support.ViewSpecSupport
-import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.AuthoriseAgentStartPage
+import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.client.AuthoriseAgentStartPage
 
 import scala.language.postfixOps
 
@@ -55,7 +56,6 @@ class AuthoriseAgentStartPageSpec extends ViewSpecSupport {
 
   "AuthoriseAgentStartPage for authorisation journey view" should {
 
-
     val uid = "uid"
     for (taxService <- taxServiceNames.keySet.toList) {
       val view: HtmlFormat.Appendable = viewTemplate(agentName, taxService, uid)
@@ -75,15 +75,10 @@ class AuthoriseAgentStartPageSpec extends ViewSpecSupport {
         val expectedUrl = s"/agent-client-relationships/authorisation-response/$uid/$taxService/consent-information"
         doc.mainContent.extractLinkButton(1).value shouldBe TestLink("Start now", expectedUrl)
       }
-      s"have correct link for $taxService" in {
-        val expectedUrl = s"/agent-client-relationships/authorisation-response/$uid/$taxService/decline-request"
+      s"have correct 'Decline' link for $taxService" in {
+        val expectedUrl = routes.DeclineRequestController.show(uid, taxService).url
         doc.mainContent.extractLink(1).value shouldBe TestLink(s"I do not want $agentName to act for me.", expectedUrl)
       }
-
-
     }
-
   }
-
-
 }

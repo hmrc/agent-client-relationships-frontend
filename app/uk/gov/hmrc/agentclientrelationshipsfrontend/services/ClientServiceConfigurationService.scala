@@ -19,11 +19,10 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.services
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientType
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientType.{business, personal, trust}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.common.{ClientDetailsConfiguration, ServiceData}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{JourneyErrors, JourneyExitType, AgentJourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyType, JourneyErrors, JourneyExitType}
 
 import javax.inject.{Inject, Singleton}
 import scala.collection.immutable.ListMap
-import scala.util.Try
 
 @Singleton
 class ClientServiceConfigurationService @Inject() extends ServiceConstants {
@@ -34,7 +33,7 @@ class ClientServiceConfigurationService @Inject() extends ServiceConstants {
   
   def getService(serviceName: String): Option[ServiceData] = services.get(serviceName)
   
-  def validateUrlPart(urlPartKey: String): Boolean = Try(getServiceKeysForUrlPart(urlPartKey)).isSuccess
+  def validateUrlPart(urlPartKey: String): Boolean = getServiceKeysForUrlPart(urlPartKey).nonEmpty
 
   def clientServicesFor(clientType: String): Seq[String] = services.filter(_._2.serviceOption == true).filter(_._2.clientTypes.contains(ClientType.valueOf(clientType))).keys.toSeq
 
@@ -60,7 +59,7 @@ class ClientServiceConfigurationService @Inject() extends ServiceConstants {
 
   def getNotFoundError(journeyType: AgentJourneyType, clientService: String): JourneyExitType = services(clientService).journeyErrors(journeyType).notFound
 
-  def supportsAgentRoles(clientService: String): Boolean =  services(clientService).supportedAgentRoles.size > 1
+  def supportsAgentRoles(clientService: String): Boolean = services.get(clientService).exists(_.supportedAgentRoles.size > 1)
 
   def getSupportedAgentRoles(clientService: String): Seq[String] = services(clientService).supportedAgentRoles
 
@@ -72,7 +71,7 @@ class ClientServiceConfigurationService @Inject() extends ServiceConstants {
   def getServiceKeysForUrlPart(taxService: String): Set[String] = services
     .find(_._2.urlPart.keySet.contains(taxService))
     .map((_, serviceData) => serviceData.urlPart(taxService))
-    .getOrElse(throw new RuntimeException("Cannot find service keys for URL part"))
+    .getOrElse(Set())
 
   def getUrlPart(clientService: String): String = services(getServiceForForm(clientService)).urlPart.head._1
 

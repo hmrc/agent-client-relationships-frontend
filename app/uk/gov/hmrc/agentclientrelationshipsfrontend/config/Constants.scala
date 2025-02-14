@@ -43,5 +43,6 @@ object Constants extends ServiceConstants {
   val AgentRoleFieldName = "agentRole"
   val ConfirmCancellationFieldName = "confirmCancellation"
   val ConfirmConsentFieldName = "confirmConsent"
+  val DeclineRequestFieldName = "confirmDecline"
 
 }
