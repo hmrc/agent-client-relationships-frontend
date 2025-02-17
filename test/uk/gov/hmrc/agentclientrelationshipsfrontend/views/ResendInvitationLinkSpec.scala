@@ -14,22 +14,22 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.agentclientrelationshipsfrontend.views.journey
+package uk.gov.hmrc.agentclientrelationshipsfrontend.views
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.twirl.api.HtmlFormat
+import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.AgentRequest
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.AuthorisationRequestInfo
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, AgentJourney, AgentJourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.support.ViewSpecSupport
-import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.CreateAuthorisationRequestCompletePage
+import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.ResendInvitationLink
 
 import java.time.LocalDate
 import scala.language.postfixOps
 
-class CreateAuthorisationRequestCompletePageSpec extends ViewSpecSupport {
+class ResendInvitationLinkSpec extends ViewSpecSupport {
 
-  val viewTemplate: CreateAuthorisationRequestCompletePage = app.injector.instanceOf[CreateAuthorisationRequestCompletePage]
+  val viewTemplate: ResendInvitationLink = app.injector.instanceOf[ResendInvitationLink]
   val testInvitationId: String = "AB1234567890"
   val testClientName: String = "Test Client"
   val agentName: String = "ABC Accountants"
@@ -57,33 +57,25 @@ class CreateAuthorisationRequestCompletePageSpec extends ViewSpecSupport {
     clientType = "personal"
   )
 
-  private val completeJourney: AgentJourney = AgentJourney(
-    AgentJourneyType.AuthorisationRequest,
-    journeyComplete = Some(testInvitationId)
-  )
-
   private def makeTestLink(service: String): String =
     s"${appConfig.appExternalUrl}/agent-client-relationships/appoint-someone-to-deal-with-HMRC-for-you/${confirmationData.agentReference}/${confirmationData.normalizedAgentName}/${urlParts(service)}"
 
-  "CreateAuthorisationRequestCompletePage view" should {
+  "ResendInvitationLink view" should {
     for (taxService <- urlParts.keySet.toList) {
-      implicit val journeyRequest: AgentJourneyRequest[?] = new AgentJourneyRequest("", completeJourney, request)
+      implicit val agentRequest: AgentRequest[?] = new AgentRequest("", request)
       val view: HtmlFormat.Appendable = viewTemplate(confirmationData.copy(service = taxService), makeTestLink(taxService))
       val doc: Document = Jsoup.parse(view.body)
       s"include the correct H1 text for $taxService" in {
-        doc.mainContent.extractText("h1.govuk-panel__title", 1).value shouldBe "You’ve created an authorisation request"
-      }
-      s"include the correct panel body text for $taxService" in {
-        doc.mainContent.extractText(".govuk-panel__body", 1).value shouldBe s"Client: $testClientName"
+        doc.mainContent.extractText("h1", 1).value shouldBe "Resend this link to your client"
       }
       s"include the correct client link text for $taxService" in {
         doc.mainContent.extractText(p, 2).value shouldBe makeTestLink(taxService)
       }
-      s"have correct link to create another request on page for confirming $taxService" in {
-        val expectedUrl = "/agent-client-relationships/authorisation-request"
-        doc.mainContent.extractLink(1).value shouldBe TestLink("Create another authorisation request", expectedUrl)
+      s"have correct link to track requests when service is $taxService" in {
+        val expectedUrl = "/agent-client-relationships/manage-authorisation-requests"
+        doc.mainContent.extractLink(1).value shouldBe TestLink("Manage your recent authorisation requests", expectedUrl)
       }
-      s"have correct link for returning to Agent Services Account home on page for confirming $taxService" in {
+      s"have correct link for returning to Agent Services Account home when service is $taxService" in {
         val expectedUrl = "http://localhost:9401/agent-services-account/home"
         doc.mainContent.extractLink(2).value shouldBe TestLink(s"Go to your agent services account homepage", expectedUrl)
       }

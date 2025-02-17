@@ -351,11 +351,13 @@ confirmCancellation.HMRC-MTD-IT.inset=Cancelling this authorisation will not aut
 # ________________________________________________________________________________
 
 authorisationRequestComplete.header=You’ve created an authorisation request
+authorisationRequestComplete.resend.header=Resend this link to your client
 authorisationRequestComplete.panel.body=Client: {0}
 authorisationRequestComplete.h2=Next steps
 authorisationRequestComplete.list.one=Copy this authorisation request link and send it to your client:
 authorisationRequestComplete.list.two=Tell your client to select this link. They will then be asked to sign in.
 authorisationRequestComplete.list.three=Ask your client to authorise you by {0} – they have {1} days to respond before your request expires.
+authorisationRequestComplete.resend.list.three=Ask your client to authorise you by {0}.
 authorisationRequestComplete.list.four=We will email you at {0} to update you on the status of this request.
 authorisationRequestComplete.createAnother=Create another authorisation request
 authorisationRequestComplete.agentHome=Go to your agent services account homepage
@@ -379,11 +381,11 @@ trackRequests.title=Manage your recent authorisation requests
 trackRequests.intro=Check the status of your authorisation requests to clients in the last 30 days, or cancel requests and authorisations you no longer need.
 trackRequests.empty=You have no recent authorisation requests
 trackRequests.view=View request
-trackRequests.action.resend=Resend link
-trackRequests.action.cancel=Cancel request
-trackRequests.action.deauth=Remove authorisation
+trackRequests.action.resend=Resend request to client
+trackRequests.action.cancel=Cancel this request
+trackRequests.action.deauth=Cancel your authorisation
 trackRequests.action.signup=Sign your client up (opens in a new tab)
-trackRequests.action.startNew=Start a new request
+trackRequests.action.startNew=Start new request
 trackRequests.action.screenReaderText=for client {0} to {1}
 trackRequests.th.client=Client
 trackRequests.th.service=Service
@@ -406,9 +408,11 @@ trackRequests.service.HMRC-PILLAR2-ORG=Manage their Pillar 2 top-up taxes
 
 trackRequests.status.Pending=Client has not yet responded
 trackRequests.expires=Expires on {0}
+trackRequests.expired=Expired on {0}
 trackRequests.status.Accepted=Accepted by client
 trackRequests.status.PartialAuth=Accepted by client
 trackRequests.status.Rejected=Declined by client
+trackRequests.status.Cancelled=Cancelled by you
 trackRequests.status.Expired=Request expired as client did not respond in time
 trackRequests.status.DeAuthorised=Authorisation has been removed
 trackRequests.sidebar.clientFilter=Filter by client
@@ -425,10 +429,22 @@ trackRequests.filter-status.DeAuthorised=Authorisation has been removed
 trackRequests.filter-status.Rejected=Declined by client
 trackRequests.filter-status.Accepted=Accepted by client
 trackRequests.filter-status.PartialAuth=Accepted by client
+trackRequests.filter-status.Cancelled=Cancelled by you
 trackRequests.filter-status.Expired=Request expired as client did not respond in time
 trackRequests.filter-status.ClientCancelledAuthorisation=Accepted by client. They later cancelled their authorisation
 trackRequests.filter-status.HMRCCancelledAuthorisation=Accepted by client. HMRC later cancelled your authorisation
 trackRequests.filter-status.Declined.HMRC-CBC={0} request to manage the client’s country-by-country reports was declined.
+
+agentCancelInvitation.header=Are you sure you want to cancel this authorisation request?
+agentCancelInvitation.hint=If you cancel this request, you will not be able to manage their {0}.
+agentCancelInvitation.true=Yes
+agentCancelInvitation.false=No
+agentCancelInvitation.error.required=Select ‘yes’ if you want to cancel this authorisation request
+
+agentCancelInvitationComplete.header=Authorisation request cancelled
+agentCancelInvitationComplete.p1=You have cancelled your authorisation request to manage their {0}.
+agentCancelInvitationComplete.inset={0} can no longer respond to this request.
+agentCancelInvitationComplete.p2=If you cancelled your authorisation request by mistake, you will need to <a class="govuk-link" href="{0}">start a new authorisation request</a>.
 
 # ________________________________________________________________________________
 # Journey exit headings
@@ -829,7 +845,6 @@ clientExit.cannot-find-authorisation-request.header=We cannot find this authoris
 clientExit.authorisation-request-expired.header=This authorisation request has already expired
 clientExit.authorisation-request-already-responded-to.header=This authorisation request has already been responded to
 clientExit.authorisation-request-cancelled.header=This authorisation request request has been cancelled
-pageNotFound.header=Page not found
 
 # ________________________________________________________________________________
 # This authorisation request has already expired
@@ -865,6 +880,8 @@ authorisationRequestRespondedTo.p4=<a href={0} class="govuk-link" target="_blank
 # ________________________________________________________________________________
 # Page not found
 # ________________________________________________________________________________
+pageNotFound.header=This page can’t be found
+pageNotFound.text=Please check that you have entered the correct web address.
 pageNotFound.p1=If you typed the web address, check it is correct.
 pageNotFound.p2=If you pasted the web address, check you copied the entire address.
 pageNotFound.p3=If the web address is correct, contact the tax agent who sent you the request if you still want to authorise them.

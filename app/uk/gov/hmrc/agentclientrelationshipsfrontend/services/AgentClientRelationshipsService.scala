@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.services
 
+import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.AgentRequest
 import uk.gov.hmrc.agentclientrelationshipsfrontend.connectors.AgentClientRelationshipsConnector
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{AgentDetails, AuthorisationRequestInfo, AuthorisationRequestInfoForClient, ClientDetailsResponse}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, AgentJourneyRequest, ClientJourneyRequest}
@@ -41,7 +42,7 @@ class AgentClientRelationshipsService @Inject()(agentClientRelationshipsConnecto
     agentClientRelationshipsConnector.cancelAuthorisation(journey)
   }
 
-  def getAuthorisationRequest(invitationId: String)(implicit hc: HeaderCarrier, request: AgentJourneyRequest[?]): Future[Option[AuthorisationRequestInfo]] = {
+  def getAuthorisationRequest(invitationId: String)(implicit hc: HeaderCarrier, request: AgentRequest[?]): Future[Option[AuthorisationRequestInfo]] = {
     agentClientRelationshipsConnector.getAuthorisationRequest(invitationId)
   }
 
@@ -51,6 +52,10 @@ class AgentClientRelationshipsService @Inject()(agentClientRelationshipsConnecto
 
   def getAgentDetails()(implicit hc: HeaderCarrier, request: AgentJourneyRequest[?]): Future[Option[AgentDetails]] = {
     agentClientRelationshipsConnector.getAgentDetails()
+  }
+
+  def agentCancelInvitation(invitationId: String)(implicit hc: HeaderCarrier, request: AgentRequest[?]): Future[Unit] = {
+    agentClientRelationshipsConnector.cancelInvitation(invitationId)
   }
 
 }

@@ -29,7 +29,7 @@ class PageNotFoundPageSpec extends ViewSpecSupport {
   val viewTemplate: PageNotFound = app.injector.instanceOf[PageNotFound]
 
   object Expected {
-    val heading = "Page not found"
+    val heading = "This page can’t be found"
     val title = s"$heading - Ask a client to authorise you - GOV.UK"
     val p1 = s"If you typed the web address, check it is correct."
     val p2 = s"If you pasted the web address, check you copied the entire address."

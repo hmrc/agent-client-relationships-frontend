@@ -19,6 +19,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.connectors
 import play.api.http.Status.*
 import play.api.libs.json.Json
 import play.api.libs.ws.JsonBodyWritables.*
+import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.AgentRequest
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.invitationLink.ValidateLinkPartsResponse
@@ -69,7 +70,7 @@ class AgentClientRelationshipsConnector @Inject()(appConfig: AppConfig,
     }
 
 
-  def getAuthorisationRequest(invitationId: String)(implicit headerCarrier: HeaderCarrier, request: AgentJourneyRequest[?]): Future[Option[AuthorisationRequestInfo]] = {
+  def getAuthorisationRequest(invitationId: String)(implicit headerCarrier: HeaderCarrier, request: AgentRequest[?]): Future[Option[AuthorisationRequestInfo]] = {
     httpV2.get(url"$agentClientRelationshipsUrl/agent/${request.arn}/authorisation-request-info/$invitationId")
       .execute[Option[AuthorisationRequestInfo]]
   }
@@ -128,6 +129,13 @@ class AgentClientRelationshipsConnector @Inject()(appConfig: AppConfig,
       case status => throw new Exception(s"Unexpected status $status received when rejecting invitation")
     })
 
+  def cancelInvitation(invitationId: String)(implicit hc: HeaderCarrier): Future[Unit] =
+    val url = s"$agentClientRelationshipsUrl/agent/cancel-invitation/$invitationId"
+    httpV2.put(url"$url").execute[HttpResponse].map(response => response.status match {
+      case NO_CONTENT => Future.successful(())
+      case status => throw new Exception(s"Unexpected status $status received when cancelling invitation")
+    })
+
   def validateInvitation(uid: String, serviceKeys: Set[String])(implicit hc: HeaderCarrier): Future[Either[String, ValidateInvitationResponse]] =
     httpV2
       .post(url"$agentClientRelationshipsUrl/client/validate-invitation")
@@ -142,64 +150,3 @@ class AgentClientRelationshipsConnector @Inject()(appConfig: AppConfig,
         case NOT_FOUND => Left("INVITATION_OR_AGENT_RECORD_NOT_FOUND")
         case status => throw new Exception(s"Unexpected status $status received when fetching invitation")
       })
-
-  // stubbing the back end
-  private val stubbedAuthorisationRequests: List[AuthorisationRequest] = List(
-    AuthorisationRequest("ABC1", Some(LocalDate.now().plusDays(1)), "Troy Barnes", "HMRC-MTD-VAT", "Pending"),
-    AuthorisationRequest("ABC2", None, "Sienna Barnes", "HMRC-PPT-ORG", "Accepted"),
-    AuthorisationRequest("ABC3", Some(LocalDate.now().plusDays(3)), "Martin Barnes", "HMRC-MTD-VAT", "Pending"),
-    AuthorisationRequest("ABC4", Some(LocalDate.now().plusDays(4)), "Bob Barnes", "HMRC-MTD-IT", "Pending"),
-    AuthorisationRequest("ABC5", Some(LocalDate.now().plusDays(5)), "Jean Barnes", "HMRC-CGT-PD", "Pending"),
-    AuthorisationRequest("ABC6", Some(LocalDate.now().plusDays(6)), "Brian Barnes", "HMRC-MTD-IT", "Pending"),
-    AuthorisationRequest("ABC7", None, "Abigail Barnes", "HMRC-MTD-VAT", "Cancelled"),
-    AuthorisationRequest("ABC8", Some(LocalDate.now().plusDays(8)), "Francis Barnes", "HMRC-MTD-VAT", "Pending"),
-    AuthorisationRequest("ABC9", Some(LocalDate.now().plusDays(9)), "Albert Barnes", "HMRC-MTD-IT", "Pending"),
-    AuthorisationRequest("ABCA", Some(LocalDate.now().plusDays(10)), "Paul Barnes", "HMRC-MTD-IT", "Pending"),
-    AuthorisationRequest("ABCB", Some(LocalDate.now().plusDays(11)), "Ravi Barnes", "HMRC-MTD-IT", "Pending"),
-    AuthorisationRequest("ABCC", Some(LocalDate.now().plusDays(12)), "Diane Barnes", "HMRC-MTD-IT", "Pending"),
-    AuthorisationRequest("ABCD", Some(LocalDate.now().plusDays(13)), "Marjorie Barnes", "HMRC-MTD-IT", "Pending"),
-    AuthorisationRequest("ABCE", Some(LocalDate.now().plusDays(14)), "Ade Barnes", "HMRC-MTD-IT", "Pending"),
-    AuthorisationRequest("ABCF", Some(LocalDate.now().plusDays(15)), "Ewan Barnes", "HMRC-MTD-IT", "Pending"),
-    AuthorisationRequest("AABC1", Some(LocalDate.now().plusDays(1)), "Troy Stevens", "HMRC-CBC-ORG", "Pending"),
-    AuthorisationRequest("AABC2", None, "Sienna Stevens", "HMRC-PPT-ORG", "Accepted"),
-    AuthorisationRequest("AABC3", Some(LocalDate.now().plusDays(3)), "Martin Stevens", "HMRC-MTD-IT", "Pending"),
-    AuthorisationRequest("AABC4", Some(LocalDate.now().plusDays(4)), "Bob Stevens", "HMRC-MTD-IT", "Pending"),
-    AuthorisationRequest("AABC5", Some(LocalDate.now().plusDays(5)), "Jean Stevens", "HMRC-MTD-IT", "Pending"),
-    AuthorisationRequest("AABC6", Some(LocalDate.now().plusDays(6)), "Brian Stevens", "HMRC-MTD-IT", "Pending"),
-    AuthorisationRequest("AABC7", None, "Abigail Stevens", "HMRC-MTD-VAT", "Cancelled"),
-    AuthorisationRequest("AABC8", Some(LocalDate.now().plusDays(8)), "Francis Stevens", "HMRC-MTD-VAT", "Pending"),
-    AuthorisationRequest("AABC9", Some(LocalDate.now().plusDays(9)), "Albert Stevens", "HMRC-MTD-IT", "Pending"),
-    AuthorisationRequest("AABCA", Some(LocalDate.now().plusDays(10)), "Paul Stevens", "HMRC-MTD-IT", "Pending"),
-    AuthorisationRequest("AABCB", Some(LocalDate.now().plusDays(11)), "Ravi Stevens", "HMRC-MTD-IT", "Pending"),
-    AuthorisationRequest("AABCC", Some(LocalDate.now().plusDays(12)), "Diane Stevens", "HMRC-MTD-IT", "Pending"),
-    AuthorisationRequest("AABCD", Some(LocalDate.now().plusDays(13)), "Marjorie Stevens", "HMRC-MTD-IT", "Pending"),
-    AuthorisationRequest("AABCE", Some(LocalDate.now().plusDays(14)), "Ade Stevens", "HMRC-MTD-IT", "Pending"),
-    AuthorisationRequest("AABCF", Some(LocalDate.now().plusDays(15)), "Ewan Stevens", "HMRC-MTD-IT", "Pending"),
-    AuthorisationRequest("BABC1", Some(LocalDate.now().plusDays(1)), "Troy Singh", "HMRC-MTD-IT", "Pending"),
-    AuthorisationRequest("BABC2", None, "Sienna Singh", "HMRC-PPT-ORG", "Accepted"),
-    AuthorisationRequest("BABC3", Some(LocalDate.now().plusDays(3)), "Martin Singh", "HMRC-MTD-IT", "Pending"),
-    AuthorisationRequest("BABC4", Some(LocalDate.now().plusDays(4)), "Bob Singh", "HMRC-MTD-IT", "Pending"),
-    AuthorisationRequest("BABC5", Some(LocalDate.now().plusDays(5)), "Jean Singh", "HMRC-MTD-IT", "Pending"),
-    AuthorisationRequest("BABC6", Some(LocalDate.now().plusDays(6)), "Brian Singh", "HMRC-MTD-IT", "Pending"),
-    AuthorisationRequest("BABC7", None, "Abigail Singh", "HMRC-MTD-VAT", "Cancelled"),
-    AuthorisationRequest("BABC8", Some(LocalDate.now().plusDays(8)), "Francis Singh", "HMRC-MTD-VAT", "Pending"),
-    AuthorisationRequest("BABC9", Some(LocalDate.now().plusDays(9)), "Albert Singh", "HMRC-MTD-IT", "Pending"),
-    AuthorisationRequest("BABCA", Some(LocalDate.now().plusDays(10)), "Paul Singh", "HMRC-MTD-IT", "Pending"),
-    AuthorisationRequest("BABCB", Some(LocalDate.now().plusDays(11)), "Ravi Singh", "HMRC-MTD-IT", "Pending"),
-    AuthorisationRequest("BABCC", Some(LocalDate.now().plusDays(12)), "Diane Singh", "HMRC-MTD-IT", "Pending"),
-    AuthorisationRequest("BABCD", Some(LocalDate.now().plusDays(13)), "Marjorie Singh", "HMRC-MTD-IT", "Pending"),
-    AuthorisationRequest("BABCE", Some(LocalDate.now().plusDays(14)), "Ade Singh", "HMRC-MTD-IT", "Pending"),
-    AuthorisationRequest("BABCF", Some(LocalDate.now().plusDays(15)), "Ewan Singh", "HMRC-MTD-IT", "Pending")
-  )
-
-  private val availableFilters: List[String] = List(
-    "ExpireInNext5Days",
-    "ActivityWithinLast5Days",
-    "ClientNotYetResponded",
-    "AgentCancelledAuthorisation",
-    "DeclinedByClient",
-    "AcceptedByClient",
-    "Expired",
-    "ClientCancelledAuthorisation",
-    "HMRCCancelledAuthorisation"
-  )

@@ -22,31 +22,39 @@ import play.api.libs.json.{Reads, __}
 import java.time.LocalDate
 
 case class AuthorisationRequestInfo(
-                                 agentReference: String,
-                                 normalizedAgentName: String,
-                                 agentEmailAddress: String,
-                                 clientName: String,
-                                 service: String,
-                                 expiryDate: LocalDate
-                                )
+                                     invitationId: String,
+                                     agentReference: String,
+                                     normalizedAgentName: String,
+                                     agentEmailAddress: String,
+                                     clientType: String,
+                                     clientName: String,
+                                     suppliedClientId: String,
+                                     service: String,
+                                     expiryDate: LocalDate
+                                   )
 
 object AuthorisationRequestInfo {
-  implicit val reads: Reads[AuthorisationRequestInfo] =
-    {
-      ((__ \ "authorisationRequest" \ "service").read[String] and
-        (__ \ "authorisationRequest" \ "clientName").read[String] and
-        (__ \ "authorisationRequest" \ "expiryDate").read[LocalDate] and
-        (__ \ "agentLink" \ "uid").read[String] and
-        (__ \ "agentLink" \ "normalizedAgentName").read[String] and
-        (__ \ "agentDetails" \ "agencyDetails" \ "agencyEmail").read[String])
-        ((service, clientName, expiryDate, agentReference, normalizedAgentName, agentEmailAddress) =>
+  implicit val reads: Reads[AuthorisationRequestInfo] = {
+    ((__ \ "authorisationRequest" \ "service").read[String] and
+      (__ \ "authorisationRequest" \ "clientName").read[String] and
+      (__ \ "authorisationRequest" \ "expiryDate").read[LocalDate] and
+      (__ \ "authorisationRequest" \ "suppliedClientId").read[String] and
+      (__ \ "authorisationRequest" \ "clientType").read[String] and
+      (__ \ "authorisationRequest" \ "invitationId").read[String] and
+      (__ \ "agentLink" \ "uid").read[String] and
+      (__ \ "agentLink" \ "normalizedAgentName").read[String] and
+      (__ \ "authorisationRequest" \ "agencyEmail").read[String])
+      ((service, clientName, expiryDate, suppliedClientId, clientType, invitationId, agentReference, normalizedAgentName, agentEmailAddress) =>
         AuthorisationRequestInfo(
+          invitationId,
           agentReference,
           normalizedAgentName,
           agentEmailAddress,
+          clientType,
           clientName,
+          suppliedClientId,
           service,
           expiryDate
         ))
-    }
+  }
 }

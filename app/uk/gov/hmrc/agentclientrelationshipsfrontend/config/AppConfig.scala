@@ -35,6 +35,7 @@ class AppConfig @Inject()(servicesConfig: ServicesConfig, config: Configuration)
   val ivUpliftUrl: String = getConfString("identity-verification-frontend.uplift-url")
   val signInUrl: String = getString("sign-in.url")
   val subscriptionUrl: String = getConfString("agent-subscription-frontend.subscription-url")
+  val clientLinkBaseUrl: String = s"${appExternalUrl}/agent-client-relationships/appoint-someone-to-deal-with-HMRC-for-you"
 
   // GovUk Urls
   val govUkUrl: String = getString("gov-uk.url")
