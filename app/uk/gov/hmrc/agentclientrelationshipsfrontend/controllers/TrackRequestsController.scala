@@ -16,47 +16,70 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers
 
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, MessagesRequest}
+import play.api.i18n.I18nSupport
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.{Actions, AgentRequest}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.PageInfo
-import uk.gov.hmrc.agentclientrelationshipsfrontend.services.TrackRequestsService
+import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{AgentClientRelationshipsService, TrackRequestsService}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.TrackRequestsPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
-import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.TrackRequestsPage
 @Singleton
 class TrackRequestsController @Inject()(
                                          mcc: MessagesControllerComponents,
+                                         actions: Actions,
                                          trackRequestsService: TrackRequestsService,
+                                         acrService: AgentClientRelationshipsService,
                                          trackRequestsPage: TrackRequestsPage
-                                       )(implicit val executionContext: ExecutionContext, appConfig: AppConfig) extends FrontendController(mcc) {
-  
-  def show(pageNumber: Int, filtersApplied: Option[Map[String, Seq[String]]] = None): Action[AnyContent] = Action.async:
-    request =>
-      given MessagesRequest[AnyContent] = request
+                                       )(implicit val executionContext: ExecutionContext, appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport {
 
+  def show(pageNumber: Int, statusFilter: Option[String] = None, clientName: Option[String] = None): Action[AnyContent] = actions.agentAuthenticate.async:
+    request =>
+      given AgentRequest[?] = request
       for{
-        totalResults <- trackRequestsService.getTotalRequests("arn", filtersApplied)
-        pageInfo = PageInfo(pageNumber, appConfig.trackRequestsPerPage, totalResults)
-        requests <- trackRequestsService.getRequests("arn", pageInfo, filtersApplied)
-        clientNames <- trackRequestsService.getAllClientNames("arn", filtersApplied)
-        statusFilters <- trackRequestsService.getStatusFilters
+        result <- trackRequestsService.trackRequests(request.arn, pageNumber, statusFilter, clientName)
       } yield {
-        Ok(trackRequestsPage(requests, pageInfo, clientNames, statusFilters, filtersApplied))
+        Ok(trackRequestsPage(result, pageNumber))
       }
       
-   def submitFilters: Action[AnyContent] = Action.async:
-    request => 
-      given MessagesRequest[AnyContent] = request
-      val filtersApplied: Option[Map[String, Seq[String]]] = request.body.asFormUrlEncoded
-      for{
-        totalResults <- trackRequestsService.getTotalRequests("arn", filtersApplied)
-        pageInfo = PageInfo(1, appConfig.trackRequestsPerPage, totalResults)
-        requests <- trackRequestsService.getRequests("arn", pageInfo, filtersApplied)
-        clientNames <- trackRequestsService.getAllClientNames("arn", filtersApplied)
-        statusFilters <- trackRequestsService.getStatusFilters
-      } yield {
-        Ok(trackRequestsPage(requests, pageInfo, clientNames, statusFilters, filtersApplied))
-      }
+   def submitFilters: Action[AnyContent] = actions.agentAuthenticate.async:
+     request =>
+       given AgentRequest[?] = request
+        val filtersApplied: Option[Map[String, Seq[String]]] = request.request.body.asFormUrlEncoded
+        val statusFilter = filtersApplied.flatMap(_.get("statusFilter")).flatMap(_.headOption)
+        val clientName = filtersApplied.flatMap(_.get("clientFilter")).flatMap(_.headOption)
+        for{
+          result <- trackRequestsService.trackRequests(request.arn, 1, statusFilter, clientName)
+        } yield {
+          Ok(trackRequestsPage(result, 1))
+        }
+
+   def deAuthFromInvitation(invitationId: String): Action[AnyContent] = actions.agentAuthenticate:
+     request =>
+       given AgentRequest[?] = request
+       // we can fetch the invitation, validate the arn and populate a new AgentJourney of type `AgentCancelAuthorisation`
+       // then redirect to nextUrl in that journey
+       Ok("de-authorise relationship called with invitation id " + invitationId)
+
+  def restartInvitation(invitationId: String): Action[AnyContent] = actions.agentAuthenticate:
+    request =>
+      given AgentRequest[?] = request
+      // we can fetch the invitation, validate the arn and populate a new AgentJourney of type `AuthorisationRequest`
+      // then redirect to nextUrl in that journey
+      Ok("restart invitation called with invitation id " + invitationId)
+
+  def resendInvitation(invitationId: String): Action[AnyContent] = actions.agentAuthenticate:
+    request =>
+      given AgentRequest[?] = request
+      // we can fetch the invitation info, validate the arn and feed it into a new template to display the link to resend the invitation
+      Ok("resend invitation called with invitation id " + invitationId)
+
+  def cancelInvitation(invitationId: String): Action[AnyContent] = actions.agentAuthenticate:
+    request =>
+      given AgentRequest[?] = request
+      // we can fetch the invitation, validate the arn and populate a new AgentJourney of type `CancelInvitation`
+      // which does not yet exist - so that journey type needs to be created
+      Ok("cancel invitation called with invitation id " + invitationId)
 }

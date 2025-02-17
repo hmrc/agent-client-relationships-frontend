@@ -43,6 +43,7 @@ class AppConfig @Inject()(servicesConfig: ServicesConfig, config: Configuration)
   val guidanceSa = s"$govUkUrl/guidance/self-assessment-for-agents-online-service"
   val guidanceAuthoriseAgent = s"$govUkUrl/guidance/authorise-an-agent-to-deal-with-certain-tax-services-for-you"
   val privacyPolicyUrl = s"$govUkUrl/government/publications/data-protection-act-dpa-information-hm-revenue-and-customs-hold-about-you/data-protection-act-dpa-information-hm-revenue-and-customs-hold-about-you"
+  val signupClientUrl: String = s"$govUkUrl/guidance/sign-up-your-client-for-making-tax-digital-for-income-tax"
 
   // Feature Flags
   val welshLanguageSupportEnabled: Boolean = config.getOptional[Boolean]("features.welsh-language-support").getOrElse(false)
@@ -51,7 +52,7 @@ class AppConfig @Inject()(servicesConfig: ServicesConfig, config: Configuration)
   val appName: String = getString("appName")
   val timeoutDialogTimeoutSeconds: Int = servicesConfig.getInt("timeoutDialog.timeout-seconds")
   val allowedRedirectHosts: Set[String] = config.getOptional[Seq[String]]("allowed-redirect-hosts").getOrElse(Nil).toSet
-  val trackRequestsPerPage: Int = servicesConfig.getInt("track-requests-per-page")
+  val trackRequestsPageSize: Int = servicesConfig.getInt("track-requests-per-page")
   val authorisationRequestExpiryDays: Int = servicesConfig.getDuration("invitation.expiryDuration").toDays.toInt
 
   // Stub for supported services to be replaced when decision on how to handle this is reached

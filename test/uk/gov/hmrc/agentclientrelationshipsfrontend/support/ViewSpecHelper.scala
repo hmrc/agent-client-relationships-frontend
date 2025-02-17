@@ -38,6 +38,8 @@ trait ViewSpecHelper extends Selectors {
 
   case class TestSummaryList(rows: List[(String, String, String)])
 
+  case class TestTable(caption: String, rows: List[IndexedSeq[String]])
+
   private val elementToLink: Element => TestLink = element => TestLink(element.text(), element.attr("href"))
 
   extension (el: Element)
@@ -94,6 +96,15 @@ trait ViewSpecHelper extends Selectors {
           val value = row.select(summaryListRowValue).text()
           val changeLink = row.select(s"$summaryListRowActions > a").attr("href")
           (key, value, changeLink)
+        }
+      )
+    }
+
+    def extractTable(index: Int = 1, numberOfCols: Int = 4): Option[TestTable] = extractByIndex(table, index).map { elem =>
+      TestTable(
+        caption = elem.select("caption").text(),
+        rows = elem.select("tbody tr").toList.map { row =>
+          for (i <- 0 until numberOfCols) yield row.select("td").get(i).text()
         }
       )
     }
