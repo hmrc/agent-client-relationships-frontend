@@ -705,6 +705,23 @@ confirmConsent.HMRC-PILLAR2-ORG.list.item5=finalise your overall tax position
 confirmConsent.HMRC-PILLAR2-ORG.list.item6=view your calculations and amounts owed and paid
 
 # ________________________________________________________________________________
+# Client confirm decline of request
+# ________________________________________________________________________________
+confirmDecline.title=Decline a request
+confirmDecline.agent=agent
+confirmDecline.mainAgent=main agent
+confirmDecline.suppAgent=supporting agent
+confirmDecline.p1={0} want to be your {1} for {2}.
+confirmDecline.p2=Read the guidance about
+confirmDecline.p2.link=the difference between main agents and supporting agents (opens in a new tab)
+confirmDecline.p3=If you decline the request from {0}, they will not be able to act as your {1} for {2}.
+confirmDecline.p4=You can change your mind later - just ask them to send you another request.
+confirmDecline.label=Do you want to decline the request from {0}?
+confirmDecline.true=Yes
+confirmDecline.false=No, I want to consider this request
+confirmDecline.error.required=Select ''yes'' if you want to decline the request from {0}
+
+# ________________________________________________________________________________
 # Client journey check your answer page
 # ________________________________________________________________________________
 checkYourAnswer.title=Check your answer

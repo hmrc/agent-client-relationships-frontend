@@ -47,7 +47,7 @@
     ))
 
     <p class="govuk-body">
-        <a href=@{s"/agent-client-relationships/authorisation-response/$uid/$taxService/decline-request"} class="govuk-link">@messages(s"$key.link.text2", agentName)</a>
+        <a href="@routes.DeclineRequestController.show(uid, taxService).url" class="govuk-link">@messages(s"$key.link.text2", agentName)</a>
     </p>
 }
 

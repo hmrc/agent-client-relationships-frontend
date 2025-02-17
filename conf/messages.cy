@@ -536,3 +536,20 @@ confirmConsent.HMRC-PILLAR2-ORG.list.item3=bwrw golwg dros a newid eich manylion
 confirmConsent.HMRC-PILLAR2-ORG.list.item4=rhoi manylion banc i CThEF ar gyfer ad-daliadau pan fo ad-daliad yn ddyledus
 confirmConsent.HMRC-PILLAR2-ORG.list.item5=cwblhau’ch sefyllfa dreth gyffredinol
 confirmConsent.HMRC-PILLAR2-ORG.list.item6=bwrw golwg dros eich cyfrifiadau a’r symiau dyledus a’r symiau sydd wedi’u talu.
+
+# ________________________________________________________________________________
+# Client confirm decline of request
+# ________________________________________________________________________________
+confirmDecline.title=<translation needed>
+confirmDecline.agent=<translation needed>
+confirmDecline.mainAgent=<translation needed>
+confirmDecline.suppAgent=<translation needed>
+confirmDecline.p1=<translation needed>
+confirmDecline.p2=<translation needed>
+confirmDecline.p2.link=<translation needed>
+confirmDecline.p3=<translation needed>
+confirmDecline.p4=<translation needed>
+confirmDecline.label=<translation needed>
+confirmDecline.true=Iawn
+confirmDecline.false=<translation needed>
+confirmDecline.error.required=<translation needed>
