@@ -17,7 +17,7 @@
 @import play.twirl.api.Html
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.routes
-@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.{Accepted, DeAuthorised, Expired, InvitationStatus, PartialAuth, Pending, Rejected}
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.{Accepted, Cancelled, DeAuthorised, Expired, InvitationStatus, PartialAuth, Pending, Rejected}
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{PageInfo, TrackRequestsResult}
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.Layout
 @import uk.gov.hmrc.govukfrontend.views.Implicits.RichSelect
@@ -57,7 +57,7 @@
 @statusContent(status: InvitationStatus, expiryDate: LocalDate, lastUpdated: Instant) = {
     @{status match {
         case Pending => <span>{messages(s"$key.status.$status")}</span><br/><span class="govuk-body-s">{messages(s"$key.expires", expiryDate.format(dateFormatter))}</span>
-
+        case Expired => <span>{messages(s"$key.status.$status")}</span><span class="govuk-body-s">{messages(s"$key.expired", expiryDate.format(dateFormatter))}</span>
         case _ => <span>{messages(s"$key.status.$status")}</span><br/><span class="govuk-body-s">{lastUpdated.atZone(ZoneOffset.UTC).toLocalDateTime.format(dateFormatter)}</span>
     }}
 }
@@ -71,12 +71,12 @@
 @actions(status: InvitationStatus, id: String, client: String, service: String) = {
         @{status match {
             case Pending => <a class="govuk-link" href={routes.TrackRequestsController.resendInvitation(id).url}>{messages(s"$key.action.resend")}<span class="govuk-visually-hidden"> {messages(s"$key.action.screenReaderText", client, service)}</span></a>
-                    <br/><a class="govuk-link" href={routes.TrackRequestsController.cancelInvitation(id).url}>{messages(s"$key.action.cancel")}<span class="govuk-visually-hidden"> {messages(s"$key.action.screenReaderText", client, service)}</span></a>
+                    <br/><a class="govuk-link" href={routes.AgentCancelInvitationController.show(id).url}>{messages(s"$key.action.cancel")}<span class="govuk-visually-hidden"> {messages(s"$key.action.screenReaderText", client, service)}</span></a>
             case PartialAuth => <a class="govuk-link" href={appConfig.signupClientUrl} target="_blank" rel="noreferrer noopener">{messages(s"$key.action.signup")}<span class="govuk-visually-hidden"> {messages(s"$key.action.screenReaderText", client, service)}</span></a>
                     <br /><a class="govuk-link" href={routes.TrackRequestsController.deAuthFromInvitation(id).url}>{messages(s"$key.action.deauth")}<span class="govuk-visually-hidden"> {messages(s"$key.action.screenReaderText", client, service)}</span></a>
             case Accepted => <a class="govuk-link" href={routes.TrackRequestsController.deAuthFromInvitation(id).url}>{messages(s"$key.action.deauth")}<span class="govuk-visually-hidden"> {messages(s"$key.action.screenReaderText", client, service)}</span></a>
             case Rejected | DeAuthorised => <a class="govuk-link" href={routes.TrackRequestsController.restartInvitation(id).url}>{messages(s"$key.action.startNew")}<span class="govuk-visually-hidden"> {messages(s"$key.action.screenReaderText", client, service)}</span></a>
-            case Expired => <a class="govuk-link" href={routes.TrackRequestsController.restartInvitation(id).url}>{messages(s"$key.action.startNew")}<span class="govuk-visually-hidden"> {messages(s"$key.action.screenReaderText", client, service)}</span></a>
+            case Expired | Cancelled => <a class="govuk-link" href={routes.TrackRequestsController.restartInvitation(id).url}>{messages(s"$key.action.startNew")}<span class="govuk-visually-hidden"> {messages(s"$key.action.screenReaderText", client, service)}</span></a>
         }}
 }
 

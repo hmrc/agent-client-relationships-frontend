@@ -48,18 +48,17 @@ class ConfirmationControllerISpec extends ComponentSpecHelper with AuthStubs {
 
   def testGetAuthorisationRequestInfoResponse(service: String): JsObject = Json.obj(
     "authorisationRequest" -> Json.obj(
+      "invitationId" -> testInvitationId,
       "clientName" -> testClientName,
+      "suppliedClientId" -> "AB1234567890",
       "service" -> service,
       "expiryDate" -> LocalDate.now(),
+      "agencyEmail" -> testEmail,
+      "clientType" -> "personal"
     ),
     "agentLink" -> Json.obj(
       "uid" -> "ABC123",
       "normalizedAgentName" -> "abc-accountants"
-    ),
-    "agentDetails" -> Json.obj(
-      "agencyDetails" -> Json.obj(
-        "agencyEmail" -> testEmail
-      )
     )
   )
 

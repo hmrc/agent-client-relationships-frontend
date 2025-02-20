@@ -19,20 +19,29 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.{Actions, AgentRequest}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
-import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{AgentClientRelationshipsService, TrackRequestsService}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.TrackRequestsPage
+import uk.gov.hmrc.agentclientrelationshipsfrontend.config.{AppConfig, ErrorHandler}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.routes
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.AgentCancelInvitationForm
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.AgentJourneyType
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{AuthorisationRequest, AuthorisationRequestInfo}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{AgentClientRelationshipsService, AgentJourneyService, ClientServiceConfigurationService, JourneyService, TrackRequestsService}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.{AgentCancelInvitationPage, PageNotFound, ResendInvitationLink, TrackRequestsPage}
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class TrackRequestsController @Inject()(
                                          mcc: MessagesControllerComponents,
                                          actions: Actions,
                                          trackRequestsService: TrackRequestsService,
                                          acrService: AgentClientRelationshipsService,
-                                         trackRequestsPage: TrackRequestsPage
+                                         trackRequestsPage: TrackRequestsPage,
+                                         serviceConfig: ClientServiceConfigurationService,
+                                         resendInvitationLinkPage: ResendInvitationLink,
+                                         journeyService: AgentJourneyService,
+                                         pageNotFound: PageNotFound
                                        )(implicit val executionContext: ExecutionContext, appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport {
 
   def show(pageNumber: Int, statusFilter: Option[String] = None, clientName: Option[String] = None): Action[AnyContent] = actions.agentAuthenticate.async:
@@ -56,30 +65,63 @@ class TrackRequestsController @Inject()(
           Ok(trackRequestsPage(result, 1))
         }
 
-   def deAuthFromInvitation(invitationId: String): Action[AnyContent] = actions.agentAuthenticate:
+   def deAuthFromInvitation(invitationId: String): Action[AnyContent] = actions.agentAuthenticate.async:
      request =>
        given AgentRequest[?] = request
-       // we can fetch the invitation, validate the arn and populate a new AgentJourney of type `AgentCancelAuthorisation`
-       // then redirect to nextUrl in that journey
-       Ok("de-authorise relationship called with invitation id " + invitationId)
+       val journeyType: AgentJourneyType = AgentJourneyType.AgentCancelAuthorisation
+       for {
+         fastTrackData <- acrService.getAuthorisationRequest(invitationId = invitationId)
+           .map(_.getOrElse(throw new RuntimeException(s"Invitation not found for invitationId: $invitationId")))
+         clientDetails  <- acrService.getClientDetails(fastTrackData.suppliedClientId, fastTrackData.service)
 
-  def restartInvitation(invitationId: String): Action[AnyContent] = actions.agentAuthenticate:
+         newJourney = journeyService.newJourney(journeyType)
+           .copy(
+             clientType = Some(fastTrackData.clientType),
+             clientService = Some(fastTrackData.service),
+             refinedService = Some(true), // all invitations will have been refined
+             clientId = Some(fastTrackData.suppliedClientId),
+             clientDetailsResponse = clientDetails,
+             knownFact = clientDetails.flatMap(_.knownFacts.headOption),
+             clientConfirmed = Some(true)
+           )
+
+         _ <- journeyService.saveJourney(newJourney)
+         nextPage <- journeyService.nextPageUrl(journeyType)
+       } yield Redirect(nextPage)
+
+  def restartInvitation(invitationId: String): Action[AnyContent] = actions.agentAuthenticate.async:
     request =>
       given AgentRequest[?] = request
-      // we can fetch the invitation, validate the arn and populate a new AgentJourney of type `AuthorisationRequest`
-      // then redirect to nextUrl in that journey
-      Ok("restart invitation called with invitation id " + invitationId)
 
-  def resendInvitation(invitationId: String): Action[AnyContent] = actions.agentAuthenticate:
+      val journeyType: AgentJourneyType = AgentJourneyType.AuthorisationRequest
+      for {
+        fastTrackData <- acrService.getAuthorisationRequest(invitationId = invitationId)
+          .map(_.getOrElse(throw new RuntimeException(s"Invitation to restart not found for invitationId: $invitationId")))
+        clientDetails  <- acrService.getClientDetails(fastTrackData.suppliedClientId, fastTrackData.service)
+
+        newJourney = journeyService.newJourney(journeyType)
+          .copy(
+            clientType = Some(fastTrackData.clientType),
+            clientService = Some(fastTrackData.service),
+            refinedService = Some(true), // all invitations will have been refined
+            clientId = Some(fastTrackData.suppliedClientId),
+            clientDetailsResponse = clientDetails,
+            knownFact = None
+          )
+
+        _ <- journeyService.saveJourney(newJourney)
+        nextPage <- journeyService.nextPageUrl(journeyType)
+      } yield Redirect(nextPage)
+
+  def resendInvitation(invitationId: String): Action[AnyContent] = actions.agentAuthenticate.async:
     request =>
       given AgentRequest[?] = request
-      // we can fetch the invitation info, validate the arn and feed it into a new template to display the link to resend the invitation
-      Ok("resend invitation called with invitation id " + invitationId)
 
-  def cancelInvitation(invitationId: String): Action[AnyContent] = actions.agentAuthenticate:
-    request =>
-      given AgentRequest[?] = request
-      // we can fetch the invitation, validate the arn and populate a new AgentJourney of type `CancelInvitation`
-      // which does not yet exist - so that journey type needs to be created
-      Ok("cancel invitation called with invitation id " + invitationId)
+      acrService.getAuthorisationRequest(invitationId = invitationId).map {
+        case Some(info) =>
+          Ok(resendInvitationLinkPage(info,
+            s"${appConfig.clientLinkBaseUrl}/${info.agentReference}/${info.normalizedAgentName}/${serviceConfig.getUrlPart(info.service)}"
+          ))
+        case None => NotFound(pageNotFound())
+      }
 }

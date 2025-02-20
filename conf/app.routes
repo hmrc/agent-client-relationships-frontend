@@ -4,13 +4,17 @@
 GET        /assets/*file                                                                controllers.Assets.versioned(path = "/public", file: Asset)
 
 # Track requests ---------------------------------------------------------------------------------------------------------
-GET         /track-requests                                                             uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.TrackRequestsController.show(pageNumber: Int ?= 1, statusFilter: Option[String] ?= None, clientName: Option[String] ?= None)
-POST        /track-requests                                                             uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.TrackRequestsController.submitFilters
+GET         /manage-authorisation-requests                                              uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.TrackRequestsController.show(pageNumber: Int ?= 1, statusFilter: Option[String] ?= None, clientName: Option[String] ?= None)
+POST        /manage-authorisation-requests                                              uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.TrackRequestsController.submitFilters
 
-GET         /track-requests/deauth/:invitationId                                        uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.TrackRequestsController.deAuthFromInvitation(invitationId: String)
-GET         /track-requests/restart/:invitationId                                       uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.TrackRequestsController.restartInvitation(invitationId: String)
-GET         /track-requests/resend/:invitationId                                       uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.TrackRequestsController.resendInvitation(invitationId: String)
-GET         /track-requests/cancel/:invitationId                                       uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.TrackRequestsController.cancelInvitation(invitationId: String)
+GET         /manage-authorisation-requests/deauth/:invitationId                         uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.TrackRequestsController.deAuthFromInvitation(invitationId: String)
+GET         /manage-authorisation-requests/restart/:invitationId                        uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.TrackRequestsController.restartInvitation(invitationId: String)
+GET         /manage-authorisation-requests/resend/:invitationId                         uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.TrackRequestsController.resendInvitation(invitationId: String)
+
+GET         /manage-authorisation-requests/confirm-cancellation/:invitationId           uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.AgentCancelInvitationController.show(invitationId: String)
+POST        /manage-authorisation-requests/confirm-cancellation/:invitationId           uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.AgentCancelInvitationController.submit(invitationId: String)
+GET         /manage-authorisation-requests/cancellation-confirmation/:invitationId      uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.AgentCancelInvitationController.complete(invitationId: String)
+
 # Sign out/Timed out ---------------------------------------------------------------------------------------------------------
 GET         /timed-out                                                                  uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.TimedOutController.timedOut(continueUrl: RedirectUrl, serviceHeader: String)
 GET         /sign-out                                                                   uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.SignOutController.signOut

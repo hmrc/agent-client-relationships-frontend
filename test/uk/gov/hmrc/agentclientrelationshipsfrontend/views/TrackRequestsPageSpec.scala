@@ -57,10 +57,10 @@ class TrackRequestsPageSpec extends ViewSpecSupport {
   object Expected {
     val title = "Manage your recent authorisation requests - Ask a client to authorise you - GOV.UK"
     val heading = "Manage your recent authorisation requests"
-    def resendLink(service: String) = s"Resend link for client $clientName to ${serviceLabel(service)}"
-    def cancelRequestLink(service: String) = s"Cancel request for client $clientName to ${serviceLabel(service)}"
-    def deAuthoriseLink(service: String) = s"Remove authorisation for client $clientName to ${serviceLabel(service)}"
-    def startNewLink(service: String) = s"Start a new request for client $clientName to ${serviceLabel(service)}"
+    def resendLink(service: String) = s"Resend request to client for client $clientName to ${serviceLabel(service)}"
+    def cancelRequestLink(service: String) = s"Cancel this request for client $clientName to ${serviceLabel(service)}"
+    def deAuthoriseLink(service: String) = s"Cancel your authorisation for client $clientName to ${serviceLabel(service)}"
+    def startNewLink(service: String) = s"Start new request for client $clientName to ${serviceLabel(service)}"
     def signClientUpLink(service: String) = s"Sign your client up (opens in a new tab) for client $clientName to ${serviceLabel(service)}"
   }
 
