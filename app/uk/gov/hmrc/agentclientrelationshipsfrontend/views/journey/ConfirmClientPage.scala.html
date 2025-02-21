@@ -59,7 +59,6 @@
             )),
             items = Seq("true", "false").map(trueOrFalse =>
                 RadioItem(
-                    id = Some(trueOrFalse),
                     content = Text(messages(s"$key.$trueOrFalse")),
                     value = Some(trueOrFalse)
                 )
