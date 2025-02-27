@@ -46,6 +46,9 @@ POST       /authorisation-response/check-answer                                 
 
 GET        /authorisation-response/confirmation                                         uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.ConfirmationController.show
 
+# Client Manage Your Tax Agents URLs ----------------------------------------------------------------------------------------
+GET        /manage-your-tax-agents                                                      uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.ManageYourTaxAgentsController.show
+
 # Agent Journey URLs ----------------------------------------------------------------------------------------------------------
 GET        /:journeyType                                                                uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.StartJourneyController.startJourney(journeyType: AgentJourneyType)
 

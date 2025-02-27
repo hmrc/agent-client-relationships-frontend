@@ -18,6 +18,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.services
 
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.AgentRequest
 import uk.gov.hmrc.agentclientrelationshipsfrontend.connectors.AgentClientRelationshipsConnector
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ManageYourTaxAgentsData
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{AgentDetails, AuthorisationRequestInfo, AuthorisationRequestInfoForClient, ClientDetailsResponse}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, AgentJourneyRequest, ClientJourneyRequest}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -56,6 +57,10 @@ class AgentClientRelationshipsService @Inject()(agentClientRelationshipsConnecto
 
   def agentCancelInvitation(invitationId: String)(implicit hc: HeaderCarrier, request: AgentRequest[?]): Future[Unit] = {
     agentClientRelationshipsConnector.cancelInvitation(invitationId)
+  }
+
+  def getManageYourTaxAgentsData()(implicit hc: HeaderCarrier): Future[ManageYourTaxAgentsData] = {
+    agentClientRelationshipsConnector.getManageYourTaxAgentsData()
   }
 
 }
