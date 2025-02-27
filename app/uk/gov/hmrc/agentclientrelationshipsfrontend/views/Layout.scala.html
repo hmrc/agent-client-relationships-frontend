@@ -16,7 +16,7 @@
 
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.routes
-@import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.layouts.SidebarLayout
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.layouts.FullWidthLayout
 
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcStandardPage
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers._
@@ -34,7 +34,8 @@
         autocompleteJavascript: HmrcAccessibleAutocompleteJavascript,
         hmrcTimeoutDialogHelper: HmrcTimeoutDialogHelper,
         hmrcReportTechnicalIssueHelper: HmrcReportTechnicalIssueHelper,
-        twoThirdsOneThirdMainContent: SidebarLayout
+        fullWidthLayout: FullWidthLayout,
+        twoThirdsMainContent: TwoThirdsMainContent
 )
 
 @(
@@ -42,8 +43,8 @@
         serviceName: Option[String] = None,
         optionalForm: Option[Form[?]] = None,
         backLinkHref: Option[String] = None,
-        sidebar: Option[Html] = None,
-        suppressBackLink: Boolean = false
+        suppressBackLink: Boolean = false,
+        fullWidth: Boolean = false
 )(contentBlock: Html)(implicit request: RequestHeader, messages: Messages)
 
 @isSignedIn  = @{request.session.get("authToken").isDefined}
@@ -66,9 +67,10 @@
 }
 @* instead of doing title building at template level we can centralise it here and for
 form submission pages we can pass in hasErrors = form.hasErrors, the required pageTitle should always
-equal the page heading (H1) content *@
+equal the page heading (H1) content, if they are identical then only the service name *@
+@pageAndServiceTitle = @{if(pageTitle == service) service else s"$pageTitle - $service"}
 @gdsTitle = @{
-    s"""${if(optionalForm.exists(_.hasErrors)){ s"""${messages("error.prefix")} """ } else ""}$pageTitle - $service - GOV.UK"""
+    s"""${if(optionalForm.exists(_.hasErrors)){ s"""${messages("error.prefix")} """ } else ""}$pageAndServiceTitle - GOV.UK"""
 }
 
 @scripts = {
@@ -102,14 +104,10 @@ equal the page heading (H1) content *@
         templateOverrides = TemplateOverrides(
             additionalHeadBlock = Some(head),
             additionalScriptsBlock = Some(scripts),
-            mainContentLayout = sidebar.map(s => twoThirdsOneThirdMainContent(s, pageTitle))
+            mainContentLayout = if(fullWidth) Some(fullWidthLayout(_)) else Some(twoThirdsMainContent(_))
         ),
         isWelshTranslationAvailable = appConfig.welshLanguageSupportEnabled,
         backLink = if suppressBackLink then None else Some(backLinkHref.map(BackLink(_, messages("button.back"))).getOrElse(BackLink.mimicsBrowserBackButtonViaJavaScript)),
         serviceName = Some(service)
   )
 )(content)
-
-@{
-    //$COVERAGE-OFF$
-}

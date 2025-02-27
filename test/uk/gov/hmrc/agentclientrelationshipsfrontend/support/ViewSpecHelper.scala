@@ -100,7 +100,7 @@ trait ViewSpecHelper extends Selectors {
       )
     }
 
-    def extractTable(index: Int = 1, numberOfCols: Int = 4): Option[TestTable] = extractByIndex(table, index).map { elem =>
+    def extractTable(index: Int, numberOfCols: Int): Option[TestTable] = extractByIndex(table, index).map { elem =>
       TestTable(
         caption = elem.select("caption").text(),
         rows = elem.select("tbody tr").toList.map { row =>

@@ -18,12 +18,15 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.connectors
 
 import play.api.libs.json.{JsObject, Json}
 import play.api.test.Helpers.*
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.{AgentData, ManageYourTaxAgentsData, Pending}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.invitationLink.ValidateLinkPartsResponse
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, AgentJourneyRequest, AgentJourneyType}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsResponse, ClientStatus, KnownFactType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsResponse, ClientStatus, Invitation, KnownFactType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AgentClientRelationshipStub, ComponentSpecHelper}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.WiremockHelper.stubGet
 import uk.gov.hmrc.http.{HeaderCarrier, JsValidationException, UpstreamErrorResponse}
+
+import java.time.{Instant, LocalDate}
 
 class AgentClientRelationshipsConnectorISpec extends ComponentSpecHelper with AgentClientRelationshipStub {
 
@@ -33,6 +36,7 @@ class AgentClientRelationshipsConnectorISpec extends ComponentSpecHelper with Ag
   def getClientDetailsUrl(service: String, clientId: String) = s"/agent-client-relationships/client/$service/details/$clientId"
 
   def getValidateLinkResponseUrl(uid: String, normalizedAgentName: String) = s"/agent-client-relationships/agent/agent-reference/uid/$uid/$normalizedAgentName"
+
 
   val testArn = "TARN0000001"
   val testClientId = "clientId"
@@ -77,6 +81,49 @@ class AgentClientRelationshipsConnectorISpec extends ComponentSpecHelper with Ag
 
   val testValidateLinkResponseJson: JsObject = Json.obj(
     "name" -> testName,
+  )
+
+  val mytaData: ManageYourTaxAgentsData = ManageYourTaxAgentsData(
+    currentRequests = Seq(
+      AgentData(
+        uid = "NBM9TUDA",
+        agentName = "Test Agent",
+        invitations = Seq(
+          Invitation(
+            invitationId = "1234567890",
+            service = "HMRC-MTD-IT",
+            clientName = "Some test",
+            status = Pending,
+            expiryDate = LocalDate.now().plusDays(6),
+            lastUpdated = Instant.now()
+          ),
+          Invitation(
+            invitationId = "123LD67891",
+            service = "HMRC-PILLAR2-ORG",
+            clientName = "Some test",
+            status = Pending,
+            expiryDate = LocalDate.now().plusDays(15),
+            lastUpdated = Instant.now()
+          )
+        )
+      ),
+      AgentData(
+        uid = "1234590",
+        agentName = "Test VAT Agent Ltd",
+        invitations = Seq(
+          Invitation(
+            invitationId = "123456BFX90",
+            service = "HMRC-MTD-VAT",
+            clientName = "Some test",
+            status = Pending,
+            expiryDate = LocalDate.now().plusDays(11),
+            lastUpdated = Instant.now()
+          )
+        )
+      )
+    ),
+    authorisedAgents = Seq.empty,
+    history = Seq.empty
   )
 
   "getClientDetails" should {
@@ -153,4 +200,11 @@ class AgentClientRelationshipsConnectorISpec extends ComponentSpecHelper with Ag
       givenCancelAuthorisation(testArn)
       implicit val journeyRequest: AgentJourneyRequest[?] = new AgentJourneyRequest(testArn, basicJourney, request)
       await(testConnector.cancelAuthorisation(basicJourney)) shouldEqual ()
+
+  "getManageYourTaxAgentsData" should:
+    "return the Manage Your Tax Agents data when receiving a 200 response with a valid json" in:
+      stubGet("/agent-client-relationships/client/manage-your-tax-agents", OK, Json.toJson(mytaData).toString)
+      val result = testConnector.getManageYourTaxAgentsData()
+      await(result) shouldBe mytaData
+
 }
