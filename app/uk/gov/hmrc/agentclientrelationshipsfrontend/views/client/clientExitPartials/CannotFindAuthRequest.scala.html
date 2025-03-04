@@ -19,11 +19,11 @@
 
 @this()
 
-@(agentName: String)(implicit request: Request[?], messages: Messages, appConfig: AppConfig)
+@(agentName: Option[String])(implicit request: Request[?], messages: Messages, appConfig: AppConfig)
 @key = @{
     "cannotFindAuthRequest"
 }
 
-<p class="govuk-body">@messages(s"$key.p1", agentName)</p>
+<p class="govuk-body">@messages(s"$key.p1", agentName.getOrElse(""))</p>
 <p class="govuk-body">@Html(messages(s"$key.p2", s"${appConfig.guidanceAuthoriseAgent}"))</p>
 <p class="govuk-body">@Html(messages(s"$key.p3", routes.SignOutController.signOut.url)) </p>

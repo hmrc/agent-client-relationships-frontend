@@ -24,5 +24,8 @@ case class ValidateLinkPartsResponse(
 
 object ValidateLinkPartsResponse {
   implicit val format: OFormat[ValidateLinkPartsResponse] = Json.format[ValidateLinkPartsResponse]
-  
 }
+
+sealed trait ValidateLinkPartsError
+case object AgentSuspendedError extends ValidateLinkPartsError
+case object AgentNotFoundError extends ValidateLinkPartsError

@@ -23,7 +23,7 @@
 
 @this(layout: Layout, govukButton: GovukButton, govukRadios: GovukRadios, formWithCSRF: FormWithCSRF)
 
-@(form: Form[Boolean], agentRoleKey: String, uid: String, taxService: String)(implicit request: ClientJourneyRequest[_], messages: Messages, appConfig: AppConfig)
+@(form: Form[Boolean], agentRoleKey: String, uid: String, taxService: String)(implicit request: ClientJourneyRequest[?], messages: Messages, appConfig: AppConfig)
 
 @key = @{"confirmDecline"}
 @serviceKey = @{request.journey.getServiceKey}

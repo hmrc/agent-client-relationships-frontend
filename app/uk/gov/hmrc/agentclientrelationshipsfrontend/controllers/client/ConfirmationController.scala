@@ -17,12 +17,11 @@
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client
 
 import com.google.inject.{Inject, Singleton}
-import play.api.{Logger, Logging}
+import play.api.Logging
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
-import uk.gov.hmrc.agentclientrelationshipsfrontend.connectors.AgentClientRelationshipsConnector
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.AgentClientRelationshipsService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.client.ConfirmationPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
@@ -48,8 +47,7 @@ class ConfirmationController @Inject()(mcc: MessagesControllerComponents,
             case None =>
               throw new RuntimeException(s"Authorisation request not found for invitationId: $invitationId")
           }
-        case _ => {
+        case _ =>
           logger.warn(s"Redirecting to MYTA as client journey is not valid for confirmation page - ${request.journey}")
           Future.successful(Redirect(appConfig.acmExternalUrl))
-        }
       }

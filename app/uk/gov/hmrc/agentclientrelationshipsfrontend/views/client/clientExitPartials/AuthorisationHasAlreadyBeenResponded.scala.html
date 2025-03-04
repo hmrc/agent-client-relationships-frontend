@@ -19,14 +19,14 @@
 
 @import java.time.Instant
 
-@this(layout: Layout)
+@this()
 
-@(respondedToDate: Instant)(implicit messages: Messages, appConfig: AppConfig)
+@(respondedToDate: Option[Instant])(implicit messages: Messages, appConfig: AppConfig)
 @key = @{
     "authorisationRequestRespondedTo"
 }
 
-<p class="govuk-body">@Html(messages(s"$key.p1", displayInstant(respondedToDate), s"${appConfig.acmExternalUrl}#history"))</p>
+<p class="govuk-body">@Html(messages(s"$key.p1", respondedToDate.map(displayInstant).getOrElse(""), s"${appConfig.acmExternalUrl}#history"))</p>
 <p class="govuk-body">@Html(messages(s"$key.p2", s"${appConfig.guidanceAuthoriseAgent}"))</p>
 <p class="govuk-body">@messages(s"$key.p3")</p>
 <p class="govuk-body">@Html(messages(s"$key.p4", s"${appConfig.signInUrl}"))</p>

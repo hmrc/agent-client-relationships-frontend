@@ -25,7 +25,7 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.models.KnownFactType
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.common.KnownFactsConfiguration
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.EnterClientFactForm
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, AgentJourney, JourneyExitType, AgentJourneyType}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{ClientServiceConfigurationService, AgentJourneyService}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.services.AgentJourneyService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.EnterClientFactPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
@@ -34,7 +34,6 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class EnterClientFactController @Inject()(mcc: MessagesControllerComponents,
-                                          serviceConfig: ClientServiceConfigurationService,
                                           journeyService: AgentJourneyService,
                                           enterKnownFactPage: EnterClientFactPage,
                                           actions: Actions,

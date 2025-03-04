@@ -17,16 +17,13 @@
 package uk.gov.hmrc.agentclientrelationshipsfrontend.services
 
 import com.google.inject.{Inject, Singleton}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.ClientJourney
 import uk.gov.hmrc.agentclientrelationshipsfrontend.repositories.JourneyRepository
 import uk.gov.hmrc.mongo.cache.DataKey
 
-import scala.concurrent.ExecutionContext
-
 @Singleton
 class ClientJourneyService @Inject()(val journeyRepository: JourneyRepository,
-                                     val serviceConfig: ClientServiceConfigurationService)(implicit executionContext: ExecutionContext, appConfig: AppConfig) extends JourneyService[ClientJourney] {
+                                     val serviceConfig: ClientServiceConfigurationService) extends JourneyService[ClientJourney] {
 
   override val dataKey: DataKey[ClientJourney] = DataKey("ClientJourneySessionData")
   

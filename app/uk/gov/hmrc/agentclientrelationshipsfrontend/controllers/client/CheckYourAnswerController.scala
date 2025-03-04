@@ -22,7 +22,6 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.connectors.AgentClientRelationshipsConnector
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.{Rejected, Accepted as ClientAccepted}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.ClientJourney
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.ClientJourneyService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController

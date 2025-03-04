@@ -20,12 +20,12 @@
 
 @this()
 
-@(expiryDate: Instant)( implicit messages: Messages, appConfig: AppConfig)
+@(expiryDate: Option[Instant])( implicit messages: Messages, appConfig: AppConfig)
 @key = @{
     "authorisationRequestExpired"
 }
 
-<p class="govuk-body">@Html(messages(s"$key.p1", displayInstant(expiryDate), s"${appConfig.acmExternalUrl}#history"))</p>
+<p class="govuk-body">@Html(messages(s"$key.p1", expiryDate.map(displayInstant).getOrElse(""), s"${appConfig.acmExternalUrl}#history"))</p>
 <p class="govuk-body">@Html(messages(s"$key.p2", s"${appConfig.guidanceAuthoriseAgent}"))</p>
 <p class="govuk-body">@messages(s"$key.p3")</p>
 <p class="govuk-body">@Html(messages(s"$key.p4", s"${appConfig.signInUrl}"))</p>

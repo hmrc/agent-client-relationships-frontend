@@ -35,8 +35,7 @@
         govukPagination: GovukPagination,
         govukTable: GovukTable,
         formWithCSRF: FormWithCSRF,
-        govukButton: GovukButton,
-        govukCheckboxes: GovukCheckboxes
+        govukButton: GovukButton
 )
 
 @(
@@ -61,13 +60,6 @@
         case _ => <span>{messages(s"$key.status.$status")}</span><br/><span class="govuk-body-s">{lastUpdated.atZone(ZoneOffset.UTC).toLocalDateTime.format(dateFormatter)}</span>
     }}
 }
-@newRequestLink(id: String) = {
-    <a class="govuk-link" href="@{routes.TrackRequestsController.restartInvitation(id).url}">{messages(s"$key.action.startNew")}</a>
-}
-@deAuthLink(id: String) = {
-    <a class="govuk-link" href="@{routes.TrackRequestsController.deAuthFromInvitation(id).url}">{messages(s"$key.action.deauth")}</a>
-}
-
 @actions(status: InvitationStatus, id: String, client: String, service: String) = {
         @{status match {
             case Pending => <a class="govuk-link" href={routes.TrackRequestsController.resendInvitation(id).url}>{messages(s"$key.action.resend")}<span class="govuk-visually-hidden"> {messages(s"$key.action.screenReaderText", client, service)}</span></a>
@@ -120,7 +112,7 @@
                     items = Seq(SelectItem(value = Some(""), text = messages(s"$key.sidebar.allStatuses")))
                             ++ handlePartialAuth(result.availableFilters).map(name => SelectItem(
                                 value = Some(name),
-                                text = messages(s"$key.filter-status.${name}"),
+                                text = messages(s"$key.filter-status.$name"),
                                 selected = result.filtersApplied.flatMap(_.get("statusFilter")).contains(name)
                             )),
                     classes = "govuk-!-margin-bottom-4"

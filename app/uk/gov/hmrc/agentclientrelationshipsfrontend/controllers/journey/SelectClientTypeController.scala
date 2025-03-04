@@ -20,7 +20,6 @@ import play.api.i18n.I18nSupport
 import play.api.mvc.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.ClientTypeFieldName
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientType
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.SelectFromOptionsForm
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, AgentJourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{AgentJourneyService, ClientServiceConfigurationService}
