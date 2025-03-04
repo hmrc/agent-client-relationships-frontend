@@ -22,6 +22,7 @@ import play.api.libs.ws.JsonBodyWritables.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.AgentRequest
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.*
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ManageYourTaxAgentsData
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.invitationLink.ValidateLinkPartsResponse
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, AgentJourneyRequest, ClientJourneyRequest}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.ClientServiceConfigurationService
@@ -150,3 +151,8 @@ class AgentClientRelationshipsConnector @Inject()(appConfig: AppConfig,
         case NOT_FOUND => Left("INVITATION_OR_AGENT_RECORD_NOT_FOUND")
         case status => throw new Exception(s"Unexpected status $status received when fetching invitation")
       })
+
+  def getManageYourTaxAgentsData()(implicit hc: HeaderCarrier): Future[ManageYourTaxAgentsData] =
+    httpV2
+      .get(url"$agentClientRelationshipsUrl/client/manage-your-tax-agents")
+      .execute[ManageYourTaxAgentsData]

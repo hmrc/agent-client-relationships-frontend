@@ -16,10 +16,10 @@
 
 @this()
 
-@(sidebarContent: Html, pageTitle: String)(mainContent: Html)
+@(contentBlock: Html)
 
-    <div class="govuk-grid-column-full-width">
-        <h1 class="govuk-heading-xl">@pageTitle</h1>
-        @sidebarContent
-        @mainContent
-    </div>
+<div class="govuk-grid-row">
+ <div class="govuk-grid-column-full">
+ @contentBlock
+ </div>
+</div>

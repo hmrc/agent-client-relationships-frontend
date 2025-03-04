@@ -45,6 +45,7 @@ class AppConfig @Inject()(servicesConfig: ServicesConfig, config: Configuration)
   val guidanceAuthoriseAgent = s"$govUkUrl/guidance/authorise-an-agent-to-deal-with-certain-tax-services-for-you"
   val privacyPolicyUrl = s"$govUkUrl/government/publications/data-protection-act-dpa-information-hm-revenue-and-customs-hold-about-you/data-protection-act-dpa-information-hm-revenue-and-customs-hold-about-you"
   val signupClientUrl: String = s"$govUkUrl/guidance/sign-up-your-client-for-making-tax-digital-for-income-tax"
+  val mytaOtherTaxServicesGuidanceUrl: String = s"$govUkUrl/guidance/client-authorisation-an-overview#how-to-change-or-cancel-authorisations-as-an-agent"
 
   // Feature Flags
   val welshLanguageSupportEnabled: Boolean = config.getOptional[Boolean]("features.welsh-language-support").getOrElse(false)

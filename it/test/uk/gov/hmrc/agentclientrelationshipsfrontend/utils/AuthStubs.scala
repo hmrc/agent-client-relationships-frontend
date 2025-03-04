@@ -35,7 +35,10 @@ trait AuthStubs {
           "key" -> "AgentReferenceNumber",
           "value" -> arn
         ))
-      ))
+      )),
+      "affinityGroup" -> "Agent",
+      "confidenceLevel" -> 50,
+      "allEnrolments" -> Json.arr()
     ).toString
   )
 
