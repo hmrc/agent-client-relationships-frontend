@@ -21,6 +21,8 @@ import play.api.mvc.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.connectors.AgentClientRelationshipsConnector
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.InvitationOrAgentNotFoundError
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.AgentSuspendedError
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.{Cancelled, Expired, Pending}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientExitType.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{ClientJourneyService, ClientServiceConfigurationService}
@@ -45,8 +47,8 @@ class ConsentInformationController @Inject()(agentClientRelationshipsConnector: 
       agentClientRelationshipsConnector
         .validateInvitation(uid, serviceConfigurationService.getServiceKeysForUrlPart(taxService))
         .flatMap {
-          case Left("AGENT_SUSPENDED") => Future.successful(Redirect(routes.ClientExitController.showUnauthorised(AgentSuspended)))
-          case Left("INVITATION_OR_AGENT_RECORD_NOT_FOUND") => Future.successful(Redirect(routes.ClientExitController.showUnauthorised(NoOutstandingRequests)))
+          case Left(AgentSuspendedError) => Future.successful(Redirect(routes.ClientExitController.showUnauthorised(AgentSuspended)))
+          case Left(InvitationOrAgentNotFoundError) => Future.successful(Redirect(routes.ClientExitController.showUnauthorised(NoOutstandingRequests)))
           case Right(response) =>
             val newJourney = journeyRequest.journey.copy(
               invitationId = Some(response.invitationId),

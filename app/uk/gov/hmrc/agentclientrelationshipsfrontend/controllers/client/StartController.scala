@@ -22,6 +22,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.connectors.AgentClientRelationshipsConnector
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientExitType.*
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.invitationLink.{AgentNotFoundError, AgentSuspendedError}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.ClientServiceConfigurationService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.client.AuthoriseAgentStartPage
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.PageNotFound
@@ -44,8 +45,8 @@ class StartController @Inject()(agentClientRelationshipsConnector: AgentClientRe
         agentClientRelationshipsConnector
           .validateLinkParts(uid, normalizedAgentName)
           .map {
-            case Left("AGENT_SUSPENDED") => Redirect(routes.ClientExitController.showUnauthorised(AgentSuspended))
-            case Left("AGENT_NOT_FOUND") => Redirect(routes.ClientExitController.showUnauthorised(NoOutstandingRequests))
+            case Left(AgentSuspendedError) => Redirect(routes.ClientExitController.showUnauthorised(AgentSuspended))
+            case Left(AgentNotFoundError) => Redirect(routes.ClientExitController.showUnauthorised(NoOutstandingRequests))
             case Right(response) => Ok(authoriseAgentStartPage(response.name, taxService, uid))
           }
       else Future.successful(NotFound(pageNotFound()))
