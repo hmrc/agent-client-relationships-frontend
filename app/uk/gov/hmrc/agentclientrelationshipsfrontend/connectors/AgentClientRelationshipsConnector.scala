@@ -23,14 +23,13 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.AgentRequest
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.invitationLink.ValidateLinkPartsResponse
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, AgentJourneyRequest, ClientJourneyRequest}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, AgentJourneyRequest}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.ClientServiceConfigurationService
 import uk.gov.hmrc.http.HttpReads.Implicits.*
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps}
 import views.html.helper.urlEncode
 
-import java.time.LocalDate
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -75,7 +74,7 @@ class AgentClientRelationshipsConnector @Inject()(appConfig: AppConfig,
       .execute[Option[AuthorisationRequestInfo]]
   }
 
-  def getAuthorisationRequestForClient(invitationId: String)(implicit headerCarrier: HeaderCarrier, request: ClientJourneyRequest[?]): Future[Option[AuthorisationRequestInfoForClient]] = {
+  def getAuthorisationRequestForClient(invitationId: String)(implicit headerCarrier: HeaderCarrier): Future[Option[AuthorisationRequestInfoForClient]] = {
     httpV2.get(url"$agentClientRelationshipsUrl/client/authorisation-request-info/$invitationId")
       .execute[Option[AuthorisationRequestInfoForClient]]
   }

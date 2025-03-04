@@ -43,7 +43,7 @@ object DisplayDate {
   private val dateFormatter: DateTimeFormatter =
     DateTimeFormatter.ofPattern("d MMMM uuuu", Locale.UK)
 
-  def displayDateForLang(date: Option[java.time.LocalDate], df: DateTimeFormatter = dateFormatter)(implicit request: Request[_]): String =
+  def displayDateForLang(date: Option[java.time.LocalDate], df: DateTimeFormatter = dateFormatter)(implicit request: Request[?]): String =
     date.fold("") { d =>
       val lang = request.cookies
         .get("PLAY_LANG")
@@ -59,7 +59,7 @@ object DisplayDate {
       } else dateStrEnglish
     }
 
-  def displayDateForLangFromString(strDate: String)(implicit request: Request[_]): String = {
+  def displayDateForLangFromString(strDate: String)(implicit request: Request[?]): String = {
     val localDate = Try(LocalDate.parse(strDate))
     localDate.map(d => displayDateForLang(Some(d))).getOrElse(strDate)
   }

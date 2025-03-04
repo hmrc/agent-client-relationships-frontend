@@ -28,7 +28,6 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.client.DeclineR
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{ClientJourney, ClientJourneyRequest}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{ClientJourneyService, ClientServiceConfigurationService}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.client.DeclineRequestPage
-import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.PageNotFound
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -36,7 +35,6 @@ import scala.concurrent.{ExecutionContext, Future}
 class DeclineRequestController @Inject()(mcc: MessagesControllerComponents,
                                          actions: Actions,
                                          declineRequestView: DeclineRequestPage,
-                                         pageNotFound: PageNotFound,
                                          clientServiceConfig: ClientServiceConfigurationService,
                                          clientJourneyService: ClientJourneyService,
                                          agentClientRelationshipsConnector: AgentClientRelationshipsConnector)

@@ -25,7 +25,6 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.{Cancelled, Ex
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientExitType.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{ClientJourneyService, ClientServiceConfigurationService}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.client.ConsentInformationPage
-import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.PageNotFound
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}
@@ -35,7 +34,6 @@ import scala.concurrent.{ExecutionContext, Future}
 class ConsentInformationController @Inject()(agentClientRelationshipsConnector: AgentClientRelationshipsConnector,
                                              serviceConfigurationService: ClientServiceConfigurationService,
                                              consentInformationPage: ConsentInformationPage,
-                                             pageNotFound: PageNotFound,
                                              mcc: MessagesControllerComponents,
                                              actions: Actions,
                                              clientJourneyService: ClientJourneyService
