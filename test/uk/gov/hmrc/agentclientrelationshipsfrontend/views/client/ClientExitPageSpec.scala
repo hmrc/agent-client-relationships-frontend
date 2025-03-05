@@ -21,7 +21,6 @@ import org.jsoup.nodes.Document
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientExitType.*
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{ClientJourney, ClientJourneyRequest}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.support.ViewSpecSupport
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.client.ClientExitPage
 
@@ -35,10 +34,6 @@ class ClientExitPageSpec extends ViewSpecSupport {
   val viewTemplate: ClientExitPage = app.injector.instanceOf[ClientExitPage]
 
   case class ExpectedStrings(title: String, paragraphs: List[String])
-
-  private def clientJourney(status:Option[InvitationStatus]): ClientJourney = ClientJourney(
-    journeyType = "authorisation-response", agentName = Some(testAgentName), status = status, lastModifiedDate = Some(testLastModifiedDate)
-  )
 
   object Expected {
     val cannotFindAuthorisationRequestLabel = "We cannot find this authorisation request - Appoint someone to deal with HMRC for you - GOV.UK"
@@ -63,12 +58,17 @@ class ClientExitPageSpec extends ViewSpecSupport {
     val alreadyRespondedToAuthorisationRequestParagraphTwo = "If your agent has sent you a recent request, make sure you have signed up to the tax service you need."
     val alreadyRespondedToAuthorisationRequestParagraphThree = "You could also check you have signed in with the correct Government Gateway user ID. It must be the same one you used to sign up to the tax service the authorisation request is for."
     val alreadyRespondedToAuthorisationRequestParagraphFour = "Sign in with the Government Gateway user ID you use for managing your personal tax affairs."
+
+    val agentSuspendedLabel = "You cannot appoint this tax agent - Appoint someone to deal with HMRC for you - GOV.UK"
+    val agentSuspendedParagraphOne = "This tax agent cannot manage your Making Tax Digital for Income Tax at this time."
+    val agentSuspendedParagraphTwo = "If you have any questions, contact the tax agent who sent you this request."
+
+    val noOutstandingRequestsLabel = "There are no outstanding authorisation requests for you to respond to - Appoint someone to deal with HMRC for you - GOV.UK"
+    val noOutstandingRequestsParagraphOne = "If you think this is wrong, contact the agent who sent you the request or view your request history."
   }
 
   "ClientExitPage for CannotFindAuthorisationRequest view" should {
-    implicit val clientJourneyRequest: ClientJourneyRequest[?] = new ClientJourneyRequest(clientJourney(None), request)
-
-    val view: HtmlFormat.Appendable = viewTemplate(CannotFindAuthorisationRequest)
+    val view: HtmlFormat.Appendable = viewTemplate(CannotFindAuthorisationRequest, userIsLoggedIn = true, Some(testLastModifiedDate), Some(testAgentName))
     val doc: Document = Jsoup.parse(view.body)
 
     "have the right title" in {
@@ -92,9 +92,7 @@ class ClientExitPageSpec extends ViewSpecSupport {
   }
 
   "ClientExitPage for AuthorisationRequestExpired view" should {
-    implicit val clientJourneyRequest: ClientJourneyRequest[?] = new ClientJourneyRequest(clientJourney(Some(Expired)), request)
-
-    val view: HtmlFormat.Appendable = viewTemplate(AuthorisationRequestExpired)
+    val view: HtmlFormat.Appendable = viewTemplate(AuthorisationRequestExpired, userIsLoggedIn = true, Some(testLastModifiedDate), Some(testAgentName))
     val doc: Document = Jsoup.parse(view.body)
 
     "have the right title" in {
@@ -119,9 +117,7 @@ class ClientExitPageSpec extends ViewSpecSupport {
   }
 
   "ClientExitPage for AuthorisationRequestCancelled view" should {
-    implicit val clientJourneyRequest: ClientJourneyRequest[?] = new ClientJourneyRequest(clientJourney(Some(Cancelled)), request)
-
-    val view: HtmlFormat.Appendable = viewTemplate(AuthorisationRequestCancelled)
+    val view: HtmlFormat.Appendable = viewTemplate(AuthorisationRequestCancelled, userIsLoggedIn = true, Some(testLastModifiedDate), Some(testAgentName))
     val doc: Document = Jsoup.parse(view.body)
 
     "have the right title" in {
@@ -146,9 +142,7 @@ class ClientExitPageSpec extends ViewSpecSupport {
   }
 
   "ClientExitPage for AlreadyRespondedToAuthorisationRequest view" should {
-    implicit val clientJourneyRequest: ClientJourneyRequest[?] = new ClientJourneyRequest(clientJourney(Some(Rejected)), request)
-
-    val view: HtmlFormat.Appendable = viewTemplate(AlreadyRespondedToAuthorisationRequest)
+    val view: HtmlFormat.Appendable = viewTemplate(AlreadyRespondedToAuthorisationRequest, userIsLoggedIn = true, Some(testLastModifiedDate), Some(testAgentName))
     val doc: Document = Jsoup.parse(view.body)
 
     "have the right title" in {
@@ -169,6 +163,51 @@ class ClientExitPageSpec extends ViewSpecSupport {
     "have the correct link in the details component content" in {
 
       doc.mainContent.extractLink(2).value shouldBe TestLink("make sure you have signed up to the tax service you need.", "https://www.gov.uk/guidance/authorise-an-agent-to-deal-with-certain-tax-services-for-you")
+    }
+  }
+
+  "ClientExitPage for AgentSuspended view" should {
+    val view: HtmlFormat.Appendable = viewTemplate(AgentSuspended, userIsLoggedIn = false)
+    val doc: Document = Jsoup.parse(view.body)
+
+    "have the right title" in {
+      doc.title() shouldBe Expected.agentSuspendedLabel
+    }
+
+    "display paragraph content" in {
+      doc.select(".govuk-body").get(0).text() shouldBe Expected.agentSuspendedParagraphOne
+      doc.select(".govuk-body").get(1).text() shouldBe Expected.agentSuspendedParagraphTwo
+    }
+
+    "have a language switcher" in {
+      doc.hasLanguageSwitch shouldBe true
+    }
+
+    "have the correct link in the details component content" in {
+
+      doc.mainContent.extractLink(1).value shouldBe TestLink("Finish and sign out", "/agent-client-relationships/sign-out")
+    }
+  }
+
+  "ClientExitPage for NoOutstandingRequests view" should {
+    val view: HtmlFormat.Appendable = viewTemplate(NoOutstandingRequests, userIsLoggedIn = false)
+    val doc: Document = Jsoup.parse(view.body)
+
+    "have the right title" in {
+      doc.title() shouldBe Expected.noOutstandingRequestsLabel
+    }
+
+    "display paragraph content" in {
+      doc.select(".govuk-body").get(0).text() shouldBe Expected.noOutstandingRequestsParagraphOne
+    }
+
+    "have a language switcher" in {
+      doc.hasLanguageSwitch shouldBe true
+    }
+
+    "have the correct link in the details component content" in {
+
+      doc.mainContent.extractLink(1).value shouldBe TestLink("view your request history", "http://localhost:9568/manage-your-tax-agents#history")
     }
   }
 }

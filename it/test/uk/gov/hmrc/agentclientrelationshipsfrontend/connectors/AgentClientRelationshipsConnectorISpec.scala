@@ -18,7 +18,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.connectors
 
 import play.api.libs.json.{JsObject, Json}
 import play.api.test.Helpers.*
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.invitationLink.ValidateLinkPartsResponse
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.invitationLink.{AgentNotFoundError, AgentSuspendedError, ValidateLinkPartsResponse}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, AgentJourneyRequest, AgentJourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsResponse, ClientStatus, KnownFactType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AgentClientRelationshipStub, ComponentSpecHelper}
@@ -113,13 +113,13 @@ class AgentClientRelationshipsConnectorISpec extends ComponentSpecHelper with Ag
     "return a Left containing AGENT_NOT_FOUND" in {
       stubGet(getValidateLinkResponseUrl(testUid, testNormalizedAgentName), NOT_FOUND, "")
       val result = testConnector.validateLinkParts(testUid, testNormalizedAgentName)
-      await(result) shouldBe Left("AGENT_NOT_FOUND")
+      await(result) shouldBe Left(AgentNotFoundError)
     }
 
     "return a Left containing AGENT_SUSPENDED" in {
       stubGet(getValidateLinkResponseUrl(testUid, testNormalizedAgentName), FORBIDDEN, "")
       val result = testConnector.validateLinkParts(testUid, testNormalizedAgentName)
-      await(result) shouldBe Left("AGENT_SUSPENDED")
+      await(result) shouldBe Left(AgentSuspendedError)
     }
 
     "return error status if service service unavailable" in {

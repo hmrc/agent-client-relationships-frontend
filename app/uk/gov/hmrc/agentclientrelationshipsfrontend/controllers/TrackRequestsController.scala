@@ -19,18 +19,16 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.{Actions, AgentRequest}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.config.{AppConfig, ErrorHandler}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.routes
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.AgentCancelInvitationForm
+import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.AgentJourneyType
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{AuthorisationRequest, AuthorisationRequestInfo}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{AgentClientRelationshipsService, AgentJourneyService, ClientServiceConfigurationService, JourneyService, TrackRequestsService}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.{AgentCancelInvitationPage, PageNotFound, ResendInvitationLink, TrackRequestsPage}
-import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.AuthorisationRequestInfo
+import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{AgentClientRelationshipsService, AgentJourneyService, ClientServiceConfigurationService, TrackRequestsService}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.{PageNotFound, ResendInvitationLink, TrackRequestsPage}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
+
 @Singleton
 class TrackRequestsController @Inject()(
                                          mcc: MessagesControllerComponents,
