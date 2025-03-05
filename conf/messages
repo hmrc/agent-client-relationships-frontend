@@ -819,6 +819,43 @@ clientConfirmation.rejected.HMRC-PILLAR2-ORG.p1=You have not given permission fo
 clientConfirmation.rejected.HMRC-TERS-ORG.p1=You have not given permission for {0} to manage a trust or an estate.
 clientConfirmation.rejected.HMRC-TERSNT-ORG.p1=You have not given permission for {0} to manage a trust or an estate.
 
+
+# ________________________________________________________________________________
+# MYTA - Manage Your Tax Agents - client content
+# ________________________________________________________________________________
+
+manageYourTaxAgents.header=Manage who can deal with HMRC for you
+manageYourTaxAgents.p=Taxes you can manage from this page
+manageYourTaxAgents.link=Read the guidance about how to view and change authorisations for other tax services
+manageYourTaxAgents.agentRoles.h2=Agent roles
+manageYourTaxAgents.agentRoles.p1=How we define ‘main’ agent:
+manageYourTaxAgents.agentRoles.li1=the main agent helping to manage your Making Tax Digital for Income Tax
+manageYourTaxAgents.agentRoles.li2=the sole agent helping to manage any other tax
+manageYourTaxAgents.agentRoles.p2=You can also have ‘supporting’ agents helping to manage your Making Tax Digital for Income Tax.
+manageYourTaxAgents.agentRoles.guidanceLink=Find out how main and supporting agents can act for you
+
+manageYourTaxAgents.agentRole.main=Main
+manageYourTaxAgents.agentRole.supporting=Supporting
+
+manageYourTaxAgents.currentRequests=Current requests
+manageYourTaxAgents.currentRequests.taxService=Tax service
+manageYourTaxAgents.currentRequests.agentRole=Agent role
+manageYourTaxAgents.currentRequests.respondBy=Respond by
+manageYourTaxAgents.currentRequests.action=What you need to do
+
+manageYourTaxAgents.authorisedAgents=Authorised agents
+manageYourTaxAgents.authorisedAgents.empty=You do not have any authorised agents.
+manageYourTaxAgents.authorisedAgents.taxService=Tax service
+manageYourTaxAgents.authorisedAgents.agentRole=Agent role
+manageYourTaxAgents.authorisedAgents.consentDate=When you gave consent
+manageYourTaxAgents.authorisedAgents.action=Action
+manageYourTaxAgents.authorisedAgents.action.link=Remove authorisation<span class="govuk-visually-hidden"> from {0} to manage your {1} as a {2} agent</span>
+
+manageYourTaxAgents.history=History
+manageYourTaxAgents.history.empty=There is no authorisation history on this account.
+
+manageYourTaxAgents.currentRequests.action.link=Respond to request<span class="govuk-visually-hidden"> from {0} to manage your {1} as a {2} agent</span>
+
 # ________________________________________________________________________________
 # Unauthorised exit partials
 # ________________________________________________________________________________

@@ -1,0 +1,163 @@
+@*
+ * Copyright 2025 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ManageYourTaxAgentsData
+@import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcNewTabLinkHelper
+@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.newtablinkhelper.NewTabLinkHelper
+@import java.time.format.DateTimeFormatter
+@import java.time.{Instant, LocalDate, ZoneOffset}
+@import java.util.Locale
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.routes
+@import play.twirl.api.Html
+
+@this(
+        layout: Layout,
+        govukDetails: GovukDetails,
+        govukTabs: GovukTabs,
+        govukTable: GovukTable,
+        h1: h1,
+        hmrcNewTabLinkHelper: HmrcNewTabLinkHelper
+)
+
+@(supportedServices: Map[String, String], data: ManageYourTaxAgentsData)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+
+@key = @{"manageYourTaxAgents"}
+@pageTitle = @{messages(s"$key.header")}
+@servicesList = {
+  <ul class="govuk-list govuk-list--bullet">
+   @{supportedServices.keySet.map(service =>
+    <li>{messages(service)}</li>
+   )}
+  </ul>
+  @hmrcNewTabLinkHelper(NewTabLinkHelper(
+    href = Some(appConfig.mytaOtherTaxServicesGuidanceUrl),
+    text = messages(s"$key.link")
+  ))
+ }
+@dateFormatter = @{
+    DateTimeFormatter.ofPattern("d MMMM uuuu", Locale.UK)
+}
+@agentRoleFromService(service: String) = @{
+    if(service == "HMRC-MTD-IT-SUPP") messages(s"$key.agentRole.supporting") else messages(s"$key.agentRole.main")
+}
+@linkFromService(uid: String, service: String, agentName: String) = {
+    <a href="@{routes.ConsentInformationController.show(uid, supportedServices(service)).url}" class="govuk-link">
+        @Html(messages(s"$key.currentRequests.action.link", agentName, messages(service), agentRoleFromService(service)))
+    </a>
+}
+@deAuthLink(id: String, agentName: String, service: String) = {
+    <a href="@{s"#?id=$id"}" class="govuk-link">
+        @Html(messages(s"$key.authorisedAgents.action.link", agentName, messages(service), agentRoleFromService(service)))
+    </a>
+}
+@cellClasses = @{"govuk-body-s govuk-!-width-one-quarter"}
+@currentRequests = {
+    <h2 class="govuk-heading-m">@messages(s"$key.currentRequests")</h2>
+    @data.agentsInvitations.agentsInvitations.map { agent =>
+        @govukTable(Table(
+            classes = "govuk-body-s",
+            caption = Some(agent.agentName),
+            captionClasses = "govuk-table__caption--s",
+            head = Some(Seq(
+                HeadCell(Text(messages(s"$key.currentRequests.taxService")), classes = cellClasses),
+                HeadCell(Text(messages(s"$key.currentRequests.agentRole")), classes = cellClasses),
+                HeadCell(Text(messages(s"$key.currentRequests.respondBy")), classes = cellClasses),
+                HeadCell(Text(messages(s"$key.currentRequests.action")), classes = cellClasses)
+            )),
+            rows = agent.invitations.map { request =>
+                Seq(
+                    TableRow(content = Text(messages(request.service)), classes = cellClasses),
+                    TableRow(Text(agentRoleFromService(request.service)), classes = cellClasses),
+                    TableRow(Text(request.expiryDate.format(dateFormatter)), classes = cellClasses),
+                    TableRow(HtmlContent(linkFromService(agent.uid, request.service, agent.agentName)), classes = cellClasses)
+                )
+            }
+        ))
+    }
+}
+@authorisedAgents = {
+    <h2 class="govuk-heading-m">@messages(s"$key.authorisedAgents")</h2>
+    @if(data.agentsAuthorisations.agentsAuthorisations.isEmpty) {
+        <p class="govuk-body">@messages(s"$key.authorisedAgents.empty")</p>
+    } else {
+        @data.agentsAuthorisations.agentsAuthorisations.map { agent =>
+            @govukTable(Table(
+                classes = "govuk-body-s",
+                caption = Some(agent.agentName),
+                captionClasses = "govuk-table__caption--s",
+                head = Some(Seq(
+                    HeadCell(Text(messages(s"$key.authorisedAgents.taxService")), classes = cellClasses),
+                    HeadCell(Text(messages(s"$key.authorisedAgents.agentRole")), classes = cellClasses),
+                    HeadCell(Text(messages(s"$key.authorisedAgents.consentDate")), classes = cellClasses),
+                    HeadCell(Text(messages(s"$key.authorisedAgents.action")), classes = cellClasses)
+                )),
+                rows = agent.authorisations.map { authorisation =>
+                    Seq(
+                        TableRow(content = Text(messages(authorisation.service)), classes = cellClasses),
+                        TableRow(Text(agentRoleFromService(authorisation.service)), classes = cellClasses),
+                        TableRow(Text(authorisation.date.format(dateFormatter)), classes = cellClasses),
+                        TableRow(HtmlContent(deAuthLink(authorisation.id, authorisation.service, authorisation.agentName)), classes = cellClasses)
+                    )
+                }
+            ))
+        }
+    }
+}
+@history = {
+    <h2 class="govuk-heading-m">@messages(s"$key.history")</h2>
+    @if(data.authorisationEvents.authorisationEvents.isEmpty) {
+        <p class="govuk-body">@messages(s"$key.history.empty")</p>
+    }
+}
+@currentRequestsTab = @{TabItem(
+    id = Some("currentRequests"),
+    label = messages(s"$key.currentRequests"),
+    panel = TabPanel(content = HtmlContent(currentRequests))
+)}
+@authorisedAgentsTab = @{TabItem(
+    id = Some("authorisedAgents"),
+    label = messages(s"$key.authorisedAgents"),
+    panel = TabPanel(content = HtmlContent(authorisedAgents))
+)}
+@historyTab = @{TabItem(
+    id = Some("history"),
+    label = messages(s"$key.history"),
+    panel = TabPanel(content = HtmlContent(history))
+)}
+@tabs = @{
+    if(data.agentsInvitations.agentsInvitations.isEmpty) Seq(authorisedAgentsTab, historyTab)
+    else Seq(currentRequestsTab, authorisedAgentsTab, historyTab)
+}
+
+@layout(pageTitle, Some(pageTitle), fullWidth = true) {
+    @h1(pageTitle)
+    @govukDetails(Details(summary = Text(messages(s"$key.p")), content = HtmlContent(servicesList)))
+    <h2 class="govuk-heading-l">@messages(s"$key.agentRoles.h2")</h2>
+    <p class="govuk-body">@messages(s"$key.agentRoles.p1")</p>
+    <ul class="govuk-list govuk-list--bullet">
+        <li>@messages(s"$key.agentRoles.li1")</li>
+        <li>@messages(s"$key.agentRoles.li2")</li>
+    </ul>
+    <p class="govuk-body">@messages(s"$key.agentRoles.p2")</p>
+    <p class="govuk-body">
+        @hmrcNewTabLinkHelper(NewTabLinkHelper(
+            href = Some(appConfig.mytaOtherTaxServicesGuidanceUrl),
+            text = messages(s"$key.agentRoles.guidanceLink")
+        ))
+    </p>
+    @govukTabs(Tabs(items = tabs))
+}

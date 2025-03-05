@@ -60,7 +60,7 @@
   <p class="govuk-body">@Html(messages(s"$key.section1.p4", appConfig.privacyPolicyUrl))</p>
 
   <h2 class="govuk-heading-l">@messages(s"$key.section2.h2")</h2>
-  <p class="govuk-body">@Html(messages(s"$key.section2.p1", "routes.MYTAController.show()"))</p>
+  <p class="govuk-body">@Html(messages(s"$key.section2.p1", appConfig.acmExternalUrl))</p>
 
   <h2 class="govuk-heading-l">@messages(s"$key.section3.h2")</h2>
   <p class="govuk-body">@Html(messages(s"$key.section3.p1", indefiniteAgentRole, taxServiceName))</p>

@@ -83,7 +83,7 @@
     filters.map(filter => if(filter == "PartialAuth") "Accepted" else filter).distinct
 }
 
-@sidebarContent = {
+@filterContent = {
 
     @if(result.totalResults > appConfig.trackRequestsPageSize || result.filtersApplied.nonEmpty) {
         <div class="govuk-!-width-two-thirds">
@@ -132,7 +132,9 @@
     }
 }
 
-@layout(pageTitle, sidebar = Some(sidebarContent)) {
+@layout(pageTitle, fullWidth = true) {
+    <h1 class="govuk-heading-xl">@pageTitle</h1>
+    @filterContent
     @if(result.requests.nonEmpty) {
         @govukTable(Table(
             head = Some(

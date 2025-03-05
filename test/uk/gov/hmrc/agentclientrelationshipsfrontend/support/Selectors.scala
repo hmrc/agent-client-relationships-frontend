@@ -67,4 +67,6 @@ trait Selectors {
   val detailsContent = ".govuk-details__text"
 
   val warning = ".govuk-warning-text"
+
+  val tabLink = ".govuk-tabs__tab"
 }
