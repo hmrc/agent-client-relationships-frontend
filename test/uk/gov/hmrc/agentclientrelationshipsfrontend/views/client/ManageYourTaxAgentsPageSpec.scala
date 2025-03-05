@@ -20,7 +20,7 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.Invitation
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.{AgentData, AgentsAuthorisationsResponse, AgentsInvitationsResponse, AuthorisationEventsResponse, ManageYourTaxAgentsData, Pending}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.{AgentData, AgentsAuthorisationsResponse, AgentsInvitationsResponse, Authorisation, AuthorisationEventsResponse, AuthorisedAgent, ManageYourTaxAgentsData, Pending}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.support.ViewSpecSupport
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.client.ManageYourTaxAgentsPage
 
@@ -35,10 +35,13 @@ class ManageYourTaxAgentsPageSpec extends ViewSpecSupport {
   val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("d MMMM uuuu", Locale.UK)
   val agentName: String = "ABC Accountants"
   val agentName2: String = "DEF Accountants"
+  val authorisedAgentName: String = "GH Accountants"
+  val authorisedAgentName2: String = "IJ Accountants"
   val invitationId: String = "AB1234567890"
   val serviceKey: String = "HMRC-MTD-IT"
   val status: String = "Pending"
   val expiryDate: LocalDate = LocalDate.now().plusDays(11)
+  val startDate: LocalDate = LocalDate.now().minusDays(10)
   def agentRoleFromService(service: String): String = if (service == "HMRC-MTD-IT-SUPP") "Supporting" else "Main"
 
   val services: Map[String, String] = Map(
@@ -110,7 +113,44 @@ class ManageYourTaxAgentsPageSpec extends ViewSpecSupport {
         )
       )
     )),
-    agentsAuthorisations = AgentsAuthorisationsResponse(agentsAuthorisations = Seq.empty),
+    agentsAuthorisations = AgentsAuthorisationsResponse(agentsAuthorisations = Seq(
+      AuthorisedAgent(
+        agentName = authorisedAgentName,
+        arn = "1234567890",
+        authorisations = Seq(
+          Authorisation(
+            id = "1234567890",
+            service = "HMRC-MTD-IT",
+            clientId = "1234567890",
+            date = startDate,
+            arn = "1234567890",
+            agentName = authorisedAgentName
+          ),
+          Authorisation(
+            id = "123LD67891",
+            service = "HMRC-PILLAR2-ORG",
+            clientId = "1234567890",
+            date = startDate,
+            arn = "1234567890",
+            agentName = authorisedAgentName
+          )
+        )
+      ),
+      AuthorisedAgent(
+        agentName = authorisedAgentName2,
+        arn = "987654221",
+        authorisations = Seq(
+          Authorisation(
+            id = "123456BFX90",
+            service = "HMRC-MTD-VAT",
+            clientId = "1234567890",
+            date = startDate,
+            arn = "987654221",
+            agentName = authorisedAgentName2
+          )
+        )
+      )
+    )),
     authorisationEvents = AuthorisationEventsResponse(authorisationEvents = Seq.empty)
   )
 
@@ -166,16 +206,52 @@ class ManageYourTaxAgentsPageSpec extends ViewSpecSupport {
         ))
     }
 
+    "include a table of authorisations for each authorised agent" in {
+      doc.mainContent.extractTable(3, 4).value shouldBe TestTable(
+        caption = authorisedAgentName,
+        rows = List(
+          IndexedSeq(
+            "Making Tax Digital for Income Tax",
+            "Main",
+            startDate.format(dateFormatter),
+            s"Remove authorisation from $authorisedAgentName to manage your Making Tax Digital for Income Tax as a Main agent"
+          ),
+          IndexedSeq(
+            "Pillar 2 Top-up Taxes",
+            "Main",
+            startDate.format(dateFormatter),
+            s"Remove authorisation from $authorisedAgentName to manage your Pillar 2 Top-up Taxes as a Main agent"
+          )
+        ))
+      doc.mainContent.extractTable(4, 4).value shouldBe TestTable(
+        caption = authorisedAgentName2,
+        rows = List(
+          IndexedSeq(
+            "VAT",
+            "Main",
+            startDate.format(dateFormatter),
+            s"Remove authorisation from $authorisedAgentName2 to manage your VAT as a Main agent"
+          )
+        ))
+    }
+
   }
 
-  "ManageYourTaxAgentsPage view without any current requests" should {
+  "ManageYourTaxAgentsPage view without any current requests or authorisations" should {
 
-    val view: HtmlFormat.Appendable = viewTemplate(services, mytaData.copy(agentsInvitations = AgentsInvitationsResponse(agentsInvitations = Seq.empty)))
+    val view: HtmlFormat.Appendable = viewTemplate(services, mytaData.copy(
+      agentsInvitations = AgentsInvitationsResponse(agentsInvitations = Seq.empty),
+      agentsAuthorisations = AgentsAuthorisationsResponse(agentsAuthorisations = Seq.empty)
+    ))
     val doc: Document = Jsoup.parse(view.body)
 
     "include the correct number of tabs" in {
       doc.mainContent.extractText(tabLink, 1).value shouldBe Expected.tab2
       doc.mainContent.extractText(tabLink, 2).value shouldBe Expected.tab3
+    }
+
+    "include a message when there are no current authorised agents" in {
+      doc.extractById(main, "authorisedAgents").get.extractText(p, 1).value shouldBe "You do not have any authorised agents."
     }
 
   }
