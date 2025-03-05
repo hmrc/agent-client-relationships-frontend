@@ -40,6 +40,7 @@ case class AgentJourney(journeyType: AgentJourneyType,
   def getService: String = clientService.getOrElse(throw new RuntimeException("service not defined"))
   def getClientId: String = clientId.getOrElse(throw new RuntimeException("clientId not defined"))
   def getClientDetailsResponse: ClientDetailsResponse = clientDetailsResponse.getOrElse(throw new RuntimeException("client details are not defined"))
+  def getActiveRelationship: String = clientDetailsResponse.flatMap(_.hasExistingRelationshipFor).getOrElse(throw new RuntimeException("active relationship does not exist"))
 
   def getKnownFactType: KnownFactType = clientDetailsResponse.flatMap(_.knownFactType)getOrElse(throw new RuntimeException("known fact is not defined"))
 
