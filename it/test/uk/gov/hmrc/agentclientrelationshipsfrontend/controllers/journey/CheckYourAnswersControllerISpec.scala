@@ -162,7 +162,7 @@ class CheckYourAnswersControllerISpec extends ComponentSpecHelper with AuthStubs
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe routes.ConfirmationController.show(AgentJourneyType.AgentCancelAuthorisation).url
     })
-    servicesWithAgentRoles.foreach(service => s"redirect to authorisation cancelled for $service page when confirmed" in {
+    existingAgentRoles.flatten.foreach(service => s"redirect to authorisation cancelled for $service page when confirmed" in {
       authoriseAsAgent()
       stubPost(cancelAuthorisationUrl, NO_CONTENT, "")
       await(journeyService.saveJourney(existingAuthCancellationJourney(service)))

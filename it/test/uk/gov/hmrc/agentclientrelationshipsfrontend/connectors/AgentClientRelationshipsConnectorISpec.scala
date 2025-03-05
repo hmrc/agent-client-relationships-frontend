@@ -149,8 +149,10 @@ class AgentClientRelationshipsConnectorISpec extends ComponentSpecHelper with Ag
       intercept[Exception](await(testConnector.rejectAuthorisation("ABC123")))
 
   "cancelAuthorisation" should:
+
     "return nothing when a 204 status is received" in:
       givenCancelAuthorisation(testArn)
       implicit val journeyRequest: AgentJourneyRequest[?] = new AgentJourneyRequest(testArn, basicJourney, request)
-      await(testConnector.cancelAuthorisation(basicJourney)) shouldEqual ()
+      await(testConnector.cancelAuthorisation(basicJourney.copy(clientDetailsResponse = Some(basicClientDetails.copy(hasExistingRelationshipFor = Some("HMRC-MTD-IT")))))) shouldEqual ()
+
 }

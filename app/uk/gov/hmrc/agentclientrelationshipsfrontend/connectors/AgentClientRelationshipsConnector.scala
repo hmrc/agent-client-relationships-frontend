@@ -60,7 +60,7 @@ class AgentClientRelationshipsConnector @Inject()(appConfig: AppConfig,
 
   def cancelAuthorisation(journey: AgentJourney)(implicit hc: HeaderCarrier, request: AgentJourneyRequest[?]): Future[Unit] = httpV2
     .post(url"$agentClientRelationshipsUrl/agent/${request.arn}/remove-authorisation")
-    .withBody(Json.obj("clientId" -> journey.getClientId, "service" -> journey.getService))
+    .withBody(Json.obj("clientId" -> journey.getClientId, "service" -> journey.getActiveRelationship))
     .execute[HttpResponse].map { response =>
       response.status match {
         case NO_CONTENT => ()
