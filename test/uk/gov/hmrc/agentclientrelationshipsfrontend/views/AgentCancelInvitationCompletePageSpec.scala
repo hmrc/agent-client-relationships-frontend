@@ -18,11 +18,9 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.views
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.AgentRequest
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.AuthorisationRequestInfo
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.AgentCancelInvitationForm
 import uk.gov.hmrc.agentclientrelationshipsfrontend.support.ViewSpecSupport
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.AgentCancelInvitationCompletePage
 

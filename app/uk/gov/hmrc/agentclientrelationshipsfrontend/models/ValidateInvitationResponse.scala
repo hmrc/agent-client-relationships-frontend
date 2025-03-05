@@ -33,3 +33,7 @@ case class ValidateInvitationResponse(invitationId: String,
 object ValidateInvitationResponse {
   implicit val format: OFormat[ValidateInvitationResponse] = Json.format[ValidateInvitationResponse]
 }
+
+sealed trait ValidateInvitationError
+case object AgentSuspendedError extends ValidateInvitationError
+case object InvitationOrAgentNotFoundError extends ValidateInvitationError
