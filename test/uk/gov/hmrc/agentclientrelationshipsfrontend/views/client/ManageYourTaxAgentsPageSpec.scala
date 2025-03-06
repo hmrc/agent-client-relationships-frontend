@@ -20,7 +20,7 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.Invitation
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.{AgentData, AgentsAuthorisationsResponse, AgentsInvitationsResponse, Authorisation, AuthorisationEventsResponse, AuthorisedAgent, ManageYourTaxAgentsData, Pending}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.{AgentData, AgentsAuthorisationsResponse, AgentsInvitationsResponse, Authorisation, AuthorisationEvent, AuthorisationEventsResponse, AuthorisedAgent, Cancelled, DeAuthorised, Expired, Accepted, ManageYourTaxAgentsData, Pending, Rejected}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.support.ViewSpecSupport
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.client.ManageYourTaxAgentsPage
 
@@ -151,7 +151,38 @@ class ManageYourTaxAgentsPageSpec extends ViewSpecSupport {
         )
       )
     )),
-    authorisationEvents = AuthorisationEventsResponse(authorisationEvents = Seq.empty)
+    authorisationEvents = AuthorisationEventsResponse(authorisationEvents = Seq(
+      AuthorisationEvent(
+        agentName = "Test Agent",
+        service = "HMRC-MTD-IT",
+        date = startDate,
+        eventType = Cancelled
+      ),
+      AuthorisationEvent(
+        agentName = "Top Tax Agents Ltd",
+        service = "HMRC-MTD-VAT",
+        date = startDate.minusDays(2),
+        eventType = DeAuthorised
+      ),
+      AuthorisationEvent(
+        agentName = "Old School Books",
+        service = "HMRC-PILLAR2-ORG",
+        date = startDate.minusDays(3),
+        eventType = Expired
+      ),
+      AuthorisationEvent(
+        agentName = "Bottom Line",
+        service = "HMRC-CGT-PD",
+        date = startDate.minusDays(4),
+        eventType = Rejected
+      ),
+      AuthorisationEvent(
+        agentName = authorisedAgentName,
+        service = "HMRC-MTD-IT",
+        date = startDate,
+        eventType = Accepted
+      )
+    ))
   )
 
   "ManageYourTaxAgentsPage view with current requests" should {
@@ -235,13 +266,46 @@ class ManageYourTaxAgentsPageSpec extends ViewSpecSupport {
         ))
     }
 
+    "include a table of authorisation events in history" in {
+      doc.mainContent.extractTable(5, 3).value shouldBe TestTable(
+        caption = "History of authorisations",
+        rows = List(
+          IndexedSeq(
+            startDate.format(dateFormatter),
+            "Making Tax Digital for Income Tax",
+            "Test Agent cancelled the request to be your Main agent"
+          ),
+          IndexedSeq(
+            startDate.minusDays(2).format(dateFormatter),
+            "VAT",
+            "Top Tax Agents Ltd is no longer authorised as your Main agent"
+          ),
+          IndexedSeq(
+            startDate.minusDays(3).format(dateFormatter),
+            "Pillar 2 Top-up Taxes",
+            "The request from Old School Books to be your Main agent expired"
+          ),
+          IndexedSeq(
+            startDate.minusDays(4).format(dateFormatter),
+            "Capital Gains Tax on UK property account",
+            "You declined Bottom Line as your Main agent"
+          ),
+          IndexedSeq(
+            startDate.format(dateFormatter),
+            "Making Tax Digital for Income Tax",
+            s"You accepted $authorisedAgentName as your Main agent"
+          )
+        ))
+    }
+
   }
 
-  "ManageYourTaxAgentsPage view without any current requests or authorisations" should {
+  "ManageYourTaxAgentsPage view without any current requests, authorisations or history" should {
 
     val view: HtmlFormat.Appendable = viewTemplate(services, mytaData.copy(
       agentsInvitations = AgentsInvitationsResponse(agentsInvitations = Seq.empty),
-      agentsAuthorisations = AgentsAuthorisationsResponse(agentsAuthorisations = Seq.empty)
+      agentsAuthorisations = AgentsAuthorisationsResponse(agentsAuthorisations = Seq.empty),
+      authorisationEvents = AuthorisationEventsResponse(authorisationEvents = Seq.empty)
     ))
     val doc: Document = Jsoup.parse(view.body)
 
@@ -252,6 +316,10 @@ class ManageYourTaxAgentsPageSpec extends ViewSpecSupport {
 
     "include a message when there are no current authorised agents" in {
       doc.extractById(main, "authorisedAgents").get.extractText(p, 1).value shouldBe "You do not have any authorised agents."
+    }
+
+    "include a message when there is no history" in {
+      doc.extractById(main, "history").get.extractText(p, 1).value shouldBe "There is no authorisation history on this account."
     }
 
   }

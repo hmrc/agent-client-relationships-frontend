@@ -120,6 +120,24 @@
     <h2 class="govuk-heading-m">@messages(s"$key.history")</h2>
     @if(data.authorisationEvents.authorisationEvents.isEmpty) {
         <p class="govuk-body">@messages(s"$key.history.empty")</p>
+    } else {
+        @govukTable(Table(
+            classes = "govuk-body-s",
+            caption = Some(messages(s"$key.history.caption")),
+            captionClasses = "govuk-table__caption--s",
+            head = Some(Seq(
+                HeadCell(Text(messages(s"$key.history.eventDate")), classes = cellClasses),
+                HeadCell(Text(messages(s"$key.history.taxService")), classes = cellClasses),
+                HeadCell(Text(messages(s"$key.history.activity")), classes = cellClasses)
+            )),
+            rows = data.authorisationEvents.authorisationEvents.map { event =>
+                Seq(
+                    TableRow(content = Text(event.date.format(dateFormatter)), classes = cellClasses),
+                    TableRow(Text(messages(event.service)), classes = cellClasses),
+                    TableRow(Text(messages(s"$key.history.${event.eventType.toString}.activity", event.agentName, agentRoleFromService(event.service))), classes = cellClasses)
+                )
+            }
+        ))
     }
 }
 @currentRequestsTab = @{TabItem(

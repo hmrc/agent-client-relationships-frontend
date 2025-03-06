@@ -853,6 +853,16 @@ manageYourTaxAgents.authorisedAgents.action.link=Remove authorisation<span class
 
 manageYourTaxAgents.history=History
 manageYourTaxAgents.history.empty=There is no authorisation history on this account.
+manageYourTaxAgents.history.caption=History of authorisations
+manageYourTaxAgents.history.eventDate=Date
+manageYourTaxAgents.history.taxService=Tax service
+manageYourTaxAgents.history.activity=Activity
+manageYourTaxAgents.history.DeAuthorised.activity={0} is no longer authorised as your {1} agent
+manageYourTaxAgents.history.Accepted.activity=You accepted {0} as your {1} agent
+manageYourTaxAgents.history.Partialauth.activity=You accepted {0} as your {1} agent
+manageYourTaxAgents.history.Rejected.activity=You declined {0} as your {1} agent
+manageYourTaxAgents.history.Expired.activity=The request from {0} to be your {1} agent expired
+manageYourTaxAgents.history.Cancelled.activity={0} cancelled the request to be your {1} agent
 
 manageYourTaxAgents.currentRequests.action.link=Respond to request<span class="govuk-visually-hidden"> from {0} to manage your {1} as a {2} agent</span>
 
