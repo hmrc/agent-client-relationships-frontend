@@ -124,7 +124,7 @@
         @govukTable(Table(
             classes = "govuk-body-s",
             caption = Some(messages(s"$key.history.caption")),
-            captionClasses = "govuk-table__caption--s",
+            captionClasses = "govuk-visually-hidden",
             head = Some(Seq(
                 HeadCell(Text(messages(s"$key.history.eventDate")), classes = cellClasses),
                 HeadCell(Text(messages(s"$key.history.taxService")), classes = cellClasses),
