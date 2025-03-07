@@ -65,7 +65,17 @@ class AgentClientRelationshipsConnector @Inject()(appConfig: AppConfig,
     .execute[HttpResponse].map { response =>
       response.status match {
         case NO_CONTENT => ()
-        case _ => throw new RuntimeException(s"Failed to cancel authorisation: ${response.body}")
+        case _ => throw new RuntimeException(s"Failed to cancel authorisation on behalf of agent: ${response.body}")
+      }
+    }
+
+  def clientCancelAuthorisation(clientId: String, service: String, arn: String)(implicit hc: HeaderCarrier): Future[Unit] = httpV2
+    .post(url"$agentClientRelationshipsUrl/agent/$arn/remove-authorisation")
+    .withBody(Json.obj("clientId" -> clientId, "service" -> service))
+    .execute[HttpResponse].map { response =>
+      response.status match {
+        case NO_CONTENT => Future.successful(())
+        case _ => throw new RuntimeException(s"Failed to cancel authorisation on behalf of client: ${response.body}")
       }
     }
 

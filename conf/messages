@@ -424,13 +424,13 @@ trackRequests.sidebar.allStatuses=All statuses
 trackRequests.filter-status.selectAll=Select all
 trackRequests.filter-status.ExpireInNext5Days=Expire in the next 5 days
 trackRequests.filter-status.ActivityWithinLast5Days=Activity within the last 5 days
-trackRequests.filter-status.Pending=Client has not yet responded
-trackRequests.filter-status.DeAuthorised=Authorisation has been removed
-trackRequests.filter-status.Rejected=Declined by client
-trackRequests.filter-status.Accepted=Accepted by client
-trackRequests.filter-status.PartialAuth=Accepted by client
-trackRequests.filter-status.Cancelled=Cancelled by you
-trackRequests.filter-status.Expired=Request expired as client did not respond in time
+trackRequests.filter-status.pending=Client has not yet responded
+trackRequests.filter-status.deauthorised=Authorisation has been removed
+trackRequests.filter-status.rejected=Declined by client
+trackRequests.filter-status.accepted=Accepted by client
+trackRequests.filter-status.partialauth=Accepted by client
+trackRequests.filter-status.cancelled=Cancelled by you
+trackRequests.filter-status.expired=Request expired as client did not respond in time
 trackRequests.filter-status.ClientCancelledAuthorisation=Accepted by client. They later cancelled their authorisation
 trackRequests.filter-status.HMRCCancelledAuthorisation=Accepted by client. HMRC later cancelled your authorisation
 trackRequests.filter-status.Declined.HMRC-CBC={0} request to manage the client’s country-by-country reports was declined.
@@ -782,7 +782,7 @@ checkYourAnswer.acceptAndSend.button=Accept and send
 checkYourAnswer.change=Change
 
 # ________________________________________________________________________________
-# Client confirmation page
+# Client confirmation of authorisation page
 # ________________________________________________________________________________
 
 clientConfirmation.accepted.h1=You have authorised {0}
@@ -865,6 +865,31 @@ manageYourTaxAgents.history.Expired.activity=The request from {0} to be your {1}
 manageYourTaxAgents.history.Cancelled.activity={0} cancelled the request to be your {1} agent
 
 manageYourTaxAgents.currentRequests.action.link=Respond to request<span class="govuk-visually-hidden"> from {0} to manage your {1} as a {2} agent</span>
+
+# ________________________________________________________________________________
+# Client confirmation of Deauthorisation page
+# ________________________________________________________________________________
+
+clientConfirmDeauth.h1=Confirm that you want to remove the agent’s authorisation
+clientConfirmDeauth.p1=If you remove your authorisation from {0}, they will no longer be able to manage your {1}.
+clientConfirmDeauth.legend=Do you want to remove your authorisation from {0}?
+clientConfirmDeauth.true=Yes
+clientConfirmDeauth.false=No
+clientConfirmDeauth.error.required=Select ‘Yes’ if you want to remove your authorisation
+
+# ________________________________________________________________________________
+# Confirmation Client has Deauthorised Agent
+# ________________________________________________________________________________
+
+clientDeauthConfirmed.h1=Authorisation removed
+clientDeauthConfirmed.h2=What this means
+clientDeauthConfirmed.p1={0} is no longer authorised to manage your {1}.
+clientDeauthConfirmed.p2=You can change your mind later, just ask {0} to send you another request.
+clientDeauthConfirmed.HMRC-MTD-IT.h2=If {0} manages your Self Assessment
+clientDeauthConfirmed.HMRC-MTD-IT.p1=You will need to remove this authorisation separately, if you no longer want {0} to manage your Self Assessment.
+clientDeauthConfirmed.HMRC-MTD-IT.p2=Read the guidance about how to <a href="{0}" class="govuk-link" target="_blank" rel="noopener noreferrer">change or remove a tax agents authorisation (opens in a new tab)</a>.
+clientDeauthConfirmed.link=Manage who can deal with HMRC for you
+clientDeauthConfirmed.signOutLink=Finish and sign out
 
 # ________________________________________________________________________________
 # Unauthorised exit partials
