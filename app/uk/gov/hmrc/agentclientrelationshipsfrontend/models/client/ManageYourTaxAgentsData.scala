@@ -60,7 +60,7 @@ object AuthorisedAgent {
   implicit val format: OFormat[AuthorisedAgent] = Json.format[AuthorisedAgent]
 }
 
-case class Authorisation(id: String, service: String, clientId: String, date: LocalDate, arn: String, agentName: String)
+case class Authorisation(uid: String, service: String, clientId: String, date: LocalDate, arn: String, agentName: String)
 
 object Authorisation {
   implicit val format: OFormat[Authorisation] = Json.format[Authorisation]
