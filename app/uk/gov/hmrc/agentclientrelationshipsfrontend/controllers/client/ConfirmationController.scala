@@ -49,5 +49,5 @@ class ConfirmationController @Inject()(mcc: MessagesControllerComponents,
           }
         case _ =>
           logger.warn(s"Redirecting to MYTA as client journey is not valid for confirmation page - ${request.journey}")
-          Future.successful(Redirect(appConfig.acmExternalUrl))
+          Future.successful(Redirect(routes.ManageYourTaxAgentsController.show.url))
       }

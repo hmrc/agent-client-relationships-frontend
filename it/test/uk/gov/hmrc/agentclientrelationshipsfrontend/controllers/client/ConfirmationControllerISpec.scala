@@ -70,7 +70,7 @@ class ConfirmationControllerISpec extends ComponentSpecHelper with AuthStubs {
       authoriseAsClient()
       val result = get(routes.ConfirmationController.show.url)
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe "http://localhost:9568/manage-your-tax-agents"
+      result.header("Location").value shouldBe "/agent-client-relationships/manage-your-tax-agents"
     }
     List(Accepted, Rejected, PartialAuth).foreach(decision => s"display the confirmation page for ${decision.toString} when the invitation id is in journeyComplete" in {
       authoriseAsClientWithEnrolments("HMRC-MTD-IT")

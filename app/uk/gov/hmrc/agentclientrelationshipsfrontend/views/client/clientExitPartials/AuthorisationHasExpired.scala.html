@@ -16,6 +16,7 @@
 
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.DisplayDate.displayInstant
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.routes
 @import java.time.Instant
 
 @this()
@@ -25,7 +26,7 @@
     "authorisationRequestExpired"
 }
 
-<p class="govuk-body">@Html(messages(s"$key.p1", expiryDate.map(displayInstant).getOrElse(""), s"${appConfig.acmExternalUrl}#history"))</p>
+<p class="govuk-body">@Html(messages(s"$key.p1", expiryDate.map(displayInstant).getOrElse(""), s"${routes.ManageYourTaxAgentsController.show.url}#history"))</p>
 <p class="govuk-body">@Html(messages(s"$key.p2", s"${appConfig.guidanceAuthoriseAgent}"))</p>
 <p class="govuk-body">@messages(s"$key.p3")</p>
 <p class="govuk-body">@Html(messages(s"$key.p4", s"${appConfig.signInUrl}"))</p>

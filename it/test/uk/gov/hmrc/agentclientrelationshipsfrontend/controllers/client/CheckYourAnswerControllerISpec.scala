@@ -64,7 +64,7 @@ class CheckYourAnswerControllerISpec extends ComponentSpecHelper with AuthStubs 
         authoriseAsClient()
         val result = get(routes.CheckYourAnswerController.show.url)
         result.status shouldBe SEE_OTHER
-        result.header("Location").value shouldBe "http://localhost:9568/manage-your-tax-agents"
+        result.header("Location").value shouldBe "/agent-client-relationships/manage-your-tax-agents"
 
   "The submit action" should:
 
@@ -92,7 +92,7 @@ class CheckYourAnswerControllerISpec extends ComponentSpecHelper with AuthStubs 
         authoriseAsClient()
         val result = post(routes.CheckYourAnswerController.submit.url)(Map())
         result.status shouldBe SEE_OTHER
-        result.header("Location").value shouldBe "http://localhost:9568/manage-your-tax-agents"
+        result.header("Location").value shouldBe "/agent-client-relationships/manage-your-tax-agents"
 
     "return status 500 INTERNAL_SERVER_ERROR" when:
 
