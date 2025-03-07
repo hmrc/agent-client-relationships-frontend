@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.services
 
-import play.api.libs.json.{Reads, Writes}
+import play.api.libs.json.Writes
 import play.api.mvc.Request
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.{Authorisation, AuthorisationsCache}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.repositories.AuthorisationsCacheRepository
@@ -31,7 +31,7 @@ class AuthorisationsCacheService @Inject()(sessionCacheRepository: Authorisation
   def getAuthorisation(id: String)
                       (implicit request: Request[?], ec: ExecutionContext): Future[Option[Authorisation]] = {
     sessionCacheRepository.getFromSession[AuthorisationsCache](DataKey("authorisationsCache")).map {
-      case Some(records) => records.authorisations.find(_.id == id)
+      case Some(records) => records.authorisations.find(_.uid == id)
       case None => None
     }
   }

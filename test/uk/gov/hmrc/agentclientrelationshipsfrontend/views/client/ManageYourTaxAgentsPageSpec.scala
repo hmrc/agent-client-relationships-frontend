@@ -119,7 +119,7 @@ class ManageYourTaxAgentsPageSpec extends ViewSpecSupport {
         arn = "1234567890",
         authorisations = Seq(
           Authorisation(
-            id = "1234567890",
+            uid = "1234567890",
             service = "HMRC-MTD-IT",
             clientId = "1234567890",
             date = startDate,
@@ -127,7 +127,7 @@ class ManageYourTaxAgentsPageSpec extends ViewSpecSupport {
             agentName = authorisedAgentName
           ),
           Authorisation(
-            id = "123LD67891",
+            uid = "123LD67891",
             service = "HMRC-PILLAR2-ORG",
             clientId = "1234567890",
             date = startDate,
@@ -141,7 +141,7 @@ class ManageYourTaxAgentsPageSpec extends ViewSpecSupport {
         arn = "987654221",
         authorisations = Seq(
           Authorisation(
-            id = "123456BFX90",
+            uid = "123456BFX90",
             service = "HMRC-MTD-VAT",
             clientId = "1234567890",
             date = startDate,
