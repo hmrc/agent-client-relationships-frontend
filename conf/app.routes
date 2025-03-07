@@ -48,6 +48,9 @@ GET        /authorisation-response/confirmation                                 
 
 # Client Manage Your Tax Agents URLs ----------------------------------------------------------------------------------------
 GET        /manage-your-tax-agents                                                      uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.ManageYourTaxAgentsController.show
+GET        /manage-your-tax-agents/remove-authorisation/:id                             uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.ManageYourTaxAgentsController.showConfirmDeauth(id: String)
+POST       /manage-your-tax-agents/remove-authorisation/:id                             uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.ManageYourTaxAgentsController.submitDeauth(id: String)
+GET        /manage-your-tax-agents/confirmation/:id                                     uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.ManageYourTaxAgentsController.deauthComplete(id: String)
 
 # Agent Journey URLs ----------------------------------------------------------------------------------------------------------
 GET        /:journeyType                                                                uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.StartJourneyController.startJourney(journeyType: AgentJourneyType)

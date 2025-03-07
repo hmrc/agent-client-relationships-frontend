@@ -59,7 +59,7 @@
     </a>
 }
 @deAuthLink(id: String, agentName: String, service: String) = {
-    <a href="@{s"routes.DeauthorisationController.show($id)"}" class="govuk-link">
+    <a href="@{routes.ManageYourTaxAgentsController.showConfirmDeauth(id)}" class="govuk-link">
         @Html(messages(s"$key.authorisedAgents.action.link", agentName, messages(service), agentRoleFromService(service)))
     </a>
 }
