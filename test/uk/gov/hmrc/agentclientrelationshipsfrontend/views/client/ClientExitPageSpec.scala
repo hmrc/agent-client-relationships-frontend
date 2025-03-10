@@ -112,7 +112,7 @@ class ClientExitPageSpec extends ViewSpecSupport {
 
     "have the correct link in the details component content" in {
 
-      doc.mainContent.extractLink(1).value shouldBe TestLink("view your history", "http://localhost:9568/manage-your-tax-agents#history")
+      doc.mainContent.extractLink(1).value shouldBe TestLink("view your history", "/agent-client-relationships/manage-your-tax-agents#history")
     }
   }
 
@@ -137,7 +137,7 @@ class ClientExitPageSpec extends ViewSpecSupport {
 
     "have the correct link in the details component content" in {
 
-      doc.mainContent.extractLink(1).value shouldBe TestLink("view your history", "http://localhost:9568/manage-your-tax-agents#history")
+      doc.mainContent.extractLink(1).value shouldBe TestLink("view your history", "/agent-client-relationships/manage-your-tax-agents#history")
     }
   }
 
@@ -207,7 +207,7 @@ class ClientExitPageSpec extends ViewSpecSupport {
 
     "have the correct link in the details component content" in {
 
-      doc.mainContent.extractLink(1).value shouldBe TestLink("view your request history", "http://localhost:9568/manage-your-tax-agents#history")
+      doc.mainContent.extractLink(1).value shouldBe TestLink("view your request history", "/agent-client-relationships/manage-your-tax-agents#history")
     }
   }
 }

@@ -29,7 +29,6 @@ class AppConfig @Inject()(servicesConfig: ServicesConfig, config: Configuration)
   // Service Urls
   val appExternalUrl: String = getConfString("agent-client-relationships-frontend.external-url") // Use for redirects back to ACR frontend so they work locally
   val asaFrontendExternalUrl: String = getConfString("agent-services-account-frontend.external-url")
-  val acmExternalUrl: String = getConfString("agent-client-management-frontend.external-url")
   val agentServicesAccountLimitedUrl: String = asaFrontendExternalUrl + getConfString("agent-services-account-frontend.account-limited")
   val agentServicesAccountHomeUrl: String = asaFrontendExternalUrl + getConfString("agent-services-account-frontend.home")
   val ivUpliftUrl: String = getConfString("identity-verification-frontend.uplift-url")

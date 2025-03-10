@@ -42,7 +42,7 @@ class CheckYourAnswerController @Inject()(mcc: MessagesControllerComponents,
   def show: Action[AnyContent] = actions.clientAuthenticate:
     implicit request =>
       if request.journey.consent.isDefined then Ok(checkYourAnswerPage())
-      else Redirect(appConfig.acmExternalUrl)
+      else Redirect(routes.ManageYourTaxAgentsController.show.url)
 
   def submit: Action[AnyContent] = actions.clientAuthenticate.async:
     implicit request =>
@@ -65,5 +65,5 @@ class CheckYourAnswerController @Inject()(mcc: MessagesControllerComponents,
             ))
           } yield Redirect(routes.ConfirmationController.show)
         case _ =>
-          Future.successful(Redirect(appConfig.acmExternalUrl))
+          Future.successful(Redirect(routes.ManageYourTaxAgentsController.show.url))
       }
