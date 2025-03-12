@@ -38,9 +38,9 @@
 @pageTitle = @{messages(s"$key.header")}
 @servicesList = {
   <ul class="govuk-list govuk-list--bullet">
-   @{supportedServices.keySet.map(service =>
-    <li>{messages(service)}</li>
-   )}
+   @{supportedServices.keySet.map(service => messages(service)).toList.sorted.map { serviceName =>
+    <li>{serviceName}</li>
+   }}
   </ul>
   @hmrcNewTabLinkHelper(NewTabLinkHelper(
     href = Some(appConfig.mytaOtherTaxServicesGuidanceUrl),
