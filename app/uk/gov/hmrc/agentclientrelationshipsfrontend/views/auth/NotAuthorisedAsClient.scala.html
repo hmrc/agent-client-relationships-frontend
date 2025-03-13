@@ -20,8 +20,7 @@
 @this(
         layout: Layout,
         govukButton: GovukButton,
-        h1: h1,
-        p: p
+        h1: h1
 )
 
 @()(implicit request: Request[?], messages: Messages, appConfig: AppConfig)
@@ -32,8 +31,8 @@
 ) {
 
     @h1(messages("not-authorised.header"))
-    @p() { @messages("not-authorised.description.p1") }
-    @p() { @messages("not-authorised.description.p2") }
+    <p class="govuk-body"> @messages("not-authorised.description.p1") </p>
+    <p class="govuk-body"> @messages("not-authorised.description.p2") </p>
 
     @govukButton(Button(
         content = Text(messages("not-authorised.button")),

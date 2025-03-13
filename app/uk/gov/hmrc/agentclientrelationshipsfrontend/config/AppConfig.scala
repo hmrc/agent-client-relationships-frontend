@@ -56,21 +56,6 @@ class AppConfig @Inject()(servicesConfig: ServicesConfig, config: Configuration)
   val trackRequestsPageSize: Int = servicesConfig.getInt("track-requests-per-page")
   val authorisationRequestExpiryDays: Int = servicesConfig.getDuration("invitation.expiryDuration").toDays.toInt
 
-  // Stub for supported services to be replaced when decision on how to handle this is reached
-  val supportedServices: Set[String] =
-    Set(
-      "HMRC-MTD-IT",
-      "PERSONAL-INCOME-RECORD",
-      "HMRC-MTD-VAT",
-      "HMRC-TERS-ORG",
-      "HMRC-TERSNT-ORG",
-      "HMRC-CGT-PD",
-      "HMRC-PPT-ORG",
-      "HMRC-CBC-ORG",
-      "HMRC-CBC-NONUK-ORG",
-      "HMRC-PILLAR2-ORG"
-    )
-
   val countryListLocation: String = servicesConfig.getString("country.list.location")
 
   private def getString(key: String) = servicesConfig.getString(key)

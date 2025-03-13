@@ -300,7 +300,7 @@ class AgentFastTrackControllerSpec extends ComponentSpecHelper with AuthStubs wi
       }
     })
 
-    validFastTrackRequests.foreach(fastTrackFormData => s"redirect to error ulr when clientId fail regex for ${fastTrackFormData.service} service for ${fastTrackFormData.clientIdentifierType}" in {
+    validFastTrackRequests.foreach(fastTrackFormData => s"redirect to error url when clientId fail regex for ${fastTrackFormData.service} service for ${fastTrackFormData.clientIdentifierType}" in {
       authoriseAsAgent()
       val corruptedClientIdFormData = fastTrackFormData.copy(clientIdentifier = "FakeClientId")
       val errorURLRedirect = ("error", testRoutes.TestOnlyController.getFastTrackForm().url)
@@ -313,7 +313,7 @@ class AgentFastTrackControllerSpec extends ComponentSpecHelper with AuthStubs wi
       }
     })
 
-    validFastTrackRequests.foreach(fastTrackFormData => s"redirect to error ulr when service not supported for ${fastTrackFormData.service} service for ${fastTrackFormData.clientIdentifierType}" in {
+    validFastTrackRequests.foreach(fastTrackFormData => s"redirect to error url when service not supported for ${fastTrackFormData.service} service for ${fastTrackFormData.clientIdentifierType}" in {
       authoriseAsAgent()
       val corruptedClientIdFormData = fastTrackFormData.copy(service = "FakeService")
       val errorURLRedirect = ("error", testRoutes.TestOnlyController.getFastTrackForm().url)
@@ -326,7 +326,7 @@ class AgentFastTrackControllerSpec extends ComponentSpecHelper with AuthStubs wi
       }
     })
 
-    validFastTrackRequests.foreach(fastTrackFormData => s"redirect to error ulr when clientId type not supported for ${fastTrackFormData.service} service for ${fastTrackFormData.clientIdentifierType}" in {
+    validFastTrackRequests.foreach(fastTrackFormData => s"redirect to error url when clientId type not supported for ${fastTrackFormData.service} service for ${fastTrackFormData.clientIdentifierType}" in {
       authoriseAsAgent()
       val corruptedClientIdFormData = fastTrackFormData.copy(clientIdentifierType = "FakeClientIdentifier")
       val errorURLRedirect = ("error", testRoutes.TestOnlyController.getFastTrackForm().url)
@@ -339,7 +339,7 @@ class AgentFastTrackControllerSpec extends ComponentSpecHelper with AuthStubs wi
       }
     })
 
-    invalidClientIdFastTrackRequests.foreach(fastTrackFormData => s"redirect to error ulr when clientId is not for selected service ${fastTrackFormData.service} service for ${fastTrackFormData.clientIdentifierType}" in {
+    invalidClientIdFastTrackRequests.foreach(fastTrackFormData => s"redirect to error url when clientId is not for selected service ${fastTrackFormData.service} service for ${fastTrackFormData.clientIdentifierType}" in {
       authoriseAsAgent()
       val errorURLRedirect = ("error", testRoutes.TestOnlyController.getFastTrackForm().url)
       val result = post(fastTrackRoutes.AgentFastTrackController.agentFastTrack.url)(toFastTrackRequests(fastTrackFormData))(Seq(errorURLRedirect))
@@ -351,7 +351,7 @@ class AgentFastTrackControllerSpec extends ComponentSpecHelper with AuthStubs wi
       }
     })
 
-    invalidClientIdTypeFastTrackRequests.foreach(fastTrackFormData => s"redirect to error ulr when clientId type is not for selected service ${fastTrackFormData.service} service for ${fastTrackFormData.clientIdentifierType}" in {
+    invalidClientIdTypeFastTrackRequests.foreach(fastTrackFormData => s"redirect to error url when clientId type is not for selected service ${fastTrackFormData.service} service for ${fastTrackFormData.clientIdentifierType}" in {
       authoriseAsAgent()
       val errorURLRedirect = ("error", testRoutes.TestOnlyController.getFastTrackForm().url)
       val result = post(fastTrackRoutes.AgentFastTrackController.agentFastTrack.url)(toFastTrackRequests(fastTrackFormData))(Seq(errorURLRedirect))

@@ -35,5 +35,5 @@ object ValidateInvitationResponse {
 }
 
 sealed trait ValidateInvitationError
-case object AgentSuspendedError extends ValidateInvitationError
+case object InvitationAgentSuspendedError extends ValidateInvitationError
 case object InvitationOrAgentNotFoundError extends ValidateInvitationError

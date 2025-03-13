@@ -27,7 +27,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class GetJourneyAction @Inject()(agentJourneyService: AgentJourneyService,
-                                 clientJourneyService: ClientJourneyService, 
+                                 clientJourneyService: ClientJourneyService,
                                  appConfig: AppConfig
                                 )(implicit ec: ExecutionContext) {
 
@@ -36,21 +36,21 @@ class GetJourneyAction @Inject()(agentJourneyService: AgentJourneyService,
 
     override def invokeBlock[A](request: AgentRequest[A], block: AgentJourneyRequest[A] => Future[Result]): Future[Result] =
       given AgentRequest[A] = request
+
       agentJourneyService.getJourney.flatMap {
         case Some(journey) if journey.journeyType == journeyTypeFromUrl =>
           block(new AgentJourneyRequest(request.arn, journey, request.request))
         case _ =>
           Future.successful(Redirect(appConfig.agentServicesAccountHomeUrl))
       }
-      
+
   def clientJourneyAction: ActionFunction[Request, ClientJourneyRequest] = new ActionFunction[Request, ClientJourneyRequest]:
     override protected def executionContext: ExecutionContext = ec
-        
-      override def invokeBlock[A](request: Request[A], block: ClientJourneyRequest[A] => Future[Result]): Future[Result] =
-        given Request[A] = request
-        clientJourneyService.getJourney.flatMap {
-          mJourney => block(ClientJourneyRequest(mJourney.getOrElse(ClientJourney(journeyType = "authorisation-response")), request))
-        }
-        
 
+    override def invokeBlock[A](request: Request[A], block: ClientJourneyRequest[A] => Future[Result]): Future[Result] =
+      given Request[A] = request
+
+      clientJourneyService.getJourney.flatMap {
+        mJourney => block(ClientJourneyRequest(mJourney.getOrElse(ClientJourney(journeyType = "authorisation-response")), request))
+      }
 }

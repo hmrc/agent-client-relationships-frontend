@@ -22,7 +22,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.connectors.AgentClientRelationshipsConnector
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{AgentSuspendedError, InvitationOrAgentNotFoundError}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{InvitationAgentSuspendedError, InvitationOrAgentNotFoundError}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.{Cancelled, Expired, Pending}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientExitType.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.client.DeclineRequestForm
@@ -53,7 +53,7 @@ class DeclineRequestController @Inject()(mcc: MessagesControllerComponents,
       agentClientRelationshipsConnector
         .validateInvitation(uid, clientServiceConfig.getServiceKeysForUrlPart(taxService))
         .flatMap {
-          case Left(AgentSuspendedError) =>
+          case Left(InvitationAgentSuspendedError) =>
             Future.successful(Redirect(routes.ClientExitController.showUnauthorised(AgentSuspended)))
           case Left(InvitationOrAgentNotFoundError) =>
             Future.successful(Redirect(routes.ClientExitController.showUnauthorised(NoOutstandingRequests)))

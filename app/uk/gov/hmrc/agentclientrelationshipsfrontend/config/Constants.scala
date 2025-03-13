@@ -22,17 +22,6 @@ object Constants extends ServiceConstants {
   
   // agent enrolment
   val AsAgent = "HMRC-AS-AGENT"
-  
-  // client services
-  val MtdIncomeTax = "HMRC-MTD-IT"
-  val PersonalIncome = "PERSONAL-INCOME-RECORD"
-  val PlasticPackaging = "HMRC-PPT-ORG"
-  val CgtPd = "HMRC-CGT-PD"
-
-  // dates
-  val Year = "year"
-  val Month = "month"
-  val Day = "day"
 
   // createInvitationFields
   val ClientTypeFieldName = "clientType"

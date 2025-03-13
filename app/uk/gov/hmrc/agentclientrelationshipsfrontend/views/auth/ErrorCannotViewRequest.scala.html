@@ -19,8 +19,7 @@
 @this(
         layout: Layout,
         govukButton: GovukButton,
-        h1: h1,
-        p: p
+        h1: h1
 )
 
 @(clientType: String)(implicit request: Request[?], messages: Messages, appConfig: AppConfig)
@@ -32,9 +31,9 @@
 
     @h1(messages("error.cannot-view-request.header"))
 
-    @p(){ @messages("error.cannot-view-request.p1") }
-    @p(){ @messages("error.cannot-view-request.p2") }
-    @p(){ @messages("error.cannot-view-request.p3", messages(s"error.cannot-view-request.client-type.$clientType")) }
+    <p class="govuk-body"> @messages("error.cannot-view-request.p1") </p>
+    <p class="govuk-body"> @messages("error.cannot-view-request.p2") </p>
+    <p class="govuk-body"> @messages("error.cannot-view-request.p3", messages(s"error.cannot-view-request.client-type.$clientType")) </p>
 
     @govukButton(Button(
         content = Text(messages("error.cannot-view-request.button")),

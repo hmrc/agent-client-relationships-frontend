@@ -1,5 +1,5 @@
-@*
- * Copyright 2023 HM Revenue & Customs
+/*
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,10 +12,21 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@this()
+package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers
 
-@(href: String, text: String)(implicit messages: Messages)
+import play.api.http.Status.OK
+import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentSpecHelper}
 
-<a href="@{href}" class="govuk-link govuk-body">@text</a>
+class SignOutControllerISpec extends ComponentSpecHelper with AuthStubs {
+
+  "GET /sign-out" should {
+    "return OK" in {
+      authoriseAsAgent()
+      val result = get(routes.SignOutController.signOut.url)
+      result.status shouldBe OK
+    }
+  }
+
+}
