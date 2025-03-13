@@ -54,21 +54,23 @@ class ConfirmConsentControllerISpec extends ComponentSpecHelper with AuthStubs w
         val result = get(routes.ConfirmConsentController.show.url)
         result.status shouldBe OK
 
-    "return status 400 BAD_REQUEST" when:
+    "kick the user out to MYTA" when :
 
       "a service key is not present in the session" in:
         authoriseAsClient()
         val badJourneyModel = journeyModel.copy(serviceKey = None)
         await(journeyService.saveJourney(badJourneyModel))
         val result = get(routes.ConfirmConsentController.show.url)
-        result.status shouldBe BAD_REQUEST
+        result.status shouldBe SEE_OTHER
+        result.header("Location").value shouldBe routes.ManageYourTaxAgentsController.show.url
 
       "an agent name is not present in the session" in :
         authoriseAsClient()
         val badJourneyModel = journeyModel.copy(agentName = None)
         await(journeyService.saveJourney(badJourneyModel))
         val result = get(routes.ConfirmConsentController.show.url)
-        result.status shouldBe BAD_REQUEST
+        result.status shouldBe SEE_OTHER
+        result.header("Location").value shouldBe routes.ManageYourTaxAgentsController.show.url
 
   "The submit action" should:
 
@@ -96,16 +98,19 @@ class ConfirmConsentControllerISpec extends ComponentSpecHelper with AuthStubs w
         val result = post(routes.ConfirmConsentController.submit.url)(Map("confirmConsent" -> Seq("")))
         result.status shouldBe BAD_REQUEST
 
+    "kick the user out to MYTA" when :
       "a service key is not present in the session" in:
         authoriseAsClient()
         val badJourneyModel = journeyModel.copy(serviceKey = None)
         await(journeyService.saveJourney(badJourneyModel))
         val result = get(routes.ConfirmConsentController.show.url)
-        result.status shouldBe BAD_REQUEST
+        result.status shouldBe SEE_OTHER
+        result.header("Location").value shouldBe routes.ManageYourTaxAgentsController.show.url
 
       "an agent name is not present in the session" in :
         authoriseAsClient()
         val badJourneyModel = journeyModel.copy(agentName = None)
         await(journeyService.saveJourney(badJourneyModel))
         val result = get(routes.ConfirmConsentController.show.url)
-        result.status shouldBe BAD_REQUEST
+        result.status shouldBe SEE_OTHER
+        result.header("Location").value shouldBe routes.ManageYourTaxAgentsController.show.url
