@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.services
 
+import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientType
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientType.{business, personal, trust}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.common.{ClientDetailsConfiguration, ServiceData}
@@ -25,7 +26,7 @@ import javax.inject.{Inject, Singleton}
 import scala.collection.immutable.ListMap
 
 @Singleton
-class ClientServiceConfigurationService @Inject() extends ServiceConstants {
+class ClientServiceConfigurationService @Inject()(implicit appConfig: AppConfig) extends ServiceConstants {
 
   def orderedClientTypes: Seq[String] = Seq("personal", "business", "trust")
 
@@ -89,7 +90,7 @@ class ClientServiceConfigurationService @Inject() extends ServiceConstants {
       serviceName = HMRCMTDIT,
       urlPart = Map(incomeTax -> Set(HMRCMTDIT, HMRCNI, HMRCPT)),
       serviceOption = true,
-      supportedAgentRoles = Seq(HMRCMTDIT, HMRCMTDITSUPP),
+      supportedAgentRoles = if appConfig.emaEnabled then Seq(HMRCMTDIT, HMRCMTDITSUPP) else Seq.empty,
       clientTypes = Set(personal),
       clientDetails = Seq(
         ClientDetailsConfiguration(

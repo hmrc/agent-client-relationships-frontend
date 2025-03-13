@@ -52,8 +52,8 @@ class ConfirmationPageSpec extends ViewSpecSupport {
     "HMRC-PPT-ORG" -> "manage your Plastic Packaging Tax",
     "HMRC-CBC-ORG" -> "manage your Country-by-country reporting",
     "HMRC-PILLAR2-ORG" -> "manage your Pillar 2 Top-up Taxes",
-    "HMRC-TERS-ORG" -> "manage a trust or an estate",
-    "HMRC-TERSNT-ORG" -> "manage a trust or an estate"
+    "HMRC-TERS-ORG" -> "manage your Trusts and Estates",
+    "HMRC-TERSNT-ORG" -> "manage your Trusts and Estates"
   )
 
   val confirmationData: AuthorisationRequestInfoForClient = AuthorisationRequestInfoForClient(

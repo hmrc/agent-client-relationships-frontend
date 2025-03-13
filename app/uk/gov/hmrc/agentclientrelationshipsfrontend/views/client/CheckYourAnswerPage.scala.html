@@ -17,6 +17,7 @@
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.Layout
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.ClientJourneyRequest
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.routes
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 
 @this(
         layout: Layout,
@@ -25,7 +26,7 @@
         formWithCSRF: FormWithCSRF
 )
 
-@()(implicit request: ClientJourneyRequest[?], messages: Messages)
+@()(implicit request: ClientJourneyRequest[?], messages: Messages, appConfig: AppConfig)
 
 @key = @{
     "checkYourAnswer"
@@ -34,6 +35,9 @@
 @serviceKey = @{journey.getServiceKey}
 @agentName = @{journey.getAgentName}
 @choice = @{journey.getConsent}
+@agentRoleFor(serviceKey: String) = @{
+    if appConfig.emaEnabled then messages(s"agentRoleFor.$serviceKey") else messages("agentRoleFor.noEMA")
+}
 @pageTitle = @{
     messages(s"$key.title")
 }
@@ -49,7 +53,7 @@
         rows = Seq(
             SummaryListRow(
                 key = Key(
-                    content = Text(messages(s"$key.$serviceKey.question", agentName)),
+                    content = Text(messages(s"$key.question", agentName, agentRoleFor(serviceKey), messages(serviceKey))),
                     classes = "govuk-!-width-one-half"
                 ),
                 value = Value(
@@ -69,7 +73,7 @@
     <h2 class="govuk-heading-l">@messages(s"$key.h2")</h2>
 
     <p class="govuk-body">
-        @messages(s"$key.${if choice then "declarationYes" else "declarationNo"}.p1.$serviceKey", agentName)
+        @messages(s"$key.${if choice then "declarationYes" else "declarationNo"}.p1", agentName, agentRoleFor(serviceKey), messages(serviceKey))
     </p>
 
     @if(!choice) {
