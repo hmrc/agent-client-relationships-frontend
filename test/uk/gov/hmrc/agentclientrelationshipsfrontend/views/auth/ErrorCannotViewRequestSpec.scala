@@ -23,8 +23,10 @@ import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.mockito.MockitoSugar.mock
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
+import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.routes
 import uk.gov.hmrc.agentclientrelationshipsfrontend.support.ViewSpecSupport
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.auth.ErrorCannotViewRequest
+import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl
 
 class ErrorCannotViewRequestSpec extends ViewSpecSupport with BeforeAndAfterEach {
 
@@ -43,15 +45,14 @@ class ErrorCannotViewRequestSpec extends ViewSpecSupport with BeforeAndAfterEach
     val heading = "You cannot view this authorisation request"
     val para1 = "You have signed in using an agent user ID."
     val para2 = "If you are the agent, ask your client to respond to the authorisation request link."
-    val para3Business = "If you are not an agent, sign in with the Government Gateway user ID that you use for your business tax affairs."
-    val para3Personal = "If you are not an agent, sign in with the Government Gateway user ID that you use for your personal tax affairs."
+    val para3 = "If you are not an agent, sign in with the Government Gateway user ID that you use for your tax affairs."
     val button = "Sign in"
   }
 
   "ErrorCannotViewRequest view" when {
     "generated for a business client" should {
       when(appConfig.signInUrl).thenReturn(testUrl)
-      val view: HtmlFormat.Appendable = viewTemplate("business")
+      val view: HtmlFormat.Appendable = viewTemplate(Some(RedirectUrl(testUrl)))
       val doc: Document = Jsoup.parse(view.body)
       "have the right title" in {
         doc.title() shouldBe Expected.title
@@ -65,32 +66,10 @@ class ErrorCannotViewRequestSpec extends ViewSpecSupport with BeforeAndAfterEach
       "have the right paras" in {
         doc.mainContent.extractText(p, 1).value shouldBe Expected.para1
         doc.mainContent.extractText(p, 2).value shouldBe Expected.para2
-        doc.mainContent.extractText(p, 3).value shouldBe Expected.para3Business
+        doc.mainContent.extractText(p, 3).value shouldBe Expected.para3
       }
       "have a link button" in {
-        doc.mainContent.extractLinkButton(1).value shouldBe TestLink(Expected.button, testUrl)
-      }
-    }
-    "generated for a personal client" should {
-      when(appConfig.signInUrl).thenReturn(testUrl)
-      val view: HtmlFormat.Appendable = viewTemplate("personal")
-      val doc: Document = Jsoup.parse(view.body)
-      "have the right title" in {
-        doc.title() shouldBe Expected.title
-      }
-      "have a language switcher" in {
-        doc.hasLanguageSwitch shouldBe true
-      }
-      "have the right heading" in {
-        doc.mainContent.extractText(h1, 1).value shouldBe Expected.heading
-      }
-      "have the right paras" in {
-        doc.mainContent.extractText(p, 1).value shouldBe Expected.para1
-        doc.mainContent.extractText(p, 2).value shouldBe Expected.para2
-        doc.mainContent.extractText(p, 3).value shouldBe Expected.para3Personal
-      }
-      "have a link button" in {
-        doc.mainContent.extractLinkButton(1).value shouldBe TestLink(Expected.button, testUrl)
+        doc.mainContent.extractLinkButton(1).value shouldBe TestLink(Expected.button, routes.SignOutController.signOut(Some(RedirectUrl(testUrl))).url)
       }
     }
   }

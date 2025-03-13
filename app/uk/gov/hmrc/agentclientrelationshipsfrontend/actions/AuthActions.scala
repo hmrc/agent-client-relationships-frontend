@@ -103,7 +103,7 @@ class AuthActions @Inject()(val authConnector: AuthConnector,
                 }
                 else enrolmentCheck(enrols)
               case (AffinityGroup.Agent, _) =>
-                Future.successful(Redirect(routes.AuthorisationController.cannotViewRequest))
+                Future.successful(Redirect(routes.AuthorisationController.cannotViewRequest(Some(RedirectUrl(currentUrl)), Some(taxService))))
               case (affinityGroup, _) =>
                 logger.warn(s"unknown affinity group: $affinityGroup - cannot determine auth status")
                 Future.successful(Forbidden)
@@ -137,7 +137,7 @@ class AuthActions @Inject()(val authConnector: AuthConnector,
                   block(request)
                 else block(request)
               case (AffinityGroup.Agent, _) =>
-                Future.successful(Redirect(routes.AuthorisationController.cannotViewRequest))
+                Future.successful(Redirect(routes.AuthorisationController.cannotViewRequest(None)))
               case (affinityGroup, _) =>
                 logger.warn(s"unknown affinity group: $affinityGroup - cannot determine auth status")
                 Future.successful(Forbidden)
@@ -163,18 +163,18 @@ class AuthActions @Inject()(val authConnector: AuthConnector,
     }
   }
 
-  private def successUrl(implicit request: Request[?]) =
+  private def currentUrl(implicit request: Request[?]) =
     appConfig.appExternalUrl + request.uri
 
   private def redirectToIdentityVerification()(implicit request: Request[?]) = {
     val failureUrl = appConfig.appExternalUrl +
-      routes.AuthorisationController.cannotConfirmIdentity(continueUrl = Some(RedirectUrl(successUrl))).url
+      routes.AuthorisationController.cannotConfirmIdentity(continueUrl = Some(RedirectUrl(currentUrl))).url
 
     Future.successful(Redirect(UrlHelper.addParamsToUrl(
       appConfig.ivUpliftUrl,
       "origin" -> Some(appConfig.appName),
       "confidenceLevel" -> Some(requiredCL.toString),
-      "completionURL" -> Some(successUrl),
+      "completionURL" -> Some(currentUrl),
       "failureURL" -> Some(failureUrl)
     )))
   }
@@ -191,7 +191,7 @@ class AuthActions @Inject()(val authConnector: AuthConnector,
       Redirect(UrlHelper.addParamsToUrl(
         appConfig.signInUrl,
         "origin" -> Some(appConfig.appName),
-        "continue_url" -> Some(successUrl)
+        "continue_url" -> Some(currentUrl)
       ))
     case _: InsufficientEnrolments =>
       logger.warn(s"Logged in user does not have required enrolments")

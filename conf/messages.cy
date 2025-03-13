@@ -60,9 +60,7 @@ not-authorised.button=Allgofnodi
 error.cannot-view-request.header=Ni allwch fwrw golwg dros y cais am awdurdodiad hwn
 error.cannot-view-request.p1=Rydych wedi mewngofnodi gan ddefnyddio Dynodydd Defnyddiwr (ID) asiant.
 error.cannot-view-request.p2=Os mai chi yw’r asiant, gofynnwch i’ch cleient ddilyn y cysylltiad er mwyn ymateb i’r cais am awdurdodiad.
-error.cannot-view-request.p3=Os nad ydych yn asiant, mewngofnodwch gyda’r Dynodydd Defnyddiwr (ID) ar gyfer Porth y Llywodraeth rydych yn ei ddefnyddio ar gyfer eich {0}.
-error.cannot-view-request.client-type.business=materion treth busnes
-error.cannot-view-request.client-type.personal=materion treth personol
+error.cannot-view-request.p3=Os nad ydych yn asiant, mewngofnodwch gyda’r Dynodydd Defnyddiwr (ID) ar gyfer Porth y Llywodraeth rydych yn ei ddefnyddio ar gyfer eich materion treth.
 error.cannot-view-request.button=Mewngofnodi
 
 # -------------------------------------------------------------------------------------------

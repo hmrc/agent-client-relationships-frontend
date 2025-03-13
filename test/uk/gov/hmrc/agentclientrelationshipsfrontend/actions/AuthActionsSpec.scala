@@ -27,7 +27,7 @@ import play.api.mvc.*
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{defaultAwaitTimeout, redirectLocation, status}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
-import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.{routes => clientRoutes}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.routes as clientRoutes
 import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.routes
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientExitType
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{ClientServiceConfigurationService, ServiceConstants}
@@ -37,6 +37,7 @@ import uk.gov.hmrc.auth.core.ConfidenceLevel.{L200, L250, L50}
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -208,7 +209,8 @@ class AuthActionsSpec extends AnyWordSpecLike with Matchers with OptionValues wi
       val result = controller.clientAuthWithEnrolmentCheck(incomeTax)(fakeRequest)
 
       status(result) shouldBe SEE_OTHER
-      redirectLocation(result).value shouldBe routes.AuthorisationController.cannotViewRequest.url
+      redirectLocation(result).value shouldBe
+        routes.AuthorisationController.cannotViewRequest(Some(RedirectUrl(appConfig.appExternalUrl + fakeRequest.uri)), Some("income-tax")).url
     }
     "redirect a user without session to the login" in {
       val controller = failingControllerSetup(BearerTokenExpired(""))
@@ -274,7 +276,7 @@ class AuthActionsSpec extends AnyWordSpecLike with Matchers with OptionValues wi
       val controller = clientControllerSetup(Agent, L50, Set(Enrolment("HMRC-AS-AGENT")))
       val result = controller.clientAuth()(fakeRequest)
       status(result) shouldBe SEE_OTHER
-      redirectLocation(result).value shouldBe routes.AuthorisationController.cannotViewRequest.url
+      redirectLocation(result).value shouldBe routes.AuthorisationController.cannotViewRequest(None).url
 
     "redirect a user without session to the login" in:
       val controller = failingControllerSetup(BearerTokenExpired(""))

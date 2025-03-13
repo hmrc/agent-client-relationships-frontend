@@ -16,15 +16,23 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers
 
-import play.api.http.Status.OK
+import play.api.http.Status.{OK, SEE_OTHER}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentSpecHelper}
+import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl
 
 class SignOutControllerISpec extends ComponentSpecHelper with AuthStubs {
 
   "GET /sign-out" should {
+    "redirect to continueUrl when it is provided" in {
+      authoriseAsAgent()
+      val continueUrl = RedirectUrl("/url/continue")
+      val result = get(routes.SignOutController.signOut(Some(continueUrl)).url)
+      result.status shouldBe SEE_OTHER
+      result.header("Location").value shouldBe "/url/continue"
+    }
     "return OK" in {
       authoriseAsAgent()
-      val result = get(routes.SignOutController.signOut.url)
+      val result = get(routes.SignOutController.signOut().url)
       result.status shouldBe OK
     }
   }

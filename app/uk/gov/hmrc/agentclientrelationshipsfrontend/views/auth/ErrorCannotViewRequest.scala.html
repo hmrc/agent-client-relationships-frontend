@@ -15,6 +15,8 @@
  *@
 
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
+@import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.routes
 
 @this(
         layout: Layout,
@@ -22,7 +24,7 @@
         h1: h1
 )
 
-@(clientType: String)(implicit request: Request[?], messages: Messages, appConfig: AppConfig)
+@(continueUrl: Option[RedirectUrl])(implicit request: Request[?], messages: Messages, appConfig: AppConfig)
 
 @layout(
     pageTitle = messages("error.cannot-view-request.header"),
@@ -33,11 +35,11 @@
 
     <p class="govuk-body"> @messages("error.cannot-view-request.p1") </p>
     <p class="govuk-body"> @messages("error.cannot-view-request.p2") </p>
-    <p class="govuk-body"> @messages("error.cannot-view-request.p3", messages(s"error.cannot-view-request.client-type.$clientType")) </p>
+    <p class="govuk-body"> @messages("error.cannot-view-request.p3") </p>
 
     @govukButton(Button(
         content = Text(messages("error.cannot-view-request.button")),
-        href = Some(appConfig.signInUrl) //TODO set up the correct link when this view is properly implemented and we have access to journeyId
+        href = Some(routes.SignOutController.signOut(continueUrl).url) //Not the right link but is being redone shortly with APB-9294 and will be removed before live
     ))
 
 }

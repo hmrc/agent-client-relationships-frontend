@@ -49,7 +49,7 @@
 
 @isSignedIn  = @{request.session.get("authToken").isDefined}
 @* sign out url is only available if the user is signed in, the signOut method can do survey redirection etc *@
-@signOutUrl = @{if(isSignedIn) Some(routes.SignOutController.signOut.url) else None}
+@signOutUrl = @{if(isSignedIn) Some(routes.SignOutController.signOut().url) else None}
 @* only pass in the service name as a fully resolved message if it is not the default for agents auth *@
 @service = @{serviceName.getOrElse(messages("service.name.agents.auth"))}
 @head = {
