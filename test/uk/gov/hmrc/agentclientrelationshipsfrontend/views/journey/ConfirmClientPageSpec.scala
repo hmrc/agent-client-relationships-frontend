@@ -47,7 +47,7 @@ class ConfirmClientPageSpec extends ViewSpecSupport {
     val deAuthorisationLabel = s"Is your cancellation request for $clientName?"
     val authorisationTitle = s"$authorisationLabel - Ask a client to authorise you - GOV.UK"
     val deAuthorisationTitle = s"$deAuthorisationLabel - Cancel a client’s authorisation - GOV.UK"
-    val radioTrue = "Yes"
+    val radioTrue = "Yes - this is the right client"
     val radioFalse = "No - I need to start again"
     val authorisationErrorRequired = s"Select ‘yes’ if you want $clientName to authorise you as an agent"
     val deAuthorisationErrorRequired = s"Select ‘yes’ if $clientName is the client you want to cancel authorisation for"

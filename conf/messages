@@ -256,7 +256,7 @@ confirmClient.authorisation-request.header=Is {0} the client you want authorisat
 confirmClient.agent-cancel-authorisation.header=Is your cancellation request for {0}?
 confirmClient.authorisation-request.error.required=Select ‘yes’ if you want {0} to authorise you as an agent
 confirmClient.agent-cancel-authorisation.error.required=Select ‘yes’ if {0} is the client you want to cancel authorisation for
-confirmClient.true=Yes
+confirmClient.true=Yes - this is the right client
 confirmClient.false=No - I need to start again
 
 # ________________________________________________________________________________
