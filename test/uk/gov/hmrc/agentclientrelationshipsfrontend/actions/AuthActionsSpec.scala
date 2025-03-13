@@ -27,7 +27,9 @@ import play.api.mvc.*
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{defaultAwaitTimeout, redirectLocation, status}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
+import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.{routes => clientRoutes}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.routes
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientExitType
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{ClientServiceConfigurationService, ServiceConstants}
 import uk.gov.hmrc.auth.core.*
 import uk.gov.hmrc.auth.core.AffinityGroup.{Agent, Individual, Organisation}
@@ -144,13 +146,13 @@ class AuthActionsSpec extends AnyWordSpecLike with Matchers with OptionValues wi
 
       status(result) shouldBe OK
     }
-    s"redirect to routes.ClientExitHandler.show(INSUFFICIENT_ENROLMENTS) for $incomeTax" in {
+    s"redirect to client exit CannotFindAuthorisationRequest for $incomeTax" in {
       val controller = clientControllerSetup(Individual, L250, Set(Enrolment(HMRCMTDVAT)))
 
       val result = controller.clientAuthWithEnrolmentCheck(incomeTax)(fakeRequest)
 
       status(result) shouldBe SEE_OTHER
-      redirectLocation(result).get shouldBe "routes.ClientExitHandler.show(INSUFFICIENT_ENROLMENTS)"
+      redirectLocation(result).get shouldBe clientRoutes.ClientExitController.showUnauthorised(ClientExitType.CannotFindAuthorisationRequest).url
     }
 
     s"authorise an individual client for $incomeRecordViewer with CL250" in {
@@ -160,13 +162,13 @@ class AuthActionsSpec extends AnyWordSpecLike with Matchers with OptionValues wi
 
       status(result) shouldBe OK
     }
-    s"redirect to routes.ClientExitHandler.show(INSUFFICIENT_ENROLMENTS) for $incomeRecordViewer" in {
+    s"redirect to client exit CannotFindAuthorisationRequest for $incomeRecordViewer" in {
       val controller = clientControllerSetup(Individual, L250, Set(Enrolment(HMRCMTDVAT)))
 
       val result = controller.clientAuthWithEnrolmentCheck(incomeRecordViewer)(fakeRequest)
 
       status(result) shouldBe SEE_OTHER
-      redirectLocation(result).get shouldBe "routes.ClientExitHandler.show(INSUFFICIENT_ENROLMENTS)"
+      redirectLocation(result).get shouldBe clientRoutes.ClientExitController.showUnauthorised(ClientExitType.CannotFindAuthorisationRequest).url
     }
 
     s"authorise an individual $capitalGainsTaxUkProperty client with CL50" in {

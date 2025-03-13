@@ -22,6 +22,8 @@ import play.api.mvc.{ActionFunction, Request, Result, WrappedRequest}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.{AsAgent, HMRCCGTPD, HMRCMTDIT}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.routes
+import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.{routes => clientRoutes}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientExitType.CannotFindAuthorisationRequest
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.ClientServiceConfigurationService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.UrlHelper
 import uk.gov.hmrc.auth.core.*
@@ -85,8 +87,7 @@ class AuthActions @Inject()(val authConnector: AuthConnector,
         if userHasEnrolmentForTaxService(taxService, enrols) then
           block(request)
         else
-          //TODO: add exit type for insufficient_enrolments
-          Future.successful(Redirect("routes.ClientExitHandler.show(INSUFFICIENT_ENROLMENTS)"))
+          Future.successful(Redirect(clientRoutes.ClientExitController.showUnauthorised(CannotFindAuthorisationRequest).url))
 
       authorised(AuthProviders(GovernmentGateway))
         .retrieve(affinityGroup and confidenceLevel and allEnrolments) {
