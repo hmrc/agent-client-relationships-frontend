@@ -112,7 +112,7 @@
                     items = Seq(SelectItem(value = Some(""), text = messages(s"$key.sidebar.allStatuses")))
                             ++ handlePartialAuth(result.availableFilters).map(name => SelectItem(
                                 value = Some(name),
-                                text = messages(s"$key.filter-status.$name"),
+                                text = messages(s"$key.filter-status.${name.toLowerCase}"),
                                 selected = result.filtersApplied.flatMap(_.get("statusFilter")).contains(name)
                             )),
                     classes = "govuk-!-margin-bottom-4"

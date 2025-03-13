@@ -22,33 +22,82 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.connectors.AgentClientRelationshipsConnector
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.AuthorisationsCache
-import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{AuthorisationsCacheService, ClientServiceConfigurationService}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.client.ManageYourTaxAgentsPage
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.{AgentsAuthorisationsResponse, AuthorisationsCache, AuthorisedAgent}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.client.ConfirmDeauthForm
+import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{AgentClientRelationshipsService, AuthorisationsCacheService, ClientServiceConfigurationService}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.PageNotFound
+import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.client.{ConfirmDeauthPage, ConfirmationOfDeauthPage, ManageYourTaxAgentsPage}
 import uk.gov.hmrc.mongo.cache.DataKey
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.Singleton
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class ManageYourTaxAgentsController @Inject()(agentClientRelationshipsConnector: AgentClientRelationshipsConnector,
-                                              serviceConfigurationService: ClientServiceConfigurationService,
-                                              mytaPage: ManageYourTaxAgentsPage,
-                                              authorisationsCacheService: AuthorisationsCacheService,
-                                              actions: Actions,
-                                              mcc: MessagesControllerComponents
+class ManageYourTaxAgentsController @Inject()(
+                                               serviceConfigurationService: ClientServiceConfigurationService,
+                                               agentClientRelationshipsService: AgentClientRelationshipsService,
+                                               mytaPage: ManageYourTaxAgentsPage,
+                                               confirmDeauthPage: ConfirmDeauthPage,
+                                               deauthCompletePage: ConfirmationOfDeauthPage,
+                                               pageNotFound: PageNotFound,
+                                               authorisationsCacheService: AuthorisationsCacheService,
+                                               actions: Actions,
+                                               mcc: MessagesControllerComponents
                                              )(implicit val executionContext: ExecutionContext, appConfig: AppConfig)
   extends FrontendController(mcc) with I18nSupport:
 
   def show: Action[AnyContent] = actions.clientAuthenticate.async:
     implicit request =>
       for {
-        mytaData <- agentClientRelationshipsConnector.getManageYourTaxAgentsData()
+        mytaData <- agentClientRelationshipsService.getManageYourTaxAgentsData()
         _ <- authorisationsCacheService
           .put[AuthorisationsCache](DataKey("authorisationsCache"), AuthorisationsCache(
             authorisations = Seq(mytaData.agentsAuthorisations.agentsAuthorisations).flatten.flatMap(_.authorisations))
           )
       } yield Ok(mytaPage(serviceConfigurationService.allSupportedServices.map(s => (s, serviceConfigurationService.getUrlPart(s))).toMap, mytaData))
 
+  def showConfirmDeauth(id: String): Action[AnyContent] = actions.clientAuthenticate.async:
+    implicit request =>
+      authorisationsCacheService.getAuthorisation(id).map {
+        case Some(authorisation) if authorisation.deauthorised.isEmpty => Ok(confirmDeauthPage(ConfirmDeauthForm.form, authorisation))
+        case Some(_) => Redirect(routes.ManageYourTaxAgentsController.show.url)
+        case None => NotFound(pageNotFound())
+      }
 
+  def submitDeauth(id: String): Action[AnyContent] = actions.clientAuthenticate.async:
+    implicit request =>
+      ConfirmDeauthForm.form.bindFromRequest().fold(
+        formWithErrors => authorisationsCacheService.getAuthorisation(id).map {
+          case Some(authorisation) if authorisation.deauthorised.isEmpty => BadRequest(confirmDeauthPage(formWithErrors, authorisation))
+          case _ => NotFound(pageNotFound())
+        },
+        confirmDeauth =>
+          authorisationsCacheService.getAuthorisation(id).flatMap {
+            case Some(authorisation) if authorisation.deauthorised.isEmpty =>
+              if confirmDeauth then
+                agentClientRelationshipsService.cancelAuthorisation(authorisation.arn, authorisation.clientId, authorisation.service).flatMap {
+                  case () =>
+                    // destroy all other authorisation items from session cache and mark this one as deauthorised
+                    for {
+                      _ <- authorisationsCacheService.put[AuthorisationsCache](
+                        DataKey("authorisationsCache"),
+                        AuthorisationsCache(
+                          authorisations = Seq(authorisation.copy(deauthorised = Some(true)))
+                        )
+                      )
+                    } yield Redirect(routes.ManageYourTaxAgentsController.deauthComplete(id).url)
+
+                  case _ => Future.successful(InternalServerError)
+                }
+              else Future.successful(Redirect(routes.ManageYourTaxAgentsController.show.url))
+            case _ => Future.successful(Redirect(routes.ManageYourTaxAgentsController.show.url))
+          }
+      )
+
+  def deauthComplete(id: String): Action[AnyContent] = actions.clientAuthenticate.async:
+    implicit request =>
+      authorisationsCacheService.getAuthorisation(id).flatMap {
+        case Some(authorisation) if authorisation.deauthorised.contains(true) => Future.successful(Ok(deauthCompletePage(authorisation)))
+        case _ => Future.successful(NotFound(pageNotFound()))
+      }

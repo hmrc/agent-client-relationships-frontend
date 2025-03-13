@@ -179,7 +179,7 @@ class ManageYourTaxAgentsPageSpec extends ViewSpecSupport {
       AuthorisationEvent(
         agentName = authorisedAgentName,
         service = "HMRC-MTD-IT",
-        date = startDate,
+        date = startDate.minusDays(5),
         eventType = Accepted
       )
     ))
@@ -242,16 +242,16 @@ class ManageYourTaxAgentsPageSpec extends ViewSpecSupport {
         caption = authorisedAgentName,
         rows = List(
           IndexedSeq(
-            "Making Tax Digital for Income Tax",
-            "Main",
-            startDate.format(dateFormatter),
-            s"Remove authorisation from $authorisedAgentName to manage your Making Tax Digital for Income Tax as a Main agent"
-          ),
-          IndexedSeq(
             "Pillar 2 Top-up Taxes",
             "Main",
             startDate.format(dateFormatter),
             s"Remove authorisation from $authorisedAgentName to manage your Pillar 2 Top-up Taxes as a Main agent"
+          ),
+          IndexedSeq(
+            "Making Tax Digital for Income Tax",
+            "Main",
+            startDate.format(dateFormatter),
+            s"Remove authorisation from $authorisedAgentName to manage your Making Tax Digital for Income Tax as a Main agent"
           )
         ))
       doc.mainContent.extractTable(4, 4).value shouldBe TestTable(
@@ -291,7 +291,7 @@ class ManageYourTaxAgentsPageSpec extends ViewSpecSupport {
             "You declined Bottom Line as your Main agent"
           ),
           IndexedSeq(
-            startDate.format(dateFormatter),
+            startDate.minusDays(5).format(dateFormatter),
             "Making Tax Digital for Income Tax",
             s"You accepted $authorisedAgentName as your Main agent"
           )
