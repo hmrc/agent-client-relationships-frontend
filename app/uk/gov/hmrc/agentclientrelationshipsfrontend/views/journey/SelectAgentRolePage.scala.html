@@ -27,6 +27,7 @@
         layout: Layout,
         formWithCSRF: FormWithCSRF,
         govukRadios: GovukRadios,
+        govukInsetText : GovukInsetText,
         submitButton: SubmitButton,
         h1: h1
 )
@@ -53,7 +54,9 @@
       <p class="govuk-body">@messages(s"$key.$serviceKey.${agentRoleChangeType.toString}.intro", clientName)</p>
     }
 
-    <p class="govuk-body">@Html(messages(s"$key.$serviceKey.${agentRoleChangeType.toString}.guidance", appConfig.guidanceUrlForAgentRoles))</p>
+    @govukInsetText(InsetText(
+        content = Text(messages(s"$key.$serviceKey.${agentRoleChangeType.toString}.guidance", appConfig.guidanceUrlForAgentRoles))
+    ))
 
     @formWithCSRF(action = routes.SelectAgentRoleController.onSubmit(request.journey.journeyType)) {
         @govukRadios(Radios(

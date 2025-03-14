@@ -263,11 +263,11 @@ confirmClient.false=No - I need to start again
 
 selectAgentRole.HMRC-MTD-IT.newRelationship.header=How do you want to act for {0}?
 selectAgentRole.HMRC-MTD-IT.newRelationship.legend=How do you want to act for {0}?
-selectAgentRole.HMRC-MTD-IT.newRelationship.guidance=Read the guidance about <a href={0} class="govuk-link" target="_blank" rel="noreferrer noopener">the difference between main agents and supporting agents (opens in new tab)</a>.
+selectAgentRole.HMRC-MTD-IT.newRelationship.guidance=<a href={0} class="govuk-link" target="_blank" rel="noreferrer noopener">Find out how main and supporting agents can act (opens in new tab)</a>.
 selectAgentRole.HMRC-MTD-IT.newRelationship.option=As their main agent
 selectAgentRole.HMRC-MTD-IT-SUPP.newRelationship.option=As a supporting agent
-selectAgentRole.HMRC-MTD-IT.newRelationship.hint=If your client accepts this request, we will remove any existing main agent they have for Making Tax Digital for Income Tax.
-selectAgentRole.HMRC-MTD-IT-SUPP.newRelationship.hint=Your client can have any number of these, but supporting agents only carry out some business tax functions and cannot submit end-of-year tax returns.
+selectAgentRole.HMRC-MTD-IT.newRelationship.hint=Main agents can carry out all tax functions for the client and submit client’s tax returns
+selectAgentRole.HMRC-MTD-IT-SUPP.newRelationship.hint=Supporting agents can carry out some tax functions for the client, but they cannot submit a client’s tax returns
 agentRole.authorisation-request.error.required=Select how you want to act for {0}
 
 selectAgentRole.HMRC-MTD-IT.mainToSupporting.header=You are already an agent for {0}
