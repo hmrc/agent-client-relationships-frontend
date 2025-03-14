@@ -17,30 +17,27 @@
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.*
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.components.*
-@import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
 
 @this(
         layout: Layout,
-        h1: h1,
-        p: p,
-        a: a
+        h1: h1
 )
 
-@()(implicit request: Request[?], messages: Messages, appConfig: AppConfig)
+@()( implicit request: Request[?], messages: Messages, appConfig: AppConfig)
 
 @layout(
     pageTitle = messages("technical-issues.header"),
     serviceName = Some(messages("service.name.clients"))
 ) {
     @h1(messages("technical-issues.header"))
-    @p() { @messages("technical-issues.p1") }
-    @p() { @messages("technical-issues.p2") }
-    @p() {
-        @a(messages("technical-issues.vat-url"), messages("technical-issues.vat.link"))
+    <p class="govuk-body"> @messages("technical-issues.p1") </p>
+    <p class="govuk-body"> @messages("technical-issues.p2") </p>
+    <p class="govuk-body">
+        <a href="@messages("technical-issues.vat-url")" class="govuk-link govuk-body">@messages("technical-issues.vat.link")</a>
         @messages("technical-issues.vat.end")
-    }
-    @p() {
-        @a(messages("technical-issues.sa-url"), messages("technical-issues.it.link"))
+    </p>
+    <p class="govuk-body">
+        <a href="@messages("technical-issues.sa-url")" class="govuk-link govuk-body">@messages("technical-issues.it.link")</a>
         @messages("technical-issues.it.end")
-    }
+    </p>
 }

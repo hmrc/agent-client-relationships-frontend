@@ -18,8 +18,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.client
 
 import play.api.data.*
 import play.api.data.Forms.*
-import play.api.i18n.Messages
-import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.{ConfirmConsentFieldName, ConfirmDeauthFieldName}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.ConfirmDeauthFieldName
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.helpers.FormFieldHelper
 
 object ConfirmDeauthForm extends FormFieldHelper {

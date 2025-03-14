@@ -20,12 +20,11 @@ import com.google.inject.{Inject, Singleton}
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
-import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.connectors.AgentClientRelationshipsConnector
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.ClientJourney
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.ClientJourneyService
-import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.client.CheckYourAnswerPage
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -35,9 +34,7 @@ class CheckYourAnswerController @Inject()(mcc: MessagesControllerComponents,
                                           agentClientRelationshipsConnector: AgentClientRelationshipsConnector,
                                           checkYourAnswerPage: CheckYourAnswerPage,
                                           journeyService: ClientJourneyService
-                                         )
-                                         (implicit ec: ExecutionContext,
-                                          appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport:
+                                         )(implicit ec: ExecutionContext) extends FrontendController(mcc) with I18nSupport:
 
   def show: Action[AnyContent] = actions.clientAuthenticate:
     implicit request =>
@@ -51,19 +48,19 @@ class CheckYourAnswerController @Inject()(mcc: MessagesControllerComponents,
 
       (consentAnswer, invitationId) match {
         case (Some(true), Some(invId: String)) => for {
-            _ <- agentClientRelationshipsConnector.acceptAuthorisation(invId)
-            _ <- journeyService.saveJourney(ClientJourney(
-              journeyType = request.journey.journeyType,
-              journeyComplete = Some(invId)
-            ))
-          } yield Redirect(routes.ConfirmationController.show)
+          _ <- agentClientRelationshipsConnector.acceptAuthorisation(invId)
+          _ <- journeyService.saveJourney(ClientJourney(
+            journeyType = request.journey.journeyType,
+            journeyComplete = Some(invId)
+          ))
+        } yield Redirect(routes.ConfirmationController.show)
         case (Some(false), Some(invId)) => for {
-            _ <- agentClientRelationshipsConnector.rejectAuthorisation(invId)
-            _ <- journeyService.saveJourney(ClientJourney(
-              journeyType = request.journey.journeyType,
-              journeyComplete = Some(invId)
-            ))
-          } yield Redirect(routes.ConfirmationController.show)
+          _ <- agentClientRelationshipsConnector.rejectAuthorisation(invId)
+          _ <- journeyService.saveJourney(ClientJourney(
+            journeyType = request.journey.journeyType,
+            journeyComplete = Some(invId)
+          ))
+        } yield Redirect(routes.ConfirmationController.show)
         case _ =>
           Future.successful(Redirect(routes.ManageYourTaxAgentsController.show.url))
       }

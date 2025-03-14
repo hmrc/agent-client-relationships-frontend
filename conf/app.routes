@@ -17,10 +17,10 @@ GET         /manage-authorisation-requests/cancellation-confirmation/:invitation
 
 # Sign out/Timed out ---------------------------------------------------------------------------------------------------------
 GET         /timed-out                                                                  uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.TimedOutController.timedOut(continueUrl: RedirectUrl, serviceHeader: String)
-GET         /sign-out                                                                   uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.SignOutController.signOut
+GET         /sign-out                                                                   uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.SignOutController.signOut(continueUrl: Option[RedirectUrl] ?= None)
 
 # Auth/IV --------------------------------------------------------------------------------------------------------------------
-GET         /cannot-view-request                                                        uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.AuthorisationController.cannotViewRequest
+GET         /cannot-view-request                                                        uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.AuthorisationController.cannotViewRequest(continueUrl: Option[RedirectUrl] ?= None, taxService: Option[String] ?= None)
 GET         /cannot-confirm-identity                                                    uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.AuthorisationController.cannotConfirmIdentity(journeyId: Option[String] ?= None, continueUrl: Option[RedirectUrl] ?= None)
 GET         /iv-timed-out                                                               uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.AuthorisationController.ivTimedOut(continueUrl: Option[RedirectUrl] ?= None)
 GET         /iv-locked-out                                                              uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.AuthorisationController.ivLockedOut

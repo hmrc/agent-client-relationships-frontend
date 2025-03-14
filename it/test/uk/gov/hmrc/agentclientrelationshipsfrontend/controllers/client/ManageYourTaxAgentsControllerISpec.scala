@@ -26,6 +26,7 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AgentClientRelationsh
 import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.routes as authRoutes
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.AuthorisationsCacheService
 import uk.gov.hmrc.mongo.cache.DataKey
+import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl
 
 import java.time.{Instant, LocalDate}
 
@@ -101,9 +102,10 @@ class ManageYourTaxAgentsControllerISpec extends ComponentSpecHelper with AuthSt
 
       "signed in as an agent" in:
         authoriseAsAgent()
-        val result = get(routes.ManageYourTaxAgentsController.show.url)
+        val url = routes.ManageYourTaxAgentsController.show.url
+        val result = get(url)
         result.status shouldBe SEE_OTHER
-        result.header(LOCATION) shouldBe Some(authRoutes.AuthorisationController.cannotViewRequest.url)
+        result.header(LOCATION) shouldBe Some(authRoutes.AuthorisationController.cannotViewRequest(None, None).url)
 
   "The show confirm deauth action" should:
 

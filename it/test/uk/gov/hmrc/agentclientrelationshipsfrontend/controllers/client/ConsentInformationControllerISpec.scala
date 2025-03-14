@@ -75,7 +75,7 @@ class ConsentInformationControllerISpec extends ComponentSpecHelper with ScalaFu
       await(journeyService.saveJourney(ClientJourney(journeyType = "authorisation-response")))
       val result = get(routes.DeclineRequestController.show(testUid, "vat").url)
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe "routes.ClientExitHandler.show(INSUFFICIENT_ENROLMENTS)" // TODO change to controller action when auth action is updated
+      result.header("Location").value shouldBe routes.ClientExitController.showClient(ClientExitType.CannotFindAuthorisationRequest).url
 
     "redirect to NoOutstandingRequests exit page when the invitation data is not found" in {
       authoriseAsClientWithEnrolments("HMRC-MTD-IT")

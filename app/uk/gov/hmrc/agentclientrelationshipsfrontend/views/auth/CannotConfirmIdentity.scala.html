@@ -22,8 +22,7 @@
 @this(
         layout: Layout,
         govukButton: GovukButton,
-        h1: h1,
-        p: p
+        h1: h1
 )
 
 @(tryAgainUrl: Option[String])(implicit request: Request[?], messages: Messages, appConfig: AppConfig)
@@ -33,8 +32,8 @@
     serviceName = Some(messages("service.name.clients"))
 ) {
     @h1(messages("cannot-confirm-identity.header"))
-    @p() { @messages("cannot-confirm-identity.p1") }
-    @p() { @messages("cannot-confirm-identity.p2") }
+    <p class="govuk-body"> @messages("cannot-confirm-identity.p1") </p>
+    <p class="govuk-body"> @messages("cannot-confirm-identity.p2") </p>
 
     @tryAgainUrl.map { url =>
         @govukButton(Button(

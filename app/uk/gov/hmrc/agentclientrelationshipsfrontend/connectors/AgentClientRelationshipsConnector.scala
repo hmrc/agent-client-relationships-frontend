@@ -59,7 +59,7 @@ class AgentClientRelationshipsConnector @Inject()(appConfig: AppConfig,
       }
   }
 
-  def cancelAuthorisation(journey: AgentJourney)(implicit hc: HeaderCarrier, request: AgentJourneyRequest[?]): Future[Unit] = httpV2
+  def removeAuthorisation(journey: AgentJourney)(implicit hc: HeaderCarrier, request: AgentJourneyRequest[?]): Future[Unit] = httpV2
     .post(url"$agentClientRelationshipsUrl/agent/${request.arn}/remove-authorisation")
     .withBody(Json.obj("clientId" -> journey.getClientId, "service" -> journey.getActiveRelationship))
     .execute[HttpResponse].map { response =>
@@ -78,7 +78,6 @@ class AgentClientRelationshipsConnector @Inject()(appConfig: AppConfig,
         case _ => throw new RuntimeException(s"Failed to cancel authorisation on behalf of client: ${response.body}")
       }
     }
-
 
   def getAuthorisationRequest(invitationId: String)(implicit headerCarrier: HeaderCarrier, request: AgentRequest[?]): Future[Option[AuthorisationRequestInfo]] = {
     httpV2.get(url"$agentClientRelationshipsUrl/agent/${request.arn}/authorisation-request-info/$invitationId")
@@ -149,7 +148,6 @@ class AgentClientRelationshipsConnector @Inject()(appConfig: AppConfig,
     })
 
   def validateInvitation(uid: String, serviceKeys: Set[String])(implicit hc: HeaderCarrier): Future[Either[ValidateInvitationError, ValidateInvitationResponse]] = {
-    import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{AgentSuspendedError, InvitationOrAgentNotFoundError}
     httpV2
       .post(url"$agentClientRelationshipsUrl/client/validate-invitation")
       .withBody(Json.obj(
@@ -159,7 +157,7 @@ class AgentClientRelationshipsConnector @Inject()(appConfig: AppConfig,
       .execute[HttpResponse]
       .map(response => response.status match {
         case OK => Right(response.json.as[ValidateInvitationResponse])
-        case FORBIDDEN => Left(AgentSuspendedError)
+        case FORBIDDEN => Left(InvitationAgentSuspendedError)
         case NOT_FOUND => Left(InvitationOrAgentNotFoundError)
         case status => throw new Exception(s"Unexpected status $status received when fetching invitation")
       })

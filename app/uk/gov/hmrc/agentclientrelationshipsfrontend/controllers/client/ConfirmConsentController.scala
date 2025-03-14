@@ -51,7 +51,7 @@ class ConfirmConsentController @Inject()(mcc: MessagesControllerComponents,
             then ConfirmConsentForm.form(agentName, agentRole, service).fill(request.journey.consent.get)
             else ConfirmConsentForm.form(agentName, agentRole, service)
           Ok(confirmConsentView(form, agentRole))
-        case _ => BadRequest // TODO implement tailored page which gives some guidance to user
+        case _ => Redirect(routes.ManageYourTaxAgentsController.show.url)
       }
 
   def submit: Action[AnyContent] = actions.clientAuthenticate.async:
@@ -70,5 +70,5 @@ class ConfirmConsentController @Inject()(mcc: MessagesControllerComponents,
               }
             }
           )
-        case _ => Future.successful(BadRequest) // TODO implement tailored page which gives some guidance to user
+        case _ => Future.successful(Redirect(routes.ManageYourTaxAgentsController.show.url))
       }

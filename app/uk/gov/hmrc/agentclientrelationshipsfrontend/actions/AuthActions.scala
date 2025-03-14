@@ -20,8 +20,10 @@ import play.api.Logging
 import play.api.mvc.Results.*
 import play.api.mvc.{ActionFunction, Request, Result, WrappedRequest}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
-import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.{AsAgent, CgtPd, MtdIncomeTax}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.{AsAgent, HMRCCGTPD, HMRCMTDIT}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.routes
+import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.{routes => clientRoutes}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientExitType.CannotFindAuthorisationRequest
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.ClientServiceConfigurationService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.UrlHelper
 import uk.gov.hmrc.auth.core.*
@@ -69,7 +71,8 @@ class AuthActions @Inject()(val authConnector: AuthConnector,
         .recover {
           handleFailure(isAgent = true)
         }
-  private def userHasEnrolmentForTaxService(taxService: String, enrols:Enrolments): Boolean =
+
+  private def userHasEnrolmentForTaxService(taxService: String, enrols: Enrolments): Boolean =
     enrols.enrolments.map(_.key).intersect(serviceConfig.getServiceKeysForUrlPart(taxService)).nonEmpty
 
   def clientAuthActionWithEnrolmentCheck(taxService: String): ActionFunction[Request, Request] = new ActionFunction[Request, Request]:
@@ -77,14 +80,14 @@ class AuthActions @Inject()(val authConnector: AuthConnector,
 
     override def invokeBlock[A](request: Request[A], block: Request[A] => Future[Result]): Future[Result] =
       given Request[A] = request
+
       given HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
 
       def enrolmentCheck(enrols: Enrolments): Future[Result] =
         if userHasEnrolmentForTaxService(taxService, enrols) then
           block(request)
         else
-          //TODO: add exit type for insufficient_enrolments
-          Future.successful(Redirect("routes.ClientExitHandler.show(INSUFFICIENT_ENROLMENTS)"))
+          Future.successful(Redirect(clientRoutes.ClientExitController.showClient(CannotFindAuthorisationRequest).url))
 
       authorised(AuthProviders(GovernmentGateway))
         .retrieve(affinityGroup and confidenceLevel and allEnrolments) {
@@ -95,12 +98,12 @@ class AuthActions @Inject()(val authConnector: AuthConnector,
                   enrolmentCheck(enrols)
                 }
               case (AffinityGroup.Organisation, cl) =>
-                if enrols.enrolments.map(_.key).contains(MtdIncomeTax) then withConfidenceLevelUplift(cl, enrols) {
+                if enrols.enrolments.map(_.key).contains(HMRCMTDIT) then withConfidenceLevelUplift(cl, enrols) {
                   enrolmentCheck(enrols)
                 }
                 else enrolmentCheck(enrols)
               case (AffinityGroup.Agent, _) =>
-                Future.successful(Redirect(routes.AuthorisationController.cannotViewRequest))
+                Future.successful(Redirect(routes.AuthorisationController.cannotViewRequest(Some(RedirectUrl(currentUrl)), Some(taxService))))
               case (affinityGroup, _) =>
                 logger.warn(s"unknown affinity group: $affinityGroup - cannot determine auth status")
                 Future.successful(Forbidden)
@@ -113,44 +116,44 @@ class AuthActions @Inject()(val authConnector: AuthConnector,
           handleFailure(isAgent = false)
         }
 
-   def clientAuthAction: ActionFunction[Request, Request] = new ActionFunction[Request, Request]:
+  def clientAuthAction: ActionFunction[Request, Request] = new ActionFunction[Request, Request]:
 
-      val executionContext: ExecutionContext = ec
+    val executionContext: ExecutionContext = ec
 
-      override def invokeBlock[A](request: Request[A], block: Request[A] => Future[Result]): Future[Result] =
-        given Request[A] = request
+    override def invokeBlock[A](request: Request[A], block: Request[A] => Future[Result]): Future[Result] =
+      given Request[A] = request
 
-        given HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
+      given HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
 
-        authorised(AuthProviders(GovernmentGateway))
-          .retrieve(affinityGroup and confidenceLevel and allEnrolments):
-            case Some(affinity) ~ confidence ~ enrols =>
-              (affinity, confidence) match {
-                case (AffinityGroup.Individual, cl) =>
-                  withConfidenceLevelUplift(cl, enrols):
-                    block(request)
-                case (AffinityGroup.Organisation, cl) =>
-                  if enrols.enrolments.map(_.key).contains(MtdIncomeTax) then withConfidenceLevelUplift(cl, enrols):
-                    block(request)
-                  else block(request)
-                case (AffinityGroup.Agent, _) =>
-                  Future.successful(Redirect(routes.AuthorisationController.cannotViewRequest))
-                case (affinityGroup, _) =>
-                  logger.warn(s"unknown affinity group: $affinityGroup - cannot determine auth status")
-                  Future.successful(Forbidden)
-              }
-            case _ =>
-              logger.warn("the logged in client had no affinity group")
-              Future.successful(Forbidden)
-          .recover:
-            handleFailure(isAgent = false)
+      authorised(AuthProviders(GovernmentGateway))
+        .retrieve(affinityGroup and confidenceLevel and allEnrolments):
+          case Some(affinity) ~ confidence ~ enrols =>
+            (affinity, confidence) match {
+              case (AffinityGroup.Individual, cl) =>
+                withConfidenceLevelUplift(cl, enrols):
+                  block(request)
+              case (AffinityGroup.Organisation, cl) =>
+                if enrols.enrolments.map(_.key).contains(HMRCMTDIT) then withConfidenceLevelUplift(cl, enrols):
+                  block(request)
+                else block(request)
+              case (AffinityGroup.Agent, _) =>
+                Future.successful(Redirect(routes.AuthorisationController.cannotViewRequest(None)))
+              case (affinityGroup, _) =>
+                logger.warn(s"unknown affinity group: $affinityGroup - cannot determine auth status")
+                Future.successful(Forbidden)
+            }
+          case _ =>
+            logger.warn("the logged in client had no affinity group")
+            Future.successful(Forbidden)
+        .recover:
+          handleFailure(isAgent = false)
 
   private def withConfidenceLevelUplift(currentLevel: ConfidenceLevel, enrols: Enrolments)
                                        (body: => Future[Result])
                                        (implicit request: Request[?]): Future[Result] = {
     // APB-4856: Clients with only CGT enrol dont need to go through IV
     val isCgtOnlyClient: Boolean = {
-      enrols.enrolments.map(_.key).intersect(appConfig.supportedServices) == Set(CgtPd)
+      enrols.enrolments.map(_.key).intersect(serviceConfig.allSupportedServices) == Set(HMRCCGTPD)
     }
 
     if currentLevel >= requiredCL || isCgtOnlyClient then {
@@ -160,18 +163,18 @@ class AuthActions @Inject()(val authConnector: AuthConnector,
     }
   }
 
-  private def successUrl(implicit request: Request[?]) =
+  private def currentUrl(implicit request: Request[?]) =
     appConfig.appExternalUrl + request.uri
 
   private def redirectToIdentityVerification()(implicit request: Request[?]) = {
     val failureUrl = appConfig.appExternalUrl +
-      routes.AuthorisationController.cannotConfirmIdentity(continueUrl = Some(RedirectUrl(successUrl))).url
+      routes.AuthorisationController.cannotConfirmIdentity(continueUrl = Some(RedirectUrl(currentUrl))).url
 
     Future.successful(Redirect(UrlHelper.addParamsToUrl(
       appConfig.ivUpliftUrl,
       "origin" -> Some(appConfig.appName),
       "confidenceLevel" -> Some(requiredCL.toString),
-      "completionURL" -> Some(successUrl),
+      "completionURL" -> Some(currentUrl),
       "failureURL" -> Some(failureUrl)
     )))
   }
@@ -188,7 +191,7 @@ class AuthActions @Inject()(val authConnector: AuthConnector,
       Redirect(UrlHelper.addParamsToUrl(
         appConfig.signInUrl,
         "origin" -> Some(appConfig.appName),
-        "continue_url" -> Some(successUrl)
+        "continue_url" -> Some(currentUrl)
       ))
     case _: InsufficientEnrolments =>
       logger.warn(s"Logged in user does not have required enrolments")

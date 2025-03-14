@@ -21,8 +21,7 @@ import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
-import uk.gov.hmrc.agentclientrelationshipsfrontend.connectors.AgentClientRelationshipsConnector
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.{AgentsAuthorisationsResponse, AuthorisationsCache, AuthorisedAgent}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.AuthorisationsCache
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.client.ConfirmDeauthForm
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{AgentClientRelationshipsService, AuthorisationsCacheService, ClientServiceConfigurationService}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.PageNotFound
@@ -76,19 +75,16 @@ class ManageYourTaxAgentsController @Inject()(
           authorisationsCacheService.getAuthorisation(id).flatMap {
             case Some(authorisation) if authorisation.deauthorised.isEmpty =>
               if confirmDeauth then
-                agentClientRelationshipsService.cancelAuthorisation(authorisation.arn, authorisation.clientId, authorisation.service).flatMap {
-                  case () =>
-                    // destroy all other authorisation items from session cache and mark this one as deauthorised
-                    for {
-                      _ <- authorisationsCacheService.put[AuthorisationsCache](
-                        DataKey("authorisationsCache"),
-                        AuthorisationsCache(
-                          authorisations = Seq(authorisation.copy(deauthorised = Some(true)))
-                        )
+                agentClientRelationshipsService.cancelAuthorisation(authorisation.arn, authorisation.clientId, authorisation.service).flatMap { _ =>
+                  // destroy all other authorisation items from session cache and mark this one as deauthorised
+                  for {
+                    _ <- authorisationsCacheService.put[AuthorisationsCache](
+                      DataKey("authorisationsCache"),
+                      AuthorisationsCache(
+                        authorisations = Seq(authorisation.copy(deauthorised = Some(true)))
                       )
-                    } yield Redirect(routes.ManageYourTaxAgentsController.deauthComplete(id).url)
-
-                  case _ => Future.successful(InternalServerError)
+                    )
+                  } yield Redirect(routes.ManageYourTaxAgentsController.deauthComplete(id).url)
                 }
               else Future.successful(Redirect(routes.ManageYourTaxAgentsController.show.url))
             case _ => Future.successful(Redirect(routes.ManageYourTaxAgentsController.show.url))

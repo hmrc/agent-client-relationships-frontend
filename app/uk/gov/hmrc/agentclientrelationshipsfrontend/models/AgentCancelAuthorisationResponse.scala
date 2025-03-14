@@ -16,15 +16,9 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.models
 
-import play.api.libs.json.{Json, Format}
-
 case class AgentCancelAuthorisationResponse(
-                                 clientName: String,
-                                 agentName: String,
-                                 service: String,
-                                 date: String
-                                )
-
-object AgentCancelAuthorisationResponse {
-  implicit val format: Format[AgentCancelAuthorisationResponse] = Json.format[AgentCancelAuthorisationResponse]
-}
+                                             clientName: String,
+                                             agentName: String,
+                                             service: String,
+                                             date: String
+                                           )

@@ -21,8 +21,7 @@
 
 @this(
         layout: Layout,
-        h1: h1,
-        p: p
+        h1: h1
 )
 
 @()(implicit request: Request[?], messages: Messages, appConfig: AppConfig)
@@ -32,7 +31,7 @@
     serviceName = Some(messages("service.name.clients"))
 ) {
     @h1(messages("locked-out.header"))
-    @p() { @messages("locked-out.p1") }
-    @p() { @messages("locked-out.p2") }
-    @p() { @messages("locked-out.p3") }
+    <p class="govuk-body"> @messages("locked-out.p1") </p>
+    <p class="govuk-body"> @messages("locked-out.p2") </p>
+    <p class="govuk-body"> @messages("locked-out.p3") </p>
 }
