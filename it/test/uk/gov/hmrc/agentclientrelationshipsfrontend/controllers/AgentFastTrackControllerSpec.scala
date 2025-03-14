@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers
 
-import org.scalatest.concurrent.Futures.whenReady
 import org.scalatest.concurrent.ScalaFutures
 import play.api.libs.json.Json
 import play.api.test.Helpers.*
@@ -25,7 +24,7 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.routes as fastTr
 import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.testOnly.routes as testRoutes
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, AgentJourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{AgentFastTrackRequest, ClientDetailsResponse, KnownFactType}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{ClientServiceConfigurationService, AgentJourneyService}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{AgentJourneyService, ClientServiceConfigurationService}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AgentClientRelationshipStub, AuthStubs, ComponentSpecHelper}
 
 class AgentFastTrackControllerSpec extends ComponentSpecHelper with AuthStubs with AgentClientRelationshipStub with ScalaFutures {
@@ -204,7 +203,7 @@ class AgentFastTrackControllerSpec extends ComponentSpecHelper with AuthStubs wi
     super.beforeEach()
   }
   
-  "POST /agents/fast-track/agentFastTrack" should {
+  "POST /agents/fast-track" should {
     validFastTrackRequests.foreach(fastTrackFormData => s"redirect to the next page and store journey data for ${fastTrackFormData.service} service for ${fastTrackFormData.clientIdentifierType} and knownFacts: ${fastTrackFormData.knownFact}" in {
       authoriseAsAgent()
       //TODO - test with different patterns
@@ -362,8 +361,161 @@ class AgentFastTrackControllerSpec extends ComponentSpecHelper with AuthStubs wi
         result shouldBe None
       }
     })
-
-
   }
 
+  "POST /agents/fast-track/redirect" should {
+
+    validFastTrackRequests.foreach { fastTrackFormData =>
+      s"return the correct redirect URL for ${fastTrackFormData.service} service for ${fastTrackFormData.clientIdentifierType} and knownFacts: ${fastTrackFormData.knownFact}" in {
+        authoriseAsAgent()
+        val clientDetailsResponse: Option[ClientDetailsResponse] = Some(toClientRelationship(fastTrackFormData, Some(KnownFactType.PostalCode)))
+        givenClientRelationshipFor(fastTrackFormData.service, fastTrackFormData.clientIdentifier, Json.toJson(clientDetailsResponse).toString)
+
+        val result = post(fastTrackRoutes.AgentFastTrackController.agentFastTrackGetRedirectUrl.url)(toFastTrackRequests(fastTrackFormData))
+        val resultBody = result.body
+        val expectedUrl = fastTrackFormData.service match {
+          case "HMRC-TERS-ORG" | "HMRC-TERSNT-ORG" => journeyRoutes.ServiceRefinementController.show(journeyType).url
+          case _ => journeyRoutes.ConfirmClientController.show(journeyType).url
+        }
+
+        result.status shouldBe OK
+        resultBody shouldBe expectedUrl
+      }
+    }
+
+    missingKnownFactsFastTrackRequests.foreach { fastTrackFormData =>
+      s"return the correct redirect URL for ${fastTrackFormData.service} service for ${fastTrackFormData.clientIdentifierType} and knownFacts missing" in {
+        authoriseAsAgent()
+        val clientDetailsResponse: Option[ClientDetailsResponse] = Some(toClientRelationship(fastTrackFormData, Some(KnownFactType.PostalCode)))
+        givenClientRelationshipFor(fastTrackFormData.service, fastTrackFormData.clientIdentifier, Json.toJson(clientDetailsResponse).toString)
+
+        val result = post(fastTrackRoutes.AgentFastTrackController.agentFastTrackGetRedirectUrl.url)(toFastTrackRequests(fastTrackFormData))
+        val resultBody = result.body
+        val expectedUrl = fastTrackFormData.service match {
+          case "HMRC-TERS-ORG" | "HMRC-TERSNT-ORG" => journeyRoutes.ServiceRefinementController.show(journeyType).url
+          case _ => journeyRoutes.EnterClientFactController.show(journeyType).url
+        }
+
+        result.status shouldBe OK
+        resultBody shouldBe expectedUrl
+      }
+    }
+
+    validFastTrackRequests.foreach { originalFastTrackFormData =>
+      s"return the correct redirect URL for ${originalFastTrackFormData.service} service for ${originalFastTrackFormData.clientIdentifierType} when knownFacts format check fail" in {
+        val fastTrackFormData = originalFastTrackFormData.copy(knownFact = Some("WrongKnownFacts"))
+        val clientDetailsResponse: Option[ClientDetailsResponse] = Some(toClientRelationship(fastTrackFormData))
+
+        authoriseAsAgent()
+        givenClientRelationshipFor(fastTrackFormData.service, fastTrackFormData.clientIdentifier, Json.toJson(clientDetailsResponse).toString)
+
+        val result = post(fastTrackRoutes.AgentFastTrackController.agentFastTrackGetRedirectUrl.url)(toFastTrackRequests(fastTrackFormData))
+        val resultBody = result.body
+
+        result.status shouldBe OK
+        resultBody shouldBe journeyRoutes.JourneyExitController.show(journeyType, serviceConfig.getNotFoundError(journeyType, fastTrackFormData.service)).url
+      }
+    }
+
+    validFastTrackRequests.foreach { fastTrackFormData =>
+      s"return the correct redirect URL for ${fastTrackFormData.service} service for ${fastTrackFormData.clientIdentifierType} when  clientRelation data are missing" in {
+        authoriseAsAgent()
+        givenNotFoundForServiceAndClient(fastTrackFormData.service, fastTrackFormData.clientIdentifier)
+
+        val result = post(fastTrackRoutes.AgentFastTrackController.agentFastTrackGetRedirectUrl.url)(toFastTrackRequests(fastTrackFormData))
+        val resultBody = result.body
+
+        result.status shouldBe OK
+        resultBody shouldBe journeyRoutes.JourneyExitController.show(journeyType, serviceConfig.getNotFoundError(journeyType, fastTrackFormData.service)).url
+      }
+    }
+
+    validFastTrackRequests.foreach { fastTrackFormData =>
+      s"return the correct redirect URL for ${fastTrackFormData.service} service for ${fastTrackFormData.clientIdentifierType}" in {
+        authoriseAsAgent()
+        val corruptedClientIdFormData = fastTrackFormData.copy(clientIdentifier = "FakeClientId")
+
+        val result = post(fastTrackRoutes.AgentFastTrackController.agentFastTrackGetRedirectUrl.url)(toFastTrackRequests(corruptedClientIdFormData))
+        val resultBody = result.body
+
+        result.status shouldBe OK
+        resultBody shouldBe journeyRoutes.StartJourneyController.startJourney(journeyType).url
+      }
+    }
+
+    validFastTrackRequests.foreach { fastTrackFormData =>
+      s"return the correct redirect URL when service is not supported and no error redirect configured for ${fastTrackFormData.service} service for ${fastTrackFormData.clientIdentifierType}" in {
+        authoriseAsAgent()
+        val corruptedClientIdFormData = fastTrackFormData.copy(service = "FakeService")
+        val result = post(fastTrackRoutes.AgentFastTrackController.agentFastTrackGetRedirectUrl.url)(toFastTrackRequests(corruptedClientIdFormData))
+        val resultBody = result.body
+
+        result.status shouldBe OK
+        resultBody shouldBe journeyRoutes.StartJourneyController.startJourney(journeyType).url
+      }
+    }
+
+    validFastTrackRequests.foreach { fastTrackFormData =>
+      s"return the correct redirect URL when clientId fail regex for ${fastTrackFormData.service} service for ${fastTrackFormData.clientIdentifierType}" in {
+        authoriseAsAgent()
+        val corruptedClientIdFormData = fastTrackFormData.copy(clientIdentifier = "FakeClientId")
+        val errorURLRedirect = ("error", testRoutes.TestOnlyController.getFastTrackForm().url)
+        val result = post(fastTrackRoutes.AgentFastTrackController.agentFastTrackGetRedirectUrl.url)(toFastTrackRequests(corruptedClientIdFormData))(Seq(errorURLRedirect))
+        val resultBody = result.body
+
+        result.status shouldBe OK
+        resultBody shouldBe s"${errorURLRedirect._2}?issue=INVALID_CLIENT_ID_RECEIVED:FAKECLIENTID"
+      }
+    }
+
+    validFastTrackRequests.foreach { fastTrackFormData =>
+      s"return the correct redirect URL when service not supported for ${fastTrackFormData.service} service for ${fastTrackFormData.clientIdentifierType}" in {
+        authoriseAsAgent()
+        val corruptedClientIdFormData = fastTrackFormData.copy(service = "FakeService")
+        val errorURLRedirect = ("error", testRoutes.TestOnlyController.getFastTrackForm().url)
+        val result = post(fastTrackRoutes.AgentFastTrackController.agentFastTrackGetRedirectUrl.url)(toFastTrackRequests(corruptedClientIdFormData))(Seq(errorURLRedirect))
+        val resultBody = result.body
+
+        result.status shouldBe OK
+        resultBody shouldBe s"${errorURLRedirect._2}?issue=UNSUPPORTED_SERVICE"
+      }
+    }
+
+    validFastTrackRequests.foreach { fastTrackFormData =>
+      s"return the correct redirect URL when clientId type not supported for ${fastTrackFormData.service} service for ${fastTrackFormData.clientIdentifierType}" in {
+        authoriseAsAgent()
+        val corruptedClientIdFormData = fastTrackFormData.copy(clientIdentifierType = "FakeClientIdentifier")
+        val errorURLRedirect = ("error", testRoutes.TestOnlyController.getFastTrackForm().url)
+        val result = post(fastTrackRoutes.AgentFastTrackController.agentFastTrackGetRedirectUrl.url)(toFastTrackRequests(corruptedClientIdFormData))(Seq(errorURLRedirect))
+        val resultBody = result.body
+
+        result.status shouldBe OK
+        resultBody shouldBe s"${errorURLRedirect._2}?issue=UNSUPPORTED_CLIENT_ID_TYPE"
+      }
+    }
+
+    invalidClientIdFastTrackRequests.foreach { fastTrackFormData =>
+      s"return the correct redirect URL when clientId is not for selected service ${fastTrackFormData.service} service for ${fastTrackFormData.clientIdentifierType}" in {
+        authoriseAsAgent()
+        val errorURLRedirect = ("error", testRoutes.TestOnlyController.getFastTrackForm().url)
+        val result = post(fastTrackRoutes.AgentFastTrackController.agentFastTrackGetRedirectUrl.url)(toFastTrackRequests(fastTrackFormData))(Seq(errorURLRedirect))
+        val resultBody = result.body
+
+        result.status shouldBe OK
+        resultBody shouldBe s"${errorURLRedirect._2}?issue=INVALID_SUBMISSION"
+      }
+    }
+
+    invalidClientIdTypeFastTrackRequests.foreach { fastTrackFormData =>
+      s"return the correct redirect URL when clientId type is not for selected service ${fastTrackFormData.service} service for ${fastTrackFormData.clientIdentifierType}" in {
+        authoriseAsAgent()
+        val errorURLRedirect = ("error", testRoutes.TestOnlyController.getFastTrackForm().url)
+        val result = post(fastTrackRoutes.AgentFastTrackController.agentFastTrackGetRedirectUrl.url)(toFastTrackRequests(fastTrackFormData))(Seq(errorURLRedirect))
+        val resultBody = result.body
+
+        result.status shouldBe OK
+        resultBody shouldBe s"${errorURLRedirect._2}?issue=INVALID_SUBMISSION"
+      }
+    }
+  }
 }
