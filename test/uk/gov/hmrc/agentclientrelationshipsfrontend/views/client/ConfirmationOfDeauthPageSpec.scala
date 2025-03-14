@@ -40,7 +40,7 @@ class ConfirmationOfDeauthPageSpec extends ViewSpecSupport {
     "HMRC-MTD-VAT" -> "VAT",
     "HMRC-CGT-PD" -> "Capital Gains Tax on UK property account",
     "HMRC-PPT-ORG" -> "Plastic Packaging Tax",
-    "HMRC-CBC-ORG" -> "Country-by-country reports",
+    "HMRC-CBC-ORG" -> "Country-by-country reporting",
     "HMRC-PILLAR2-ORG" -> "Pillar 2 Top-up Taxes",
     "HMRC-TERS-ORG" -> "Trusts and Estates",
     "HMRC-TERSNT-ORG" -> "Trusts and Estates"

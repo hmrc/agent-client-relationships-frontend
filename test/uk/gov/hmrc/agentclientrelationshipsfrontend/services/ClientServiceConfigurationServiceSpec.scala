@@ -18,11 +18,11 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.services
 
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
+import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 
-class ClientServiceConfigurationServiceSpec extends AnyWordSpecLike with Matchers with ServiceConstants {
+class ClientServiceConfigurationServiceSpec(implicit val appConfig: AppConfig) extends AnyWordSpecLike with Matchers with ServiceConstants {
 
   val services = new ClientServiceConfigurationService
-
   val serviceNames: List[String] = List(incomeTax, vat, capitalGainsTaxUkProperty, plasticPackagingTax, pillar2, trustsAndEstates, trustsAndEstateNonTaxable, incomeRecordViewer, countryByCountryReporting)
 
   "getServiceKeysForUrlPart" should {

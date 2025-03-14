@@ -49,8 +49,8 @@ class AgentCancelInvitationPageSpec extends ViewSpecSupport {
     "HMRC-CGT-PD" -> "Capital Gains Tax on UK property account",
     "PERSONAL-INCOME-RECORD" -> "Income Record Viewer",
     "HMRC-PPT-ORG" -> "Plastic Packaging Tax",
-    "HMRC-CBC-ORG" -> "Country-by-country reports",
-    "HMRC-CBC-NONUK-ORG" -> "Country-by-country reports",
+    "HMRC-CBC-ORG" -> "Country-by-country reporting",
+    "HMRC-CBC-NONUK-ORG" -> "Country-by-country reporting",
     "HMRC-PILLAR2-ORG" -> "Pillar 2 Top-up Taxes",
     "HMRC-TERSNT-ORG" -> "Trusts and Estates"
   )

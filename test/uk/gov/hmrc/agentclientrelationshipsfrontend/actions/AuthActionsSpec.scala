@@ -56,7 +56,7 @@ class AuthActionsSpec extends AnyWordSpecLike with Matchers with OptionValues wi
 
   val mockAuthConnector: AuthConnector = mock[AuthConnector]
   val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
-  val serviceConfig: ClientServiceConfigurationService = new ClientServiceConfigurationService
+  val serviceConfig: ClientServiceConfigurationService = app.injector.instanceOf[ClientServiceConfigurationService]
   val defaultActionBuilder: DefaultActionBuilder = app.injector.instanceOf[DefaultActionBuilder]
 
   given ExecutionContext = app.injector.instanceOf[ExecutionContext]

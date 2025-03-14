@@ -36,9 +36,16 @@
     case status => throw new RuntimeException(s"Cannot confirm client completion of accept/reject when status is $status")
 }}
 @agentName = @{authorisationRequestInfo.agentName}
+@agentRoleFor(serviceKey: String) = @{
+    if appConfig.emaEnabled then messages(s"agentRoleFor.$serviceKey") else messages("agentRoleFor.noEMA")
+}
 @serviceKey = @{authorisationRequestInfo.service}
 @pageTitle = @{
     messages(s"$key.$decisionKey.h1", agentName)
+}
+@decisionBasedP1 = @{
+    if(messages.isDefinedAt(s"$key.$serviceKey.$decisionKey.p1")) messages(s"$key.$serviceKey.$decisionKey.p1", agentName, agentRoleFor(serviceKey), messages(serviceKey))
+    else messages(s"$key.$decisionKey.p1", agentName, agentRoleFor(serviceKey), messages(serviceKey))
 }
 
 @layout(
@@ -53,7 +60,7 @@
         <h2 class="govuk-heading-m">@messages(s"$key.$decisionKey.h2")</h2>
     }
 
-    <p class="govuk-body">@messages(s"$key.$decisionKey.$serviceKey.p1", agentName)</p>
+    <p class="govuk-body">@decisionBasedP1</p>
 
     <h2 class="govuk-heading-m">@messages(s"$key.section2.h2")</h2>
     <p class="govuk-body">@Html(messages(s"$key.section2.p1", clientRoutes.ManageYourTaxAgentsController.show.url))</p>
