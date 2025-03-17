@@ -775,6 +775,7 @@ checkYourAnswer.change=Change
 clientConfirmation.accepted.h1=You have authorised {0}
 clientConfirmation.accepted.h2=What this means
 clientConfirmation.accepted.p1={0} is now your {1} for {2}.
+clientConfirmation.p2=We’ll send an email to {0} to update them.
 
 clientConfirmation.section2.h2=What you can do next
 clientConfirmation.section2.p1=Go to <a href={0} class="govuk-link">Manage who can deal with HMRC for you</a> to:
