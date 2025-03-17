@@ -87,3 +87,4 @@ GET        /:journeyType/exit/:exitType                                         
 # Fast Track URLs ----------------------------------------------------------------------------------------------------------
 + nocsrf
 POST        /agents/fast-track                                                          uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.AgentFastTrackController.agentFastTrack
+POST        /agents/fast-track/redirect                                                 uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.AgentFastTrackController.agentFastTrackGetRedirectUrl

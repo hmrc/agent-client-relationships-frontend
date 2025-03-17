@@ -22,7 +22,7 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
 import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.routes
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.AgentFastTrackForm
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.AgentJourneyType
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsResponse, FastTrackErrors}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{AgentFastTrackRequestWithRedirectUrls, ClientDetailsResponse, FastTrackErrors}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{AgentClientRelationshipsService, AgentJourneyService, ClientServiceConfigurationService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
@@ -51,15 +51,14 @@ class AgentFastTrackController @Inject()(mcc: MessagesControllerComponents,
     validKnownFact && matchedKnownFact
   }
 
-
-  def agentFastTrack: Action[AnyContent] = actions.getFastTrackUrl.async { implicit agentFastTrackRequest =>
+  private def getRedirectUrlFromRequest(implicit request: AgentFastTrackRequestWithRedirectUrls[AnyContent]): Future[String] =
     AgentFastTrackForm.form(serviceConfig).bindFromRequest().fold(
       formWithErrors => {
-        agentFastTrackRequest.errorUrl match {
+        request.errorUrl match {
           case Some(errorUrl) =>
-            Future.successful(Redirect(Call("GET", errorUrl + s"?issue=${formWithErrors.errorsAsJson.as[FastTrackErrors].formErrorsMessages}")))
+            Future.successful(Call("GET", errorUrl + s"?issue=${formWithErrors.errorsAsJson.as[FastTrackErrors].formErrorsMessages}").url)
           case None =>
-            Future.successful(Redirect(routes.StartJourneyController.startJourney(journeyType)))
+            Future.successful(routes.StartJourneyController.startJourney(journeyType).url)
         }
       },
 
@@ -87,9 +86,18 @@ class AgentFastTrackController @Inject()(mcc: MessagesControllerComponents,
           nextPage <- (clientDetails, checkedKnownFact) match
             case (Some(_), None | Some(true)) => journeyService.nextPageUrl(journeyType)
             case _ => Future.successful(routes.JourneyExitController.show(journeyType, serviceConfig.getNotFoundError(journeyType, agentFastTrackFormData.service)).url)
-        } yield Redirect(nextPage)
+        } yield nextPage
       }
     )
+
+  def agentFastTrack: Action[AnyContent] = actions.getFastTrackUrl.async { implicit agentFastTrackRequest =>
+    getRedirectUrlFromRequest.map(url => Redirect(url))
+  }
+
+  // This function supports the re-routing of a fast track request that is posted to agent-invitations-frontend
+  // This function and associated endpoint can be removed once agent-invitations-frontend is decommissioned
+  def agentFastTrackGetRedirectUrl: Action[AnyContent] = actions.getFastTrackUrl.async { implicit agentFastTrackRequest =>
+    getRedirectUrlFromRequest.map(url => Ok(url))
   }
 }
 
