@@ -1,21 +1,20 @@
 
 # agent-client-relationships-frontend
 
-[![Build Status](https://travis-ci.org/hmrc/agent-client-relationships-frontend.svg)](https://travis-ci.org/hmrc/agent-client-relationships-frontend) [ ![Download](https://api.bintray.com/packages/hmrc/releases/agent-client-relationships-frontend/images/download.svg) ](https://bintray.com/hmrc/releases/agent-client-relationships-frontend/_latestVersion)
-
 ## What the service does
-This is a frontend microservice for Agent Client Authorisation.
+This is a frontend microservice for agent-client-relationships. It handles the following agent client authorisation journeys and dashboards:
 
-Invitations service currently provides these functions:
-- Agent can create an invitation to represent a client for specific tax regime
-- Client can accept or decline an agent's invitation
-- Agent can view their authorisation requests and inactive relationships from the last 30 days (track)
+- Journey for agents to create an authorisation request (aka invitation) for a specific client and tax regime
+- Journey for clients to accept or decline an agent's authorisation request
+- Journey for agents or clients to de-authorise a relationship
+- Agent can view their authorisation requests and inactive relationships from the last 30 days (track authorisation requests)
 - Agent fast track service
+- Client can view pending invitations, past and present agent authorisations
 
 Clients can be 'personal' or 'business' or 'trusts' (taxable and non-taxable).
 
 Currently this service supports the following invitations:
-- ITSA, including alternative ITSA (client does not need to be registered for ITSA)
+- ITSA for main or supporting agents, including alternative ITSA (client does not need to be registered for ITSA)
 - Personal Income Record
 - MTD VAT
 - Capital Gains Tax on UK property account
@@ -26,21 +25,15 @@ Currently this service supports the following invitations:
 
 Feature flags exist for each service and for requirement of known facts.
 
-## Features
-
-### Running the tests
-
-    sbt test it/test
-
 ### Running the tests with coverage
 
-    sbt clean coverageOn test it/test coverageReport
+    ./check.sh
 
 ### Running the app locally
 
     sm2 --start AGENT_AUTHORISATION
     sm2 --stop AGENT_CLIENT_RELATIONSHIPS_FRONTEND
-    sbt run
+    ./run.sh
 
 It should then be listening on port 9435
 
@@ -49,9 +42,6 @@ It should then be listening on port 9435
 or
 
     browse http://localhost:9435/agent-client-relationships/agent-cancel-authorisation
-
-## Endpoints
-All Endpoints require Authentication.
 
 ### For Agents
 
@@ -71,7 +61,7 @@ The following are the supported services and relevant fields required to create 
 
 |clientType| service                | clientIdentifierType   | clientIdentifier              |knownFact|
 |--------|------------------------|------------------------|-------------------------------|-------|
-|personal| HMRC-MTD-IT            | NINO                   | Valid Nino                    |Postcode|
+|personal| HMRC-MTD-IT or HMRC-MTD-IT-SUPP           | NINO                   | Valid Nino                    |Postcode|
 |personal| PERSONAL-INCOME-RECORD | NINO                   | Valid Nino                    |Date of Birth|
 |personal or business| HMRC-MTD-VAT           | VRN                    | Valid Vat Registration Number |Date of Client's VAT Registration|
 |personal or business| HMRC-CGT-PD            | CGTPDRef               | Valid CGT-PD reference number |Postcode|
