@@ -26,5 +26,5 @@ class ClientJourneyService @Inject()(val journeyRepository: JourneyRepository,
                                      val serviceConfig: ClientServiceConfigurationService) extends JourneyService[ClientJourney] {
 
   override val dataKey: DataKey[ClientJourney] = DataKey("ClientJourneySessionData")
-  
+
 }

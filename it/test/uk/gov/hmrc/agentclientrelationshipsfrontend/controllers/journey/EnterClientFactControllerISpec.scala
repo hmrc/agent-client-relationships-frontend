@@ -16,13 +16,10 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey
 
-import play.api.http.Status.{BAD_REQUEST, OK}
 import play.api.test.Helpers.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsResponse, KnownFactType}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.KnownFactType.PostalCode
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, AgentJourneyType, JourneyExitType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.AgentJourneyService
-import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.WiremockHelper.stubGet
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentSpecHelper}
 
 class EnterClientFactControllerISpec extends ComponentSpecHelper with AuthStubs {
@@ -83,7 +80,7 @@ class EnterClientFactControllerISpec extends ComponentSpecHelper with AuthStubs 
     "unset existing answers when submitting a new answer" in {
       authoriseAsAgent()
       await(journeyService.saveJourney(testItsaJourney(AgentJourneyType.AuthorisationRequest).copy(knownFact = Some("ZZ1 1AA"), clientConfirmed = Some(true))))
-      val result = post(routes.EnterClientFactController.onSubmit(AgentJourneyType.AuthorisationRequest).url)(Map(
+      post(routes.EnterClientFactController.onSubmit(AgentJourneyType.AuthorisationRequest).url)(Map(
         "postcode" -> Seq(testPostcode)
       ))
       val updatedJourney = await(journeyService.getJourney(request))
@@ -92,7 +89,7 @@ class EnterClientFactControllerISpec extends ComponentSpecHelper with AuthStubs 
     "leave existing answers intact when submitting the same answer" in {
       authoriseAsAgent()
       await(journeyService.saveJourney(testItsaJourney(AgentJourneyType.AuthorisationRequest).copy(knownFact = Some(testPostcode), clientConfirmed = Some(true))))
-      val result = post(routes.EnterClientFactController.onSubmit(AgentJourneyType.AuthorisationRequest).url)(Map(
+      post(routes.EnterClientFactController.onSubmit(AgentJourneyType.AuthorisationRequest).url)(Map(
         "postcode" -> Seq(testPostcode)
       ))
       val updatedJourney = await(journeyService.getJourney(request))
@@ -144,7 +141,7 @@ class EnterClientFactControllerISpec extends ComponentSpecHelper with AuthStubs 
     "unset existing answers when submitting a new answer" in {
       authoriseAsAgent()
       await(journeyService.saveJourney(testItsaJourney(AgentJourneyType.AgentCancelAuthorisation).copy(knownFact = Some("ZZ1 1AA"), clientConfirmed = Some(true))))
-      val result = post(routes.EnterClientFactController.onSubmit(AgentJourneyType.AgentCancelAuthorisation).url)(Map(
+      post(routes.EnterClientFactController.onSubmit(AgentJourneyType.AgentCancelAuthorisation).url)(Map(
         "postcode" -> Seq(testPostcode)
       ))
       val updatedJourney = await(journeyService.getJourney(request))
@@ -153,7 +150,7 @@ class EnterClientFactControllerISpec extends ComponentSpecHelper with AuthStubs 
     "leave existing answers intact when submitting the same answer" in {
       authoriseAsAgent()
       await(journeyService.saveJourney(testItsaJourney(AgentJourneyType.AgentCancelAuthorisation).copy(knownFact = Some(testPostcode), clientConfirmed = Some(true))))
-      val result = post(routes.EnterClientFactController.onSubmit(AgentJourneyType.AgentCancelAuthorisation).url)(Map(
+      post(routes.EnterClientFactController.onSubmit(AgentJourneyType.AgentCancelAuthorisation).url)(Map(
         "postcode" -> Seq(testPostcode)
       ))
       val updatedJourney = await(journeyService.getJourney(request))

@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey
 
-import play.api.http.Status.{BAD_REQUEST, OK}
 import play.api.libs.json.{JsObject, Json}
 import play.api.test.Helpers.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsResponse, KnownFactType}
