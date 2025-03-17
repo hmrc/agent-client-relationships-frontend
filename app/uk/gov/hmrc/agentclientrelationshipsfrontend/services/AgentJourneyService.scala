@@ -29,10 +29,10 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class AgentJourneyService @Inject()(val journeyRepository: JourneyRepository,
                                     val serviceConfig: ClientServiceConfigurationService
-                                       )(implicit executionContext: ExecutionContext, appConfig: AppConfig) extends JourneyService[AgentJourney] {
+                                   )(implicit executionContext: ExecutionContext, appConfig: AppConfig) extends JourneyService[AgentJourney] {
 
   override val dataKey: DataKey[AgentJourney] = DataKey("AgentJourneySessionData")
-  
+
   def newJourney(journeyType: AgentJourneyType): AgentJourney = AgentJourney(
     journeyType = journeyType
   )
@@ -57,5 +57,5 @@ class AgentJourneyService @Inject()(val journeyRepository: JourneyRepository,
       case _ => routes.StartJourneyController.startJourney(journeyType).url
     }
   }
-  
+
 }

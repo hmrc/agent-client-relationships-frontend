@@ -60,7 +60,6 @@ trait ComponentSpecHelper
 
   override lazy val app: Application = new GuiceApplicationBuilder()
     .configure(config ++ extraConfig() ++ downstreamServices)
-    .configure("play.http.router" -> "testOnlyDoNotUseInAppConf.Routes")
     .build()
 
   val mockHost: String = WiremockHelper.wiremockHost
@@ -71,7 +70,9 @@ trait ComponentSpecHelper
     "auditing.enabled" -> "false",
     "play.filters.csrf.header.bypassHeaders.Csrf-Token" -> "nocheck",
     "auditing.consumer.baseUri.host" -> mockHost,
-    "auditing.consumer.baseUri.port" -> mockPort
+    "auditing.consumer.baseUri.port" -> mockPort,
+    "play.http.router" -> "testOnlyDoNotUseInAppConf.Routes",
+    "mongoEncryption.enabled" -> "true"
   )
 
   implicit val ws: WSClient = app.injector.instanceOf[WSClient]

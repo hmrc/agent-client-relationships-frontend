@@ -16,20 +16,23 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.repositories
 
+import uk.gov.hmrc.crypto.{Decrypter, Encrypter}
 import uk.gov.hmrc.http.SessionKeys
 import uk.gov.hmrc.mongo.cache.SessionCacheRepository
 import uk.gov.hmrc.mongo.{CurrentTimestampSupport, MongoComponent}
 
-import javax.inject.{Inject, Singleton}
+import javax.inject.{Inject, Named, Singleton}
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration.DurationInt
 
 @Singleton
-class AuthorisationsCacheRepository @Inject()(mongo: MongoComponent)(implicit ec: ExecutionContext)
+class AuthorisationsCacheRepository @Inject()(mongo: MongoComponent)
+                                             (implicit val ec: ExecutionContext,
+                                              @Named("aes") val crypto: Encrypter & Decrypter)
   extends SessionCacheRepository(
     mongoComponent = mongo,
     collectionName = "authorised-agents-cache",
     ttl = 15.minutes,
     timestampSupport = new CurrentTimestampSupport(),
     sessionIdKey = SessionKeys.sessionId
-  )
+  ) with EncryptedSessionCacheRepository

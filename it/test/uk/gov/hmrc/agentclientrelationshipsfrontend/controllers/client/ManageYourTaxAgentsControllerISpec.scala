@@ -26,7 +26,6 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AgentClientRelationsh
 import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.routes as authRoutes
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.AuthorisationsCacheService
 import uk.gov.hmrc.mongo.cache.DataKey
-import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl
 
 import java.time.{Instant, LocalDate}
 
