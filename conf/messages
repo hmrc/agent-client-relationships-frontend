@@ -796,6 +796,17 @@ clientConfirmation.accepted.HMRC-CBC-NONUK-ORG.p1={0} is now your agent for Coun
 clientConfirmation.accepted.HMRC-PILLAR2-ORG.p1={0} is now your agent for Pillar 2 Top-up Taxes.
 clientConfirmation.accepted.HMRC-TERS-ORG.p1={0} is now your agent for Trusts and Estates.
 clientConfirmation.accepted.HMRC-TERSNT-ORG.p1={0} is now your agent for Trusts and Estates.
+clientConfirmation.accepted.HMRC-MTD-IT.p2=We’ll send an email to {0} to update them.
+clientConfirmation.accepted.HMRC-MTD-IT-SUPP.p2=We’ll send an email to {0} to update them.
+clientConfirmation.accepted.PERSONAL-INCOME-RECORD.p2=We’ll send an email to {0} to update them.
+clientConfirmation.accepted.HMRC-MTD-VAT.p2=We’ll send an email to {0} to update them.
+clientConfirmation.accepted.HMRC-CGT-PD.p2=We’ll send an email to {0} to update them.
+clientConfirmation.accepted.HMRC-PPT-ORG.p2=We’ll send an email to {0} to update them.
+clientConfirmation.accepted.HMRC-CBC-ORG.p2=We’ll send an email to {0} to update them.
+clientConfirmation.accepted.HMRC-CBC-NONUK-ORG.p2=We’ll send an email to {0} to update them.
+clientConfirmation.accepted.HMRC-PILLAR2-ORG.p2=We’ll send an email to {0} to update them.
+clientConfirmation.accepted.HMRC-TERS-ORG.p2=We’ll send an email to {0} to update them.
+clientConfirmation.accepted.HMRC-TERSNT-ORG.p2=We’ll send an email to {0} to update them.
 
 clientConfirmation.section2.h2=What you can do next
 clientConfirmation.section2.p1=Go to <a href={0} class="govuk-link">Manage who can deal with HMRC for you</a> to:
@@ -816,7 +827,17 @@ clientConfirmation.rejected.HMRC-CBC-NONUK-ORG.p1=You have not given permission 
 clientConfirmation.rejected.HMRC-PILLAR2-ORG.p1=You have not given permission for {0} to manage your Pillar 2 Top-up Taxes.
 clientConfirmation.rejected.HMRC-TERS-ORG.p1=You have not given permission for {0} to manage a trust or an estate.
 clientConfirmation.rejected.HMRC-TERSNT-ORG.p1=You have not given permission for {0} to manage a trust or an estate.
-
+clientConfirmation.rejected.HMRC-MTD-IT.p2=We’ll send an email to {0} to update them.
+clientConfirmation.rejected.HMRC-MTD-IT-SUPP.p2=We’ll send an email to {0} to update them.
+clientConfirmation.rejected.PERSONAL-INCOME-RECORD.p2=We’ll send an email to {0} to update them.
+clientConfirmation.rejected.HMRC-MTD-VAT.p2=We’ll send an email to {0} to update them.
+clientConfirmation.rejected.HMRC-CGT-PD.p2=We’ll send an email to {0} to update them.
+clientConfirmation.rejected.HMRC-PPT-ORG.p2=We’ll send an email to {0} to update them.
+clientConfirmation.rejected.HMRC-CBC-ORG.p2=We’ll send an email to {0} to update them.
+clientConfirmation.rejected.HMRC-CBC-NONUK-ORG.p2=We’ll send an email to {0} to update them.
+clientConfirmation.rejected.HMRC-PILLAR2-ORG.p2=We’ll send an email to {0} to update them.
+clientConfirmation.rejected.HMRC-TERS-ORG.p2=We’ll send an email to {0} to update them.
+clientConfirmation.rejected.HMRC-TERSNT-ORG.p2=We’ll send an email to {0} to update them.
 
 # ________________________________________________________________________________
 # MYTA - Manage Your Tax Agents - client content

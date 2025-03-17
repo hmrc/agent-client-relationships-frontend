@@ -95,6 +95,14 @@ class ConfirmationPageSpec extends ViewSpecSupport {
           }
           doc.mainContent.extractText(p, 1).value shouldBe expectedContent
         }
+        s"include the correct p2 text for ${decision.toString} $taxService" in {
+          val expectedContent = decision match {
+            case Accepted => s"We’ll send an email to $agentName to update them."
+            case PartialAuth => s"We’ll send an email to $agentName to update them."
+            case _ => s"We’ll send an email to $agentName to update them."
+          }
+          doc.mainContent.extractText(p, 2).value shouldBe expectedContent
+        }
       }
     )
   }
