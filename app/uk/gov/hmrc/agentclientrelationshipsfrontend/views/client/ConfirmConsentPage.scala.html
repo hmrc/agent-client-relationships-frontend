@@ -31,10 +31,11 @@
 @(form: Form[Boolean], agentRoleKey: String)(implicit request: ClientJourneyRequest[?], messages: Messages, appConfig: AppConfig)
 
 @key = @{"confirmConsent"}
+@agentRoleOverride = @{if appConfig.emaEnabled then agentRoleKey else "agent"}
 @serviceKey = @{request.journey.getServiceKey}
 @agentName = @{request.journey.getAgentName}
-@agentRole = @{messages(s"$key.$agentRoleKey")}
-@agentRoleNoStrong = @{messages(s"$key.form.$agentRoleKey")}
+@agentRole = @{messages(s"$key.$agentRoleOverride")}
+@agentRoleNoStrong = @{messages(s"$key.form.$agentRoleOverride")}
 @taxServiceName = @{messages(serviceKey)}
 @pageTitle = @{messages(s"$key.h1")}
 @serviceName = @{messages("service.name.clients")}

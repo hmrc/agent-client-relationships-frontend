@@ -68,7 +68,7 @@ class ManageYourTaxAgentsPageSpec extends ViewSpecSupport {
     "HMRC-MTD-IT" -> "Making Tax Digital for Income Tax",
     "HMRC-PPT-ORG" -> "Plastic Packaging Tax",
     "HMRC-CGT-PD" -> "Capital Gains Tax on UK property account",
-    "HMRC-CBC-ORG" -> "Country-by-country reports",
+    "HMRC-CBC-ORG" -> "Country-by-country reporting",
     "HMRC-MTD-VAT" -> "VAT",
     "HMRC-PILLAR2-ORG" -> "Pillar 2 Top-up Taxes",
     "HMRC-TERS-ORG" -> "Trusts and Estates"

@@ -15,7 +15,8 @@
  *@
 
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
-@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ManageYourTaxAgentsData
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.{Authorisation, ManageYourTaxAgentsData}
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.Invitation
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcNewTabLinkHelper
 @import uk.gov.hmrc.hmrcfrontend.views.viewmodels.newtablinkhelper.NewTabLinkHelper
 @import java.time.format.DateTimeFormatter
@@ -51,7 +52,9 @@
     DateTimeFormatter.ofPattern("d MMMM uuuu", Locale.UK)
 }
 @agentRoleFromService(service: String) = @{
-    if(service == "HMRC-MTD-IT-SUPP") messages(s"$key.agentRole.supporting") else messages(s"$key.agentRole.main")
+    if(!appConfig.emaEnabled) ""
+    else if(service == "HMRC-MTD-IT-SUPP") messages(s"$key.agentRole.supporting")
+    else messages(s"$key.agentRole.main")
 }
 @linkFromService(uid: String, service: String, agentName: String) = {
     <a href="@{routes.ConsentInformationController.show(uid, supportedServices(service)).url}" class="govuk-link">
@@ -63,6 +66,73 @@
         @Html(messages(s"$key.authorisedAgents.action.link", agentName, messages(service), agentRoleFromService(service)))
     </a>
 }
+@invitationsHeadCells = @{
+    if(appConfig.emaEnabled) {
+        Seq(
+            HeadCell(Text(messages(s"$key.currentRequests.taxService")), classes = cellClasses),
+            HeadCell(Text(messages(s"$key.currentRequests.agentRole")), classes = cellClasses),
+            HeadCell(Text(messages(s"$key.currentRequests.respondBy")), classes = cellClasses),
+            HeadCell(Text(messages(s"$key.currentRequests.action")), classes = cellClasses)
+        )
+    } else {
+        Seq(
+            HeadCell(Text(messages(s"$key.currentRequests.taxService")), classes = cellClasses),
+            HeadCell(Text(messages(s"$key.currentRequests.respondBy")), classes = cellClasses),
+            HeadCell(Text(messages(s"$key.currentRequests.action")), classes = cellClasses)
+        )
+    }
+}
+@authorisationsHeaders = @{
+    if(appConfig.emaEnabled) {
+        Seq(
+            HeadCell(Text(messages(s"$key.authorisedAgents.taxService")), classes = cellClasses),
+            HeadCell(Text(messages(s"$key.authorisedAgents.agentRole")), classes = cellClasses),
+            HeadCell(Text(messages(s"$key.authorisedAgents.consentDate")), classes = cellClasses),
+            HeadCell(Text(messages(s"$key.authorisedAgents.action")), classes = cellClasses)
+        )
+    } else {
+        Seq(
+            HeadCell(Text(messages(s"$key.authorisedAgents.taxService")), classes = cellClasses),
+            HeadCell(Text(messages(s"$key.authorisedAgents.consentDate")), classes = cellClasses),
+            HeadCell(Text(messages(s"$key.authorisedAgents.action")), classes = cellClasses)
+        )
+    }
+}
+
+@invitationRow(request: Invitation, uid: String, agentName: String) = @{
+    if(appConfig.emaEnabled) {
+        Seq(
+            TableRow(content = Text(messages(request.service)), classes = cellClasses),
+            TableRow(Text(agentRoleFromService(request.service)), classes = cellClasses),
+            TableRow(Text(request.expiryDate.format(dateFormatter)), classes = cellClasses),
+            TableRow(HtmlContent(linkFromService(uid, request.service, agentName)), classes = cellClasses)
+        )
+    } else {
+        Seq(
+            TableRow(content = Text(messages(request.service)), classes = cellClasses),
+            TableRow(Text(request.expiryDate.format(dateFormatter)), classes = cellClasses),
+            TableRow(HtmlContent(linkFromService(uid, request.service, agentName)), classes = cellClasses)
+        )
+    }
+}
+
+@authorisationRow(authorisation: Authorisation) = @{
+    if(appConfig.emaEnabled) {
+        Seq(
+            TableRow(content = Text(messages(authorisation.service)), classes = cellClasses),
+            TableRow(Text(agentRoleFromService(authorisation.service)), classes = cellClasses),
+            TableRow(Text(authorisation.date.format(dateFormatter)), classes = cellClasses),
+            TableRow(HtmlContent(deAuthLink(authorisation.uid, authorisation.agentName, authorisation.service)), classes = cellClasses)
+        )
+    } else {
+        Seq(
+            TableRow(content = Text(messages(authorisation.service)), classes = cellClasses),
+            TableRow(Text(authorisation.date.format(dateFormatter)), classes = cellClasses),
+            TableRow(HtmlContent(deAuthLink(authorisation.uid, authorisation.agentName, authorisation.service)), classes = cellClasses)
+        )
+    }
+}
+
 @cellClasses = @{"govuk-body-s govuk-!-width-one-quarter"}
 @currentRequests = {
     <h2 class="govuk-heading-m">@messages(s"$key.currentRequests")</h2>
@@ -71,19 +141,9 @@
             classes = "govuk-body-s",
             caption = Some(agent.agentName),
             captionClasses = "govuk-table__caption--s",
-            head = Some(Seq(
-                HeadCell(Text(messages(s"$key.currentRequests.taxService")), classes = cellClasses),
-                HeadCell(Text(messages(s"$key.currentRequests.agentRole")), classes = cellClasses),
-                HeadCell(Text(messages(s"$key.currentRequests.respondBy")), classes = cellClasses),
-                HeadCell(Text(messages(s"$key.currentRequests.action")), classes = cellClasses)
-            )),
+            head = Some(invitationsHeadCells),
             rows = agent.invitations.sortBy(_.expiryDate).map { request =>
-                Seq(
-                    TableRow(content = Text(messages(request.service)), classes = cellClasses),
-                    TableRow(Text(agentRoleFromService(request.service)), classes = cellClasses),
-                    TableRow(Text(request.expiryDate.format(dateFormatter)), classes = cellClasses),
-                    TableRow(HtmlContent(linkFromService(agent.uid, request.service, agent.agentName)), classes = cellClasses)
-                )
+              invitationRow(request, agent.uid, agent.agentName)
             }
         ))
     }
@@ -98,19 +158,9 @@
                 classes = "govuk-body-s",
                 caption = Some(agent.agentName),
                 captionClasses = "govuk-table__caption--s",
-                head = Some(Seq(
-                    HeadCell(Text(messages(s"$key.authorisedAgents.taxService")), classes = cellClasses),
-                    HeadCell(Text(messages(s"$key.authorisedAgents.agentRole")), classes = cellClasses),
-                    HeadCell(Text(messages(s"$key.authorisedAgents.consentDate")), classes = cellClasses),
-                    HeadCell(Text(messages(s"$key.authorisedAgents.action")), classes = cellClasses)
-                )),
+                head = Some(authorisationsHeaders),
                 rows = agent.authorisations.sortBy(_.date).reverse.map { authorisation =>
-                    Seq(
-                        TableRow(content = Text(messages(authorisation.service)), classes = cellClasses),
-                        TableRow(Text(agentRoleFromService(authorisation.service)), classes = cellClasses),
-                        TableRow(Text(authorisation.date.format(dateFormatter)), classes = cellClasses),
-                        TableRow(HtmlContent(deAuthLink(authorisation.uid, authorisation.agentName, authorisation.service)), classes = cellClasses)
-                    )
+                        authorisationRow(authorisation)
                 }
             ))
         }
@@ -163,18 +213,20 @@
 @layout(pageTitle, Some(pageTitle), fullWidth = true) {
     @h1(pageTitle)
     @govukDetails(Details(summary = Text(messages(s"$key.p")), content = HtmlContent(servicesList)))
-    <h2 class="govuk-heading-m">@messages(s"$key.agentRoles.h2")</h2>
-    <p class="govuk-body">@messages(s"$key.agentRoles.p1")</p>
-    <ul class="govuk-list govuk-list--bullet">
-        <li>@messages(s"$key.agentRoles.li1")</li>
-        <li>@messages(s"$key.agentRoles.li2")</li>
-    </ul>
-    <p class="govuk-body">@messages(s"$key.agentRoles.p2")</p>
-    <p class="govuk-body govuk-!-margin-bottom-7">
+    @if(appConfig.emaEnabled) {
+        <h2 class="govuk-heading-m">@messages(s"$key.agentRoles.h2")</h2>
+        <p class="govuk-body">@messages(s"$key.agentRoles.p1")</p>
+        <ul class="govuk-list govuk-list--bullet">
+            <li>@messages(s"$key.agentRoles.li1")</li>
+            <li>@messages(s"$key.agentRoles.li2")</li>
+        </ul>
+        <p class="govuk-body">@messages(s"$key.agentRoles.p2")</p>
+        <p class="govuk-body govuk-!-margin-bottom-7">
         @hmrcNewTabLinkHelper(NewTabLinkHelper(
             href = Some(appConfig.mytaOtherTaxServicesGuidanceUrl),
             text = messages(s"$key.agentRoles.guidanceLink")
         ))
-    </p>
+        </p>
+    }
     @govukTabs(Tabs(items = tabs))
 }

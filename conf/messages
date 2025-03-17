@@ -28,8 +28,8 @@ HMRC-MTD-IT=Making Tax Digital for Income Tax
 HMRC-MTD-IT-SUPP=Making Tax Digital for Income Tax
 HMRC-PPT-ORG=Plastic Packaging Tax
 HMRC-CGT-PD=Capital Gains Tax on UK property account
-HMRC-CBC-ORG=Country-by-country reports
-HMRC-CBC-NONUK-ORG=Country-by-country reports
+HMRC-CBC-ORG=Country-by-country reporting
+HMRC-CBC-NONUK-ORG=Country-by-country reporting
 HMRC-MTD-VAT=VAT
 HMRC-PILLAR2-ORG=Pillar 2 Top-up Taxes
 HMRC-TERS-ORG=Trusts and Estates
@@ -318,18 +318,7 @@ confirmCancellation.legend=Do you want to cancel your authorisation for this cli
 confirmCancellation.true=Yes
 confirmCancellation.false=No - I need to start again
 confirmCancellation.agent-cancel-authorisation.error.required=Select ‘yes’ if you want to cancel authorisation for this client
-
-confirmCancellation.HMRC-MTD-IT.current-status=You are currently authorised as the main agent to manage {0}’s Making Tax Digital for Income Tax.
-confirmCancellation.HMRC-MTD-IT-SUPP.current-status=You are currently authorised as a supporting agent to manage {0}’s Making Tax Digital for Income Tax.
-confirmCancellation.PERSONAL-INCOME-RECORD.current-status=You are currently authorised as the agent to view the Income record for {0}.
-confirmCancellation.HMRC-MTD-VAT.current-status=You are currently authorised as the agent to manage {0}’s VAT.
-confirmCancellation.HMRC-TERS-ORG.current-status=You are currently authorised as the agent to maintain {0}’s trust or an estate.
-confirmCancellation.HMRC-TERSNT-ORG.current-status=You are currently authorised as the agent to maintain {0}’s trust or an estate.
-confirmCancellation.HMRC-CGT-PD.current-status=You are currently authorised as the agent to manage {0}’s Capital Gains Tax on UK property account.
-confirmCancellation.HMRC-PPT-ORG.current-status=You are currently authorised as the agent to manage Plastic Packaging Tax for {0}.
-confirmCancellation.HMRC-CBC-ORG.current-status=You are currently authorised as the agent to manage country-by-country reports for {0}.
-confirmCancellation.HMRC-CBC-NONUK-ORG.current-status=You are currently authorised as the agent to manage {0}’s country-by-country reports.
-confirmCancellation.HMRC-PILLAR2-ORG.current-status=You are currently authorised as the agent to manage {0}’s Pillar 2 top-up taxes.
+confirmCancellation.current-status=You are currently authorised as {0} to manage {1}’s {2}.
 
 confirmCancellation.HMRC-MTD-IT.outcome=If you cancel your authorisation, you will not be able to manage Making Tax Digital for Income Tax for {0}.
 confirmCancellation.PERSONAL-INCOME-RECORD.outcome=If you cancel this request, you will not be able to view the Income record for this client.
@@ -557,6 +546,33 @@ agentRole.HMRC-PPT-ORG=agent
 agentRole.HMRC-CBC-ORG=agent
 agentRole.HMRC-CBC-NONUK-ORG=agent
 agentRole.HMRC-PILLAR2-ORG=agent
+agentRole.noEMA=agent
+
+agentRoleFor.HMRC-MTD-IT=main agent
+agentRoleFor.HMRC-MTD-IT-SUPP=supporting agent
+agentRoleFor.PERSONAL-INCOME-RECORD=agent
+agentRoleFor.HMRC-MTD-VAT=agent
+agentRoleFor.HMRC-TERS-ORG=agent
+agentRoleFor.HMRC-TERSNT-ORG=agent
+agentRoleFor.HMRC-CGT-PD=agent
+agentRoleFor.HMRC-PPT-ORG=agent
+agentRoleFor.HMRC-CBC-ORG=agent
+agentRoleFor.HMRC-CBC-NONUK-ORG=agent
+agentRoleFor.HMRC-PILLAR2-ORG=agent
+agentRoleFor.noEMA=agent
+
+definitiveAgentRoleFor.HMRC-MTD-IT=the main agent
+definitiveAgentRoleFor.HMRC-MTD-IT-SUPP=a supporting agent
+definitiveAgentRoleFor.PERSONAL-INCOME-RECORD=the agent
+definitiveAgentRoleFor.HMRC-MTD-VAT=the agent
+definitiveAgentRoleFor.HMRC-TERS-ORG=the agent
+definitiveAgentRoleFor.HMRC-TERSNT-ORG=the agent
+definitiveAgentRoleFor.HMRC-CGT-PD=the agent
+definitiveAgentRoleFor.HMRC-PPT-ORG=the agent
+definitiveAgentRoleFor.HMRC-CBC-ORG=the agent
+definitiveAgentRoleFor.HMRC-CBC-NONUK-ORG=the agent
+definitiveAgentRoleFor.HMRC-PILLAR2-ORG=the agent
+definitiveAgentRoleFor.noEMA=the agent
 
 indefiniteAgentRole.HMRC-MTD-IT=a main agent
 indefiniteAgentRole.HMRC-MTD-IT-SUPP=a supporting agent
@@ -569,6 +585,7 @@ indefiniteAgentRole.HMRC-PPT-ORG=an agent
 indefiniteAgentRole.HMRC-CBC-ORG=an agent
 indefiniteAgentRole.HMRC-CBC-NONUK-ORG=an agent
 indefiniteAgentRole.HMRC-PILLAR2-ORG=an agent
+indefiniteAgentRole.noEMA=an agent
 
 consentInformation.p1={0} want to be authorised as your {1} for {2}.
 
@@ -739,42 +756,14 @@ confirmDecline.error.required=Select ''yes'' if you want to decline the request 
 # Client journey check your answer page
 # ________________________________________________________________________________
 checkYourAnswer.title=Check your answer
-checkYourAnswer.HMRC-MTD-IT.question=Do you want {0} to be your main agent for Making Tax Digital for Income Tax?
-checkYourAnswer.HMRC-MTD-IT-SUPP.question=Do you want {0} to be your supporting agent for Making Tax Digital for Income Tax?
-checkYourAnswer.PERSONAL-INCOME-RECORD.question=Do you want {0} to be your agent for Income Record Viewer?
-checkYourAnswer.HMRC-MTD-VAT.question=Do you want {0} to be your agent for VAT?
-checkYourAnswer.HMRC-CGT-PD.question=Do you want {0} to be your agent for Capital Gains Tax on UK property account?
-checkYourAnswer.HMRC-PPT-ORG.question=Do you want {0} to be your agent for Plastic Packaging Tax?
-checkYourAnswer.HMRC-CBC-ORG.question=Do you want {0} to be your agent for Country-by-country reporting?
-checkYourAnswer.HMRC-CBC-NONUK-ORG.question=Do you want {0} to be your agent for Country-by-country reporting?
-checkYourAnswer.HMRC-PILLAR2-ORG.question=Do you want {0} to be your agent for Pillar 2 Top-up Taxes?
-checkYourAnswer.HMRC-TERS-ORG.question=Do you want {0} to be your agent for Trusts and Estates?
-checkYourAnswer.HMRC-TERSNT-ORG.question=Do you want {0} to be your agent for Trusts and Estates?
+
+checkYourAnswer.question=Do you want {0} to be your {1} for {2}?
+
 checkYourAnswer.true=Yes
 checkYourAnswer.false=No
 checkYourAnswer.h2=Declaration
-checkYourAnswer.declarationYes.p1.HMRC-MTD-IT=I understand how {0} will be able to act on my behalf. I confirm that HMRC can allow {0} to act as my main agent for Making Tax Digital for Income Tax.
-checkYourAnswer.declarationYes.p1.HMRC-MTD-IT-SUPP=I understand how {0} will be able to act on my behalf. I confirm that HMRC can allow {0} to act as my supporting agent for Making Tax Digital for Income Tax.
-checkYourAnswer.declarationYes.p1.PERSONAL-INCOME-RECORD=I understand how {0} will be able to act on my behalf. I confirm that HMRC can allow {0} to act as my agent for Income Record Viewer.
-checkYourAnswer.declarationYes.p1.HMRC-MTD-VAT=I understand how {0} will be able to act on my behalf. I confirm that HMRC can allow {0} to act as my agent for VAT.
-checkYourAnswer.declarationYes.p1.HMRC-CGT-PD=I understand how {0} will be able to act on my behalf. I confirm that HMRC can allow {0} to act as my agent for Capital Gains Tax on UK property account.
-checkYourAnswer.declarationYes.p1.HMRC-PPT-ORG=I understand how {0} will be able to act on my behalf. I confirm that HMRC can allow {0} to act as my agent for Plastic Packaging Tax.
-checkYourAnswer.declarationYes.p1.HMRC-CBC-ORG=I understand how {0} will be able to act on my behalf. I confirm that HMRC can allow {0} to act as my agent for Country-by-country reporting.
-checkYourAnswer.declarationYes.p1.HMRC-CBC-NONUK-ORG=I understand how {0} will be able to act on my behalf. I confirm that HMRC can allow {0} to act as my agent for Country-by-country reporting.
-checkYourAnswer.declarationYes.p1.HMRC-PILLAR2-ORG=I understand how {0} will be able to act on my behalf. I confirm that HMRC can allow {0} to act as my agent for Pillar 2 Top-up Taxes.
-checkYourAnswer.declarationYes.p1.HMRC-TERS-ORG=I understand how {0} will be able to act on my behalf. I confirm that HMRC can allow {0} to act as my agent for Trusts and Estates.
-checkYourAnswer.declarationYes.p1.HMRC-TERSNT-ORG=I understand how {0} will be able to act on my behalf. I confirm that HMRC can allow {0} to act as my agent for Trusts and Estates.
-checkYourAnswer.declarationNo.p1.HMRC-MTD-IT=Declining this request from {0} means they will not be able to act as your main agent for Making Tax Digital for Income Tax.
-checkYourAnswer.declarationNo.p1.HMRC-MTD-IT-SUPP=Declining this request from {0} means they will not be able to act as your supporting agent for Making Tax Digital for Income Tax.
-checkYourAnswer.declarationNo.p1.PERSONAL-INCOME-RECORD=Declining this request from {0} means they will not be able to act as your agent for Income Record Viewer.
-checkYourAnswer.declarationNo.p1.HMRC-MTD-VAT=Declining this request from {0} means they will not be able to act as your agent for VAT.
-checkYourAnswer.declarationNo.p1.HMRC-CGT-PD=Declining this request from {0} means they will not be able to act as your agent for Capital Gains Tax on UK property account.
-checkYourAnswer.declarationNo.p1.HMRC-PPT-ORG=Declining this request from {0} means they will not be able to act as your agent for Plastic Packaging Tax.
-checkYourAnswer.declarationNo.p1.HMRC-CBC-ORG=Declining this request from {0} means they will not be able to act as your agent for Country-by-country reporting.
-checkYourAnswer.declarationNo.p1.HMRC-CBC-NONUK-ORG=Declining this request from {0} means they will not be able to act as your agent for Country-by-country reporting.
-checkYourAnswer.declarationNo.p1.HMRC-PILLAR2-ORG=Declining this request from {0} means they will not be able to act as your agent for Pillar 2 Top-up Taxes.
-checkYourAnswer.declarationNo.p1.HMRC-TERS-ORG=Declining this request from {0} means they will not be able to act as your agent for Trusts and Estates.
-checkYourAnswer.declarationNo.p1.HMRC-TERSNT-ORG=Declining this request from {0} means they will not be able to act as your agent for Trusts and Estates.
+checkYourAnswer.declarationYes.p1=I understand how {0} will be able to act on my behalf. I confirm that HMRC can allow {0} to act as my {1} for {2}.
+checkYourAnswer.declarationNo.p1=Declining this request from {0} means they will not be able to act as your {1} for {2}.
 checkYourAnswer.declarationNo.p2=You can change your mind later - just send them another request.
 checkYourAnswer.acceptAndSend.button=Accept and send
 checkYourAnswer.change=Change
@@ -785,17 +774,7 @@ checkYourAnswer.change=Change
 
 clientConfirmation.accepted.h1=You have authorised {0}
 clientConfirmation.accepted.h2=What this means
-clientConfirmation.accepted.HMRC-MTD-IT.p1={0} is now your main agent for Making Tax Digital for Income Tax.
-clientConfirmation.accepted.HMRC-MTD-IT-SUPP.p1={0} is now your supporting agent for Making Tax Digital for Income Tax.
-clientConfirmation.accepted.PERSONAL-INCOME-RECORD.p1={0} is now your agent for Income Record Viewer.
-clientConfirmation.accepted.HMRC-MTD-VAT.p1={0} is now your agent for VAT.
-clientConfirmation.accepted.HMRC-CGT-PD.p1={0} is now your agent for Capital Gains Tax on UK property account.
-clientConfirmation.accepted.HMRC-PPT-ORG.p1={0} is now your agent for Plastic Packaging Tax.
-clientConfirmation.accepted.HMRC-CBC-ORG.p1={0} is now your agent for Country-by-country reporting.
-clientConfirmation.accepted.HMRC-CBC-NONUK-ORG.p1={0} is now your agent for Country-by-country reporting.
-clientConfirmation.accepted.HMRC-PILLAR2-ORG.p1={0} is now your agent for Pillar 2 Top-up Taxes.
-clientConfirmation.accepted.HMRC-TERS-ORG.p1={0} is now your agent for Trusts and Estates.
-clientConfirmation.accepted.HMRC-TERSNT-ORG.p1={0} is now your agent for Trusts and Estates.
+clientConfirmation.accepted.p1={0} is now your {1} for {2}.
 
 clientConfirmation.section2.h2=What you can do next
 clientConfirmation.section2.p1=Go to <a href={0} class="govuk-link">Manage who can deal with HMRC for you</a> to:
@@ -805,17 +784,8 @@ clientConfirmation.section2.li3=remove consent if you no longer want an agent to
 clientConfirmation.section2.signOutLink=Finish and sign out
 
 clientConfirmation.rejected.h1=You declined a request from {0}
-clientConfirmation.rejected.HMRC-MTD-IT.p1=You have not given permission for {0} to manage your Making Tax Digital for Income Tax.
-clientConfirmation.rejected.HMRC-MTD-IT-SUPP.p1=You have not given permission for {0} to manage your Making Tax Digital for Income Tax.
-clientConfirmation.rejected.PERSONAL-INCOME-RECORD.p1=You have not given permission for {0} to view your personal income record.
-clientConfirmation.rejected.HMRC-MTD-VAT.p1=You have not given permission for {0} to manage your VAT.
-clientConfirmation.rejected.HMRC-CGT-PD.p1=You have not given permission for {0} to manage your Capital Gains Tax on UK property account.
-clientConfirmation.rejected.HMRC-PPT-ORG.p1=You have not given permission for {0} to manage your Plastic Packaging Tax.
-clientConfirmation.rejected.HMRC-CBC-ORG.p1=You have not given permission for {0} to manage your Country-by-country reporting.
-clientConfirmation.rejected.HMRC-CBC-NONUK-ORG.p1=You have not given permission for {0} to manage your Country-by-country reporting.
-clientConfirmation.rejected.HMRC-PILLAR2-ORG.p1=You have not given permission for {0} to manage your Pillar 2 Top-up Taxes.
-clientConfirmation.rejected.HMRC-TERS-ORG.p1=You have not given permission for {0} to manage a trust or an estate.
-clientConfirmation.rejected.HMRC-TERSNT-ORG.p1=You have not given permission for {0} to manage a trust or an estate.
+clientConfirmation.rejected.p1=You have not given permission for {0} to manage your {2}.
+clientConfirmation.PERSONAL-INCOME-RECORD.rejected.p1=You have not given permission for {0} to view your personal income record.
 
 
 # ________________________________________________________________________________

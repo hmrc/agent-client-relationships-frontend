@@ -20,6 +20,7 @@ import com.google.inject.{Inject, Singleton}
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
+import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.connectors.AgentClientRelationshipsConnector
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.ClientJourney
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.ClientJourneyService
@@ -34,7 +35,7 @@ class CheckYourAnswerController @Inject()(mcc: MessagesControllerComponents,
                                           agentClientRelationshipsConnector: AgentClientRelationshipsConnector,
                                           checkYourAnswerPage: CheckYourAnswerPage,
                                           journeyService: ClientJourneyService
-                                         )(implicit ec: ExecutionContext) extends FrontendController(mcc) with I18nSupport:
+                                         )(implicit ec: ExecutionContext, appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport:
 
   def show: Action[AnyContent] = actions.clientAuthenticate:
     implicit request =>
