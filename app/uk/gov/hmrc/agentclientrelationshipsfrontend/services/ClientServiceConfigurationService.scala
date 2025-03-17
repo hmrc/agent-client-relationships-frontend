@@ -36,8 +36,14 @@ class ClientServiceConfigurationService @Inject()(implicit appConfig: AppConfig)
   
   def validateUrlPart(urlPartKey: String): Boolean = getServiceKeysForUrlPart(urlPartKey).nonEmpty
 
-  def clientServicesFor(clientType: String): Seq[String] = services.filter(_._2.serviceOption == true).filter(_._2.clientTypes.contains(ClientType.valueOf(clientType))).keys.toSeq
+  // services that are enabled and have the service option enabled meaning they will appear in the user facing service
+  // options list for the given user type
+  def clientServicesFor(clientType: String): Seq[String] = services
+    .filter(_._2.serviceOption == true)
+    .filter(_._2.clientTypes.contains(ClientType.valueOf(clientType)))
+    .keys.toSeq
 
+  def allEnabledServices: Set[String] = services.filter(_._2.serviceOption == true).map(_._2.serviceName).toSet
   def allSupportedServices: Set[String] = services.map(_._2.serviceName).toSet[String]
 
   def clientDetailsFor(clientService: String): Seq[ClientDetailsConfiguration] = services(clientService).clientDetails
@@ -52,13 +58,16 @@ class ClientServiceConfigurationService @Inject()(implicit appConfig: AppConfig)
 
   def getSupportedEnrolments(clientService: String): Seq[String] = services(clientService).supportedEnrolments
   
+  // this method normalises the service name to the parent service name if the service supports multiple service keys for enrolments
   def getServiceForForm(clientService: String): String = if clientService.nonEmpty then (getSupportedAgentRoles(clientService), getSupportedEnrolments(clientService)) match {
     case (_, enrols) if enrols.size > 1 => enrols.head // the head of the list is the parent service
     case (roles, _) if roles.size > 1 => roles.head // the head of the list is the parent service
     case _ => clientService
   } else ""
 
-  def getNotFoundError(journeyType: AgentJourneyType, clientService: String): JourneyExitType = services(clientService).journeyErrors(journeyType).notFound
+  // some services may have custom not found errors
+  def getNotFoundError(journeyType: AgentJourneyType, clientService: String): JourneyExitType =
+    services(clientService).journeyErrors(journeyType).notFound
 
   def supportsAgentRoles(clientService: String): Boolean = services.get(clientService).exists(_.supportedAgentRoles.size > 1)
 
@@ -67,13 +76,15 @@ class ClientServiceConfigurationService @Inject()(implicit appConfig: AppConfig)
   val utrRegex = "^[0-9]{10}$"
   val urnRegex = "^[A-Z]{2}TRUST[0-9]{8}$"
 
-  def clientDetailForServiceAndClientIdType(clientService: String, clientIdType: String): Option[ClientDetailsConfiguration] = services(clientService).clientDetails.find(_.clientIdType == clientIdType)
+  def clientDetailForServiceAndClientIdType(clientService: String, clientIdType: String): Option[ClientDetailsConfiguration] =
+    services(clientService).clientDetails.find(_.clientIdType == clientIdType)
 
   def getServiceKeysForUrlPart(taxService: String): Set[String] = services
     .find(_._2.urlPart.keySet.contains(taxService))
     .map((_, serviceData) => serviceData.urlPart(taxService))
     .getOrElse(Set())
 
+  // url parts are used in public urls to determine which service
   def getUrlPart(clientService: String): String = services(getServiceForForm(clientService)).urlPart.head._1
 
   // when a service only supports one client type we can infer the client type from the service when it's missing
@@ -221,7 +232,7 @@ class ClientServiceConfigurationService @Inject()(implicit appConfig: AppConfig)
       overseasServiceName = Some(HMRCCBCNONUKORG),
       supportedEnrolments = Seq(HMRCCBCORG, HMRCCBCNONUKORG), // parent service is always head of the list
       urlPart = Map(countryByCountryReporting -> Set(HMRCCBCORG, HMRCCBCNONUKORG)),
-      serviceOption = true,
+      serviceOption = appConfig.cbcEnabled,
       clientTypes = Set(business, trust),
       clientDetails = Seq(
         ClientDetailsConfiguration(
