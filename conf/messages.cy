@@ -551,3 +551,8 @@ confirmDecline.label=<translation needed>
 confirmDecline.true=Iawn
 confirmDecline.false=<translation needed>
 confirmDecline.error.required=<translation needed>
+
+# ________________________________________________________________________________
+# Client confirmation of authorisation page
+# ________________________________________________________________________________
+clientConfirmation.p2=<translation needed>
