@@ -42,7 +42,6 @@
 
   @if(agentRoleKey == "mainAgent" || agentRoleKey == "suppAgent") {
     <p class="govuk-body" id="agent-role-guidance">
-      @messages(s"$key.p2")
       <a class="govuk-link" target="_blank" href="@appConfig.guidanceUrlForAgentRoles">@messages(s"$key.p2.link")</a>.
     </p>
   }
