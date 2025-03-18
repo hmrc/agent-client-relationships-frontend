@@ -35,7 +35,12 @@
 @pageTitle = @{messages(s"$key.h1")}
 @serviceName = @{messages("service.name.clients")}
 
-@layout(pageTitle, Some(serviceName), Some(form)) {
+@layout(
+    pageTitle,
+    Some(serviceName),
+    Some(form),
+    isAgent = false
+) {
 
     <h1 class="govuk-heading-xl">@pageTitle</h1>
     <p class="govuk-body">@messages(s"$key.p1", authorisation.agentName, taxServiceName)</p>

@@ -37,7 +37,11 @@
 @indefiniteAgentRole = @{if appConfig.emaEnabled then messages(s"indefiniteAgentRole.$serviceKey") else messages("indefiniteAgentRole.noEMA")}
 @taxServiceName = @{messages(serviceKey)}
 
-@layout(pageTitle, Some(serviceName)) {
+@layout(
+    pageTitle,
+    Some(serviceName),
+    isAgent = false
+) {
 
   <h2 class="govuk-caption-xl">@messages(serviceKey)</h2>
   <h1 class="govuk-heading-xl">@pageTitle</h1>

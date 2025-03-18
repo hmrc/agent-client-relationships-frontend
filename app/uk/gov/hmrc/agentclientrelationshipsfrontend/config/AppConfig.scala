@@ -34,7 +34,12 @@ class AppConfig @Inject()(servicesConfig: ServicesConfig, config: Configuration)
   val ivUpliftUrl: String = getConfString("identity-verification-frontend.uplift-url")
   val signInUrl: String = getString("sign-in.url")
   val subscriptionUrl: String = getConfString("agent-subscription-frontend.subscription-url")
-  val clientLinkBaseUrl: String = s"${appExternalUrl}/agent-client-relationships/appoint-someone-to-deal-with-HMRC-for-you"
+  val clientLinkBaseUrl: String = s"$appExternalUrl/agent-client-relationships/appoint-someone-to-deal-with-HMRC-for-you"
+  val feedbackSurveyUrl: String = getConfString("feedback-frontend.external-url")
+  def surveyUrl(isAgent: Boolean): String = {
+    if isAgent then s"$feedbackSurveyUrl/$agentOriginToken"
+    else s"$feedbackSurveyUrl/$clientOriginToken"
+  }
 
   // GovUk Urls
   val govUkUrl: String = getString("gov-uk.url")
@@ -56,6 +61,8 @@ class AppConfig @Inject()(servicesConfig: ServicesConfig, config: Configuration)
   val allowedRedirectHosts: Set[String] = config.getOptional[Seq[String]]("allowed-redirect-hosts").getOrElse(Nil).toSet
   val trackRequestsPageSize: Int = servicesConfig.getInt("track-requests-per-page")
   val authorisationRequestExpiryDays: Int = servicesConfig.getDuration("invitation.expiryDuration").toDays.toInt
+  val agentOriginToken = "INVITAGENT"
+  val clientOriginToken = "INVITCLIENT"
 
   val countryListLocation: String = servicesConfig.getString("country.list.location")
 

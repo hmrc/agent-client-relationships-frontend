@@ -85,7 +85,12 @@
     </ul>
 }
 
-@layout(pageTitle, Some(serviceName), Some(form)) {
+@layout(
+    pageTitle,
+    Some(serviceName),
+    Some(form),
+    isAgent = false
+) {
 
     <h2 class="govuk-caption-xl">@messages(serviceKey)</h2>
     <h1 class="govuk-heading-xl">@pageTitle</h1>

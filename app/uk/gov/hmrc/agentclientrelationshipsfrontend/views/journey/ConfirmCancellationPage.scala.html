@@ -52,7 +52,8 @@
 @layout(
     pageTitle = pageTitle,
     optionalForm = Some(form),
-    serviceName = Some(messages(s"${request.journey.journeyType.toString}.service.name"))
+    serviceName = Some(messages(s"${request.journey.journeyType.toString}.service.name")),
+    isAgent = true
 ) {
 
     <h1 class="govuk-heading-xl">@pageTitle</h1>

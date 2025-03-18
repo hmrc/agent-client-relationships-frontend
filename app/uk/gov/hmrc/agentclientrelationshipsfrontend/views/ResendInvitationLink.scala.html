@@ -39,7 +39,9 @@
 
 @layout(
     pageTitle = pageTitle,
-    serviceName = Some(messages("authorisation-request.service.name"))
+    serviceName = Some(messages("authorisation-request.service.name")),
+    isAgent = true,
+    showSurvey = true
 ) {
 
     <h1 class="govuk-heading-xl">@pageTitle</h1>
