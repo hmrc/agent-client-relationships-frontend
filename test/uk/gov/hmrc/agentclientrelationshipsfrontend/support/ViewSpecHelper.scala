@@ -30,7 +30,7 @@ trait ViewSpecHelper extends Selectors {
 
   case class TestLink(text: String, href: String)
 
-  case class TestRadioGroup(legend: String, options: List[(String, String)], hint: Option[String])
+  case class TestRadioGroup(legend: String, options: List[(String, String)], hint: Option[String], optionHints: List[(String, Option[String])] = Nil)
 
   case class TestInputField(label: String, hint: Option[String], inputName: String)
 
@@ -71,6 +71,15 @@ trait ViewSpecHelper extends Selectors {
         legend = element.select(fieldSetLegend).first().text(),
         options = element.select(".govuk-radios__item").toList.map(el => (el.select("label").text(), el.select("input").attr("value"))),
         hint = element.select(fieldSetHint).toList.headOption.map(_.text)
+      )
+    }
+
+    def extractRadiosWithHints(index: Int = 1): Option[TestRadioGroup] = extractByIndex(fieldSet, index).map { element =>
+      TestRadioGroup(
+        legend = element.select(fieldSetLegend).first().text(),
+        options = element.select(".govuk-radios__item").toList.map(el => (el.select("label").text(), el.select("input").attr("value"))),
+        hint = element.select(fieldSetHint).toList.headOption.map(_.text),
+        optionHints = element.select(".govuk-radios__item").toList.map(el => (el.select("label").text(), el.select(".govuk-radios__hint").headOption.map(_.text()))),
       )
     }
 

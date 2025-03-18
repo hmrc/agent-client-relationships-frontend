@@ -263,7 +263,7 @@ confirmClient.false=No - I need to start again
 
 selectAgentRole.HMRC-MTD-IT.newRelationship.header=How do you want to act for {0}?
 selectAgentRole.HMRC-MTD-IT.newRelationship.legend=How do you want to act for {0}?
-selectAgentRole.HMRC-MTD-IT.newRelationship.guidance=<a href={0} class="govuk-link" target="_blank" rel="noreferrer noopener">Find out how main and supporting agents can act (opens in new tab)</a>.
+selectAgentRole.HMRC-MTD-IT.guidance=<a href={0} class="govuk-link" target="_blank" rel="noreferrer noopener">Find out how main and supporting agents can act (opens in new tab)</a>.
 selectAgentRole.HMRC-MTD-IT.newRelationship.option=As their main agent
 selectAgentRole.HMRC-MTD-IT-SUPP.newRelationship.option=As a supporting agent
 selectAgentRole.HMRC-MTD-IT.newRelationship.hint=Main agents can carry out all tax functions for the client and submit client’s tax returns
