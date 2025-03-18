@@ -24,7 +24,7 @@ class TimedOutControllerISpec extends ComponentSpecHelper with AuthStubs {
 
   "GET /timed-out" should {
     "return OK" in {
-      val result = get(routes.TimedOutController.timedOut(RedirectUrl("/agent-client-relationships"), "Agents").url)
+      val result = get(routes.TimedOutController.timedOut(RedirectUrl("/agent-client-relationships"), "Agents", isAgent = true).url)
       result.status shouldBe OK
     }
   }

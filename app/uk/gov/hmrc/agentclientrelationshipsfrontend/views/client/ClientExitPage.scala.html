@@ -37,7 +37,11 @@
 @serviceName = @{messages("service.name.clients")}
 @pageTitle = @{messages(s"$key.$exitType.header")}
 
-@layout(pageTitle, Some(serviceName)) {
+@layout(
+    pageTitle,
+    Some(serviceName),
+    isAgent = false
+) {
 
     <h1 class="govuk-heading-xl">@pageTitle</h1>
     @{

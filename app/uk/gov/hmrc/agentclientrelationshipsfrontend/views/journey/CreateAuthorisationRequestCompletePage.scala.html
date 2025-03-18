@@ -41,7 +41,9 @@
 @layout(
     pageTitle = pageTitle,
     serviceName = Some(messages("authorisation-request.service.name")),
-    suppressBackLink = true
+    suppressBackLink = true,
+    isAgent = true,
+    showSurvey = true
 ) {
 
     @govukPanel(Panel(

@@ -27,7 +27,10 @@
     messages(s"$key.header")
 }
 
-@layout(pageTitle) {
+@layout(
+    pageTitle,
+    isAgent = true
+) {
     <h1 class="govuk-heading-xl">@pageTitle</h1>
     <p class="govuk-body">@messages(s"$key.text")</p>
 }

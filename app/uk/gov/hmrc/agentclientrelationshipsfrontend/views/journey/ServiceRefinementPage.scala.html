@@ -39,7 +39,8 @@
 @layout(
     pageTitle = pageTitle,
     optionalForm = Some(form),
-    serviceName = Some(messages(s"$journeyKey.service.name"))
+    serviceName = Some(messages(s"$journeyKey.service.name")),
+    isAgent = true
 ) {
 
     @formWithCSRF(action = routes.ServiceRefinementController.onSubmit(request.journey.journeyType)) {

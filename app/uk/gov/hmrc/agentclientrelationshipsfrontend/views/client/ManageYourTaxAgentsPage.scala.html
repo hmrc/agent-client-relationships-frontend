@@ -210,7 +210,12 @@
     else Seq(currentRequestsTab, authorisedAgentsTab, historyTab)
 }
 
-@layout(pageTitle, Some(pageTitle), fullWidth = true) {
+@layout(
+    pageTitle,
+    Some(pageTitle),
+    fullWidth = true,
+    isAgent = false
+) {
     @h1(pageTitle)
     @govukDetails(Details(summary = Text(messages(s"$key.p")), content = HtmlContent(servicesList)))
     @if(appConfig.emaEnabled) {

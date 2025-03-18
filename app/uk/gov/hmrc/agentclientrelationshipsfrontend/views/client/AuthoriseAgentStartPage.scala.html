@@ -32,7 +32,11 @@
     messages(s"$key.h1.$taxService", agentName)
 }
 
-@layout(pageTitle = title, serviceName = Some(messages("service.name.clients"))) {
+@layout(
+    pageTitle = title,
+    serviceName = Some(messages("service.name.clients")),
+    isAgent = false
+) {
 
     @h1(title)
 

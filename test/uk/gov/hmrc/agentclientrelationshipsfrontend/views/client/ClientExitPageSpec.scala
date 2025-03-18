@@ -185,7 +185,7 @@ class ClientExitPageSpec extends ViewSpecSupport {
 
     "have the correct link in the details component content" in {
 
-      doc.mainContent.extractLink(1).value shouldBe TestLink("Finish and sign out", "/agent-client-relationships/sign-out")
+      doc.mainContent.extractLink(1).value shouldBe TestLink("Finish and sign out", "/agent-client-relationships/sign-out?isAgent=false")
     }
   }
 

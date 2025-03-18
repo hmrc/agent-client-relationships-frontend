@@ -42,7 +42,12 @@
     )
 }
 
-@layout(pageTitle = "Test Only: Fast Track Invitation", optionalForm = None, backLinkHref = None) {
+@layout(
+    pageTitle = "Test Only: Fast Track Invitation",
+    optionalForm = None,
+    backLinkHref = None,
+    isAgent = true
+) {
     <h1>Test Only: Fast Track Invitation</h1>
 
     @formWithCSRF(action = Call("POST", postToInvitations)) {

@@ -41,7 +41,8 @@
 @layout(
     pageTitle = pageTitle,
     optionalForm = Some(form),
-    serviceName = Some(messages("authorisation-request.service.name"))
+    serviceName = Some(messages("authorisation-request.service.name")),
+    isAgent = true
 ) {
     @formWithCSRF(action = routes.AgentCancelInvitationController.submit(authorisationRequestInfo.invitationId)) {
         @govukRadios(Radios(

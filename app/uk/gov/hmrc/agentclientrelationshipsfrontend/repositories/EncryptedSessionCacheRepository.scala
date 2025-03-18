@@ -16,9 +16,9 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.repositories
 
-import play.api.libs.json.{Format, Reads, Writes}
+import play.api.libs.json.{Reads, Writes}
 import play.api.mvc.RequestHeader
-import uk.gov.hmrc.crypto.json.JsonEncryption.{sensitiveDecrypter, sensitiveEncrypter, sensitiveEncrypterDecrypter}
+import uk.gov.hmrc.crypto.json.JsonEncryption.{sensitiveDecrypter, sensitiveEncrypter}
 import uk.gov.hmrc.crypto.{Decrypter, Encrypter, Sensitive}
 import uk.gov.hmrc.mongo.cache.{DataKey, SessionCacheRepository}
 

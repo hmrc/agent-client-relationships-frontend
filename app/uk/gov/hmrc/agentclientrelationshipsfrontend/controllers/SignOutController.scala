@@ -18,6 +18,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers
 
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
+import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.routes as clientRoutes
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.UrlHelper.validateRedirectUrl
 import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
@@ -29,11 +30,9 @@ import scala.concurrent.Future
 class SignOutController @Inject()(mcc: MessagesControllerComponents)
                                  (implicit appConfig: AppConfig) extends FrontendController(mcc):
 
-  def signOut(continueUrl: Option[RedirectUrl] = None): Action[AnyContent] = Action.async: _ =>
+  def signOut(continueUrl: Option[RedirectUrl] = None, isAgent: Boolean): Action[AnyContent] = Action.async: _ =>
     continueUrl match {
       case Some(url) => Future.successful(Redirect(validateRedirectUrl(url)).withNewSession)
-      // previously the generic behaviour and destination of sign out was determined by MainTemplate code
-      // instead we could do that in here (when no continue url is provided manually)
-      case None => Future.successful(Ok("Signed out").withNewSession)
+      case None if isAgent => Future.successful(Redirect(appConfig.agentServicesAccountHomeUrl).withNewSession)
+      case None => Future.successful(Redirect(clientRoutes.ManageYourTaxAgentsController.show).withNewSession)
     }
-

@@ -132,7 +132,11 @@
     }
 }
 
-@layout(pageTitle, fullWidth = true) {
+@layout(
+    pageTitle,
+    fullWidth = true,
+    isAgent = true
+) {
     <h1 class="govuk-heading-xl">@pageTitle</h1>
     @filterContent
     @if(result.requests.nonEmpty) {

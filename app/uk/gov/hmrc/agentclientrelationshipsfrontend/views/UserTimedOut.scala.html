@@ -23,7 +23,7 @@
         govukButton: GovukButton
 )
 
-@(continueUrl: Option[String], serviceHeader: Option[String] = None)(implicit request: Request[?], messages: Messages, appConfig: AppConfig)
+@(continueUrl: Option[String], serviceHeader: Option[String] = None, isAgent: Boolean)(implicit request: Request[?], messages: Messages, appConfig: AppConfig)
 
 @timeString = @{
     val timeout = appConfig.timeoutDialogTimeoutSeconds
@@ -35,7 +35,8 @@
 
 @layout(
     pageTitle = title,
-    serviceName = Some(serviceName)
+    serviceName = Some(serviceName),
+    isAgent = isAgent
 ) {
 
     @h1(title)

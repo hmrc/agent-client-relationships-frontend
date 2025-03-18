@@ -46,7 +46,7 @@ class UserTimedOutSpec extends ViewSpecSupport {
 
   "UserTimedOut view" when {
     "viewed as a client" should {
-      val view: HtmlFormat.Appendable = viewTemplate(Some(testUrl))
+      val view: HtmlFormat.Appendable = viewTemplate(Some(testUrl), isAgent = true)
       val doc: Document = Jsoup.parse(view.body)
       "have the right title" in {
         doc.title() shouldBe ExpectedClient.title
@@ -65,7 +65,7 @@ class UserTimedOutSpec extends ViewSpecSupport {
       }
     }
     "viewed as an agent on an authorisation request journey" should {
-      val view: HtmlFormat.Appendable = viewTemplate(Some(testUrl), Some("Ask a client to authorise you"))
+      val view: HtmlFormat.Appendable = viewTemplate(Some(testUrl), Some("Ask a client to authorise you"), isAgent = true)
       val doc: Document = Jsoup.parse(view.body)
       "have the right title" in {
         doc.title() shouldBe ExpectedAgent.authorisationRequestTitle
@@ -85,7 +85,7 @@ class UserTimedOutSpec extends ViewSpecSupport {
       }
     }
     "viewed as an agent on a cancel authorisation journey" should {
-      val view: HtmlFormat.Appendable = viewTemplate(Some(testUrl), Some("Cancel a client’s authorisation"))
+      val view: HtmlFormat.Appendable = viewTemplate(Some(testUrl), Some("Cancel a client’s authorisation"), isAgent = true)
       val doc: Document = Jsoup.parse(view.body)
       "have the right title" in {
         doc.title() shouldBe ExpectedAgent.cancelAuthorisationTitle

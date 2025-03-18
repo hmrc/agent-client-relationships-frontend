@@ -16,24 +16,32 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers
 
-import play.api.http.Status.{OK, SEE_OTHER}
+import play.api.http.Status.SEE_OTHER
+import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.routes as clientRoutes
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentSpecHelper}
 import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl
 
 class SignOutControllerISpec extends ComponentSpecHelper with AuthStubs {
 
   "GET /sign-out" should {
-    "redirect to continueUrl when it is provided" in {
+    "sign out and redirect to continueUrl when it is provided" in {
       authoriseAsAgent()
       val continueUrl = RedirectUrl("/url/continue")
-      val result = get(routes.SignOutController.signOut(Some(continueUrl)).url)
+      val result = get(routes.SignOutController.signOut(Some(continueUrl), true).url)
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe "/url/continue"
     }
-    "return OK" in {
+    "sign out and redirect to ASA if user is an agent" in {
       authoriseAsAgent()
-      val result = get(routes.SignOutController.signOut().url)
-      result.status shouldBe OK
+      val result = get(routes.SignOutController.signOut(isAgent = true).url)
+      result.status shouldBe SEE_OTHER
+      result.header("Location").value shouldBe "http://localhost:9401/agent-services-account/home"
+    }
+    "sign out redirect to MYTA if user is a client" in {
+      authoriseAsAgent()
+      val result = get(routes.SignOutController.signOut(isAgent = false).url)
+      result.status shouldBe SEE_OTHER
+      result.header("Location").value shouldBe clientRoutes.ManageYourTaxAgentsController.show.url
     }
   }
 

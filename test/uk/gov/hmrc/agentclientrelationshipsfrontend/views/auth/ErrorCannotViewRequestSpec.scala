@@ -69,7 +69,7 @@ class ErrorCannotViewRequestSpec extends ViewSpecSupport with BeforeAndAfterEach
         doc.mainContent.extractText(p, 3).value shouldBe Expected.para3
       }
       "have a link button" in {
-        doc.mainContent.extractLinkButton(1).value shouldBe TestLink(Expected.button, routes.SignOutController.signOut(Some(RedirectUrl(testUrl))).url)
+        doc.mainContent.extractLinkButton(1).value shouldBe TestLink(Expected.button, routes.SignOutController.signOut(Some(RedirectUrl(testUrl)), isAgent = false).url)
       }
     }
   }

@@ -25,6 +25,7 @@
 @import uk.gov.hmrc.hmrcfrontend.views.viewmodels.hmrcstandardpage._
 @import views.html.helper.CSPNonce
 @import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl
+@import uk.gov.hmrc.hmrcfrontend.config.ContactFrontendConfig
 
 @this(
         appConfig: AppConfig,
@@ -33,9 +34,10 @@
         autocompleteCss: HmrcAccessibleAutocompleteCss,
         autocompleteJavascript: HmrcAccessibleAutocompleteJavascript,
         hmrcTimeoutDialogHelper: HmrcTimeoutDialogHelper,
-        hmrcReportTechnicalIssueHelper: HmrcReportTechnicalIssueHelper,
+        hmrcReportTechnicalIssue: HmrcReportTechnicalIssue,
         fullWidthLayout: FullWidthLayout,
-        twoThirdsMainContent: TwoThirdsMainContent
+        twoThirdsMainContent: TwoThirdsMainContent,
+        contactFrontendConfig: ContactFrontendConfig
 )
 
 @(
@@ -44,12 +46,15 @@
         optionalForm: Option[Form[?]] = None,
         backLinkHref: Option[String] = None,
         suppressBackLink: Boolean = false,
-        fullWidth: Boolean = false
+        fullWidth: Boolean = false,
+        isAgent: Boolean,
+        showSurvey: Boolean = false
 )(contentBlock: Html)(implicit request: RequestHeader, messages: Messages)
 
 @isSignedIn  = @{request.session.get("authToken").isDefined}
-@* sign out url is only available if the user is signed in, the signOut method can do survey redirection etc *@
-@signOutUrl = @{if(isSignedIn) Some(routes.SignOutController.signOut().url) else None}
+@* ported over logic from AIF, agents are shown feedback form at journey end, clients are shown at any point, may need reviewing *@
+@optSurveyUrl = @{if(showSurvey || !isAgent) Some(RedirectUrl(appConfig.surveyUrl(isAgent))) else None}
+@signOutUrl = @{if(isSignedIn) Some(routes.SignOutController.signOut(continueUrl = optSurveyUrl, isAgent = isAgent).url) else None}
 @* only pass in the service name as a fully resolved message if it is not the default for agents auth *@
 @service = @{serviceName.getOrElse(messages("service.name.agents.auth"))}
 @head = {
@@ -58,7 +63,8 @@
             signOutUrl = signOutUrl.get,
             timeoutUrl = Some(routes.TimedOutController.timedOut(
                 continueUrl = RedirectUrl(s"${appConfig.appExternalUrl}${request.uri}"),
-                serviceHeader = service
+                serviceHeader = service,
+                isAgent = isAgent
             ).url)
         )
     }
@@ -92,7 +98,12 @@ equal the page heading (H1) content, if they are identical then only the service
     }
     @contentBlock
     <div class="govuk-!-display-none-print govuk-!-margin-top-6">
-        @hmrcReportTechnicalIssueHelper()
+        @hmrcReportTechnicalIssue(ReportTechnicalIssue(
+            serviceId = if(isAgent) appConfig.agentOriginToken else appConfig.clientOriginToken,
+            language = if(messages.lang.code == "cy") Cy else En,
+            referrerUrl = contactFrontendConfig.referrerUrl,
+            baseUrl = contactFrontendConfig.baseUrl
+        ))
     </div>
 }
 

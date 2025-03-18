@@ -26,4 +26,4 @@
 
 <p class="govuk-body">@messages(s"$key.p1", agentName.getOrElse(""))</p>
 <p class="govuk-body">@Html(messages(s"$key.p2", s"${appConfig.guidanceAuthoriseAgent}"))</p>
-<p class="govuk-body">@Html(messages(s"$key.p3", routes.SignOutController.signOut().url)) </p>
+<p class="govuk-body">@Html(messages(s"$key.p3", routes.SignOutController.signOut(isAgent = false).url)) </p>

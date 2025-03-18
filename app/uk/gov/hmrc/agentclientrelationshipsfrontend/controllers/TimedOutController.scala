@@ -32,7 +32,7 @@ class TimedOutController @Inject()(
                                     mcc: MessagesControllerComponents
                                   )(implicit appConfig: AppConfig) extends FrontendController(mcc):
 
-  def timedOut(continueUrl: RedirectUrl, serviceHeader: String): Action[AnyContent] = Action.async:
+  def timedOut(continueUrl: RedirectUrl, serviceHeader: String, isAgent: Boolean): Action[AnyContent] = Action.async:
     request =>
       given MessagesRequest[AnyContent] = request
-      Future.successful(Ok(timedOutView(Some(validateRedirectUrl(continueUrl)), Some(serviceHeader))))
+      Future.successful(Ok(timedOutView(Some(validateRedirectUrl(continueUrl)), Some(serviceHeader), isAgent)))

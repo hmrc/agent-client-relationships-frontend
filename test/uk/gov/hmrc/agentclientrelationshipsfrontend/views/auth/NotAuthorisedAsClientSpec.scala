@@ -55,7 +55,7 @@ class NotAuthorisedAsClientSpec extends ViewSpecSupport with BeforeAndAfterEach 
       doc.mainContent.extractText(p, 2).value shouldBe Expected.para2
     }
     "have a link button" in {
-      doc.mainContent.extractLinkButton(1).value shouldBe TestLink(Expected.button, routes.SignOutController.signOut().url)
+      doc.mainContent.extractLinkButton(1).value shouldBe TestLink(Expected.button, routes.SignOutController.signOut(isAgent = false).url)
     }
   }
 }
