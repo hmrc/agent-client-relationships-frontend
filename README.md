@@ -23,7 +23,6 @@ Currently this service supports the following invitations:
 - CBC
 - Pillar 2
 
-Feature flags exist for each service and for requirement of known facts.
 
 ### Running the tests with coverage
 
