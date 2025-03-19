@@ -54,7 +54,7 @@ class AuthorisationControllerISpec extends ComponentSpecHelper {
   "GET /cannot-confirm-identity" should {
     "return FORBIDDEN with the CannotConfirmIdentity view when there's no journeyId" in {
       val result = get(routes.AuthorisationController.cannotConfirmIdentity(None, Some(RedirectUrl(testUrl))).url)
-
+      
       result.status shouldBe FORBIDDEN
     }
     "return FORBIDDEN with the IvTechDifficulties view when the journey status is TechnicalIssue" in {
