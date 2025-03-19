@@ -63,7 +63,7 @@ class DeclineRequestPageSpec extends ViewSpecSupport:
     def introductionParagraph(role: String, service: String): String =
       s"$newAgentName want to be your ${messages(s"confirmDecline.$role")} for ${messages(service)}."
     val guidanceLink =
-      "Find out how main and supporting can act for you(opens in a new tab)."
+      "Find out how main and supporting agents can act for you (opens in new tab)."
     def ifYouDeclineParagraph(role: String, service: String): String =
       s"If you decline the request from $newAgentName, they will not be able to act as your " +
         s"${messages(s"confirmDecline.$role")} for ${messages(service)}."
