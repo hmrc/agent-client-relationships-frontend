@@ -62,8 +62,8 @@ class DeclineRequestPageSpec extends ViewSpecSupport:
     def caption(service: String): String = messages(service)
     def introductionParagraph(role: String, service: String): String =
       s"$newAgentName want to be your ${messages(s"confirmDecline.$role")} for ${messages(service)}."
-    val guidanceParagraph =
-      "Read the guidance about the difference between main agents and supporting agents (opens in a new tab)."
+    val guidanceLink =
+      "Find out how main and supporting agents can act for you (opens in new tab)."
     def ifYouDeclineParagraph(role: String, service: String): String =
       s"If you decline the request from $newAgentName, they will not be able to act as your " +
         s"${messages(s"confirmDecline.$role")} for ${messages(service)}."
@@ -148,7 +148,7 @@ class DeclineRequestPageSpec extends ViewSpecSupport:
             doc.mainContent.extractText(p, 1).value shouldBe Expected.introductionParagraph(mainRole, service)
 
           "have the agent role guidance paragraph" in :
-            doc.mainContent.extractText("#agent-role-guidance", 1).value shouldBe Expected.guidanceParagraph
+            doc.mainContent.extractText("#agent-role-guidance", 1).value shouldBe Expected.guidanceLink
 
           "have the correct third paragraph" in :
             doc.mainContent.extractText(p, 3).value shouldBe Expected.ifYouDeclineParagraph(mainRole, service)
@@ -195,7 +195,7 @@ class DeclineRequestPageSpec extends ViewSpecSupport:
             doc.mainContent.extractText(p, 1).value shouldBe Expected.introductionParagraph(suppRole, service)
 
           "have the agent role guidance paragraph" in :
-            doc.mainContent.extractText("#agent-role-guidance", 1).value shouldBe Expected.guidanceParagraph
+            doc.mainContent.extractText("#agent-role-guidance", 1).value shouldBe Expected.guidanceLink
 
           "have the correct third paragraph" in :
             doc.mainContent.extractText(p, 3).value shouldBe Expected.ifYouDeclineParagraph(suppRole, service)

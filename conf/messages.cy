@@ -543,7 +543,6 @@ confirmDecline.agent=<translation needed>
 confirmDecline.mainAgent=<translation needed>
 confirmDecline.suppAgent=<translation needed>
 confirmDecline.p1=<translation needed>
-confirmDecline.p2=<translation needed>
 confirmDecline.p2.link=<translation needed>
 confirmDecline.p3=<translation needed>
 confirmDecline.p4=<translation needed>
