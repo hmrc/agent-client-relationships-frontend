@@ -54,7 +54,7 @@ class ManageYourTaxAgentsController @Inject()(
           .put[AuthorisationsCache](DataKey("authorisationsCache"), AuthorisationsCache(
             authorisations = Seq(mytaData.agentsAuthorisations.agentsAuthorisations).flatten.flatMap(_.authorisations))
           )
-      } yield Ok(mytaPage(serviceConfigurationService.allSupportedServices.map(s => (s, serviceConfigurationService.getUrlPart(s))).toMap, mytaData))
+      } yield Ok(mytaPage(serviceConfigurationService.allEnabledServices.map(s => (s, serviceConfigurationService.getUrlPart(s))).toMap, mytaData))
 
   def showConfirmDeauth(id: String): Action[AnyContent] = actions.clientAuthenticate.async:
     implicit request =>
