@@ -40,10 +40,18 @@
 
     @h1(title)
 
-    <p class="govuk-body">@messages(s"$key.p1.$taxService")</p>
-
-    <p class="govuk-body">@messages(s"$key.p2")</p>
-
+    @if(taxService == "income-tax") {
+        <h2 class="govuk-heading-m">@messages(s"$key.h2.$taxService")</h2>
+        <p class="govuk-body">@messages(s"$key.p1.$taxService")</p>
+        <p class="govuk-body">@messages(s"$key.p2.$taxService")</p>
+    <ul class="govuk-list govuk-list--bullet">
+        <li>@messages(s"$key.li1.$taxService")</li>
+        <li>@messages(s"$key.li2.$taxService")</li>
+    </ul>
+    } else {
+            <p class="govuk-body">@messages(s"$key.p1,s$Messages($taxService")")</p>
+            <p class="govuk-body">@messages(s"$key.p2")</p>
+    }
     @govukButton(Button(
         href = Some(routes.ConsentInformationController.show(uid, taxService).url),
         isStartButton = true,
