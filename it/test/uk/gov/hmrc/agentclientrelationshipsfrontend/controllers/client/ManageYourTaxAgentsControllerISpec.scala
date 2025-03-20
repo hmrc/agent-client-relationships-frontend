@@ -152,6 +152,16 @@ class ManageYourTaxAgentsControllerISpec extends ComponentSpecHelper with AuthSt
         val result = post(routes.ManageYourTaxAgentsController.submitDeauth(testAuthorisationCacheId).url)(Map.empty)
         result.status shouldBe BAD_REQUEST
 
+    "return status 404 NOT_FOUND" when :
+
+      "there is no invitation in the cache" in :
+        authoriseAsClient()
+        await(authorisedAgentsCacheService.put[AuthorisationsCache](
+          DataKey("authorisationsCache"),
+          AuthorisationsCache(authorisations = Seq())))
+        val result = post(routes.ManageYourTaxAgentsController.submitDeauth(testAuthorisationCacheId).url)(Map.empty)
+        result.status shouldBe NOT_FOUND
+
     "redirect to manage your tax agents page" when:
 
       "authorisation id is valid but has already been deauthorised" in:
@@ -197,3 +207,31 @@ class ManageYourTaxAgentsControllerISpec extends ComponentSpecHelper with AuthSt
         val result = post(routes.ManageYourTaxAgentsController.submitDeauth(testAuthorisationCacheId).url)(Map("clientConfirmDeauth" -> Seq("true")))
         result.status shouldBe SEE_OTHER
         result.header(LOCATION) shouldBe Some(routes.ManageYourTaxAgentsController.deauthComplete(testAuthorisationCacheId).url)
+
+  "The deauthComplete action" should :
+
+    "render the deauth complete page when a deauthorised invitation is in the cache" in :
+      authoriseAsClient()
+      await(authorisedAgentsCacheService.put[AuthorisationsCache](
+        DataKey("authorisationsCache"),
+        AuthorisationsCache(authorisations = Seq(testAuthorisation.copy(deauthorised = Some(true))))))
+      val result = get(routes.ManageYourTaxAgentsController.deauthComplete(testAuthorisationCacheId).url)
+      result.status shouldBe OK
+
+    "return 404 NOT_FOUND" when :
+
+      "the invitation in the cache is not deauthorised" in :
+        authoriseAsClient()
+        await(authorisedAgentsCacheService.put[AuthorisationsCache](
+          DataKey("authorisationsCache"),
+          AuthorisationsCache(authorisations = Seq(testAuthorisation))))
+        val result = get(routes.ManageYourTaxAgentsController.deauthComplete(testAuthorisationCacheId).url)
+        result.status shouldBe NOT_FOUND
+
+      "there is no invitation in the cache" in :
+        authoriseAsClient()
+        await(authorisedAgentsCacheService.put[AuthorisationsCache](
+          DataKey("authorisationsCache"),
+          AuthorisationsCache(authorisations = Seq())))
+        val result = get(routes.ManageYourTaxAgentsController.deauthComplete(testAuthorisationCacheId).url)
+        result.status shouldBe NOT_FOUND

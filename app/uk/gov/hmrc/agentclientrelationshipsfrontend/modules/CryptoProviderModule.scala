@@ -25,7 +25,7 @@ import java.util.Base64
 
 class CryptoProviderModule extends Module {
 
-  private def aesGcmCryptoInstance(configuration: Configuration): Encrypter & Decrypter =
+  private[modules] def aesGcmCryptoInstance(configuration: Configuration): Encrypter & Decrypter =
     if configuration.underlying.getBoolean("mongoEncryption.enable") then
       SymmetricCryptoFactory.aesGcmCryptoFromConfig("mongoEncryption", configuration.underlying)
     else

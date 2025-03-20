@@ -16,14 +16,14 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers
 
-import play.api.http.Status.{NO_CONTENT, OK, SEE_OTHER}
+import play.api.http.Status.{BAD_REQUEST, INTERNAL_SERVER_ERROR, NOT_FOUND, NO_CONTENT, OK, SEE_OTHER}
 import play.api.libs.json.{JsObject, Json}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.WiremockHelper.{stubGet, stubPut}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentSpecHelper}
 
 import java.time.LocalDate
 
-class AgentCancelInvitationControllerISpec extends ComponentSpecHelper with AuthStubs {
+class AgentCancelInvitationControllerISpec extends ComponentSpecHelper with AuthStubs :
   val arn: String = testArn
   val expiryDate: LocalDate = LocalDate.now().plusDays(10)
 
@@ -43,18 +43,23 @@ class AgentCancelInvitationControllerISpec extends ComponentSpecHelper with Auth
     )
   )
 
-  "GET /manage-authorisation-requests/cancel/:invitationId" should {
-    "return the cancel invitation page" in {
+  "GET /manage-authorisation-requests/cancel/:invitationId" should :
+    "return the cancel invitation page when ACR returns an invitation" in :
       authoriseAsAgent()
       val invitationId = "someInvitationId"
       stubGet(s"/agent-client-relationships/agent/$testArn/authorisation-request-info/$invitationId", OK, authorisationRequestInfoResponseJson().toString)
       val result = get(routes.AgentCancelInvitationController.show(invitationId).url)
       result.status shouldBe OK
-    }
-  }
 
-  "POST /manage-authorisation-requests/confirm-cancellation/:invitationId" should {
-    "redirect us to the cancel invitation complete page when we confirm cancellation" in {
+    "return 500 when ACR does not return an invitation" in :
+      authoriseAsAgent()
+      val invitationId = "someInvitationId"
+      stubGet(s"/agent-client-relationships/agent/$testArn/authorisation-request-info/$invitationId", NOT_FOUND, "")
+      val result = get(routes.AgentCancelInvitationController.show(invitationId).url)
+      result.status shouldBe INTERNAL_SERVER_ERROR
+
+  "POST /manage-authorisation-requests/confirm-cancellation/:invitationId" should :
+    "redirect us to the cancel invitation complete page when we confirm cancellation" in :
       authoriseAsAgent()
       val invitationId = "someInvitationId"
       stubGet(s"/agent-client-relationships/agent/$testArn/authorisation-request-info/$invitationId", OK, authorisationRequestInfoResponseJson().toString)
@@ -62,8 +67,8 @@ class AgentCancelInvitationControllerISpec extends ComponentSpecHelper with Auth
       val result = post(routes.AgentCancelInvitationController.submit(invitationId).url)(Map("agentCancelInvitation" -> Seq("true")))
       result.status shouldBe SEE_OTHER
       result.header("location").value shouldBe routes.AgentCancelInvitationController.complete(invitationId).url
-    }
-    "redirect us to back to the track requests page when we answer NO to cancellation" in {
+
+    "redirect us to back to the track requests page when we answer NO to cancellation" in :
       authoriseAsAgent()
       val invitationId = "someInvitationId"
       stubGet(s"/agent-client-relationships/agent/$testArn/authorisation-request-info/$invitationId", OK, authorisationRequestInfoResponseJson().toString)
@@ -71,17 +76,32 @@ class AgentCancelInvitationControllerISpec extends ComponentSpecHelper with Auth
       val result = post(routes.AgentCancelInvitationController.submit(invitationId).url)(Map("agentCancelInvitation" -> Seq("false")))
       result.status shouldBe SEE_OTHER
       result.header("location").value shouldBe routes.TrackRequestsController.show().url
-    }
-  }
 
-  "GET /manage-authorisation-requests/confirm-cancellation/complete/:invitationId" should {
-    "return the cancel invitation complete page" in {
+    "return 400 and reload the cancel invitation page when there are errors in the form and ACR returns an invitation" in :
+      authoriseAsAgent()
+      val invitationId = "someInvitationId"
+      stubGet(s"/agent-client-relationships/agent/$testArn/authorisation-request-info/$invitationId", OK, authorisationRequestInfoResponseJson().toString)
+      val result = post(routes.AgentCancelInvitationController.submit(invitationId).url)(Map("agentCancelInvitation" -> Seq("")))
+      result.status shouldBe BAD_REQUEST
+
+    "return 500 when there are errors in the form and ACR does not return an invitation" in :
+      authoriseAsAgent()
+      val invitationId = "someInvitationId"
+      stubGet(s"/agent-client-relationships/agent/$testArn/authorisation-request-info/$invitationId", NOT_FOUND, "")
+      val result = post(routes.AgentCancelInvitationController.submit(invitationId).url)(Map("agentCancelInvitation" -> Seq("")))
+      result.status shouldBe INTERNAL_SERVER_ERROR
+
+  "GET /manage-authorisation-requests/confirm-cancellation/complete/:invitationId" should :
+    "return the cancel invitation complete page" in :
       authoriseAsAgent()
       val invitationId = "someInvitationId"
       stubGet(s"/agent-client-relationships/agent/$testArn/authorisation-request-info/$invitationId", OK, authorisationRequestInfoResponseJson().toString)
       val result = get(routes.AgentCancelInvitationController.complete(invitationId).url)
       result.status shouldBe OK
-    }
-  }
 
-}
+    "return 500 when ACR does not return an invitation" in :
+      authoriseAsAgent()
+      val invitationId = "someInvitationId"
+      stubGet(s"/agent-client-relationships/agent/$testArn/authorisation-request-info/$invitationId", NOT_FOUND, "")
+      val result = get(routes.AgentCancelInvitationController.complete(invitationId).url)
+      result.status shouldBe INTERNAL_SERVER_ERROR

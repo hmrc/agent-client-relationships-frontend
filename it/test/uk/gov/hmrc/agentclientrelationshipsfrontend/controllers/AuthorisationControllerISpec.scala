@@ -20,7 +20,6 @@ import play.api.i18n.{Messages, MessagesApi}
 import play.api.libs.json.Json
 import play.api.libs.ws.{BodyReadable, DefaultBodyReadables}
 import play.api.test.Helpers.*
-import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.ComponentSpecHelper
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.WiremockHelper.stubGet
 import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl
@@ -28,8 +27,6 @@ import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl
 class AuthorisationControllerISpec extends ComponentSpecHelper {
 
   given BodyReadable[String] = DefaultBodyReadables.readableAsString
-
-  implicit val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
 
   implicit val messages: Messages = app.injector.instanceOf[MessagesApi].preferred(request)
 

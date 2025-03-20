@@ -35,6 +35,7 @@ class UrlHelperSpec extends AnyWordSpecLike with Matchers with OptionValues with
   }
 
   val testUrl = "/url"
+  val testUrlAbsolute = "http://localhost:1234/url"
   val key1 = "key1"
   val param1 = "param1"
   val key2 = "key2"
@@ -42,22 +43,43 @@ class UrlHelperSpec extends AnyWordSpecLike with Matchers with OptionValues with
   val keyUrl = "keyUrl"
 
   "addParamsToUrl" should {
+
     "add the list of parameters to a url without any" in {
       val url = UrlHelper.addParamsToUrl(testUrl, (key1, Some(param1)), (key2, Some(param2)))
 
       url shouldBe "/url?key1=param1&key2=param2"
     }
+
     "add the list of parameters to a url without some appended already" in {
       val urlWithParams = UrlHelper.addParamsToUrl(testUrl, (key1, Some(param1)))
       val url = UrlHelper.addParamsToUrl(urlWithParams, (key2, Some(param2)))
 
       url shouldBe "/url?key1=param1&key2=param2"
     }
+
+    "add the list of parameters cleanly to a url that ends with '?'" in {
+      val url = UrlHelper.addParamsToUrl(testUrl + "?", (key1, Some(param1)))
+
+      url shouldBe "/url?key1=param1"
+    }
+
+    "add the list of parameters cleanly to a url that ends with '&'" in {
+      val urlWithParams = UrlHelper.addParamsToUrl(testUrl, (key1, Some(param1)))
+      val url = UrlHelper.addParamsToUrl(urlWithParams + "&", (key2, Some(param2)))
+
+      url shouldBe "/url?key1=param1&key2=param2"
+    }
+
     "encode parameters it is trying to append" in {
       val paramUrl = UrlHelper.addParamsToUrl(testUrl, (key1, Some(param1)), (key2, Some(param2)))
       val url = UrlHelper.addParamsToUrl(testUrl, (keyUrl, Some(paramUrl)))
 
       url shouldBe "/url?keyUrl=%2Furl%3Fkey1%3Dparam1%26key2%3Dparam2"
+    }
+
+    "not alter the url if no parameters are provided" in {
+      val url = UrlHelper.addParamsToUrl(testUrl)
+      url shouldBe testUrl
     }
   }
 
@@ -79,6 +101,31 @@ class UrlHelperSpec extends AnyWordSpecLike with Matchers with OptionValues with
 
       intercept[IllegalArgumentException](UrlHelper.validateRedirectUrl(RedirectUrl(testUrl))).getMessage shouldBe
         "Provided URL [http://invalidhost.com/url] doesn't comply with redirect policy"
+    }
+  }
+
+  "getRedirectUrl" should {
+
+    "return a relative url" in {
+      val url = UrlHelper.getRedirectUrl(testUrl)
+      url shouldBe Some(testUrl)
+    }
+
+    "return an absolute url if the host is in the allow list" in {
+      when(appConfig.allowedRedirectHosts).thenReturn(Set("localhost"))
+      val url = UrlHelper.getRedirectUrl(testUrlAbsolute)
+      url shouldBe Some(testUrlAbsolute)
+    }
+
+    "return None when the absolute url host is not in the allow list" in {
+      when(appConfig.allowedRedirectHosts).thenReturn(Set(""))
+      val url = UrlHelper.getRedirectUrl(testUrlAbsolute)
+      url shouldBe None
+    }
+
+    "return None when the url contains an invalid character" in {
+      val url = UrlHelper.getRedirectUrl("/invalid-@-character")
+      url shouldBe None
     }
   }
 }

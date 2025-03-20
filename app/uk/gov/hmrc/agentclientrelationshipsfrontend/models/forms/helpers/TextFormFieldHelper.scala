@@ -23,8 +23,7 @@ import play.api.data.validation.*
 object TextFormFieldHelper extends FormFieldHelper {
   // all text fields in this service are for ids or codes, so we strip all white spaces
   private def stripWhiteSpaces(str: String): String = str.trim.replaceAll("\\s", "")
-  val emptyMapping: (String, Mapping[String]) = "" -> optional(text).transform(_.getOrElse(""), (Some(_)): String => Option[String])
-  
+
   def textFieldMapping(fieldName: String, formMessageKey: String, regex: String = ".*"): Mapping[String] = {
     optional(text)
       .verifying(validateText(fieldName, formMessageKey, regex))

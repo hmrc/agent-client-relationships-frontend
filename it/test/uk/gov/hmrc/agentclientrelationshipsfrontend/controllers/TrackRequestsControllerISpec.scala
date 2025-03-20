@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers
 
-import play.api.http.Status.{NOT_FOUND, OK, SEE_OTHER}
+import play.api.http.Status.{INTERNAL_SERVER_ERROR, NOT_FOUND, OK, SEE_OTHER}
 import play.api.libs.json.{JsObject, Json}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.routes as journeyRoutes
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.Invitation
@@ -28,7 +28,7 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentS
 
 import java.time.{Instant, LocalDate}
 
-class TrackRequestsControllerISpec extends ComponentSpecHelper with AuthStubs {
+class TrackRequestsControllerISpec extends ComponentSpecHelper with AuthStubs :
   val arn: String = testArn
   val expiryDate: LocalDate = LocalDate.now().plusDays(10)
   val lastUpdated: Instant = Instant.now()
@@ -86,43 +86,37 @@ class TrackRequestsControllerISpec extends ComponentSpecHelper with AuthStubs {
 
   val trackRequestsService: TrackRequestsService = app.injector.instanceOf[TrackRequestsService]
 
-  "GET /manage-authorisation-requests" should {
-    "return the manage authorisation requests page" in {
+  "GET /manage-authorisation-requests" should :
+    "return the manage authorisation requests page" in :
       authoriseAsAgent()
       stubGet(trackRequestsUrl(1, None, None), OK, testTrackRequestsResponseJson().toString)
       val result = get(routes.TrackRequestsController.show(1).url)
       result.status shouldBe OK
-    }
-  }
 
-  "POST /manage-authorisation-requests" should {
-    "return the manage authorisation requests page when submitting filters" in {
+  "POST /manage-authorisation-requests" should :
+    "return the manage authorisation requests page when submitting filters" in :
       authoriseAsAgent()
       stubGet(trackRequestsUrl(1, Some("Pending"), None), OK, testTrackRequestsResponseJson().toString)
       val result = post(routes.TrackRequestsController.submitFilters.url)(Map("statusFilter" -> Seq("Pending")))
       result.status shouldBe OK
-    }
-  }
 
-  "GET /manage-authorisation-requests/resend/:invitationId" should {
-    "return the resend invitation link page when requested with a valid invitation id" in {
+  "GET /manage-authorisation-requests/resend/:invitationId" should :
+    "return the resend invitation link page when requested with a valid invitation id" in :
       authoriseAsAgent()
       val invitationId = "someInvitationId"
       stubGet(s"/agent-client-relationships/agent/$testArn/authorisation-request-info/$invitationId", OK, authorisationRequestInfoResponseJson().toString)
       val result = get(routes.TrackRequestsController.resendInvitation(invitationId).url)
       result.status shouldBe OK
-    }
-    "return Page Not Found when non-existent invitation id used in url" in {
+
+    "return Page Not Found when non-existent invitation id used in url" in :
       authoriseAsAgent()
       val invitationId = "nonExistentInvitationId"
       stubGet(s"/agent-client-relationships/agent/$testArn/authorisation-request-info/$invitationId", 404, "")
       val result = get(routes.TrackRequestsController.resendInvitation(invitationId).url)
       result.status shouldBe NOT_FOUND
-    }
-  }
 
-  "GET /manage-authorisation-requests/restart/:invitationId" should {
-    "redirect us into the authorisation request journey at known fact stage when known fact required" in {
+  "GET /manage-authorisation-requests/restart/:invitationId" should :
+    "redirect us into the authorisation request journey at known fact stage when known fact required" in :
       authoriseAsAgent()
       val invitationId = "someInvitationId"
       stubGet(s"/agent-client-relationships/agent/$testArn/authorisation-request-info/$invitationId", OK, authorisationRequestInfoResponseJson().toString)
@@ -130,8 +124,8 @@ class TrackRequestsControllerISpec extends ComponentSpecHelper with AuthStubs {
       val result = get(routes.TrackRequestsController.restartInvitation(invitationId).url)
       result.status shouldBe SEE_OTHER
       result.header("location").value shouldBe journeyRoutes.EnterClientFactController.show(AgentJourneyType.AuthorisationRequest).url
-    }
-    "redirect us into the authorisation request journey at confirm client stage when known fact not required" in {
+
+    "redirect us into the authorisation request journey at confirm client stage when known fact not required" in :
       authoriseAsAgent()
       val invitationId = "someInvitationId"
       stubGet(s"/agent-client-relationships/agent/$testArn/authorisation-request-info/$invitationId", OK, authorisationRequestInfoResponseJson().toString)
@@ -139,11 +133,16 @@ class TrackRequestsControllerISpec extends ComponentSpecHelper with AuthStubs {
       val result = get(routes.TrackRequestsController.restartInvitation(invitationId).url)
       result.status shouldBe SEE_OTHER
       result.header("location").value shouldBe journeyRoutes.ConfirmClientController.show(AgentJourneyType.AuthorisationRequest).url
-    }
-  }
 
-  "GET /manage-authorisation-requests/deauth/:invitationId" should {
-    "redirect us into the cancel authorisation request journey at confirm cancellation stage" in {
+    "return 500 when ACR does not return an invitation" in:
+      authoriseAsAgent()
+      val invitationId = "someInvitationId"
+      stubGet(s"/agent-client-relationships/agent/$testArn/authorisation-request-info/$invitationId", NOT_FOUND, "")
+      val result = get(routes.TrackRequestsController.restartInvitation(invitationId).url)
+      result.status shouldBe INTERNAL_SERVER_ERROR
+
+  "GET /manage-authorisation-requests/deauth/:invitationId" should :
+    "redirect us into the cancel authorisation request journey at confirm cancellation stage" in :
       authoriseAsAgent()
       val invitationId = "someInvitationId"
       stubGet(s"/agent-client-relationships/agent/$testArn/authorisation-request-info/$invitationId", OK, authorisationRequestInfoResponseJson().toString)
@@ -151,7 +150,10 @@ class TrackRequestsControllerISpec extends ComponentSpecHelper with AuthStubs {
       val result = get(routes.TrackRequestsController.deAuthFromInvitation(invitationId).url)
       result.status shouldBe SEE_OTHER
       result.header("location").value shouldBe journeyRoutes.CheckYourAnswersController.show(AgentJourneyType.AgentCancelAuthorisation).url
-    }
-  }
 
-}
+    "return 500 when ACR does not return an invitation" in :
+      authoriseAsAgent()
+      val invitationId = "someInvitationId"
+      stubGet(s"/agent-client-relationships/agent/$testArn/authorisation-request-info/$invitationId", NOT_FOUND, "")
+      val result = get(routes.TrackRequestsController.deAuthFromInvitation(invitationId).url)
+      result.status shouldBe INTERNAL_SERVER_ERROR

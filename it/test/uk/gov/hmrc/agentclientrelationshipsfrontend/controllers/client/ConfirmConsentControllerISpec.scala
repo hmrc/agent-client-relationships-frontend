@@ -48,9 +48,15 @@ class ConfirmConsentControllerISpec extends ComponentSpecHelper with AuthStubs w
 
     "return status 200 OK" when:
 
-      "a service key and agent name are retrieved from the session" in:
+      "a service key and agent name are retrieved from the session, with a consent answer already defined" in:
         authoriseAsClient()
         await(journeyService.saveJourney(journeyModel))
+        val result = get(routes.ConfirmConsentController.show.url)
+        result.status shouldBe OK
+
+      "a service key and agent name are retrieved from the session, with no consent answer defined" in :
+        authoriseAsClient()
+        await(journeyService.saveJourney(journeyModel.copy(consent = None)))
         val result = get(routes.ConfirmConsentController.show.url)
         result.status shouldBe OK
 
@@ -99,11 +105,12 @@ class ConfirmConsentControllerISpec extends ComponentSpecHelper with AuthStubs w
         result.status shouldBe BAD_REQUEST
 
     "kick the user out to MYTA" when :
+
       "a service key is not present in the session" in:
         authoriseAsClient()
         val badJourneyModel = journeyModel.copy(serviceKey = None)
         await(journeyService.saveJourney(badJourneyModel))
-        val result = get(routes.ConfirmConsentController.show.url)
+        val result = post(routes.ConfirmConsentController.submit.url)(Map("confirmConsent" -> Seq("true")))
         result.status shouldBe SEE_OTHER
         result.header("Location").value shouldBe routes.ManageYourTaxAgentsController.show.url
 
@@ -111,6 +118,6 @@ class ConfirmConsentControllerISpec extends ComponentSpecHelper with AuthStubs w
         authoriseAsClient()
         val badJourneyModel = journeyModel.copy(agentName = None)
         await(journeyService.saveJourney(badJourneyModel))
-        val result = get(routes.ConfirmConsentController.show.url)
+        val result = post(routes.ConfirmConsentController.submit.url)(Map("confirmConsent" -> Seq("true")))
         result.status shouldBe SEE_OTHER
         result.header("Location").value shouldBe routes.ManageYourTaxAgentsController.show.url
