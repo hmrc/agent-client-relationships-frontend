@@ -30,7 +30,7 @@ class AuthoriseAgentStartPageSpec extends ViewSpecSupport {
   val viewTemplate: AuthoriseAgentStartPage = app.injector.instanceOf[AuthoriseAgentStartPage]
   val agentName: String = "ABC Accountants"
   val taxServiceNames: Map[String, String] = Map(
-    "income-tax" -> "Income Tax",
+    "income-tax" -> "Making Tax Digital for Income Tax",
     "income-record-viewer" -> "",
     "vat" -> "VAT",
     "capital-gains-tax-uk-property" -> "Capital Gains Tax on UK property account",
@@ -77,8 +77,9 @@ class AuthoriseAgentStartPageSpec extends ViewSpecSupport {
       }
       s"have correct 'Decline' link for $taxService" in {
         val expectedUrl = routes.DeclineRequestController.show(uid, taxService).url
-        doc.mainContent.extractLink(1).value shouldBe TestLink(s"I do not want $agentName to act for me.", expectedUrl)
+        doc.mainContent.extractLink(1).value shouldBe TestLink(s"I do not want $agentName to act for me", expectedUrl)
       }
     }
   }
 }
+
