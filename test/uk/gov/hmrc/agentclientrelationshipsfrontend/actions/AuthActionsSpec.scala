@@ -152,7 +152,8 @@ class AuthActionsSpec extends AnyWordSpecLike with Matchers with OptionValues wi
       val result = controller.clientAuthWithEnrolmentCheck(incomeTax)(fakeRequest)
 
       status(result) shouldBe SEE_OTHER
-      redirectLocation(result).get shouldBe clientRoutes.ClientExitController.showClient(ClientExitType.CannotFindAuthorisationRequest).url
+      redirectLocation(result).get shouldBe clientRoutes.ClientExitController
+        .showClient(ClientExitType.CannotFindAuthorisationRequest, Some(RedirectUrl(appConfig.appExternalUrl + fakeRequest.uri))).url
 
 
     s"authorise an individual client for $incomeRecordViewer with CL250" in :
@@ -168,7 +169,8 @@ class AuthActionsSpec extends AnyWordSpecLike with Matchers with OptionValues wi
       val result = controller.clientAuthWithEnrolmentCheck(incomeRecordViewer)(fakeRequest)
 
       status(result) shouldBe SEE_OTHER
-      redirectLocation(result).get shouldBe clientRoutes.ClientExitController.showClient(ClientExitType.CannotFindAuthorisationRequest).url
+      redirectLocation(result).get shouldBe clientRoutes.ClientExitController
+        .showClient(ClientExitType.CannotFindAuthorisationRequest, Some(RedirectUrl(appConfig.appExternalUrl + fakeRequest.uri))).url
 
 
     s"authorise an individual $capitalGainsTaxUkProperty client with CL50" in :

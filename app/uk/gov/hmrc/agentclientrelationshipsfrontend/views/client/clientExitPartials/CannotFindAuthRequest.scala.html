@@ -16,14 +16,31 @@
 
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.routes
+@import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl
 
 @this()
 
-@(agentName: Option[String])(implicit request: Request[?], messages: Messages, appConfig: AppConfig)
+@(continueUrl: Option[RedirectUrl])(implicit request: Request[?], messages: Messages, appConfig: AppConfig)
 @key = @{
     "cannotFindAuthRequest"
 }
 
-<p class="govuk-body">@messages(s"$key.p1", agentName.getOrElse(""))</p>
-<p class="govuk-body">@Html(messages(s"$key.p2", s"${appConfig.guidanceAuthoriseAgent}"))</p>
-<p class="govuk-body">@Html(messages(s"$key.p3", routes.SignOutController.signOut(isAgent = false).url)) </p>
+<p class="govuk-body">@messages(s"$key.p1")</p>
+<p class="govuk-body">@messages(s"$key.p2")</p>
+<p class="govuk-body">@messages(s"$key.p3") </p>
+<ul class="govuk-list govuk-list--bullet">
+    <li>@messages(s"$key.bullet1")</li>
+    <li>@messages(s"$key.bullet2")</li>
+</ul>
+<ul class="govuk-list">
+    <li>
+        <a class="govuk-link govuk-!-margin-bottom-4" href="@{routes.SignOutController.signOut(continueUrl = continueUrl, isAgent = false).url}">
+        @messages(s"$key.signIn")
+        </a>
+    </li>
+    <li>
+        <a class="govuk-link" href="@{routes.SignOutController.signOut(isAgent = false).url}">
+        @messages(s"$key.signOut")
+        </a>
+    </li>
+</ul>
