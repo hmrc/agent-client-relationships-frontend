@@ -15,6 +15,7 @@
  *@
 
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.services.ClientServiceConfigurationService
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.{Authorisation, ManageYourTaxAgentsData}
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.models.Invitation
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcNewTabLinkHelper
@@ -30,7 +31,8 @@
         govukTabs: GovukTabs,
         govukTable: GovukTable,
         h1: h1,
-        hmrcNewTabLinkHelper: HmrcNewTabLinkHelper
+        hmrcNewTabLinkHelper: HmrcNewTabLinkHelper,
+        clientServiceConfig: ClientServiceConfigurationService
 )
 
 @(supportedServices: Map[String, String], data: ManageYourTaxAgentsData)(implicit request: Request[?], messages: Messages, appConfig: AppConfig)
@@ -53,11 +55,11 @@
 }
 @agentRoleFromService(service: String) = @{
     if(!appConfig.emaEnabled) ""
-    else if(service == "HMRC-MTD-IT-SUPP") messages(s"$key.agentRole.supporting")
+    else if(messages.isDefinedAt(s"$key.agentRole.$service")) messages(s"$key.agentRole.$service")
     else messages(s"$key.agentRole.main")
 }
 @linkFromService(uid: String, service: String, agentName: String) = {
-    <a href="@{routes.ConsentInformationController.show(uid, supportedServices(service)).url}" class="govuk-link">
+    <a href="@{routes.ConsentInformationController.show(uid, supportedServices(clientServiceConfig.getServiceForForm(service))).url}" class="govuk-link">
         @Html(messages(s"$key.currentRequests.action.link", agentName, messages(service), agentRoleFromService(service)))
     </a>
 }
