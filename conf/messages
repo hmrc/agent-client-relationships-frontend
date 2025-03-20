@@ -276,7 +276,7 @@ selectAgentRole.HMRC-MTD-IT.mainToSupporting.guidance=Read the guidance about <a
 selectAgentRole.HMRC-MTD-IT.mainToSupporting.legend=Do you want to change how you act for this client?
 selectAgentRole.HMRC-MTD-IT.mainToSupporting.option=No
 selectAgentRole.HMRC-MTD-IT-SUPP.mainToSupporting.option=Yes, I want to become their supporting agent instead
-selectAgentRole.HMRC-MTD-IT-SUPP.mainToSupporting.hint=If {0} accepts this request, you’ll lose access to some of their Income Tax information and will not be able to submit their end-of-year tax returns.
+selectAgentRole.HMRC-MTD-IT-SUPP.mainToSupporting.hint=If {0} accepts this request, you’ll lose access to some of their Income Tax information and will not be able to submit their tax returns.
 
 selectAgentRole.HMRC-MTD-IT.supportingToMain.header=You are already an agent for {0}
 selectAgentRole.HMRC-MTD-IT.supportingToMain.intro=You are authorised as a supporting agent to help manage {0}’s Making Tax Digital for Income Tax.

@@ -62,7 +62,7 @@ class SelectAgentRolePageSpec extends ViewSpecSupport {
     val noExistingRelationshipHint1 = "Main agents can carry out all tax functions for the client and submit client’s tax returns"
     val noExistingRelationshipHint2 = "Supporting agents can carry out some tax functions for the client, but they cannot submit a client’s tax returns"
 
-    val mainToSupportingHint = s"If $testClientName accepts this request, you’ll lose access to some of their Income Tax information and will not be able to submit their end-of-year tax returns."
+    val mainToSupportingHint = s"If $testClientName accepts this request, you’ll lose access to some of their Income Tax information and will not be able to submit their tax returns."
     val supportingToMainHint = s"If $testClientName accepts this request, you’ll get access to all the Income Tax information you need to deal with HMRC on their behalf."
     val link = "Find out how main and supporting agents can act (opens in new tab)"
   }
