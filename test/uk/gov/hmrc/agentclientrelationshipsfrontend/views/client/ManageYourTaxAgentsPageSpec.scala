@@ -81,16 +81,32 @@ class ManageYourTaxAgentsPageSpec extends ViewSpecSupport {
         agentName = agentName,
         invitations = Seq(
           Invitation(
-            invitationId = "1234567890",
-            service = "HMRC-MTD-IT",
+            invitationId = "4454567890",
+            service = "HMRC-MTD-IT-SUPP",
             clientName = "Some test",
             status = Pending,
             expiryDate = expiryDate,
             lastUpdated = Instant.now()
           ),
           Invitation(
-            invitationId = "123LD67891",
+            invitationId = "336LD67891",
             service = "HMRC-PILLAR2-ORG",
+            clientName = "Some test",
+            status = Pending,
+            expiryDate = expiryDate,
+            lastUpdated = Instant.now()
+          ),
+          Invitation(
+            invitationId = "456LD67891",
+            service = "HMRC-TERSNT-ORG",
+            clientName = "Some test",
+            status = Pending,
+            expiryDate = expiryDate,
+            lastUpdated = Instant.now()
+          ),
+          Invitation(
+            invitationId = "456LD67891",
+            service = "HMRC-CBC-NONUK-ORG",
             clientName = "Some test",
             status = Pending,
             expiryDate = expiryDate,
@@ -102,6 +118,14 @@ class ManageYourTaxAgentsPageSpec extends ViewSpecSupport {
         uid = "1234590",
         agentName = agentName2,
         invitations = Seq(
+          Invitation(
+            invitationId = "7714567891",
+            service = "HMRC-MTD-IT",
+            clientName = "Some test",
+            status = Pending,
+            expiryDate = expiryDate,
+            lastUpdated = Instant.now()
+          ),
           Invitation(
             invitationId = "123456BFX90",
             service = "HMRC-MTD-VAT",
@@ -214,20 +238,38 @@ class ManageYourTaxAgentsPageSpec extends ViewSpecSupport {
         rows = List(
           IndexedSeq(
             "Making Tax Digital for Income Tax",
-            "Main",
+            "Supporting",
             expiryDate.format(dateFormatter),
-            s"Respond to request from $agentName to manage your Making Tax Digital for Income Tax as a Main agent"
+            s"Respond to request from $agentName to manage your Making Tax Digital for Income Tax as a Supporting agent"
           ),
           IndexedSeq(
             "Pillar 2 Top-up Taxes",
             "Main",
             expiryDate.format(dateFormatter),
             s"Respond to request from $agentName to manage your Pillar 2 Top-up Taxes as a Main agent"
+          ),
+          IndexedSeq(
+            "Trusts and Estates",
+            "Main",
+            expiryDate.format(dateFormatter),
+            s"Respond to request from $agentName to manage your Trusts and Estates as a Main agent"
+          ),
+          IndexedSeq(
+            "Country-by-country reporting",
+            "Main",
+            expiryDate.format(dateFormatter),
+            s"Respond to request from $agentName to manage your Country-by-country reporting as a Main agent"
           )
         ))
       doc.mainContent.extractTable(2, 4).value shouldBe TestTable(
         caption = agentName2,
         rows = List(
+          IndexedSeq(
+            "Making Tax Digital for Income Tax",
+            "Main",
+            expiryDate.format(dateFormatter),
+            s"Respond to request from $agentName2 to manage your Making Tax Digital for Income Tax as a Main agent"
+          ),
           IndexedSeq(
             "VAT",
             "Main",

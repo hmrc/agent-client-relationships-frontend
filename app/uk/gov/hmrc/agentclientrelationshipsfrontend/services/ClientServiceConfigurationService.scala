@@ -85,7 +85,7 @@ class ClientServiceConfigurationService @Inject()(implicit appConfig: AppConfig)
     .getOrElse(Set())
 
   // url parts are used in public urls to determine which service
-  def getUrlPart(clientService: String): String = services(getServiceForForm(clientService)).urlPart.head._1
+  def getUrlPart(clientService: String): String = services(getServiceForForm(clientService)).urlPart.keys.head
 
   // when a service only supports one client type we can infer the client type from the service when it's missing
   // from any fast track requests

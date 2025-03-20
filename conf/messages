@@ -803,7 +803,8 @@ manageYourTaxAgents.agentRoles.p2=You can also have ‘supporting’ agents help
 manageYourTaxAgents.agentRoles.guidanceLink=Find out how main and supporting agents can act for you
 
 manageYourTaxAgents.agentRole.main=Main
-manageYourTaxAgents.agentRole.supporting=Supporting
+manageYourTaxAgents.agentRole.HMRC-MTD-IT=Main
+manageYourTaxAgents.agentRole.HMRC-MTD-IT-SUPP=Supporting
 
 manageYourTaxAgents.currentRequests=Current requests
 manageYourTaxAgents.currentRequests.taxService=Tax service
