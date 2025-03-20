@@ -22,7 +22,7 @@ import play.api.mvc.{ActionFunction, Request, Result, WrappedRequest}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.{AsAgent, HMRCCGTPD, HMRCMTDIT}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.routes
-import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.{routes => clientRoutes}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.routes as clientRoutes
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientExitType.CannotFindAuthorisationRequest
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.ClientServiceConfigurationService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.UrlHelper
@@ -35,6 +35,7 @@ import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl
 import uk.gov.hmrc.play.http.HeaderCarrierConverter
 
 import javax.inject.{Inject, Singleton}
+import scala.annotation.nowarn
 import scala.concurrent.{ExecutionContext, Future}
 
 class AgentRequest[A](val arn: String,
@@ -75,6 +76,7 @@ class AuthActions @Inject()(val authConnector: AuthConnector,
   private def userHasEnrolmentForTaxService(taxService: String, enrols: Enrolments): Boolean =
     enrols.enrolments.map(_.key).intersect(serviceConfig.getServiceKeysForUrlPart(taxService)).nonEmpty
 
+  @nowarn("msg=exhaustive") // Disabling "match may not be exhaustive" warning due to Affinity Group match below
   def clientAuthActionWithEnrolmentCheck(taxService: String): ActionFunction[Request, Request] = new ActionFunction[Request, Request]:
     val executionContext: ExecutionContext = ec
 
@@ -104,9 +106,6 @@ class AuthActions @Inject()(val authConnector: AuthConnector,
                 else enrolmentCheck(enrols)
               case (AffinityGroup.Agent, _) =>
                 Future.successful(Redirect(routes.AuthorisationController.cannotViewRequest(Some(RedirectUrl(currentUrl)), Some(taxService))))
-              case (affinityGroup, _) =>
-                logger.warn(s"unknown affinity group: $affinityGroup - cannot determine auth status")
-                Future.successful(Forbidden)
             }
           case _ =>
             logger.warn("the logged in client had no affinity group")
@@ -116,6 +115,7 @@ class AuthActions @Inject()(val authConnector: AuthConnector,
           handleFailure(isAgent = false)
         }
 
+  @nowarn("msg=exhaustive") // Disabling "match may not be exhaustive" warning due to Affinity Group match below
   def clientAuthAction: ActionFunction[Request, Request] = new ActionFunction[Request, Request]:
 
     val executionContext: ExecutionContext = ec
@@ -138,9 +138,6 @@ class AuthActions @Inject()(val authConnector: AuthConnector,
                 else block(request)
               case (AffinityGroup.Agent, _) =>
                 Future.successful(Redirect(routes.AuthorisationController.cannotViewRequest(None)))
-              case (affinityGroup, _) =>
-                logger.warn(s"unknown affinity group: $affinityGroup - cannot determine auth status")
-                Future.successful(Forbidden)
             }
           case _ =>
             logger.warn("the logged in client had no affinity group")
@@ -194,10 +191,13 @@ class AuthActions @Inject()(val authConnector: AuthConnector,
         "continue_url" -> Some(currentUrl)
       ))
     case _: InsufficientEnrolments =>
-      logger.warn(s"Logged in user does not have required enrolments")
+      logger.warn("Logged in user does not have required enrolments")
       if isAgent then Redirect(appConfig.subscriptionUrl) else Forbidden
     case _: UnsupportedAuthProvider =>
-      logger.warn(s"user logged in with unsupported auth provider")
+      logger.warn("user logged in with unsupported auth provider")
+      Forbidden
+    case _: UnsupportedAffinityGroup =>
+      logger.warn("unsupported affinity group - cannot determine auth status")
       Forbidden
   }
 }

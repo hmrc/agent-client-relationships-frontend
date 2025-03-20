@@ -104,134 +104,150 @@ class AuthActionsSpec extends AnyWordSpecLike with Matchers with OptionValues wi
   val fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
   val testArn = "testArn"
 
-  "agentAuthAction" should {
-    "authorise an AS Agent with ARN" in {
+  "agentAuthAction" should :
+    "authorise an AS Agent with ARN" in :
       val controller = agentControllerSetup(Some(testArn))
       val result = controller.agentAuth()(fakeRequest)
 
       status(result) shouldBe OK
-    }
-    "block an AS Agent without ARN" in {
+
+    "block an AS Agent without ARN" in :
       val controller = agentControllerSetup(None)
       val result = controller.agentAuth()(fakeRequest)
 
       status(result) shouldBe FORBIDDEN
-    }
-    "redirect a user without session to the login" in {
+
+    "redirect a user without session to the login" in :
       val controller = failingControllerSetup(BearerTokenExpired(""))
       val result = controller.agentAuth()(fakeRequest)
 
       status(result) shouldBe SEE_OTHER
       redirectLocation(result).value should startWith("http://localhost:9099/bas-gateway/sign-in")
-    }
-    "redirect an agent without the AS enrolment to the subscription url" in {
+
+    "redirect an agent without the AS enrolment to the subscription url" in :
       val controller = failingControllerSetup(InsufficientEnrolments(""))
       val result = controller.agentAuth()(fakeRequest)
 
       status(result) shouldBe SEE_OTHER
       redirectLocation(result).value shouldBe "http://localhost:9437/agent-subscription/start"
-    }
-    "block an agent with the wrong auth provider" in {
+
+    "block an agent with the wrong auth provider" in :
       val controller = failingControllerSetup(UnsupportedAuthProvider(""))
       val result = controller.agentAuth()(fakeRequest)
 
       status(result) shouldBe FORBIDDEN
-    }
-  }
 
-  "clientAuthActionWithEnrolmentCheck" should {
-    s"authorise an individual client for $incomeTax with CL250" in {
+
+  "clientAuthActionWithEnrolmentCheck" should :
+    s"authorise an individual client for $incomeTax with CL250" in :
       val controller = clientControllerSetup(Individual, L250, Set(Enrolment(HMRCMTDIT)))
 
       val result = controller.clientAuthWithEnrolmentCheck(incomeTax)(fakeRequest)
 
       status(result) shouldBe OK
-    }
-    s"redirect to client exit CannotFindAuthorisationRequest for $incomeTax" in {
+
+    s"redirect to client exit CannotFindAuthorisationRequest for $incomeTax" in :
       val controller = clientControllerSetup(Individual, L250, Set(Enrolment(HMRCMTDVAT)))
 
       val result = controller.clientAuthWithEnrolmentCheck(incomeTax)(fakeRequest)
 
       status(result) shouldBe SEE_OTHER
       redirectLocation(result).get shouldBe clientRoutes.ClientExitController.showClient(ClientExitType.CannotFindAuthorisationRequest).url
-    }
 
-    s"authorise an individual client for $incomeRecordViewer with CL250" in {
+
+    s"authorise an individual client for $incomeRecordViewer with CL250" in :
       val controller = clientControllerSetup(Individual, L250, Set(Enrolment(HMRCNI)))
 
       val result = controller.clientAuthWithEnrolmentCheck(incomeRecordViewer)(fakeRequest)
 
       status(result) shouldBe OK
-    }
-    s"redirect to client exit CannotFindAuthorisationRequest for $incomeRecordViewer" in {
+
+    s"redirect to client exit CannotFindAuthorisationRequest for $incomeRecordViewer" in :
       val controller = clientControllerSetup(Individual, L250, Set(Enrolment(HMRCMTDVAT)))
 
       val result = controller.clientAuthWithEnrolmentCheck(incomeRecordViewer)(fakeRequest)
 
       status(result) shouldBe SEE_OTHER
       redirectLocation(result).get shouldBe clientRoutes.ClientExitController.showClient(ClientExitType.CannotFindAuthorisationRequest).url
-    }
 
-    s"authorise an individual $capitalGainsTaxUkProperty client with CL50" in {
+
+    s"authorise an individual $capitalGainsTaxUkProperty client with CL50" in :
       val controller = clientControllerSetup(Individual, L50, Set(Enrolment(HMRCCGTPD)))
       val result = controller.clientAuthWithEnrolmentCheck(capitalGainsTaxUkProperty)(fakeRequest)
 
       status(result) shouldBe OK
-    }
-    "authorise an organisation client with CL50" in {
+
+    "authorise an organisation client with CL50" in :
       val controller = clientControllerSetup(Organisation, L50, Set(Enrolment(HMRCMTDVAT)))
       val result = controller.clientAuthWithEnrolmentCheck(vat)(fakeRequest)
 
       status(result) shouldBe OK
-    }
-    "authorise an organisation ITSA client with CL250" in {
+
+    "authorise an organisation ITSA client with CL250" in :
       val controller = clientControllerSetup(Organisation, L250, Set(Enrolment(HMRCMTDIT)))
       val result = controller.clientAuthWithEnrolmentCheck(incomeTax)(fakeRequest)
 
       status(result) shouldBe OK
-    }
-    "redirect an individual client with less than CL250 to IV" in {
+
+    "redirect an individual client with less than CL250 to IV" in :
       val controller = clientControllerSetup(Individual, L200, Set(Enrolment(HMRCMTDIT)))
       val result = controller.clientAuthWithEnrolmentCheck(incomeTax)(fakeRequest)
 
       status(result) shouldBe SEE_OTHER
       redirectLocation(result).value should startWith("http://localhost:9938/mdtp/uplift")
-    }
-    "redirect an organisation ITSA client with less than CL250 to IV" in {
+
+    "redirect an organisation ITSA client with less than CL250 to IV" in :
       val controller = clientControllerSetup(Organisation, L200, Set(Enrolment(HMRCMTDIT)))
       val result = controller.clientAuthWithEnrolmentCheck(incomeTax)(fakeRequest)
 
       status(result) shouldBe SEE_OTHER
       redirectLocation(result).value should startWith("http://localhost:9938/mdtp/uplift")
-    }
-    "redirect an agent to Cannot view request page" in {
+
+    "redirect an agent to Cannot view request page" in :
       val controller = clientControllerSetup(Agent, L50, Set(Enrolment("HMRC-AS-AGENT")))
       val result = controller.clientAuthWithEnrolmentCheck(incomeTax)(fakeRequest)
 
       status(result) shouldBe SEE_OTHER
       redirectLocation(result).value shouldBe
         routes.AuthorisationController.cannotViewRequest(Some(RedirectUrl(appConfig.appExternalUrl + fakeRequest.uri)), Some("income-tax")).url
-    }
-    "redirect a user without session to the login" in {
+
+    "redirect a user without session to the login" in :
       val controller = failingControllerSetup(BearerTokenExpired(""))
       val result = controller.clientAuthWithEnrolmentCheck(incomeTax)(fakeRequest)
 
       status(result) shouldBe SEE_OTHER
       redirectLocation(result).value should startWith("http://localhost:9099/bas-gateway/sign-in")
-    }
-    "block a client without required enrolments (can't happen in theory)" in {
+
+    "block a client without required enrolments (can't happen in theory)" in :
       val controller = failingControllerSetup(InsufficientEnrolments(""))
       val result = controller.clientAuthWithEnrolmentCheck(incomeTax)(fakeRequest)
 
       status(result) shouldBe FORBIDDEN
-    }
-    "block a client with the wrong auth provider" in {
+
+    "block a client with the wrong auth provider" in :
       val controller = failingControllerSetup(UnsupportedAuthProvider(""))
       val result = controller.clientAuthWithEnrolmentCheck(incomeTax)(fakeRequest)
 
       status(result) shouldBe FORBIDDEN
-    }
-  }
+
+    "block a client with an unsupported affinity group" in :
+      val controller = failingControllerSetup(UnsupportedAffinityGroup(""))
+      val result = controller.clientAuthWithEnrolmentCheck(incomeTax)(fakeRequest)
+
+      status(result) shouldBe FORBIDDEN
+
+    "block a client with no affinity group" in :
+      val retrieval: Future[Option[AffinityGroup] ~ ConfidenceLevel.L250.type ~ Enrolments] =
+        Future.successful(None ~ L250 ~ Enrolments(Set(Enrolment(HMRCMTDIT))))
+      val controller = new FakeController(
+        new AuthActions(FakePassingAuthConnector(retrieval), appConfig, serviceConfig),
+        defaultActionBuilder
+      )
+      val result = controller.clientAuthWithEnrolmentCheck(incomeTax)(fakeRequest)
+
+      status(result) shouldBe FORBIDDEN
+
+
 
   "clientAuthAction" should:
 
@@ -292,6 +308,23 @@ class AuthActionsSpec extends AnyWordSpecLike with Matchers with OptionValues wi
     "block a client with the wrong auth provider" in:
       val controller = failingControllerSetup(UnsupportedAuthProvider(""))
       val result = controller.clientAuth()(fakeRequest)
+      status(result) shouldBe FORBIDDEN
+
+    "block a client with an unsupported affinity group" in :
+      val controller = failingControllerSetup(UnsupportedAffinityGroup(""))
+      val result = controller.clientAuth()(fakeRequest)
+
+      status(result) shouldBe FORBIDDEN
+
+    "block a client with no affinity group" in :
+      val retrieval: Future[Option[AffinityGroup] ~ ConfidenceLevel.L250.type ~ Enrolments] =
+        Future.successful(None ~ L250 ~ Enrolments(Set(Enrolment(HMRCMTDIT))))
+      val controller = new FakeController(
+        new AuthActions(FakePassingAuthConnector(retrieval), appConfig, serviceConfig),
+        defaultActionBuilder
+      )
+      val result = controller.clientAuth()(fakeRequest)
+
       status(result) shouldBe FORBIDDEN
 }
 

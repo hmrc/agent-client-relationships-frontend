@@ -28,6 +28,7 @@ import play.api.libs.ws.{DefaultWSCookie, WSClient, WSCookie, WSRequest, WSRespo
 import play.api.mvc.{AnyContentAsFormUrlEncoded, Request, Session, SessionCookieBaker}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
+import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.crypto.PlainText
 import uk.gov.hmrc.http.SessionKeys
 import uk.gov.hmrc.play.bootstrap.frontend.filters.crypto.SessionCookieCrypto
@@ -77,6 +78,7 @@ trait ComponentSpecHelper
 
   implicit val ws: WSClient = app.injector.instanceOf[WSClient]
   implicit val executionContext: ExecutionContext = app.injector.instanceOf[ExecutionContext]
+  val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
 
   override def beforeAll(): Unit = {
     startWiremock()

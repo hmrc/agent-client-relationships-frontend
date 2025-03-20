@@ -24,7 +24,7 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.services.ClientJourneyServic
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.WiremockHelper.stubGet
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentSpecHelper}
 
-class ConfirmationControllerISpec extends ComponentSpecHelper with AuthStubs {
+class ConfirmationControllerISpec extends ComponentSpecHelper with AuthStubs :
 
   val testInvitationId: String = "AB1234567890"
 
@@ -64,20 +64,25 @@ class ConfirmationControllerISpec extends ComponentSpecHelper with AuthStubs {
     super.beforeEach()
   }
 
-  "GET /authorisation-response/confirmation" should {
-    "redirect to MYTA when no journey session present" in {
+  "GET /authorisation-response/confirmation" should :
+
+    "redirect to MYTA when no journey session present" in :
       authoriseAsClient()
       val result = get(routes.ConfirmationController.show.url)
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe "/agent-client-relationships/manage-your-tax-agents"
-    }
-    List(Accepted, Rejected, PartialAuth).foreach(decision => s"display the confirmation page for ${decision.toString} when the invitation id is in journeyComplete" in {
+
+    List(Accepted, Rejected, PartialAuth).foreach(decision => s"display the confirmation page for ${decision.toString} when the invitation id is in journeyComplete" in :
       authoriseAsClientWithEnrolments("HMRC-MTD-IT")
       stubGet(getAuthorisationRequestUrl, OK, testGetAuthorisationRequestInfoResponse("HMRC-MTD-IT", decision).toString())
       await(journeyService.saveJourney(completeJourney))
       val result = get(routes.ConfirmationController.show.url)
       result.status shouldBe OK
-    })
-  }
+    )
 
-}
+    "return 500 when ACR does not return an invitation for the invitationId in session" in :
+      authoriseAsClient()
+      stubGet(getAuthorisationRequestUrl, NOT_FOUND, "")
+      await(journeyService.saveJourney(completeJourney))
+      val result = get(routes.ConfirmationController.show.url)
+      result.status shouldBe INTERNAL_SERVER_ERROR

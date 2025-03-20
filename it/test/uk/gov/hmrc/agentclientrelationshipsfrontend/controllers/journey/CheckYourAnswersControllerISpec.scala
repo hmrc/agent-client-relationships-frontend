@@ -88,45 +88,51 @@ class CheckYourAnswersControllerISpec extends ComponentSpecHelper with AuthStubs
     super.beforeEach()
   }
 
-  "GET /authorisation-request/confirm" should {
-    "redirect to enter client id when client details are missing" in {
+  "GET /authorisation-request/confirm" should :
+    "redirect to enter client id when client details are missing" in :
       authoriseAsAgent()
       await(journeyService.saveJourney(AgentJourney(journeyType = AgentJourneyType.AuthorisationRequest, clientType = Some("personal"), clientService = Some("HMRC-MTD-IT"))))
       val result = get(routes.CheckYourAnswersController.show(AgentJourneyType.AuthorisationRequest).url)
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe routes.EnterClientIdController.show(AgentJourneyType.AuthorisationRequest).url
-    }
+
+    "redirect to ASA home if journeyComplete is defined" in :
+      authoriseAsAgent()
+      await(journeyService.saveJourney(AgentJourney(journeyType = AgentJourneyType.AuthorisationRequest, journeyComplete = Some("ABC"))))
+      val result = get(routes.CheckYourAnswersController.show(AgentJourneyType.AuthorisationRequest).url)
+      result.status shouldBe SEE_OTHER
+      result.header("Location").value shouldBe appConfig.agentServicesAccountHomeUrl
+
     servicesWithSingleAgentRole
-      .foreach(service => s"display the CYA page on authorisation request for $service journey" in {
+      .foreach(service => s"display the CYA page on authorisation request for $service journey" in :
         authoriseAsAgent()
         await(journeyService.saveJourney(singleAgentRequestJourney(service)))
         val result = get(routes.CheckYourAnswersController.show(AgentJourneyType.AuthorisationRequest).url)
         result.status shouldBe OK
-      })
+      )
     servicesWithAgentRoles
       .foreach(service => existingAgentRoles
-        .foreach(role => s"display the CYA page on authorisation request for $service journey when existing role is ${role.getOrElse("none")}" in {
+        .foreach(role => s"display the CYA page on authorisation request for $service journey when existing role is ${role.getOrElse("none")}" in :
         authoriseAsAgent()
         await(journeyService.saveJourney(agentRoleBasedRequestJourney(service, role)))
         val result = get(routes.CheckYourAnswersController.show(AgentJourneyType.AuthorisationRequest).url)
         result.status shouldBe OK
-      }))
+      ))
     servicesWithSingleAgentRole
-      .foreach(service => s"display the confirm cancellation page for $service journey" in {
+      .foreach(service => s"display the confirm cancellation page for $service journey" in :
         authoriseAsAgent()
         await(journeyService.saveJourney(existingAuthCancellationJourney(service)))
         val result = get(routes.CheckYourAnswersController.show(AgentJourneyType.AgentCancelAuthorisation).url)
         result.status shouldBe OK
-      })
+      )
     servicesWithAgentRoles
       .foreach(service => existingAgentRoles.collect({ case Some(role) => role }) // we don't test for None as it should not be possible
-        .foreach(role => s"display the confirm cancellation page for $service journey when existing role is $role" in {
+        .foreach(role => s"display the confirm cancellation page for $service journey when existing role is $role" in :
         authoriseAsAgent()
         await(journeyService.saveJourney(existingAuthCancellationJourney(service)))
         val result = get(routes.CheckYourAnswersController.show(AgentJourneyType.AgentCancelAuthorisation).url)
         result.status shouldBe OK
-      }))
-  }
+      ))
 
   "POST /authorisation-request/confirm" should {
     servicesWithSingleAgentRole.foreach(service => s"redirect to authorisation request created for $service page when confirmed" in {

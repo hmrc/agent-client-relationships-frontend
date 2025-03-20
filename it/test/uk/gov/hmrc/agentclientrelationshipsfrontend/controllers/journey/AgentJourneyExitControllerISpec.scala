@@ -17,12 +17,14 @@
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey
 
 import play.api.test.Helpers.*
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.AgentJourneyType.AuthorisationRequest
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyExitType.NotFound
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsResponse, KnownFactType}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, JourneyExitType, AgentJourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, AgentJourneyType, JourneyExitType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.AgentJourneyService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentSpecHelper}
 
-class AgentJourneyExitControllerISpec extends ComponentSpecHelper with AuthStubs {
+class AgentJourneyExitControllerISpec extends ComponentSpecHelper with AuthStubs :
 
   private val authorisationRequestJourney: AgentJourney = AgentJourney(
     AgentJourneyType.AuthorisationRequest,
@@ -48,12 +50,17 @@ class AgentJourneyExitControllerISpec extends ComponentSpecHelper with AuthStubs
 
   List(authorisationRequestJourney, agentCancelAuthorisationJourney).foreach(j =>
     JourneyExitType.values.foreach(exitType =>
-      s"GET /${j.journeyType.toString}/exit/$exitType" should {
-        "display the exit page" in {
+      s"GET /${j.journeyType.toString}/exit/$exitType" should :
+        "display the exit page" in :
           authoriseAsAgent()
           await(journeyService.saveJourney(j))
           val result = get(routes.JourneyExitController.show(j.journeyType, exitType).url)
           result.status shouldBe OK
-        }
-      }))
-}
+      ))
+
+  "a request should be redirected to ASA home when a clientService is not stored in session" in :
+    authoriseAsAgent()
+    await(journeyService.saveJourney(authorisationRequestJourney.copy(clientService = None)))
+    val result = get(routes.JourneyExitController.show(AuthorisationRequest, NotFound).url)
+    result.status shouldBe SEE_OTHER
+    result.header("Location").value shouldBe appConfig.agentServicesAccountHomeUrl

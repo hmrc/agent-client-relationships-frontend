@@ -54,7 +54,7 @@ class AgentCancelInvitationController @Inject()(
         formWithErrors => {
           acrService.getAuthorisationRequest(invitationId = invitationId).map {
             case Some(info) =>
-              Ok(agentCancelInvitationPage(formWithErrors, info))
+              BadRequest(agentCancelInvitationPage(formWithErrors, info))
             case None =>
               throw new RuntimeException(s"Invitation not found for invitationId: $invitationId")
           }
