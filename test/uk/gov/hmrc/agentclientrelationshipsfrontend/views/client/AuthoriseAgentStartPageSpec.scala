@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.views.client
 
+import org.apache.pekko.http.scaladsl.model.RequestEntityAcceptance.Expected
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.twirl.api.HtmlFormat
@@ -29,6 +30,10 @@ class AuthoriseAgentStartPageSpec extends ViewSpecSupport {
 
   val viewTemplate: AuthoriseAgentStartPage = app.injector.instanceOf[AuthoriseAgentStartPage]
   val agentName: String = "ABC Accountants"
+  val incomeTaxH2 = "Use the right sign in details"
+  val incomeTaxLi1 = "sign in with the user ID for your Personal Tax Account, or"
+  val incomeTaxLi2 = "create a user ID for your Personal Tax Account"
+
   val taxServiceNames: Map[String, String] = Map(
     "income-tax" -> "Making Tax Digital for Income Tax",
     "income-record-viewer" -> "",
@@ -68,7 +73,16 @@ class AuthoriseAgentStartPageSpec extends ViewSpecSupport {
       s"include the correct H1 text for $taxService" in {
         doc.mainContent.extractText(h1, 1).value shouldBe h1Expected(taxService)
       }
-      
+
+      if taxService == "income-tax" then
+        s"include the correct H2 text for Income-tax" in {
+          doc.mainContent.extractText(h2, 1).value shouldBe incomeTaxH2
+        }
+          s"has the correct bullet point list for income-tax" in {
+          doc.mainContent.extractText(li, 1).value shouldBe incomeTaxLi1
+          doc.mainContent.extractText(li, 2).value shouldBe incomeTaxLi2
+        }
+
       s"include the correct p1 text for $taxService" in {
         doc.mainContent.extractText(p, 1).value shouldBe p1Expected(taxService)
       }
