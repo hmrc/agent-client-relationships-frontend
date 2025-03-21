@@ -19,6 +19,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client
 import org.scalatest.concurrent.ScalaFutures
 import play.api.libs.json.{JsObject, Json}
 import play.api.test.Helpers.*
+import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.connectors.AgentClientRelationshipsConnector
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientExitType
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.ClientJourney
@@ -26,10 +27,12 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{ClientJourneyServi
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.WiremockHelper.stubPost
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentSpecHelper}
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl
 
 class ConsentInformationControllerISpec extends ComponentSpecHelper with ScalaFutures with AuthStubs {
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
+
   val testUid = "ABCD"
   val testName = "Test Name"
 
@@ -75,13 +78,14 @@ class ConsentInformationControllerISpec extends ComponentSpecHelper with ScalaFu
       await(journeyService.saveJourney(ClientJourney(journeyType = "authorisation-response")))
       val result = get(routes.DeclineRequestController.show(testUid, "vat").url)
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe routes.ClientExitController.showClient(ClientExitType.CannotFindAuthorisationRequest).url
+      result.header("Location").value shouldBe routes.ClientExitController
+        .showClient(ClientExitType.CannotFindAuthorisationRequest, Some(RedirectUrl(appConfig.appExternalUrl + routes.DeclineRequestController.show(testUid, "vat").url))).url
 
     "redirect to NoOutstandingRequests exit page when the invitation data is not found" in {
       authoriseAsClientWithEnrolments("HMRC-MTD-IT")
       await(journeyService.saveJourney(ClientJourney(journeyType = "authorisation-response")))
       stubPost(validateInvitationUrl, NOT_FOUND, "")
-      val result = get(routes.ConsentInformationController.show(testUid,"income-tax").url)
+      val result = get(routes.ConsentInformationController.show(testUid, "income-tax").url)
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe routes.ClientExitController.showUnauthorised(ClientExitType.NoOutstandingRequests).url
     }

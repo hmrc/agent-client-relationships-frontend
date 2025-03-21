@@ -20,6 +20,7 @@
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.Layout
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.client.clientExitPartials.*
 @import java.time.Instant
+@import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl
 
 @this(
         layout: Layout,
@@ -31,7 +32,7 @@
         noOutstandingRequests: NoOutstandingRequests
 )
 
-@(exitType: ClientExitType, userIsLoggedIn: Boolean, lastModifiedDate: Option[Instant] = None, agentName: Option[String] = None)(implicit request: Request[AnyContent], messages: Messages, appConfig: AppConfig)
+@(exitType: ClientExitType, userIsLoggedIn: Boolean, lastModifiedDate: Option[Instant] = None, continueUrl: Option[RedirectUrl] = None)(implicit request: Request[AnyContent], messages: Messages, appConfig: AppConfig)
 
 @key = @{if (userIsLoggedIn) "clientExit" else "unauthorisedExit"}
 @serviceName = @{messages("service.name.clients")}
@@ -50,7 +51,7 @@
             case ClientExitType.NoOutstandingRequests => noOutstandingRequests()
             case ClientExitType.AuthorisationRequestExpired => authorisationHasExpired(expiryDate = lastModifiedDate)
             case ClientExitType.AuthorisationRequestCancelled => authorisationHasBeenCancelled(expiryDate = lastModifiedDate)
-            case ClientExitType.CannotFindAuthorisationRequest => cannotFindAuthRequest(agentName = agentName)
+            case ClientExitType.CannotFindAuthorisationRequest => cannotFindAuthRequest(continueUrl)
             case ClientExitType.AlreadyRespondedToAuthorisationRequest => authorisationHasAlreadyBeenResponded(respondedToDate = lastModifiedDate)
         }
     }

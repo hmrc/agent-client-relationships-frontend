@@ -22,6 +22,7 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientExitType
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.client.ClientExitPage
+import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}
@@ -34,9 +35,9 @@ class ClientExitController @Inject()(mcc: MessagesControllerComponents,
                                     )(implicit val executionContext: ExecutionContext,
                                       appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport:
 
-  def showClient(exitType: ClientExitType): Action[AnyContent] = actions.clientAuthenticate.async:
+  def showClient(exitType: ClientExitType, continueUrl: Option[RedirectUrl] = None): Action[AnyContent] = actions.clientAuthenticate.async:
     implicit request =>
-      Future.successful(Ok(clientExitPage(exitType, userIsLoggedIn = true, lastModifiedDate = request.journey.lastModifiedDate, agentName = request.journey.agentName)))
+      Future.successful(Ok(clientExitPage(exitType, userIsLoggedIn = true, lastModifiedDate = request.journey.lastModifiedDate, continueUrl = continueUrl)))
 
   def showUnauthorised(exitType: ClientExitType): Action[AnyContent] = Action.async:
     implicit request =>

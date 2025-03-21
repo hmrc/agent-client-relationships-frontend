@@ -19,10 +19,12 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.views.client
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.twirl.api.HtmlFormat
+import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.routes
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientExitType.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.support.ViewSpecSupport
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.client.ClientExitPage
+import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl
 
 import java.time.{Instant, LocalDateTime, ZoneOffset}
 
@@ -33,13 +35,15 @@ class ClientExitPageSpec extends ViewSpecSupport {
 
   val viewTemplate: ClientExitPage = app.injector.instanceOf[ClientExitPage]
 
-  case class ExpectedStrings(title: String, paragraphs: List[String])
-
   object Expected {
-    val cannotFindAuthorisationRequestLabel = "We cannot find this authorisation request - Appoint someone to deal with HMRC for you - GOV.UK"
-    val cannotFindAuthorisationRequestParagraphOne = "We cannot find a request from Agent Name."
-    val cannotFindAuthorisationRequestParagraphTwo = "Make sure you have signed up for the tax service you need. Ask your agent if you are not sure."
-    val cannotFindAuthorisationRequestParagraphThree = "You need to sign in with the correct Government Gateway user ID. It is possible to have more than one, so make sure it is the same one you used to sign up to the tax service the authorisation request is for. Try signing in with a different Government Gateway user ID (the one that you use for managing your personal tax affairs)."
+    val cannotFindAuthorisationRequestLabel = "There are no requests linked to the sign-in details you used - Appoint someone to deal with HMRC for you - GOV.UK"
+    val cannotFindAuthorisationRequestParagraphOne = "You may have signed in with the wrong user ID."
+    val cannotFindAuthorisationRequestParagraphTwo = "You need to use the sign-in details which match the tax service the agent wants to manage for you."
+    val cannotFindAuthorisationRequestParagraphThree = "For example, if an agent wants to manage your VAT you should:"
+    val cannotFindAuthorisationRequestBulletOne = "make sure you have registered for VAT and have an online VAT account"
+    val cannotFindAuthorisationRequestBulletTwo = "use your VAT sign-in details when responding to the authorisation request"
+    val cannotFindAuthorisationRequestSignIn = "Sign in with a different user ID"
+    val cannotFindAuthorisationRequestSignOut = "Finish and sign out"
 
     val authorisationRequestExpiredLabel = "This authorisation request has already expired - Appoint someone to deal with HMRC for you - GOV.UK"
     val authorisationRequestExpiredParagraphOne = "This request expired on 10/01/2024. For details, view your history to check for any expired, cancelled or outstanding requests."
@@ -68,7 +72,7 @@ class ClientExitPageSpec extends ViewSpecSupport {
   }
 
   "ClientExitPage for CannotFindAuthorisationRequest view" should {
-    val view: HtmlFormat.Appendable = viewTemplate(CannotFindAuthorisationRequest, userIsLoggedIn = true, Some(testLastModifiedDate), Some(testAgentName))
+    val view: HtmlFormat.Appendable = viewTemplate(CannotFindAuthorisationRequest, userIsLoggedIn = true, Some(testLastModifiedDate), Some(RedirectUrl("/url")))
     val doc: Document = Jsoup.parse(view.body)
 
     "have the right title" in {
@@ -76,23 +80,36 @@ class ClientExitPageSpec extends ViewSpecSupport {
     }
 
     "display paragraph content" in {
-      doc.select(".govuk-body").get(0).text() shouldBe Expected.cannotFindAuthorisationRequestParagraphOne
-      doc.select(".govuk-body").get(1).text() shouldBe Expected.cannotFindAuthorisationRequestParagraphTwo
-      doc.select(".govuk-body").get(2).text() shouldBe Expected.cannotFindAuthorisationRequestParagraphThree
+      doc.mainContent.extractText(p, 1).value shouldBe Expected.cannotFindAuthorisationRequestParagraphOne
+      doc.mainContent.extractText(p, 2).value shouldBe Expected.cannotFindAuthorisationRequestParagraphTwo
+      doc.mainContent.extractText(p, 3).value shouldBe Expected.cannotFindAuthorisationRequestParagraphThree
+    }
+
+    "display bullets" in {
+      doc.extractList(1) shouldBe List(
+        Expected.cannotFindAuthorisationRequestBulletOne,
+        Expected.cannotFindAuthorisationRequestBulletTwo
+      )
+    }
+
+    "display correct links" in {
+      doc.mainContent.extractLink(1).value shouldBe TestLink(
+        Expected.cannotFindAuthorisationRequestSignIn,
+        routes.SignOutController.signOut(isAgent = false, continueUrl = Some(RedirectUrl("/url"))).url
+      )
+      doc.mainContent.extractLink(2).value shouldBe TestLink(
+        Expected.cannotFindAuthorisationRequestSignOut,
+        routes.SignOutController.signOut(isAgent = false, continueUrl = None).url
+      )
     }
 
     "have a language switcher" in {
       doc.hasLanguageSwitch shouldBe true
     }
-
-    "have the correct link in the details component content" in {
-
-      doc.mainContent.extractLink(1).value shouldBe TestLink("Make sure you have signed up for the tax service you need.", "https://www.gov.uk/guidance/authorise-an-agent-to-deal-with-certain-tax-services-for-you")
-    }
   }
 
   "ClientExitPage for AuthorisationRequestExpired view" should {
-    val view: HtmlFormat.Appendable = viewTemplate(AuthorisationRequestExpired, userIsLoggedIn = true, Some(testLastModifiedDate), Some(testAgentName))
+    val view: HtmlFormat.Appendable = viewTemplate(AuthorisationRequestExpired, userIsLoggedIn = true, Some(testLastModifiedDate))
     val doc: Document = Jsoup.parse(view.body)
 
     "have the right title" in {
@@ -117,7 +134,7 @@ class ClientExitPageSpec extends ViewSpecSupport {
   }
 
   "ClientExitPage for AuthorisationRequestCancelled view" should {
-    val view: HtmlFormat.Appendable = viewTemplate(AuthorisationRequestCancelled, userIsLoggedIn = true, Some(testLastModifiedDate), Some(testAgentName))
+    val view: HtmlFormat.Appendable = viewTemplate(AuthorisationRequestCancelled, userIsLoggedIn = true, Some(testLastModifiedDate))
     val doc: Document = Jsoup.parse(view.body)
 
     "have the right title" in {
@@ -142,7 +159,7 @@ class ClientExitPageSpec extends ViewSpecSupport {
   }
 
   "ClientExitPage for AlreadyRespondedToAuthorisationRequest view" should {
-    val view: HtmlFormat.Appendable = viewTemplate(AlreadyRespondedToAuthorisationRequest, userIsLoggedIn = true, Some(testLastModifiedDate), Some(testAgentName))
+    val view: HtmlFormat.Appendable = viewTemplate(AlreadyRespondedToAuthorisationRequest, userIsLoggedIn = true, Some(testLastModifiedDate))
     val doc: Document = Jsoup.parse(view.body)
 
     "have the right title" in {
