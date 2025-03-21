@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.views.client
 
+import org.apache.pekko.http.scaladsl.model.RequestEntityAcceptance.Expected
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.twirl.api.HtmlFormat
@@ -29,8 +30,12 @@ class AuthoriseAgentStartPageSpec extends ViewSpecSupport {
 
   val viewTemplate: AuthoriseAgentStartPage = app.injector.instanceOf[AuthoriseAgentStartPage]
   val agentName: String = "ABC Accountants"
+  val incomeTaxH2 = "Use the right sign in details"
+  val incomeTaxLi1 = "sign in with the user ID for your Personal Tax Account, or"
+  val incomeTaxLi2 = "create a user ID for your Personal Tax Account"
+
   val taxServiceNames: Map[String, String] = Map(
-    "income-tax" -> "Income Tax",
+    "income-tax" -> "Making Tax Digital for Income Tax",
     "income-record-viewer" -> "",
     "vat" -> "VAT",
     "capital-gains-tax-uk-property" -> "Capital Gains Tax on UK property account",
@@ -40,7 +45,6 @@ class AuthoriseAgentStartPageSpec extends ViewSpecSupport {
     "trusts-and-estates" -> "Trust or an Estate"
   )
 
-
   def h1Expected(taxService: String): String = taxService match {
     case "income-record-viewer" => s"Authorise $agentName to view your Income Record"
     case "trusts-and-estates" => s"Authorise $agentName to maintain your Trust or an Estate"
@@ -48,9 +52,15 @@ class AuthoriseAgentStartPageSpec extends ViewSpecSupport {
   }
 
   def p1Expected(taxService: String): String = taxService match {
+    case "income-tax" => "To authorise an agent you need to sign in with the user ID you use for Making Tax Digital for Income tax."
     case "income-record-viewer" => "You need to sign in with the user ID you use for your personal tax account."
     case "trusts-and-estates" => "You need to sign in with the user ID you use for maintaining your trust or estate."
     case _ => s"You need to sign in with the user ID you use for ${taxServiceNames(taxService)}."
+  }
+
+  def p2Expected(taxService: String): String = taxService match {
+    case "income-tax" => "If you do not have a user ID for Making Tax Digital for Income Tax, you can either:"
+    case _ => "If you do not have sign in details, you‘ll be able to create some."
   }
 
 
@@ -64,21 +74,32 @@ class AuthoriseAgentStartPageSpec extends ViewSpecSupport {
         doc.mainContent.extractText(h1, 1).value shouldBe h1Expected(taxService)
       }
 
+      if taxService == "income-tax" then
+        s"include the correct H2 text for Income-tax" in {
+          doc.mainContent.extractText(h2, 1).value shouldBe incomeTaxH2
+        }
+          s"has the correct bullet point list for income-tax" in {
+          doc.mainContent.extractText(li, 1).value shouldBe incomeTaxLi1
+          doc.mainContent.extractText(li, 2).value shouldBe incomeTaxLi2
+        }
+
       s"include the correct p1 text for $taxService" in {
         doc.mainContent.extractText(p, 1).value shouldBe p1Expected(taxService)
       }
 
       s"include the correct p2 text for $taxService" in {
-        doc.mainContent.extractText(p, 2).value shouldBe "If you do not have sign in details, you‘ll be able to create some."
+        doc.mainContent.extractText(p, 2).value shouldBe p2Expected(taxService)
       }
       s"have correct link button for $taxService" in {
         val expectedUrl = s"/agent-client-relationships/authorisation-response/$uid/$taxService/consent-information"
         doc.mainContent.extractLinkButton(1).value shouldBe TestLink("Start now", expectedUrl)
       }
+      
       s"have correct 'Decline' link for $taxService" in {
         val expectedUrl = routes.DeclineRequestController.show(uid, taxService).url
-        doc.mainContent.extractLink(1).value shouldBe TestLink(s"I do not want $agentName to act for me.", expectedUrl)
+        doc.mainContent.extractLink(1).value shouldBe TestLink(s"I do not want $agentName to act for me", expectedUrl)
       }
     }
   }
 }
+
