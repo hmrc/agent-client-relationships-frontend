@@ -182,9 +182,13 @@ clientId.PlrId.error.required=Enter your client’s  date of registration to rep
 # -------------------------------------------------------------------------------------------
 
 clientFact.HMRC-MTD-IT.postcode.label=What is your client’s postcode?
+clientFact.HMRC-MTD-IT-SUPP.postcode.label=What is your client’s postcode?
 clientFact.HMRC-MTD-IT.postcode.hint=For sole traders who are signed up to Making Tax Digital for Income Tax, use the postcode from their business address.<br /><br />For any other type of client, use their home postcode.
+clientFact.HMRC-MTD-IT-SUPP.postcode.hint=For sole traders who are signed up to Making Tax Digital for Income Tax, use the postcode from their business address.<br /><br />For any other type of client, use their home postcode.
 clientFact.HMRC-MTD-IT.postcode.error.required=Enter your client’s postcode
+clientFact.HMRC-MTD-IT-SUPP.postcode.error.required=Enter your client’s postcode
 clientFact.HMRC-MTD-IT.postcode.error.invalid=Enter a real postcode
+clientFact.HMRC-MTD-IT-SUPP.postcode.error.invalid=Enter a real postcode
 
 clientFact.PERSONAL-INCOME-RECORD.date.label=What is your client’s date of birth?
 clientFact.PERSONAL-INCOME-RECORD.date.hint=For example, 22 7 1981.
@@ -262,8 +266,11 @@ confirmClient.false=No - I need to start again
 # ________________________________________________________________________________
 
 selectAgentRole.HMRC-MTD-IT.newRelationship.header=How do you want to act for {0}?
+selectAgentRole.HMRC-MTD-IT-SUPP.newRelationship.header=How do you want to act for {0}?
 selectAgentRole.HMRC-MTD-IT.newRelationship.legend=How do you want to act for {0}?
+selectAgentRole.HMRC-MTD-IT-SUPP.newRelationship.legend=How do you want to act for {0}?
 selectAgentRole.HMRC-MTD-IT.guidance=<a href={0} class="govuk-link" target="_blank" rel="noreferrer noopener">Find out how main and supporting agents can act (opens in new tab)</a>.
+selectAgentRole.HMRC-MTD-IT-SUPP.guidance=<a href={0} class="govuk-link" target="_blank" rel="noreferrer noopener">Find out how main and supporting agents can act (opens in new tab)</a>.
 selectAgentRole.HMRC-MTD-IT.newRelationship.option=As their main agent
 selectAgentRole.HMRC-MTD-IT-SUPP.newRelationship.option=As a supporting agent
 selectAgentRole.HMRC-MTD-IT.newRelationship.hint=Main agents can carry out all tax functions for the client and submit client’s tax returns
@@ -321,6 +328,7 @@ confirmCancellation.agent-cancel-authorisation.error.required=Select ‘yes’ i
 confirmCancellation.current-status=You are currently authorised as {0} to manage {1}’s {2}.
 
 confirmCancellation.HMRC-MTD-IT.outcome=If you cancel your authorisation, you will not be able to manage Making Tax Digital for Income Tax for {0}.
+confirmCancellation.HMRC-MTD-IT-SUPP.outcome=If you cancel your authorisation, you will not be able to manage Making Tax Digital for Income Tax for {0}.
 confirmCancellation.PERSONAL-INCOME-RECORD.outcome=If you cancel this request, you will not be able to view the Income record for this client.
 confirmCancellation.HMRC-MTD-VAT.outcome=If you cancel your authorisation, you will not be able to manage their VAT for {0}.
 confirmCancellation.HMRC-TERS-ORG.outcome=If you cancel your authorisation, you will not be able to maintain a trust or an estate on behalf of {0}.
@@ -464,6 +472,7 @@ clientNotRegistered.return=Return to your authorisation requests
 # Not authorised to de-auth
 # ________________________________________________________________________________
 notAuthorised.HMRC-MTD-IT.p=This client has not authorised you to manage their Making Tax Digital for Income Tax.
+notAuthorised.HMRC-MTD-IT-SUPP.p=This client has not authorised you to manage their Making Tax Digital for Income Tax.
 notAuthorised.PERSONAL-INCOME-RECORD.p=This client has not authorised you to view their Income record.
 notAuthorised.HMRC-MTD-VAT.p=This client has not authorised you to manage their VAT.
 notAuthorised.HMRC-TERS-ORG.p=This client has not authorised you to maintain a trust or an estate.
@@ -492,6 +501,7 @@ clientInsolvent.p=Clients cannot authorise an agent on their behalf when they ar
 # ________________________________________________________________________________
 
 authorisationAlreadyExists.HMRC-MTD-IT.p1=This client has already authorised you to manage their Making Tax Digital for Income Tax.
+authorisationAlreadyExists.HMRC-MTD-IT-SUPP.p1=This client has already authorised you to manage their Making Tax Digital for Income Tax.
 authorisationAlreadyExists.PERSONAL-INCOME-RECORD.p1=This client has already authorised you to view their Income record.
 authorisationAlreadyExists.HMRC-MTD-VAT.p1=This client has already authorised you to manage their VAT.
 authorisationAlreadyExists.HMRC-TERS-ORG.p1=This client has already authorised you to maintain a trust or an estate.

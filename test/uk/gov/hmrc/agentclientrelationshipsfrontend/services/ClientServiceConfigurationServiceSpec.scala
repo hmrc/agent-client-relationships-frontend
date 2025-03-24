@@ -57,8 +57,6 @@ class ClientServiceConfigurationServiceSpec extends AnyWordSpecLike with Matcher
     "return an empty Set when service is unknown" in :
       services.getServiceKeysForUrlPart("unknown") shouldBe Set()
 
-
-
   "inferredClientType" should :
 
     "return an inferred client type for services with only one type supported" in :
@@ -69,7 +67,6 @@ class ClientServiceConfigurationServiceSpec extends AnyWordSpecLike with Matcher
 
     "return None for services with more than one client type supported" in :
       services.inferredClientType(HMRCMTDVAT) shouldBe None
-
 
   "allClientTypes" should :
 
@@ -176,3 +173,22 @@ class ClientServiceConfigurationServiceSpec extends AnyWordSpecLike with Matcher
         width = 20,
         clientIdType = "PLRID"
       ))
+
+  "getServiceForFastTrack" should:
+
+    "return the correct service for fast track deauth" in:
+
+      services.getServiceForFastTrack("HMRC-MTD-IT") shouldBe "HMRC-MTD-IT"
+      services.getServiceForFastTrack("HMRC-MTD-IT-SUPP") shouldBe "HMRC-MTD-IT"
+      services.getServiceForFastTrack("HMRC-MTD-VAT") shouldBe "HMRC-MTD-VAT"
+      services.getServiceForFastTrack("HMRC-CGT-PD") shouldBe "HMRC-CGT-PD"
+      services.getServiceForFastTrack("HMRC-PPT-ORG") shouldBe "HMRC-PPT-ORG"
+      services.getServiceForFastTrack("HMRC-PILLAR2-ORG") shouldBe "HMRC-PILLAR2-ORG"
+      services.getServiceForFastTrack("HMRC-TERS-ORG") shouldBe "HMRC-TERS-ORG"
+      // HMRC-TERSNT-ORG is arrived at usually via refinement during deauth journey
+      // this new method "getServiceForFastTrack" ensures it is preserved when found in
+      // an invitation instead of reverted to the parent form option which is HMRC-TERS-ORG
+      services.getServiceForFastTrack("HMRC-TERSNT-ORG") shouldBe "HMRC-TERSNT-ORG"
+      services.getServiceForFastTrack("PERSONAL-INCOME-RECORD") shouldBe "PERSONAL-INCOME-RECORD"
+      services.getServiceForFastTrack("HMRC-CBC-ORG") shouldBe "HMRC-CBC-ORG"
+      services.getServiceForFastTrack("HMRC-CBC-NONUK-ORG") shouldBe "HMRC-CBC-ORG"

@@ -43,7 +43,7 @@ class AgentClientRelationshipsConnector @Inject()(appConfig: AppConfig,
   private val agentClientRelationshipsUrl = s"${appConfig.agentClientRelationshipsBaseUrl}/agent-client-relationships"
 
   def getClientDetails(service: String, clientId: String)(implicit hc: HeaderCarrier): Future[Option[ClientDetailsResponse]] = httpV2
-    .get(url"$agentClientRelationshipsUrl/client/$service/details/$clientId")
+    .get(url"$agentClientRelationshipsUrl/client/${serviceConfig.getServiceForFastTrack(service)}/details/$clientId")
     .execute[Option[ClientDetailsResponse]]
 
   def createAuthorisationRequest(journey: AgentJourney)(implicit hc: HeaderCarrier, request: AgentJourneyRequest[?]): Future[String] = {
