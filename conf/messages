@@ -882,7 +882,7 @@ noOutstandingRequests.p1= If you think this is wrong, contact the agent who sent
 # Client journey exit partials
 # ________________________________________________________________________________
 
-clientExit.cannot-find-authorisation-request.header=We cannot find this authorisation request
+clientExit.cannot-find-authorisation-request.header=There are no requests linked to the sign-in details you used
 clientExit.authorisation-request-expired.header=This authorisation request has already expired
 clientExit.authorisation-request-already-responded-to.header=This authorisation request has already been responded to
 clientExit.authorisation-request-cancelled.header=This authorisation request request has been cancelled
@@ -898,9 +898,13 @@ authorisationRequestExpired.p4=<a href={0} class="govuk-link" target="_blank" re
 # ________________________________________________________________________________
 # We cannot find this authorisation request
 # ________________________________________________________________________________
-cannotFindAuthRequest.p1=We cannot find a request from {0}.
-cannotFindAuthRequest.p2=<a href={0} class="govuk-link" target="_blank" rel="noreferrer noopener">Make sure you have signed up for the tax service you need.</a> Ask your agent if you are not sure.
-cannotFindAuthRequest.p3=You need to sign in with the correct Government Gateway user ID. It is possible to have more than one, so make sure it is the same one you used to sign up to the tax service the authorisation request is for.<a href={0} class="govuk-link" target="_blank" rel="noreferrer noopener"> Try signing in with a different Government Gateway user ID</a> (the one that you use for managing your personal tax affairs).
+cannotFindAuthRequest.p1=You may have signed in with the wrong user ID.
+cannotFindAuthRequest.p2=You need to use the sign-in details which match the tax service the agent wants to manage for you.
+cannotFindAuthRequest.p3=For example, if an agent wants to manage your VAT you should:
+cannotFindAuthRequest.bullet1=make sure you have registered for VAT and have an online VAT account
+cannotFindAuthRequest.bullet2=use your VAT sign-in details when responding to the authorisation request
+cannotFindAuthRequest.signIn=Sign in with a different user ID
+cannotFindAuthRequest.signOut=Finish and sign out
 
 # ________________________________________________________________________________
 # This authorisation request has been cancelled
