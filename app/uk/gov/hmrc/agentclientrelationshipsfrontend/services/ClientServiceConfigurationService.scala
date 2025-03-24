@@ -65,6 +65,11 @@ class ClientServiceConfigurationService @Inject()(implicit appConfig: AppConfig)
     case _ => clientService
   } else ""
 
+  // extra method to support jumping into journeys at a position where refinement of a service will already have
+  // happened and therefore we should use the service key we have in scope instead of normalising it with getServiceForForm
+  def getServiceForFastTrack(clientService: String): String =
+    if requiresRefining(clientService) then clientService else getServiceForForm(clientService)
+
   // some services may have custom not found errors
   def getNotFoundError(journeyType: AgentJourneyType, clientService: String): JourneyExitType =
     services(clientService).journeyErrors(journeyType).notFound
