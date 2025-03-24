@@ -35,6 +35,7 @@ trait Selectors {
   val captionL = ".govuk-caption-l"
   val captionXL = ".govuk-caption-xl"
   val button = ".govuk-button"
+  val li = "li"
 
   val errorSummary = ".govuk-error-summary"
   val errorSummaryList = ".govuk-error-summary__list"
