@@ -23,6 +23,7 @@
 
 @this(
         layout: Layout,
+        govukDetails: GovukDetails,
         govukButton: GovukButton
 )
 
@@ -31,11 +32,12 @@
 @key = @{"consentInformation"}
 @serviceKey = @{journey.getServiceKey}
 @agentName = @{journey.getAgentName}
-@pageTitle = @{messages(s"$key.header")}
+@pageTitle = @{messages(s"$key.header", agentName, agentRole)}
 @serviceName = @{messages("service.name.clients")}
 @agentRole = @{if appConfig.emaEnabled then messages(s"agentRole.$serviceKey") else messages("agentRole.noEMA")}
 @indefiniteAgentRole = @{if appConfig.emaEnabled then messages(s"indefiniteAgentRole.$serviceKey") else messages("indefiniteAgentRole.noEMA")}
 @taxServiceName = @{messages(serviceKey)}
+@removeContent = {<p class="govuk-body">@Html(messages(s"$key.section3.p1", routes.ManageYourTaxAgentsController.show.url))</p>}
 
 @layout(
     pageTitle,
@@ -44,30 +46,27 @@
 ) {
 
   <h2 class="govuk-caption-xl">@messages(serviceKey)</h2>
-  <h1 class="govuk-heading-xl">@pageTitle</h1>
-  <p class="govuk-body">@Html(messages(s"$key.p1", agentName, agentRole, taxServiceName))</p>
+  <h1 class="govuk-heading-xl">@Html(pageTitle)</h1>
 
-  @if(appConfig.emaEnabled && messages.isDefinedAt(s"$key.$serviceKey.p2")) {
-    <p class="govuk-body">@messages(s"$key.$serviceKey.p2", taxServiceName)</p>
-    <p class="govuk-body">@messages(s"$key.$serviceKey.p3")</p>
-    <ul class="govuk-list govuk-list--bullet">
-      <li>@messages(s"$key.$serviceKey.li1")</li>
-      <li>@messages(s"$key.$serviceKey.li2")</li>
-    </ul>
-    <p class="govuk-body">@Html(messages(s"$key.$serviceKey.guidance", appConfig.guidanceUrlForAgentRoles))</p>
+  @if(appConfig.emaEnabled) {
+    <h2 class="govuk-heading-l">@messages(s"$key.section1.h2")</h2>
+    <p class="govuk-body">@messages(s"$key.section1.p1", taxServiceName)</p>
+    <p class="govuk-body">@messages(s"$key.section1.p2")</p>
+    <p class="govuk-body">@Html(messages(s"$key.section1.p3", appConfig.guidanceUrlForAgentRoles))</p>
   }
 
-  <h2 class="govuk-heading-l">@messages(s"$key.section1.h2")</h2>
-  <p class="govuk-body">@messages(s"$key.section1.p1", agentName, taxServiceName)</p>
-  <p class="govuk-body">@messages(s"$key.section1.p2", agentName)</p>
-  <p class="govuk-body">@messages(s"$key.section1.p3", agentName)</p>
-  <p class="govuk-body">@Html(messages(s"$key.section1.p4", appConfig.privacyPolicyUrl))</p>
-
   <h2 class="govuk-heading-l">@messages(s"$key.section2.h2")</h2>
-  <p class="govuk-body">@Html(messages(s"$key.section2.p1", routes.ManageYourTaxAgentsController.show.url))</p>
+  <p class="govuk-body">@messages(s"$key.section2.p1", agentName, taxServiceName)</p>
+  <p class="govuk-body">@messages(s"$key.section2.p2", agentName)</p>
+  <p class="govuk-body">@Html(messages(s"$key.section2.p3", appConfig.privacyPolicyUrl))</p>
 
-  <h2 class="govuk-heading-l">@messages(s"$key.section3.h2")</h2>
-  <p class="govuk-body">@Html(messages(s"$key.section3.p1", indefiniteAgentRole, taxServiceName))</p>
+  @govukDetails(Details(
+      summary = Text(messages(s"$key.section3.h2")),
+      content = HtmlContent(removeContent))
+  )
+
+  <h2 class="govuk-heading-l">@messages(s"$key.section4.h2")</h2>
+  <p class="govuk-body">@Html(messages(s"$key.section4.p1", agentName, indefiniteAgentRole))</p>
 
   @govukButton(Button(
       id = Some("continueButton"),
