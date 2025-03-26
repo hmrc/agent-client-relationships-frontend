@@ -49,9 +49,14 @@ class CheckYourAnswersController @Inject()(mcc: MessagesControllerComponents,
       if journey.journeyComplete.nonEmpty then Redirect(appConfig.agentServicesAccountHomeUrl)
       else if journey.clientDetailsResponse.isEmpty then Redirect(routes.EnterClientIdController.show(journey.journeyType))
       else {
-        journeyType match {
-          case AgentJourneyType.AuthorisationRequest => Ok(checkYourAnswersPage(serviceConfig.supportsAgentRoles(journey.getService)))
-          case AgentJourneyType.AgentCancelAuthorisation => Ok(confirmCancellationPage(ConfirmCancellationForm.form(ConfirmCancellationFieldName, journey.journeyType.toString)))
+        val conditionalExitUrl = journeyService.checkExitConditions
+        (journeyType, conditionalExitUrl) match {
+          case (AgentJourneyType.AuthorisationRequest, None) =>
+            Ok(checkYourAnswersPage(serviceConfig.supportsAgentRoles(journey.getService)))
+          case (AgentJourneyType.AgentCancelAuthorisation, None) =>
+            Ok(confirmCancellationPage(ConfirmCancellationForm.form(ConfirmCancellationFieldName, journey.journeyType.toString)))
+          case (_, Some(url)) =>
+            Redirect(url)
         }
       }
 
@@ -60,8 +65,10 @@ class CheckYourAnswersController @Inject()(mcc: MessagesControllerComponents,
       given AgentJourneyRequest[?] = journeyRequest
 
       val journey = journeyRequest.journey
-      journeyType match {
-        case AgentJourneyType.AuthorisationRequest => for {
+      val conditionalExitUrl = journeyService.checkExitConditions
+
+      (journeyType, conditionalExitUrl) match {
+        case (AgentJourneyType.AuthorisationRequest, None) => for {
           invitationId <- agentClientRelationshipsService.createAuthorisationRequest(journey)
           _ <- journeyService.saveJourney(AgentJourney(
             journeyType = journey.journeyType,
@@ -69,7 +76,7 @@ class CheckYourAnswersController @Inject()(mcc: MessagesControllerComponents,
           ))
         } yield Redirect(routes.ConfirmationController.show(journey.journeyType))
 
-        case AgentJourneyType.AgentCancelAuthorisation =>
+        case (AgentJourneyType.AgentCancelAuthorisation, None) =>
           ConfirmCancellationForm.form(ConfirmCancellationFieldName, journey.journeyType.toString)
             .bindFromRequest()
             .fold(
@@ -88,4 +95,7 @@ class CheckYourAnswersController @Inject()(mcc: MessagesControllerComponents,
                 } yield Redirect(routes.ConfirmationController.show(journey.journeyType))
                 else Future.successful(Redirect(routes.StartJourneyController.startJourney(journey.journeyType)))
               })
+
+        case (_, Some(url)) =>
+          Future.successful(Redirect(url))
       }

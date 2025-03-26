@@ -17,7 +17,7 @@
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey
 
 import play.api.test.Helpers.*
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, JourneyExitType, AgentJourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, AgentJourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsResponse, ClientStatus, KnownFactType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.AgentJourneyService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentSpecHelper}
@@ -126,16 +126,6 @@ class ConfirmClientControllerISpec extends ComponentSpecHelper with AuthStubs {
       result.header("Location").value shouldBe routes.CheckYourAnswersController.show(AgentJourneyType.AuthorisationRequest).url
     }
 
-    "redirect to authorisation-exists exit page when confirming client with existing authorisation" in {
-      authoriseAsAgent()
-      await(journeyService.saveJourney(alreadyAuthJourney(AgentJourneyType.AuthorisationRequest)))
-      val result = post(routes.ConfirmClientController.onSubmit(AgentJourneyType.AuthorisationRequest).url)(Map(
-        "confirmClient" -> Seq("true")
-      ))
-      result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe routes.JourneyExitController.show(AgentJourneyType.AuthorisationRequest, JourneyExitType.AuthorisationAlreadyExists).url
-    }
-
     "redirect to check your answers page when confirming client to deAuth with existing authorisation" in {
       authoriseAsAgent()
       await(journeyService.saveJourney(alreadyAuthJourney(AgentJourneyType.AgentCancelAuthorisation)))
@@ -144,36 +134,6 @@ class ConfirmClientControllerISpec extends ComponentSpecHelper with AuthStubs {
       ))
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe routes.CheckYourAnswersController.show(AgentJourneyType.AgentCancelAuthorisation).url
-    }
-
-    "redirect to not-authorised exist page when confirming client to deAuth with no existing authorisation" in {
-      authoriseAsAgent()
-      await(journeyService.saveJourney(noAuthJourney(AgentJourneyType.AgentCancelAuthorisation)))
-      val result = post(routes.ConfirmClientController.onSubmit(AgentJourneyType.AgentCancelAuthorisation).url)(Map(
-        "confirmClient" -> Seq("true")
-      ))
-      result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe routes.JourneyExitController.show(AgentJourneyType.AgentCancelAuthorisation, JourneyExitType.NoAuthorisationExists).url
-    }
-
-    "redirect to client-insolvent page when client is insolvent" in {
-      authoriseAsAgent()
-      await(journeyService.saveJourney(clientInsolventJourney))
-      val result = post(routes.ConfirmClientController.onSubmit(AgentJourneyType.AuthorisationRequest).url)(Map(
-        "confirmClient" -> Seq("true")
-      ))
-      result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe routes.JourneyExitController.show(AgentJourneyType.AuthorisationRequest, JourneyExitType.ClientStatusInsolvent).url
-    }
-
-    "redirect to client-status-invalid page when client status is invalid" in {
-      authoriseAsAgent()
-      await(journeyService.saveJourney(clientStatusInvalidJourney))
-      val result = post(routes.ConfirmClientController.onSubmit(AgentJourneyType.AuthorisationRequest).url)(Map(
-        "confirmClient" -> Seq("true")
-      ))
-      result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe routes.JourneyExitController.show(AgentJourneyType.AuthorisationRequest, JourneyExitType.ClientStatusInvalid).url
     }
 
     "redirect to start again when not confirming client" in {

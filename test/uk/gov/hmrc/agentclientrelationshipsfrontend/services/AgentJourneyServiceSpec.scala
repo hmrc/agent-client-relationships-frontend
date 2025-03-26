@@ -31,11 +31,9 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.HMRCMTDVAT
 import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.routes
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.ClientDetailsResponse
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.ClientStatus.Insolvent
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.KnownFactType.Date
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, JourneyExitType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.AgentJourney
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.AgentJourneyType.{AgentCancelAuthorisation, AuthorisationRequest}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyExitType.ClientStatusInsolvent
 import uk.gov.hmrc.agentclientrelationshipsfrontend.repositories.JourneyRepository
 import uk.gov.hmrc.mongo.cache.DataKey
 
@@ -151,19 +149,6 @@ class AgentJourneyServiceSpec extends AnyWordSpecLike with Matchers with Mockito
 
       val result = await(service.nextPageUrl(AuthorisationRequest))
       result shouldBe routes.SelectAgentRoleController.show(AuthorisationRequest).url
-
-    "return an exit page URL if the session indicates there is an exit reason" in :
-      val sessionJourney = baseAgentJourney.copy(
-        clientService = Some(HMRCMTDVAT),
-        clientDetailsResponse = Some(ClientDetailsResponse("Colin Client", Some(Insolvent), None, Seq(), Some(Date), false, None)),
-        knownFact = Some("2020-01-01"),
-        clientConfirmed = Some(true),
-        agentType = Some("main")
-      )
-      givenJourneyInSession(sessionJourney)
-
-      val result = await(service.nextPageUrl(AuthorisationRequest))
-      result shouldBe routes.JourneyExitController.show(AuthorisationRequest, ClientStatusInsolvent).url
 
     "return the CheckYourAnswers URL if all necessary values are defined and there is no reason to exit" in :
       val sessionJourney = baseAgentJourney.copy(
