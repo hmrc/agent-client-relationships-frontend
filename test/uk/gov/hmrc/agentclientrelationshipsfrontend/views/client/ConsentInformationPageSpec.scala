@@ -55,15 +55,26 @@ class ConsentInformationPageSpec extends ViewSpecSupport {
   )
 
   object Expected {
-    val heading = "Information you need before you authorise an agent"
-    val title = s"$heading - Appoint someone to deal with HMRC for you - GOV.UK"
-    val p1Main = s"$agentName want to be authorised as your main agent for Making Tax Digital for Income Tax."
-    val p1Supporting = s"$agentName want to be authorised as your supporting agent for Making Tax Digital for Income Tax."
-    def p1(serviceKey: String) = s"$agentName want to be authorised as your agent for ${taxServiceNames(serviceKey)}."
-    val p2 = s"When you have an agent for Making Tax Digital for Income Tax, you can choose how much support you want from them."
-    def section1p1(serviceKey: String) = s"Giving your consent means employees of $agentName will be able to access your ${taxServiceNames(serviceKey)} data."
+    def heading(serviceKey: String) = s"$agentName want to be your ${indefiniteAgentRole(serviceKey)}"
+    def title(serviceKey: String) = s"${heading(serviceKey)} - Appoint someone to deal with HMRC for you - GOV.UK"
+    def section1p1(serviceKey: String) = s"An agent can either be 'main agent' or a 'supporting agent' when they manage your ${taxServiceNames(serviceKey)}."
+    def section2p1(serviceKey: String) = s"Giving consent means employees of $agentName will be able to access your ${taxServiceNames(serviceKey)} data."
   }
 
+  val indefiniteAgentRole: Map[String, String] = Map(
+    "PERSONAL-INCOME-RECORD" -> "agent",
+    "HMRC-MTD-IT" -> "main agent",
+    "HMRC-MTD-IT-SUPP" -> "supporting agent",
+    "HMRC-PPT-ORG" -> "agent",
+    "HMRC-CGT-PD" -> "agent",
+    "HMRC-CBC-ORG" -> "agent",
+    "HMRC-CBC-NONUK-ORG" -> "agent",
+    "HMRC-MTD-VAT" -> "agent",
+    "HMRC-PILLAR2-ORG" -> "agent",
+    "HMRC-TERS-ORG" -> "agent",
+    "HMRC-TERSNT-ORG" -> "agent"
+  )
+  
   val taxServiceNames: Map[String, String] = Map(
     "PERSONAL-INCOME-RECORD" -> "Income Record Viewer",
     "HMRC-MTD-IT" -> "Making Tax Digital for Income Tax",
@@ -99,27 +110,21 @@ class ConsentInformationPageSpec extends ViewSpecSupport {
         val view: HtmlFormat.Appendable = viewTemplate(journeyForService(serviceKey))
         val doc: Document = Jsoup.parse(view.body)
         s"include the correct title for $serviceKey" in {
-          doc.title() shouldBe Expected.title
+          doc.title() shouldBe Expected.title(serviceKey)
         }
 
         s"include the correct H1 text for $serviceKey" in {
-          doc.mainContent.extractText(h1, 1).value shouldBe Expected.heading
+          doc.mainContent.extractText(h1, 1).value shouldBe Expected.heading(serviceKey)
         }
-
+        
         s"include the correct p1 text for $serviceKey" in {
-          val expectedP1 = serviceKey match {
-            case "HMRC-MTD-IT" => Expected.p1Main
-            case "HMRC-MTD-IT-SUPP" => Expected.p1Supporting
-            case _ => Expected.p1(serviceKey)
-          }
-          doc.mainContent.extractText(p, 1).value shouldBe expectedP1
+          doc.mainContent.extractText(p, 1).value shouldBe Expected.section1p1(serviceKey)
         }
-
-        s"include the correct p2 text for $serviceKey" in {
-          val expectedP2 = if (taxService == "income-tax") Expected.p2 else Expected.section1p1(serviceKey)
-          doc.mainContent.extractText(p, 2).value shouldBe expectedP2
+        
+        s"include the correct p4 text for $serviceKey" in {
+          doc.mainContent.extractText(p, 4).value shouldBe Expected.section2p1(serviceKey)
         }
-
+        
         s"should include a continue button for $serviceKey" in {
           doc.mainContent.extractText(button, 1).value shouldBe "Continue"
         }

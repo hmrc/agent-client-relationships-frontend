@@ -34,7 +34,7 @@
 @agentName = @{journey.getAgentName}
 @pageTitle = @{messages(s"$key.header", agentName, agentRole)}
 @serviceName = @{messages("service.name.clients")}
-@agentRole = @{if appConfig.emaEnabled then messages(s"agentRole.$serviceKey") else messages("agentRole.noEMA")}
+@agentRole = @{if appConfig.emaEnabled then messages(s"agentRoleFor.$serviceKey") else messages("agentRole.noEMA")}
 @indefiniteAgentRole = @{if appConfig.emaEnabled then messages(s"indefiniteAgentRole.$serviceKey") else messages("indefiniteAgentRole.noEMA")}
 @taxServiceName = @{messages(serviceKey)}
 @removeContent = {<p class="govuk-body">@Html(messages(s"$key.section3.p1", routes.ManageYourTaxAgentsController.show.url))</p>}
