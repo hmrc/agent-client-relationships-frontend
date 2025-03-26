@@ -29,7 +29,7 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class AgentJourneyService @Inject()(val journeyRepository: JourneyRepository,
                                     val serviceConfig: ClientServiceConfigurationService
-                                   )(implicit executionContext: ExecutionContext, appConfig: AppConfig) extends JourneyService[AgentJourney] {
+                                   )(implicit ec: ExecutionContext, appConfig: AppConfig) extends JourneyService[AgentJourney] {
 
   override val dataKey: DataKey[AgentJourney] = DataKey("AgentJourneySessionData")
 
@@ -43,7 +43,7 @@ class AgentJourneyService @Inject()(val journeyRepository: JourneyRepository,
     } yield journey match {
       case Some(journey) if journey.journeyType != journeyType => routes.StartJourneyController.startJourney(journeyType).url
       case Some(journey) if journey.journeyComplete.nonEmpty => appConfig.agentServicesAccountHomeUrl
-      case Some(journey) => {
+      case Some(journey) =>
         if (journey.clientService.isEmpty) routes.SelectClientTypeController.show(journeyType).url
         else if (serviceConfig.requiresRefining(journey.clientService.get) && journey.refinedService.isEmpty) routes.ServiceRefinementController.show(journeyType).url
         else if (journey.clientDetailsResponse.isEmpty) routes.EnterClientIdController.show(journeyType).url
@@ -51,11 +51,19 @@ class AgentJourneyService @Inject()(val journeyRepository: JourneyRepository,
         else if (journey.clientConfirmed.isEmpty) routes.ConfirmClientController.show(journeyType).url
         else if (journey.clientConfirmed.contains(false)) routes.StartJourneyController.startJourney(journeyType).url
         else if (journeyType == AgentJourneyType.AuthorisationRequest && serviceConfig.supportsAgentRoles(journey.getService) && journey.agentType.isEmpty) routes.SelectAgentRoleController.show(journeyType).url
-        else if (journey.getExitType(journeyType, journey.getClientDetailsResponse, serviceConfig.getSupportedAgentRoles(journey.getService)).nonEmpty) routes.JourneyExitController.show(journeyType, journey.getExitType(journeyType, journey.getClientDetailsResponse, serviceConfig.getSupportedAgentRoles(journey.getService)).get).url
         else routes.CheckYourAnswersController.show(journeyType).url
-      }
       case _ => routes.StartJourneyController.startJourney(journeyType).url
     }
   }
 
+  def checkExitConditions(implicit request: AgentJourneyRequest[?]): Option[String] =
+    val journeyExitType = request.journey.getExitType(
+      request.journey.journeyType,
+      request.journey.getClientDetailsResponse,
+      serviceConfig.getSupportedAgentRoles(request.journey.getService)
+    )
+
+    journeyExitType.map { exitType =>
+      routes.JourneyExitController.show(request.journey.journeyType, exitType).url
+    }
 }
