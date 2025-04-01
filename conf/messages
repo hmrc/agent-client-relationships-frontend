@@ -590,6 +590,9 @@ indefiniteAgentRole.noEMA=an agent
 # ________________________________________________________________________________
 # Client consent information
 # ________________________________________________________________________________
+consentInformation.warning.mainAgent=If you authorise {0}, we will remove {1} as your existing main agent.
+consentInformation.warning.mainToSupp=If you authorise {0} as your supporting agent, they can not longer act as main agent.
+
 consentInformation.section1.h2=What you need to know first
 consentInformation.section1.p1=An agent can either be ''main agent'' or a ''supporting agent'' when they manage your {0}.
 consentInformation.section1.p2=Some important tasks - like submitting your tax returns - can only be completed by you, or by a main agent acting on your behalf.
