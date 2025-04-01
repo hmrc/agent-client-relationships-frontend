@@ -555,3 +555,17 @@ confirmDecline.error.required=<translation needed>
 # Client confirmation of authorisation page
 # ________________________________________________________________________________
 clientConfirmation.p2=<translation needed>
+
+# ________________________________________________________________________________
+# Client journey exit partials
+# ________________________________________________________________________________
+
+clientExit.authorisation-request-cancelled.header=Mae’r cais hwn am awdurdodiad wedi cael ei ganslo
+
+# ________________________________________________________________________________
+# This authorisation request has been cancelled
+# ________________________________________________________________________________
+authorisationRequestCancelled.p1=Cafodd y cais hwn ei ganslo gan yr asiant ar {0}.
+authorisationRequestCancelled.p2=Os hoffech i’r asiant hwn reoli’ch {0}, gofynnwch iddo anfon cais arall atoch am awdurdodiad.
+authorisationRequestCancelled.a1=Rheoli’ch asiantau treth
+authorisationRequestCancelled.a2=Gorffen ac allgofnodi
