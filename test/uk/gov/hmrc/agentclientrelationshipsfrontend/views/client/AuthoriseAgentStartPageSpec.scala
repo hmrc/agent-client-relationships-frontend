@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.views.client
 
-import org.apache.pekko.http.scaladsl.model.RequestEntityAcceptance.Expected
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.twirl.api.HtmlFormat
