@@ -78,7 +78,7 @@ class ConsentInformationPageSpec extends ViewSpecSupport {
     def heading(serviceKey: String) = s"$agentName want to be your ${indefiniteAgentRole(serviceKey)}"
 
     def title(serviceKey: String) = s"${heading(serviceKey)} - Appoint someone to deal with HMRC for you - GOV.UK"
-    
+
     def section2p1(serviceKey: String) = s"Giving consent means employees of $agentName will be able to access your ${taxServiceNames(serviceKey)} data."
   }
 
@@ -87,7 +87,7 @@ class ConsentInformationPageSpec extends ViewSpecSupport {
 
     def title(serviceKey: String, agentName: String) = s"${heading(serviceKey, agentName)} - Appoint someone to deal with HMRC for you - GOV.UK"
 
-    def section1p1(serviceKey: String, agentName: String, newAgentName: String) = s"If you authorise $newAgentName, we will remove $agentName as your existing main agent."
+    def section1p1(serviceKey: String, agentName: String, newAgentName: String) = s"If you authorise $newAgentName, we will remove $agentName as your existing agent."
 
     def section2p1(serviceKey: String, agentName: String) = s"Giving consent means employees of $agentName will be able to access your ${taxServiceNames(serviceKey)} data."
   }
@@ -273,9 +273,9 @@ class ConsentInformationPageSpec extends ViewSpecSupport {
     taxServices.foreach(serviceKey =>
       val view: HtmlFormat.Appendable = viewTemplate( journeyForService(serviceKey).copy(
         existingMainAgent = Some(existingAgent),
-        agentName = Some(newAgentName)), 
+        agentName = Some(newAgentName)),
         agentRole(serviceKey))
-      
+
       val doc: Document = Jsoup.parse(view.body)
       s"include the correct title for $serviceKey" in {
         doc.title() shouldBe ExpectedChangeAgent.title(serviceKey,newAgentName)
@@ -292,7 +292,7 @@ class ConsentInformationPageSpec extends ViewSpecSupport {
       s"include the correct p2 text for $serviceKey" in {
         doc.mainContent.extractText(p, 2).value shouldBe ExpectedItsaChangeAgent.section2p1(serviceKey, newAgentName)
       }
-      
+
       s"should include a continue button for $serviceKey" in {
         doc.mainContent.extractText(button, 1).value shouldBe "Continue"
       }
