@@ -77,7 +77,13 @@ class ClientExitPageSpec extends ViewSpecSupport {
   }
 
   "ClientExitPage for CannotFindAuthorisationRequest view" should {
-    val view: HtmlFormat.Appendable = viewTemplate(CannotFindAuthorisationRequest, userIsLoggedIn = true, Some(testLastModifiedDate), Some(RedirectUrl("/url")))
+    val view: HtmlFormat.Appendable = viewTemplate(
+      exitType = CannotFindAuthorisationRequest,
+      userIsLoggedIn = true,
+      lastModifiedDate = Some(testLastModifiedDate),
+      continueUrl = Some(RedirectUrl("/url")),
+      service = HMRCMTDIT
+    )
     val doc: Document = Jsoup.parse(view.body)
 
     "have the right title" in {
@@ -114,7 +120,7 @@ class ClientExitPageSpec extends ViewSpecSupport {
   }
 
   "ClientExitPage for AuthorisationRequestExpired view" should {
-    val view: HtmlFormat.Appendable = viewTemplate(AuthorisationRequestExpired, userIsLoggedIn = true, Some(testLastModifiedDate))
+    val view: HtmlFormat.Appendable = viewTemplate(AuthorisationRequestExpired, userIsLoggedIn = true, Some(testLastModifiedDate), service = HMRCMTDIT)
     val doc: Document = Jsoup.parse(view.body)
 
     "have the right title" in {
@@ -139,7 +145,7 @@ class ClientExitPageSpec extends ViewSpecSupport {
   }
 
   "ClientExitPage for AuthorisationRequestCancelled view" should {
-    val view: HtmlFormat.Appendable = viewTemplate(AuthorisationRequestCancelled, userIsLoggedIn = true, Some(testLastModifiedDate), service = Some(HMRCMTDIT))
+    val view: HtmlFormat.Appendable = viewTemplate(AuthorisationRequestCancelled, userIsLoggedIn = true, Some(testLastModifiedDate), service = HMRCMTDIT)
     val doc: Document = Jsoup.parse(view.body)
 
     "have the right title" in {
@@ -162,7 +168,7 @@ class ClientExitPageSpec extends ViewSpecSupport {
   }
 
   "ClientExitPage for AlreadyAcceptedAuthorisationRequest view" should {
-    val view: HtmlFormat.Appendable = viewTemplate(AlreadyAcceptedAuthorisationRequest, userIsLoggedIn = true, Some(testLastModifiedDate))
+    val view: HtmlFormat.Appendable = viewTemplate(AlreadyAcceptedAuthorisationRequest, userIsLoggedIn = true, Some(testLastModifiedDate), service = HMRCMTDIT)
     val doc: Document = Jsoup.parse(view.body)
 
     "have the right title" in {
@@ -185,7 +191,7 @@ class ClientExitPageSpec extends ViewSpecSupport {
   }
 
   "ClientExitPage for AlreadyRefusedAuthorisationRequest view" should {
-    val view: HtmlFormat.Appendable = viewTemplate(AlreadyRefusedAuthorisationRequest, userIsLoggedIn = true, Some(testLastModifiedDate), service = Some(HMRCMTDIT))
+    val view: HtmlFormat.Appendable = viewTemplate(AlreadyRefusedAuthorisationRequest, userIsLoggedIn = true, Some(testLastModifiedDate), service = HMRCMTDIT)
     val doc: Document = Jsoup.parse(view.body)
 
     "have the right title" in {
@@ -208,7 +214,7 @@ class ClientExitPageSpec extends ViewSpecSupport {
   }
 
   "ClientExitPage for AgentSuspended view" should {
-    val view: HtmlFormat.Appendable = viewTemplate(AgentSuspended, userIsLoggedIn = false)
+    val view: HtmlFormat.Appendable = viewTemplate(AgentSuspended, userIsLoggedIn = false, service = HMRCMTDIT)
     val doc: Document = Jsoup.parse(view.body)
 
     "have the right title" in {
@@ -223,15 +229,11 @@ class ClientExitPageSpec extends ViewSpecSupport {
     "have a language switcher" in {
       doc.hasLanguageSwitch shouldBe true
     }
-
-    "have the correct link in the details component content" in {
-
-      doc.mainContent.extractLink(1).value shouldBe TestLink("Finish and sign out", "/agent-client-relationships/sign-out?isAgent=false")
-    }
+    // there should not be a sign out link as the user is not signed in...
   }
 
   "ClientExitPage for NoOutstandingRequests view" should {
-    val view: HtmlFormat.Appendable = viewTemplate(NoOutstandingRequests, userIsLoggedIn = false)
+    val view: HtmlFormat.Appendable = viewTemplate(NoOutstandingRequests, userIsLoggedIn = false, service = HMRCMTDIT)
     val doc: Document = Jsoup.parse(view.body)
 
     "have the right title" in {

@@ -66,7 +66,7 @@ class StartControllerISpec extends ComponentSpecHelper with ScalaFutures with Au
 
       val result = get(routes.StartController.show(testUid, testNormalizedAgentName, testTaxService).url)
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe routes.ClientExitController.showUnauthorised(NoOutstandingRequests).url
+      result.header("Location").value shouldBe routes.ClientExitController.showUnauthorised(NoOutstandingRequests, testTaxService).url
     }
 
     "Redirect to routes.ClientExitController.show(AGENT_SUSPENDED)" in {
@@ -75,7 +75,7 @@ class StartControllerISpec extends ComponentSpecHelper with ScalaFutures with Au
 
       val result = get(routes.StartController.show(testUid, testNormalizedAgentName, testTaxService).url)
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe routes.ClientExitController.showUnauthorised(AgentSuspended).url
+      result.header("Location").value shouldBe routes.ClientExitController.showUnauthorised(AgentSuspended, testTaxService).url
     }
 
     validTaxServiceNames.foreach { taxService =>

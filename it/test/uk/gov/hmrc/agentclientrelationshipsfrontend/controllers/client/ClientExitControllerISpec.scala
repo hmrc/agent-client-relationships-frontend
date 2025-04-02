@@ -34,6 +34,7 @@ class ClientExitControllerISpec extends ComponentSpecHelper with AuthStubs {
   val alreadyAcceptedStatus: List[InvitationStatus] = List(Accepted, DeAuthorised, PartialAuth)
 
   val testName = "Test Name"
+  val defaultTaxService = "income-tax"
 
   def testValidateInvitationResponseJson(taxService: String, status: String = "Pending"): JsObject = Json.obj(
     "invitationId" -> "AB1234567890",
@@ -64,27 +65,27 @@ class ClientExitControllerISpec extends ComponentSpecHelper with AuthStubs {
     "return 200" when {
       "the user is signed out and the agent is suspended" in {
         await(journeyService.saveJourney(journeyModel(None)))
-        val result = get(routes.ClientExitController.showUnauthorised(AgentSuspended).url)
+        val result = get(routes.ClientExitController.showUnauthorised(AgentSuspended, defaultTaxService).url)
 
         result.status shouldBe OK
       }
       "the user is signed out and there are no outstanding requests" in {
         await(journeyService.saveJourney(journeyModel(None)))
-        val result = get(routes.ClientExitController.showUnauthorised(NoOutstandingRequests).url)
+        val result = get(routes.ClientExitController.showUnauthorised(NoOutstandingRequests, defaultTaxService).url)
 
         result.status shouldBe OK
       }
       "a client is signed in and the agent is suspended" in {
         authoriseAsClientWithEnrolments("HMRC-MTD-IT")
         await(journeyService.saveJourney(journeyModel(None)))
-        val result = get(routes.ClientExitController.showUnauthorised(AgentSuspended).url)
+        val result = get(routes.ClientExitController.showUnauthorised(AgentSuspended, defaultTaxService).url)
 
         result.status shouldBe OK
       }
       "a client is signed in and  there are no outstanding requests" in {
         authoriseAsClientWithEnrolments("HMRC-MTD-IT")
         await(journeyService.saveJourney(journeyModel(None)))
-        val result = get(routes.ClientExitController.showUnauthorised(NoOutstandingRequests).url)
+        val result = get(routes.ClientExitController.showUnauthorised(NoOutstandingRequests, defaultTaxService).url)
 
         result.status shouldBe OK
       }
@@ -93,10 +94,16 @@ class ClientExitControllerISpec extends ComponentSpecHelper with AuthStubs {
 
   "the showClient action" should {
     "return 200" when {
+      "the client is authenticated and the agent is suspended" in {
+        authoriseAsClient()
+        await(journeyService.saveJourney(journeyModel(None)))
+        val result = get(routes.ClientExitController.showClient(AgentSuspended, taxService = Some(defaultTaxService)).url)
+        result.status shouldBe OK
+      }
       "the client is authenticated and the authorisation request is Cancelled" in {
         authoriseAsClient()
         await(journeyService.saveJourney(journeyModel(Some(Cancelled))))
-        val result = get(routes.ClientExitController.showClient(AuthorisationRequestCancelled).url)
+        val result = get(routes.ClientExitController.showClient(AuthorisationRequestCancelled, taxService = Some(defaultTaxService)).url)
         result.status shouldBe OK
       }
       "the client is authenticated and the authorisation request is Expired" in {

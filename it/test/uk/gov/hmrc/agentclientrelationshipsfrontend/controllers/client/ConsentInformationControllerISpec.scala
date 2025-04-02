@@ -34,6 +34,7 @@ class ConsentInformationControllerISpec extends ComponentSpecHelper with ScalaFu
 
   val testUid = "ABCD"
   val testName = "Test Name"
+  val defaultTaxService = "income-tax"
 
   val taxServices: Map[String, String] = Map(
     "income-tax" -> "HMRC-MTD-IT",
@@ -74,7 +75,7 @@ class ConsentInformationControllerISpec extends ComponentSpecHelper with ScalaFu
 
     "redirect to a InsufficientEnrolments exit page when the URL part is not valid for the user enrolments" in :
       authoriseAsClientWithEnrolments("HMRC-MTD-IT")
-      await(journeyService.saveJourney(ClientJourney(journeyType = "authorisation-response")))
+      await(journeyService.saveJourney(ClientJourney(journeyType = "authorisation-response", serviceKey = Some(taxServices("vat")))))
       val result = get(routes.DeclineRequestController.show(testUid, "vat").url)
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe routes.ClientExitController
@@ -82,41 +83,42 @@ class ConsentInformationControllerISpec extends ComponentSpecHelper with ScalaFu
 
     "redirect to NoOutstandingRequests exit page when the invitation data is not found" in {
       authoriseAsClientWithEnrolments("HMRC-MTD-IT")
-      await(journeyService.saveJourney(ClientJourney(journeyType = "authorisation-response")))
+      await(journeyService.saveJourney(ClientJourney(journeyType = "authorisation-response", serviceKey = Some("HMRC-MTD-IT"))))
       stubPost(validateInvitationUrl, NOT_FOUND, "")
-      val result = get(routes.ConsentInformationController.show(testUid, "income-tax").url)
+      val result = get(routes.ConsentInformationController.show(testUid, defaultTaxService).url)
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe routes.ClientExitController.showUnauthorised(ClientExitType.NoOutstandingRequests).url
+      result.header("Location").value shouldBe routes.ClientExitController.showClient(ClientExitType.NoOutstandingRequests).url
     }
 
     "redirect to AgentSuspended exit page when the invitation data is not found" in {
       authoriseAsClientWithEnrolments("HMRC-MTD-IT")
-      await(journeyService.saveJourney(ClientJourney(journeyType = "authorisation-response")))
+      await(journeyService.saveJourney(ClientJourney(journeyType = "authorisation-response", serviceKey = Some("HMRC-MTD-IT"))))
       stubPost(validateInvitationUrl, FORBIDDEN, "")
-      val result = get(routes.ConsentInformationController.show(testUid, "income-tax").url)
+      val result = get(routes.ConsentInformationController.show(testUid, defaultTaxService).url)
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe routes.ClientExitController.showUnauthorised(ClientExitType.AgentSuspended).url
+      result.header("Location").value shouldBe routes.ClientExitController.showClient(ClientExitType.AgentSuspended, taxService = Some(defaultTaxService)).url
     }
 
     taxServices.keySet.foreach { taxService =>
+      val serviceKey: String = taxServices(taxService)
       s"Display consent information page for $taxService" in {
-        authoriseAsClientWithEnrolments(taxServices(taxService))
+        authoriseAsClientWithEnrolments(serviceKey)
         await(journeyService.saveJourney(ClientJourney(journeyType = "authorisation-response")))
-        stubPost(validateInvitationUrl, OK, testValidateInvitationResponseJson(taxServices(taxService)).toString())
+        stubPost(validateInvitationUrl, OK, testValidateInvitationResponseJson(serviceKey).toString())
         val result = get(routes.ConsentInformationController.show(testUid, taxService).url)
         result.status shouldBe OK
       }
       s"Redirect correctly to expired exit page for $taxService" in {
-        authoriseAsClientWithEnrolments(taxServices(taxService))
-        await(journeyService.saveJourney(ClientJourney(journeyType = "authorisation-response")))
-        stubPost(validateInvitationUrl, OK, testValidateInvitationResponseJson(taxServices(taxService), "Expired").toString())
+        authoriseAsClientWithEnrolments(serviceKey)
+        await(journeyService.saveJourney(ClientJourney(journeyType = "authorisation-response", serviceKey = Some(serviceKey))))
+        stubPost(validateInvitationUrl, OK, testValidateInvitationResponseJson(serviceKey, "Expired").toString())
         val result = get(routes.ConsentInformationController.show(testUid, taxService).url)
         result.status shouldBe SEE_OTHER
         result.header("Location").value shouldBe routes.ClientExitController.showClient(ClientExitType.AuthorisationRequestExpired).url
       }
       s"Redirect correctly to cancelled exit page for $taxService" in {
-        authoriseAsClientWithEnrolments(taxServices(taxService))
-        await(journeyService.saveJourney(ClientJourney(journeyType = "authorisation-response")))
+        authoriseAsClientWithEnrolments(serviceKey)
+        await(journeyService.saveJourney(ClientJourney(journeyType = "authorisation-response", serviceKey = Some(serviceKey))))
         stubPost(validateInvitationUrl, OK, testValidateInvitationResponseJson(taxServices(taxService), "Cancelled").toString())
         val result = get(routes.ConsentInformationController.show(testUid, taxService).url)
         result.status shouldBe SEE_OTHER
@@ -124,7 +126,7 @@ class ConsentInformationControllerISpec extends ComponentSpecHelper with ScalaFu
       }
       s"Redirect correctly to already accepted exit page for $taxService" in {
         authoriseAsClientWithEnrolments(taxServices(taxService))
-        await(journeyService.saveJourney(ClientJourney(journeyType = "authorisation-response")))
+        await(journeyService.saveJourney(ClientJourney(journeyType = "authorisation-response", serviceKey = Some(serviceKey))))
         stubPost(validateInvitationUrl, OK, testValidateInvitationResponseJson(taxServices(taxService), "Accepted").toString())
         val result = get(routes.ConsentInformationController.show(testUid, taxService).url)
         result.status shouldBe SEE_OTHER
@@ -133,7 +135,7 @@ class ConsentInformationControllerISpec extends ComponentSpecHelper with ScalaFu
 
       s"Redirect correctly to already refused exit page for $taxService" in {
         authoriseAsClientWithEnrolments(taxServices(taxService))
-        await(journeyService.saveJourney(ClientJourney(journeyType = "authorisation-response")))
+        await(journeyService.saveJourney(ClientJourney(journeyType = "authorisation-response", serviceKey = Some(serviceKey))))
         stubPost(validateInvitationUrl, OK, testValidateInvitationResponseJson(taxServices(taxService), "Rejected").toString())
         val result = get(routes.ConsentInformationController.show(testUid, taxService).url)
         result.status shouldBe SEE_OTHER

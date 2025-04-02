@@ -39,14 +39,16 @@ class StartController @Inject()(agentClientRelationshipsConnector: AgentClientRe
                                 mcc: MessagesControllerComponents
                                )(implicit val executionContext: ExecutionContext, appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport:
 
+  // TEST-ONLY NOTE: unauthenticated access to this route may not work when using stubs without an existing agent cache in agent-assurance
+  // bypass issue by either accessing as authenticated client or ensure cache for agent record exists first before signing out
   def show(uid: String, normalizedAgentName: String, taxService: String): Action[AnyContent] = Action.async:
     implicit request =>
       if serviceConfigurationService.validateUrlPart(taxService) then
         agentClientRelationshipsConnector
           .validateLinkParts(uid, normalizedAgentName)
           .map {
-            case Left(AgentSuspendedError) => Redirect(routes.ClientExitController.showUnauthorised(AgentSuspended))
-            case Left(AgentNotFoundError) => Redirect(routes.ClientExitController.showUnauthorised(NoOutstandingRequests))
+            case Left(AgentSuspendedError) => Redirect(routes.ClientExitController.showUnauthorised(AgentSuspended, taxService))
+            case Left(AgentNotFoundError) => Redirect(routes.ClientExitController.showUnauthorised(NoOutstandingRequests, taxService))
             case Right(response) => Ok(authoriseAgentStartPage(response.name, taxService, uid))
           }
       else Future.successful(NotFound(pageNotFound()))

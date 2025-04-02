@@ -47,6 +47,8 @@ class DeclineRequestControllerISpec extends ComponentSpecHelper with AuthStubs w
     "trusts-and-estates" -> "HMRC-TERS-ORG",
   )
 
+  val defaultTaxService: String = "income-tax"
+
   val validateInvitationUrl = s"/agent-client-relationships/client/validate-invitation"
 
   def testValidateInvitationResponseJson(taxService: String, status: String = "Pending"): JsObject = Json.obj(
@@ -79,64 +81,75 @@ class DeclineRequestControllerISpec extends ComponentSpecHelper with AuthStubs w
       val result = get(routes.DeclineRequestController.show(testUid, "vat").url)
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe routes.ClientExitController
-        .showClient(ClientExitType.CannotFindAuthorisationRequest, Some(RedirectUrl(appConfig.appExternalUrl + routes.DeclineRequestController.show(testUid, "vat").url))).url
+        .showClient(
+          ClientExitType.CannotFindAuthorisationRequest,
+          Some(RedirectUrl(appConfig.appExternalUrl + routes.DeclineRequestController.show(testUid, "vat").url))
+        ).url
 
     "redirect to NoOutstandingRequests exit page when the invitation data is not found" in :
       authoriseAsClientWithEnrolments("HMRC-MTD-IT")
-      await(journeyService.saveJourney(ClientJourney(journeyType = "authorisation-response")))
+      await(journeyService.saveJourney(ClientJourney(journeyType = "authorisation-response", serviceKey = Some("HMRC-MTD-IT"))))
       stubPost(validateInvitationUrl, NOT_FOUND, "")
-      val result = get(routes.DeclineRequestController.show(testUid, "income-tax").url)
+      val result = get(routes.DeclineRequestController.show(testUid, defaultTaxService).url)
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe routes.ClientExitController.showUnauthorised(ClientExitType.NoOutstandingRequests).url
+      result.header("Location").value shouldBe routes.ClientExitController.showClient(ClientExitType.NoOutstandingRequests, taxService = Some(defaultTaxService)).url
 
     "redirect to AgentSuspended exit page when the agent is suspended" in :
       authoriseAsClientWithEnrolments("HMRC-MTD-IT")
-      await(journeyService.saveJourney(ClientJourney(journeyType = "authorisation-response")))
+      await(journeyService.saveJourney(ClientJourney(journeyType = "authorisation-response", serviceKey = Some("HMRC-MTD-IT"))))
       stubPost(validateInvitationUrl, FORBIDDEN, "")
-      val result = get(routes.DeclineRequestController.show(testUid, "income-tax").url)
+      val result = get(routes.DeclineRequestController.show(testUid, defaultTaxService).url)
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe routes.ClientExitController.showUnauthorised(ClientExitType.AgentSuspended).url
+      result.header("Location").value shouldBe routes.ClientExitController.showClient(ClientExitType.AgentSuspended, taxService = Some(defaultTaxService)).url
 
     taxServices.keySet.foreach: taxService =>
 
       s"display consent information page for $taxService" in :
         authoriseAsClientWithEnrolments(taxServices(taxService))
-        await(journeyService.saveJourney(ClientJourney(journeyType = "authorisation-response")))
+        await(journeyService.saveJourney(ClientJourney(journeyType = "authorisation-response", serviceKey = Some(taxServices(taxService)))))
         stubPost(validateInvitationUrl, OK, testValidateInvitationResponseJson(taxServices(taxService)).toString())
         val result = get(routes.DeclineRequestController.show(testUid, taxService).url)
         result.status shouldBe OK
 
       s"redirect to expired exit page for $taxService" in :
         authoriseAsClientWithEnrolments(taxServices(taxService))
-        await(journeyService.saveJourney(ClientJourney(journeyType = "authorisation-response")))
+        await(journeyService.saveJourney(ClientJourney(journeyType = "authorisation-response", serviceKey = Some(taxServices(taxService)))))
         stubPost(validateInvitationUrl, OK, testValidateInvitationResponseJson(taxServices(taxService), "Expired").toString())
         val result = get(routes.DeclineRequestController.show(testUid, taxService).url)
         result.status shouldBe SEE_OTHER
-        result.header("Location").value shouldBe routes.ClientExitController.showClient(ClientExitType.AuthorisationRequestExpired).url
+        result.header("Location").value shouldBe routes.ClientExitController.showClient(
+          ClientExitType.AuthorisationRequestExpired
+        ).url
 
       s"redirect to cancelled exit page for $taxService" in :
         authoriseAsClientWithEnrolments(taxServices(taxService))
-        await(journeyService.saveJourney(ClientJourney(journeyType = "authorisation-response")))
+        await(journeyService.saveJourney(ClientJourney(journeyType = "authorisation-response", serviceKey = Some(taxServices(taxService)))))
         stubPost(validateInvitationUrl, OK, testValidateInvitationResponseJson(taxServices(taxService), "Cancelled").toString())
         val result = get(routes.DeclineRequestController.show(testUid, taxService).url)
         result.status shouldBe SEE_OTHER
-        result.header("Location").value shouldBe routes.ClientExitController.showClient(ClientExitType.AuthorisationRequestCancelled).url
+        result.header("Location").value shouldBe routes.ClientExitController.showClient(
+          ClientExitType.AuthorisationRequestCancelled
+        ).url
 
       s"redirect to already accepted exit page for $taxService" in :
         authoriseAsClientWithEnrolments(taxServices(taxService))
-        await(journeyService.saveJourney(ClientJourney(journeyType = "authorisation-response")))
+        await(journeyService.saveJourney(ClientJourney(journeyType = "authorisation-response", serviceKey = Some(taxServices(taxService)))))
         stubPost(validateInvitationUrl, OK, testValidateInvitationResponseJson(taxServices(taxService), "Accepted").toString())
         val result = get(routes.DeclineRequestController.show(testUid, taxService).url)
         result.status shouldBe SEE_OTHER
-        result.header("Location").value shouldBe routes.ClientExitController.showClient(ClientExitType.AlreadyAcceptedAuthorisationRequest).url
+        result.header("Location").value shouldBe routes.ClientExitController.showClient(
+          ClientExitType.AlreadyAcceptedAuthorisationRequest
+        ).url
 
       s"redirect to already refused exit page for $taxService" in :
         authoriseAsClientWithEnrolments(taxServices(taxService))
-        await(journeyService.saveJourney(ClientJourney(journeyType = "authorisation-response")))
+        await(journeyService.saveJourney(ClientJourney(journeyType = "authorisation-response", serviceKey = Some(taxServices(taxService)))))
         stubPost(validateInvitationUrl, OK, testValidateInvitationResponseJson(taxServices(taxService), "Rejected").toString())
         val result = get(routes.DeclineRequestController.show(testUid, taxService).url)
         result.status shouldBe SEE_OTHER
-        result.header("Location").value shouldBe routes.ClientExitController.showClient(ClientExitType.AlreadyRefusedAuthorisationRequest).url
+        result.header("Location").value shouldBe routes.ClientExitController.showClient(
+          ClientExitType.AlreadyRefusedAuthorisationRequest
+        ).url
 
 
   "POST /authorisation-response/:uid/:taxService/confirm-decline" when :
@@ -154,7 +167,7 @@ class DeclineRequestControllerISpec extends ComponentSpecHelper with AuthStubs w
         authoriseAsClientWithEnrolments("HMRC-MTD-IT")
         await(journeyService.saveJourney(baseJourneyModel))
         givenRejectAuthorisation("ABC123", NO_CONTENT)
-        val result = post(routes.DeclineRequestController.submit(testUid, "income-tax").url)
+        val result = post(routes.DeclineRequestController.submit(testUid, defaultTaxService).url)
           (Map(DeclineRequestFieldName -> Seq("true")))
         result.status shouldBe SEE_OTHER
         result.header("Location").value shouldBe routes.ConfirmationController.show.url
@@ -162,21 +175,21 @@ class DeclineRequestControllerISpec extends ComponentSpecHelper with AuthStubs w
       "return BadRequest when there is no service in session" in :
         authoriseAsClientWithEnrolments("HMRC-MTD-IT")
         await(journeyService.saveJourney(baseJourneyModel.copy(serviceKey = None)))
-        val result = post(routes.DeclineRequestController.submit(testUid, "income-tax").url)
+        val result = post(routes.DeclineRequestController.submit(testUid, defaultTaxService).url)
           (Map(DeclineRequestFieldName -> Seq("true")))
         result.status shouldBe BAD_REQUEST
 
       "return BadRequest when there is no agent name in session" in :
         authoriseAsClientWithEnrolments("HMRC-MTD-IT")
         await(journeyService.saveJourney(baseJourneyModel.copy(agentName = None)))
-        val result = post(routes.DeclineRequestController.submit(testUid, "income-tax").url)
+        val result = post(routes.DeclineRequestController.submit(testUid, defaultTaxService).url)
           (Map(DeclineRequestFieldName -> Seq("true")))
         result.status shouldBe BAD_REQUEST
 
       "return BadRequest when there is no invitation ID in session" in :
         authoriseAsClientWithEnrolments("HMRC-MTD-IT")
         await(journeyService.saveJourney(baseJourneyModel.copy(invitationId = None)))
-        val result = post(routes.DeclineRequestController.submit(testUid, "income-tax").url)
+        val result = post(routes.DeclineRequestController.submit(testUid, defaultTaxService).url)
           (Map(DeclineRequestFieldName -> Seq("true")))
         result.status shouldBe BAD_REQUEST
 
@@ -185,29 +198,29 @@ class DeclineRequestControllerISpec extends ComponentSpecHelper with AuthStubs w
       "redirect to the ConsentInformation page" in :
         authoriseAsClientWithEnrolments("HMRC-MTD-IT")
         await(journeyService.saveJourney(baseJourneyModel))
-        val result = post(routes.DeclineRequestController.submit(testUid, "income-tax").url)
+        val result = post(routes.DeclineRequestController.submit(testUid, defaultTaxService).url)
           (Map(DeclineRequestFieldName -> Seq("false")))
         result.status shouldBe SEE_OTHER
-        result.header("Location").value shouldBe routes.ConsentInformationController.show(testUid, "income-tax").url
+        result.header("Location").value shouldBe routes.ConsentInformationController.show(testUid, defaultTaxService).url
 
       "return BadRequest when there is no service in session" in :
         authoriseAsClientWithEnrolments("HMRC-MTD-IT")
         await(journeyService.saveJourney(baseJourneyModel.copy(serviceKey = None)))
-        val result = post(routes.DeclineRequestController.submit(testUid, "income-tax").url)
+        val result = post(routes.DeclineRequestController.submit(testUid, defaultTaxService).url)
           (Map(DeclineRequestFieldName -> Seq("false")))
         result.status shouldBe BAD_REQUEST
 
       "return BadRequest when there is no agent name in session" in :
         authoriseAsClientWithEnrolments("HMRC-MTD-IT")
         await(journeyService.saveJourney(baseJourneyModel.copy(agentName = None)))
-        val result = post(routes.DeclineRequestController.submit(testUid, "income-tax").url)
+        val result = post(routes.DeclineRequestController.submit(testUid, defaultTaxService).url)
           (Map(DeclineRequestFieldName -> Seq("false")))
         result.status shouldBe BAD_REQUEST
 
       "return BadRequest when there is no invitation ID in session" in :
         authoriseAsClientWithEnrolments("HMRC-MTD-IT")
         await(journeyService.saveJourney(baseJourneyModel.copy(invitationId = None)))
-        val result = post(routes.DeclineRequestController.submit(testUid, "income-tax").url)
+        val result = post(routes.DeclineRequestController.submit(testUid, defaultTaxService).url)
           (Map(DeclineRequestFieldName -> Seq("false")))
         result.status shouldBe BAD_REQUEST
 
@@ -216,6 +229,6 @@ class DeclineRequestControllerISpec extends ComponentSpecHelper with AuthStubs w
       "return BadRequest" in :
         authoriseAsClientWithEnrolments("HMRC-MTD-IT")
         await(journeyService.saveJourney(baseJourneyModel))
-        val result = post(routes.DeclineRequestController.submit(testUid, "income-tax").url)
+        val result = post(routes.DeclineRequestController.submit(testUid, defaultTaxService).url)
           (Map(DeclineRequestFieldName -> Seq("")))
         result.status shouldBe BAD_REQUEST

@@ -38,11 +38,10 @@
     userIsLoggedIn: Boolean,
     lastModifiedDate: Option[Instant] = None,
     continueUrl: Option[RedirectUrl] = None,
-    service: Option[String] = None
+    service: String
 )(implicit request: Request[AnyContent], messages: Messages, appConfig: AppConfig)
-@key = @{if (userIsLoggedIn) "clientExit" else "unauthorisedExit"}
 @serviceName = @{messages("service.name.clients")}
-@pageTitle = @{messages(s"$key.$exitType.header")}
+@pageTitle = @{messages(s"$exitType.header")}
 
 @layout(
     pageTitle,
@@ -53,13 +52,13 @@
     <h1 class="govuk-heading-xl">@pageTitle</h1>
     @{
         exitType match {
-            case ClientExitType.AgentSuspended => agentSuspended()
+            case ClientExitType.AgentSuspended => agentSuspended(service, userIsLoggedIn)
             case ClientExitType.NoOutstandingRequests => noOutstandingRequests()
             case ClientExitType.AuthorisationRequestExpired => authorisationHasExpired(expiryDate = lastModifiedDate)
             case ClientExitType.AuthorisationRequestCancelled => authorisationHasBeenCancelled(lastModifiedDate, service)
             case ClientExitType.CannotFindAuthorisationRequest => cannotFindAuthRequest(continueUrl)
             case ClientExitType.AlreadyAcceptedAuthorisationRequest => alreadyAcceptedAuthorisationRequest(lastModifiedDate)
-            case ClientExitType.AlreadyRefusedAuthorisationRequest => alreadyRefusedAuthorisationRequest(lastModifiedDate, service.getOrElse(throw new RuntimeException("Service Key is missing")))
+            case ClientExitType.AlreadyRefusedAuthorisationRequest => alreadyRefusedAuthorisationRequest(lastModifiedDate, service)
         }
     }
 }

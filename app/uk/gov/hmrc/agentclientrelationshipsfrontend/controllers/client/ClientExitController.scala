@@ -21,6 +21,7 @@ import play.api.mvc.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientExitType
+import uk.gov.hmrc.agentclientrelationshipsfrontend.services.ClientServiceConfigurationService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.client.ClientExitPage
 import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
@@ -31,20 +32,25 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class ClientExitController @Inject()(mcc: MessagesControllerComponents,
                                      clientExitPage: ClientExitPage,
-                                     actions: Actions
+                                     actions: Actions,
+                                     serviceConfigurationService: ClientServiceConfigurationService,
                                     )(implicit val executionContext: ExecutionContext,
                                       appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport:
 
-  def showClient(exitType: ClientExitType, continueUrl: Option[RedirectUrl] = None): Action[AnyContent] = actions.clientAuthenticate.async:
+  def showClient(exitType: ClientExitType, continueUrl: Option[RedirectUrl] = None, taxService: Option[String] = None): Action[AnyContent] = actions.clientAuthenticate.async:
     implicit request =>
+      val serviceKey = taxService.fold
+        (request.journey.serviceKey.getOrElse(throw RuntimeException("Required service key is missing")))
+        (s => serviceConfigurationService.getServiceKeysForUrlPart(s).head)
       Future.successful(Ok(clientExitPage(
         exitType,
         userIsLoggedIn = true,
         lastModifiedDate = request.journey.lastModifiedDate,
         continueUrl = continueUrl,
-        service = request.journey.serviceKey
+        service = serviceKey
       )))
 
-  def showUnauthorised(exitType: ClientExitType): Action[AnyContent] = Action.async:
+  def showUnauthorised(exitType: ClientExitType, taxService: String): Action[AnyContent] = Action.async:
     implicit request =>
-      Future.successful(Ok(clientExitPage(exitType, userIsLoggedIn = false)))
+      val serviceKey = serviceConfigurationService.getServiceKeysForUrlPart(taxService).head
+      Future.successful(Ok(clientExitPage(exitType, userIsLoggedIn = false, service = serviceKey)))
