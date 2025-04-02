@@ -37,7 +37,13 @@ class ClientExitController @Inject()(mcc: MessagesControllerComponents,
 
   def showClient(exitType: ClientExitType, continueUrl: Option[RedirectUrl] = None): Action[AnyContent] = actions.clientAuthenticate.async:
     implicit request =>
-      Future.successful(Ok(clientExitPage(exitType, userIsLoggedIn = true, lastModifiedDate = request.journey.lastModifiedDate, continueUrl = continueUrl)))
+      Future.successful(Ok(clientExitPage(
+        exitType,
+        userIsLoggedIn = true,
+        lastModifiedDate = request.journey.lastModifiedDate,
+        continueUrl = continueUrl,
+        service = request.journey.serviceKey
+      )))
 
   def showUnauthorised(exitType: ClientExitType): Action[AnyContent] = Action.async:
     implicit request =>

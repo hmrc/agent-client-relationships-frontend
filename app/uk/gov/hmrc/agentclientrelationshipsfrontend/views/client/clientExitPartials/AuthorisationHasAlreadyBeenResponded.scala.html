@@ -22,7 +22,7 @@
 
 @this()
 
-@(respondedToDate: Option[Instant])(implicit messages: Messages, appConfig: AppConfig)
+@(respondedToDate: Option[Instant])(implicit messages: Messages, appConfig: AppConfig, request: Request[AnyContent])
 @key = @{
     "authorisationRequestRespondedTo"
 }

@@ -73,8 +73,10 @@ class DisplayDateSpec extends AnyWordSpecLike with Matchers with OptionValues wi
 
     }
   }
+
   "display the date correctly for an ExitPage" in {
+    implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
     val date: Instant = LocalDateTime.of(2024, 1, 10, 0, 0).toInstant(ZoneOffset.UTC)
-    displayInstant(date) shouldBe "10/01/2024"
+    displayInstant(date) shouldBe "10 January 2024"
   }
 }

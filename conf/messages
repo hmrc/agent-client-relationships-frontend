@@ -924,10 +924,10 @@ cannotFindAuthRequest.signOut=Finish and sign out
 # ________________________________________________________________________________
 # This authorisation request has been cancelled
 # ________________________________________________________________________________
-authorisationRequestCancelled.p1=This request was cancelled by your agent on {0}. For details, <a href={1} class="govuk-link" target="_blank" rel="noreferrer noopener">view your history</a> to check for any expired, cancelled or outstanding requests.
-authorisationRequestCancelled.p2=If your agent has sent you a recent request, <a href={0} class="govuk-link" target="_blank" rel="noreferrer noopener">make sure you have signed up to the tax service you need.</a>
-authorisationRequestCancelled.p3=You could also check you have signed in with the correct Government Gateway user ID. It must be the same one you used to sign up to the tax service the authorisation request is for.
-authorisationRequestCancelled.p4=<a href={0} class="govuk-link" target="_blank" rel="noreferrer noopener">Sign in with the Government Gateway user ID</a> you use for managing your personal tax affairs.
+authorisationRequestCancelled.p1=This request was cancelled by the agent on {0}.
+authorisationRequestCancelled.p2=If you want this agent to manage your {0}, ask them to send you another authorisation request.
+authorisationRequestCancelled.a1=Manage your tax agents
+authorisationRequestCancelled.a2=Finish and sign out
 
 # ________________________________________________________________________________
 # This authorisation request has already been responded to

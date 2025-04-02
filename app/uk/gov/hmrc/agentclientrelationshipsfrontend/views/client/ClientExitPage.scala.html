@@ -16,23 +16,29 @@
 
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientExitType
-@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.ClientJourneyRequest
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.Layout
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.client.clientExitPartials.*
-@import java.time.Instant
 @import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl
 
+@import java.time.Instant
+
 @this(
-        layout: Layout,
-        authorisationHasExpired: AuthorisationHasExpired,
-        cannotFindAuthRequest: CannotFindAuthRequest,
-        authorisationHasBeenCancelled: AuthorisationHasBeenCancelled,
-        authorisationHasAlreadyBeenResponded: AuthorisationHasAlreadyBeenResponded,
-        agentSuspended: AgentSuspended,
-        noOutstandingRequests: NoOutstandingRequests
+    layout: Layout,
+    authorisationHasExpired: AuthorisationHasExpired,
+    cannotFindAuthRequest: CannotFindAuthRequest,
+    authorisationHasBeenCancelled: AuthorisationHasBeenCancelled,
+    authorisationHasAlreadyBeenResponded: AuthorisationHasAlreadyBeenResponded,
+    agentSuspended: AgentSuspended,
+    noOutstandingRequests: NoOutstandingRequests
 )
 
-@(exitType: ClientExitType, userIsLoggedIn: Boolean, lastModifiedDate: Option[Instant] = None, continueUrl: Option[RedirectUrl] = None)(implicit request: Request[AnyContent], messages: Messages, appConfig: AppConfig)
+@(
+    exitType: ClientExitType,
+    userIsLoggedIn: Boolean,
+    lastModifiedDate: Option[Instant] = None,
+    continueUrl: Option[RedirectUrl] = None,
+    service: Option[String] = None
+)(implicit request: Request[AnyContent], messages: Messages, appConfig: AppConfig)
 
 @key = @{if (userIsLoggedIn) "clientExit" else "unauthorisedExit"}
 @serviceName = @{messages("service.name.clients")}
@@ -50,7 +56,7 @@
             case ClientExitType.AgentSuspended => agentSuspended()
             case ClientExitType.NoOutstandingRequests => noOutstandingRequests()
             case ClientExitType.AuthorisationRequestExpired => authorisationHasExpired(expiryDate = lastModifiedDate)
-            case ClientExitType.AuthorisationRequestCancelled => authorisationHasBeenCancelled(expiryDate = lastModifiedDate)
+            case ClientExitType.AuthorisationRequestCancelled => authorisationHasBeenCancelled(lastModifiedDate, service)
             case ClientExitType.CannotFindAuthorisationRequest => cannotFindAuthRequest(continueUrl)
             case ClientExitType.AlreadyRespondedToAuthorisationRequest => authorisationHasAlreadyBeenResponded(respondedToDate = lastModifiedDate)
         }

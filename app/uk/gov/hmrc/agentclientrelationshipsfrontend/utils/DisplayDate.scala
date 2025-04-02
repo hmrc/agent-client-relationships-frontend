@@ -64,10 +64,8 @@ object DisplayDate {
     localDate.map(d => displayDateForLang(Some(d))).getOrElse(strDate)
   }
 
-  def displayInstant(instant: Instant): String = {
-    val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
-    val date = instant.atZone(ZoneId.of("Europe/London")).toLocalDate.format(formatter)
-    date
+  def displayInstant(instant: Instant)(implicit request: Request[?]): String = {
+    val localDate = instant.atZone(ZoneId.of("Europe/London")).toLocalDate
+    displayDateForLang(Some(localDate))
   }
-
 }
