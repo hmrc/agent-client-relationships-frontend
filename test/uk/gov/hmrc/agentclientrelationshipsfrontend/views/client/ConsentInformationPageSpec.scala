@@ -23,6 +23,7 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.Pending
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{ClientJourney, ClientJourneyRequest}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.support.ViewSpecSupport
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.client.ConsentInformationPage
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ExistingMainAgent
 
 import java.time.Instant
 import scala.language.postfixOps
@@ -32,38 +33,79 @@ class ConsentInformationPageSpec extends ViewSpecSupport {
   val viewTemplate: ConsentInformationPage = app.injector.instanceOf[ConsentInformationPage]
 
   val agentName: String = "ABC Accountants"
+  val newAgentName:String  = "ABC Accountants New"
+  val existingAgent: ExistingMainAgent = ExistingMainAgent(agentName, false)
   val invitationId: String = "AB1234567890"
-  val serviceKey: String = "HMRC-MTD-IT"
-  val status: String = "Pending"
   val lastModifiedDate: String = "2024-12-01T12:00:00Z"
 
-  val taxServices: Map[String, String] = Map(
-    "income-tax" -> "HMRC-MTD-IT",
-    "income-record-viewer" -> "PERSONAL-INCOME-RECORD",
-    "vat" -> "HMRC-MTD-VAT",
-    "capital-gains-tax-uk-property" -> "HMRC-CGT-PD",
-    "plastic-packaging-tax" -> "HMRC-PPT-ORG",
-    "country-by-country-reporting" -> "HMRC-CBC-ORG",
-    "pillar-2" -> "HMRC-PILLAR2-ORG",
-    "trusts-and-estates" -> "HMRC-TERS-ORG",
+
+  val taxServices:Set[String] = Set(
+    "PERSONAL-INCOME-RECORD",
+    "HMRC-MTD-VAT",
+    "HMRC-CGT-PD",
+    "HMRC-PPT-ORG",
+    "HMRC-CBC-ORG",
+    "HMRC-PILLAR2-ORG",
+    "HMRC-TERS-ORG",
   )
 
   // in the test we can align the same url part with other services according to the actual invitation contents
-  val altTaxServices: Map[String, String] = Map(
-    "income-tax" -> "HMRC-MTD-IT-SUPP",
-    "trusts-and-estates" -> "HMRC-TERSNT-ORG",
+  val itsaServices: Set[String] = Set(
+    "HMRC-MTD-IT",
+    "HMRC-MTD-IT-SUPP"
   )
 
-  object Expected {
-    val heading = "Information you need before you authorise an agent"
-    val title = s"$heading - Appoint someone to deal with HMRC for you - GOV.UK"
-    val p1Main = s"$agentName want to be authorised as your main agent for Making Tax Digital for Income Tax."
-    val p1Supporting = s"$agentName want to be authorised as your supporting agent for Making Tax Digital for Income Tax."
-    def p1(serviceKey: String) = s"$agentName want to be authorised as your agent for ${taxServiceNames(serviceKey)}."
-    val p2 = s"When you have an agent for Making Tax Digital for Income Tax, you can choose how much support you want from them."
-    def section1p1(serviceKey: String) = s"Giving your consent means employees of $agentName will be able to access your ${taxServiceNames(serviceKey)} data."
+  object ExpectedItsa {
+    def heading(serviceKey: String, agentName:String) = s"$agentName want to be your ${indefiniteAgentRole(serviceKey)}"
+    def title(serviceKey: String, agentName:String) = s"${heading(serviceKey, agentName)} - Appoint someone to deal with HMRC for you - GOV.UK"
+    def section1p1(serviceKey: String) = s"An agent can either be 'main agent' or a 'supporting agent' when they manage your ${taxServiceNames(serviceKey)}."
+    def section2p1(serviceKey: String, agentName:String) = s"Giving consent means employees of $agentName will be able to access your ${taxServiceNames(serviceKey)} data."
   }
 
+  object ExpectedItsaChangeAgent {
+    def heading(serviceKey: String, agentName: String) = s"$agentName want to be your ${indefiniteAgentRole(serviceKey)}"
+
+    def title(serviceKey: String, agentName: String) = s"${heading(serviceKey, agentName)} - Appoint someone to deal with HMRC for you - GOV.UK"
+
+    def section1p1(serviceKey: String) = s"An agent can either be 'main agent' or a 'supporting agent' when they manage your ${taxServiceNames(serviceKey)}."
+
+    def section1p2(serviceKey: String, agentName: String, newAgentName: String) = s"If you authorise $newAgentName, we will remove $agentName as your existing main agent."
+    
+    def section2p1(serviceKey: String, agentName: String) = s"Giving consent means employees of $agentName will be able to access your ${taxServiceNames(serviceKey)} data."
+  }
+
+  object Expected {
+    def heading(serviceKey: String) = s"$agentName want to be your ${indefiniteAgentRole(serviceKey)}"
+
+    def title(serviceKey: String) = s"${heading(serviceKey)} - Appoint someone to deal with HMRC for you - GOV.UK"
+
+    def section2p1(serviceKey: String) = s"Giving consent means employees of $agentName will be able to access your ${taxServiceNames(serviceKey)} data."
+  }
+
+  object ExpectedChangeAgent {
+    def heading(serviceKey: String, agentName: String) = s"$agentName want to be your ${indefiniteAgentRole(serviceKey)}"
+
+    def title(serviceKey: String, agentName: String) = s"${heading(serviceKey, agentName)} - Appoint someone to deal with HMRC for you - GOV.UK"
+
+    def section1p1(serviceKey: String, agentName: String, newAgentName: String) = s"If you authorise $newAgentName, we will remove $agentName as your existing agent."
+
+    def section2p1(serviceKey: String, agentName: String) = s"Giving consent means employees of $agentName will be able to access your ${taxServiceNames(serviceKey)} data."
+  }
+
+  val indefiniteAgentRole: Map[String, String] = Map(
+    "PERSONAL-INCOME-RECORD" -> "agent",
+    "HMRC-MTD-IT" -> "main agent",
+    "HMRC-MTD-IT-SUPP" -> "supporting agent",
+    "HMRC-PPT-ORG" -> "agent",
+    "HMRC-CGT-PD" -> "agent",
+    "HMRC-CBC-ORG" -> "agent",
+    "HMRC-CBC-NONUK-ORG" -> "agent",
+    "HMRC-MTD-VAT" -> "agent",
+    "HMRC-PILLAR2-ORG" -> "agent",
+    "HMRC-TERS-ORG" -> "agent",
+    "HMRC-TERSNT-ORG" -> "agent"
+  )
+  
   val taxServiceNames: Map[String, String] = Map(
     "PERSONAL-INCOME-RECORD" -> "Income Record Viewer",
     "HMRC-MTD-IT" -> "Making Tax Digital for Income Tax",
@@ -78,6 +120,20 @@ class ConsentInformationPageSpec extends ViewSpecSupport {
     "HMRC-TERSNT-ORG" -> "Trusts and Estates"
   )
 
+  val agentRole: Map[String, String] = Map(
+    "PERSONAL-INCOME-RECORD" -> "agent",
+    "HMRC-MTD-IT" -> "mainAgent",
+    "HMRC-MTD-IT-SUPP" -> "suppAgent",
+    "HMRC-PPT-ORG" -> "agent",
+    "HMRC-CGT-PD" -> "agent",
+    "HMRC-CBC-ORG" -> "agent",
+    "HMRC-CBC-NONUK-ORG" -> "agent",
+    "HMRC-MTD-VAT" -> "agent",
+    "HMRC-PILLAR2-ORG" -> "agent",
+    "HMRC-TERS-ORG" -> "agent",
+    "HMRC-TERSNT-ORG" -> "agent"
+  )
+
   val journey: ClientJourney = ClientJourney(
     journeyType = "authorisation-response"
   )
@@ -90,40 +146,157 @@ class ConsentInformationPageSpec extends ViewSpecSupport {
     lastModifiedDate = Some(Instant.parse(lastModifiedDate))
   )
 
-  "ConsentInformation view" should {
+
+  "ConsentInformation view ITSA no agent change" should {
     implicit val journeyRequest: ClientJourneyRequest[?] = new ClientJourneyRequest(journey, request)
 
-    List(taxServices, altTaxServices).foreach(services =>
-      for (taxService <- services.keySet.toList) {
-        val serviceKey: String = services(taxService)
-        val view: HtmlFormat.Appendable = viewTemplate(journeyForService(serviceKey))
+    itsaServices.foreach(serviceKey =>
+        val view: HtmlFormat.Appendable = viewTemplate(journeyForService(serviceKey), agentRole(serviceKey))
         val doc: Document = Jsoup.parse(view.body)
         s"include the correct title for $serviceKey" in {
-          doc.title() shouldBe Expected.title
+          doc.title() shouldBe ExpectedItsa.title(serviceKey, agentName)
         }
 
         s"include the correct H1 text for $serviceKey" in {
-          doc.mainContent.extractText(h1, 1).value shouldBe Expected.heading
+          doc.mainContent.extractText(h1, 1).value shouldBe ExpectedItsa.heading(serviceKey, agentName)
         }
 
         s"include the correct p1 text for $serviceKey" in {
-          val expectedP1 = serviceKey match {
-            case "HMRC-MTD-IT" => Expected.p1Main
-            case "HMRC-MTD-IT-SUPP" => Expected.p1Supporting
-            case _ => Expected.p1(serviceKey)
-          }
-          doc.mainContent.extractText(p, 1).value shouldBe expectedP1
+          doc.mainContent.extractText(p, 1).value shouldBe ExpectedItsa.section1p1(serviceKey)
         }
 
-        s"include the correct p2 text for $serviceKey" in {
-          val expectedP2 = if (taxService == "income-tax") Expected.p2 else Expected.section1p1(serviceKey)
-          doc.mainContent.extractText(p, 2).value shouldBe expectedP2
+        s"include the correct p4 text for $serviceKey" in {
+          doc.mainContent.extractText(p, 4).value shouldBe ExpectedItsa.section2p1(serviceKey, agentName)
         }
 
         s"should include a continue button for $serviceKey" in {
           doc.mainContent.extractText(button, 1).value shouldBe "Continue"
         }
+      
+    )
+  }
+
+
+  "ConsentInformation view HMRC-MTD-IT change agent to HMRC-MTD-IT" should {
+    implicit val journeyRequest: ClientJourneyRequest[?] = new ClientJourneyRequest(journey, request)
+
+    val serviceKey = "HMRC-MTD-IT" 
+    val view: HtmlFormat.Appendable = viewTemplate(
+      journeyForService(serviceKey).copy(
+        existingMainAgent = Some(existingAgent),
+        agentName = Some(newAgentName)), 
+      agentRole(serviceKey))
+    val doc: Document = Jsoup.parse(view.body)
+    s"include the correct title for $serviceKey" in {
+      doc.title() shouldBe ExpectedItsaChangeAgent.title(serviceKey, newAgentName)
+    }
+
+    s"include the correct H1 text for $serviceKey" in {
+      doc.mainContent.extractText(h1, 1).value shouldBe ExpectedItsaChangeAgent.heading(serviceKey, newAgentName)
+    }
+
+    s"include the correct p1 text for $serviceKey" in {
+      doc.mainContent.extractText(p, 1).value shouldBe ExpectedItsaChangeAgent.section1p1(serviceKey)
+    }
+
+    s"include the correct p3 text for $serviceKey" in {
+      doc.mainContent.extractText(p, 3).value shouldBe ExpectedItsaChangeAgent.section1p2(serviceKey, agentName, newAgentName)
+    }
+
+
+    s"include the correct p5 text for $serviceKey" in {
+      doc.mainContent.extractText(p, 5).value shouldBe ExpectedItsaChangeAgent.section2p1(serviceKey, newAgentName)
+    }
+
+  }
+
+  "ConsentInformation view HMRC-MTD-IT change agent to HMRC-MTD-IT-SUPP" should {
+    implicit val journeyRequest: ClientJourneyRequest[?] = new ClientJourneyRequest(journey, request)
+
+    val serviceKey = "HMRC-MTD-IT-SUPP"
+    val view: HtmlFormat.Appendable = viewTemplate(
+      journeyForService(serviceKey).copy(
+        existingMainAgent = Some(existingAgent),
+        agentName = Some(newAgentName)),
+      agentRole(serviceKey))
+    val doc: Document = Jsoup.parse(view.body)
+    s"include the correct title for $serviceKey" in {
+      doc.title() shouldBe ExpectedItsaChangeAgent.title(serviceKey, newAgentName)
+    }
+
+    s"include the correct H1 text for $serviceKey" in {
+      doc.mainContent.extractText(h1, 1).value shouldBe ExpectedItsaChangeAgent.heading(serviceKey, newAgentName)
+    }
+
+    s"include the correct p1 text for $serviceKey" in {
+      doc.mainContent.extractText(p, 1).value shouldBe ExpectedItsaChangeAgent.section1p1(serviceKey)
+    }
+
+    s"include the correct p4 text for $serviceKey" in {
+      doc.mainContent.extractText(p, 4).value shouldBe ExpectedItsaChangeAgent.section2p1(serviceKey, newAgentName)
+    }
+
+    s"should include a continue button for $serviceKey" in {
+      doc.mainContent.extractText(button, 1).value shouldBe "Continue"
+    }
+  }
+
+
+  "ConsentInformation view Not ITSA" should {
+    implicit val journeyRequest: ClientJourneyRequest[?] = new ClientJourneyRequest(journey, request)
+
+    taxServices.foreach(serviceKey =>
+      val view: HtmlFormat.Appendable = viewTemplate(journeyForService(serviceKey), agentRole(serviceKey))
+      val doc: Document = Jsoup.parse(view.body)
+      s"include the correct title for $serviceKey" in {
+        doc.title() shouldBe Expected.title(serviceKey)
       }
+
+      s"include the correct H1 text for $serviceKey" in {
+        doc.mainContent.extractText(h1, 1).value shouldBe Expected.heading(serviceKey)
+      }
+
+      s"include the correct p1 text for $serviceKey" in {
+        doc.mainContent.extractText(p, 1).value shouldBe Expected.section2p1(serviceKey)
+      }
+      
+      s"should include a continue button for $serviceKey" in {
+        doc.mainContent.extractText(button, 1).value shouldBe "Continue"
+      }
+
+    )
+  }
+
+  "ConsentInformation view Not ITSA agent change" should {
+    implicit val journeyRequest: ClientJourneyRequest[?] = new ClientJourneyRequest(journey, request)
+
+    taxServices.foreach(serviceKey =>
+      val view: HtmlFormat.Appendable = viewTemplate( journeyForService(serviceKey).copy(
+        existingMainAgent = Some(existingAgent),
+        agentName = Some(newAgentName)),
+        agentRole(serviceKey))
+
+      val doc: Document = Jsoup.parse(view.body)
+      s"include the correct title for $serviceKey" in {
+        doc.title() shouldBe ExpectedChangeAgent.title(serviceKey,newAgentName)
+      }
+
+      s"include the correct H1 text for $serviceKey" in {
+        doc.mainContent.extractText(h1, 1).value shouldBe ExpectedChangeAgent.heading(serviceKey, newAgentName)
+      }
+
+      s"include the correct p1 text for $serviceKey" in {
+        doc.mainContent.extractText(p, 1).value shouldBe ExpectedChangeAgent.section1p1(serviceKey, agentName, newAgentName)
+      }
+
+      s"include the correct p2 text for $serviceKey" in {
+        doc.mainContent.extractText(p, 2).value shouldBe ExpectedItsaChangeAgent.section2p1(serviceKey, newAgentName)
+      }
+
+      s"should include a continue button for $serviceKey" in {
+        doc.mainContent.extractText(button, 1).value shouldBe "Continue"
+      }
+
     )
   }
 }

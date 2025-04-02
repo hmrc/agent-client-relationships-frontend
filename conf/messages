@@ -548,7 +548,7 @@ authoriseAgentStartPage.link.text2=I do not want {0} to act for me
 # Client consent information page (warm-up page)
 # ________________________________________________________________________________
 
-consentInformation.header=Information you need before you authorise an agent
+consentInformation.header={0} want to be your {1}
 
 agentRole.HMRC-MTD-IT=<strong>main agent</strong>
 agentRole.HMRC-MTD-IT-SUPP=<strong>supporting agent</strong>
@@ -602,31 +602,28 @@ indefiniteAgentRole.HMRC-CBC-NONUK-ORG=an agent
 indefiniteAgentRole.HMRC-PILLAR2-ORG=an agent
 indefiniteAgentRole.noEMA=an agent
 
-consentInformation.p1={0} want to be authorised as your {1} for {2}.
+# ________________________________________________________________________________
+# Client consent information
+# ________________________________________________________________________________
+consentInformation.warning.mainAgent=If you authorise {0}, we will remove {1} as your existing main agent.
+consentInformation.warning.agent=If you authorise {0}, we will remove {1} as your existing agent.
+consentInformation.warning.suppAgent=If you authorise {0} as your supporting agent, they can not longer act as main agent.
 
-consentInformation.HMRC-MTD-IT.p2=When you have an agent for {0}, you can choose how much support you want from them.
-consentInformation.HMRC-MTD-IT.p3=There are 2 levels of support to choose from:
-consentInformation.HMRC-MTD-IT.li1=a ‘main agent’ can complete most tasks on your behalf
-consentInformation.HMRC-MTD-IT.li2=a ‘supporting agent’ can carry out some tasks, but they cannot submit end-of-year tax returns or see payment information
-consentInformation.HMRC-MTD-IT.guidance=Read the guidance about <a href={0} class="govuk-link" target="_blank" rel="noreferrer noopener">the difference between main agents and supporting agents (opens in new tab)</a>.
+consentInformation.section1.h2=What you need to know first
+consentInformation.section1.p1=An agent can either be ''main agent'' or a ''supporting agent'' when they manage your {0}.
+consentInformation.section1.p2=Some important tasks - like submitting your tax returns - can only be completed by you, or by a main agent acting on your behalf.
+consentInformation.section1.p3=<a href="{0}" class="govuk-link" target="_blank" rel="noreferrer noopener">Find out how main and supporting agents can act for you  (opens in a new tab)</a>.
 
-consentInformation.HMRC-MTD-IT-SUPP.p2=When you have an agent for {0}, you can choose how much support you want from them.
-consentInformation.HMRC-MTD-IT-SUPP.p3=There are 2 levels of support to choose from:
-consentInformation.HMRC-MTD-IT-SUPP.li1=a ‘main agent’ can complete most tasks on your behalf
-consentInformation.HMRC-MTD-IT-SUPP.li2=a ‘supporting agent’ can carry out some tasks, but they cannot submit end-of-year tax returns or see payment information
-consentInformation.HMRC-MTD-IT-SUPP.guidance=Read the guidance about <a href={0} class="govuk-link" target="_blank" rel="noreferrer noopener">the difference between main agents and supporting agents (opens in new tab)</a>.
+consentInformation.section2.h2=What it means to give consent to an agent
+consentInformation.section2.p1=Giving consent means employees of {0} will be able to access your {1} data.
+consentInformation.section2.p2=Consent lasts until you tell us that {0} can no longer act on your behalf.
+consentInformation.section2.p3=For details about how we store and process your information, see our <a href="{0}" class="govuk-link" target="_blank" rel="noreferrer noopener">privacy notice (opens in a new tab)</a>.
 
-consentInformation.section1.h2=What it means to give consent to an agent
-consentInformation.section1.p1=Giving your consent means employees of {0} will be able to access your {1} data.
-consentInformation.section1.p2=Your consent lasts until you tell us that {0} can no longer act on your behalf.
-consentInformation.section1.p3=If you appoint an overseas agent to act for you, we will need to share your data outside the UK.
-consentInformation.section1.p4=For details about how we store and process your information, see our <a href="{0}" class="govuk-link" target="_blank" rel="noreferrer noopener">privacy notice (opens in a new tab)</a>.
+consentInformation.section3.h2=How to remove consent
+consentInformation.section3.p1=You can withdraw consent at any time by using <a href="{0}" class="govuk-link">Manage who can deal with HMRC for you</a>. A link to this page can be found in your Personal Tax Account or Business Tax Account.
 
-consentInformation.section2.h2=How to remove consent
-consentInformation.section2.p1=You can withdraw consent at any time by using <a href="{0}" class="govuk-link">Manage who can deal with HMRC for you</a>.
-
-consentInformation.section3.h2=Before you decide
-consentInformation.section3.p1=Select ‘continue’ to learn what {0} can do when you authorise them to manage your {1}.
+consentInformation.section4.h2=Before you decide
+consentInformation.section4.p1=On the next page we list the tasks that {0} can carry out on your behalf, if you authorise them as your {1}.
 
 # ________________________________________________________________________________
 # Client confirm consent
@@ -636,16 +633,6 @@ confirmConsent.h1=Authorise an agent
 confirmConsent.agent=agent
 confirmConsent.mainAgent=<strong>main agent</strong>
 confirmConsent.suppAgent=<strong>supporting agent</strong>
-confirmConsent.p1={0} want to be authorised as your {1} for {2}.
-confirmConsent.warning.agent=You can have 1 agent for {0}. If you authorise {1}, we will remove {2} as your existing agent.
-confirmConsent.warning.mainAgent=You can have 1 main agent for {0}. If you authorise {1}, we will remove {2} as your existing main agent.
-confirmConsent.warning.mainToSupp=If you authorise {0} as your supporting agent, you will no longer have a main agent for {1}.
-confirmConsent.suppAgent.details.heading=What a supporting agent cannot do
-confirmConsent.suppAgent.details.p1=A supporting agent can only carry out limited tax-related tasks for you. For example, they cannot:
-confirmConsent.suppAgent.details.list.item1=submit end-of-year tax returns
-confirmConsent.suppAgent.details.list.item2=estimate tax and view final calculation
-confirmConsent.suppAgent.details.list.item3=view tax amounts owed and paid
-confirmConsent.suppAgent.details.list.item4=deal with penalties for late payment and late submission
 confirmConsent.h2=Read carefully: we need your consent
 confirmConsent.p2=If you agree that {0} can act as your {1} for {2}, they will be able to:
 confirmConsent.legend=Do you want {0} to be authorised as your {1} for {2}?

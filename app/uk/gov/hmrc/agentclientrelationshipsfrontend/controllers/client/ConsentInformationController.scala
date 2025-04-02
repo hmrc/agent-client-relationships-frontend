@@ -36,11 +36,12 @@ import scala.concurrent.{ExecutionContext, Future}
 class ConsentInformationController @Inject()(agentClientRelationshipsConnector: AgentClientRelationshipsConnector,
                                              serviceConfigurationService: ClientServiceConfigurationService,
                                              consentInformationPage: ConsentInformationPage,
+                                             clientServiceConfig: ClientServiceConfigurationService,
                                              mcc: MessagesControllerComponents,
                                              actions: Actions,
                                              clientJourneyService: ClientJourneyService
                                             )(implicit val executionContext: ExecutionContext, appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport:
-
+  
   def show(uid: String, taxService: String): Action[AnyContent] = actions.getClientJourney(taxService).async:
     implicit journeyRequest =>
 
@@ -60,9 +61,18 @@ class ConsentInformationController @Inject()(agentClientRelationshipsConnector: 
               clientType = response.clientType
             )
             clientJourneyService.saveJourney(newJourney).map(_ => response.status match {
-              case Pending => Ok(consentInformationPage(newJourney))
+              case Pending =>
+                val agentRole = determineAgentRole(newJourney.getServiceKey)
+                Ok(consentInformationPage(newJourney, agentRole))
               case Expired => Redirect(routes.ClientExitController.showClient(AuthorisationRequestExpired))
               case Cancelled => Redirect(routes.ClientExitController.showClient(AuthorisationRequestCancelled))
               case _ => Redirect(routes.ClientExitController.showClient(AlreadyRespondedToAuthorisationRequest))
             })
         }
+
+  private def determineAgentRole(service: String) = clientServiceConfig.supportsAgentRoles(service) match {
+    case true if clientServiceConfig.supportingAgentServices.contains(service) => "suppAgent"
+    case true => "mainAgent"
+    case false => "agent"
+  }
+      
