@@ -104,7 +104,7 @@ class ManageYourTaxAgentsControllerISpec extends ComponentSpecHelper with AuthSt
         val url = routes.ManageYourTaxAgentsController.show.url
         val result = get(url)
         result.status shouldBe SEE_OTHER
-        result.header(LOCATION) shouldBe Some(authRoutes.AuthorisationController.cannotViewRequest(None, None).url)
+        result.header(LOCATION) shouldBe Some(authRoutes.AuthorisationController.cannotViewRequest.url)
 
   "The show confirm deauth action" should:
 

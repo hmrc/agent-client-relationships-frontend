@@ -108,7 +108,7 @@ class AuthActions @Inject()(val authConnector: AuthConnector,
                 }
                 else enrolmentCheck(enrols)
               case (AffinityGroup.Agent, _) =>
-                Future.successful(Redirect(routes.AuthorisationController.cannotViewRequest(Some(RedirectUrl(currentUrl)), Some(taxService))))
+                Future.successful(Redirect(routes.AuthorisationController.cannotViewRequest))
             }
           case _ =>
             logger.warn("the logged in client had no affinity group")
@@ -140,7 +140,7 @@ class AuthActions @Inject()(val authConnector: AuthConnector,
                   block(request)
                 else block(request)
               case (AffinityGroup.Agent, _) =>
-                Future.successful(Redirect(routes.AuthorisationController.cannotViewRequest(None)))
+                Future.successful(Redirect(routes.AuthorisationController.cannotViewRequest))
             }
           case _ =>
             logger.warn("the logged in client had no affinity group")

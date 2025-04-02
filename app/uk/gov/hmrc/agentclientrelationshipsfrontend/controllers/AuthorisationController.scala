@@ -35,7 +35,6 @@ class AuthorisationController @Inject()(mcc: MessagesControllerComponents,
                                         identityVerificationConnector: IdentityVerificationConnector,
                                         cannotConfirmIdentityView: CannotConfirmIdentity,
                                         errorCannotViewRequest: ErrorCannotViewRequest,
-                                        notAuthorisedAsClientView: NotAuthorisedAsClient,
                                         ivTechDifficultiesView: IvTechDifficulties,
                                         ivLockedOutView: IvLockedOut,
                                         timedOutView: UserTimedOut)
@@ -43,11 +42,8 @@ class AuthorisationController @Inject()(mcc: MessagesControllerComponents,
                                         appConfig: AppConfig)
   extends FrontendController(mcc) with I18nSupport:
 
-  def cannotViewRequest(continueUrl: Option[RedirectUrl], taxService: Option[String] = None): Action[AnyContent] = Action.async:
-    implicit request =>
-      //When playing APB-9294 check if the else/if is needed or we could use new content for both, very similar
-      if taxService.isDefined then Future.successful(Forbidden(errorCannotViewRequest(continueUrl)))
-      else Future.successful(Forbidden(notAuthorisedAsClientView()))
+  def cannotViewRequest: Action[AnyContent] = Action:
+    implicit request => Forbidden(errorCannotViewRequest())
 
   def cannotConfirmIdentity(journeyId: Option[String], continueUrl: Option[RedirectUrl]): Action[AnyContent] = Action.async:
     implicit request =>
