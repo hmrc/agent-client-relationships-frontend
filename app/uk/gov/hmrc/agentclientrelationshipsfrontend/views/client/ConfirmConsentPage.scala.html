@@ -75,15 +75,6 @@
     }
 }
 
-@suppAgentDetails = {
-    <p>@messages("confirmConsent.suppAgent.details.p1")</p>
-    <ul class="govuk-list govuk-list--bullet">
-        <li>@messages("confirmConsent.suppAgent.details.list.item1")</li>
-        <li>@messages("confirmConsent.suppAgent.details.list.item2")</li>
-        <li>@messages("confirmConsent.suppAgent.details.list.item3")</li>
-        <li>@messages("confirmConsent.suppAgent.details.list.item4")</li>
-    </ul>
-}
 
 @layout(
     pageTitle,
@@ -94,23 +85,6 @@
 
     <h2 class="govuk-caption-xl">@messages(serviceKey)</h2>
     <h1 class="govuk-heading-xl">@pageTitle</h1>
-
-    <p class="govuk-body">@Html(messages(s"$key.p1", agentName, agentRole, taxServiceName))</p>
-
-    @{(request.journey.existingMainAgent, agentRoleKey) match {
-        case (Some(exAgent), "suppAgent") if exAgent.sameAgent =>
-            govukWarningText(WarningText(content = Text(messages(s"$key.warning.mainToSupp", agentName, taxServiceName))))
-        case (Some(exAgent), role) if role != "suppAgent" =>
-            govukWarningText(WarningText(content = Text(messages(s"$key.warning.$agentRoleKey", taxServiceName, agentName, exAgent.agencyName))))
-        case _ => // No warning will render
-    }}
-
-    @if(agentRoleKey == "suppAgent") {
-        @govukDetails(Details(
-            summary = Text(messages("confirmConsent.suppAgent.details.heading")),
-            content = HtmlContent(suppAgentDetails)
-        ))
-    }
 
     <h2 class="govuk-heading-l">@messages(s"$key.h2")</h2>
 
