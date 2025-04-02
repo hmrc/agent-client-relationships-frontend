@@ -20,7 +20,7 @@ GET         /timed-out                                                          
 GET         /sign-out                                                                   uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.SignOutController.signOut(continueUrl: Option[RedirectUrl] ?= None, isAgent: Boolean)
 
 # Auth/IV --------------------------------------------------------------------------------------------------------------------
-GET         /cannot-view-request                                                        uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.AuthorisationController.cannotViewRequest(continueUrl: Option[RedirectUrl] ?= None, taxService: Option[String] ?= None)
+GET         /cannot-view-request                                                        uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.AuthorisationController.cannotViewRequest
 GET         /cannot-confirm-identity                                                    uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.AuthorisationController.cannotConfirmIdentity(journeyId: Option[String] ?= None, continueUrl: Option[RedirectUrl] ?= None)
 GET         /iv-timed-out                                                               uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.AuthorisationController.ivTimedOut(continueUrl: Option[RedirectUrl] ?= None)
 GET         /iv-locked-out                                                              uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.AuthorisationController.ivLockedOut

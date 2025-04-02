@@ -70,18 +70,12 @@ technical-issues.vat.end=if you need help with VAT.
 technical-issues.it.link=Call the HMRC Self Assessment online services helpline
 technical-issues.it.end=if you need help with Making Tax Digital for Income Tax.
 
-#Not Authorised
-not-authorised.header=You cannot access this page
-not-authorised.description.p1=This page can only be accessed by your client.
-not-authorised.description.p2=Ask your client to go to the link that you tried to access, so they can accept your authorisation request.
-not-authorised.button=Sign out
-
 #Error Cannot View Request
 error.cannot-view-request.header=You cannot view this authorisation request
 error.cannot-view-request.p1=You have signed in using an agent user ID.
-error.cannot-view-request.p2=If you are the agent, ask your client to respond to the authorisation request link.
-error.cannot-view-request.p3=If you are not an agent, sign in with the Government Gateway user ID that you use for your tax affairs.
-error.cannot-view-request.button=Sign in
+error.cannot-view-request.p2=If you are the agent, ask your client to respond to the authorisation request.
+error.cannot-view-request.a1=Manage your recent authorisation requests
+error.cannot-view-request.a2=Finish and sign out
 
 # -------------------------------------------------------------------------------------------
 # Select Client Type

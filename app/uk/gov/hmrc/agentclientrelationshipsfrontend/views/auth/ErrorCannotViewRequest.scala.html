@@ -15,32 +15,27 @@
  *@
 
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
-@import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.routes
 
-@this(
-        layout: Layout,
-        govukButton: GovukButton,
-        h1: h1
-)
+@this(layout: Layout, h1: h1)
 
-@(continueUrl: Option[RedirectUrl])(implicit request: Request[?], messages: Messages, appConfig: AppConfig)
+@()(implicit request: Request[?], messages: Messages, appConfig: AppConfig)
+
+@key = @{"error.cannot-view-request"}
 
 @layout(
-    pageTitle = messages("error.cannot-view-request.header"),
+    pageTitle = messages(s"$key.header"),
     serviceName = Some(messages("service.name.clients")),
-    isAgent = false
+    isAgent = true
 ) {
 
-    @h1(messages("error.cannot-view-request.header"))
+    @h1(messages(s"$key.header"))
 
-    <p class="govuk-body"> @messages("error.cannot-view-request.p1") </p>
-    <p class="govuk-body"> @messages("error.cannot-view-request.p2") </p>
-    <p class="govuk-body"> @messages("error.cannot-view-request.p3") </p>
-
-    @govukButton(Button(
-        content = Text(messages("error.cannot-view-request.button")),
-        href = Some(routes.SignOutController.signOut(continueUrl, isAgent = false).url) //Not the right link but is being redone shortly with APB-9294 and will be removed before live
-    ))
+    <p class="govuk-body"> @messages(s"$key.p1") </p>
+    <p class="govuk-body"> @messages(s"$key.p2") </p>
+    <ul class="govuk-list">
+        <li><a class="govuk-link" href="@routes.TrackRequestsController.show().url">@messages(s"$key.a1")</a></li>
+        <li><a class="govuk-link" href="@routes.SignOutController.signOut(isAgent = true).url">@messages(s"$key.a2")</a></li>
+    </ul>
 
 }

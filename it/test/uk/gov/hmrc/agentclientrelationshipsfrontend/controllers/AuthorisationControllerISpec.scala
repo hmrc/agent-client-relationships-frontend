@@ -36,13 +36,8 @@ class AuthorisationControllerISpec extends ComponentSpecHelper {
   def ivUrl(id: String) = s"/mdtp/journey/journeyId/$id"
 
   "GET /cannot-view-request" should {
-    "return FORBIDDEN with ErrorCannotViewRequest view when called with a taxService" in {
-      val result = get(routes.AuthorisationController.cannotViewRequest(None, Some("taxService")).url)
-
-      result.status shouldBe FORBIDDEN
-    }
-    "return FORBIDDEN with NotAuthorisedAsClient view when called without a taxService" in {
-      val result = get(routes.AuthorisationController.cannotViewRequest(None, None).url)
+    "return FORBIDDEN with ErrorCannotViewRequest view" in {
+      val result = get(routes.AuthorisationController.cannotViewRequest.url)
 
       result.status shouldBe FORBIDDEN
     }

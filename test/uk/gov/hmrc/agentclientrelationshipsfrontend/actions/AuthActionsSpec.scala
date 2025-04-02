@@ -210,8 +210,7 @@ class AuthActionsSpec extends AnyWordSpecLike with Matchers with OptionValues wi
       val result = controller.clientAuthWithEnrolmentCheck(incomeTax)(fakeRequest)
 
       status(result) shouldBe SEE_OTHER
-      redirectLocation(result).value shouldBe
-        routes.AuthorisationController.cannotViewRequest(Some(RedirectUrl(appConfig.appExternalUrl + fakeRequest.uri)), Some("income-tax")).url
+      redirectLocation(result).value shouldBe routes.AuthorisationController.cannotViewRequest.url
 
     "redirect a user without session to the login" in :
       val controller = failingControllerSetup(BearerTokenExpired(""))
@@ -294,7 +293,7 @@ class AuthActionsSpec extends AnyWordSpecLike with Matchers with OptionValues wi
       val controller = clientControllerSetup(Agent, L50, Set(Enrolment("HMRC-AS-AGENT")))
       val result = controller.clientAuth()(fakeRequest)
       status(result) shouldBe SEE_OTHER
-      redirectLocation(result).value shouldBe routes.AuthorisationController.cannotViewRequest(None).url
+      redirectLocation(result).value shouldBe routes.AuthorisationController.cannotViewRequest.url
 
     "redirect a user without session to the login" in:
       val controller = failingControllerSetup(BearerTokenExpired(""))

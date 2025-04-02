@@ -18,59 +18,46 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.views.auth
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import org.mockito.Mockito.{reset, when}
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.mockito.MockitoSugar.mock
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
-import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.routes
 import uk.gov.hmrc.agentclientrelationshipsfrontend.support.ViewSpecSupport
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.auth.ErrorCannotViewRequest
-import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl
 
-class ErrorCannotViewRequestSpec extends ViewSpecSupport with BeforeAndAfterEach {
+class ErrorCannotViewRequestSpec extends ViewSpecSupport with BeforeAndAfterEach :
 
   val viewTemplate: ErrorCannotViewRequest = app.injector.instanceOf[ErrorCannotViewRequest]
   override implicit val appConfig: AppConfig = mock[AppConfig]
 
-  override def afterEach(): Unit = {
-    reset(appConfig)
-    super.afterEach()
-  }
-
-  val testUrl = "/url"
-
-  object Expected {
+  object Expected :
     val title = "You cannot view this authorisation request - Appoint someone to deal with HMRC for you - GOV.UK"
     val heading = "You cannot view this authorisation request"
     val para1 = "You have signed in using an agent user ID."
-    val para2 = "If you are the agent, ask your client to respond to the authorisation request link."
-    val para3 = "If you are not an agent, sign in with the Government Gateway user ID that you use for your tax affairs."
-    val button = "Sign in"
-  }
+    val para2 = "If you are the agent, ask your client to respond to the authorisation request."
+    val link1 = "Manage your recent authorisation requests"
+    val link2 = "Finish and sign out"
 
-  "ErrorCannotViewRequest view" when {
-    "generated for a business client" should {
-      when(appConfig.signInUrl).thenReturn(testUrl)
-      val view: HtmlFormat.Appendable = viewTemplate(Some(RedirectUrl(testUrl)))
+  "ErrorCannotViewRequest view" when :
+
+    "generated for a business client" should :
+
+      val view: HtmlFormat.Appendable = viewTemplate()
       val doc: Document = Jsoup.parse(view.body)
-      "have the right title" in {
+
+      "have the right title" in :
         doc.title() shouldBe Expected.title
-      }
-      "have a language switcher" in {
+
+      "have a language switcher" in :
         doc.hasLanguageSwitch shouldBe true
-      }
-      "have the right heading" in {
+
+      "have the right heading" in :
         doc.mainContent.extractText(h1, 1).value shouldBe Expected.heading
-      }
-      "have the right paras" in {
+
+      "have the right paras" in :
         doc.mainContent.extractText(p, 1).value shouldBe Expected.para1
         doc.mainContent.extractText(p, 2).value shouldBe Expected.para2
-        doc.mainContent.extractText(p, 3).value shouldBe Expected.para3
-      }
-      "have a link button" in {
-        doc.mainContent.extractLinkButton(1).value shouldBe TestLink(Expected.button, routes.SignOutController.signOut(Some(RedirectUrl(testUrl)), isAgent = false).url)
-      }
-    }
-  }
-}
+
+      "have the right links" in :
+        doc.mainContent.extractLink(1).value shouldBe TestLink(Expected.link1, "/agent-client-relationships/manage-authorisation-requests")
+        doc.mainContent.extractLink(2).value shouldBe TestLink(Expected.link2, "/agent-client-relationships/sign-out?isAgent=true")

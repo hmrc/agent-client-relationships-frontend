@@ -50,18 +50,12 @@ technical-issues.vat.end=os oes angen help arnoch gyda’r cynllun TAW.
 technical-issues.it.link=Ffoniwch Wasanaeth Cwsmeriaid Cymraeg CThEM
 technical-issues.it.end=os oes angen help arnoch gyda’r cynllun Troi Treth yn Ddigidol ar gyfer Treth Incwm.
 
-#Not Authorised
-not-authorised.header=Nid oes gennych fynediad at y dudalen hon
-not-authorised.description.p1=Dim ond eich cleient all fynd at y dudalen hon.
-not-authorised.description.p2=Gofynnwch i’ch cleient ddilyn y cysylltiad yr oeddech yn ceisio’i ddefnyddio er mwyn iddo allu derbyn eich cais am awdurdodiad.
-not-authorised.button=Allgofnodi
-
 #Error Cannot View Request
-error.cannot-view-request.header=Ni allwch fwrw golwg dros y cais am awdurdodiad hwn
+error.cannot-view-request.header=Ni allwch fwrw golwg dros y cais hwn am awdurdodiad
 error.cannot-view-request.p1=Rydych wedi mewngofnodi gan ddefnyddio Dynodydd Defnyddiwr (ID) asiant.
-error.cannot-view-request.p2=Os mai chi yw’r asiant, gofynnwch i’ch cleient ddilyn y cysylltiad er mwyn ymateb i’r cais am awdurdodiad.
-error.cannot-view-request.p3=Os nad ydych yn asiant, mewngofnodwch gyda’r Dynodydd Defnyddiwr (ID) ar gyfer Porth y Llywodraeth rydych yn ei ddefnyddio ar gyfer eich materion treth.
-error.cannot-view-request.button=Mewngofnodi
+error.cannot-view-request.p2=Os mai chi yw’r asiant, gofynnwch i’ch cleient ymateb i’r cais am awdurdodiad.
+error.cannot-view-request.a1=Rheoli’ch ceisiadau diweddar am awdurdodiad
+error.cannot-view-request.a2=Gorffen ac allgofnodi
 
 # -------------------------------------------------------------------------------------------
 # Select Client Type
