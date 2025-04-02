@@ -58,11 +58,9 @@ class ClientExitPageSpec extends ViewSpecSupport {
     val authorisationRequestCancelledLinkOne = "Manage your tax agents"
     val authorisationRequestCancelledLinkTwo = "Finish and sign out"
 
-    val alreadyRespondedToAuthorisationRequestLabel = "This authorisation request has already been responded to - Appoint someone to deal with HMRC for you - GOV.UK"
-    val alreadyRespondedToAuthorisationRequestParagraphOne = s"This request has already been responded to on 10 January 2024. For details, view your history to check for any expired, cancelled or outstanding requests."
-    val alreadyRespondedToAuthorisationRequestParagraphTwo = "If your agent has sent you a recent request, make sure you have signed up to the tax service you need."
-    val alreadyRespondedToAuthorisationRequestParagraphThree = "You could also check you have signed in with the correct Government Gateway user ID. It must be the same one you used to sign up to the tax service the authorisation request is for."
-    val alreadyRespondedToAuthorisationRequestParagraphFour = "Sign in with the Government Gateway user ID you use for managing your personal tax affairs."
+    val alreadyAcceptedAuthorisationRequestLabel = "You have already accepted this authorisation request - Appoint someone to deal with HMRC for you - GOV.UK"
+    val alreadyAcceptedAuthorisationRequestParagraphOne = s"We received a response to this request on 10 January 2024."
+    val alreadyAcceptedAuthorisationRequestParagraphTwo = "To check the details, or to cancel this authorisation, go to Manage your tax agents."
 
     val agentSuspendedLabel = "You cannot appoint this tax agent - Appoint someone to deal with HMRC for you - GOV.UK"
     val agentSuspendedParagraphOne = "This tax agent cannot manage your Making Tax Digital for Income Tax at this time."
@@ -157,28 +155,26 @@ class ClientExitPageSpec extends ViewSpecSupport {
     }
   }
 
-  "ClientExitPage for AlreadyRespondedToAuthorisationRequest view" should {
+  "ClientExitPage for AlreadyAcceptedAuthorisationRequest view" should {
     val view: HtmlFormat.Appendable = viewTemplate(AlreadyRespondedToAuthorisationRequest, userIsLoggedIn = true, Some(testLastModifiedDate))
     val doc: Document = Jsoup.parse(view.body)
 
     "have the right title" in {
-      doc.title() shouldBe Expected.alreadyRespondedToAuthorisationRequestLabel
+      doc.title() shouldBe Expected.alreadyAcceptedAuthorisationRequestLabel
     }
 
     "display paragraph content" in {
-      doc.select(".govuk-body").get(0).text() shouldBe Expected.alreadyRespondedToAuthorisationRequestParagraphOne
-      doc.select(".govuk-body").get(1).text() shouldBe Expected.alreadyRespondedToAuthorisationRequestParagraphTwo
-      doc.select(".govuk-body").get(2).text() shouldBe Expected.alreadyRespondedToAuthorisationRequestParagraphThree
-      doc.select(".govuk-body").get(3).text() shouldBe Expected.alreadyRespondedToAuthorisationRequestParagraphFour
+      doc.select(".govuk-body").get(0).text() shouldBe Expected.alreadyAcceptedAuthorisationRequestParagraphOne
+      doc.select(".govuk-body").get(1).text() shouldBe Expected.alreadyAcceptedAuthorisationRequestParagraphTwo
     }
 
     "have a language switcher" in {
       doc.hasLanguageSwitch shouldBe true
     }
 
-    "have the correct link in the details component content" in {
-
-      doc.mainContent.extractLink(2).value shouldBe TestLink("make sure you have signed up to the tax service you need.", "https://www.gov.uk/guidance/authorise-an-agent-to-deal-with-certain-tax-services-for-you")
+    "have the correct link text and hrefs" in {
+      doc.mainContent.extractLink(1).value shouldBe TestLink("Manage your tax agents", "/agent-client-relationships/manage-your-tax-agents")
+      doc.mainContent.extractLink(2).value shouldBe TestLink("Finish and sign out", "/agent-client-relationships/sign-out?isAgent=false")
     }
   }
 
