@@ -61,8 +61,7 @@ class ConsentInformationController @Inject()(agentClientRelationshipsConnector: 
               clientType = response.clientType
             )
             clientJourneyService.saveJourney(newJourney).map(_ => response.status match {
-              case Pending => 
-                println(s"${Console.MAGENTA} Wojciech newJourney${newJourney} ${Console.RESET}")
+              case Pending =>
                 val agentRole = determineAgentRole(newJourney.getServiceKey)
                 Ok(consentInformationPage(newJourney, agentRole))
               case Expired => Redirect(routes.ClientExitController.showClient(AuthorisationRequestExpired))
