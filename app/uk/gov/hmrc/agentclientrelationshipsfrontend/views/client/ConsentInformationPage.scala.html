@@ -41,11 +41,11 @@
 @extAgents= @{journey.existingMainAgent}
 @warningHtml= @{(journey.existingMainAgent, agentRoleKey) match {
     case (Some(exAgent), "suppAgent") if exAgent.sameAgent =>
-        val text = messages(s"$key.warning.mainToSupp", agentName)
+        val text = messages(s"$key.warning.$agentRoleKey", agentName)
         Html(s"""<p class="govuk-inset-text">$text</p>""")
 
     case (Some(exAgent), role) if role != "suppAgent" =>
-        val text = messages(s"$key.warning.mainAgent", agentName, exAgent.agencyName)
+        val text = messages(s"$key.warning.$agentRoleKey", agentName, exAgent.agencyName)
         Html(s"""<p class="govuk-inset-text">$text</p>""")
 
     case _ =>
@@ -60,13 +60,16 @@
 
   <h2 class="govuk-caption-xl">@messages(serviceKey)</h2>
   <h1 class="govuk-heading-xl">@Html(pageTitle)</h1>
-
-  @if(agentRoleKey == "mainAgent" || agentRoleKey == "suppAgent") {
+  @if(appConfig.emaEnabled) {
+    @if(agentRoleKey == "mainAgent" || agentRoleKey == "suppAgent") {
       <h2 class="govuk-heading-l">@messages(s"$key.section1.h2")</h2>
       <p class="govuk-body">@messages(s"$key.section1.p1", taxServiceName)</p>
       <p class="govuk-body">@messages(s"$key.section1.p2")</p>
       @warningHtml
       <p class="govuk-body">@Html(messages(s"$key.section1.p3", appConfig.guidanceUrlForAgentRoles))</p>
+    } else {
+      @warningHtml
+    }
   }
 
   <h2 class="govuk-heading-l">@messages(s"$key.section2.h2")</h2>

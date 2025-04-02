@@ -35,23 +35,9 @@ class ConsentInformationPageSpec extends ViewSpecSupport {
   val agentName: String = "ABC Accountants"
   val newAgentName:String  = "ABC Accountants New"
   val existingAgent: ExistingMainAgent = ExistingMainAgent(agentName, false)
-
   val invitationId: String = "AB1234567890"
-//  val serviceKey: String = "HMRC-MTD-IT"
-//  val status: String = "Pending"
   val lastModifiedDate: String = "2024-12-01T12:00:00Z"
 
-//  val mainRole = "mainAgent"
-//  val suppRole = "suppAgent"
-//  val genericRole = "agent"
-//  val caption = "Making Tax Digital for Income Tax"
-
-//  val genericRoleServices: Seq[String] = Seq(
-//    "PERSONAL-INCOME-RECORD", "HMRC-MTD-VAT", "HMRC-CGT-PD",
-//    "HMRC-PPT-ORG", "HMRC-CBC-ORG", "HMRC-PILLAR2-ORG", "HMRC-TERS-ORG"
-//  )
-//  val mainRoleServices: Seq[String] = Seq("HMRC-MTD-IT")
-//  val suppRoleServices: Seq[String] = Seq("HMRC-MTD-IT-SUPP")
 
   val taxServices:Set[String] = Set(
     "PERSONAL-INCOME-RECORD",
@@ -92,10 +78,18 @@ class ConsentInformationPageSpec extends ViewSpecSupport {
     def heading(serviceKey: String) = s"$agentName want to be your ${indefiniteAgentRole(serviceKey)}"
 
     def title(serviceKey: String) = s"${heading(serviceKey)} - Appoint someone to deal with HMRC for you - GOV.UK"
-
-    def section1p1(serviceKey: String) = s"An agent can either be 'main agent' or a 'supporting agent' when they manage your ${taxServiceNames(serviceKey)}."
-
+    
     def section2p1(serviceKey: String) = s"Giving consent means employees of $agentName will be able to access your ${taxServiceNames(serviceKey)} data."
+  }
+
+  object ExpectedChangeAgent {
+    def heading(serviceKey: String, agentName: String) = s"$agentName want to be your ${indefiniteAgentRole(serviceKey)}"
+
+    def title(serviceKey: String, agentName: String) = s"${heading(serviceKey, agentName)} - Appoint someone to deal with HMRC for you - GOV.UK"
+
+    def section1p1(serviceKey: String, agentName: String, newAgentName: String) = s"If you authorise $newAgentName, we will remove $agentName as your existing main agent."
+
+    def section2p1(serviceKey: String, agentName: String) = s"Giving consent means employees of $agentName will be able to access your ${taxServiceNames(serviceKey)} data."
   }
 
   val indefiniteAgentRole: Map[String, String] = Map(
@@ -264,6 +258,39 @@ class ConsentInformationPageSpec extends ViewSpecSupport {
 
       s"include the correct p1 text for $serviceKey" in {
         doc.mainContent.extractText(p, 1).value shouldBe Expected.section2p1(serviceKey)
+      }
+      
+      s"should include a continue button for $serviceKey" in {
+        doc.mainContent.extractText(button, 1).value shouldBe "Continue"
+      }
+
+    )
+  }
+
+  "ConsentInformation view Not ITSA agent change" should {
+    implicit val journeyRequest: ClientJourneyRequest[?] = new ClientJourneyRequest(journey, request)
+
+    taxServices.foreach(serviceKey =>
+      val view: HtmlFormat.Appendable = viewTemplate( journeyForService(serviceKey).copy(
+        existingMainAgent = Some(existingAgent),
+        agentName = Some(newAgentName)), 
+        agentRole(serviceKey))
+      
+      val doc: Document = Jsoup.parse(view.body)
+      s"include the correct title for $serviceKey" in {
+        doc.title() shouldBe ExpectedChangeAgent.title(serviceKey,newAgentName)
+      }
+
+      s"include the correct H1 text for $serviceKey" in {
+        doc.mainContent.extractText(h1, 1).value shouldBe ExpectedChangeAgent.heading(serviceKey, newAgentName)
+      }
+
+      s"include the correct p1 text for $serviceKey" in {
+        doc.mainContent.extractText(p, 1).value shouldBe ExpectedChangeAgent.section1p1(serviceKey, agentName, newAgentName)
+      }
+
+      s"include the correct p2 text for $serviceKey" in {
+        doc.mainContent.extractText(p, 2).value shouldBe ExpectedItsaChangeAgent.section2p1(serviceKey, newAgentName)
       }
       
       s"should include a continue button for $serviceKey" in {
