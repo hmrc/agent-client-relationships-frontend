@@ -60,7 +60,7 @@ class ClientExitPageSpec extends ViewSpecSupport {
 
     val alreadyAcceptedAuthorisationRequestLabel = "You have already accepted this authorisation request - Appoint someone to deal with HMRC for you - GOV.UK"
     val alreadyAcceptedAuthorisationRequestParagraphOne = "We received a response to this request on 10 January 2024."
-    val alreadyAcceptedAuthorisationRequestParagraphTwo = "To check the details, or to cancel this authorisation,go to Manage your tax agents."
+    val alreadyAcceptedAuthorisationRequestParagraphTwo = "To check the details, or to cancel this authorisation, go to Manage your tax agents."
 
     val alreadyRefusedAuthorisationRequestLabel = "You already refused this authorisation request - Appoint someone to deal with HMRC for you - GOV.UK"
     val alreadyRefusedAuthorisationRequestParagraphOne = "This request was refused on 10 January 2024."
