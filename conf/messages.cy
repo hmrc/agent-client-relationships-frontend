@@ -555,6 +555,7 @@ clientConfirmation.p2=<translation needed>
 # ________________________________________________________________________________
 
 clientExit.authorisation-request-cancelled.header=Mae’r cais hwn am awdurdodiad wedi cael ei ganslo
+clientExit.authorisation-request-already-accepted.header=Rydych eisoes wedi derbyn y cais hwn am awdurdodiad
 
 # ________________________________________________________________________________
 # This authorisation request has been cancelled
@@ -563,3 +564,11 @@ authorisationRequestCancelled.p1=Cafodd y cais hwn ei ganslo gan yr asiant ar {0
 authorisationRequestCancelled.p2=Os hoffech i’r asiant hwn reoli’ch {0}, gofynnwch iddo anfon cais arall atoch am awdurdodiad.
 authorisationRequestCancelled.a1=Rheoli’ch asiantau treth
 authorisationRequestCancelled.a2=Gorffen ac allgofnodi
+
+# ________________________________________________________________________________
+# You have already accepted this authorisation request
+# ________________________________________________________________________________
+authorisationAlreadyAccepted.p1=Daeth ymateb i’r cais hwn i law ar {0}.
+authorisationAlreadyAccepted.p2=I wirio’r manylion, neu i ganslo’r awdurdodiad, ewch i’r adran ar gyfer <a href="{0}" class="govuk-link">rheoli’ch asiantau treth</a>.
+authorisationAlreadyAccepted.signOutLink=Gorffen ac allgofnodi
+

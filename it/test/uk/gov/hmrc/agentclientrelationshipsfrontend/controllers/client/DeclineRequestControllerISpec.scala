@@ -122,13 +122,22 @@ class DeclineRequestControllerISpec extends ComponentSpecHelper with AuthStubs w
         result.status shouldBe SEE_OTHER
         result.header("Location").value shouldBe routes.ClientExitController.showClient(ClientExitType.AuthorisationRequestCancelled).url
 
-      s"redirect to already responded exit page for $taxService" in :
+      s"redirect to already accepted exit page for $taxService" in :
         authoriseAsClientWithEnrolments(taxServices(taxService))
         await(journeyService.saveJourney(ClientJourney(journeyType = "authorisation-response")))
         stubPost(validateInvitationUrl, OK, testValidateInvitationResponseJson(taxServices(taxService), "Accepted").toString())
         val result = get(routes.DeclineRequestController.show(testUid, taxService).url)
         result.status shouldBe SEE_OTHER
-        result.header("Location").value shouldBe routes.ClientExitController.showClient(ClientExitType.AlreadyRespondedToAuthorisationRequest).url
+        result.header("Location").value shouldBe routes.ClientExitController.showClient(ClientExitType.AlreadyAcceptedAuthorisationRequest).url
+
+      s"redirect to already refused exit page for $taxService" in :
+        authoriseAsClientWithEnrolments(taxServices(taxService))
+        await(journeyService.saveJourney(ClientJourney(journeyType = "authorisation-response")))
+        stubPost(validateInvitationUrl, OK, testValidateInvitationResponseJson(taxServices(taxService), "Rejected").toString())
+        val result = get(routes.DeclineRequestController.show(testUid, taxService).url)
+        result.status shouldBe SEE_OTHER
+        result.header("Location").value shouldBe routes.ClientExitController.showClient(ClientExitType.AlreadyRefusedAuthorisationRequest).url
+
 
   "POST /authorisation-response/:uid/:taxService/confirm-decline" when :
 

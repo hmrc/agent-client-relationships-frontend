@@ -21,9 +21,8 @@ import play.api.mvc.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.connectors.AgentClientRelationshipsConnector
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.InvitationOrAgentNotFoundError
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.InvitationAgentSuspendedError
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.{Cancelled, Expired, Pending}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{InvitationAgentSuspendedError, InvitationOrAgentNotFoundError, client}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.{Cancelled, Expired, Pending, Rejected}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientExitType.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{ClientJourneyService, ClientServiceConfigurationService}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.client.ConsentInformationPage
@@ -66,7 +65,8 @@ class ConsentInformationController @Inject()(agentClientRelationshipsConnector: 
                 Ok(consentInformationPage(newJourney, agentRole))
               case Expired => Redirect(routes.ClientExitController.showClient(AuthorisationRequestExpired))
               case Cancelled => Redirect(routes.ClientExitController.showClient(AuthorisationRequestCancelled))
-              case _ => Redirect(routes.ClientExitController.showClient(AlreadyRespondedToAuthorisationRequest))
+              case Rejected => Redirect(routes.ClientExitController.showClient(AlreadyRefusedAuthorisationRequest))
+              case _ => Redirect(routes.ClientExitController.showClient(AlreadyAcceptedAuthorisationRequest))
             })
         }
 

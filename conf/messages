@@ -880,8 +880,9 @@ noOutstandingRequests.p1= If you think this is wrong, contact the agent who sent
 
 clientExit.cannot-find-authorisation-request.header=There are no requests linked to the sign-in details you used
 clientExit.authorisation-request-expired.header=This authorisation request has already expired
-clientExit.authorisation-request-already-responded-to.header=This authorisation request has already been responded to
 clientExit.authorisation-request-cancelled.header=This authorisation request request has been cancelled
+clientExit.already-accepted-authorisation-request.header=You have already accepted this authorisation request
+clientExit.already-refused-authorisation-request.header=You already refused this authorisation request
 
 # ________________________________________________________________________________
 # This authorisation request has already expired
@@ -911,12 +912,20 @@ authorisationRequestCancelled.a1=Manage your tax agents
 authorisationRequestCancelled.a2=Finish and sign out
 
 # ________________________________________________________________________________
-# This authorisation request has already been responded to
+# You have already accepted this authorisation request
 # ________________________________________________________________________________
-authorisationRequestRespondedTo.p1=This request has already been responded to on {0}. For details, <a href={1} class="govuk-link" target="_blank" rel="noreferrer noopener">view your history</a> to check for any expired, cancelled or outstanding requests.
-authorisationRequestRespondedTo.p2=If your agent has sent you a recent request, <a href={0} class="govuk-link" target="_blank" rel="noreferrer noopener">make sure you have signed up to the tax service you need.</a>
-authorisationRequestRespondedTo.p3=You could also check you have signed in with the correct Government Gateway user ID. It must be the same one you used to sign up to the tax service the authorisation request is for.
-authorisationRequestRespondedTo.p4=<a href={0} class="govuk-link" target="_blank" rel="noreferrer noopener">Sign in with the Government Gateway user ID</a> you use for managing your personal tax affairs.
+authorisationAlreadyAccepted.p1=We received a response to this request on {0}.
+authorisationAlreadyAccepted.p2=To check the details, or to cancel this authorisation, go to <a href="{0}" class="govuk-link">Manage your tax agents</a>.
+authorisationAlreadyAccepted.signOutLink=Finish and sign out
+
+# ________________________________________________________________________________
+# You already refused this authorisation request
+# ________________________________________________________________________________
+authorisationAlreadyRefused.p1=This request was refused on {0}.
+authorisationAlreadyRefused.p2=If you want this agent to manage your {0}, ask them to send you another authorisation request.
+authorisationAlreadyRefused.mytaLink=Manage your tax agents
+authorisationAlreadyRefused.signOutLink=Finish and sign out
+
 
 # ________________________________________________________________________________
 # Page not found

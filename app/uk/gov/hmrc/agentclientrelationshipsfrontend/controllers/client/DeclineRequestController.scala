@@ -22,8 +22,8 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.connectors.AgentClientRelationshipsConnector
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{InvitationAgentSuspendedError, InvitationOrAgentNotFoundError}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.{Cancelled, Expired, Pending}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{InvitationAgentSuspendedError, InvitationOrAgentNotFoundError, client}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.{Cancelled, Expired, Pending, Rejected}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientExitType.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.client.DeclineRequestForm
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{ClientJourney, ClientJourneyRequest}
@@ -77,8 +77,9 @@ class DeclineRequestController @Inject()(mcc: MessagesControllerComponents,
                 Redirect(routes.ClientExitController.showClient(AuthorisationRequestExpired))
               case Cancelled =>
                 Redirect(routes.ClientExitController.showClient(AuthorisationRequestCancelled))
+              case Rejected => Redirect(routes.ClientExitController.showClient(AlreadyRefusedAuthorisationRequest))
               case _ =>
-                Redirect(routes.ClientExitController.showClient(AlreadyRespondedToAuthorisationRequest))
+                Redirect(routes.ClientExitController.showClient(AlreadyAcceptedAuthorisationRequest))
             })
         }
 
