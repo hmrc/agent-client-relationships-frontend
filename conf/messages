@@ -934,7 +934,7 @@ authorisationRequestCancelled.a2=Finish and sign out
 # You have already accepted this authorisation request
 # ________________________________________________________________________________
 authorisationAlreadyAccepted.p1=We received a response to this request on {0}.
-authorisationAlreadyAccepted.p2=To check the details, or to cancel this authorisation,go to <a href="{0}" class="govuk-link">Manage your tax agents</a>.
+authorisationAlreadyAccepted.p2=To check the details, or to cancel this authorisation, go to <a href="{0}" class="govuk-link">Manage your tax agents</a>.
 authorisationAlreadyAccepted.signOutLink=Finish and sign out
 
 # ________________________________________________________________________________
