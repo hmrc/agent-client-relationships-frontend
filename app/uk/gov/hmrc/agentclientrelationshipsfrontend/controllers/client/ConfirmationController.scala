@@ -48,6 +48,6 @@ class ConfirmationController @Inject()(mcc: MessagesControllerComponents,
               throw new RuntimeException(s"Authorisation request not found for invitationId: $invitationId")
           }
         case _ =>
-          logger.warn(s"Redirecting to MYTA as client journey is not valid for confirmation page - ${request.journey}")
+          logger.warn(s"Redirecting to MYTA as there is no journeyComplete value in session")
           Future.successful(Redirect(routes.ManageYourTaxAgentsController.show.url))
       }
