@@ -59,8 +59,14 @@ class ClientExitPageSpec extends ViewSpecSupport {
     val authorisationRequestCancelledLinkTwo = "Finish and sign out"
 
     val alreadyAcceptedAuthorisationRequestLabel = "You have already accepted this authorisation request - Appoint someone to deal with HMRC for you - GOV.UK"
-    val alreadyAcceptedAuthorisationRequestParagraphOne = s"We received a response to this request on 10 January 2024."
+    val alreadyAcceptedAuthorisationRequestParagraphOne = "We received a response to this request on 10 January 2024."
     val alreadyAcceptedAuthorisationRequestParagraphTwo = "To check the details, or to cancel this authorisation,go to Manage your tax agents."
+
+    val alreadyRefusedAuthorisationRequestLabel = "You already refused this authorisation request - Appoint someone to deal with HMRC for you - GOV.UK"
+    val alreadyRefusedAuthorisationRequestParagraphOne = "This request was refused on 10 January 2024."
+    val alreadyRefusedAuthorisationRequestParagraphTwo = "If you want this agent to manage your Making Tax Digital for Income Tax, ask them to send you another authorisation request."
+    val alreadyRefusedAuthorisationRequestLinkOne = "Manage your tax agents"
+    val alreadyRefusedAuthorisationRequestLinkTwo = "Finish and sign out"
 
     val agentSuspendedLabel = "You cannot appoint this tax agent - Appoint someone to deal with HMRC for you - GOV.UK"
     val agentSuspendedParagraphOne = "This tax agent cannot manage your Making Tax Digital for Income Tax at this time."
@@ -156,7 +162,7 @@ class ClientExitPageSpec extends ViewSpecSupport {
   }
 
   "ClientExitPage for AlreadyAcceptedAuthorisationRequest view" should {
-    val view: HtmlFormat.Appendable = viewTemplate(AlreadyRespondedToAuthorisationRequest, userIsLoggedIn = true, Some(testLastModifiedDate))
+    val view: HtmlFormat.Appendable = viewTemplate(AlreadyAcceptedAuthorisationRequest, userIsLoggedIn = true, Some(testLastModifiedDate))
     val doc: Document = Jsoup.parse(view.body)
 
     "have the right title" in {
@@ -175,6 +181,29 @@ class ClientExitPageSpec extends ViewSpecSupport {
     "have the correct link text and hrefs" in {
       doc.mainContent.extractLink(1).value shouldBe TestLink("Manage your tax agents", "/agent-client-relationships/manage-your-tax-agents")
       doc.mainContent.extractLink(2).value shouldBe TestLink("Finish and sign out", "/agent-client-relationships/sign-out?isAgent=false")
+    }
+  }
+
+  "ClientExitPage for AlreadyRefusedAuthorisationRequest view" should {
+    val view: HtmlFormat.Appendable = viewTemplate(AlreadyRefusedAuthorisationRequest, userIsLoggedIn = true, Some(testLastModifiedDate), service = Some(HMRCMTDIT))
+    val doc: Document = Jsoup.parse(view.body)
+
+    "have the right title" in {
+      doc.title() shouldBe Expected.alreadyRefusedAuthorisationRequestLabel
+    }
+
+    "display paragraph content" in {
+      doc.select(".govuk-body").get(0).text() shouldBe Expected.alreadyRefusedAuthorisationRequestParagraphOne
+      doc.select(".govuk-body").get(1).text() shouldBe Expected.alreadyRefusedAuthorisationRequestParagraphTwo
+    }
+
+    "have the correct link text and hrefs" in {
+      doc.mainContent.extractLink(1).value shouldBe TestLink(Expected.alreadyRefusedAuthorisationRequestLinkOne, "/agent-client-relationships/manage-your-tax-agents")
+      doc.mainContent.extractLink(2).value shouldBe TestLink(Expected.alreadyRefusedAuthorisationRequestLinkTwo, "/agent-client-relationships/sign-out?isAgent=false")
+    }
+
+    "have a language switcher" in {
+      doc.hasLanguageSwitch shouldBe true
     }
   }
 

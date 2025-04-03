@@ -27,7 +27,8 @@
     authorisationHasExpired: AuthorisationHasExpired,
     cannotFindAuthRequest: CannotFindAuthRequest,
     authorisationHasBeenCancelled: AuthorisationHasBeenCancelled,
-    authorisationHasAlreadyBeenResponded: AuthorisationHasAlreadyBeenResponded,
+    alreadyAcceptedAuthorisationRequest: AlreadyAcceptedAuthorisationRequest,
+    alreadyRefusedAuthorisationRequest: AlreadyRefusedAuthorisationRequest,
     agentSuspended: AgentSuspended,
     noOutstandingRequests: NoOutstandingRequests
 )
@@ -39,7 +40,6 @@
     continueUrl: Option[RedirectUrl] = None,
     service: Option[String] = None
 )(implicit request: Request[AnyContent], messages: Messages, appConfig: AppConfig)
-
 @key = @{if (userIsLoggedIn) "clientExit" else "unauthorisedExit"}
 @serviceName = @{messages("service.name.clients")}
 @pageTitle = @{messages(s"$key.$exitType.header")}
@@ -58,7 +58,8 @@
             case ClientExitType.AuthorisationRequestExpired => authorisationHasExpired(expiryDate = lastModifiedDate)
             case ClientExitType.AuthorisationRequestCancelled => authorisationHasBeenCancelled(lastModifiedDate, service)
             case ClientExitType.CannotFindAuthorisationRequest => cannotFindAuthRequest(continueUrl)
-            case ClientExitType.AlreadyRespondedToAuthorisationRequest => authorisationHasAlreadyBeenResponded(respondedToDate = lastModifiedDate)
+            case ClientExitType.AlreadyAcceptedAuthorisationRequest => alreadyAcceptedAuthorisationRequest(lastModifiedDate)
+            case ClientExitType.AlreadyRefusedAuthorisationRequest => alreadyRefusedAuthorisationRequest(lastModifiedDate, service.getOrElse(throw new RuntimeException("Service Key is missing")))
         }
     }
 }

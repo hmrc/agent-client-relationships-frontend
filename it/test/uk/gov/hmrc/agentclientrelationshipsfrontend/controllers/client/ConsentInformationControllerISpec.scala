@@ -123,13 +123,22 @@ class ConsentInformationControllerISpec extends ComponentSpecHelper with ScalaFu
         result.status shouldBe SEE_OTHER
         result.header("Location").value shouldBe routes.ClientExitController.showClient(ClientExitType.AuthorisationRequestCancelled).url
       }
-      s"Redirect correctly to already responded exit page for $taxService" in {
+      s"Redirect correctly to already accepted exit page for $taxService" in {
         authoriseAsClientWithEnrolments(taxServices(taxService))
         await(journeyService.saveJourney(ClientJourney(journeyType = "authorisation-response")))
         stubPost(validateInvitationUrl, OK, testValidateInvitationResponseJson(taxServices(taxService), "Accepted").toString())
         val result = get(routes.ConsentInformationController.show(testUid, taxService).url)
         result.status shouldBe SEE_OTHER
-        result.header("Location").value shouldBe routes.ClientExitController.showClient(ClientExitType.AlreadyRespondedToAuthorisationRequest).url
+        result.header("Location").value shouldBe routes.ClientExitController.showClient(ClientExitType.AlreadyAcceptedAuthorisationRequest).url
+      }
+
+      s"Redirect correctly to already refused exit page for $taxService" in {
+        authoriseAsClientWithEnrolments(taxServices(taxService))
+        await(journeyService.saveJourney(ClientJourney(journeyType = "authorisation-response")))
+        stubPost(validateInvitationUrl, OK, testValidateInvitationResponseJson(taxServices(taxService), "Rejected").toString())
+        val result = get(routes.ConsentInformationController.show(testUid, taxService).url)
+        result.status shouldBe SEE_OTHER
+        result.header("Location").value shouldBe routes.ClientExitController.showClient(ClientExitType.AlreadyRefusedAuthorisationRequest).url
       }
     }
   }

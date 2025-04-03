@@ -899,8 +899,9 @@ noOutstandingRequests.p1= If you think this is wrong, contact the agent who sent
 
 clientExit.cannot-find-authorisation-request.header=There are no requests linked to the sign-in details you used
 clientExit.authorisation-request-expired.header=This authorisation request has already expired
-clientExit.authorisation-request-already-accepted.header=You have already accepted this authorisation request
 clientExit.authorisation-request-cancelled.header=This authorisation request request has been cancelled
+clientExit.already-accepted-authorisation-request.header=You have already accepted this authorisation request
+clientExit.already-refused-authorisation-request.header=You already refused this authorisation request
 
 # ________________________________________________________________________________
 # This authorisation request has already expired
@@ -935,6 +936,15 @@ authorisationRequestCancelled.a2=Finish and sign out
 authorisationAlreadyAccepted.p1=We received a response to this request on {0}.
 authorisationAlreadyAccepted.p2=To check the details, or to cancel this authorisation,go to <a href="{0}" class="govuk-link">Manage your tax agents</a>.
 authorisationAlreadyAccepted.signOutLink=Finish and sign out
+
+# ________________________________________________________________________________
+# You already refused this authorisation request
+# ________________________________________________________________________________
+authorisationAlreadyRefused.p1=This request was refused on {0}.
+authorisationAlreadyRefused.p2=If you want this agent to manage your {0}, ask them to send you another authorisation request.
+authorisationAlreadyRefused.mytaLink=Manage your tax agents
+authorisationAlreadyRefused.signOutLink=Finish and sign out
+
 
 # ________________________________________________________________________________
 # Page not found

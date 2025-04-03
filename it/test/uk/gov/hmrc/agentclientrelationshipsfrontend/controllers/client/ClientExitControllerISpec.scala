@@ -31,7 +31,7 @@ class ClientExitControllerISpec extends ComponentSpecHelper with AuthStubs {
 
   val journeyService: ClientJourneyService = app.injector.instanceOf[ClientJourneyService]
 
-  val alreadyRespondedStatus: List[InvitationStatus] = List(Accepted, Rejected, DeAuthorised, PartialAuth)
+  val alreadyAcceptedStatus: List[InvitationStatus] = List(Accepted, DeAuthorised, PartialAuth)
 
   val testName = "Test Name"
 
@@ -105,14 +105,22 @@ class ClientExitControllerISpec extends ComponentSpecHelper with AuthStubs {
         val result = get(routes.ClientExitController.showClient(AuthorisationRequestExpired).url)
         result.status shouldBe OK
       }
-      alreadyRespondedStatus.foreach(status =>
+      alreadyAcceptedStatus.foreach(status =>
         s"the client is authenticated and the authorisation request is $status" in {
           authoriseAsClient()
           await(journeyService.saveJourney(journeyModel(Some(status))))
-          val result = get(routes.ClientExitController.showClient(AlreadyRespondedToAuthorisationRequest).url)
+          val result = get(routes.ClientExitController.showClient(AlreadyAcceptedAuthorisationRequest).url)
 
           result.status shouldBe OK
         })
+
+      s"the client is authenticated and the authorisation request is Rejected" in {
+        authoriseAsClient()
+        await(journeyService.saveJourney(journeyModel(Some(Rejected))))
+        val result = get(routes.ClientExitController.showClient(AlreadyRefusedAuthorisationRequest).url)
+
+        result.status shouldBe OK
+      }
     }
   }
 }
