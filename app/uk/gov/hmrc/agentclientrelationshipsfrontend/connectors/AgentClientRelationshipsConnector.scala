@@ -74,7 +74,7 @@ class AgentClientRelationshipsConnector @Inject()(appConfig: AppConfig,
     .withBody(Json.obj("clientId" -> clientId, "service" -> service))
     .execute[HttpResponse].map { response =>
       response.status match {
-        case NO_CONTENT => Future.successful(())
+        case NO_CONTENT => ()
         case _ => throw new RuntimeException(s"Failed to cancel authorisation on behalf of client: ${response.body}")
       }
     }
