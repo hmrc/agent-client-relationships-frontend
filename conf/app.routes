@@ -34,9 +34,9 @@ GET        /authorisation-response/:uid/:taxService/consent-information         
 GET        /authorisation-response/:uid/:taxService/confirm-decline                     uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.DeclineRequestController.show(uid: String, taxService: String)
 POST       /authorisation-response/:uid/:taxService/confirm-decline                     uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.DeclineRequestController.submit(uid: String, taxService: String)
 
-GET        /authorisation-response/exit-auth/:exitType                                  uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.ClientExitController.showClient(exitType: ClientExitType, continueUrl: Option[RedirectUrl] ?= None)
+GET        /authorisation-response/exit-auth/:exitType                                  uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.ClientExitController.showClient(exitType: ClientExitType, continueUrl: Option[RedirectUrl] ?= None, taxService: Option[String] ?= None)
 
-GET        /authorisation-response/exit-public/:exitType                                uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.ClientExitController.showUnauthorised(exitType: ClientExitType)
+GET        /authorisation-response/exit-public/:exitType                                uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.ClientExitController.showUnauthorised(exitType: ClientExitType, taxService: String)
 
 GET        /authorisation-response/confirm-consent                                      uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.ConfirmConsentController.show
 POST       /authorisation-response/confirm-consent                                      uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.ConfirmConsentController.submit

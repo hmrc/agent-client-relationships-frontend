@@ -77,7 +77,13 @@ class ClientExitPageSpec extends ViewSpecSupport {
   }
 
   "ClientExitPage for CannotFindAuthorisationRequest view" should {
-    val view: HtmlFormat.Appendable = viewTemplate(CannotFindAuthorisationRequest, userIsLoggedIn = true, Some(testLastModifiedDate), Some(RedirectUrl("/url")))
+    val view: HtmlFormat.Appendable = viewTemplate(
+      exitType = CannotFindAuthorisationRequest,
+      userIsLoggedIn = true,
+      lastModifiedDate = Some(testLastModifiedDate),
+      continueUrl = Some(RedirectUrl("/url")),
+      service = HMRCMTDIT
+    )
     val doc: Document = Jsoup.parse(view.body)
 
     "have the right title" in {
@@ -99,12 +105,18 @@ class ClientExitPageSpec extends ViewSpecSupport {
 
     "display correct links" in {
       doc.mainContent.extractLink(1).value shouldBe TestLink(
-        Expected.cannotFindAuthorisationRequestSignIn,
-        routes.SignOutController.signOut(isAgent = false, continueUrl = Some(RedirectUrl("/url"))).url
+        text = Expected.cannotFindAuthorisationRequestSignIn,
+        href = routes.SignOutController.signOut(
+          isAgent = false,
+          continueUrl = Some(RedirectUrl("/url"))
+        ).url
       )
       doc.mainContent.extractLink(2).value shouldBe TestLink(
-        Expected.cannotFindAuthorisationRequestSignOut,
-        routes.SignOutController.signOut(isAgent = false, continueUrl = None).url
+        text = Expected.cannotFindAuthorisationRequestSignOut,
+        href = routes.SignOutController.signOut(
+          isAgent = false,
+          continueUrl = None
+        ).url
       )
     }
 
@@ -114,7 +126,12 @@ class ClientExitPageSpec extends ViewSpecSupport {
   }
 
   "ClientExitPage for AuthorisationRequestExpired view" should {
-    val view: HtmlFormat.Appendable = viewTemplate(AuthorisationRequestExpired, userIsLoggedIn = true, Some(testLastModifiedDate))
+    val view: HtmlFormat.Appendable = viewTemplate(
+      exitType = AuthorisationRequestExpired,
+      userIsLoggedIn = true,
+      lastModifiedDate = Some(testLastModifiedDate),
+      service = HMRCMTDIT
+    )
     val doc: Document = Jsoup.parse(view.body)
 
     "have the right title" in {
@@ -134,12 +151,20 @@ class ClientExitPageSpec extends ViewSpecSupport {
 
     "have the correct link in the details component content" in {
 
-      doc.mainContent.extractLink(1).value shouldBe TestLink("view your history", "/agent-client-relationships/manage-your-tax-agents#history")
+      doc.mainContent.extractLink(1).value shouldBe TestLink(
+        text = "view your history",
+        href = "/agent-client-relationships/manage-your-tax-agents#history"
+      )
     }
   }
 
   "ClientExitPage for AuthorisationRequestCancelled view" should {
-    val view: HtmlFormat.Appendable = viewTemplate(AuthorisationRequestCancelled, userIsLoggedIn = true, Some(testLastModifiedDate), service = Some(HMRCMTDIT))
+    val view: HtmlFormat.Appendable = viewTemplate(
+      exitType = AuthorisationRequestCancelled,
+      userIsLoggedIn = true,
+      lastModifiedDate = Some(testLastModifiedDate),
+      service = HMRCMTDIT
+    )
     val doc: Document = Jsoup.parse(view.body)
 
     "have the right title" in {
@@ -152,8 +177,14 @@ class ClientExitPageSpec extends ViewSpecSupport {
     }
 
     "have the correct link text and hrefs" in {
-      doc.mainContent.extractLink(1).value shouldBe TestLink(Expected.authorisationRequestCancelledLinkOne, "/agent-client-relationships/manage-your-tax-agents")
-      doc.mainContent.extractLink(2).value shouldBe TestLink(Expected.authorisationRequestCancelledLinkTwo, "/agent-client-relationships/sign-out?isAgent=false")
+      doc.mainContent.extractLink(1).value shouldBe TestLink(
+        text = Expected.authorisationRequestCancelledLinkOne,
+        href = "/agent-client-relationships/manage-your-tax-agents"
+      )
+      doc.mainContent.extractLink(2).value shouldBe TestLink(
+        text = Expected.authorisationRequestCancelledLinkTwo,
+        href = "/agent-client-relationships/sign-out?isAgent=false"
+      )
     }
 
     "have a language switcher" in {
@@ -162,7 +193,12 @@ class ClientExitPageSpec extends ViewSpecSupport {
   }
 
   "ClientExitPage for AlreadyAcceptedAuthorisationRequest view" should {
-    val view: HtmlFormat.Appendable = viewTemplate(AlreadyAcceptedAuthorisationRequest, userIsLoggedIn = true, Some(testLastModifiedDate))
+    val view: HtmlFormat.Appendable = viewTemplate(
+      exitType = AlreadyAcceptedAuthorisationRequest,
+      userIsLoggedIn = true,
+      lastModifiedDate = Some(testLastModifiedDate),
+      service = HMRCMTDIT
+    )
     val doc: Document = Jsoup.parse(view.body)
 
     "have the right title" in {
@@ -179,13 +215,24 @@ class ClientExitPageSpec extends ViewSpecSupport {
     }
 
     "have the correct link text and hrefs" in {
-      doc.mainContent.extractLink(1).value shouldBe TestLink("Manage your tax agents", "/agent-client-relationships/manage-your-tax-agents")
-      doc.mainContent.extractLink(2).value shouldBe TestLink("Finish and sign out", "/agent-client-relationships/sign-out?isAgent=false")
+      doc.mainContent.extractLink(1).value shouldBe TestLink(
+        text = "Manage your tax agents",
+        href = "/agent-client-relationships/manage-your-tax-agents"
+      )
+      doc.mainContent.extractLink(2).value shouldBe TestLink(
+        text = "Finish and sign out",
+        href = "/agent-client-relationships/sign-out?isAgent=false"
+      )
     }
   }
 
   "ClientExitPage for AlreadyRefusedAuthorisationRequest view" should {
-    val view: HtmlFormat.Appendable = viewTemplate(AlreadyRefusedAuthorisationRequest, userIsLoggedIn = true, Some(testLastModifiedDate), service = Some(HMRCMTDIT))
+    val view: HtmlFormat.Appendable = viewTemplate(
+      exitType = AlreadyRefusedAuthorisationRequest,
+      userIsLoggedIn = true,
+      lastModifiedDate = Some(testLastModifiedDate),
+      service = HMRCMTDIT
+    )
     val doc: Document = Jsoup.parse(view.body)
 
     "have the right title" in {
@@ -198,8 +245,14 @@ class ClientExitPageSpec extends ViewSpecSupport {
     }
 
     "have the correct link text and hrefs" in {
-      doc.mainContent.extractLink(1).value shouldBe TestLink(Expected.alreadyRefusedAuthorisationRequestLinkOne, "/agent-client-relationships/manage-your-tax-agents")
-      doc.mainContent.extractLink(2).value shouldBe TestLink(Expected.alreadyRefusedAuthorisationRequestLinkTwo, "/agent-client-relationships/sign-out?isAgent=false")
+      doc.mainContent.extractLink(1).value shouldBe TestLink(
+        text = Expected.alreadyRefusedAuthorisationRequestLinkOne,
+        href = "/agent-client-relationships/manage-your-tax-agents"
+      )
+      doc.mainContent.extractLink(2).value shouldBe TestLink(
+        text = Expected.alreadyRefusedAuthorisationRequestLinkTwo,
+        href = "/agent-client-relationships/sign-out?isAgent=false"
+      )
     }
 
     "have a language switcher" in {
@@ -208,7 +261,11 @@ class ClientExitPageSpec extends ViewSpecSupport {
   }
 
   "ClientExitPage for AgentSuspended view" should {
-    val view: HtmlFormat.Appendable = viewTemplate(AgentSuspended, userIsLoggedIn = false)
+    val view: HtmlFormat.Appendable = viewTemplate(
+      exitType = AgentSuspended,
+      userIsLoggedIn = false,
+      service = HMRCMTDIT
+    )
     val doc: Document = Jsoup.parse(view.body)
 
     "have the right title" in {
@@ -223,15 +280,15 @@ class ClientExitPageSpec extends ViewSpecSupport {
     "have a language switcher" in {
       doc.hasLanguageSwitch shouldBe true
     }
-
-    "have the correct link in the details component content" in {
-
-      doc.mainContent.extractLink(1).value shouldBe TestLink("Finish and sign out", "/agent-client-relationships/sign-out?isAgent=false")
-    }
+    // there should not be a sign out link as the user is not signed in
   }
 
   "ClientExitPage for NoOutstandingRequests view" should {
-    val view: HtmlFormat.Appendable = viewTemplate(NoOutstandingRequests, userIsLoggedIn = false)
+    val view: HtmlFormat.Appendable = viewTemplate(
+      exitType = NoOutstandingRequests,
+      userIsLoggedIn = false,
+      service = HMRCMTDIT
+    )
     val doc: Document = Jsoup.parse(view.body)
 
     "have the right title" in {
@@ -248,7 +305,10 @@ class ClientExitPageSpec extends ViewSpecSupport {
 
     "have the correct link in the details component content" in {
 
-      doc.mainContent.extractLink(1).value shouldBe TestLink("view your request history", "/agent-client-relationships/manage-your-tax-agents#history")
+      doc.mainContent.extractLink(1).value shouldBe TestLink(
+        text = "view your request history",
+        href = "/agent-client-relationships/manage-your-tax-agents#history"
+      )
     }
   }
 }
