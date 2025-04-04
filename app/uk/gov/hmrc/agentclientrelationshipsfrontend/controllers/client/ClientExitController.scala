@@ -34,13 +34,17 @@ class ClientExitController @Inject()(mcc: MessagesControllerComponents,
                                      clientExitPage: ClientExitPage,
                                      actions: Actions,
                                      serviceConfigurationService: ClientServiceConfigurationService,
-                                    )(implicit val executionContext: ExecutionContext,
-                                      appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport:
+                                    )(implicit val executionContext: ExecutionContext, appConfig: AppConfig)
+  extends FrontendController(mcc) with I18nSupport:
 
-  def showClient(exitType: ClientExitType, continueUrl: Option[RedirectUrl] = None, taxService: Option[String] = None): Action[AnyContent] = actions.clientAuthenticate.async:
+  def showClient(
+                  exitType: ClientExitType,
+                  continueUrl: Option[RedirectUrl] = None,
+                  taxService: Option[String] = None
+                ): Action[AnyContent] = actions.clientAuthenticate.async:
     implicit request =>
       val serviceKey = taxService.fold
-        (request.journey.serviceKey.getOrElse(throw RuntimeException("Required service key is missing")))
+        (request.journey.getServiceKey)
         (s => serviceConfigurationService.getServiceKeysForUrlPart(s).head)
       Future.successful(Ok(clientExitPage(
         exitType,
@@ -50,7 +54,14 @@ class ClientExitController @Inject()(mcc: MessagesControllerComponents,
         service = serviceKey
       )))
 
-  def showUnauthorised(exitType: ClientExitType, taxService: String): Action[AnyContent] = Action.async:
+  def showUnauthorised(
+                        exitType: ClientExitType,
+                        taxService: String
+                      ): Action[AnyContent] = Action.async:
     implicit request =>
       val serviceKey = serviceConfigurationService.getServiceKeysForUrlPart(taxService).head
-      Future.successful(Ok(clientExitPage(exitType, userIsLoggedIn = false, service = serviceKey)))
+      Future.successful(Ok(clientExitPage(
+        exitType,
+        userIsLoggedIn = false,
+        service = serviceKey
+      )))

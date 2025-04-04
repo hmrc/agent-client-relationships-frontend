@@ -17,6 +17,7 @@
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client
 
 import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
 import play.api.libs.json.{JsObject, Json}
 import play.api.test.Helpers.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.connectors.AgentClientRelationshipsConnector
@@ -56,34 +57,86 @@ class StartControllerISpec extends ComponentSpecHelper with ScalaFutures with Au
   "GET /appoint-someone-to-deal-with-HMRC-for-you/:uid/:normalizedAgentName/:taxService" should {
     "Returns Not Found when tax service name not valid" in {
 
-      val result = get(routes.StartController.show(testUid, testNormalizedAgentName, "invalidTaxService").url)
+      val result = get(
+        uri = routes.StartController.show(
+          uid = testUid,
+          normalizedAgentName = testNormalizedAgentName,
+          taxService = "invalidTaxService"
+        ).url
+      )
       result.status shouldBe NOT_FOUND
     }
 
     "Redirect to routes.ClientExitController.show(AGENT_NOT_FOUND)" in {
 
-      stubGet(getValidateLinkResponseUrl(testUid, testNormalizedAgentName), NOT_FOUND, testValidateLinkResponseJson.toString)
+      stubGet(
+        url = getValidateLinkResponseUrl(
+          uid = testUid,
+          normalizedAgentName = testNormalizedAgentName
+        ),
+        status = NOT_FOUND,
+        body = testValidateLinkResponseJson.toString
+      )
 
-      val result = get(routes.StartController.show(testUid, testNormalizedAgentName, testTaxService).url)
+      val result = get(
+        uri = routes.StartController.show(
+          uid = testUid,
+          normalizedAgentName = testNormalizedAgentName,
+          taxService = testTaxService
+        ).url
+      )
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe routes.ClientExitController.showUnauthorised(NoOutstandingRequests, testTaxService).url
+      result.header("Location").value shouldBe routes.ClientExitController.showUnauthorised(
+        exitType = NoOutstandingRequests,
+        taxService = testTaxService
+      ).url
     }
 
     "Redirect to routes.ClientExitController.show(AGENT_SUSPENDED)" in {
 
-      stubGet(getValidateLinkResponseUrl(testUid, testNormalizedAgentName), FORBIDDEN, testValidateLinkResponseJson.toString)
+      stubGet(
+        url = getValidateLinkResponseUrl(
+          uid = testUid,
+          normalizedAgentName = testNormalizedAgentName
+        ),
+        status = FORBIDDEN,
+        body = testValidateLinkResponseJson.toString
+      )
 
-      val result = get(routes.StartController.show(testUid, testNormalizedAgentName, testTaxService).url)
+      val result = get(
+        uri = routes.StartController.show(
+          uid = testUid,
+          normalizedAgentName = testNormalizedAgentName,
+          taxService = testTaxService
+        ).url
+      )
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe routes.ClientExitController.showUnauthorised(AgentSuspended, testTaxService).url
+      result.header("Location").value shouldBe routes.ClientExitController.showUnauthorised(
+        exitType = AgentSuspended,
+        taxService = testTaxService
+      ).url
     }
 
     validTaxServiceNames.foreach { taxService =>
       s"Display start page for $taxService" in {
 
-        stubGet(getValidateLinkResponseUrl(testUid, testNormalizedAgentName), OK, testValidateLinkResponseJson.toString)
+        stubGet(
+          url = getValidateLinkResponseUrl(
+            uid = testUid,
+            normalizedAgentName = testNormalizedAgentName
+          ),
+          status = OK,
+          body = testValidateLinkResponseJson.toString
+        )
 
-        val result = get(routes.StartController.show(testUid, testNormalizedAgentName, taxService).url)
+        val result = get(
+          uri = routes.StartController.show(
+            uid = testUid,
+            normalizedAgentName = testNormalizedAgentName,
+            taxService = taxService
+          ).url
+        )
+
         result.status shouldBe OK
       }
 
