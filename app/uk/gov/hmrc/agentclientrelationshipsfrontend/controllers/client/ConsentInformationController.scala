@@ -35,7 +35,6 @@ import scala.concurrent.{ExecutionContext, Future}
 class ConsentInformationController @Inject()(agentClientRelationshipsConnector: AgentClientRelationshipsConnector,
                                              serviceConfigurationService: ClientServiceConfigurationService,
                                              consentInformationPage: ConsentInformationPage,
-                                             clientServiceConfig: ClientServiceConfigurationService,
                                              mcc: MessagesControllerComponents,
                                              actions: Actions,
                                              clientJourneyService: ClientJourneyService
@@ -47,8 +46,12 @@ class ConsentInformationController @Inject()(agentClientRelationshipsConnector: 
       agentClientRelationshipsConnector
         .validateInvitation(uid, serviceConfigurationService.getServiceKeysForUrlPart(taxService))
         .flatMap {
-          case Left(InvitationAgentSuspendedError) => Future.successful(Redirect(routes.ClientExitController.showUnauthorised(AgentSuspended)))
-          case Left(InvitationOrAgentNotFoundError) => Future.successful(Redirect(routes.ClientExitController.showUnauthorised(NoOutstandingRequests)))
+          case Left(InvitationAgentSuspendedError) => Future.successful(Redirect(routes.ClientExitController.showClient(
+            exitType = AgentSuspended,
+            continueUrl = None,
+            taxService = Some(taxService)
+          )))
+          case Left(InvitationOrAgentNotFoundError) => Future.successful(Redirect(routes.ClientExitController.showClient(NoOutstandingRequests)))
           case Right(response) =>
             val newJourney = journeyRequest.journey.copy(
               invitationId = Some(response.invitationId),
@@ -70,8 +73,8 @@ class ConsentInformationController @Inject()(agentClientRelationshipsConnector: 
             })
         }
 
-  private def determineAgentRole(service: String) = clientServiceConfig.supportsAgentRoles(service) match {
-    case true if clientServiceConfig.supportingAgentServices.contains(service) => "suppAgent"
+  private def determineAgentRole(service: String) = serviceConfigurationService.supportsAgentRoles(service) match {
+    case true if serviceConfigurationService.supportingAgentServices.contains(service) => "suppAgent"
     case true => "mainAgent"
     case false => "agent"
   }

@@ -54,9 +54,17 @@ class DeclineRequestController @Inject()(mcc: MessagesControllerComponents,
         .validateInvitation(uid, clientServiceConfig.getServiceKeysForUrlPart(taxService))
         .flatMap {
           case Left(InvitationAgentSuspendedError) =>
-            Future.successful(Redirect(routes.ClientExitController.showUnauthorised(AgentSuspended)))
+            Future.successful(Redirect(routes.ClientExitController.showClient(
+              exitType = AgentSuspended,
+              continueUrl = None,
+              taxService = Some(taxService)
+            )))
           case Left(InvitationOrAgentNotFoundError) =>
-            Future.successful(Redirect(routes.ClientExitController.showUnauthorised(NoOutstandingRequests)))
+            Future.successful(Redirect(routes.ClientExitController.showClient(
+              exitType = NoOutstandingRequests,
+              continueUrl = None,
+              taxService = Some(taxService)
+            )))
           case Right(response) =>
             val newJourney = request.journey.copy(
               invitationId = Some(response.invitationId),

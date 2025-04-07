@@ -857,32 +857,28 @@ clientDeauthConfirmed.link=Manage who can deal with HMRC for you
 clientDeauthConfirmed.signOutLink=Finish and sign out
 
 # ________________________________________________________________________________
-# Unauthorised exit partials
+# Client journey exit partial headers
 # ________________________________________________________________________________
-unauthorisedExit.agent-suspended.header=You cannot appoint this tax agent
-unauthorisedExit.no-outstanding-requests.header=There are no outstanding authorisation requests for you to respond to
+
+cannot-find-authorisation-request.header=There are no requests linked to the sign-in details you used
+authorisation-request-expired.header=This authorisation request has already expired
+authorisation-request-cancelled.header=This authorisation request request has been cancelled
+agent-suspended.header=You cannot appoint this tax agent
+already-accepted-authorisation-request.header=You have already accepted this authorisation request
+already-refused-authorisation-request.header=You already refused this authorisation request
+no-outstanding-requests.header=There are no outstanding authorisation requests for you to respond to
 
 # ________________________________________________________________________________
 # You cannot appoint this tax agent (Agent suspended)
 # ________________________________________________________________________________
-agentSuspended.p1=This tax agent cannot manage your Making Tax Digital for Income Tax at this time.
+agentSuspended.p1=This tax agent cannot manage your {0} at this time.
 agentSuspended.p2=If you have any questions, contact the tax agent who sent you this request.
 agentSuspended.signout-link=Finish and sign out
 
 # ________________________________________________________________________________
 # There are no outstanding authorisation requests for you to respond to
 # ________________________________________________________________________________
-noOutstandingRequests.p1= If you think this is wrong, contact the agent who sent you the request or <a href={0} class="govuk-link" target="_blank" rel="noreferrer noopener">view your request history</a>.
-
-# ________________________________________________________________________________
-# Client journey exit partials
-# ________________________________________________________________________________
-
-clientExit.cannot-find-authorisation-request.header=There are no requests linked to the sign-in details you used
-clientExit.authorisation-request-expired.header=This authorisation request has already expired
-clientExit.authorisation-request-cancelled.header=This authorisation request request has been cancelled
-clientExit.already-accepted-authorisation-request.header=You have already accepted this authorisation request
-clientExit.already-refused-authorisation-request.header=You already refused this authorisation request
+noOutstandingRequests.p1= If you think this is wrong, contact the agent who sent you the request or <a href="{0}" class="govuk-link">view your request history</a>.
 
 # ________________________________________________________________________________
 # This authorisation request has already expired
