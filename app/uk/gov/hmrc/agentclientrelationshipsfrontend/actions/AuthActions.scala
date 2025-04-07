@@ -115,7 +115,7 @@ class AuthActions @Inject()(val authConnector: AuthConnector,
             Future.successful(Forbidden)
         }
         .recover {
-          handleFailure(isAgent = false)
+          handleFailure(isAgent = false, taxService = Some(taxService))
         }
 
   @nowarn("msg=exhaustive") // Disabling "match may not be exhaustive" warning due to Affinity Group match below
@@ -185,14 +185,23 @@ class AuthActions @Inject()(val authConnector: AuthConnector,
       identifier <- enrolment.getIdentifier("AgentReferenceNumber")
     yield identifier.value
 
-  private def handleFailure(isAgent: Boolean)
+  private def handleFailure(isAgent: Boolean, taxService: Option[String] = None)
                            (implicit request: Request[?]): PartialFunction[Throwable, Result] = {
     case _: NoActiveSession =>
-      Redirect(UrlHelper.addParamsToUrl(
-        appConfig.signInUrl,
-        "origin" -> Some(appConfig.appName),
-        "continue_url" -> Some(currentUrl)
-      ))
+      taxService match
+        case Some(urlPart) if !serviceConfig.includesPersonal(urlPart) =>
+          Redirect(UrlHelper.addParamsToUrl(
+            appConfig.signInUrl,
+            "origin" -> Some(appConfig.appName),
+            "continue_url" -> Some(currentUrl),
+            "accountType" -> Some("ORGANISATION")
+          ))
+        case _ =>
+          Redirect(UrlHelper.addParamsToUrl(
+            appConfig.signInUrl,
+            "origin" -> Some(appConfig.appName),
+            "continue_url" -> Some(currentUrl)
+          ))
     case _: InsufficientEnrolments =>
       logger.warn("Logged in user does not have required enrolments")
       if isAgent then Redirect(appConfig.subscriptionUrl) else Forbidden

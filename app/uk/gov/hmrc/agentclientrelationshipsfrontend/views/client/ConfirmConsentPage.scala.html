@@ -24,8 +24,6 @@
 @this(layout: Layout,
       govukButton: GovukButton,
       govukRadios: GovukRadios,
-      govukWarningText: GovukWarningText,
-      govukDetails: GovukDetails,
       formWithCSRF: FormWithCSRF)
 
 @(form: Form[Boolean], agentRoleKey: String)(implicit request: ClientJourneyRequest[?], messages: Messages, appConfig: AppConfig)
@@ -34,7 +32,6 @@
 @agentRoleOverride = @{if appConfig.emaEnabled then agentRoleKey else "agent"}
 @serviceKey = @{request.journey.getServiceKey}
 @agentName = @{request.journey.getAgentName}
-@agentRole = @{messages(s"$key.$agentRoleOverride")}
 @agentRoleNoStrong = @{messages(s"$key.form.$agentRoleOverride")}
 @taxServiceName = @{messages(serviceKey)}
 @pageTitle = @{messages(s"$key.h1")}

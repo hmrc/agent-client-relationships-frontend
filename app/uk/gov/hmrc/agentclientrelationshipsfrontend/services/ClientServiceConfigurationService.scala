@@ -89,6 +89,11 @@ class ClientServiceConfigurationService @Inject()(implicit appConfig: AppConfig)
     .map((_, serviceData) => serviceData.urlPart(taxService))
     .getOrElse(Set())
 
+  def getServiceNameForUrlPart(taxService: String): String = services
+    .find(_._2.urlPart.keySet.contains(taxService))
+    .map((_, serviceData) => serviceData.serviceName)
+    .getOrElse(throw new RuntimeException(s"Cannot get service for url part $taxService"))
+
   // url parts are used in public urls to determine which service
   def getUrlPart(clientService: String): String = services(getServiceForForm(clientService)).urlPart.keys.head
 
@@ -98,6 +103,13 @@ class ClientServiceConfigurationService @Inject()(implicit appConfig: AppConfig)
     val clientTypes = services(getServiceForForm(clientService)).clientTypes
     if clientTypes.size == 1 then Some(clientTypes.head.toString) else None
   }
+
+  // we resolve the supplied url part to a service and then check the
+  // client types go see if personal is included (e.g. for OneLogin redirects)
+  def includesPersonal(urlPart: String): Boolean =
+    services(getServiceNameForUrlPart(urlPart))
+      .clientTypes
+      .contains(personal)
 
   val supportingAgentServices: Seq[String] = Seq(HMRCMTDITSUPP)
   

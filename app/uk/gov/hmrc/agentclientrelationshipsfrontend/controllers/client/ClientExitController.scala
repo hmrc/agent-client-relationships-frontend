@@ -45,7 +45,7 @@ class ClientExitController @Inject()(mcc: MessagesControllerComponents,
     implicit request =>
       val serviceKey = taxService.fold
         (request.journey.getServiceKey)
-        (s => serviceConfigurationService.getServiceKeysForUrlPart(s).head)
+        (s => serviceConfigurationService.getServiceNameForUrlPart(s))
       Future.successful(Ok(clientExitPage(
         exitType,
         userIsLoggedIn = true,
@@ -59,7 +59,7 @@ class ClientExitController @Inject()(mcc: MessagesControllerComponents,
                         taxService: String
                       ): Action[AnyContent] = Action.async:
     implicit request =>
-      val serviceKey = serviceConfigurationService.getServiceKeysForUrlPart(taxService).head
+      val serviceKey = serviceConfigurationService.getServiceNameForUrlPart(taxService)
       Future.successful(Ok(clientExitPage(
         exitType,
         userIsLoggedIn = false,
