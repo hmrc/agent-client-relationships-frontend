@@ -54,7 +54,7 @@
         exitType match {
             case ClientExitType.AgentSuspended => agentSuspended(service, userIsLoggedIn)
             case ClientExitType.NoOutstandingRequests => noOutstandingRequests()
-            case ClientExitType.AuthorisationRequestExpired => authorisationHasExpired(expiryDate = lastModifiedDate)
+            case ClientExitType.AuthorisationRequestExpired => authorisationHasExpired(lastModifiedDate, service)
             case ClientExitType.AuthorisationRequestCancelled => authorisationHasBeenCancelled(lastModifiedDate, service)
             case ClientExitType.CannotFindAuthorisationRequest => cannotFindAuthRequest(continueUrl)
             case ClientExitType.AlreadyAcceptedAuthorisationRequest => alreadyAcceptedAuthorisationRequest(lastModifiedDate)

@@ -16,17 +16,20 @@
 
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.DisplayDate.displayInstant
-@import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.routes
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.{routes => clientRoutes}
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.routes
 @import java.time.Instant
 
 @this()
 
-@(expiryDate: Option[Instant])( implicit messages: Messages, appConfig: AppConfig, request: Request[AnyContent])
+@(expiryDate: Option[Instant], service: String)(implicit messages: Messages, appConfig: AppConfig, request: Request[AnyContent])
 @key = @{
     "authorisationRequestExpired"
 }
 
-<p class="govuk-body">@Html(messages(s"$key.p1", expiryDate.map(displayInstant).getOrElse(""), s"${routes.ManageYourTaxAgentsController.show.url}#history"))</p>
-<p class="govuk-body">@Html(messages(s"$key.p2", s"${appConfig.guidanceAuthoriseAgent}"))</p>
-<p class="govuk-body">@messages(s"$key.p3")</p>
-<p class="govuk-body">@Html(messages(s"$key.p4", s"${appConfig.signInUrl}"))</p>
+<p class="govuk-body">@messages(s"$key.p1", expiryDate.map(displayInstant).getOrElse(""))</p>
+<p class="govuk-body">@messages(s"$key.p2", messages(service))</p>
+<ul class="govuk-list">
+ <li><a class="govuk-link" href="@clientRoutes.ManageYourTaxAgentsController.show.url">@messages(s"$key.a1")</a></li>
+ <li><a class="govuk-link" href="@routes.SignOutController.signOut(isAgent = false).url">@messages(s"$key.a2")</a></li>
+</ul>

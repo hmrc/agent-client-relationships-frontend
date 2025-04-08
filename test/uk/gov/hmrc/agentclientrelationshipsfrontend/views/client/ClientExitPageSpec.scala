@@ -46,11 +46,11 @@ class ClientExitPageSpec extends ViewSpecSupport {
     val cannotFindAuthorisationRequestSignIn = "Sign in with a different user ID"
     val cannotFindAuthorisationRequestSignOut = "Finish and sign out"
 
-    val authorisationRequestExpiredLabel = "This authorisation request has already expired - Appoint someone to deal with HMRC for you - GOV.UK"
-    val authorisationRequestExpiredParagraphOne = "This request expired on 10 January 2024. For details, view your history to check for any expired, cancelled or outstanding requests."
-    val authorisationRequestExpiredParagraphTwo = "If your agent has sent you a recent request, make sure you have signed up to the tax service you need."
-    val authorisationRequestExpiredParagraphThree = "You could also check you have signed in with the correct Government Gateway user ID. It must be the same one you used to sign up to the tax service the authorisation request is for."
-    val authorisationRequestExpiredParagraphFour = "Sign in with the Government Gateway user ID you use for managing your personal tax affairs."
+    val authorisationRequestExpiredLabel = "This authorisation request has expired - Appoint someone to deal with HMRC for you - GOV.UK"
+    val authorisationRequestExpiredParagraphOne = "This request expired on 10 January 2024. Authorisation requests expire after 21 days."
+    val authorisationRequestExpiredParagraphTwo = "If you want this agent to manage your Making Tax Digital for Income Tax, ask them to send you another authorisation request."
+    val authorisationRequestExpiredLinkOne = "Manage your tax agents"
+    val authorisationRequestExpiredLinkTwo = "Finish and sign out"
 
     val authorisationRequestCancelledLabel = "This authorisation request request has been cancelled - Appoint someone to deal with HMRC for you - GOV.UK"
     val authorisationRequestCancelledParagraphOne = "This request was cancelled by the agent on 10 January 2024."
@@ -141,20 +141,15 @@ class ClientExitPageSpec extends ViewSpecSupport {
     "display paragraph content" in {
       doc.select(".govuk-body").get(0).text() shouldBe Expected.authorisationRequestExpiredParagraphOne
       doc.select(".govuk-body").get(1).text() shouldBe Expected.authorisationRequestExpiredParagraphTwo
-      doc.select(".govuk-body").get(2).text() shouldBe Expected.authorisationRequestExpiredParagraphThree
-      doc.select(".govuk-body").get(3).text() shouldBe Expected.authorisationRequestExpiredParagraphFour
+    }
+
+    "have the correct link text and hrefs" in {
+      doc.mainContent.extractLink(1).value shouldBe TestLink(Expected.authorisationRequestExpiredLinkOne, "/agent-client-relationships/manage-your-tax-agents")
+      doc.mainContent.extractLink(2).value shouldBe TestLink(Expected.authorisationRequestExpiredLinkTwo, "/agent-client-relationships/sign-out?isAgent=false")
     }
 
     "have a language switcher" in {
       doc.hasLanguageSwitch shouldBe true
-    }
-
-    "have the correct link in the details component content" in {
-
-      doc.mainContent.extractLink(1).value shouldBe TestLink(
-        text = "view your history",
-        href = "/agent-client-relationships/manage-your-tax-agents#history"
-      )
     }
   }
 

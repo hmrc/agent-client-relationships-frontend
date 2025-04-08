@@ -554,6 +554,7 @@ clientConfirmation.p2=<translation needed>
 # Client journey exit partials
 # ________________________________________________________________________________
 
+clientExit.authorisation-request-expired.header=Mae’r cais hwn am awdurdodiad wedi dod i ben
 clientExit.authorisation-request-cancelled.header=Mae’r cais hwn am awdurdodiad wedi cael ei ganslo
 clientExit.authorisation-request-already-accepted.header=Rydych eisoes wedi derbyn y cais hwn am awdurdodiad
 
@@ -564,6 +565,14 @@ authorisationRequestCancelled.p1=Cafodd y cais hwn ei ganslo gan yr asiant ar {0
 authorisationRequestCancelled.p2=Os hoffech i’r asiant hwn reoli’ch {0}, gofynnwch iddo anfon cais arall atoch am awdurdodiad.
 authorisationRequestCancelled.a1=Rheoli’ch asiantau treth
 authorisationRequestCancelled.a2=Gorffen ac allgofnodi
+
+# ________________________________________________________________________________
+# This authorisation request has already expired
+# ________________________________________________________________________________
+authorisationRequestExpired.p1=Daeth y cais hwn i ben ar {0}. Mae ceisiadau am awdurdodiad yn dod i ben ar ôl 21 diwrnod.
+authorisationRequestExpired.p2=Os hoffech i’r asiant hwn reoli’ch <tax service>, gofynnwch iddo anfon cais arall atoch am awdurdodiad.
+authorisationRequestExpired.a1=Rheoli’ch asiantau treth
+authorisationRequestExpired.a2=Gorffen ac allgofnodi
 
 # ________________________________________________________________________________
 # You have already accepted this authorisation request
