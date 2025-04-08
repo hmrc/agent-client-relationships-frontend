@@ -861,7 +861,7 @@ clientDeauthConfirmed.signOutLink=Finish and sign out
 # ________________________________________________________________________________
 
 cannot-find-authorisation-request.header=There are no requests linked to the sign-in details you used
-authorisation-request-expired.header=This authorisation request has already expired
+authorisation-request-expired.header=This authorisation request has expired
 authorisation-request-cancelled.header=This authorisation request request has been cancelled
 agent-suspended.header=You cannot appoint this tax agent
 already-accepted-authorisation-request.header=You have already accepted this authorisation request
