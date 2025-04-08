@@ -219,6 +219,13 @@ class AuthActionsSpec extends AnyWordSpecLike with Matchers with OptionValues wi
       status(result) shouldBe SEE_OTHER
       redirectLocation(result).value should startWith("http://localhost:9099/bas-gateway/sign-in")
 
+    "redirect a user without session to the login with accountType ORGANISATION" in:
+      val controller = failingControllerSetup(BearerTokenExpired(""))
+      val result = controller.clientAuthWithEnrolmentCheck(countryByCountryReporting)(fakeRequest)
+
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result).value should endWith("ORGANISATION")
+
     "block a client without required enrolments (can't happen in theory)" in :
       val controller = failingControllerSetup(InsufficientEnrolments(""))
       val result = controller.clientAuthWithEnrolmentCheck(incomeTax)(fakeRequest)

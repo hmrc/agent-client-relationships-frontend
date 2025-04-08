@@ -192,3 +192,30 @@ class ClientServiceConfigurationServiceSpec extends AnyWordSpecLike with Matcher
       services.getServiceForFastTrack("PERSONAL-INCOME-RECORD") shouldBe "PERSONAL-INCOME-RECORD"
       services.getServiceForFastTrack("HMRC-CBC-ORG") shouldBe "HMRC-CBC-ORG"
       services.getServiceForFastTrack("HMRC-CBC-NONUK-ORG") shouldBe "HMRC-CBC-ORG"
+
+  "getServiceNameForUrlPart" should:
+
+    "return service name for valid url parts" in:
+
+      services.getServiceNameForUrlPart(incomeTax) shouldBe "HMRC-MTD-IT"
+      services.getServiceNameForUrlPart(incomeRecordViewer) shouldBe "PERSONAL-INCOME-RECORD"
+      services.getServiceNameForUrlPart(vat) shouldBe "HMRC-MTD-VAT"
+      services.getServiceNameForUrlPart(capitalGainsTaxUkProperty) shouldBe "HMRC-CGT-PD"
+      services.getServiceNameForUrlPart(plasticPackagingTax) shouldBe "HMRC-PPT-ORG"
+      services.getServiceNameForUrlPart(countryByCountryReporting) shouldBe "HMRC-CBC-ORG"
+      services.getServiceNameForUrlPart(trustsAndEstates) shouldBe "HMRC-TERS-ORG"
+      services.getServiceNameForUrlPart(pillar2) shouldBe "HMRC-PILLAR2-ORG"
+
+  "includesPersonal" should:
+
+    "return true when a service supports personal client types" in:
+      services.includesPersonal(incomeTax) shouldBe true
+      services.includesPersonal(incomeRecordViewer) shouldBe true
+      services.includesPersonal(vat) shouldBe true
+      services.includesPersonal(capitalGainsTaxUkProperty) shouldBe true
+      services.includesPersonal(plasticPackagingTax) shouldBe true
+
+    "return false when a service does not support personal client types" in:
+      services.includesPersonal(countryByCountryReporting) shouldBe false
+      services.includesPersonal(trustsAndEstates) shouldBe false
+      services.includesPersonal(pillar2) shouldBe false

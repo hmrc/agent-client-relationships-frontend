@@ -38,7 +38,6 @@
 @indefiniteAgentRole = @{if appConfig.emaEnabled then messages(s"indefiniteAgentRole.$serviceKey") else messages("indefiniteAgentRole.noEMA")}
 @taxServiceName = @{messages(serviceKey)}
 @removeContent = {<p class="govuk-body">@Html(messages(s"$key.section3.p1", routes.ManageYourTaxAgentsController.show.url))</p>}
-@extAgents= @{journey.existingMainAgent}
 @warningHtml= @{(journey.existingMainAgent, agentRoleKey) match {
     case (Some(exAgent), "suppAgent") if exAgent.sameAgent =>
         val text = messages(s"$key.warning.$agentRoleKey", agentName)
