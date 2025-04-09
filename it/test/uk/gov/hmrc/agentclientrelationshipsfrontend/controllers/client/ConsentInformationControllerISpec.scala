@@ -93,7 +93,8 @@ class ConsentInformationControllerISpec extends ComponentSpecHelper with ScalaFu
       result.header("Location").value shouldBe routes.ClientExitController
         .showClient(
           exitType = ClientExitType.CannotFindAuthorisationRequest,
-          continueUrl = Some(RedirectUrl(appConfig.appExternalUrl + routes.DeclineRequestController.show(testUid, "vat").url))
+          continueUrl = Some(RedirectUrl(appConfig.appExternalUrl + routes.DeclineRequestController.show(testUid, "vat").url)),
+          taxService = Some("vat")
         ).url
 
     "redirect to NoOutstandingRequests exit page when the invitation data is not found" in {
@@ -114,7 +115,8 @@ class ConsentInformationControllerISpec extends ComponentSpecHelper with ScalaFu
       )
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe routes.ClientExitController.showClient(
-        exitType = ClientExitType.NoOutstandingRequests
+        exitType = ClientExitType.NoOutstandingRequests,
+        taxService = Some("income-tax")
       ).url
     }
 
