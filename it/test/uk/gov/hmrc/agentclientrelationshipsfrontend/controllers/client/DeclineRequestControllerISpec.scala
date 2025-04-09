@@ -98,7 +98,8 @@ class DeclineRequestControllerISpec extends ComponentSpecHelper with AuthStubs w
           continueUrl = Some(RedirectUrl(appConfig.appExternalUrl + routes.DeclineRequestController.show(
             uid = testUid,
             taxService = "vat"
-          ).url))
+          ).url)),
+          Some("vat")
         ).url
 
     "redirect to NoOutstandingRequests exit page when the invitation data is not found" in :

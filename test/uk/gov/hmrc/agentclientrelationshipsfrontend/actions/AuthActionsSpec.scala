@@ -153,7 +153,11 @@ class AuthActionsSpec extends AnyWordSpecLike with Matchers with OptionValues wi
 
       status(result) shouldBe SEE_OTHER
       redirectLocation(result).get shouldBe clientRoutes.ClientExitController
-        .showClient(ClientExitType.CannotFindAuthorisationRequest, Some(RedirectUrl(appConfig.appExternalUrl + fakeRequest.uri))).url
+        .showClient(
+          ClientExitType.CannotFindAuthorisationRequest,
+          Some(RedirectUrl(appConfig.appExternalUrl + fakeRequest.uri)),
+          Some("income-tax")
+        ).url
 
 
     s"authorise an individual client for $incomeRecordViewer with CL250" in :
@@ -170,7 +174,11 @@ class AuthActionsSpec extends AnyWordSpecLike with Matchers with OptionValues wi
 
       status(result) shouldBe SEE_OTHER
       redirectLocation(result).get shouldBe clientRoutes.ClientExitController
-        .showClient(ClientExitType.CannotFindAuthorisationRequest, Some(RedirectUrl(appConfig.appExternalUrl + fakeRequest.uri))).url
+        .showClient(
+          ClientExitType.CannotFindAuthorisationRequest,
+          Some(RedirectUrl(appConfig.appExternalUrl + fakeRequest.uri)),
+          Some("income-record-viewer")
+        ).url
 
 
     s"authorise an individual $capitalGainsTaxUkProperty client with CL50" in :

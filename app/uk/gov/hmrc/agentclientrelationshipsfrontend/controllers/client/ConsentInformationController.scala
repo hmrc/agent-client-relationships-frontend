@@ -21,9 +21,9 @@ import play.api.mvc.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.connectors.AgentClientRelationshipsConnector
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{InvitationAgentSuspendedError, InvitationOrAgentNotFoundError, client}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.{Cancelled, Expired, Pending, Rejected}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientExitType.*
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.{Cancelled, Expired, Pending, Rejected}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{InvitationAgentSuspendedError, InvitationOrAgentNotFoundError}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{ClientJourneyService, ClientServiceConfigurationService}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.client.ConsentInformationPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
@@ -39,19 +39,25 @@ class ConsentInformationController @Inject()(agentClientRelationshipsConnector: 
                                              actions: Actions,
                                              clientJourneyService: ClientJourneyService
                                             )(implicit val executionContext: ExecutionContext, appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport:
-  
+
   def show(uid: String, taxService: String): Action[AnyContent] = actions.getClientJourney(taxService).async:
     implicit journeyRequest =>
 
       agentClientRelationshipsConnector
         .validateInvitation(uid, serviceConfigurationService.getServiceKeysForUrlPart(taxService))
         .flatMap {
-          case Left(InvitationAgentSuspendedError) => Future.successful(Redirect(routes.ClientExitController.showClient(
-            exitType = AgentSuspended,
-            continueUrl = None,
-            taxService = Some(taxService)
-          )))
-          case Left(InvitationOrAgentNotFoundError) => Future.successful(Redirect(routes.ClientExitController.showClient(NoOutstandingRequests)))
+          case Left(InvitationAgentSuspendedError) =>
+            Future.successful(Redirect(routes.ClientExitController.showClient(
+              exitType = AgentSuspended,
+              continueUrl = None,
+              taxService = Some(taxService)
+            )))
+          case Left(InvitationOrAgentNotFoundError) =>
+            Future.successful(Redirect(routes.ClientExitController.showClient(
+              exitType = NoOutstandingRequests,
+              continueUrl = None,
+              taxService = Some(taxService)
+            )))
           case Right(response) =>
             val newJourney = journeyRequest.journey.copy(
               invitationId = Some(response.invitationId),

@@ -91,7 +91,8 @@ class AuthActions @Inject()(val authConnector: AuthConnector,
         else
           Future.successful(Redirect(clientRoutes.ClientExitController.showClient(
             exitType = CannotFindAuthorisationRequest,
-            continueUrl = Some(RedirectUrl(currentUrl))
+            continueUrl = Some(RedirectUrl(currentUrl)),
+            taxService = Some(taxService)
           ).url))
 
       authorised(AuthProviders(GovernmentGateway))
