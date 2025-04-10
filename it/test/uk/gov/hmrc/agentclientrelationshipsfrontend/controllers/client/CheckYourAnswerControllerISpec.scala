@@ -86,6 +86,7 @@ class CheckYourAnswerControllerISpec extends ComponentSpecHelper with AuthStubs 
         result.status shouldBe SEE_OTHER
         result.header("Location").value shouldBe routes.ConfirmationController.show.url
 
+
     "redirect to MYTA" when:
 
       "a consent answer is not present in the session" in:
