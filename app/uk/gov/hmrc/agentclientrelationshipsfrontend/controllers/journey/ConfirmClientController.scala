@@ -55,18 +55,26 @@ class ConfirmClientController @Inject()(mcc: MessagesControllerComponents,
       given AgentJourneyRequest[?] = journeyRequest
 
       val journey = journeyRequest.journey
-      val clientName = journey.clientDetailsResponse.get.name
-
-      ConfirmClientForm.form("confirmClient", clientName, journey.journeyType.toString).bindFromRequest().fold(
-        formWithErrors => {
-          Future.successful(BadRequest(confirmClientPage(formWithErrors)))
-        },
-        confirmClient => {
-          journeyService.saveJourney(journey.copy(
-            clientConfirmed = Some(confirmClient),
-            confirmationClientName = None,
-            journeyComplete = None)).flatMap { _ =>
-            journeyService.nextPageUrl(journeyType).map(Redirect(_))
+      if journey.clientDetailsResponse.isEmpty
+      then Future.successful(Redirect(routes.EnterClientIdController.show(journey.journeyType)))
+      else {
+        val clientName = journey.clientDetailsResponse.get.name
+        ConfirmClientForm.form(
+          fieldName = "confirmClient",
+          clientName = clientName,
+          journeyType = journey.journeyType.toString
+        ).bindFromRequest().fold(
+          formWithErrors => {
+            Future.successful(BadRequest(confirmClientPage(formWithErrors)))
+          },
+          confirmClient => {
+            journeyService.saveJourney(journey.copy(
+              clientConfirmed = Some(confirmClient),
+              confirmationClientName = None,
+              journeyComplete = None
+            )).flatMap { _ =>
+              journeyService.nextPageUrl(journeyType).map(Redirect(_))
+            }
           }
-        }
-      )
+        )
+      }

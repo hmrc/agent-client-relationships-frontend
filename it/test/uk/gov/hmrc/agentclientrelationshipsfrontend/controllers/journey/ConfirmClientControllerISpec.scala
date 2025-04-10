@@ -16,13 +16,14 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey
 
+import org.scalatest.concurrent.ScalaFutures
 import play.api.test.Helpers.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, AgentJourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsResponse, ClientStatus, KnownFactType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.AgentJourneyService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentSpecHelper}
 
-class ConfirmClientControllerISpec extends ComponentSpecHelper with AuthStubs {
+class ConfirmClientControllerISpec extends ComponentSpecHelper with ScalaFutures with AuthStubs {
 
   val testNino: String = "AB123456C"
   val testCgtRef: String = "XMCGTP123456789"
@@ -107,6 +108,23 @@ class ConfirmClientControllerISpec extends ComponentSpecHelper with AuthStubs {
   }
 
   "POST /authorisation-request/confirm-client" should {
+
+    "redirect to enter client id when client details are missing" in {
+      authoriseAsAgent()
+      journeyService.saveJourney(
+        journey = AgentJourney(
+          journeyType = AgentJourneyType.AuthorisationRequest,
+          clientType = Some("personal"),
+          clientService = Some("HMRC-MTD-IT")
+        )
+      ).futureValue
+      val result = post(routes.ConfirmClientController.onSubmit(AgentJourneyType.AuthorisationRequest).url)(Map(
+        "confirmClient" -> Seq("true")
+      ))
+      result.status shouldBe SEE_OTHER
+      result.header("Location").value shouldBe routes.EnterClientIdController.show(AgentJourneyType.AuthorisationRequest).url
+    }
+
     "redirect to select agent role page when service has supported roles and client is confirmed" in {
       authoriseAsAgent()
       await(journeyService.saveJourney(noAuthJourneyWithSupportedRoles(AgentJourneyType.AuthorisationRequest)))

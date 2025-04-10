@@ -16,13 +16,14 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey
 
+import org.scalatest.concurrent.ScalaFutures
 import play.api.test.Helpers.*
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, AgentJourneyType, JourneyExitType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsResponse, KnownFactType}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, JourneyExitType, AgentJourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.AgentJourneyService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentSpecHelper}
 
-class SelectAgentRoleControllerISpec extends ComponentSpecHelper with AuthStubs {
+class SelectAgentRoleControllerISpec extends ComponentSpecHelper with ScalaFutures with AuthStubs {
 
   val journeyService: AgentJourneyService = app.injector.instanceOf[AgentJourneyService]
   val journeyType: AgentJourneyType = AgentJourneyType.AuthorisationRequest // this controller is only used on AuthorisationRequest journeys
@@ -86,6 +87,22 @@ class SelectAgentRoleControllerISpec extends ComponentSpecHelper with AuthStubs 
   }
 
   "POST /authorisation-request/agent-role" should {
+
+    "redirect to enter client id when client details are missing" in {
+      authoriseAsAgent()
+      journeyService.saveJourney(
+        journey = AgentJourney(
+          journeyType = AgentJourneyType.AuthorisationRequest,
+          clientType = Some("personal"),
+          clientService = Some("HMRC-MTD-IT")
+        )
+      ).futureValue
+      val result = post(routes.ConfirmClientController.onSubmit(AgentJourneyType.AuthorisationRequest).url)(Map(
+        "confirmClient" -> Seq("true")
+      ))
+      result.status shouldBe SEE_OTHER
+      result.header("Location").value shouldBe routes.EnterClientIdController.show(AgentJourneyType.AuthorisationRequest).url
+    }
 
     List("HMRC-MTD-IT", "HMRC-MTD-IT-SUPP").foreach(role => s"redirect to the CYA page after storing valid answer $role for new relationship" in {
       authoriseAsAgent()

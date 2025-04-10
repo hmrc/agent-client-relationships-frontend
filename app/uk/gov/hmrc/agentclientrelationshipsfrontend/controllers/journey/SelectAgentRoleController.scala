@@ -66,27 +66,31 @@ class SelectAgentRoleController @Inject()(mcc: MessagesControllerComponents,
     journeyRequest =>
       given AgentJourneyRequest[?] = journeyRequest
       val journey = journeyRequest.journey
-      val options = serviceConfig.getSupportedAgentRoles(journey.getServiceWithDefault)
-      SelectFromOptionsForm.form(AgentRoleFieldName, options, journeyType.toString, journey.getClientDetailsResponse.name).bindFromRequest().fold(
-        formWithErrors => {
-          Future.successful(BadRequest(selectAgentRolePage(
-            formWithErrors,
-            options,
-            getAgentRoleChangeType(journey, options)
-          )))
-        },
-        agentRole => {
-          if(journey.getClientDetailsResponse.hasExistingRelationshipFor.contains(agentRole)) {
-            Future.successful(Redirect(routes.JourneyExitController.show(journeyType, JourneyExitType.NoChangeOfAgentRole)))
-          } else {
-            val newJourney = journey.copy(
-              agentType = Some(agentRole),
-              confirmationClientName = None,
-              journeyComplete = None
-            )
-            journeyService.saveJourney(newJourney).flatMap { _ =>
-              journeyService.nextPageUrl(journeyType).map(Redirect(_))
+      if journey.clientDetailsResponse.isEmpty
+      then Future.successful(Redirect(routes.EnterClientIdController.show(journey.journeyType)))
+      else {
+        val options = serviceConfig.getSupportedAgentRoles(journey.getServiceWithDefault)
+        SelectFromOptionsForm.form(AgentRoleFieldName, options, journeyType.toString, journey.getClientDetailsResponse.name).bindFromRequest().fold(
+          formWithErrors => {
+            Future.successful(BadRequest(selectAgentRolePage(
+              formWithErrors,
+              options,
+              getAgentRoleChangeType(journey, options)
+            )))
+          },
+          agentRole => {
+            if (journey.getClientDetailsResponse.hasExistingRelationshipFor.contains(agentRole)) {
+              Future.successful(Redirect(routes.JourneyExitController.show(journeyType, JourneyExitType.NoChangeOfAgentRole)))
+            } else {
+              val newJourney = journey.copy(
+                agentType = Some(agentRole),
+                confirmationClientName = None,
+                journeyComplete = None
+              )
+              journeyService.saveJourney(newJourney).flatMap { _ =>
+                journeyService.nextPageUrl(journeyType).map(Redirect(_))
+              }
             }
           }
-        }
-  )
+        )
+      }
