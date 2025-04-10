@@ -65,37 +65,42 @@ class CheckYourAnswersController @Inject()(mcc: MessagesControllerComponents,
       given AgentJourneyRequest[?] = journeyRequest
 
       val journey = journeyRequest.journey
-      val conditionalExitUrl = journeyService.checkExitConditions
+      if journey.clientDetailsResponse.isEmpty then
+        Future.successful(Redirect(routes.EnterClientIdController.show(journey.journeyType)))
+      else {
+        val conditionalExitUrl = journeyService.checkExitConditions
 
-      (journeyType, conditionalExitUrl) match {
-        case (AgentJourneyType.AuthorisationRequest, None) => for {
-          invitationId <- agentClientRelationshipsService.createAuthorisationRequest(journey)
-          _ <- journeyService.saveJourney(AgentJourney(
-            journeyType = journey.journeyType,
-            journeyComplete = Some(invitationId)
-          ))
-        } yield Redirect(routes.ConfirmationController.show(journey.journeyType))
+        (journeyType, conditionalExitUrl) match {
+          case (AgentJourneyType.AuthorisationRequest, None) => for {
+            invitationId <- agentClientRelationshipsService.createAuthorisationRequest(journey)
+            _ <- journeyService.saveJourney(AgentJourney(
+              journeyType = journey.journeyType,
+              journeyComplete = Some(invitationId)
+            ))
+          } yield Redirect(routes.ConfirmationController.show(journey.journeyType))
 
-        case (AgentJourneyType.AgentCancelAuthorisation, None) =>
-          ConfirmCancellationForm.form(ConfirmCancellationFieldName, journey.journeyType.toString)
-            .bindFromRequest()
-            .fold(
-              formWithErrors => {
-                Future.successful(BadRequest(confirmCancellationPage(formWithErrors)))
-              },
-              confirmCancellation => {
-                if confirmCancellation then for {
-                  _ <- agentClientRelationshipsService.cancelAuthorisation(journey)
-                  _ <- journeyService.saveJourney(AgentJourney(
-                    journeyType = journey.journeyType,
-                    confirmationService = journey.clientService,
-                    confirmationClientName = Some(journey.getClientDetailsResponse.name),
-                    journeyComplete = Some(LocalDate.now().toString)
-                  ))
-                } yield Redirect(routes.ConfirmationController.show(journey.journeyType))
-                else Future.successful(Redirect(routes.StartJourneyController.startJourney(journey.journeyType)))
-              })
+          case (AgentJourneyType.AgentCancelAuthorisation, None) =>
+            ConfirmCancellationForm.form(ConfirmCancellationFieldName, journey.journeyType.toString)
+              .bindFromRequest()
+              .fold(
+                formWithErrors => {
+                  Future.successful(BadRequest(confirmCancellationPage(formWithErrors)))
+                },
+                confirmCancellation => {
+                  if confirmCancellation then for {
+                    _ <- agentClientRelationshipsService.cancelAuthorisation(journey)
+                    _ <- journeyService.saveJourney(AgentJourney(
+                      journeyType = journey.journeyType,
+                      confirmationService = journey.clientService,
+                      confirmationClientName = Some(journey.getClientDetailsResponse.name),
+                      journeyComplete = Some(LocalDate.now().toString)
+                    ))
+                  } yield Redirect(routes.ConfirmationController.show(journey.journeyType))
+                  else Future.successful(Redirect(routes.StartJourneyController.startJourney(journey.journeyType)))
+                })
 
-        case (_, Some(url)) =>
-          Future.successful(Redirect(url))
+          case (_, Some(url)) =>
+            Future.successful(Redirect(url))
+        }
       }
+

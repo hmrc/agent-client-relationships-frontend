@@ -17,6 +17,7 @@
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey
 
 import play.api.libs.json.{JsObject, Json}
+import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import play.api.test.Helpers.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.{HMRCMTDIT, HMRCMTDITSUPP, HMRCMTDVAT}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.AgentJourney
@@ -27,7 +28,7 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.services.AgentJourneyService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.WiremockHelper.stubPost
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentSpecHelper}
 
-class CheckYourAnswersControllerISpec extends ComponentSpecHelper with AuthStubs :
+class CheckYourAnswersControllerISpec extends ComponentSpecHelper with ScalaFutures with AuthStubs :
 
   val testInvitationId: String = "AB1234567890"
   val testCreateAuthorisationRequestResponseJson: JsObject = Json.obj(
@@ -184,6 +185,21 @@ class CheckYourAnswersControllerISpec extends ComponentSpecHelper with AuthStubs
         result.header("Location").value shouldBe routes.ConfirmationController.show(AuthorisationRequest).url
       ))
 
+    "redirect to enter client id when client details are missing" in :
+      authoriseAsAgent()
+      journeyService.saveJourney(
+        journey = AgentJourney(
+          journeyType = AuthorisationRequest,
+          clientType = Some("personal"),
+          clientService = Some(HMRCMTDIT)
+        )
+      ).futureValue
+      val result = post(routes.CheckYourAnswersController.onSubmit(AuthorisationRequest).url)(Map(
+        "confirmed" -> Seq("true")
+      ))
+      result.status shouldBe SEE_OTHER
+      result.header("Location").value shouldBe routes.EnterClientIdController.show(AuthorisationRequest).url
+
     "redirect to an exit URL if there is an exit condition" in :
       authoriseAsAgent()
       val insolventClientSession = singleAgentRequestJourney(HMRCMTDVAT).copy(
@@ -231,6 +247,21 @@ class CheckYourAnswersControllerISpec extends ComponentSpecHelper with AuthStubs
       await(journeyService.saveJourney(existingAuthCancellationJourney(HMRCMTDIT)))
       val result = post(routes.CheckYourAnswersController.onSubmit(AgentCancelAuthorisation).url)("")
       result.status shouldBe BAD_REQUEST
+
+    "redirect to enter client id when client details are missing" in :
+      authoriseAsAgent()
+      journeyService.saveJourney(
+        journey = AgentJourney(
+          journeyType = AgentCancelAuthorisation,
+          clientType = Some("personal"),
+          clientService = Some(HMRCMTDIT)
+        )
+      ).futureValue
+      val result = post(routes.CheckYourAnswersController.onSubmit(AgentCancelAuthorisation).url)(Map(
+        "confirmed" -> Seq("true")
+      ))
+      result.status shouldBe SEE_OTHER
+      result.header("Location").value shouldBe routes.EnterClientIdController.show(AgentCancelAuthorisation).url
 
     "redirect to an exit URL if there is an exit condition" in :
       authoriseAsAgent()
