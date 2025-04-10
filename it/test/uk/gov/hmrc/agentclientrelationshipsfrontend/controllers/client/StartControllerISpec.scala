@@ -17,7 +17,6 @@
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client
 
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
 import play.api.libs.json.{JsObject, Json}
 import play.api.test.Helpers.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.connectors.AgentClientRelationshipsConnector

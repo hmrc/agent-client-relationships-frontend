@@ -17,7 +17,7 @@
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey
 
 import play.api.libs.json.{JsObject, Json}
-import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.concurrent.ScalaFutures
 import play.api.test.Helpers.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.{HMRCMTDIT, HMRCMTDITSUPP, HMRCMTDVAT}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.AgentJourney
