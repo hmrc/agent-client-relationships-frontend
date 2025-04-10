@@ -1,179 +1,132 @@
-# -------------------------------------------------------------------------------------------
-# Common
-# -------------------------------------------------------------------------------------------
 service.name.agents.auth=Gofyn i gleient eich awdurdodi
-service.name.agents.de-auth=Canslo awdurdodiad cleient
-service.name.clients=Penodi rhywun i ddelio â CThEM ar eich rhan
-
-authorisation-request.service.name = Gofyn i gleient eich awdurdodi
-agent-cancel-authorisation.service.name = Canslo awdurdodiad cleient
-
-error.prefix=Gwall:' '
-error.heading=Mae problem wedi codi
-
-continue.button=Yn eich blaen
+service.name.agents.de-auth=Canslo awdurdodiad y cleient
+service.name.clients=Penodi rhywun i ddelio â CThEF ar eich rhan
+authorisation-request.service.name=Gofyn i gleient eich awdurdodi
+agent-cancel-authorisation.service.name=Canslo awdurdodiad y cleient
+error.prefix=Gwall:’ ’
+error.heading=Mae problem.
+continue.button=Parhau
 try-again.button=Rhoi cynnig arall arni
+button.copy=Copïo cysylltiad i’r clipfwrdd
+button.copied=Copïo’r cysylltiad
 start-again.button=Dechrau eto
-
-# -------------------------------------------------------------------------------------------
-# Timeout/Auth/IV error pages
-# -------------------------------------------------------------------------------------------
-
-# Cannot confirm identity
-cannot-confirm-identity.header=Nid oeddem yn gallu cadarnhau pwy ydych
+track-requests.button=Rheoli ceisiadau diweddar am awdurdodiad
+PERSONAL-INCOME-RECORD=Dangosydd Cofnodion Incwm
+HMRC-MTD-IT=Troi Treth yn Ddigidol ar gyfer Treth Incwm
+HMRC-MTD-IT-SUPP=Troi Treth yn Ddigidol ar gyfer Treth Incwm
+HMRC-PPT-ORG=Treth Deunydd Pacio Plastig
+HMRC-CGT-PD=Cyfrif Treth Enillion Cyfalaf ar eiddo yn y DU
+HMRC-CBC-ORG=Adroddiadau Gwlad wrth wlad
+HMRC-CBC-NONUK-ORG=Adroddiadau Gwlad wrth wlad
+HMRC-MTD-VAT=TAW
+HMRC-PILLAR2-ORG=Trethi Atodol Colofn 2
+HMRC-TERS-ORG=Ymddiriedolaethau ac Ystadau
+HMRC-TERSNT-ORG=Ymddiriedolaethau ac Ystadau
+cannot-confirm-identity.header=Nid oedd modd i ni gadarnhau pwy ydych
 cannot-confirm-identity.p1=Nid yw’r wybodaeth yr ydych wedi’i nodi yn cyd-fynd â’n cofnodion.
 cannot-confirm-identity.p2=Os oes angen help arnoch i gadarnhau pwy ydych, defnyddiwch y cysylltiad ‘A yw’r dudalen hon yn gweithio’n iawn’.
-
-# Locked-out
-locked-out.header=Nid oeddem yn gallu cadarnhau pwy ydych
-locked-out.p1=Rydych wedi nodi gwybodaeth nad yw’n cyd-fynd â’n cofnodion gormod o weithiau.
-locked-out.p2=Am resymau diogelwch, mae’n rhaid i chi aros 24 awr ac yna mewngofnodi i roi cynnig arall arni.
+locked-out.header=Nid oedd modd i ni gadarnhau pwy ydych
+locked-out.p1=Rydych wedi nodi gwybodaeth nad yw’n cyd-fynd â’n cofnodion ormod o weithiau.
+locked-out.p2=Am resymau diogelwch, mae’n rhaid i chi aros 24 awr ac yna fewngofnodi i roi cynnig arall arni.
 locked-out.p3=Os oes angen help arnoch i gadarnhau pwy ydych, defnyddiwch y cysylltiad ‘A yw’r dudalen hon yn gweithio’n iawn’.
-
-#Timed out
 timed-out.header=Rydych wedi cael eich allgofnodi
 timed-out.p1=Nid ydych wedi gwneud dim byd ers {0}, felly rydym wedi’ch allgofnodi er mwyn cadw’ch cyfrif yn ddiogel.
 timed-out.p2.link=Mewngofnodwch eto
 timed-out.p2.end=i ddefnyddio’r gwasanaeth hwn.
 timed-out.button=Dechrau eto
-timed-out.minutes=munud
-timed-out.seconds=eiliad
-
-# Technical issues
+timed-out.minutes=o funudau
+timed-out.seconds=o eiliadau
 technical-issues.header=Mae’n ddrwg gennym, mae problem gyda’r gwasanaeth
 technical-issues.p1=Rhowch gynnig arall arni yn nes ymlaen.
 technical-issues.p2=Efallai nad ydym wedi cadw’ch atebion. Pan fydd y gwasanaeth ar gael, efallai y bydd yn rhaid i chi ddechrau eto.
 technical-issues.sa-url=https://www.gov.uk/government/organisations/hm-revenue-customs/contact/welsh-language-helplines
-technical-issues.vat-url= https://www.gov.uk/government/organisations/hm-revenue-customs/contact/vat-customs-and-excise-and-duties-enquiries-for-welsh-speaking-customers
-technical-issues.vat.link=Ffoniwch linell Ymholiadau TAW, Tollau ac Ecséis CThEM
-technical-issues.vat.end=os oes angen help arnoch gyda’r cynllun TAW.
-technical-issues.it.link=Ffoniwch Wasanaeth Cwsmeriaid Cymraeg CThEM
+technical-issues.vat-url=https://www.gov.uk/government/organisations/hm-revenue-customs/contact/vat-customs-and-excise-and-duties-enquiries-for-welsh-speaking-customers
+technical-issues.vat.link=Ffoniwch linell Ymholiadau TAW, Tollau ac Ecséis CThEF
+technical-issues.vat.end=os oes angen help arnoch gyda TAW.
+technical-issues.it.link=Ffoniwch Wasanaeth Cwsmeriaid Cymraeg CThEF
 technical-issues.it.end=os oes angen help arnoch gyda’r cynllun Troi Treth yn Ddigidol ar gyfer Treth Incwm.
-
-#Error Cannot View Request
-error.cannot-view-request.header=Ni allwch fwrw golwg dros y cais hwn am awdurdodiad
+not-authorised.header=Ni allwch gael at y dudalen hon
+not-authorised.description.p1=Dim ond eich cleient all fynd at y dudalen hon.
+not-authorised.description.p2=Gofynnwch i’ch cleient ddilyn y cysylltiad yr oeddech yn ceisio’i ddefnyddio er mwyn iddo allu derbyn eich cais am awdurdodiad.
+not-authorised.button=Allgofnodi
+error.cannot-view-request.header=Ni allwch fwrw golwg dros y cais am awdurdodiad hwn
 error.cannot-view-request.p1=Rydych wedi mewngofnodi gan ddefnyddio Dynodydd Defnyddiwr (ID) asiant.
-error.cannot-view-request.p2=Os mai chi yw’r asiant, gofynnwch i’ch cleient ymateb i’r cais am awdurdodiad.
-error.cannot-view-request.a1=Rheoli’ch ceisiadau diweddar am awdurdodiad
-error.cannot-view-request.a2=Gorffen ac allgofnodi
-
-# -------------------------------------------------------------------------------------------
-# Select Client Type
-# -------------------------------------------------------------------------------------------
-clientType.authorisation-request.header=Gan ba fath o gleient y mae angen awdurdodiad arnoch?
-clientType.agent-cancel-authorisation.header=Ar gyfer pa fath o gleient yr hoffech ganslo’ch awdurdodiad?
+error.cannot-view-request.p2=Os mai chi yw’r asiant, gofynnwch i’ch cleient ddilyn y cysylltiad er mwyn ymateb i’r cais am awdurdodiad.
+error.cannot-view-request.p3=Os nad ydych yn asiant, mewngofnodwch gyda’r Dynodydd Defnyddiwr (ID) ar gyfer Porth y Llywodraeth rydych yn ei ddefnyddio ar gyfer eich {0}.
+error.cannot-view-request.client-type.business=materion treth busnes
+error.cannot-view-request.client-type.personal=materion treth personol
+error.cannot-view-request.button=Mewngofnodi
+clientType.authorisation-request.header=Pa fath o gleient mae’r awdurdodiad ar ei gyfer?
+clientType.agent-cancel-authorisation.header=Pa fath o gleient rydych am ganslo’ch awdurdodiad ar ei gyfer?
 clientType.personal=Unigolyn neu unig fasnachwr
 clientType.business=Cwmni neu bartneriaeth
 clientType.trust=Ymddiriedolaeth neu ystâd
-
 clientType.authorisation-request.error.required=Dewiswch y math o gleient rydych angen awdurdodiad ganddo
-clientType.agent-cancel-authorisation.error.required=Dewiswch y math o gleient y mae angen i chi ganslo’ch awdurdodiad ar ei gyfer
-
-
-# -------------------------------------------------------------------------------------------
-# Select Client Service
-# -------------------------------------------------------------------------------------------
-clientService.authorisation-request.header=Beth yr ydych am i’r cleient eich awdurdodi i’w wneud?
-clientService.agent-cancel-authorisation.header=<translation needed>
-clientService.hint=<translation needed>
+clientType.agent-cancel-authorisation.error.required=Dewiswch y math o gleient rydych am ganslo’ch awdurdodiad ar ei gyfer
+clientService.authorisation-request.header=Beth ydych am i’r cleient eich awdurdodi i’w wneud?
+clientService.agent-cancel-authorisation.header=Pa awdurdodiad a hoffech ei ganslo ar gyfer y cleient?
+clientService.hint=Mae angen i chi greu cais ar wahân ar gyfer pob gwasanaeth treth.
 clientService.alternative=Mae angen awdurdodiad arnaf ar gyfer rhywbeth arall
 clientService.alt-suggestion=Dysgwch ragor am
-clientService.alt-suggestion.link=aofyn i gleient eich awdurdodi i ddelio â gwasanaethau treth eraill (yn agor tab newydd)
-clientService.authorisation-request.error.required=Dewiswch yr hyn rydych am i’r cleient eich awdurdodi i’w wneud
-clientService.agent-cancel-authorisation.error.required=<translation needed>
-
+clientService.alt-suggestion.link=gofyn i gleient eich awdurdodi i ddelio â gwasanaethau treth eraill (yn agor tab newydd)
+clientService.authorisation-request.error.required=Dewiswch beth ydych am i’r cleient eich awdurdodi i’w wneud
+clientService.agent-cancel-authorisation.error.required=Dewiswch pa awdurdodiad a hoffech ei ganslo ar gyfer y cleient
 clientService.PERSONAL-INCOME-RECORD.personal=Bwrw golwg dros ei gofnod incwm
 clientService.HMRC-MTD-IT.personal=Rheoli ei gyfrif Troi Treth yn Ddigidol ar gyfer Treth Incwm
 clientService.HMRC-PPT-ORG.personal=Rheoli ei Dreth Deunydd Pacio Plastig
 clientService.HMRC-PPT-ORG.business=Rheoli ei Dreth Deunydd Pacio Plastig
-clientService.HMRC-PPT-ORG.trust=Rheoli ei Treth Deunydd Pacio Plastig ymddiriedolaeth
+clientService.HMRC-PPT-ORG.trust=Rheoli Treth Deunydd Pacio Plastig ei ymddiriedolaeth
 clientService.HMRC-CGT-PD.personal=Rheoli ei gyfrif Treth Enillion Cyfalaf ar eiddo yn y DU
-clientService.HMRC-CGT-PD.trust=Rheoli ei cyfrif Treth Enillion Cyfalaf ar eiddo yn y DU ar gyfer ymddiriedolaeth
-select-service.HMRC-MTD-VAT.personal=Rheoli ei TAW
+clientService.HMRC-CGT-PD.trust=Rheoli ei gyfrif Treth Enillion Cyfalaf ymddiriedolaeth ar eiddo yn y DU
+clientService.HMRC-CBC-ORG.personal=Rheoli ei adroddiadau gwlad wrth wlad
+clientService.HMRC-CBC-ORG.business=Rheoli ei adroddiadau gwlad wrth wlad
+clientService.HMRC-CBC-ORG.trust=Rheoli adroddiadau gwlad wrth wlad ei ymddiriedolaeth
+clientService.HMRC-MTD-VAT.personal=Rheoli ei TAW
 clientService.HMRC-MTD-VAT.business=Rheoli ei TAW
-clientService.HMRC-TERS-ORG.trust=Cynnal ei ymddiriedolaeth neu ystâd
-clientService.HMRC-TERSNT-ORG.trust=<translation needed>
-clientService.HMRC-CBC-ORG.trust=Rheoli ei adroddiadau gwlad-wrth-wlad
-clientService.HMRC-CBC-ORG.business=Rheoli ei adroddiadau gwlad-wrth-wlad
 clientService.HMRC-PILLAR2-ORG.business=Rheoli ei drethi atodol Colofn 2
 clientService.HMRC-PILLAR2-ORG.trust=Rheoli ei drethi atodol Colofn 2
-
-#-------------------------------------------------------------------------------------------
-# Enter Client Fact
-# -------------------------------------------------------------------------------------------
-
-
-clientFact.HMRC-CGT-PD.countryCode.label=Beth yw gwlad cyfeiriad cyswllt eich cleient?
-clientFact.HMRC-CGT-PD.countryCode.hint=Mae’n rhaid i hwn gyd-fynd â gwlad cyfeiriad cyswllt eich cleient yn ei gyfrif Treth Enillion Cyfalaf ar eiddo yn y DU. Dechreuwch deipio enw’r wlad.
-clientFact.HMRC-CGT-PD.countryCode.error.required=Nodwch wlad cyfeiriad cyswllt eich cleient
-
-
-clientFact.HMRC-CBC-ORG.email.label=<translation needed>
-clientFact.HMRC-CBC-ORG.email.hint=<translation needed>
-clientFact.HMRC-CBC-ORG.email.error.invalid=<translation needed>
-clientFact.HMRC-CBC-ORG.email.error.required=<translation needed>
-clientFact.HMRC-CBC-NONUK-ORG.email.label=<translation needed>
-clientFact.HMRC-CBC-NONUK-ORG.email.hint=<translation needed>
-clientFact.HMRC-CBC-NONUK-ORG.email.error.invalid=<translation needed>
-clientFact.HMRC-CBC-NONUK-ORG.email.error.required=<translation needed>
-
-
-# -------------------------------------------------------------------------------------------
-# Enter Known Facts
-# -------------------------------------------------------------------------------------------
-# Nino
-client-details.nino.label=<translation needed>
-client-details.nino.hint=Er enghraifft, QQ 12 34 56 C
-error.client-details.nino.invalid=Mae’n rhaid i rif Yswiriant Gwladol fod ar ffurf 2 lythyren, yna 6 rhif wedi’u dilyn gan A, B, C neu D, megis QQ 12 34 56 C
-error.client-details.nino.required=Nodwch rif Yswiriant Gwladol eich cleient
-
-# Postcode
-client-details.postcode.label=Cod post
-client-details.postcode.hint=Dyma god post cyfeiriad cofrestredig eich cleient
-error.client-details.postcode.invalid=Nodwch god post go iawn
-error.client-details.postcode.required=Nodwch god post eich cleient
-
-# Date of Birth
-client-details.dob.label=Dyddiad geni
-client-details.dob.hint=Er enghraifft, 31 3 1980
-error.client-details.dob.required=Nodwch ddyddiad geni’ch cleient
-error.client-details.dob.invalid=Mae’n rhaid i’r dyddiad geni fod yn ddyddiad dilys
-error.client-details.dob.day.required=Mae’n rhaid i’r dyddiad geni gynnwys diwrnod
-error.client-details.dob.month.required=Mae’n rhaid i’r dyddiad geni gynnwys mis
-error.client-details.dob.year.required=Mae’n rhaid i’r dyddiad geni gynnwys blwyddyn
-error.client-details.dob.day-month.required=Mae’n rhaid i’r dyddiad geni gynnwys diwrnod a mis
-error.client-details.dob.day-year.required=Mae’n rhaid i’r dyddiad geni gynnwys diwrnod a blwyddyn
-error.client-details.dob.month-year.required=Mae’n rhaid i’r dyddiad geni gynnwys mis a blwyddyn
-
-# Plastic Packaging Tax Reference
-client-details.pptRef.label=Cyfeirnod Treth Deunydd Pacio Plastig
-client-details.pptRef.hint=Mae hyn yn 15 o gymeriadau, er enghraifft XMPPT0000000001. Daeth hyn i law eich cleient pan gofrestrodd ar gyfer Treth Deunydd Pacio Plastig.
-error.client-details.pptRef.required=Nodwch gyfeirnod Treth Deunydd Pacio Plastig eich cleient
-error.client-details.pptRef.invalid=Nodwch gyfeirnod Treth Deunydd Pacio Plastig y cleient yn y fformat cywir
-
-# Plastic Packaging Tax Registration Date
-client-details.registrationDate.label=Dyddiad cofrestru ar gyfer Treth Deunydd Pacio Plastig
-client-details.registrationDate.hint=Er enghraifft, 21 8 2021
-error.client-details.registrationDate.invalid=Nodwch ddyddiad cofrestru ar gyfer Treth Deunydd Pacio Plastig sy’n ddilys
-error.client-details.registrationDate.required=Nodwch ddyddiad cofrestru eich cleient ar gyfer Treth Deunydd Pacio Plastig
-error.client-details.registrationDate.day.required=Mae’n rhaid i’r dyddiad cofrestru ar gyfer Treth Deunydd Pacio Plastig gynnwys diwrnod
-error.client-details.registrationDate.month.required=Mae’n rhaid i’r dyddiad cofrestru ar gyfer Treth Deunydd Pacio Plastig gynnwys mis
-error.client-details.registrationDate.year.required=Mae’n rhaid i’r dyddiad cofrestru ar gyfer Treth Deunydd Pacio Plastig gynnwys blwyddyn
-error.client-details.registrationDate.day-month.required=Mae’n rhaid i’r dyddiad cofrestru ar gyfer Treth Deunydd Pacio Plastig gynnwys diwrnod a mis
-error.client-details.registrationDate.day-year.required=Mae’n rhaid i’r dyddiad cofrestru ar gyfer Treth Deunydd Pacio Plastig gynnwys diwrnod a blwyddyn
-error.client-details.registrationDate.month-year.required=Mae’n rhaid i’r dyddiad cofrestru ar gyfer Treth Deunydd Pacio Plastig gynnwys mis a blwyddyn
-
-# Capital Gains Tax account reference
-client-details.cgtRef.label=Pa rif cyfrif Treth Enillion Cyfalaf ar eiddo yn y DU sydd gan eich cleient?
-client-details.cgtRef.hint=Bydd hyn yn ein helpu i baru ei fanylion â’r wybodaeth sydd gennym. Mae hyn yn 15 o gymeriadau, er enghraifft XYCGTP123456789. Daeth hyn i law eich cleient pan greodd ei gyfrif.
-error.client-details.cgtRef.required=Nodwch gyfeirnod cyfrif Treth Enillion Cyfalaf y cleient
-error.client-details.cgtRef.invalid=Nodwch gyfeirnod cyfrif Treth Enillion Cyfalaf y cleient yn y fformat cywir
-
-
-#-------------------------------------------------------------------------------------------
-# Enter Client Fact
-# -------------------------------------------------------------------------------------------
-
+clientService.HMRC-TERS-ORG.trust=Cynnal ei ymddiriedolaeth neu ystâd
+clientService.HMRC-TERSNT-ORG.trust=Cynnal ei ymddiriedolaethau nad ydynt yn drethadwy
+clientServiceRefinement.HMRC-TERS-ORG.header=A yw ymddiriedolaeth neu ystâd eich cleient yn drethadwy?
+clientServiceRefinement.HMRC-TERSNT-ORG.header=A yw ymddiriedolaeth neu ystâd eich cleient yn drethadwy?
+clientServiceRefinement.HMRC-TERS-ORG.option=Iawn
+clientServiceRefinement.HMRC-TERSNT-ORG.option=Na, mae wedi’i esemptio rhag treth
+clientId.nino.label=Beth yw rhif Yswiriant Gwladol eich cleient?
+clientId.nino.hint=Er enghraifft, QQ 12 34 56 C
+clientId.nino.error.invalid=Mae’n rhaid i’r rhif Yswiriant Gwladol fod ar ffurf 2 lythyren, yna 6 rhif wedi’u dilyn gan A, B, C neu D, megis QQ 12 34 56 C
+clientId.nino.error.required=Nodwch rif Yswiriant Gwladol eich cleient
+clientId.vrn.label=Beth yw cyfeirnod cofrestru TAW eich cleient?
+clientId.vrn.hint=Rhif 9 digid yw hwn, er enghraifft 123456789
+clientId.vrn.error.invalid=Mae’n rhaid i’r rhif cofrestru TAW fod yn 9 rhif
+clientId.vrn.error.required=Nodwch rif cofrestru TAW eich cleient
+clientId.utr.label=Beth yw Cyfeirnod Unigryw y Trethdalwr (UTR) eich cleient?
+clientId.utr.hint=Nodwch y 10 digid olaf yn unig. Er enghraifft, 12345 67890
+clientId.utr.error.invalid=Nodwch y Cyfeirnod Unigryw y Trethdalwr (UTR) yn y fformat cywir
+clientId.utr.error.required=Nodwch Gyfeirnod Unigryw y Trethdalwr (UTR) eich cleient
+clientId.urn.label=Beth yw Cyfeirnod Unigryw (URN) eich cleient?
+clientId.urn.hint=Mae hwn yn 15 o gymeriadau, er enghraifft, XATRUST12345678
+clientId.urn.error.invalid=Nodwch y Cyfeirnod Unigryw (URN) yn y fformat cywir
+clientId.urn.error.required=Nodwch Gyfeirnod Unigryw (URN) eich cleient
+clientId.cgtRef.label=Beth yw cyfeirnod cyfrif Treth Enillion Cyfalaf sydd gan eich cleient?
+clientId.cgtRef.hint=Mae hyn yn 15 o gymeriadau, er enghraifft XYCGTP123456789. Daeth hyn i law eich cleient pan greodd ei gyfrif.
+clientId.cgtRef.error.invalid=Nodwch gyfeirnod cyfrif Treth Enillion Cyfalaf eich cleient
+clientId.cgtRef.error.required=Nodwch Gyfeirnod cyfrif Treth Enillion Cyfalaf eich cleient yn y fformat cywir
+clientId.pptRef.label=Beth yw cyfeirnod Treth Deunydd Pacio Plastig eich cleient?
+clientId.pptRef.hint=Mae hyn yn 15 o gymeriadau, er enghraifft, XMPPT0000000001. Daeth hyn i law eich cleient pan gofrestrodd ar gyfer Treth Deunydd Pacio Plastig.
+clientId.pptRef.error.invalid=Nodwch gyfeirnod Treth Deunydd Pacio Plastig eich cleient yn y fformat cywir
+clientId.pptRef.error.required=Nodwch gyfeirnod Treth Deunydd Pacio Plastig eich cleient
+clientId.cbcId.label=Beth yw Dynodydd Defnyddiwr (ID) gwlad wrth wlad eich cleient?
+clientId.cbcId.hint=Er enghraifft, XACBC0000999999.
+clientId.cbcId.error.invalid=Nodwch Dynodydd Defnyddiwr (ID) gwlad wrth wlad eich cleient, mae’n rhaid iddo ddechrau gyda ‘X’ a ddilynir gan lythyren, yna ‘CBC’ ac yna 10 rhif
+clientId.cbcId.error.required=Nodwch Dynodydd Defnyddiwr (ID) gwlad wrth wlad eich cleient
+clientId.PlrId.label=Beth yw Dynodydd Defnyddiwr (ID) ar gyfer trethi atodol Colofn 2 eich cleient?
+clientId.PlrId.hint=Mae hwn yn 15 o gymeriadau, er enghraifft XAPLR0000999999. Gall yr aelod presennol sy’n cyflwyno ddod o hyd iddo ar ei dudalen gartref ar gyfer rhoi gwybod ynghylch trethi atodol Colofn 2.
+clientId.PlrId.error.invalid=Nodwch ddyddiad cofrestru trethi atodol Colofn 2 dilys
+clientId.PlrId.error.required=Nodwch ddyddiad cofrestru eich cleient ar gyfer rhoi gwybod am drethi atodol Colofn 2
+clientFact.HMRC-MTD-IT.postcode.label=Beth yw cod post eich cleient?
+clientFact.HMRC-MTD-IT.postcode.hint=Ar gyfer unig fasnachwyr sydd wedi’u cofrestru am y cynllun Troi Treth yn Ddigidol ar gyfer Treth Incwm, defnyddiwch god post eu cyfeiriad busnes.<br /><br />Ar gyfer unrhyw fath arall o gleient, defnyddiwch god post ei gartref.
+clientFact.HMRC-MTD-IT.postcode.error.required=Nodwch god post eich cleient
+clientFact.HMRC-MTD-IT.postcode.error.invalid=Nodwch god post go iawn
 clientFact.PERSONAL-INCOME-RECORD.date.label=Beth yw dyddiad geni eich cleient?
 clientFact.PERSONAL-INCOME-RECORD.date.hint=Er enghraifft, 22 7 1981.
 clientFact.PERSONAL-INCOME-RECORD.date.error.required=Nodwch ddyddiad geni’ch cleient
@@ -184,9 +137,8 @@ clientFact.PERSONAL-INCOME-RECORD.date.error.year.required=Mae’n rhaid i’r d
 clientFact.PERSONAL-INCOME-RECORD.date.error.day-month.required=Mae’n rhaid i’r dyddiad geni gynnwys diwrnod a mis
 clientFact.PERSONAL-INCOME-RECORD.date.error.day-year.required=Mae’n rhaid i’r dyddiad geni gynnwys diwrnod a blwyddyn
 clientFact.PERSONAL-INCOME-RECORD.date.error.month-year.required=Mae’n rhaid i’r dyddiad geni gynnwys mis a blwyddyn
-
-clientFact.HMRC-MTD-VAT.date.label=<translation needed>
-clientFact.HMRC-MTD-VAT.date.hint=<translation needed>
+clientFact.HMRC-MTD-VAT.date.label=Pryd ddechreuodd cofrestriad TAW eich cleient?
+clientFact.HMRC-MTD-VAT.date.hint=Mae’r dyddiad cofrestru ar dystysgrif TAW eich cleient. Er enghraifft, 31 8 2015.
 clientFact.HMRC-MTD-VAT.date.error.required=Nodwch ddyddiad cofrestru TAW eich cleient
 clientFact.HMRC-MTD-VAT.date.error.invalid=Nodwch ddyddiad cofrestru TAW dilys
 clientFact.HMRC-MTD-VAT.date.error.day.required=Mae’n rhaid i’r dyddiad cofrestru TAW gynnwys diwrnod
@@ -195,8 +147,11 @@ clientFact.HMRC-MTD-VAT.date.error.year.required=Mae’n rhaid i’r dyddiad cof
 clientFact.HMRC-MTD-VAT.date.error.day-month.required=Mae’n rhaid i’r dyddiad cofrestru TAW gynnwys diwrnod a mis
 clientFact.HMRC-MTD-VAT.date.error.day-year.required=Mae’n rhaid i’r dyddiad cofrestru TAW gynnwys diwrnod a blwyddyn
 clientFact.HMRC-MTD-VAT.date.error.month-year.required=Mae’n rhaid i’r dyddiad cofrestru TAW gynnwys mis a blwyddyn
-
-clientFact.HMRC-PPT-ORG.date.label=<translation needed>
+clientFact.HMRC-CGT-PD.postcode.label=Beth yw cod post eich cleient?
+clientFact.HMRC-CGT-PD.countryCode.label=Ym mha wlad y mae cyfeiriad cyswllt eich cleient?
+clientFact.HMRC-CGT-PD.countryCode.hint=Mae’n rhaid i hwn gyd-fynd â gwlad cyfeiriad cyswllt eich cleient yn ei Gyfrif Treth Enillion Cyfalaf ar eiddo yn y DU. Dechreuwch deipio’r wlad.
+clientFact.HMRC-CGT-PD.countryCode.error.required=Nodwch wlad cyfeiriad cyswllt eich cleient
+clientFact.HMRC-PPT-ORG.date.label=Pryd dechreuodd cofrestriad eich cleient ar gyfer Treth Deunydd Pacio Plastig?
 clientFact.HMRC-PPT-ORG.date.hint=Er enghraifft, 31 8 2022.
 clientFact.HMRC-PPT-ORG.date.error.required=Nodwch ddyddiad cofrestru eich cleient ar gyfer Treth Deunydd Pacio Plastig
 clientFact.HMRC-PPT-ORG.date.error.invalid=Nodwch ddyddiad cofrestru ar gyfer Treth Deunydd Pacio Plastig sy’n ddilys
@@ -206,378 +161,554 @@ clientFact.HMRC-PPT-ORG.date.error.year.required=Mae’n rhaid i’r dyddiad cof
 clientFact.HMRC-PPT-ORG.date.error.day-month.required=Mae’n rhaid i’r dyddiad cofrestru ar gyfer Treth Deunydd Pacio Plastig gynnwys diwrnod a mis
 clientFact.HMRC-PPT-ORG.date.error.day-year.required=Mae’n rhaid i’r dyddiad cofrestru ar gyfer Treth Deunydd Pacio Plastig gynnwys diwrnod a blwyddyn
 clientFact.HMRC-PPT-ORG.date.error.month-year.required=Mae’n rhaid i’r dyddiad cofrestru ar gyfer Treth Deunydd Pacio Plastig gynnwys mis a blwyddyn
-
-clientFact.HMRC-PILLAR2-ORG.date.label=<translation needed>
-clientFact.HMRC-PILLAR2-ORG.date.hint=<translation needed>
+clientFact.HMRC-CBC-ORG.email.label=Beth yw cyfeiriad e-bost cyswllt gwlad wrth wlad eich cleient?
+clientFact.HMRC-CBC-ORG.email.hint=Dyma’r e-bost a roddodd eich cleient i CThEF ar gyfer adrodd Gwlad wrth Wlad.
+clientFact.HMRC-CBC-ORG.email.error.invalid=Nodwch gyfeiriad e-bost eich cleient yn y fformat cywir, megis enw@enghraifft.com
+clientFact.HMRC-CBC-ORG.email.error.required=Nodwch gyfeiriad e-bost eich cleient
+clientFact.HMRC-CBC-NONUK-ORG.email.label=Beth yw cyfeiriad e-bost cyswllt gwlad wrth wlad eich cleient?
+clientFact.HMRC-CBC-NONUK-ORG.email.hint=Dyma’r e-bost a roddodd eich cleient i CThEF ar gyfer adrodd Gwlad wrth Wlad.
+clientFact.HMRC-CBC-NONUK-ORG.email.error.invalid=Nodwch gyfeiriad e-bost eich cleient yn y fformat cywir, megis enw@enghraifft.com
+clientFact.HMRC-CBC-NONUK-ORG.email.error.required=Nodwch gyfeiriad e-bost eich cleient
+clientFact.HMRC-PILLAR2-ORG.date.label=Beth yw dyddiad cofrestru eich cleient ar gyfer trethi atodol Colofn 2?
+clientFact.HMRC-PILLAR2-ORG.date.hint=Gall yr aelod presennol sy’n cyflwyno dod o hyd iddo ar ei dudalen gartref ar gyfer trethi atodol Colofn 2. Er enghraifft, 27 3 2026.
 clientFact.HMRC-PILLAR2-ORG.date.error.required=Nodwch ddyddiad cofrestru eich cleient ar gyfer rhoi gwybod am drethi atodol Colofn 2
-clientFact.HMRC-PILLAR2-ORG.date.error.invalid=Nodwch ddyddiad cofrestru ar gyfer trethi atodol Colofn 2 eich cleient
+clientFact.HMRC-PILLAR2-ORG.date.error.invalid=Nodwch ddyddiad cofrestru trethi atodol Colofn 2 dilys
 clientFact.HMRC-PILLAR2-ORG.date.error.day.required=Mae’n rhaid i’r dyddiad cofrestru ar gyfer trethi atodol Colofn 2 gynnwys diwrnod
 clientFact.HMRC-PILLAR2-ORG.date.error.month.required=Mae’n rhaid i’r dyddiad cofrestru ar gyfer trethi atodol Colofn 2 gynnwys mis
 clientFact.HMRC-PILLAR2-ORG.date.error.year.required=Mae’n rhaid i’r dyddiad cofrestru ar gyfer trethi atodol Colofn 2 gynnwys blwyddyn
 clientFact.HMRC-PILLAR2-ORG.date.error.day-month.required=Mae’n rhaid i’r dyddiad cofrestru ar gyfer trethi atodol Colofn 2 gynnwys diwrnod a mis
 clientFact.HMRC-PILLAR2-ORG.date.error.day-year.required=Mae’n rhaid i’r dyddiad cofrestru ar gyfer trethi atodol Colofn 2 gynnwys diwrnod a blwyddyn
 clientFact.HMRC-PILLAR2-ORG.date.error.month-year.required=Mae’n rhaid i’r dyddiad cofrestru ar gyfer trethi atodol Colofn 2 gynnwys mis a blwyddyn
-
-# ________________________________________________________________________________
-# Confirm Client
-# ________________________________________________________________________________
-confirmClient.title=Ai hwn yw’r cleient yr hoffech gael awdurdodiad ganddo?
+confirmClient.title=Ai hwn yw’r cleient rydych am awdurdodiad ganddo?
 confirmClient.authorisation-request.header=Ai {0} yw’r cleient rydych am awdurdodiad ganddo?
-confirmClient.agent-cancel-authorisation.header=<translation needed>
-confirmClient.authorisation-request.error.required=Dewiswch ‘Iawn’ os hoffech ofyn i’r cleient hwn am awdurdodiad
-confirmClient.agent-cancel-authorisation.error.required=<translation needed> 
+confirmClient.agent-cancel-authorisation.header=A yw’ch cais am ganslo ar gyfer {0}?
+confirmClient.authorisation-request.error.required=Dewiswch ‘Iawn’ os hoffech {0} eich awdurdodi fel asiant
+confirmClient.agent-cancel-authorisation.error.required=Dewiswch ‘Iawn’ os {0} yw’r cleient rydych am ganslo’ch awdurdodiad ar ei gyfer
 confirmClient.true=Iawn
-confirmClient.false=Na – mae angen i mi ddechrau eto
-
-# ________________________________________________________________________________
-# Select agent role
-# ________________________________________________________________________________
-
-selectAgentRole.HMRC-MTD-IT.newRelationship.header=<translation needed>
-selectAgentRole.HMRC-MTD-IT.newRelationship.legend=<translation needed>
-selectAgentRole.HMRC-MTD-IT.newRelationship.guidance=<translation needed>
-selectAgentRole.HMRC-MTD-IT.newRelationship.option=<translation needed>
-selectAgentRole.HMRC-MTD-IT-SUPP.newRelationship.option=<translation needed>
-selectAgentRole.HMRC-MTD-IT.newRelationship.hint=<translation needed>
-selectAgentRole.HMRC-MTD-IT-SUPP.newRelationship.hint=<translation needed>
-agentRole.authorisation-request.error.required=<translation needed>
-
-selectAgentRole.HMRC-MTD-IT.mainToSupporting.header=<translation needed>
-selectAgentRole.HMRC-MTD-IT.mainToSupporting.intro=<translation needed>
-selectAgentRole.HMRC-MTD-IT.mainToSupporting.guidance=<translation needed>
-selectAgentRole.HMRC-MTD-IT.mainToSupporting.legend=<translation needed>
-selectAgentRole.HMRC-MTD-IT.mainToSupporting.option=<translation needed>
-selectAgentRole.HMRC-MTD-IT-SUPP.mainToSupporting.option=<translation needed>
-selectAgentRole.HMRC-MTD-IT-SUPP.mainToSupporting.hint=<translation needed>
-
-selectAgentRole.HMRC-MTD-IT.supportingToMain.header=<translation needed>
-selectAgentRole.HMRC-MTD-IT.supportingToMain.intro=<translation needed>
-selectAgentRole.HMRC-MTD-IT.supportingToMain.guidance=<translation needed>
-selectAgentRole.HMRC-MTD-IT.supportingToMain.legend=<translation needed>
-selectAgentRole.HMRC-MTD-IT.supportingToMain.option=<translation needed>
-selectAgentRole.HMRC-MTD-IT-SUPP.supportingToMain.option=<translation needed>
-selectAgentRole.HMRC-MTD-IT.supportingToMain.hint=<translation needed>
-
-
-#Track invitation requests
-trackRequests.title=Rheoli eich ceisiadau diweddar am awdurdodiad
-trackRequests.intro=Gwirio statws eich ceisiadau am awdurdodiad i gleientiaid yn ystod y {0} o ddiwrnodau diwethaf, neu ganslo ceisiadau ac awdurdodiadau nad oes eu hangen mwyach.
-trackRequests.empty=Nid oes gennych unrhyw geisiadau diweddar am awdurdodiad.
-trackRequests.empty.continue=Dechrau cais am awdurdodiad newydd
-trackRequests.th.client=Manylion y cleient
-trackRequests.table-row-header.clientNameUnknown=Methu adfer enw cleient
-trackRequests.th.service=Cais am awdurdodiad wedi’i anfon
+confirmClient.false=Na - mae angen i mi ddechrau eto
+selectAgentRole.HMRC-MTD-IT.newRelationship.header=Sut ydych am weithredu ar gyfer {0}?
+selectAgentRole.HMRC-MTD-IT.newRelationship.legend=Sut ydych am weithredu ar gyfer {0}?
+selectAgentRole.HMRC-MTD-IT.newRelationship.guidance=Darllenwch yr arweiniad am <a href={0} class=""govuk-link"" target=""_blank"" rel=""noreferrer noopener"">y gwahaniaeth rhwng prif asiantau ac asiantau ategol (yn agor tab newydd)</a>.
+selectAgentRole.HMRC-MTD-IT.newRelationship.option=Fel ei brif asiant
+selectAgentRole.HMRC-MTD-IT-SUPP.newRelationship.option=Fel ei asiant ategol
+selectAgentRole.HMRC-MTD-IT.newRelationship.hint=Os bydd eich cleient yn derbyn y cais hwn, byddwn yn dileu unrhyw brif asiant presennol sydd ganddynt ar gyfer Troi Treth yn Ddigidol ar gyfer Treth Incwm.
+selectAgentRole.HMRC-MTD-IT-SUPP.newRelationship.hint=Gall eich cleient gael unrhyw nifer o’r rhain, ond mae asiantau ategol yn cyflawni rhai swyddogaethau treth busnes yn unig ac ni allant gyflwyno Ffurflenni Treth diwedd blwyddyn.
+agentRole.authorisation-request.error.required=Dewiswch sut rydych am weithredu ar gyfer {0}
+selectAgentRole.HMRC-MTD-IT.mainToSupporting.header=Rydych eisoes yn asiant ar gyfer {0}
+selectAgentRole.HMRC-MTD-IT.mainToSupporting.intro=Rydych wedi’ch awdurdodi fel prif asiant i reoli cyfrif Troi Treth yn Ddigidol ar gyfer Treth Incwm {0}.
+selectAgentRole.HMRC-MTD-IT.mainToSupporting.guidance=Darllenwch yr arweiniad am <a href={0} class=""govuk-link"" target=""_blank"" rel=""noreferrer noopener"">y gwahaniaeth rhwng prif asiantau ac asiantau ategol (yn agor tab newydd)</a>.
+selectAgentRole.HMRC-MTD-IT.mainToSupporting.legend=A hoffech newid sut rydych chi’n gweithredu ar gyfer y cleient hwn?
+selectAgentRole.HMRC-MTD-IT.mainToSupporting.option=Na
+selectAgentRole.HMRC-MTD-IT-SUPP.mainToSupporting.option=Iawn, rwyf am ddod yn asiant ategol iddyn nhw yn lle hynny
+selectAgentRole.HMRC-MTD-IT-SUPP.mainToSupporting.hint=Os bydd {0} yn derbyn y cais hwn, byddwch yn colli mynediad at rywfaint o’i gwybodaeth ynghylch ei Dreth Incwm ac ni fyddwch yn gallu cyflwyno eu Ffurflenni Treth diwedd blwyddyn.
+selectAgentRole.HMRC-MTD-IT.supportingToMain.header=Rydych eisoes yn asiant ar gyfer {0}
+selectAgentRole.HMRC-MTD-IT.supportingToMain.intro=Rydych wedi’ch awdurdodi fel asiant ategol i helpu gyda rheoli cyfrif Troi Treth yn Ddigidol ar gyfer Treth Incwm {0}.
+selectAgentRole.HMRC-MTD-IT.supportingToMain.guidance=Darllenwch yr arweiniad am <a href={0} class=""govuk-link"" target=""_blank"" rel=""noreferrer noopener"">y gwahaniaeth rhwng prif asiantau ac asiantau ategol (yn agor tab newydd)</a>.
+selectAgentRole.HMRC-MTD-IT.supportingToMain.legend=A hoffech newid sut rydych chi’n gweithredu ar gyfer y cleient hwn?
+selectAgentRole.HMRC-MTD-IT.supportingToMain.option=Iawn, rwyf am ddod yn brif asiant iddyn nhw yn lle hynny
+selectAgentRole.HMRC-MTD-IT-SUPP.supportingToMain.option=Na
+selectAgentRole.HMRC-MTD-IT.supportingToMain.hint=Os bydd {0} yn derbyn y cais hwn, byddwch yn cael mynediad at holl wybodaeth Treth Incwm sydd ei hangen arnoch i ddelio â CThEF ar eu rhan.
+checkYourAnswers.header=Gwiriwch eich atebion
+checkYourAnswers.h2=Manylion awdurdodiad ar gyfer {0}
+checkYourAnswers.clientService.label=Yr hyn yr ydych am ei wneud ar gyfer y cleient
+checkYourAnswers.agentType.label=Sut ydych am weithredu drostyn nhw
+checkYourAnswers.confirmAndSend.button=Cadarnhau ac anfon
+checkYourAnswers.change=Newid
+checkYourAnswers.PERSONAL-INCOME-RECORD=Bwrw golwg dros ei Gofnod incwm
+checkYourAnswers.HMRC-MTD-IT=Rheoli ei gyfrif Troi Treth yn Ddigidol ar gyfer Treth Incwm
+checkYourAnswers.HMRC-MTD-IT-SUPP=Rheoli ei gyfrif Troi Treth yn Ddigidol ar gyfer Treth Incwm
+checkYourAnswers.HMRC-PPT-ORG=Rheoli ei Dreth Deunydd Pacio Plastig
+checkYourAnswers.HMRC-CGT-PD=Rheoli ei gyfrif Treth Enillion Cyfalaf ar eiddo yn y DU
+checkYourAnswers.HMRC-CBC-ORG=Rheoli ei adroddiadau gwlad wrth wlad
+checkYourAnswers.HMRC-CBC-NONUK-ORG=Rheoli ei adroddiadau gwlad wrth wlad
+checkYourAnswers.HMRC-MTD-VAT=Rheoli ei TAW
+checkYourAnswers.HMRC-PILLAR2-ORG=Rheoli ei drethi atodol Colofn 2
+checkYourAnswers.HMRC-TERS-ORG=Cynnal ei ymddiriedolaeth neu ystâd
+checkYourAnswers.HMRC-TERSNT-ORG=Cynnal ei ymddiriedolaeth neu ystâd
+confirmCancellation.header=Cadarnhau canslo
+confirmCancellation.legend=A ydych am ganslo eich awdurdodiad ar gyfer y cleient hwn?
+confirmCancellation.true=Iawn
+confirmCancellation.false=Na - mae angen i mi ddechrau eto
+confirmCancellation.agent-cancel-authorisation.error.required=Dewiswch ‘Iawn’ os hoffech ganslo awdurdodiad ar gyfer y cleient hwn
+confirmCancellation.HMRC-MTD-IT.current-status=Ar hyn o bryd rydych wedi’ch awdurdodi fel prif asiant i reoli cyfrif Troi Treth yn Ddigidol ar gyfer Treth Incwm {0}.
+confirmCancellation.HMRC-MTD-IT-SUPP.current-status=Ar hyn o bryd rydych wedi’ch awdurdodi fel prif asiant i reoli cyfrif Troi Treth yn Ddigidol ar gyfer Treth Incwm {0}.
+confirmCancellation.PERSONAL-INCOME-RECORD.current-status=Ar hyn o bryd rydych wedi’ch awdurdodi fel yr asiant i fwrw golwg dros y Cofnod incwm ar gyfer {0}.
+confirmCancellation.HMRC-MTD-VAT.current-status=Ar hyn o bryd rydych wedi’ch awdurdodi fel yr asiant i reoli TAW {0}.
+confirmCancellation.HMRC-TERS-ORG.current-status=Ar hyn o bryd rydych wedi’ch awdurdodi fel yr asiant i gynnal ymddiriedolaeth neu ystâd {0}.
+confirmCancellation.HMRC-TERSNT-ORG.current-status=Ar hyn o bryd rydych wedi’ch awdurdodi fel yr asiant i gynnal ymddiriedolaeth neu ystâd {0}.
+confirmCancellation.HMRC-CGT-PD.current-status=Ar hyn o bryd rydych wedi’ch awdurdodi fel yr asiant i reoli cyfrif Treth Enillion Cyfalaf ar eiddo yn y DU {0}.
+confirmCancellation.HMRC-PPT-ORG.current-status=Ar hyn o bryd rydych wedi’ch awdurdodi fel yr asiant i reoli Treth Deunydd Pacio Plastig ar gyfer {0}.
+confirmCancellation.HMRC-CBC-ORG.current-status=Ar hyn o bryd rydych wedi’ch awdurdodi fel yr asiant i reoli adroddiadau gwlad wrth wlad ar gyfer {0}.
+confirmCancellation.HMRC-CBC-NONUK-ORG.current-status=Ar hyn o bryd rydych wedi’ch awdurdodi fel yr asiant i reoli adroddiadau gwlad wrth wlad {0}.
+confirmCancellation.HMRC-PILLAR2-ORG.current-status=Ar hyn o bryd rydych wedi’ch awdurdodi fel yr asiant i reoli trethi atodol Colofn 2 {0}.
+confirmCancellation.HMRC-MTD-IT.outcome=Os byddwch yn canslo’ch awdurdodiad, ni fyddwch yn gallu rheoli cyfrif Troi Treth yn Ddigidol ar gyfer Treth Incwm ar gyfer {0}.
+confirmCancellation.PERSONAL-INCOME-RECORD.outcome=Os byddwch yn canslo’r cais hwn, ni fyddwch yn gallu bwrw golwg dros y cofnod Incwm ar gyfer y cleient hwn.
+confirmCancellation.HMRC-MTD-VAT.outcome=Os byddwch yn canslo’ch cais, ni fyddwch yn gallu rheoli ei TAW ar gyfer {0}.
+confirmCancellation.HMRC-TERS-ORG.outcome=Os byddwch yn canslo’r cais hwn, ni fyddwch yn gallu cynnal ymddiriedolaeth nac ystâd ar ran {0}.
+confirmCancellation.HMRC-TERSNT-ORG.outcome=Os byddwch yn canslo’r cais hwn, ni fyddwch yn gallu cynnal ymddiriedolaeth nac ystâd ar ran {0}.
+confirmCancellation.HMRC-CGT-PD.outcome=Os byddwch yn canslo’ch awdurdodiad, ni fyddwch yn gallu rheoli cyfrif Treth Enillion Cyfalaf ar eiddo yn y DU ar gyfer {0}.
+confirmCancellation.HMRC-PPT-ORG.outcome=Os byddwch yn canslo’ch awdurdodiad, ni fyddwch yn gallu rheoli Treth Deunydd Pacio Plastig ar gyfer {0}.
+confirmCancellation.HMRC-CBC-ORG.outcome=Os byddwch yn canslo’ch awdurdodiad, ni fyddwch yn gallu rheoli Treth Deunydd Pacio Plastig ar gyfer {0}.
+confirmCancellation.HMRC-CBC-NONUK-ORG.outcome=Os byddwch yn canslo’ch awdurdodiad, ni fyddwch yn gallu rheoli Ymddiriedolaeth o adroddiadau gwlad wrth wlad {0}.
+confirmCancellation.HMRC-PILLAR2-ORG.outcome=Os byddwch yn canslo’ch awdurdodiad, ni fyddwch yn gallu rheoli trethi atodol Colofn 2 {0}.
+confirmCancellation.HMRC-MTD-IT.inset=Ni fydd canslo’r awdurdodiad hwn yn canslo unrhyw awdurdodiad ar gyfer y cleient hwn ar gyfer Hunanasesiad yn awtomatig.
+authorisationRequestComplete.header=Rydych wedi creu cais am awdurdodiad
+authorisationRequestComplete.resend.header=Ailanfon y cysylltiad hwn at eich cleient
+authorisationRequestComplete.panel.body=Cleient: {0}
+authorisationRequestComplete.h2=Y camau nesaf
+authorisationRequestComplete.list.one=Copïwch y cysylltiad hwn sy’n gais am awdurdodiad a’i anfon at eich cleient:
+authorisationRequestComplete.list.two=Rhowch wybod i’ch cleient i ddewis y cysylltiad hwn. Byddant yn cael ei ofyn i fewngofnodi.
+authorisationRequestComplete.list.three=Gofynnwch i’ch cleient eich awdurdodi erbyn {0} – mae ganddynt {1} diwrnod i ymateb cyn i’ch cais ddod i ben.
+authorisationRequestComplete.resend.list.three=Gofynnwch i’ch cleient i’ch awdurdodi erbyn {0}.
+authorisationRequestComplete.list.four=Byddwn yn anfon e-bost atoch yn {0} i’ch diweddaru ar statws y cais hwn.
+authorisationRequestComplete.createAnother=Crëwch gais arall am awdurdodiad
+authorisationRequestComplete.agentHome=Ewch i’ch hafan y cyfrif gwasanaethau asiant
+agentCancelAuthorisationComplete.header=Awdurdodiad wedi’i ganslo
+agentCancelAuthorisationComplete.h2=Beth mae hyn yn ei olygu
+agentCancelAuthorisationComplete.p1=Nid yw {0} wedi’i awdurdodi mwyach i reoli {1} {2}.
+agentCancelAuthorisationComplete.HMRC-MTD-IT.h2=Os ydych eisoes wedi’ch awdurdodi i reoli Hunanasesiad ar gyfer y cleient hwn
+agentCancelAuthorisationComplete.p2=Efallai y bydd gennych awdurdodiad ar waith o hyd ar gyfer Hunanasesiad y cleient hwn. I’w wirio neu ei ganslo, bydd angen i chi wneud y canlynol:
+agentCancelAuthorisationComplete.list-one=allgofnodi o’ch cyfrif gwasanaethau asiant
+agentCancelAuthorisationComplete.list-two=mewngofnodi i’ch cyfrif gwasanaethau ar-lein CThEF ar gyfer asiantau
+agentCancelAuthorisationComplete.list-three=dilyn y cyfarwyddiadau ar gyfer dileu’r cleient oddi ar eich rhestr o gleientiaid
+agentCancelAuthorisationComplete.print=Argraffu’r dudalen hon
+agentCancelAuthorisationComplete.agentHome=Dychwelyd i hafan y cyfrif gwasanaethau asiant
+trackRequests.title=Rheoli’ch ceisiadau diweddar am awdurdodiad
+trackRequests.intro=Gwirio statws eich ceisiadau am awdurdodiad i gleientiaid yn ystod y 30 diwrnod diwethaf, neu ganslo ceisiadau ac awdurdodiadau nad oes eu hangen mwyach.
+trackRequests.empty=Nid oes gennych unrhyw geisiadau diweddar am awdurdodiad
+trackRequests.view=Bwrw golwg dros y cais
+trackRequests.action.resend=Ailanfon cais at y cleient
+trackRequests.action.cancel=Canslo’r cais hwn
+trackRequests.action.deauth=Canslo’ch awdurdodiad
+trackRequests.action.signup=Cofrestru eich cleient (yn agor tab newydd)
+trackRequests.action.startNew=Dechrau cais newydd
+trackRequests.action.screenReaderText=ar gyfer cleient {0} i {1}
+trackRequests.th.client=Cleient
+trackRequests.th.service=Gwasanaeth
 trackRequests.th.status=Statws
-trackRequests.th.actions=Camau gweithredu
+trackRequests.th.expiryDate=Yn dod i ben
+trackRequests.th.actions=Camau i’w cymryd
+trackRequests.resultsCaption=Yn dangos {0} i {1} o {2} o geisiadau
 trackRequests.service.HMRC-MTD-IT=Rheoli ei gyfrif Troi Treth yn Ddigidol ar gyfer Treth Incwm
-trackRequests.service.PERSONAL-INCOME-RECORD=Bwrw golwg dros ei gofnod incwm
+trackRequests.service.HMRC-MTD-IT-SUPP=Rheoli ei gyfrif Troi Treth yn Ddigidol ar gyfer Treth Incwm
+trackRequests.service.PERSONAL-INCOME-RECORD=Bwrw golwg dros ei Gofnod incwm
 trackRequests.service.HMRC-MTD-VAT=Rheoli ei TAW
 trackRequests.service.HMRC-TERS-ORG=Cynnal ymddiriedolaeth neu ystâd
-trackRequests.service.HMRC-TERSNT-ORG=Cynnal ymddiriedolaeth neu ystâd
+trackRequests.service.HMRC-TERSNT-ORG=Cynnal ymddiriedolaeth nad yw’n drethadwy
 trackRequests.service.HMRC-CGT-PD=Rheoli ei gyfrif Treth Enillion Cyfalaf ar eiddo yn y DU
 trackRequests.service.HMRC-PPT-ORG=Rheoli ei Dreth Deunydd Pacio Plastig
-trackRequests.service.HMRC-CBC-ORG=Rheoli ei adroddiadau gwlad-wrth-wlad
-trackRequests.service.HMRC-CBC-NONUK-ORG=Rheoli ei adroddiadau gwlad-wrth-wlad
-trackRequests.service.HMRC-CBC=Rheoli adroddiadau gwlad-wrth-wlad
+trackRequests.service.HMRC-CBC-ORG=Rheoli ei adroddiadau gwlad wrth wlad
+trackRequests.service.HMRC-CBC-NONUK-ORG=Rheoli ei adroddiadau gwlad wrth wlad
+trackRequests.service.HMRC-CBC=Rheoli adroddiadau gwlad wrth wlad
 trackRequests.service.HMRC-PILLAR2-ORG=Rheoli ei drethi atodol Colofn 2
-trackRequests.service.details.HMRC-CBC=Manylion am adroddiadau gwlad-wrth-wlad
-trackRequests.service.clients.HMRC-CBC=Rheoli adroddiadau gwlad-wrth-wlad y cleient
-trackRequests.invitation.identifier.nino=Rhif Yswiriant Gwladol:
-trackRequests.invitation.identifier.vrn=Rhif cofrestru TAW:
-trackRequests.invitation.identifier.MTDITID=Dynodydd Troi Treth yn Ddigidol ar gyfer Treth Incwm
-trackRequests.invitation.expires=Yn dod i ben:
 trackRequests.status.Pending=Nid yw’r cleient wedi ymateb eto
+trackRequests.expires=Yn dod i ben ar {0}
+trackRequests.expired=Wedi dod i ben ar {0}
 trackRequests.status.Accepted=Derbyniwyd gan y cleient
-trackRequests.status.Partialauth=Derbyniwyd gan y cleient
+trackRequests.status.PartialAuth=Derbyniwyd gan y cleient
 trackRequests.status.Rejected=Gwrthodwyd gan y cleient
+trackRequests.status.Cancelled=Wedi caei ei ganslo gennych
 trackRequests.status.Expired=Daeth y cais i ben gan i’r cleient fethu ag ymateb mewn pryd
-trackRequests.status.Cancelled=Gwnaethoch ganslo’r cais hwn
-trackRequests.invitation.status.acceptedthencancelledbyagent=Gwnaethoch ganslo’ch awdurdodiad
-trackRequests.invitation.status.acceptedthencancelledbyclient=Derbyniwyd gan y cleient. Gwnaeth y cleient ganslo’i awdurdodiad yn nes ymlaen
-trackRequests.invitation.status.acceptedthencancelledbyhmrc=Derbyniwyd gan y cleient. Gwnaeth CThEM ganslo’ch awdurdodiad yn nes ymlaen
-trackRequests.invitation.status.invalidrelationship=Gwnaethoch ganslo’ch awdurdodiad
-trackRequests.invitations.actions.acceptedthencancelledbyagent=Dechrau cais newydd
-trackRequests.invitations.actions.aria-text=Dechrau cais newydd ar gyfer {0} i {1}
-trackRequests.invitations.actions.acceptedthencancelledbyclient=Dechrau cais newydd
-trackRequests.invitations.actions.acceptedthencancelledbyhmrc=Dechrau cais newydd
-trackRequests.invitations.actions.partialauth.signup=Cofrestru eich cleient (yn agor tab newydd)
-trackRequests.invitations.actions.partialauth.cancel=Canslo’ch awdurdodiad
-trackRequests.invitations.actions.partialauth.cancel.aria-text=Canslo’ch awdurdodiad ar gyfer {0} to {1}
-trackRequests.invitations.actions.pending=Ailanfon cais at y cleient
-trackRequests.invitations.actions.pending.aria-text=Ailanfon cais at gleient {0} i {1}
-trackRequests.invitations.actions.pending.cancel=Canslo’r cais hwn
-trackRequests.invitations.actions.pending.cancel.aria-text=Canslo’r cais hwn ar gyfer {0} i {1}
-trackRequests.invitations.actions.accepted=Canslo’ch awdurdodiad
-trackRequests.invitations.actions.accepted.aria-text=Canslo’ch awdurdodiad ar gyfer {0} to {1}
-trackRequests.invitations.actions.rejected=Dechrau cais newydd
-trackRequests.invitations.actions.expired=Dechrau cais newydd
-trackRequests.invitations.actions.cancelled=Dechrau cais newydd
-trackRequests.invitations.actions.invalidrelationship=Dechrau cais newydd
-trackRequests.pagination.showing=Dangos
-trackRequests.pagination.to=i
-trackRequests.pagination.of=o
-trackRequests.filter-client.label=Chwilio yn Ã´l cleient
-trackRequests.filter-status.label=Hidlo yn Ã´l statws
-trackRequests.filter.filter.button=Hidlo
-trackRequests.filter.clear.button=Clirio pob hidlydd
-trackRequests.filter-status.filter.button=Hidlo
-trackRequests.error.status-empty=Rhaid i chi ddewis statws o’r rhestr
-trackRequests.error.status-invalid=Rhaid i chi ddewis statws o’r rhestr
-trackRequests.error.client-empty=Rhaid i chi ddewis enw o’r rhestr
-trackRequests.error.client-invalid=Rhaid i chi ddewis enw o’r rhestr
-trackRequests.filter-status.AllStatuses=Pob statws
+trackRequests.status.DeAuthorised=Mae’r awdurdodiad wedi’i ddileu
+trackRequests.sidebar.clientFilter=Hidlo yn ôl cleient
+trackRequests.sidebar.statusFilter=Hidlo yn ôl statws
+trackRequests.sidebar.applyFilters=Gweithredu hidlyddion
+trackRequests.sidebar.clearFilters=Clirio pob hidlydd
+trackRequests.sidebar.allClients=Pob cleient
+trackRequests.sidebar.allStatuses=Pob statws
+trackRequests.filter-status.selectAll=Dewis popeth
 trackRequests.filter-status.ExpireInNext5Days=Yn dod i ben yn y 5 diwrnod nesaf
 trackRequests.filter-status.ActivityWithinLast5Days=Gweithgarwch yn ystod y 5 diwrnod diwethaf
-trackRequests.filter-status.ClientNotYetResponded=Nid yw’r cleient wedi ymateb eto
-trackRequests.filter-status.AgentCancelledAuthorisation=Gwnaethoch ganslo’ch awdurdodiad
-trackRequests.filter-status.DeclinedByClient=Gwrthodwyd gan y cleient
-trackRequests.filter-status.AcceptedByClient=Derbyniwyd gan y cleient
+trackRequests.filter-status.Pending=Nid yw’r cleient wedi ymateb eto
+trackRequests.filter-status.DeAuthorised=Mae’r awdurdodiad wedi’i ddileu
+trackRequests.filter-status.Rejected=Gwrthodwyd gan y cleient
+trackRequests.filter-status.Accepted=Derbyniwyd gan y cleient
+trackRequests.filter-status.PartialAuth=Derbyniwyd gan y cleient
+trackRequests.filter-status.Cancelled=Wedi caei ei ganslo gennych
 trackRequests.filter-status.Expired=Daeth y cais i ben gan i’r cleient fethu ag ymateb mewn pryd
 trackRequests.filter-status.ClientCancelledAuthorisation=Derbyniwyd gan y cleient. Gwnaeth y cleient ganslo’i awdurdodiad yn nes ymlaen
-trackRequests.filter-status.HMRCCancelledAuthorisation=Derbyniwyd gan y cleient. Gwnaeth CThEM ganslo’ch awdurdodiad yn nes ymlaen
-trackRequests.filter-status.Declined.HMRC-CBC=Cafodd cais {0} i reoli adroddiadau gwlad-wrth-wlad y cleient ei wrthod.
-
-# ________________________________________________________________________________
-# Journey exit headings
-# ________________________________________________________________________________
-
+trackRequests.filter-status.HMRCCancelledAuthorisation=Derbyniwyd gan y cleient. Gwnaeth CThEF ganslo’ch awdurdodiad yn nes ymlaen
+trackRequests.filter-status.Declined.HMRC-CBC=Gwrthodwyd cais {0} i reoli adroddiadau gwlad wrth wlad y cleient.
+agentCancelInvitation.header=A ydych yn siŵr eich bod am ganslo’r cais am awdurdodiad hwn?
+agentCancelInvitation.hint=Os byddwch yn canslo’r cais hwn, ni fyddwch yn gallu rheoli ei {0}.
+agentCancelInvitation.true=Iawn
+agentCancelInvitation.false=Na
+agentCancelInvitation.error.required=Dewiswch ‘Iawn’ os hoffech ganslo’r cais hwn am awdurdodiad
+agentCancelInvitationComplete.header=Cais am awdurdodiad wedi’i ganslo
+agentCancelInvitationComplete.p1=Rydych wedi canslo’ch cais am awdurdodiad i reoli ei {0}.
+agentCancelInvitationComplete.inset=Ni all {0} ymateb i’r cais hwn mwyach.
+agentCancelInvitationComplete.p2=Os gwnaethoch ganslo’ch cais am awdurdodiad drwy ddamwain, bydd yn rhaid i chi <a class=""govuk-link"" href=""{0}"">ddechrau cais am awdurdodiad newydd</a>.
 journeyExit.client-not-found.header=Nid oeddem yn gallu dod o hyd i’ch cleient
 journeyExit.not-registered.header=Mae angen i’ch cleient gofrestru ar gyfer Hunanasesiad
 journeyExit.not-authorised.header=Nid ydych wedi eich awdurdodi
 journeyExit.pending-authorisation-exists.header=Rydych eisoes wedi creu cais am awdurdodiad ar gyfer y gwasanaeth treth hwn
 journeyExit.client-insolvent.header=Ni allwch greu cais am awdurdodiad gan fod y cleient hwn yn ansolfent
 journeyExit.authorisation-already-exists.header=Rydych eisoes wedi’ch awdurdodi
-journeyExit.no-change-of-agent-role.header=<translation needed>
-
-# ________________________________________________________________________________
-# Journey exit partials
-# ________________________________________________________________________________
-
+journeyExit.no-change-of-agent-role.header=Nid ydych wedi newid sut rydych chi’n gweithredu ar gyfer y cleient hwn
 genericNotFound.description=Nid oeddem yn gallu dod o hyd i gleient yn ein cofnodion gan ddefnyddio’r manylion a roesoch i ni.
 genericNotFound.advice=Gwiriwch y manylion a rhowch gynnig arall arni.
-
-# ________________________________________________________________________________
-
 clientNotRegistered.p1=Ni allwch greu cais am awdurdodiad ar gyfer y cleient hwn hyd nes ei fod wedi cofrestru ar gyfer Hunanasesiad a bod ganddo Gyfeirnod Unigryw y Trethdalwr ar gyfer Hunanasesiad.
 clientNotRegistered.h2=Yr hyn i’w wneud nesaf
-clientNotRegistered.p2=Gofynnwch i’ch cleient <a href="{0}">gofrestru ar gyfer Hunanasesiad</a>. Ar Ã´l iddo gofrestru, bydd yn cael Cyfeirnod Unigryw y Trethdalwr ar gyfer Hunanasesiad.
-clientNotRegistered.p3=Wedyn, gallwch <a href="{0}">greu cais am awdurdodiad i’w anfon ato</a>.
+clientNotRegistered.p2=Gofynnwch i’ch cleient <a class=""govuk-link"" href=""{0}"">gofrestru ar gyfer Hunanasesiad</a>. Ar ôl iddo gofrestru, bydd yn cael Cyfeirnod Unigryw y Trethdalwr ar gyfer Hunanasesiad.
+clientNotRegistered.p3=Wedyn, gallwch <a class=""govuk-link"" href={0}>greu cais am awdurdodiad i’w anfon ato</a>.
 clientNotRegistered.return=Dychwelyd i’ch ceisiadau am awdurdodiad
-
-# ________________________________________________________________________________
-# Not authorised to de-auth
-# ________________________________________________________________________________
-notAuthorised.HMRC-MTD-IT.p=Nid yw’r cleient hwn wedi’ch awdurdodi i reoli ei gyfrif Troi Treth yn Ddigidol ar gyfer Treth Incwm.
-notAuthorised.PERSONAL-INCOME-RECORD.p=Nid yw’r cleient hwn wedi’ch awdurdodi i fwrw golwg dros ei gofnod incwm.
+notAuthorised.HMRC-MTD-IT.p=Nid yw’r cleient wedi’ch awdurdodi i reoli ei gynllun Troi Treth yn Ddigidol ar gyfer Treth Incwm.
+notAuthorised.PERSONAL-INCOME-RECORD.p=Nid yw’r cleient hwn wedi’ch awdurdodi i fwrw golwg dros ei Gofnod incwm.
 notAuthorised.HMRC-MTD-VAT.p=Nid yw’r cleient hwn wedi’ch awdurdodi i reoli ei TAW.
 notAuthorised.HMRC-TERS-ORG.p=Nid yw’r cleient hwn wedi’ch awdurdodi i gynnal ymddiriedolaeth nac ystâd.
 notAuthorised.HMRC-TERSNT-ORG.p=Nid yw’r cleient hwn wedi’ch awdurdodi i gynnal ymddiriedolaeth nac ystâd.
-notAuthorised.HMRC-CGT-PD.p=Nid yw’r cleient hwn wedi’ch awdurdodi i reoli ei Dreth Enillion Cyfalaf ar warediadau eiddo yn y DU.
+notAuthorised.HMRC-CGT-PD.p=Nid yw’r cleient hwn wedi’ch awdurdodi i reoli ei gyfrif Treth Enillion Cyfalaf ar eiddo yn y DU.
 notAuthorised.HMRC-PPT-ORG.p=Nid yw’r cleient hwn wedi’ch awdurdodi i reoli ei Dreth Deunydd Pacio Plastig.
-notAuthorised.HMRC-CBC-ORG.p=Nid yw’r cleient hwn wedi’ch awdurdodi i reoli ei adroddiadau gwlad-wrth-wlad.
-notAuthorised.HMRC-CBC-NONUK-ORG.p=Nid yw’r cleient hwn wedi’ch awdurdodi i reoli ei adroddiadau gwlad-wrth-wlad.
-
-# ________________________________________________________________________________
-# Pending authorisation already exists
-# ________________________________________________________________________________
-
+notAuthorised.HMRC-CBC-ORG.p=Nid yw’r cleient wedi’ch awdurdodi i reoli ei adroddiadau gwlad wrth wlad
+notAuthorised.HMRC-CBC-NONUK-ORG.p=Nid yw’r cleient wedi’ch awdurdodi i reoli ei adroddiadau gwlad wrth wlad
 clientAlreadyInvited.p=Ni allwch fynd yn eich blaen hyd nes bod {0} wedi derbyn y cysylltiad at y cais am awdurdodiad.
-clientAlreadyInvited.p2=Ail-anfonwch y cysylltiad at y cais am awdurdodiad a grÃ«wyd pan wnaethoch ofyn i {0} eich awdurdodi yn y lle cyntaf:
+clientAlreadyInvited.p2=Ail-anfonwch y cysylltiad at y cais am awdurdodiad a grëwyd pan wnaethoch ofyn i {0} eich awdurdodi yn y lle cyntaf.
 clientAlreadyInvited.h2=Yr hyn y gallwch ei wneud nesaf
-
-# ________________________________________________________________________________
-# Client insolvent
-# ________________________________________________________________________________
-
 clientInsolvent.p=Ni all cleientiaid awdurdodi asiant ar eu rhan pan fyddan nhw’n ansolfent.
-
-# ________________________________________________________________________________
-# Active authorisation already exists
-# ________________________________________________________________________________
-
-authorisationAlreadyExists.HMRC-MTD-IT.p1=Mae’r cleient hwn eisoes wedi’ch awdurdodi i reoli ei gyfrif Troi Treth yn Ddigidol ar gyfer Treth Incwm.
-authorisationAlreadyExists.PERSONAL-INCOME-RECORD.p1=Mae’r cleient hwn eisoes wedi’ch awdurdodi i fwrw golwg dros ei gofnod incwm.
+authorisationAlreadyExists.HMRC-MTD-IT.p1=Mae’r cleient hwn eisoes wedi’ch awdurdodi i reoli ei gynllun Troi Treth yn Ddigidol ar gyfer Treth Incwm.
+authorisationAlreadyExists.PERSONAL-INCOME-RECORD.p1=Mae’r cleient hwn eisoes wedi’ch awdurdodi i fwrw golwg dros ei Gofnod incwm.
 authorisationAlreadyExists.HMRC-MTD-VAT.p1=Mae’r cleient hwn eisoes wedi’ch awdurdodi i reoli ei TAW.
 authorisationAlreadyExists.HMRC-TERS-ORG.p1=Mae’r cleient hwn eisoes wedi’ch awdurdodi i gynnal ymddiriedolaeth neu ystâd.
 authorisationAlreadyExists.HMRC-TERSNT-ORG.p1=Mae’r cleient hwn eisoes wedi’ch awdurdodi i gynnal ymddiriedolaeth neu ystâd.
-authorisationAlreadyExists.HMRC-CGT-PD.p1=Mae’r cleient hwn eisoes wedi’ch awdurdodi i reoli ei Dreth Enillion Cyfalaf ar warediadau eiddo yn y DU.
+authorisationAlreadyExists.HMRC-CGT-PD.p1=Nid yw’r cleient hwn wedi’ch awdurdodi i reoli ei Dreth Enillion Cyfalaf ar warediadau eiddo yn y DU.
 authorisationAlreadyExists.HMRC-PPT-ORG.p1=Mae’r cleient hwn eisoes wedi’ch awdurdodi i reoli ei Dreth Deunydd Pacio Plastig.
-authorisationAlreadyExists.HMRC-CBC-ORG.p1=<translation needed>
-authorisationAlreadyExists.HMRC-CBC-NONUK-ORG.p1=<translation needed>
-authorisationAlreadyExists.HMRC-PILLAR2-ORG.p1=<translation needed>
+authorisationAlreadyExists.HMRC-CBC-ORG.p1=Mae’r cleient hwn eisoes wedi’ch awdurdodi i reoli ei adroddiadau gwlad wrth wlad.
+authorisationAlreadyExists.HMRC-CBC-NONUK-ORG.p1=Mae’r cleient hwn eisoes wedi’ch awdurdodi i reoli ei adroddiadau gwlad wrth wlad.
+authorisationAlreadyExists.HMRC-PILLAR2-ORG.p1=Mae’r cleient hwn eisoes wedi’ch awdurdodi i reoli ei drethi atodol Colofn 2.
 authorisationAlreadyExists.p2=Nid oes yn rhaid i chi ofyn iddo eich awdurdodi ar gyfer y gwasanaeth hwn eto.
-
-# ________________________________________________________________________________
-# Client confirm consent
-# ________________________________________________________________________________
-
-confirmConsent.h1 = <translation needed>
-confirmConsent.agent = <translation needed>
-confirmConsent.mainAgent = <translation needed>
-confirmConsent.suppAgent = <translation needed>
-confirmConsent.p1 = <translation needed>
-confirmConsent.warning.agent = <translation needed>
-confirmConsent.warning.mainAgent = <translation needed>
-confirmConsent.warning.mainToSupp = <translation needed>
-confirmConsent.suppAgent.details.heading=<translation needed>
-confirmConsent.suppAgent.details.p1=<translation needed>
-confirmConsent.suppAgent.details.list.item1=<translation needed>
-confirmConsent.suppAgent.details.list.item2=<translation needed>
-confirmConsent.suppAgent.details.list.item3=<translation needed>
-confirmConsent.suppAgent.details.list.item4=<translation needed>
-confirmConsent.h2 = <translation needed>
-confirmConsent.p2 = <translation needed>
-confirmConsent.legend = <translation needed>
-confirmConsent.true = Iawn
-confirmConsent.false = Na
-confirmConsent.error.required=<translation needed>
-confirmConsent.form.agent=<translation needed>
-confirmConsent.form.mainAgent=<translation needed>
-confirmConsent.form.suppAgent=<translation needed>
-
+authorisationAlreadyExists.return=Dychwelyd i’ch ceisiadau am awdurdodiad
+authoriseAgentStartPage.h1.income-tax=Awdurdodi {0} i reoli’ch Treth Incwm
+authoriseAgentStartPage.h1.income-record-viewer=Awdurdodi {0} i reoli’ch Cofnod Incwm
+authoriseAgentStartPage.h1.vat=Awdurdodi {0} i reoli’ch TAW
+authoriseAgentStartPage.h1.capital-gains-tax-uk-property=Awdurdodi {0} i reoli’ch cyfrif Treth Enillion Cyfalaf ar eiddo yn y DU
+authoriseAgentStartPage.h1.plastic-packaging-tax=Awdurdodi {0} i reoli’ch Treth Deunydd Pacio Plastig
+authoriseAgentStartPage.h1.country-by-country-reporting=Awdurdodi {0} i reoli’ch Adroddiadau Gwlad wrth wlad
+authoriseAgentStartPage.h1.pillar-2=Awdurdodi {0} i reoli’ch trethi atodol Colofn 2
+authoriseAgentStartPage.h1.trusts-and-estates=Awdurdodi {0} i reoli’ch Ymddiriedolaeth neu’ch Ystâd
+authoriseAgentStartPage.p1.income-tax=Bydd angen i chi fewngofnodi gyda’r Dynodydd Defnyddiwr (ID) rydych chi’n ei ddefnyddio ar gyfer Treth Incwm.
+authoriseAgentStartPage.p1.income-record-viewer=Bydd angen i chi fewngofnodi gyda’r Dynodydd Defnyddiwr (ID) rydych chi’n ei ddefnyddio ar gyfer eich cyfrif treth personol.
+authoriseAgentStartPage.p1.vat=Bydd angen i chi fewngofnodi gyda’r Dynodydd Defnyddiwr (ID) rydych chi’n ei ddefnyddio ar gyfer TAW.
+authoriseAgentStartPage.p1.capital-gains-tax-uk-property=Bydd angen i chi fewngofnodi â’r Dynodydd Defnyddiwr (ID) rydych chi’n ei ddefnyddio ar gyfer cyfrif Treth Enillion Cyfalaf ar eiddo yn y DU.
+authoriseAgentStartPage.p1.plastic-packaging-tax=Bydd angen i chi fewngofnodi gyda’r Dynodydd Defnyddiwr (ID) rydych chi’n ei ddefnyddio ar gyfer Treth Deunydd Pacio Plastig.
+authoriseAgentStartPage.p1.country-by-country-reporting=Bydd angen i chi fewngofnodi gyda’r Dynodydd Defnyddiwr (ID) rydych chi’n ei ddefnyddio ar gyfer Adroddiadau Gwlad wrth wlad.
+authoriseAgentStartPage.p1.pillar-2=Bydd angen i chi fewngofnodi gyda’r Dynodydd Defnyddiwr (ID) rydych chi’n ei ddefnyddio ar gyfer trethi atodol Colofn 2.
+authoriseAgentStartPage.p1.trusts-and-estates=Mae angen i chi fewngofnodi gan ddefnyddio Dynodydd Defnyddiwr (ID) rydych chi’n ei ddefnyddio ar gyfer rheoli eich Ymddiriedolaeth neu’ch Ystâd.
+authoriseAgentStartPage.p2=Os nad oes gennych fanylion mewngofnodi, bydd modd i chi greu rhai.
+authoriseAgentStartPage.link.text1=Dechrau nawr
+authoriseAgentStartPage.link.text2=Dydw i ddim am i {0} weithredu ar fy rhan.
+consentInformation.header=Gwybodaeth sydd ei hangen arnoch cyn i chi awdurdodi asiant
+agentRole.HMRC-MTD-IT=<strong>prif asiant</strong>
+agentRole.HMRC-MTD-IT-SUPP=<strong>asiant ategol</strong>
+agentRole.PERSONAL-INCOME-RECORD=asiant
+agentRole.HMRC-MTD-VAT=asiant
+agentRole.HMRC-TERS-ORG=asiant
+agentRole.HMRC-TERSNT-ORG=asiant
+agentRole.HMRC-CGT-PD=asiant
+agentRole.HMRC-PPT-ORG=asiant
+agentRole.HMRC-CBC-ORG=asiant
+agentRole.HMRC-CBC-NONUK-ORG=asiant
+agentRole.HMRC-PILLAR2-ORG=asiant
+indefiniteAgentRole.HMRC-MTD-IT=prif asiant
+indefiniteAgentRole.HMRC-MTD-IT-SUPP=asiant ategol
+indefiniteAgentRole.PERSONAL-INCOME-RECORD=asiant
+indefiniteAgentRole.HMRC-MTD-VAT=asiant
+indefiniteAgentRole.HMRC-TERS-ORG=asiant
+indefiniteAgentRole.HMRC-TERSNT-ORG=asiant
+indefiniteAgentRole.HMRC-CGT-PD=asiant
+indefiniteAgentRole.HMRC-PPT-ORG=asiant
+indefiniteAgentRole.HMRC-CBC-ORG=asiant
+indefiniteAgentRole.HMRC-CBC-NONUK-ORG=asiant
+indefiniteAgentRole.HMRC-PILLAR2-ORG=asiant
+consentInformation.p1=Hoffai {0} gael ei awdurdodi fel eich {1} ar gyfer {2}.
+consentInformation.HMRC-MTD-IT.p2=Pan fydd gennych asiant ar gyfer {0}, gallwch ddewis faint o gefnogaeth rydych chi ei eisiau ganddynt.
+consentInformation.HMRC-MTD-IT.p3=Mae yna 2 lefel o gymorth i ddewis ohonynt:
+consentInformation.HMRC-MTD-IT.li1=gall ‘prif asiant’ gwblhau’r rhan fwyaf o dasgau ar eich rhan
+consentInformation.HMRC-MTD-IT.li2=gall ‘asiant ategol’ gyflawni rhai tasgau, ond ni allant gyflwyno Ffurflenni Treth diwedd blwyddyn neu wybodaeth am daliadau
+consentInformation.HMRC-MTD-IT.guidance=Darllenwch yr arweiniad am <a href={0} class=""govuk-link"" target=""_blank"" rel=""noreferrer noopener"">y gwahaniaeth rhwng prif asiantau ac asiantau ategol (yn agor tab newydd)</a>.
+consentInformation.HMRC-MTD-IT-SUPP.p2=Pan fydd gennych asiant ar gyfer {0}, gallwch ddewis faint o gefnogaeth rydych chi ei eisiau ganddynt.
+consentInformation.HMRC-MTD-IT-SUPP.p3=Mae yna 2 lefel o gymorth i ddewis ohonynt:
+consentInformation.HMRC-MTD-IT-SUPP.li1=gall ‘prif asiant’ gwblhau’r rhan fwyaf o dasgau ar eich rhan
+consentInformation.HMRC-MTD-IT-SUPP.li2=gall ‘asiant ategol’ gyflawni rhai tasgau, ond ni allant gyflwyno Ffurflenni Treth diwedd blwyddyn neu wybodaeth am daliadau
+consentInformation.HMRC-MTD-IT-SUPP.guidance=Darllenwch yr arweiniad am <a href={0} class=""govuk-link"" target=""_blank"" rel=""noreferrer noopener"">y gwahaniaeth rhwng prif asiantau ac asiantau ategol (yn agor tab newydd)</a>.
+consentInformation.section1.h2=Yr hyn mae’n ei olygu i roi caniatâd i asiant
+consentInformation.section1.p1=Mae rhoi’ch caniatâd yn golygu y bydd modd i gyflogeion {0} gael mynediad at eich {1} data.
+consentInformation.section1.p2=Mae eich caniatâd yn para nes i chi rhoi gwybod i ni na all {0} weithredu ar eich rhan mwyach.
+consentInformation.section1.p3=Os byddwch yn penodi asiant tramor i weithredu ar eich rhan, bydd yn rhaid i ni rannu’ch data y tu allan i’r DU.
+consentInformation.section1.p4=Am fanylion ynghylch sut yr ydym yn cadw a phrosesu’ch gwybodaeth, darllenwch ein <a href=""{0}"" class=""govuk-link"" target=""_blank"" rel=""noreferrer noopener"">hysbysiad preifatrwydd (yn agor tab newydd)</a>.
+consentInformation.section2.h2=Sut i dynnu caniatâd yn ôl
+consentInformation.section2.p1=Gallwch dynnu’ch caniatâd yn ôl ar unrhyw adeg gan ddefnyddio <a href=""{0}"" class=""govuk-link"">Rheoli pwy all ddelio â CThEF i chi</a>.
+consentInformation.section3.h2=Cyn i chi benderfynu
+consentInformation.section3.p1=Dewiswch ‘parhau’ i ddysgu beth all {0} ei wneud pan fyddwch chi’n eu hawdurdodi i reoli eich {1}.
+confirmConsent.h1=Awdurdodi asiant
+confirmConsent.agent=asiant
+confirmConsent.mainAgent=<strong>prif asiant</strong>
+confirmConsent.suppAgent=<strong>asiant ategol</strong>
+confirmConsent.p1=Hoffai {0} gael ei awdurdodi fel eich {1} ar gyfer {2}.
+confirmConsent.warning.agent=Gallwch gael 1 asiant ar gyfer {0}. Os ydych yn awdurdodi {1}, byddwn yn tynnu {2} fel eich asiant presennol.
+confirmConsent.warning.mainAgent=Gallwch gael 1 prif asiant ar gyfer {0}. Os ydych yn awdurdodi {1}, byddwn yn tynnu {2} fel eich prif asiant presennol.
+confirmConsent.warning.mainToSupp=Os ydych yn awdurdodi {0} fel eich asiant ategol, ni fydd gennych prif asiant ar gyfer {1}.
+confirmConsent.suppAgent.details.heading=Yr hyn ni all asiant ategol ei wneud
+confirmConsent.suppAgent.details.p1=Gall asiant ategol gyflawni tasgau cyfyngedig sy’n gysylltiedig â threth i chi yn unig. Er enghraifft, ni allant wneud y canlynol:
+confirmConsent.suppAgent.details.list.item1=cyflwyno Ffurflenni Treth diwedd blwyddyn
+confirmConsent.suppAgent.details.list.item2=amcangyfrif treth a bwrw golwg dros y cyfrifiad terfynol
+confirmConsent.suppAgent.details.list.item3=bwrw golwg dros symiau dyledus a’r symiau sydd wedi’u talu
+confirmConsent.suppAgent.details.list.item4=delio â chosbau am gyflwyno a thalu’n hwyr
+confirmConsent.h2=Darllenwch yn ofalus: mae angen eich caniatâd
+confirmConsent.p2=Os ydych yn cytuno bod {0} yn gweithredu fel eich {1} ar gyfer {2}, byddant yn gallu gwneud y canlynol:
+confirmConsent.legend=A ydych am i {0} gael ei awdurdodi fel eich {1} ar gyfer {2}?
+confirmConsent.true=Iawn
+confirmConsent.false=Na
+confirmConsent.error.required=Dewiswch ‘Iawn’ os ydych am i {0} fod eich {1} ar gyfer {2}
+confirmConsent.form.agent=asiant
+confirmConsent.form.mainAgent=prif asiant
+confirmConsent.form.suppAgent=asiant ategol
 confirmConsent.HMRC-MTD-IT.list.item1=eich cofrestru neu eich optio allan
-confirmConsent.HMRC-MTD-IT.list.item2=cysylltu â CThEF yngl’n â’ch Ffurflenni Treth
+confirmConsent.HMRC-MTD-IT.list.item2=cysylltu â CThEF ynghylch eich Ffurflenni Treth presennol a blaenorol
 confirmConsent.HMRC-MTD-IT.list.item3=bwrw golwg dros a newid eich manylion, megis ffynonellau incwm
-confirmConsent.HMRC-MTD-IT.list.item4=rhoi manylion banc i CThEM ar gyfer ad-daliadau pan fo ad-daliad yn ddyledus
+confirmConsent.HMRC-MTD-IT.list.item4=rhoi manylion banc i CThEF ar gyfer ad-daliadau pan fo ad-daliad yn ddyledus
 confirmConsent.HMRC-MTD-IT.list.item5=bwrw golwg dros a chyflwyno’ch diweddariadau (incwm a threuliau)
-confirmConsent.HMRC-MTD-IT.list.item6=<translation needed>
+confirmConsent.HMRC-MTD-IT.list.item6=cyflwyno’ch Ffurflenni Treth diwedd blwyddyn
 confirmConsent.HMRC-MTD-IT.list.item7=bwrw golwg dros eich cyfrifiadau a’r symiau dyledus a’r symiau sydd wedi’u talu
-confirmConsent.HMRC-MTD-IT.list.item8=rheoli’ch Troi Treth yn Ddigidol ar gyfer Treth Incwm gan ddefnyddio meddalwedd
+confirmConsent.HMRC-MTD-IT.list.item8=rheoli’ch cyfrif Troi Treth yn Ddigidol ar gyfer Treth Incwm gan ddefnyddio meddalwedd
 confirmConsent.HMRC-MTD-IT.list.item9=cael mynediad at eich manylion Hunanasesiad, megis eich enw, cyfeiriad, rhif Yswiriant Gwladol a Chyfeirnod Unigryw y Trethdalwr
-confirmConsent.HMRC-MTD-IT.list.item10=<translation needed>
-confirmConsent.HMRC-MTD-IT.list.item11=<translation needed>
+confirmConsent.HMRC-MTD-IT.list.item10=cael copïau o hysbysiad o gosb am daliad hwyr neu gyflwyniad hwyr
+confirmConsent.HMRC-MTD-IT.list.item11=bwrw golwg dros ac apelio yn erbyn cosbau a gyhoeddwyd am daliad hwyr neu gyflwyniad hwyr
 confirmConsent.HMRC-MTD-IT.list.item12=canslo’ch cofrestriad Hunanasesiad
-
-confirmConsent.HMRC-MTD-IT-SUPP.list.item1=<translation needed>
-confirmConsent.HMRC-MTD-IT-SUPP.list.item2=<translation needed>
-confirmConsent.HMRC-MTD-IT-SUPP.list.item3=<translation needed>
-confirmConsent.HMRC-MTD-IT-SUPP.list.item4=<translation needed>
-confirmConsent.HMRC-MTD-IT-SUPP.list.item5=<translation needed>
-confirmConsent.HMRC-MTD-IT-SUPP.list.item6=<translation needed>
-confirmConsent.HMRC-MTD-IT-SUPP.list.item7=<translation needed>
-confirmConsent.HMRC-MTD-IT-SUPP.list.item8=<translation needed>
-
+confirmConsent.HMRC-MTD-IT-SUPP.list.item1=eich cofrestru neu eich optio allan
+confirmConsent.HMRC-MTD-IT-SUPP.list.item2=cysylltu â CThEF ynghylch eich Ffurflenni Treth presennol a blaenorol
+confirmConsent.HMRC-MTD-IT-SUPP.list.item3=bwrw golwg dros eich manylion personol a manylion y busnes gan gynnwys enw, cyfeiriad, rhif Yswiriant Gwladol a Chyfeirnod Unigryw y Trethdalwr
+confirmConsent.HMRC-MTD-IT-SUPP.list.item4=bwrw golwg dros neu ddiwygio eich busnes dynodol
+confirmConsent.HMRC-MTD-IT-SUPP.list.item5=bwrw golwg dros a diwygio eich ffynonellau incwm
+confirmConsent.HMRC-MTD-IT-SUPP.list.item6=dod o hyd a dewis meddalwedd sy’n cydweddu a’i defnyddio i reoli’ch cyfrif Troi Treth yn Ddigidol ar gyfer Treth Incwm
+confirmConsent.HMRC-MTD-IT-SUPP.list.item7=anfon diweddariadau chwarterol
+confirmConsent.HMRC-MTD-IT-SUPP.list.item8=gwneud addasiadau diwedd blwyddyn
 confirmConsent.PERSONAL-INCOME-RECORD.list.item1=cael mynediad at wybodaeth am y canlynol:
-confirmConsent.PERSONAL-INCOME-RECORD.list.item2=i bwy rydych wedi gweithio yn y gorffennol
-confirmConsent.PERSONAL-INCOME-RECORD.list.item3=buddiannau trethadwy megis yswiriant meddygol ac yswiriant car cwmni
+confirmConsent.PERSONAL-INCOME-RECORD.list.item2=pwy rydych wedi gweithio yn y gorffennol
+confirmConsent.PERSONAL-INCOME-RECORD.list.item3=buddiannau trethadwy megis yswiriant meddygol a char cwmni
 confirmConsent.PERSONAL-INCOME-RECORD.list.item4=eich pensiynau
 confirmConsent.PERSONAL-INCOME-RECORD.list.item5=dyddiadau dechrau a dod i ben eich rhan yn y broses TWE
-
-confirmConsent.HMRC-MTD-VAT.list.item1=trafod eich TAW gyda CThEM
+confirmConsent.HMRC-MTD-VAT.list.item1=cysylltu â CThEF ynglŷn â’ch TAW
 confirmConsent.HMRC-MTD-VAT.list.item2=bwrw golwg dros eich manylion TAW a’ch manylion banc, a’u newid
 confirmConsent.HMRC-MTD-VAT.list.item3=bwrw golwg dros eich manylion TAW, eu newid a’u cyflwyno
 confirmConsent.HMRC-MTD-VAT.list.item4=bwrw golwg dros eich taliadau a’ch rhwymedigaethau TAW
 confirmConsent.HMRC-MTD-VAT.list.item5=rheoli’ch TAW drwy ddefnyddio meddalwedd
 confirmConsent.HMRC-MTD-VAT.list.item6=canslo’ch cofrestriad TAW
 confirmConsent.HMRC-MTD-VAT.list.item7=apelio yn erbyn cosb am gyflwyno’n hwyr neu am dalu’n hwyr
-confirmConsent.HMRC-MTD-VAT.list.item8=gweld:
+confirmConsent.HMRC-MTD-VAT.list.item8=cael mynediad at eich:
 confirmConsent.HMRC-MTD-VAT.list.item9=manylion eich cofrestriad TAW, megis enw’ch busnes a’ch manylion cyswllt
 confirmConsent.HMRC-MTD-VAT.list.item10=y Ffurflenni TAW a gyflwynwyd gennych
 confirmConsent.HMRC-MTD-VAT.list.item11=cyfrifiadau Ffurflenni TAW
 confirmConsent.HMRC-MTD-VAT.list.item12=y symiau sydd arnoch neu a dalwyd gennych
-
 confirmConsent.HMRC-TERS-ORG.list.item1=rhoi gwybod am newidiadau sy’n ymwneud ag ymddiriedolwyr, setlwyr, buddiolwyr, diogelwyr ac unigolion eraill yn yr ymddiriedolaeth – megis enwau a chyfeiriadau’r rhain – a datgan bod yr ymddiriedolaeth yn gyfredol
-confirmConsent.HMRC-TERS-ORG.list.item2=rhoi gwybod am newidiadau sy’n ymwneud â chynrychiolydd personol yr ystâd, megis enwau a chyfeiriadau, a datgan bod yr ystâd yn gyfredol
-
-confirmConsent.HMRC-CGT-PD.personal.list.item1=bwrw golwg dros eich Ffurflenni Treth presennol, eu newid a’u cyflwyno
+confirmConsent.HMRC-TERS-ORG.list.item2=rhoi gwybod am newidiadau sy’n ymwneud â chynrychiolydd personol yr ystâd, megis enw a chyfeiriad, a datgan bod yr ystâd yn gyfredol
+confirmConsent.HMRC-CGT-PD.personal.list.item1=bwrw golwg dros eich Ffurflenni TAW presennol, eu newid a’u cyflwyno
 confirmConsent.HMRC-CGT-PD.personal.list.item2=bwrw golwg dros fanylion eich Ffurflenni Treth blaenorol, a’u newid
 confirmConsent.HMRC-CGT-PD.personal.list.item3=bwrw golwg dros eich dulliau cysylltu dewisol, a’u newid
-confirmConsent.HMRC-CGT-PD.personal.list.item4=cysylltwch â CThEM am eich ffurflenni Treth, eich taliadau ac unrhyw gosbau
-confirmConsent.HMRC-CGT-PD.personal.list.item5=cyrchu a diweddaru eich:
-confirmConsent.HMRC-CGT-PD.personal.list.item6=eich enw a manylion cyswllt
-confirmConsent.HMRC-CGT-PD.personal.list.item7=eich statws preswyl
-confirmConsent.HMRC-CGT-PD.personal.list.item8=eich rhwymedigaeth ar gyfer y flwyddyn dreth bresennol a blynyddoedd treth blaenorol
-confirmConsent.HMRC-CGT-PD.personal.list.item9=y symiau sy’n ddyledus a’r symiau sydd wedi’u talu gennych
-confirmConsent.HMRC-CGT-PD.personal.list.item10=manylion eich cosbau
-
+confirmConsent.HMRC-CGT-PD.personal.list.item4=cysylltu â CThEF ynglŷn â’ch Ffurflenni Treth, eich taliadau ac unrhyw gosbau
+confirmConsent.HMRC-CGT-PD.personal.list.item5=cael mynediad at a diweddaru’ch:
+confirmConsent.HMRC-CGT-PD.personal.list.item6=enw a manylion cyswllt
+confirmConsent.HMRC-CGT-PD.personal.list.item7=statws preswyl
+confirmConsent.HMRC-CGT-PD.personal.list.item8=rhwymedigaeth ar gyfer y flwyddyn dreth bresennol a blynyddoedd treth blaenorol
+confirmConsent.HMRC-CGT-PD.personal.list.item9=symiau sy’n ddyledus a’r symiau sydd wedi’u talu gennych
+confirmConsent.HMRC-CGT-PD.personal.list.item10=manylion cosb
 confirmConsent.HMRC-CGT-PD.trust.list.item1=bwrw golwg dros Ffurflenni Treth presennol yr ymddiriedolaeth, eu newid a’u cyflwyno
 confirmConsent.HMRC-CGT-PD.trust.list.item2=bwrw golwg dros fanylion Ffurflenni Treth blaenorol yr ymddiriedolaeth, a’u newid
 confirmConsent.HMRC-CGT-PD.trust.list.item3=bwrw golwg dros ddulliau cysylltu dewisol yr ymddiriedolaeth, a’u newid
-confirmConsent.HMRC-CGT-PD.trust.list.item4=cysylltwch â CThEM am eich ffurflenni Treth yr ymddiriedolaeth, ei thaliadau ac unrhyw gosbau
-confirmConsent.HMRC-CGT-PD.trust.list.item5=cyrchu a diweddaru?r ymddiriedolaeth:
-confirmConsent.HMRC-CGT-PD.trust.list.item6=enw a manylion cyswllt yr ymddiriedolaeth
-confirmConsent.HMRC-CGT-PD.trust.list.item7=statws preswyl yr ymddiriedolaeth
-confirmConsent.HMRC-CGT-PD.trust.list.item8=rhwymedigaeth yr ymddiriedolaeth ar gyfer y flwyddyn dreth bresennol a blynyddoedd treth blaenorol
-confirmConsent.HMRC-CGT-PD.trust.list.item9=y symiau sy’n ddyledus a’r symiau sydd wedi’u talu gan yr ymddiriedolaeth
-confirmConsent.HMRC-CGT-PD.trust.list.item10=manylion cosbau’r ymddiriedolaeth
-
+confirmConsent.HMRC-CGT-PD.trust.list.item4=cysylltu â CThEF ynglŷn â’ch Ffurflenni Treth yr ymddiriedolaeth, ei thaliadau ac unrhyw gosbau
+confirmConsent.HMRC-CGT-PD.trust.list.item5=cael mynediad at a diweddaru’r canlynol ar ran ymddiriedolaeth:
+confirmConsent.HMRC-CGT-PD.trust.list.item6=enw a manylion cyswllt
+confirmConsent.HMRC-CGT-PD.trust.list.item7=statws preswyl
+confirmConsent.HMRC-CGT-PD.trust.list.item8=rhwymedigaeth ar gyfer y flwyddyn dreth bresennol a blynyddoedd treth blaenorol
+confirmConsent.HMRC-CGT-PD.trust.list.item9=symiau sy’n ddyledus a’r symiau sydd wedi’u talu gennych
+confirmConsent.HMRC-CGT-PD.trust.list.item10=manylion cosb
 confirmConsent.HMRC-PPT-ORG.list.item1=bwrw golwg dros eich Ffurflenni Treth Deunydd Pacio Plastig
 confirmConsent.HMRC-PPT-ORG.list.item2=cyflwyno’ch Ffurflenni Treth Deunydd Pacio Plastig
 confirmConsent.HMRC-PPT-ORG.list.item3=addasu’ch Ffurflenni Treth Deunydd Pacio Plastig
-confirmConsent.HMRC-PPT-ORG.list.item4=siarad â CThEM am eich Ffurflenni
-confirmConsent.HMRC-PPT-ORG.list.item5=rhoi manylion banc i CThEM ar gyfer ad-daliadau pan fo ad-daliad yn ddyledus
+confirmConsent.HMRC-PPT-ORG.list.item4=Cysylltu â CThEF ynglŷn â’ch Ffurflenni Treth
+confirmConsent.HMRC-PPT-ORG.list.item5=rhoi manylion banc i CThEF ar gyfer ad-daliadau pan fo ad-daliad yn ddyledus
 confirmConsent.HMRC-PPT-ORG.list.item6=cwblhau’ch sefyllfa dreth gyffredinol
 confirmConsent.HMRC-PPT-ORG.list.item7=bwrw golwg dros eich cyfrifiadau a’r symiau dyledus a’r symiau sydd wedi’u talu
 confirmConsent.HMRC-PPT-ORG.list.item8=rheoli’ch Treth Deunydd Pacio Plastig gan ddefnyddio meddalwedd
-
-confirmConsent.HMRC-CBC-ORG.list.item1=anfon adroddiadau gwlad-wrth-wlad newydd
-confirmConsent.HMRC-CBC-ORG.list.item2=anfon gwybodaeth, cywiriadau neu achosion o ddileu ychwanegol ar gyfer adroddiadau gwlad-wrth-wlad blaenorol
-confirmConsent.HMRC-CBC-ORG.list.item3=cael at restr o unrhyw adroddiadau gwlad-wrth-wlad a anfonwyd yn ystod y 28 diwrnod diwethaf
-confirmConsent.HMRC-CBC-ORG.list.item4=contact HMRC about your current and previous reports
-confirmConsent.HMRC-CBC-ORG.list.item5=rhannu gwybodaeth gyda CThEF am eich adroddiadau gwlad-wrth-wlad presennol neu flaenorol
-confirmConsent.HMRC-CBC-ORG.list.item6=cael gwybodaeth gan CThEF am eich adroddiadau gwlad-wrth-wlad presennol neu flaenorol
-confirmConsent.HMRC-CBC-ORG.list.item7=cael at eich Dynodydd (ID) CBC (Dynodydd (ID))
-confirmConsent.HMRC-CBC-ORG.list.item8=cael at a newid eich manylion cyswllt gwlad-wrth-wlad, fel eich enwau cyswllt, cyfeiriadau e-bost a rhifau ffôn
-confirmConsent.HMRC-CBC-ORG.list.item9=cael at fanylion unrhyw gosbau a godir
-confirmConsent.HMRC-CBC-ORG.list.item10=apelio cosb am gyflwyno’n hwyr
-confirmConsent.HMRC-CBC-ORG.list.item11=rhoi gwybodaeth ychwanegol wrth apelio cosbau am gyflwyno’n hwyr
-
+confirmConsent.HMRC-CBC-ORG.list.item1=anfon adroddiadau gwlad wrth wlad
+confirmConsent.HMRC-CBC-ORG.list.item2=anfon gwybodaeth ychwanegol, cywiriadau neu ddileu ar gyfer adroddiadau gwlad wrth wlad flaenorol
+confirmConsent.HMRC-CBC-ORG.list.item3=cael mynediad at restr o adroddiadau gwlad wrth wlad a anfonwyd yn ystod y 28 diwrnod diwethaf.
+confirmConsent.HMRC-CBC-ORG.list.item4=cysylltu â CThEF ynghylch eich adroddiadau presennol a blaenorol
+confirmConsent.HMRC-CBC-ORG.list.item5=rhannu gwybodaeth gyda CThEF am eich adroddiadau gwlad wrth wlad bresennol neu flaenorol
+confirmConsent.HMRC-CBC-ORG.list.item6=cael gwybodaeth gan CThEF am eich adroddiadau gwlad wrth wlad bresennol neu flaenorol
+confirmConsent.HMRC-CBC-ORG.list.item7=cael mynediad at eich ID CBC (Dynodydd Defnyddiwr (ID) gwlad wrth wlad)
+confirmConsent.HMRC-CBC-ORG.list.item8=cael mynediad at eich manylion cyswllt gwlad wrth wlad, megis eich enwau cyswllt, cyfeiriadau e-bost a’ch rhifau ffôn
+confirmConsent.HMRC-CBC-ORG.list.item9=cael mynediad at fanylion o unrhyw gosbau wedi’u codi
+confirmConsent.HMRC-CBC-ORG.list.item10=Apêl yn erbyn cosbau am gyflwyno’n hwyr
+confirmConsent.HMRC-CBC-ORG.list.item11=rhoi gwybodaeth ychwanegol wrth apelio yn erbyn cosbau am gyflwyno’n hwyr
 confirmConsent.HMRC-PILLAR2-ORG.list.item1=bwrw golwg dros, newid a chyflwyno eich Ffurflenni Treth atodol Colofn 2
-confirmConsent.HMRC-PILLAR2-ORG.list.item2=cysylltu â CThEF ynghylch eich Ffurflenni Treth atodol Colofn 2 cyfredol a blaenorol
+confirmConsent.HMRC-PILLAR2-ORG.list.item2=cysylltu â CThEF ynghylch eich Ffurflenni Treth atodol Colofn 2 presennol a blaenorol
 confirmConsent.HMRC-PILLAR2-ORG.list.item3=bwrw golwg dros a newid eich manylion mewn perthynas â’r dreth atodol Colofn 2 megis eich manylion cyswllt, cyfnod cyfrifyddu a math o sefydliad
 confirmConsent.HMRC-PILLAR2-ORG.list.item4=rhoi manylion banc i CThEF ar gyfer ad-daliadau pan fo ad-daliad yn ddyledus
 confirmConsent.HMRC-PILLAR2-ORG.list.item5=cwblhau’ch sefyllfa dreth gyffredinol
-confirmConsent.HMRC-PILLAR2-ORG.list.item6=bwrw golwg dros eich cyfrifiadau a’r symiau dyledus a’r symiau sydd wedi’u talu.
-
-# ________________________________________________________________________________
-# Client confirm decline of request
-# ________________________________________________________________________________
-confirmDecline.title=<translation needed>
-confirmDecline.agent=<translation needed>
-confirmDecline.mainAgent=<translation needed>
-confirmDecline.suppAgent=<translation needed>
-confirmDecline.p1=<translation needed>
-confirmDecline.p2.link=<translation needed>
-confirmDecline.p3=<translation needed>
-confirmDecline.p4=<translation needed>
-confirmDecline.label=<translation needed>
+confirmConsent.HMRC-PILLAR2-ORG.list.item6=bwrw golwg dros eich cyfrifiadau a’r symiau dyledus a’r symiau sydd wedi’u talu
+confirmDecline.title=Gwrthod cais
+confirmDecline.agent=asiant
+confirmDecline.mainAgent=prif asiant
+confirmDecline.suppAgent=asiant ategol
+confirmDecline.p1=Hoffai {0} bod eich {1} ar gyfer {2}.
+confirmDecline.p2=Darllenwch yr arweiniad am
+confirmDecline.p2.link=y gwahaniaeth rhwng asiantau ac asiantau ategol (yn agor tab newydd)
+confirmDecline.p3=Os byddwch yn gwrthod y cais gan {0}, ni fyddant yn gallu gweithredu fel eich {1} ar gyfer {2}.
+confirmDecline.p4=Gallwch newid eich meddwl yn nes ymlaen - gofynnwch iddyn nhw anfon cais arall atoch.
+confirmDecline.label=A ydych am wrthod y cais ar gyfer {0}?
 confirmDecline.true=Iawn
-confirmDecline.false=<translation needed>
-confirmDecline.error.required=<translation needed>
-
-# ________________________________________________________________________________
-# Client confirmation of authorisation page
-# ________________________________________________________________________________
-clientConfirmation.p2=<translation needed>
-
-# ________________________________________________________________________________
-# Client journey exit partials
-# ________________________________________________________________________________
-
-clientExit.authorisation-request-expired.header=Mae’r cais hwn am awdurdodiad wedi dod i ben
-clientExit.authorisation-request-cancelled.header=Mae’r cais hwn am awdurdodiad wedi cael ei ganslo
-clientExit.authorisation-request-already-accepted.header=Rydych eisoes wedi derbyn y cais hwn am awdurdodiad
-
-# ________________________________________________________________________________
-# This authorisation request has been cancelled
-# ________________________________________________________________________________
-authorisationRequestCancelled.p1=Cafodd y cais hwn ei ganslo gan yr asiant ar {0}.
-authorisationRequestCancelled.p2=Os hoffech i’r asiant hwn reoli’ch {0}, gofynnwch iddo anfon cais arall atoch am awdurdodiad.
-authorisationRequestCancelled.a1=Rheoli’ch asiantau treth
-authorisationRequestCancelled.a2=Gorffen ac allgofnodi
-
-# ________________________________________________________________________________
-# This authorisation request has already expired
-# ________________________________________________________________________________
-authorisationRequestExpired.p1=Daeth y cais hwn i ben ar {0}. Mae ceisiadau am awdurdodiad yn dod i ben ar ôl 21 diwrnod.
-authorisationRequestExpired.p2=Os hoffech i’r asiant hwn reoli’ch <tax service>, gofynnwch iddo anfon cais arall atoch am awdurdodiad.
-authorisationRequestExpired.a1=Rheoli’ch asiantau treth
-authorisationRequestExpired.a2=Gorffen ac allgofnodi
-
-# ________________________________________________________________________________
-# You have already accepted this authorisation request
-# ________________________________________________________________________________
-authorisationAlreadyAccepted.p1=Daeth ymateb i’r cais hwn i law ar {0}.
-authorisationAlreadyAccepted.p2=I wirio’r manylion, neu i ganslo’r awdurdodiad, ewch i’r adran ar gyfer <a href="{0}" class="govuk-link">rheoli’ch asiantau treth</a>.
-authorisationAlreadyAccepted.signOutLink=Gorffen ac allgofnodi
+confirmDecline.false=Na, hoffwn ystyried y cais hwn
+confirmDecline.error.required=Dewiswch ‘Iawn’ os hoffech wrthod y cais hwn gan {0}
+checkYourAnswer.title=Gwirio’ch ateb
+checkYourAnswer.HMRC-MTD-IT.question=A ydych am i {0} fod eich prif asiant ar gyfer Troi Treth yn Ddigidol ar gyfer Treth Incwm?
+checkYourAnswer.HMRC-MTD-IT-SUPP.question=A ydych am i {0} fod eich asiant ategol ar gyfer Troi Treth yn Ddigidol ar gyfer Treth Incwm?
+checkYourAnswer.PERSONAL-INCOME-RECORD.question=A ydych am i {0} fod eich asiant ar gyfer Dangosydd Cofnodion Incwm?
+checkYourAnswer.HMRC-MTD-VAT.question=A ydych am i {0} fod eich asiant ar gyfer TAW?
+checkYourAnswer.HMRC-CGT-PD.question=A ydych am i {0} fod eich asiant ar gyfer cyfrif Treth Enillion Cyfalaf ar eiddo yn y DU?
+checkYourAnswer.HMRC-PPT-ORG.question=A ydych am i {0} fod eich asiant ar gyfer Treth Deunydd Pacio Plastig?
+checkYourAnswer.HMRC-CBC-ORG.question=A ydych am i {0} fod eich asiant ar gyfer adrodd Gwlad wrth wlad?
+checkYourAnswer.HMRC-CBC-NONUK-ORG.question=A ydych am i {0} fod eich asiant ar gyfer adrodd Gwlad wrth wlad?
+checkYourAnswer.HMRC-PILLAR2-ORG.question=A ydych am i {0} fod eich asiant ar gyfer Trethi atodol Colofn 2?
+checkYourAnswer.HMRC-TERS-ORG.question=A ydych am i {0} fod eich asiant ar gyfer Ymddiriedolaethau ac Ystadau?
+checkYourAnswer.HMRC-TERSNT-ORG.question=A ydych am i {0} fod eich asiant ar gyfer Ymddiriedolaethau ac Ystadau?
+checkYourAnswer.true=Iawn
+checkYourAnswer.false=Na
+checkYourAnswer.h2=Datganiad
+checkYourAnswer.declarationYes.p1.HMRC-MTD-IT=Rwy’n deall sut y bydd {0} yn gallu gweithredu ar fy rhan. Rwy’n cadarnhau y gall CThEF ganiatáu i {0} weithredu fel fy mhrif asiant ar gyfer Troi Treth yn Ddigidol ar gyfer Treth Incwm.
+checkYourAnswer.declarationYes.p1.HMRC-MTD-IT-SUPP=Rwy’n deall sut y bydd {0} yn gallu gweithredu ar fy rhan. Rwy’n cadarnhau y gall CThEF ganiatáu i {0} weithredu fel fy asiant ategol ar gyfer Troi Treth yn Ddigidol ar gyfer Treth Incwm.
+checkYourAnswer.declarationYes.p1.PERSONAL-INCOME-RECORD=Rwy’n deall sut y bydd {0} yn gallu gweithredu ar fy rhan. Rwy’n cadarnhau y gall CThEF ganiatáu i {0} weithredu fel fy mhrif asiant ar gyfer Dangosydd Cofnodion Incwm.
+checkYourAnswer.declarationYes.p1.HMRC-MTD-VAT=Rwy’n deall sut y bydd {0} yn gallu gweithredu ar fy rhan. Rwy’n cadarnhau y gall CThEF ganiatáu i {0} weithredu fel fy asiant ar gyfer TAW.
+checkYourAnswer.declarationYes.p1.HMRC-CGT-PD=Rwy’n deall sut y bydd {0} yn gallu gweithredu ar fy rhan. Rwy’n rhoi caniatâd i CThEF ganiatáu {0} i weithredu fel fy asiant cyfrif Treth Enillion Cyfalaf ymddiriedolaeth ar eiddo yn y DU.
+checkYourAnswer.declarationYes.p1.HMRC-PPT-ORG=Rwy’n deall sut y bydd {0} yn gallu gweithredu ar fy rhan. Rwy’n cadarnhau y gall CThEF ganiatáu i {0} weithredu fel fy asiant ar gyfer Treth Deunydd Pacio Plastig.
+checkYourAnswer.declarationYes.p1.HMRC-CBC-ORG=Rwy’n deall sut y bydd {0} yn gallu gweithredu ar fy rhan. Rwy’n cadarnhau y gall CThEF ganiatáu i {0} weithredu fel fy asiant ar gyfer adrodd Gwlad wrth wlad.
+checkYourAnswer.declarationYes.p1.HMRC-CBC-NONUK-ORG=Rwy’n deall sut y bydd {0} yn gallu gweithredu ar fy rhan. Rwy’n cadarnhau y gall CThEF ganiatáu i {0} weithredu fel fy asiant ar gyfer adrodd Gwlad wrth wlad.
+checkYourAnswer.declarationYes.p1.HMRC-PILLAR2-ORG=Rwy’n deall sut y bydd {0} yn gallu gweithredu ar fy rhan. Rwy’n cadarnhau y gall CThEF ganiatáu i {0} weithredu fel fy asiant ar gyfer Trethi atodol Colofn 2.
+checkYourAnswer.declarationYes.p1.HMRC-TERS-ORG=Rwy’n deall sut y bydd {0} yn gallu gweithredu ar fy rhan. Rwy’n cadarnhau y gall CThEF ganiatáu i {0} weithredu fel fy asiant ar gyfer Ymddiriedolaethau ac Ystadau.
+checkYourAnswer.declarationYes.p1.HMRC-TERSNT-ORG=Rwy’n deall sut y bydd {0} yn gallu gweithredu ar fy rhan. Rwy’n cadarnhau y gall CThEF ganiatáu i {0} weithredu fel fy asiant ar gyfer Ymddiriedolaethau ac Ystadau.
+checkYourAnswer.declarationNo.p1.HMRC-MTD-IT=Mae gwrthod y cais hwn gan {0} yn golygu na fyddant yn gallu gweithredu fel eich prif asiant ar gyfer Troi Treth Ddigidol ar gyfer Treth Incwm.
+checkYourAnswer.declarationNo.p1.HMRC-MTD-IT-SUPP=Mae gwrthod y cais hwn gan {0} yn golygu na fyddant yn gallu gweithredu fel eich asiant ategol ar gyfer Troi Treth Ddigidol ar gyfer Treth Incwm.
+checkYourAnswer.declarationNo.p1.PERSONAL-INCOME-RECORD=Mae gwrthod y cais hwn gan {0} yn golygu na fyddant yn gallu gweithredu fel eich asiant ar gyfer Dangosydd Cofnodion Incwm.
+checkYourAnswer.declarationNo.p1.HMRC-MTD-VAT=Mae gwrthod y cais hwn gan {0} yn golygu na fyddant yn gallu gweithredu fel eich asiant ar gyfer TAW.
+checkYourAnswer.declarationNo.p1.HMRC-CGT-PD=Mae gwrthod y cais hwn gan {0} yn golygu na fyddant yn gallu gweithredu fel eich asiant ar gyfer cyfrif Treth Enillion Cyfalaf ar eiddo yn y DU.
+checkYourAnswer.declarationNo.p1.HMRC-PPT-ORG=Mae gwrthod y cais hwn gan {0} yn golygu na fyddant yn gallu gweithredu fel eich asiant ar gyfer Treth Deunydd Pacio Plastig.
+checkYourAnswer.declarationNo.p1.HMRC-CBC-ORG=Mae gwrthod y cais hwn gan {0} yn golygu na fyddant yn gallu gweithredu fel eich asiant ar gyfer adrodd Gwlad wrth wlad.
+checkYourAnswer.declarationNo.p1.HMRC-CBC-NONUK-ORG=Mae gwrthod y cais hwn gan {0} yn golygu na fyddant yn gallu gweithredu fel eich asiant ar gyfer adrodd Gwlad wrth wlad.
+checkYourAnswer.declarationNo.p1.HMRC-PILLAR2-ORG=Mae gwrthod y cais hwn gan {0} yn golygu na fyddant yn gallu gweithredu fel eich asiant ar gyfer Trethi atodol Colofn 2.
+checkYourAnswer.declarationNo.p1.HMRC-TERS-ORG=Mae gwrthod y cais hwn gan {0} yn golygu na fyddant yn gallu gweithredu fel eich asiant ar gyfer Ymddiriedolaethau ac Ystadau.
+checkYourAnswer.declarationNo.p1.HMRC-TERSNT-ORG=Mae gwrthod y cais hwn gan {0} yn golygu na fyddant yn gallu gweithredu fel eich asiant ar gyfer Ymddiriedolaethau ac Ystadau.
+checkYourAnswer.declarationNo.p2=Gallwch newid eich meddwl yn nes ymlaen - anfonwch gais arall atynt.
+checkYourAnswer.acceptAndSend.button=Derbyn ac anfon
+checkYourAnswer.change=Newid
+clientConfirmation.accepted.h1=Rydych wedi awdurdodi {0}
+clientConfirmation.accepted.h2=Beth mae hyn yn ei olygu
+clientConfirmation.accepted.HMRC-MTD-IT.p1=Erbyn hyn, {0} yw’ch prif asiant ar gyfer Troi Treth yn Ddigidol ar gyfer Treth Incwm.
+clientConfirmation.accepted.HMRC-MTD-IT-SUPP.p1=Erbyn hyn, {0} yw’ch asiant ategol ar gyfer Troi Treth yn Ddigidol ar gyfer Treth Incwm.
+clientConfirmation.accepted.PERSONAL-INCOME-RECORD.p1=Erbyn hyn, {0} yw’ch asiant ar gyfer Dangosydd Cofnodion Incwm.
+clientConfirmation.accepted.HMRC-MTD-VAT.p1=Erbyn hyn, {0} yw’ch asiant ar gyfer TAW.
+clientConfirmation.accepted.HMRC-CGT-PD.p1=Erbyn hyn, {0} yw’ch asiant ar gyfer cyfrif Treth Enillion Cyfalaf ar eiddo yn y DU.
+clientConfirmation.accepted.HMRC-PPT-ORG.p1=Erbyn hyn, {0} yw’ch asiant ar gyfer Treth Deunydd Pacio Plastig.
+clientConfirmation.accepted.HMRC-CBC-ORG.p1=Erbyn hyn, {0} yw’ch asiant ar gyfer adrodd Gwlad wrth wlad.
+clientConfirmation.accepted.HMRC-CBC-NONUK-ORG.p1=Erbyn hyn, {0} yw’ch asiant ar gyfer adrodd Gwlad wrth wlad.
+clientConfirmation.accepted.HMRC-PILLAR2-ORG.p1=Erbyn hyn, {0} byw’ch asiant ar gyfer Trethi atodol Colofn 2.
+clientConfirmation.accepted.HMRC-TERS-ORG.p1=Erbyn hyn, {0} yw’ch asiant ar gyfer Ymddiriedolaethau ac Ystadau.
+clientConfirmation.accepted.HMRC-TERSNT-ORG.p1=Erbyn hyn, {0} yw’ch asiant ar gyfer Ymddiriedolaethau ac Ystadau.
+clientConfirmation.section2.h2=Yr hyn y gallwch ei wneud nesaf
+clientConfirmation.section2.p1=Ewch i’r gwasanaeth<a href={0} class=""govuk-link"">i Reoli pwll all delio â CThEF ar eich rhan</a> er mwyn gwneud y canlynol:
+clientConfirmation.section2.li1=bwrw golwg dros unrhyw geisiadau y mae angen i chi ymateb iddynt
+clientConfirmation.section2.li2=gwirio pwy sy’n cael delio â CThEF ar eich rhan ar hyn o bryd
+clientConfirmation.section2.li3=tynnu caniatâd os nad ydych am i asiant weithredu ar eich rhan
+clientConfirmation.section2.signOutLink=Gorffen ac allgofnodi
+clientConfirmation.rejected.h1=Fe wnaethoch chi wrthod cais gan {0}
+clientConfirmation.rejected.HMRC-MTD-IT.p1=Nid ydych wedi rhoi caniatâd i {0} reoli’ch cyfrif Troi Treth yn Ddigidol ar gyfer Treth Incwm.
+clientConfirmation.rejected.HMRC-MTD-IT-SUPP.p1=Nid ydych wedi rhoi caniatâd i {0} reoli’ch cyfrif Troi Treth yn Ddigidol ar gyfer Treth Incwm.
+clientConfirmation.rejected.PERSONAL-INCOME-RECORD.p1=Nid ydych wedi rhoi caniatâd i {0} fwrw golwg dros eich cofnod incwm personol.
+clientConfirmation.rejected.HMRC-MTD-VAT.p1=Nid ydych wedi rhoi caniatâd i {0} reoli’ch TAW.
+clientConfirmation.rejected.HMRC-CGT-PD.p1=Nid ydych wedi rhoi caniatâd i {0} reoli’ch cyfrif Treth Enillion Cyfalaf ar eiddo yn y DU.
+clientConfirmation.rejected.HMRC-PPT-ORG.p1=Nid ydych wedi rhoi caniatâd i {0} reoli’ch Treth Deunydd Pacio Plastig.
+clientConfirmation.rejected.HMRC-CBC-ORG.p1=Nid ydych wedi rhoi caniatâd i {0} reoli’ch adrodd Gwlad wrth wlad.
+clientConfirmation.rejected.HMRC-CBC-NONUK-ORG.p1=Nid ydych wedi rhoi caniatâd i {0} reoli’ch adrodd Gwlad wrth wlad.
+clientConfirmation.rejected.HMRC-PILLAR2-ORG.p1=Nid ydych wedi rhoi caniatâd i {0} reoli’ch Trethi Atodol Colofn 2.
+clientConfirmation.rejected.HMRC-TERS-ORG.p1=Nid ydych wedi rhoi caniatâd i {0} reoli ymddiriedolaeth nac ystâd.
+clientConfirmation.rejected.HMRC-TERSNT-ORG.p1=Nid ydych wedi rhoi caniatâd i {0} reoli ymddiriedolaeth nac ystâd.
+manageYourTaxAgents.header=Rheoli pwy sy’n gallu delio â CThEF ar eich rhan
+manageYourTaxAgents.p=Trethi y gallwch eu rheoli o’r dudalen hon
+manageYourTaxAgents.link=Darllenwch y canllawiau ar sut i fwrw golwg dros a newid awdurdodiadau ar gyfer gwasanaethau treth eraill
+manageYourTaxAgents.agentRoles.h2=Rolau asiant
+manageYourTaxAgents.agentRoles.p1=Sut rydym yn diffinio ‘prif’ asiant:
+manageYourTaxAgents.agentRoles.li1=y prif asiant yn helpu i reoli’ch cyfrif Troi Treth yn Ddigidol ar gyfer Treth Incwm
+manageYourTaxAgents.agentRoles.li2=yr unig asiant sy’n helpu i reoli unrhyw dreth arall
+manageYourTaxAgents.agentRoles.p2=Gallwch hefyd gael asiantau ‘ategol’ sy’n helpu i reoli’ch cyfrif Troi Treth yn Ddigidol ar gyfer Treth Incwm.
+manageYourTaxAgents.agentRoles.guidanceLink=Dysgwch sut y gall prif asiantau ac asiantau ategol weithredu ar eich rhan
+manageYourTaxAgents.agentRole.main=Prif
+manageYourTaxAgents.agentRole.supporting=Ategol
+manageYourTaxAgents.currentRequests=Ceisiadau presennol
+manageYourTaxAgents.currentRequests.taxService=Gwasanaeth treth
+manageYourTaxAgents.currentRequests.agentRole=Rôl asiant
+manageYourTaxAgents.currentRequests.respondBy=Ymateb erbyn
+manageYourTaxAgents.currentRequests.action=Yr hyn y mae angen i chi ei wneud
+manageYourTaxAgents.authorisedAgents=Asiantau awdurdodedig
+manageYourTaxAgents.authorisedAgents.empty=Nid oes gennych unrhyw asiantau awdurdodedig.
+manageYourTaxAgents.authorisedAgents.taxService=Gwasanaeth treth
+manageYourTaxAgents.authorisedAgents.agentRole=Rôl asiant
+manageYourTaxAgents.authorisedAgents.consentDate=Pryd gwnaethoch roi caniatâd
+manageYourTaxAgents.authorisedAgents.action=Camau i’w cymryd
+manageYourTaxAgents.authorisedAgents.action.link=Tynnu awdurdodiad<span class=""govuk-visually-hidden""> o {0} i reoli’ch {1} fel {2} asiant</span>
+manageYourTaxAgents.history=Hanes
+manageYourTaxAgents.history.empty=Does dim hanes awdurdodi ar y cyfrif hwn.
+manageYourTaxAgents.history.caption=Hanes awdurdodiadau
+manageYourTaxAgents.history.eventDate=Dyddiad
+manageYourTaxAgents.history.taxService=Gwasanaeth treth
+manageYourTaxAgents.history.activity=Gweithgarwch
+manageYourTaxAgents.history.DeAuthorised.activity=Nid yw {0} wedi’i awdurdodi mwyach fel eich {1} asiant
+manageYourTaxAgents.history.Accepted.activity=Fe wnaethoch chi dderbyn {0} fel eich {1} asiant
+manageYourTaxAgents.history.Partialauth.activity=Fe wnaethoch chi dderbyn {0} fel eich {1} asiant
+manageYourTaxAgents.history.Rejected.activity=Fe wnaethoch chi wrthod {0} fel eich {1} asiant
+manageYourTaxAgents.history.Expired.activity=Mae’r cais gan {0} i fod eich {1} asiant wedi dod i ben
+manageYourTaxAgents.history.Cancelled.activity=Canslodd {0} y cais i fod eich {1} asiant
+manageYourTaxAgents.currentRequests.action.link=Ymateb i’r cais<span class=""govuk-visually-hidden""> o {0} i reoli’ch {1} fel {2} asiant</span>
+clientConfirmDeauth.h1=Cadarnhau eich bod am dynnu awdurdodiad yr asiant
+clientConfirmDeauth.p1=Os byddwch yn tynnu’ch awdurdodiad oddi wrth {0}, ni fyddant yn gallu rheoli’ch {1}.
+clientConfirmDeauth.legend=A ydych am dynnu’ch awdurdodiad oddi wrth {0}?
+clientConfirmDeauth.true=Iawn
+clientConfirmDeauth.false=Na
+clientConfirmDeauth.error.required=Dewiswch ‘Iawn’ os hoffech dynnu’ch awdurdodiad
+clientDeauthConfirmed.h1=Awdurdodiad wedi’i ddileu
+clientDeauthConfirmed.h2=Beth mae hyn yn ei olygu
+clientDeauthConfirmed.p1=Nid yw {0} wedi’i awdurdodi mwyach i reoli’ch {1}.
+clientDeauthConfirmed.p2=Gallwch newid eich meddwl yn nes ymlaen, gofynnwch i {0} anfon cais arall atoch.
+clientDeauthConfirmed.HMRC-MTD-IT.h2=Os yw {0} yn rheoli’ch Hunanasesiad
+clientDeauthConfirmed.HMRC-MTD-IT.p1=Bydd angen i chi dynnu’r awdurdodiad hwn ar wahân, os nad ydych am i {0} reoli eich Hunanasesiad mwyach.
+clientDeauthConfirmed.HMRC-MTD-IT.p2=Darllenwch yr arweiniad am sut i <a href=""{0}"" class=""govuk-link"" target=""_blank"" rel=""noopener noreferrer"">newid neu dynnu awdurdodiadau asiantau treth (yn agor tab newydd)</a>.
+clientDeauthConfirmed.link=Rheoli pwy sy’n gallu delio â CThEF ar eich rhan
+clientDeauthConfirmed.signOutLink=Gorffen ac allgofnodi
+unauthorisedExit.agent-suspended.header=Ni allwch benodi’r asiant treth hwn
+unauthorisedExit.no-outstanding-requests.header=Nid oes unrhyw geisiadau am awdurdodiad dros ben i chi ymateb iddynt
+agentSuspended.p1=Ni all yr asiant treth hwn reoli’ch cyfrif Troi Treth yn Ddigidol ar gyfer Treth Incwm ar hyn o bryd.
+agentSuspended.p2=Os oes gennych unrhyw gwestiynau, cysylltwch â’r asiant treth a anfonodd y cais hwn atoch.
+agentSuspended.signout-link=Gorffen ac allgofnodi
+noOutstandingRequests.p1=Os ydych o’r farn bod hyn yn anghywir, cysylltwch â’r asiant a anfonodd y cais atoch neu ewch ati i <a href={0} class=""govuk-link"" target=""_blank"" rel=""noreferrer noopener"">fwrw golwg dros hanes eich ceisiadau</a>.
+clientExit.cannot-find-authorisation-request.header=Ni allwn ddod o hyd i’r cais hwn am awdurdodiad
+clientExit.authorisation-request-expired.header=Mae’r cais am awdurdodiad hwn eisoes wedi dod i ben
+clientExit.authorisation-request-already-responded-to.header=Mae’r cais am awdurdodiad hwn wedi cael ei ateb eisoes
+clientExit.authorisation-request-cancelled.header=Mae’r cais am awdurdodiad wedi’i ganslo
+authorisationRequestExpired.p1=Daeth y cais hwn i ben ar {0}. Ar gyfer manylion, <a href={1} class=""govuk-link"" target=""_blank"" rel=""noreferrer noopener"">bwrw golwg dros eich hanes</a> i wirio am unrhyw geisiadau sydd wedi dod i ben, wedi’u ganslo neu sydd heb eu dileu.
+authorisationRequestExpired.p2=Os yw’ch asiant wedi anfon cais atoch yn ddiweddar, <a href={0} class=""govuk-link"" target=""_blank"" rel=""noreferrer noopener"">gwnewch yn siŵr eich bod wedi cofrestru ar gyfer y gwasanaeth treth sydd ei angen arnoch.</a>
+authorisationRequestExpired.p3=Gallwch hefyd wirio eich bod wedi mewngofnodi â’r Dynodydd Defnyddiwr (ID) cywir ar gyfer Porth y Llywodraeth. Mae’n rhaid iddo fod yr un Dynodydd Defnyddiwr (ID) a ddefnyddiwyd gennych i gofrestru ar gyfer y gwasanaeth treth y mae’r cais am awdurdodiad ar ei gyfer.
+authorisationRequestExpired.p4=<a href={0} class=""govuk-link"" target=""_blank"" rel=""noreferrer noopener"">Mewngofnodwch gyda’r Dynodydd Defnyddiwr (ID) ar gyfer Porth y Llywodraeth</a> rydych chi’n ei ddefnyddio i reoli eich materion treth personol.
+cannotFindAuthRequest.p1=Ni allwn ddod o hyd i gais gan {0}.
+cannotFindAuthRequest.p2=<a href={0} class=""govuk-link"" target=""_blank"" rel=""noreferrer noopener"">Gwnewch yn siŵr eich bod wedi cofrestru ar gyfer y gwasanaeth treth sydd ei angen arnoch.<a> Gofynnwch i’ch asiant os nad ydych yn siŵr.
+cannotFindAuthRequest.p3=Bydd yn rhaid i chi fewngofnodi gan ddefnyddio’r Dynodydd Defnyddiwr (ID) cywir. Mae’n bosibl cael mwy nag un, felly gwnewch yn siŵr ei fod yr un fath â’r un a ddefnyddioch i gofrestru ar gyfer y gwasanaeth treth y mae’r cais am awdurdodiad ar ei gyfer. <a href={0} class=""govuk-link"" target=""_blank"" rel=""noreferrer noopener""> Rhowch gynnig ar fewngofnodi gan ddefnyddio Dynodydd Defnyddiwr (ID) gwahanol ar gyfer Porth y Llywodraeth</a> (yr un a ddefnyddiwch i reoli’ch materion treth personol).
+authorisationRequestCancelled.p1=Mae’r cais wedi’i ganslo gan eich asiant ar {0}. Ar gyfer manylion, <a href={1} class=""govuk-link"" target=""_blank"" rel=""noreferrer noopener"">bwrw golwg dros eich hanes</a> i wirio am unrhyw geisiadau sydd wedi dod i ben, wedi’u ganslo neu sydd heb eu dileu.
+authorisationRequestCancelled.p2=Os yw’ch asiant wedi anfon cais atoch yn ddiweddar, <a href={0} class=""govuk-link"" target=""_blank"" rel=""noreferrer noopener"">gwnewch yn siŵr eich bod wedi cofrestru ar gyfer y gwasanaeth treth sydd ei angen arnoch.</a>
+authorisationRequestCancelled.p3=Gallwch hefyd wirio eich bod wedi mewngofnodi â’r Dynodydd Defnyddiwr (ID) cywir ar gyfer Porth y Llywodraeth. Mae’n rhaid iddo fod yr un Dynodydd Defnyddiwr (ID) a ddefnyddiwyd gennych i gofrestru ar gyfer y gwasanaeth treth y mae’r cais am awdurdodiad ar ei gyfer.
+authorisationRequestCancelled.p4=<a href={0} class=""govuk-link"" target=""_blank"" rel=""noreferrer noopener"">Mewngofnodwch gyda’r Dynodydd Defnyddiwr (ID) ar gyfer Porth y Llywodraeth</a> rydych chi’n ei ddefnyddio i reoli eich materion treth personol.
+authorisationRequestRespondedTo.p1=Mae’r cais wedi cael ei ateb eisoes ar {0}. Ar gyfer manylion, <a href={1} class=""govuk-link"" target=""_blank"" rel=""noreferrer noopener"">bwrw golwg dros eich hanes</a> i wirio am unrhyw geisiadau sydd wedi dod i ben, wedi’u ganslo neu sydd heb eu dileu.
+authorisationRequestRespondedTo.p2=Os yw’ch asiant wedi anfon cais atoch yn ddiweddar, <a href={0} class=""govuk-link"" target=""_blank"" rel=""noreferrer noopener"">gwnewch yn siŵr eich bod wedi cofrestru ar gyfer y gwasanaeth treth sydd ei angen arnoch.</a>
+authorisationRequestRespondedTo.p3=Gallwch hefyd wirio eich bod wedi mewngofnodi â’r Dynodydd Defnyddiwr (ID) cywir ar gyfer Porth y Llywodraeth. Mae’n rhaid iddo fod yr un Dynodydd Defnyddiwr (ID) a ddefnyddiwyd gennych i gofrestru ar gyfer y gwasanaeth treth y mae’r cais am awdurdodiad ar ei gyfer.
+authorisationRequestRespondedTo.p4=<a href={0} class=""govuk-link"" target=""_blank"" rel=""noreferrer noopener"">Mewngofnodwch gyda’r Dynodydd Defnyddiwr (ID) ar gyfer Porth y Llywodraeth</a> rydych chi’n ei ddefnyddio i reoli eich materion treth personol.
+pageNotFound.header=Ni ellir dod o hyd i’r dudalen hon
+pageNotFound.text=Gwiriwch eich bod wedi nodi’r cyfeiriad gwe cywir.
+pageNotFound.p1=Os gwnaethoch deipio’r cyfeiriad gwe, gwiriwch ei fod yn gywir.
+pageNotFound.p2=Os gwnaethoch ludo’r cyfeiriad gwe, gwiriwch eich bod wedi copïo’r cyfeiriad yn llawn.
+pageNotFound.p3=Os yw’r cyfeiriad gwe’n gywir, cysylltwch â’r asiant treth a anfonodd y cais atoch os hoffech ei awdurdodi o hyd.
 
