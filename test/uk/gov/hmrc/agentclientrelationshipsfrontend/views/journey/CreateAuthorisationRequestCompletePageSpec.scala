@@ -63,7 +63,7 @@ class CreateAuthorisationRequestCompletePageSpec extends ViewSpecSupport {
   )
 
   private def makeTestLink(service: String): String =
-    s"${appConfig.appExternalUrl}/agent-client-relationships/appoint-someone-to-deal-with-HMRC-for-you/${confirmationData.agentReference}/${confirmationData.normalizedAgentName}/${urlParts(service)}"
+    s"${appConfig.baseUrl}/agent-client-relationships/appoint-someone-to-deal-with-HMRC-for-you/${confirmationData.agentReference}/${confirmationData.normalizedAgentName}/${urlParts(service)}"
 
   "CreateAuthorisationRequestCompletePage view" should {
     for (taxService <- urlParts.keySet.toList) {
