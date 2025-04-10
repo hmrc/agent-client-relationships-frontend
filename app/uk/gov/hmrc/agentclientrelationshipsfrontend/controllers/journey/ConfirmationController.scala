@@ -39,7 +39,7 @@ class ConfirmationController @Inject()(mcc: MessagesControllerComponents,
                                        )(implicit val executionContext: ExecutionContext, appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport:
 
   private def makeClientLink(authorisationRequestInfo: AuthorisationRequestInfo): String =
-    s"${appConfig.appExternalUrl}/agent-client-relationships/appoint-someone-to-deal-with-HMRC-for-you/${authorisationRequestInfo.agentReference}/${authorisationRequestInfo.normalizedAgentName}/${serviceConfig.getUrlPart(authorisationRequestInfo.service)}"
+    s"${appConfig.baseUrl}/agent-client-relationships/appoint-someone-to-deal-with-HMRC-for-you/${authorisationRequestInfo.agentReference}/${authorisationRequestInfo.normalizedAgentName}/${serviceConfig.getUrlPart(authorisationRequestInfo.service)}"
 
   def show(journeyType: AgentJourneyType): Action[AnyContent] = actions.getAgentJourney(journeyType).async:
     journeyRequest =>

@@ -27,14 +27,15 @@ class AppConfig @Inject()(servicesConfig: ServicesConfig, config: Configuration)
   val agentClientRelationshipsBaseUrl: String = baseUrl("agent-client-relationships")
 
   // Service Urls
-  val appExternalUrl: String = getConfString("agent-client-relationships-frontend.external-url") // Use for redirects back to ACR frontend so they work locally
+  val baseUrl: String = getString("base.url") // environment specific MTD domain, only use when need to create an absolute url (e.g. invitation link)
+  val appExternalUrl: String = getConfString("agent-client-relationships-frontend.external-url")
   val asaFrontendExternalUrl: String = getConfString("agent-services-account-frontend.external-url")
   val agentServicesAccountLimitedUrl: String = asaFrontendExternalUrl + getConfString("agent-services-account-frontend.account-limited")
   val agentServicesAccountHomeUrl: String = asaFrontendExternalUrl + getConfString("agent-services-account-frontend.home")
   val ivUpliftUrl: String = getConfString("identity-verification-frontend.uplift-url")
   val signInUrl: String = getString("sign-in.url")
   val subscriptionUrl: String = getConfString("agent-subscription-frontend.subscription-url")
-  val clientLinkBaseUrl: String = s"$appExternalUrl/agent-client-relationships/appoint-someone-to-deal-with-HMRC-for-you"
+  val clientLinkBaseUrl: String = s"$baseUrl/agent-client-relationships/appoint-someone-to-deal-with-HMRC-for-you"
   val feedbackSurveyUrl: String = getConfString("feedback-frontend.external-url")
   def surveyUrl(isAgent: Boolean): String = {
     if isAgent then s"$feedbackSurveyUrl/$agentOriginToken"
