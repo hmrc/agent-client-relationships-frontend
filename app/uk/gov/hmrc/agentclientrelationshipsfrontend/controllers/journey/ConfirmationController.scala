@@ -23,7 +23,7 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{AgentCancelAuthorisationResponse, AuthorisationRequestInfo}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, AgentJourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{AgentClientRelationshipsService, ClientServiceConfigurationService}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.{AgentCancelAuthorisationCompletePage, CreateAuthorisationRequestCompletePage}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.agentJourney.{AgentCancelAuthorisationCompletePage, CreateAuthorisationRequestCompletePage}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}

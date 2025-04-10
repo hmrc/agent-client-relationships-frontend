@@ -1,0 +1,63 @@
+@*
+ * Copyright 2024 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.KnownFactType
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.common.KnownFactsConfiguration
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.AgentJourneyRequest
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.agentJourney.clientFactPartials._
+
+@this(
+        layout: Layout,
+        postalCodePartial: Postcode,
+        countryCodePartial: Country,
+        emailPartial: Email,
+        datePartial: Date
+)
+
+@(form: Form[?], inputField: KnownFactsConfiguration)(implicit request: AgentJourneyRequest[?], messages: Messages)
+
+@key = @{
+    "clientFact"
+}
+@journeyKey = @{
+    request.journey.journeyType.toString
+}
+@messagePrefix = @{
+    s"$key.${request.journey.getService}.${inputField.name}"
+}
+@pageTitle = @{
+    messages(s"$messagePrefix.label")
+}
+@knownFactType = @{
+    request.journey.clientDetailsResponse.get.knownFactType.get
+}
+
+@layout(
+    pageTitle = pageTitle,
+    optionalForm = Some(form),
+    serviceName = Some(messages(s"$journeyKey.service.name")),
+    isAgent = true
+) {
+
+    @{
+        knownFactType match {
+            case KnownFactType.PostalCode => postalCodePartial(form, inputField, messagePrefix)
+            case KnownFactType.CountryCode => countryCodePartial(form, inputField, messagePrefix)
+            case KnownFactType.Email => emailPartial(form, inputField, messagePrefix)
+            case KnownFactType.Date => datePartial(form, inputField, messagePrefix)
+        }
+    }
+}

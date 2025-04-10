@@ -23,7 +23,7 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.ClientServi
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.SelectFromOptionsForm
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, AgentJourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{ClientServiceConfigurationService, AgentJourneyService}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.SelectClientServicePage
+import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.agentJourney.SelectClientServicePage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}
