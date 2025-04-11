@@ -240,25 +240,25 @@ class ManageYourTaxAgentsPageSpec extends ViewSpecSupport {
             "Making Tax Digital for Income Tax",
             "Supporting",
             expiryDate.format(dateFormatter),
-            s"Respond to request from $agentName to manage your Making Tax Digital for Income Tax as a Supporting agent"
+            s"Respond to request from $agentName to manage your Making Tax Digital for Income Tax as a supporting agent"
           ),
           IndexedSeq(
             "Pillar 2 Top-up Taxes",
             "Main",
             expiryDate.format(dateFormatter),
-            s"Respond to request from $agentName to manage your Pillar 2 Top-up Taxes as a Main agent"
+            s"Respond to request from $agentName to manage your Pillar 2 Top-up Taxes as an agent"
           ),
           IndexedSeq(
             "Trusts and Estates",
             "Main",
             expiryDate.format(dateFormatter),
-            s"Respond to request from $agentName to manage your Trusts and Estates as a Main agent"
+            s"Respond to request from $agentName to manage your Trusts and Estates as an agent"
           ),
           IndexedSeq(
             "Country-by-country reporting",
             "Main",
             expiryDate.format(dateFormatter),
-            s"Respond to request from $agentName to manage your Country-by-country reporting as a Main agent"
+            s"Respond to request from $agentName to manage your Country-by-country reporting as an agent"
           )
         ))
       doc.mainContent.extractTable(2, 4).value shouldBe TestTable(
@@ -268,13 +268,13 @@ class ManageYourTaxAgentsPageSpec extends ViewSpecSupport {
             "Making Tax Digital for Income Tax",
             "Main",
             expiryDate.format(dateFormatter),
-            s"Respond to request from $agentName2 to manage your Making Tax Digital for Income Tax as a Main agent"
+            s"Respond to request from $agentName2 to manage your Making Tax Digital for Income Tax as a main agent"
           ),
           IndexedSeq(
             "VAT",
             "Main",
             expiryDate.format(dateFormatter),
-            s"Respond to request from $agentName2 to manage your VAT as a Main agent"
+            s"Respond to request from $agentName2 to manage your VAT as an agent"
           )
         ))
     }
@@ -287,13 +287,13 @@ class ManageYourTaxAgentsPageSpec extends ViewSpecSupport {
             "Pillar 2 Top-up Taxes",
             "Main",
             startDate.format(dateFormatter),
-            s"Remove authorisation from $authorisedAgentName to manage your Pillar 2 Top-up Taxes as a Main agent"
+            s"Remove authorisation from $authorisedAgentName to manage your Pillar 2 Top-up Taxes as an agent"
           ),
           IndexedSeq(
             "Making Tax Digital for Income Tax",
             "Main",
             startDate.format(dateFormatter),
-            s"Remove authorisation from $authorisedAgentName to manage your Making Tax Digital for Income Tax as a Main agent"
+            s"Remove authorisation from $authorisedAgentName to manage your Making Tax Digital for Income Tax as a main agent"
           )
         ))
       doc.mainContent.extractTable(4, 4).value shouldBe TestTable(
@@ -303,7 +303,7 @@ class ManageYourTaxAgentsPageSpec extends ViewSpecSupport {
             "VAT",
             "Main",
             startDate.format(dateFormatter),
-            s"Remove authorisation from $authorisedAgentName2 to manage your VAT as a Main agent"
+            s"Remove authorisation from $authorisedAgentName2 to manage your VAT as an agent"
           )
         ))
     }
