@@ -60,12 +60,11 @@
 }
 @linkFromService(uid: String, service: String, agentName: String) = {
     <a href="@{routes.ConsentInformationController.show(uid, supportedServices(clientServiceConfig.getServiceForForm(service))).url}" class="govuk-link">
-        @Html(messages(s"$key.currentRequests.action.link", agentName, messages(service), agentRoleFromService(service)))
-    </a>
+        @Html(messages(s"$key.currentRequests.action.link", agentName, messages(service), messages(s"indefiniteAgentRole.$service")))
 }
 @deAuthLink(id: String, agentName: String, service: String) = {
     <a href="@{routes.ManageYourTaxAgentsController.showConfirmDeauth(id)}" class="govuk-link">
-        @Html(messages(s"$key.authorisedAgents.action.link", agentName, messages(service), agentRoleFromService(service)))
+        @Html(messages(s"$key.authorisedAgents.action.link", agentName, messages(service), messages(s"indefiniteAgentRole.$service")))
     </a>
 }
 @invitationsHeadCells = @{
