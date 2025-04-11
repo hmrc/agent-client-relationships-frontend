@@ -23,7 +23,7 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.ClientConfi
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.ConfirmClientForm
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, AgentJourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.AgentJourneyService
-import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.ConfirmClientPage
+import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.agentJourney.ConfirmClientPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}

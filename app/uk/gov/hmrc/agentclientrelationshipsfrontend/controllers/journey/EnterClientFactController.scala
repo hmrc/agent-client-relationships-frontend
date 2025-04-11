@@ -26,7 +26,7 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.models.common.KnownFactsConf
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.EnterClientFactForm
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, AgentJourney, JourneyExitType, AgentJourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.AgentJourneyService
-import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.EnterClientFactPage
+import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.agentJourney.EnterClientFactPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}

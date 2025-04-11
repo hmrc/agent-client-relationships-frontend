@@ -1,0 +1,180 @@
+@*
+ * Copyright 2024 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import play.twirl.api.Html
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.routes
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.{Accepted, Cancelled, DeAuthorised, Expired, InvitationStatus, PartialAuth, Pending, Rejected}
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{PageInfo, TrackRequestsResult}
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.Layout
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.trackRequests.actionsPartials.*
+@import uk.gov.hmrc.govukfrontend.views.Implicits.RichSelect
+@import uk.gov.hmrc.govukfrontend.views.html.components.*
+@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.accessibleautocomplete.AccessibleAutocomplete
+@import views.html.helper.urlEncode
+
+@import java.time.format.DateTimeFormatter
+@import java.time.{Instant, LocalDate, ZoneOffset}
+@import java.util.Locale
+
+@this(
+        layout: Layout,
+        govukSelect: GovukSelect,
+        govukPagination: GovukPagination,
+        govukTable: GovukTable,
+        formWithCSRF: FormWithCSRF,
+        govukButton: GovukButton,
+        pendingActions: PendingActions,
+        partialAuthActions: PartialAuthActions
+)
+
+@(
+        result: TrackRequestsResult,
+        pageNumber: Int
+)(implicit request: RequestHeader, messages: Messages, appConfig: AppConfig)
+
+@key = @{
+    "trackRequests"
+}
+@pageTitle = @{
+    messages(s"$key.title")
+}
+@pageInfo = @{PageInfo(pageNumber, appConfig.trackRequestsPageSize, result.totalResults)}
+@dateFormatter = @{
+    DateTimeFormatter.ofPattern("d MMMM uuuu", Locale.UK)
+}
+@statusContent(status: InvitationStatus, expiryDate: LocalDate, lastUpdated: Instant) = {
+    @{status match {
+        case Pending => <span>{messages(s"$key.status.$status")}</span><br/><span class="govuk-body-s">{messages(s"$key.expires", expiryDate.format(dateFormatter))}</span>
+        case Expired => <span>{messages(s"$key.status.$status")}</span><span class="govuk-body-s">{messages(s"$key.expired", expiryDate.format(dateFormatter))}</span>
+        case _ => <span>{messages(s"$key.status.$status")}</span><br/><span class="govuk-body-s">{lastUpdated.atZone(ZoneOffset.UTC).toLocalDateTime.format(dateFormatter)}</span>
+    }}
+}
+@actions(status: InvitationStatus, id: String, client: String, service: String) = {
+    @{status match {
+        case Pending => pendingActions(service, client, id, key)
+        case PartialAuth => partialAuthActions(service, client, id, key)
+        case Accepted => <a class="govuk-link" href={routes.TrackRequestsController.deAuthFromInvitation(id).url}>{messages(s"$key.action.deauth")}<span class="govuk-visually-hidden"> {messages(s"$key.action.screenReaderText", client, service)}</span></a>
+        case Rejected | DeAuthorised => <a class="govuk-link" href={routes.TrackRequestsController.restartInvitation(id).url}>{messages(s"$key.action.startNew")}<span class="govuk-visually-hidden"> {messages(s"$key.action.screenReaderText", client, service)}</span></a>
+        case Expired | Cancelled => <a class="govuk-link" href={routes.TrackRequestsController.restartInvitation(id).url}>{messages(s"$key.action.startNew")}<span class="govuk-visually-hidden"> {messages(s"$key.action.screenReaderText", client, service)}</span></a>
+    }}
+}
+
+@urlForPage(page: Int) = @{
+    val filters = result.filtersApplied.map { (m: Map[String, String]) => m.map(kv => s"${kv._1}=${kv._2}") }.getOrElse(Seq.empty).mkString("&")
+    if (filters.isEmpty) routes.TrackRequestsController.show(page).url
+    else if(page > 1) routes.TrackRequestsController.show(page).url + "&" + filters
+    else routes.TrackRequestsController.show(page).url + "?" + filters
+}
+
+@handlePartialAuth(filters: Seq[String]) = @{
+    filters.map(filter => if(filter == "PartialAuth") "Accepted" else filter).distinct
+}
+
+@filterContent = {
+
+    @if(result.totalResults > appConfig.trackRequestsPageSize || result.filtersApplied.nonEmpty) {
+        <div class="govuk-!-width-two-thirds">
+            @formWithCSRF(action = routes.TrackRequestsController.submitFilters) {
+
+                @govukSelect(Select(
+                    id = "clientFilter",
+                    name = "clientFilter",
+                    label = Label(content = Text(messages(s"$key.sidebar.clientFilter")), classes = "govuk-label--m"),
+                    items = Seq(SelectItem(value = Some(""), text = "")) ++ result.clientNames.map(name => SelectItem(
+                        value = Some(name),
+                        text = name,
+                        selected = result.filtersApplied.flatMap(_.get("clientFilter")).contains(urlEncode(name))
+                    )),
+                    classes = "govuk-!-margin-bottom-4"
+                ).asAccessibleAutocomplete(Some(
+                    AccessibleAutocomplete(
+                        showAllValues = true
+                    )
+                )))
+
+                @govukSelect(Select(
+                    id = "statusFilter",
+                    name = "statusFilter",
+                    label = Label(content = Text(messages(s"$key.sidebar.statusFilter")), classes = "govuk-label--m"),
+                    items = Seq(SelectItem(value = Some(""), text = messages(s"$key.sidebar.allStatuses")))
+                            ++ handlePartialAuth(result.availableFilters).map(name => SelectItem(
+                                value = Some(name),
+                                text = messages(s"$key.filter-status.${name.toLowerCase}"),
+                                selected = result.filtersApplied.flatMap(_.get("statusFilter")).contains(name)
+                            )),
+                    classes = "govuk-!-margin-bottom-4"
+                ))
+
+                @govukButton(Button(
+                    content = Text(messages(s"$key.sidebar.applyFilters"))
+                ))
+
+                @govukButton(Button(
+                    href = Some(routes.TrackRequestsController.show(1).url),
+                    content = Text(messages(s"$key.sidebar.clearFilters")),
+                    classes = "govuk-button--secondary app-clear-filters"
+                ))
+            }
+        </div>
+    }
+}
+
+@layout(
+    pageTitle,
+    fullWidth = true,
+    isAgent = true
+) {
+    <h1 class="govuk-heading-xl">@pageTitle</h1>
+    @filterContent
+    @if(result.requests.nonEmpty) {
+        @govukTable(Table(
+            head = Some(
+                Seq(
+                    HeadCell(content = Text(messages(s"$key.th.client"))),
+                    HeadCell(content = Text(messages(s"$key.th.service"))),
+                    HeadCell(content = Text(messages(s"$key.th.status"))),
+                    HeadCell(content = Text(messages(s"$key.th.actions")))
+                )
+            ),
+            caption = Some(messages(s"$key.resultsCaption", pageInfo.offset + 1, pageInfo.lastItemOnPage, pageInfo.totalResults)),
+            captionClasses = "govuk-table__caption--m",
+            rows = result.requests.map(r => Seq(
+                TableRow(content = Text(r.clientName), attributes = Map("id" -> s"client-name-${r.invitationId}"), classes="govuk-body-s"),
+                TableRow(content = Text(messages(s"$key.service.${r.service}")), attributes = Map("id" -> s"service-name-${r.invitationId}"), classes="govuk-body-s"),
+                TableRow(content = HtmlContent(statusContent(r.status, r.expiryDate, r.lastUpdated)), attributes = Map("id" -> s"status-${r.invitationId}"), classes="govuk-body-s"),
+                TableRow(content = HtmlContent(actions(r.status, r.invitationId, r.clientName, messages(s"$key.service.${r.service}"))), attributes = Map("id" -> s"actions-${r.invitationId}"), classes="govuk-body-s")
+            )).toSeq
+        ))
+        @if(pageInfo.numberOfPages > 1) {
+            @govukPagination(Pagination(
+                items = Some(
+                    for {
+                        n <- 1 to pageInfo.numberOfPages
+                    } yield PaginationItem(
+                        href = urlForPage(n),
+                        number = Some(s"$n"),
+                        current = Some(pageInfo.page == n)
+                    )
+                ),
+                previous = if(pageInfo.page > 1) Some(PaginationLink(href = urlForPage(pageInfo.previousPage))) else None,
+                next = if(pageInfo.page < pageInfo.numberOfPages) Some(PaginationLink(href = urlForPage(pageInfo.nextPage))) else None,
+            ))
+        }
+    } else {
+        <p class="govuk-body">@messages(s"$key.empty")</p>
+    }
+}

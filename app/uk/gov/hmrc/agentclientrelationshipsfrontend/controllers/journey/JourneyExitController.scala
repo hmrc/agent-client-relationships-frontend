@@ -21,7 +21,7 @@ import play.api.mvc.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, JourneyExitType, AgentJourneyType}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.JourneyExitPage
+import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.agentJourney.JourneyExitPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}

@@ -24,7 +24,7 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.ConfirmCanc
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.ConfirmCancellationForm
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, AgentJourney, AgentJourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{AgentClientRelationshipsService, ClientServiceConfigurationService, AgentJourneyService}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.journey.{CheckYourAnswersPage, ConfirmCancellationPage}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.agentJourney.{CheckYourAnswersPage, ConfirmCancellationPage}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import java.time.LocalDate

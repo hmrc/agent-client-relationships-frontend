@@ -21,7 +21,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.{Actions, AgentRequest}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.AgentCancelInvitationForm
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.AgentClientRelationshipsService
-import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.{AgentCancelInvitationCompletePage, AgentCancelInvitationPage}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.trackRequests.{AgentCancelInvitationCompletePage, AgentCancelInvitationPage}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}
