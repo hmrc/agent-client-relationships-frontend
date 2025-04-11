@@ -64,7 +64,8 @@
 
         @govukButton(Button(
             id = Some("continueButton"),
-            content = Text(messages("continue.button"))
+            content = Text(messages("continue.button")),
+            preventDoubleClick = Some(true)
         ))
     }
 }
