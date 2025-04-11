@@ -19,6 +19,7 @@
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.routes
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.{Accepted, Cancelled, DeAuthorised, Expired, InvitationStatus, PartialAuth, Pending, Rejected}
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{PageInfo, TrackRequestsResult}
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.DisplayDate
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.Layout
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.trackRequests.actionsPartials.*
 @import uk.gov.hmrc.govukfrontend.views.Implicits.RichSelect
@@ -26,9 +27,7 @@
 @import uk.gov.hmrc.hmrcfrontend.views.viewmodels.accessibleautocomplete.AccessibleAutocomplete
 @import views.html.helper.urlEncode
 
-@import java.time.format.DateTimeFormatter
-@import java.time.{Instant, LocalDate, ZoneOffset}
-@import java.util.Locale
+@import java.time.{Instant, LocalDate}
 
 @this(
         layout: Layout,
@@ -44,7 +43,7 @@
 @(
         result: TrackRequestsResult,
         pageNumber: Int
-)(implicit request: RequestHeader, messages: Messages, appConfig: AppConfig)
+)(implicit request: Request[?], messages: Messages, appConfig: AppConfig)
 
 @key = @{
     "trackRequests"
@@ -53,14 +52,11 @@
     messages(s"$key.title")
 }
 @pageInfo = @{PageInfo(pageNumber, appConfig.trackRequestsPageSize, result.totalResults)}
-@dateFormatter = @{
-    DateTimeFormatter.ofPattern("d MMMM uuuu", Locale.UK)
-}
 @statusContent(status: InvitationStatus, expiryDate: LocalDate, lastUpdated: Instant) = {
     @{status match {
-        case Pending => <span>{messages(s"$key.status.$status")}</span><br/><span class="govuk-body-s">{messages(s"$key.expires", expiryDate.format(dateFormatter))}</span>
-        case Expired => <span>{messages(s"$key.status.$status")}</span><span class="govuk-body-s">{messages(s"$key.expired", expiryDate.format(dateFormatter))}</span>
-        case _ => <span>{messages(s"$key.status.$status")}</span><br/><span class="govuk-body-s">{lastUpdated.atZone(ZoneOffset.UTC).toLocalDateTime.format(dateFormatter)}</span>
+        case Pending => <span>{messages(s"$key.status.$status")}</span><br/><span class="govuk-body-s">{messages(s"$key.expires", DisplayDate.displayDateForLang(Some(expiryDate)))}</span>
+        case Expired => <span>{messages(s"$key.status.$status")}</span><span class="govuk-body-s">{messages(s"$key.expired", DisplayDate.displayDateForLang(Some(expiryDate)))}</span>
+        case _ => <span>{messages(s"$key.status.$status")}</span><br/><span class="govuk-body-s">{DisplayDate.displayInstant(lastUpdated)}</span>
     }}
 }
 @actions(status: InvitationStatus, id: String, client: String, service: String) = {

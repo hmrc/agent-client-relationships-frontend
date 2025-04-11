@@ -16,12 +16,11 @@
 
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.services.ClientServiceConfigurationService
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.DisplayDate
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.{Authorisation, ManageYourTaxAgentsData}
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.models.Invitation
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcNewTabLinkHelper
 @import uk.gov.hmrc.hmrcfrontend.views.viewmodels.newtablinkhelper.NewTabLinkHelper
-@import java.time.format.DateTimeFormatter
-@import java.util.Locale
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.routes
 @import play.twirl.api.Html
 
@@ -50,9 +49,7 @@
     text = messages(s"$key.link")
   ))
  }
-@dateFormatter = @{
-    DateTimeFormatter.ofPattern("d MMMM uuuu", Locale.UK)
-}
+
 @agentRoleFromService(service: String) = @{
     if(!appConfig.emaEnabled) ""
     else if(messages.isDefinedAt(s"$key.agentRole.$service")) messages(s"$key.agentRole.$service")
@@ -105,13 +102,13 @@
         Seq(
             TableRow(content = Text(messages(request.service)), classes = cellClasses),
             TableRow(Text(agentRoleFromService(request.service)), classes = cellClasses),
-            TableRow(Text(request.expiryDate.format(dateFormatter)), classes = cellClasses),
+            TableRow(Text(DisplayDate.displayDateForLang(Some(request.expiryDate))), classes = cellClasses),
             TableRow(HtmlContent(linkFromService(uid, request.service, agentName)), classes = cellClasses)
         )
     } else {
         Seq(
             TableRow(content = Text(messages(request.service)), classes = cellClasses),
-            TableRow(Text(request.expiryDate.format(dateFormatter)), classes = cellClasses),
+            TableRow(Text(DisplayDate.displayDateForLang(Some(request.expiryDate))), classes = cellClasses),
             TableRow(HtmlContent(linkFromService(uid, request.service, agentName)), classes = cellClasses)
         )
     }
@@ -122,13 +119,13 @@
         Seq(
             TableRow(content = Text(messages(authorisation.service)), classes = cellClasses),
             TableRow(Text(agentRoleFromService(authorisation.service)), classes = cellClasses),
-            TableRow(Text(authorisation.date.format(dateFormatter)), classes = cellClasses),
+            TableRow(Text(DisplayDate.displayDateForLang(Some(authorisation.date))), classes = cellClasses),
             TableRow(HtmlContent(deAuthLink(authorisation.uid, authorisation.agentName, authorisation.service)), classes = cellClasses)
         )
     } else {
         Seq(
             TableRow(content = Text(messages(authorisation.service)), classes = cellClasses),
-            TableRow(Text(authorisation.date.format(dateFormatter)), classes = cellClasses),
+            TableRow(Text(DisplayDate.displayDateForLang(Some(authorisation.date))), classes = cellClasses),
             TableRow(HtmlContent(deAuthLink(authorisation.uid, authorisation.agentName, authorisation.service)), classes = cellClasses)
         )
     }
@@ -183,7 +180,7 @@
             )),
             rows = data.authorisationEvents.authorisationEvents.sortBy(_.date).reverse.map { event =>
                 Seq(
-                    TableRow(content = Text(event.date.format(dateFormatter)), classes = cellClasses),
+                    TableRow(content = Text(DisplayDate.displayDateForLang(Some(event.date))), classes = cellClasses),
                     TableRow(Text(messages(event.service)), classes = cellClasses),
                     TableRow(Text(messages(s"$key.history.${event.eventType.toString}.activity", event.agentName, agentRoleFromService(event.service))), classes = cellClasses)
                 )
