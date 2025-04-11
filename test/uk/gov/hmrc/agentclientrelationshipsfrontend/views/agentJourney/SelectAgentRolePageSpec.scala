@@ -30,7 +30,7 @@ class SelectAgentRolePageSpec extends ViewSpecSupport {
 
   val viewTemplate: SelectAgentRolePage = app.injector.instanceOf[SelectAgentRolePage]
 
-  val testUrl = "https://www.gov.uk/"
+  val guidanceUrl = "https://www.gov.uk/guidance/choose-agents-for-making-tax-digital-for-income-tax"
 
   val testClientName = "Test Client"
   val testPostcode = "AA1 1AA"
@@ -162,7 +162,7 @@ class SelectAgentRolePageSpec extends ViewSpecSupport {
     }
 
     "have a p1 hyperLink" in {
-      doc.mainContent.extractLink(1).value shouldBe TestLink(Expected.link, testUrl)
+      doc.mainContent.extractLink(1).value shouldBe TestLink(Expected.link, guidanceUrl)
     }
 
     "render error for the correct journey" in {
