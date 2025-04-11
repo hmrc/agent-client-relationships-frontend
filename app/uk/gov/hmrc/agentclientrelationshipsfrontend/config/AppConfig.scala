@@ -45,7 +45,7 @@ class AppConfig @Inject()(servicesConfig: ServicesConfig, config: Configuration)
   // GovUk Urls
   val govUkUrl: String = getString("gov-uk.url")
   val guidanceUrlSaSignup = s"$govUkUrl/register-for-self-assessment/self-employed"
-  val guidanceUrlForAgentRoles = s"$govUkUrl/" // TODO: We need this url to be complete
+  val guidanceUrlForAgentRoles = s"$govUkUrl/guidance/choose-agents-for-making-tax-digital-for-income-tax"
   val guidanceSa = s"$govUkUrl/guidance/self-assessment-for-agents-online-service"
   val guidanceAuthoriseAgent = s"$govUkUrl/guidance/authorise-an-agent-to-deal-with-certain-tax-services-for-you"
   val privacyPolicyUrl = s"$govUkUrl/government/publications/data-protection-act-dpa-information-hm-revenue-and-customs-hold-about-you/data-protection-act-dpa-information-hm-revenue-and-customs-hold-about-you"
