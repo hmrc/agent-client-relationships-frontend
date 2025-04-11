@@ -1,3 +1,4 @@
+outage-page.serviceDisplayName=Cyfrif gwasanaethau asiant
 service.name.agents.auth=Gofyn i gleient eich awdurdodi
 service.name.agents.de-auth=Canslo awdurdodiad y cleient
 service.name.clients=Penodi rhywun i ddelio â CThEF ar eich rhan
