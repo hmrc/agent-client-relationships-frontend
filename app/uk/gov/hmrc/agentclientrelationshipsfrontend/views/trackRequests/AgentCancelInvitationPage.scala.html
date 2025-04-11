@@ -24,7 +24,7 @@
         layout: Layout,
         govukRadios: GovukRadios,
         formWithCSRF:  FormWithCSRF,
-        submitButton: SubmitButton
+        govukButton: GovukButton
 )
 
 
@@ -64,6 +64,11 @@
             )
         ).withFormField(form(key)))
 
-        @submitButton()
+        @govukButton(Button(
+            attributes = Map("id" -> "continue"),
+            inputType = Some("submit"),
+            content = Text(messages("continue.button")),
+            preventDoubleClick = Some(true)
+        ))
     }
 }

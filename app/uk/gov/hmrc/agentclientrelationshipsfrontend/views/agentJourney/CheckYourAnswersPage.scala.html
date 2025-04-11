@@ -95,7 +95,8 @@
         @govukButton(Button(
             attributes = Map("id" -> "submitAuthorisationRequestButton"),
             inputType = Some("submit"),
-            content = Text(messages("checkYourAnswers.confirmAndSend.button"))
+            content = Text(messages("checkYourAnswers.confirmAndSend.button")),
+            preventDoubleClick = Some(true)
         ))
     }
 }

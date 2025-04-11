@@ -79,8 +79,9 @@
     ).withFormField(form(DeclineRequestFieldName)))
 
     @govukButton(Button(
-      id = Some("continueButton"),
-      content = Text(messages("continue.button"))
+        id = Some("continueButton"),
+        content = Text(messages("continue.button")),
+        preventDoubleClick = Some(true)
     ))
   }
 }
