@@ -815,7 +815,7 @@ manageYourTaxAgents.authorisedAgents.taxService=Tax service
 manageYourTaxAgents.authorisedAgents.agentRole=Agent role
 manageYourTaxAgents.authorisedAgents.consentDate=When you gave consent
 manageYourTaxAgents.authorisedAgents.action=Action
-manageYourTaxAgents.authorisedAgents.action.link=Remove authorisation<span class="govuk-visually-hidden"> from {0} to manage your {1} as a {2} agent</span>
+manageYourTaxAgents.authorisedAgents.action.link=Remove authorisation<span class="govuk-visually-hidden"> from {0} to manage your {1} as {2}</span>
 
 manageYourTaxAgents.history=History
 manageYourTaxAgents.history.empty=There is no authorisation history on this account.
@@ -830,7 +830,7 @@ manageYourTaxAgents.history.Rejected.activity=You declined {0} as your {1} agent
 manageYourTaxAgents.history.Expired.activity=The request from {0} to be your {1} agent expired
 manageYourTaxAgents.history.Cancelled.activity={0} cancelled the request to be your {1} agent
 
-manageYourTaxAgents.currentRequests.action.link=Respond to request<span class="govuk-visually-hidden"> from {0} to manage your {1} as a {2} agent</span>
+manageYourTaxAgents.currentRequests.action.link=Respond to request<span class="govuk-visually-hidden"> from {0} to manage your {1} as {2}</span>
 
 # ________________________________________________________________________________
 # Client confirmation of Deauthorisation page
