@@ -129,5 +129,14 @@ class ClientExitControllerISpec extends ComponentSpecHelper with AuthStubs {
         result.status shouldBe OK
       }
     }
+    "redirect to Manage Your Tax Agents" when {
+      "the client journey does not have a service key in it and none is passed in" in {
+        authoriseAsClient()
+        await(journeyService.saveJourney(journeyModel(Some(Accepted)).copy(serviceKey = None)))
+        val result = get(routes.ClientExitController.showClient(AlreadyAcceptedAuthorisationRequest).url)
+        result.status shouldBe SEE_OTHER
+        result.header("Location").value shouldBe routes.ManageYourTaxAgentsController.show.url
+      }
+    }
   }
 }

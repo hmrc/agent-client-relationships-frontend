@@ -43,16 +43,25 @@ class ClientExitController @Inject()(mcc: MessagesControllerComponents,
                   taxService: Option[String] = None
                 ): Action[AnyContent] = actions.clientAuthenticate.async:
     implicit request =>
-      val serviceKey = taxService.fold
-        (request.journey.getServiceKey)
-        (s => serviceConfigurationService.getServiceNameForUrlPart(s))
-      Future.successful(Ok(clientExitPage(
-        exitType,
-        userIsLoggedIn = true,
-        lastModifiedDate = request.journey.lastModifiedDate,
-        continueUrl = continueUrl,
-        service = serviceKey
-      )))
+      request.journey.serviceKey match {
+        case Some(journeyService) =>
+          Future.successful(Ok(clientExitPage(
+            exitType,
+            userIsLoggedIn = true,
+            lastModifiedDate = request.journey.lastModifiedDate,
+            continueUrl = continueUrl,
+            service = journeyService
+          )))
+        case None if taxService.nonEmpty =>
+          Future.successful(Ok(clientExitPage(
+            exitType,
+            userIsLoggedIn = true,
+            lastModifiedDate = request.journey.lastModifiedDate,
+            continueUrl = continueUrl,
+            service =  serviceConfigurationService.getServiceNameForUrlPart(taxService.get)
+          )))
+        case _ => Future.successful(Redirect(routes.ManageYourTaxAgentsController.show))
+      }
 
   def showUnauthorised(
                         exitType: ClientExitType,
