@@ -89,10 +89,10 @@ class AuthActions @Inject()(val authConnector: AuthConnector,
         if userHasEnrolmentForTaxService(taxService, enrols) then
           block(request)
         else
-          Future.successful(Redirect(clientRoutes.ClientExitController.showClient(
+          Future.successful(Redirect(clientRoutes.ClientExitController.showExit(
             exitType = CannotFindAuthorisationRequest,
             continueUrl = Some(RedirectUrl(currentUrl)),
-            taxService = Some(taxService)
+            taxService = taxService
           ).url))
 
       authorised(AuthProviders(GovernmentGateway))

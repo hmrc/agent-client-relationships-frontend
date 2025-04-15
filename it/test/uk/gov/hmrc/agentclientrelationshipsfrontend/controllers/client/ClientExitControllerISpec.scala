@@ -24,6 +24,7 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientExitType
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.ClientJourney
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.ClientJourneyService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentSpecHelper}
+import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl
 
 import java.time.Instant
 
@@ -61,70 +62,55 @@ class ClientExitControllerISpec extends ComponentSpecHelper with AuthStubs {
     super.beforeEach()
   }
 
-  "the showUnauthenticated action" should {
+  "showExit" should {
     "return 200" when {
-      "the user is signed out and the agent is suspended" in {
+      "the agent is suspended" in {
         await(journeyService.saveJourney(journeyModel(None)))
-        val result = get(routes.ClientExitController.showUnauthorised(AgentSuspended, defaultTaxService).url)
+        val result = get(routes.ClientExitController.showExit(AgentSuspended, None, defaultTaxService).url)
 
         result.status shouldBe OK
       }
-      "the user is signed out and there are no outstanding requests" in {
+      "there are no outstanding requests" in {
         await(journeyService.saveJourney(journeyModel(None)))
-        val result = get(routes.ClientExitController.showUnauthorised(NoOutstandingRequests, defaultTaxService).url)
+        val result = get(routes.ClientExitController.showExit(NoOutstandingRequests, None, defaultTaxService).url)
 
         result.status shouldBe OK
       }
-      "a client is signed in and the agent is suspended" in {
-        authoriseAsClientWithEnrolments("HMRC-MTD-IT")
+      "the user has no valid enrolments" in {
         await(journeyService.saveJourney(journeyModel(None)))
-        val result = get(routes.ClientExitController.showUnauthorised(AgentSuspended, defaultTaxService).url)
-
-        result.status shouldBe OK
-      }
-      "a client is signed in and  there are no outstanding requests" in {
-        authoriseAsClientWithEnrolments("HMRC-MTD-IT")
-        await(journeyService.saveJourney(journeyModel(None)))
-        val result = get(routes.ClientExitController.showUnauthorised(NoOutstandingRequests, defaultTaxService).url)
+        val result = get(routes.ClientExitController.showExit(CannotFindAuthorisationRequest, Some(RedirectUrl("/url")), defaultTaxService).url)
 
         result.status shouldBe OK
       }
     }
   }
 
-  "the showClient action" should {
+  "showJourneyExit" should {
     "return 200" when {
-      "the client is authenticated and the agent is suspended" in {
-        authoriseAsClient()
-        await(journeyService.saveJourney(journeyModel(None)))
-        val result = get(routes.ClientExitController.showClient(AgentSuspended, taxService = Some(defaultTaxService)).url)
-        result.status shouldBe OK
-      }
       "the client is authenticated and the authorisation request is Cancelled" in {
         authoriseAsClient()
         await(journeyService.saveJourney(journeyModel(Some(Cancelled))))
-        val result = get(routes.ClientExitController.showClient(AuthorisationRequestCancelled, taxService = Some(defaultTaxService)).url)
+        val result = get(routes.ClientExitController.showJourneyExit(AuthorisationRequestCancelled).url)
         result.status shouldBe OK
       }
       "the client is authenticated and the authorisation request is Expired" in {
         authoriseAsClient()
         await(journeyService.saveJourney(journeyModel(Some(Expired))))
-        val result = get(routes.ClientExitController.showClient(AuthorisationRequestExpired).url)
+        val result = get(routes.ClientExitController.showJourneyExit(AuthorisationRequestExpired).url)
         result.status shouldBe OK
       }
       alreadyAcceptedStatus.foreach(status =>
         s"the client is authenticated and the authorisation request is $status" in {
           authoriseAsClient()
           await(journeyService.saveJourney(journeyModel(Some(status))))
-          val result = get(routes.ClientExitController.showClient(AlreadyAcceptedAuthorisationRequest).url)
+          val result = get(routes.ClientExitController.showJourneyExit(AlreadyAcceptedAuthorisationRequest).url)
 
           result.status shouldBe OK
         })
-
       s"the client is authenticated and the authorisation request is Rejected" in {
         authoriseAsClient()
         await(journeyService.saveJourney(journeyModel(Some(Rejected))))
-        val result = get(routes.ClientExitController.showClient(AlreadyRefusedAuthorisationRequest).url)
+        val result = get(routes.ClientExitController.showJourneyExit(AlreadyRefusedAuthorisationRequest).url)
 
         result.status shouldBe OK
       }

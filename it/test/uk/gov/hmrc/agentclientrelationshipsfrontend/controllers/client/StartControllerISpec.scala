@@ -85,7 +85,7 @@ class StartControllerISpec extends ComponentSpecHelper with ScalaFutures with Au
         ).url
       )
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe routes.ClientExitController.showUnauthorised(
+      result.header("Location").value shouldBe routes.ClientExitController.showExit(
         exitType = NoOutstandingRequests,
         taxService = testTaxService
       ).url
@@ -110,7 +110,7 @@ class StartControllerISpec extends ComponentSpecHelper with ScalaFutures with Au
         ).url
       )
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe routes.ClientExitController.showUnauthorised(
+      result.header("Location").value shouldBe routes.ClientExitController.showExit(
         exitType = AgentSuspended,
         taxService = testTaxService
       ).url

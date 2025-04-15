@@ -42,7 +42,7 @@ class ConfirmConsentController @Inject()(mcc: MessagesControllerComponents,
     case false => "agent"
   }
 
-  def show: Action[AnyContent] = actions.clientAuthenticate:
+  def show: Action[AnyContent] = actions.clientJourneyRequired:
     implicit request =>
       (request.journey.serviceKey, request.journey.agentName) match {
         case (Some(service), Some(agentName)) =>
@@ -54,7 +54,7 @@ class ConfirmConsentController @Inject()(mcc: MessagesControllerComponents,
         case _ => Redirect(routes.ManageYourTaxAgentsController.show.url)
       }
 
-  def submit: Action[AnyContent] = actions.clientAuthenticate.async:
+  def submit: Action[AnyContent] = actions.clientJourneyRequired.async:
     implicit request =>
       (request.journey.serviceKey, request.journey.agentName) match {
         case (Some(service), Some(agentName)) =>

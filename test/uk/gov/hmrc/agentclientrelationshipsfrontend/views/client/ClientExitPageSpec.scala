@@ -79,7 +79,6 @@ class ClientExitPageSpec extends ViewSpecSupport {
   "ClientExitPage for CannotFindAuthorisationRequest view" should {
     val view: HtmlFormat.Appendable = viewTemplate(
       exitType = CannotFindAuthorisationRequest,
-      userIsLoggedIn = true,
       lastModifiedDate = Some(testLastModifiedDate),
       continueUrl = Some(RedirectUrl("/url")),
       service = HMRCMTDIT
@@ -128,7 +127,6 @@ class ClientExitPageSpec extends ViewSpecSupport {
   "ClientExitPage for AuthorisationRequestExpired view" should {
     val view: HtmlFormat.Appendable = viewTemplate(
       exitType = AuthorisationRequestExpired,
-      userIsLoggedIn = true,
       lastModifiedDate = Some(testLastModifiedDate),
       service = HMRCMTDIT
     )
@@ -156,7 +154,6 @@ class ClientExitPageSpec extends ViewSpecSupport {
   "ClientExitPage for AuthorisationRequestCancelled view" should {
     val view: HtmlFormat.Appendable = viewTemplate(
       exitType = AuthorisationRequestCancelled,
-      userIsLoggedIn = true,
       lastModifiedDate = Some(testLastModifiedDate),
       service = HMRCMTDIT
     )
@@ -190,7 +187,6 @@ class ClientExitPageSpec extends ViewSpecSupport {
   "ClientExitPage for AlreadyAcceptedAuthorisationRequest view" should {
     val view: HtmlFormat.Appendable = viewTemplate(
       exitType = AlreadyAcceptedAuthorisationRequest,
-      userIsLoggedIn = true,
       lastModifiedDate = Some(testLastModifiedDate),
       service = HMRCMTDIT
     )
@@ -224,7 +220,6 @@ class ClientExitPageSpec extends ViewSpecSupport {
   "ClientExitPage for AlreadyRefusedAuthorisationRequest view" should {
     val view: HtmlFormat.Appendable = viewTemplate(
       exitType = AlreadyRefusedAuthorisationRequest,
-      userIsLoggedIn = true,
       lastModifiedDate = Some(testLastModifiedDate),
       service = HMRCMTDIT
     )
@@ -258,7 +253,6 @@ class ClientExitPageSpec extends ViewSpecSupport {
   "ClientExitPage for AgentSuspended view" should {
     val view: HtmlFormat.Appendable = viewTemplate(
       exitType = AgentSuspended,
-      userIsLoggedIn = false,
       service = HMRCMTDIT
     )
     val doc: Document = Jsoup.parse(view.body)
@@ -281,7 +275,6 @@ class ClientExitPageSpec extends ViewSpecSupport {
   "ClientExitPage for NoOutstandingRequests view" should {
     val view: HtmlFormat.Appendable = viewTemplate(
       exitType = NoOutstandingRequests,
-      userIsLoggedIn = false,
       service = HMRCMTDIT
     )
     val doc: Document = Jsoup.parse(view.body)

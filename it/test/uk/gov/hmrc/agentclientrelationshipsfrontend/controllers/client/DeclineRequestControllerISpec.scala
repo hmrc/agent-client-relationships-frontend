@@ -93,21 +93,20 @@ class DeclineRequestControllerISpec extends ComponentSpecHelper with AuthStubs w
       )
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe routes.ClientExitController
-        .showClient(
+        .showExit(
           exitType = ClientExitType.CannotFindAuthorisationRequest,
           continueUrl = Some(RedirectUrl(appConfig.appExternalUrl + routes.DeclineRequestController.show(
             uid = testUid,
             taxService = "vat"
           ).url)),
-          Some("vat")
+          "vat"
         ).url
 
     "redirect to NoOutstandingRequests exit page when the invitation data is not found" in :
       authoriseAsClientWithEnrolments(enrolment = "HMRC-MTD-IT")
       journeyService
         .saveJourney(journey = ClientJourney(
-          journeyType = "authorisation-response",
-          serviceKey = Some("HMRC-MTD-IT")
+          journeyType = "authorisation-response"
         )).futureValue
       stubPost(
         url = validateInvitationUrl,
@@ -116,9 +115,10 @@ class DeclineRequestControllerISpec extends ComponentSpecHelper with AuthStubs w
       )
       val result = get(uri = routes.DeclineRequestController.show(testUid, defaultTaxService).url)
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe routes.ClientExitController.showClient(
+      result.header("Location").value shouldBe routes.ClientExitController.showExit(
         exitType = ClientExitType.NoOutstandingRequests,
-        taxService = Some(defaultTaxService)
+        continueUrl = None,
+        taxService = defaultTaxService
       ).url
 
     "redirect to AgentSuspended exit page when the agent is suspended" in :
@@ -136,9 +136,10 @@ class DeclineRequestControllerISpec extends ComponentSpecHelper with AuthStubs w
         ).url
       )
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe routes.ClientExitController.showClient(
+      result.header("Location").value shouldBe routes.ClientExitController.showExit(
         exitType = ClientExitType.AgentSuspended,
-        taxService = Some(defaultTaxService)
+        continueUrl = None,
+        taxService = defaultTaxService
       ).url
 
     taxServices.keySet.foreach: taxService =>
@@ -180,7 +181,7 @@ class DeclineRequestControllerISpec extends ComponentSpecHelper with AuthStubs w
           ).url
         )
         result.status shouldBe SEE_OTHER
-        result.header("Location").value shouldBe routes.ClientExitController.showClient(
+        result.header("Location").value shouldBe routes.ClientExitController.showJourneyExit(
           exitType = ClientExitType.AuthorisationRequestExpired
         ).url
 
@@ -205,7 +206,7 @@ class DeclineRequestControllerISpec extends ComponentSpecHelper with AuthStubs w
           ).url
         )
         result.status shouldBe SEE_OTHER
-        result.header("Location").value shouldBe routes.ClientExitController.showClient(
+        result.header("Location").value shouldBe routes.ClientExitController.showJourneyExit(
           exitType = ClientExitType.AuthorisationRequestCancelled
         ).url
 
@@ -231,7 +232,7 @@ class DeclineRequestControllerISpec extends ComponentSpecHelper with AuthStubs w
           ).url
         )
         result.status shouldBe SEE_OTHER
-        result.header("Location").value shouldBe routes.ClientExitController.showClient(
+        result.header("Location").value shouldBe routes.ClientExitController.showJourneyExit(
           exitType = ClientExitType.AlreadyAcceptedAuthorisationRequest
         ).url
 
@@ -257,7 +258,7 @@ class DeclineRequestControllerISpec extends ComponentSpecHelper with AuthStubs w
           ).url
         )
         result.status shouldBe SEE_OTHER
-        result.header("Location").value shouldBe routes.ClientExitController.showClient(
+        result.header("Location").value shouldBe routes.ClientExitController.showJourneyExit(
           ClientExitType.AlreadyRefusedAuthorisationRequest
         ).url
 

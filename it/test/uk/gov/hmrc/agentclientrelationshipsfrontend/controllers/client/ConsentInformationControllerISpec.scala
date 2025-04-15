@@ -91,10 +91,10 @@ class ConsentInformationControllerISpec extends ComponentSpecHelper with ScalaFu
       )
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe routes.ClientExitController
-        .showClient(
+        .showExit(
           exitType = ClientExitType.CannotFindAuthorisationRequest,
           continueUrl = Some(RedirectUrl(appConfig.appExternalUrl + routes.DeclineRequestController.show(testUid, "vat").url)),
-          taxService = Some("vat")
+          taxService = "vat"
         ).url
 
     "redirect to NoOutstandingRequests exit page when the invitation data is not found" in {
@@ -102,8 +102,7 @@ class ConsentInformationControllerISpec extends ComponentSpecHelper with ScalaFu
       journeyService
         .saveJourney(
           journey = ClientJourney(
-            journeyType = "authorisation-response",
-            serviceKey = Some("HMRC-MTD-IT")
+            journeyType = "authorisation-response"
           )
         ).futureValue
       stubPost(validateInvitationUrl, NOT_FOUND, "")
@@ -114,9 +113,9 @@ class ConsentInformationControllerISpec extends ComponentSpecHelper with ScalaFu
         ).url
       )
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe routes.ClientExitController.showClient(
+      result.header("Location").value shouldBe routes.ClientExitController.showExit(
         exitType = ClientExitType.NoOutstandingRequests,
-        taxService = Some("income-tax")
+        taxService = "income-tax"
       ).url
     }
 
@@ -137,9 +136,10 @@ class ConsentInformationControllerISpec extends ComponentSpecHelper with ScalaFu
         ).url
       )
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe routes.ClientExitController.showClient(
+      result.header("Location").value shouldBe routes.ClientExitController.showExit(
         exitType = ClientExitType.AgentSuspended,
-        taxService = Some(defaultTaxService)
+        continueUrl = None,
+        taxService = defaultTaxService
       ).url
     }
 
@@ -191,7 +191,7 @@ class ConsentInformationControllerISpec extends ComponentSpecHelper with ScalaFu
           ).url
         )
         result.status shouldBe SEE_OTHER
-        result.header("Location").value shouldBe routes.ClientExitController.showClient(
+        result.header("Location").value shouldBe routes.ClientExitController.showJourneyExit(
           exitType = ClientExitType.AuthorisationRequestExpired
         ).url
       }
@@ -219,7 +219,7 @@ class ConsentInformationControllerISpec extends ComponentSpecHelper with ScalaFu
           ).url
         )
         result.status shouldBe SEE_OTHER
-        result.header("Location").value shouldBe routes.ClientExitController.showClient(
+        result.header("Location").value shouldBe routes.ClientExitController.showJourneyExit(
           exitType = ClientExitType.AuthorisationRequestCancelled
         ).url
       }
@@ -247,7 +247,7 @@ class ConsentInformationControllerISpec extends ComponentSpecHelper with ScalaFu
           ).url
         )
         result.status shouldBe SEE_OTHER
-        result.header("Location").value shouldBe routes.ClientExitController.showClient(
+        result.header("Location").value shouldBe routes.ClientExitController.showJourneyExit(
           exitType = ClientExitType.AlreadyAcceptedAuthorisationRequest
         ).url
       }
@@ -276,7 +276,7 @@ class ConsentInformationControllerISpec extends ComponentSpecHelper with ScalaFu
           ).url
         )
         result.status shouldBe SEE_OTHER
-        result.header("Location").value shouldBe routes.ClientExitController.showClient(
+        result.header("Location").value shouldBe routes.ClientExitController.showJourneyExit(
           exitType = ClientExitType.AlreadyRefusedAuthorisationRequest
         ).url
       }

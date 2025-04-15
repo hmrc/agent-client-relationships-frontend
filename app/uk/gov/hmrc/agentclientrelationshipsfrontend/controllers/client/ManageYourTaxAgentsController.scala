@@ -46,7 +46,7 @@ class ManageYourTaxAgentsController @Inject()(
                                              )(implicit val executionContext: ExecutionContext, appConfig: AppConfig)
   extends FrontendController(mcc) with I18nSupport:
 
-  def show: Action[AnyContent] = actions.clientAuthenticate.async:
+  def show: Action[AnyContent] = actions.clientAuthorised.async:
     implicit request =>
       for {
         mytaData <- agentClientRelationshipsService.getManageYourTaxAgentsData()
@@ -56,7 +56,7 @@ class ManageYourTaxAgentsController @Inject()(
           )
       } yield Ok(mytaPage(serviceConfigurationService.allEnabledServices.map(s => (s, serviceConfigurationService.getUrlPart(s))).toMap, mytaData))
 
-  def showConfirmDeauth(id: String): Action[AnyContent] = actions.clientAuthenticate.async:
+  def showConfirmDeauth(id: String): Action[AnyContent] = actions.clientAuthorised.async:
     implicit request =>
       authorisationsCacheService.getAuthorisation(id).map {
         case Some(authorisation) if authorisation.deauthorised.isEmpty => Ok(confirmDeauthPage(ConfirmDeauthForm.form, authorisation))
@@ -64,7 +64,7 @@ class ManageYourTaxAgentsController @Inject()(
         case None => NotFound(pageNotFound())
       }
 
-  def submitDeauth(id: String): Action[AnyContent] = actions.clientAuthenticate.async:
+  def submitDeauth(id: String): Action[AnyContent] = actions.clientAuthorised.async:
     implicit request =>
       ConfirmDeauthForm.form.bindFromRequest().fold(
         formWithErrors => authorisationsCacheService.getAuthorisation(id).map {
@@ -91,7 +91,7 @@ class ManageYourTaxAgentsController @Inject()(
           }
       )
 
-  def deauthComplete(id: String): Action[AnyContent] = actions.clientAuthenticate.async:
+  def deauthComplete(id: String): Action[AnyContent] = actions.clientAuthorised.async:
     implicit request =>
       authorisationsCacheService.getAuthorisation(id).flatMap {
         case Some(authorisation) if authorisation.deauthorised.contains(true) => Future.successful(Ok(deauthCompletePage(authorisation)))

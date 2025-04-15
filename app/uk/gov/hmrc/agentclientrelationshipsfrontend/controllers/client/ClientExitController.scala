@@ -37,31 +37,26 @@ class ClientExitController @Inject()(mcc: MessagesControllerComponents,
                                     )(implicit val executionContext: ExecutionContext, appConfig: AppConfig)
   extends FrontendController(mcc) with I18nSupport:
 
-  def showClient(
-                  exitType: ClientExitType,
-                  continueUrl: Option[RedirectUrl] = None,
-                  taxService: Option[String] = None
-                ): Action[AnyContent] = actions.clientAuthenticate.async:
+  //TODO split into separate routes for each exit page
+
+  def showJourneyExit(
+                       exitType: ClientExitType
+                     ): Action[AnyContent] = actions.clientJourneyRequired.async:
     implicit request =>
-      val serviceKey = taxService.fold
-        (request.journey.getServiceKey)
-        (s => serviceConfigurationService.getServiceNameForUrlPart(s))
       Future.successful(Ok(clientExitPage(
         exitType,
-        userIsLoggedIn = true,
-        lastModifiedDate = request.journey.lastModifiedDate,
-        continueUrl = continueUrl,
-        service = serviceKey
+        lastModifiedDate = Some(request.journey.getLastModifiedDate),
+        service = request.journey.getServiceKey
       )))
 
-  def showUnauthorised(
-                        exitType: ClientExitType,
-                        taxService: String
-                      ): Action[AnyContent] = Action.async:
+  def showExit(
+                exitType: ClientExitType,
+                continueUrl: Option[RedirectUrl] = None,
+                taxService: String
+              ): Action[AnyContent] = Action.async:
     implicit request =>
-      val serviceKey = serviceConfigurationService.getServiceNameForUrlPart(taxService)
       Future.successful(Ok(clientExitPage(
         exitType,
-        userIsLoggedIn = false,
-        service = serviceKey
+        continueUrl = continueUrl,
+        service = serviceConfigurationService.getServiceNameForUrlPart(taxService)
       )))

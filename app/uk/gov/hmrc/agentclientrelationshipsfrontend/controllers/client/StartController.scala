@@ -47,8 +47,8 @@ class StartController @Inject()(agentClientRelationshipsConnector: AgentClientRe
         agentClientRelationshipsConnector
           .validateLinkParts(uid, normalizedAgentName)
           .map {
-            case Left(AgentSuspendedError) => Redirect(routes.ClientExitController.showUnauthorised(AgentSuspended, taxService))
-            case Left(AgentNotFoundError) => Redirect(routes.ClientExitController.showUnauthorised(NoOutstandingRequests, taxService))
+            case Left(AgentSuspendedError) => Redirect(routes.ClientExitController.showExit(AgentSuspended, None, taxService))
+            case Left(AgentNotFoundError) => Redirect(routes.ClientExitController.showExit(NoOutstandingRequests, None, taxService))
             case Right(response) => Ok(authoriseAgentStartPage(response.name, taxService, uid))
           }
       else Future.successful(NotFound(pageNotFound()))

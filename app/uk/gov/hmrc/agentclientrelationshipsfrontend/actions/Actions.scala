@@ -16,8 +16,8 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.actions
 
-import play.api.mvc.{ActionBuilder, AnyContent, DefaultActionBuilder}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, ClientJourneyRequest, AgentJourneyType}
+import play.api.mvc.{ActionBuilder, AnyContent, DefaultActionBuilder, Request}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, AgentJourneyType, ClientJourneyRequest}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.AgentFastTrackRequestWithRedirectUrls
 
 import javax.inject.{Inject, Singleton}
@@ -38,9 +38,12 @@ class Actions @Inject()(
   def getFastTrackUrl: ActionBuilder[AgentFastTrackRequestWithRedirectUrls, AnyContent] =
     actionBuilder andThen authActions.agentAuthAction andThen getFastTrackUrlAction.getFastTrackUrlAction
 
-  def getClientJourney(taxService: String): ActionBuilder[ClientJourneyRequest, AnyContent] =
-    actionBuilder andThen authActions.clientAuthActionWithEnrolmentCheck(taxService) andThen getJourneyAction.clientJourneyAction
+  def clientJourney(taxService: String): ActionBuilder[ClientJourneyRequest, AnyContent] =
+    actionBuilder andThen authActions.clientAuthActionWithEnrolmentCheck(taxService) andThen getJourneyAction.clientJourneyAction(false)
 
-  def clientAuthenticate: ActionBuilder[ClientJourneyRequest, AnyContent] =
-    actionBuilder andThen authActions.clientAuthAction andThen getJourneyAction.clientJourneyAction
+  def clientJourneyRequired: ActionBuilder[ClientJourneyRequest, AnyContent] =
+    actionBuilder andThen authActions.clientAuthAction andThen getJourneyAction.clientJourneyAction(true)
+
+  def clientAuthorised: ActionBuilder[Request, AnyContent] =
+    actionBuilder andThen authActions.clientAuthAction
 }

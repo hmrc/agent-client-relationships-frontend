@@ -23,18 +23,19 @@ import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatest.{BeforeAndAfterEach, OptionValues}
 import org.scalatestplus.mockito.MockitoSugar.mock
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import play.api.http.Status.OK
+import play.api.http.Status.{OK, SEE_OTHER}
 import play.api.libs.json.Json
 import play.api.mvc.*
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{contentAsJson, defaultAwaitTimeout, status}
+import play.api.test.Helpers.{contentAsJson, defaultAwaitTimeout, redirectLocation, status}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
+import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.routes
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.ClientJourney
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{AgentJourneyService, ClientJourneyService}
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class GetClientJourneyActionSpec extends AnyWordSpecLike with Matchers with OptionValues with BeforeAndAfterEach with GuiceOneAppPerSuite:
+class ClientJourneyActionSpec extends AnyWordSpecLike with Matchers with OptionValues with BeforeAndAfterEach with GuiceOneAppPerSuite:
 
   val fakeAuthAction: ActionRefiner[Request, Request] = new ActionRefiner[Request, Request] {
     override def refine[A](request: Request[A]): Future[Either[Result, Request[A]]] =
@@ -45,8 +46,8 @@ class GetClientJourneyActionSpec extends AnyWordSpecLike with Matchers with Opti
 
   class FakeController(getJourneyAction: GetJourneyAction,
                        actionBuilder: DefaultActionBuilder) {
-    def route: Action[AnyContent] =
-      (actionBuilder andThen fakeAuthAction andThen getJourneyAction.clientJourneyAction) {
+    def route(journeyRequired: Boolean): Action[AnyContent] =
+      (actionBuilder andThen fakeAuthAction andThen getJourneyAction.clientJourneyAction(journeyRequired)) {
         journeyRequest =>
           Results.Ok(Json.toJson(journeyRequest.journey).toString)
       }
@@ -81,7 +82,7 @@ class GetClientJourneyActionSpec extends AnyWordSpecLike with Matchers with Opti
       when(mockClientJourneyService.getJourney(any(), any()))
         .thenReturn(Future.successful(Some(testJourney)))
 
-      val result = testController.route()(fakeRequest)
+      val result = testController.route(false)(fakeRequest)
 
       status(result) shouldBe OK
       contentAsJson(result).as[ClientJourney] shouldBe testJourney
@@ -91,11 +92,20 @@ class GetClientJourneyActionSpec extends AnyWordSpecLike with Matchers with Opti
       when(mockClientJourneyService.getJourney(any(), any()))
         .thenReturn(Future.successful(None))
 
-      val result = testController.route()(fakeRequest)
+      val result = testController.route(false)(fakeRequest)
 
       status(result) shouldBe OK
       contentAsJson(result).as[ClientJourney] shouldBe ClientJourney(journeyType = "authorisation-response")
+    }
 
+    "redirect to MYTA if journey doesn't exist in Mongo when required" in {
+      when(mockClientJourneyService.getJourney(any(), any()))
+        .thenReturn(Future.successful(None))
+
+      val result = testController.route(true)(fakeRequest)
+
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result).value shouldBe routes.ManageYourTaxAgentsController.show.url
     }
   }
 

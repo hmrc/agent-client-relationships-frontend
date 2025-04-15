@@ -40,23 +40,21 @@ class ConsentInformationController @Inject()(agentClientRelationshipsConnector: 
                                              clientJourneyService: ClientJourneyService
                                             )(implicit val executionContext: ExecutionContext, appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport:
 
-  def show(uid: String, taxService: String): Action[AnyContent] = actions.getClientJourney(taxService).async:
+  def show(uid: String, taxService: String): Action[AnyContent] = actions.clientJourney(taxService).async:
     implicit journeyRequest =>
 
       agentClientRelationshipsConnector
         .validateInvitation(uid, serviceConfigurationService.getServiceKeysForUrlPart(taxService))
         .flatMap {
           case Left(InvitationAgentSuspendedError) =>
-            Future.successful(Redirect(routes.ClientExitController.showClient(
+            Future.successful(Redirect(routes.ClientExitController.showExit(
               exitType = AgentSuspended,
-              continueUrl = None,
-              taxService = Some(taxService)
+              taxService = taxService
             )))
           case Left(InvitationOrAgentNotFoundError) =>
-            Future.successful(Redirect(routes.ClientExitController.showClient(
+            Future.successful(Redirect(routes.ClientExitController.showExit(
               exitType = NoOutstandingRequests,
-              continueUrl = None,
-              taxService = Some(taxService)
+              taxService = taxService
             )))
           case Right(response) =>
             val newJourney = journeyRequest.journey.copy(
@@ -72,10 +70,10 @@ class ConsentInformationController @Inject()(agentClientRelationshipsConnector: 
               case Pending =>
                 val agentRole = determineAgentRole(newJourney.getServiceKey)
                 Ok(consentInformationPage(newJourney, agentRole))
-              case Expired => Redirect(routes.ClientExitController.showClient(AuthorisationRequestExpired))
-              case Cancelled => Redirect(routes.ClientExitController.showClient(AuthorisationRequestCancelled))
-              case Rejected => Redirect(routes.ClientExitController.showClient(AlreadyRefusedAuthorisationRequest))
-              case _ => Redirect(routes.ClientExitController.showClient(AlreadyAcceptedAuthorisationRequest))
+              case Expired => Redirect(routes.ClientExitController.showJourneyExit(AuthorisationRequestExpired))
+              case Cancelled => Redirect(routes.ClientExitController.showJourneyExit(AuthorisationRequestCancelled))
+              case Rejected => Redirect(routes.ClientExitController.showJourneyExit(AlreadyRefusedAuthorisationRequest))
+              case _ => Redirect(routes.ClientExitController.showJourneyExit(AlreadyAcceptedAuthorisationRequest))
             })
         }
 
