@@ -26,6 +26,7 @@
 @import views.html.helper.CSPNonce
 @import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl
 @import uk.gov.hmrc.hmrcfrontend.config.ContactFrontendConfig
+@import scala.util.Try
 
 @this(
         appConfig: AppConfig,
@@ -51,7 +52,13 @@
         showSurvey: Boolean = false
 )(contentBlock: Html)(implicit request: RequestHeader, messages: Messages)
 
-@isSignedIn  = @{request.session.get("authToken").isDefined}
+@isSignedIn = @{
+    try {
+        request.session.get("authToken").isDefined
+    } catch {
+        case _: Throwable => false // There are special error cases that can bypass the boostrap session filter, this avoids errors caused by that
+    }
+}
 @* ported over logic from AIF, agents are shown feedback form at journey end, clients are shown at any point, may need reviewing *@
 @optSurveyUrl = @{if(showSurvey || !isAgent) Some(RedirectUrl(appConfig.surveyUrl(isAgent))) else None}
 @signOutUrl = @{if(isSignedIn) Some(routes.SignOutController.signOut(continueUrl = optSurveyUrl, isAgent = isAgent).url) else None}
