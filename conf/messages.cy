@@ -226,8 +226,8 @@ clientId.cbcId.error.required=Nodwch Dynodydd Defnyddiwr (ID) gwlad wrth wlad ei
 
 clientId.PlrId.label=Beth yw Dynodydd Defnyddiwr (ID) ar gyfer trethi atodol Colofn 2 eich cleient?
 clientId.PlrId.hint=Mae hwn yn 15 o gymeriadau, er enghraifft XAPLR0000999999. Gall yr aelod presennol sy’n cyflwyno ddod o hyd iddo ar ei dudalen gartref ar gyfer rhoi gwybod ynghylch trethi atodol Colofn 2.
-clientId.PlrId.error.invalid=Nodwch ddyddiad cofrestru trethi atodol Colofn 2 dilys
-clientId.PlrId.error.required=Nodwch ddyddiad cofrestru eich cleient ar gyfer rhoi gwybod am drethi atodol Colofn 2
+clientId.PlrId.error.invalid=Nodwch ID ar gyfer trethi atodol Colofn 2 yn y fformat cywir
+clientId.PlrId.error.required=Nodwch Dynodydd (ID) ar gyfer trethi atodol Colofn 2 eich cleient
 
 # ________________________________________________________________________________
 # Agent journey enter client fact
