@@ -37,12 +37,12 @@ class CheckYourAnswerController @Inject()(mcc: MessagesControllerComponents,
                                           journeyService: ClientJourneyService
                                          )(implicit ec: ExecutionContext, appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport:
 
-  def show: Action[AnyContent] = actions.clientAuthenticate:
+  def show: Action[AnyContent] = actions.clientJourneyRequired:
     implicit request =>
       if request.journey.consent.isDefined then Ok(checkYourAnswerPage())
       else Redirect(routes.ManageYourTaxAgentsController.show.url)
 
-  def submit: Action[AnyContent] = actions.clientAuthenticate.async:
+  def submit: Action[AnyContent] = actions.clientJourneyRequired.async:
     implicit request =>
       val consentAnswer: Option[Boolean] = request.journey.consent
       val invitationId: Option[String] = request.journey.invitationId

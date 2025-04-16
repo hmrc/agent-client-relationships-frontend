@@ -19,6 +19,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.actions
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{ActionFunction, Request, Result}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
+import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.routes
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, AgentJourneyType, ClientJourney, ClientJourneyRequest}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{AgentJourneyService, ClientJourneyService}
 
@@ -44,13 +45,14 @@ class GetJourneyAction @Inject()(agentJourneyService: AgentJourneyService,
           Future.successful(Redirect(appConfig.agentServicesAccountHomeUrl))
       }
 
-  def clientJourneyAction: ActionFunction[Request, ClientJourneyRequest] = new ActionFunction[Request, ClientJourneyRequest]:
+  def clientJourneyAction(journeyRequired: Boolean): ActionFunction[Request, ClientJourneyRequest] = new ActionFunction[Request, ClientJourneyRequest]:
     override protected def executionContext: ExecutionContext = ec
 
     override def invokeBlock[A](request: Request[A], block: ClientJourneyRequest[A] => Future[Result]): Future[Result] =
       given Request[A] = request
 
       clientJourneyService.getJourney.flatMap {
-        mJourney => block(ClientJourneyRequest(mJourney.getOrElse(ClientJourney(journeyType = "authorisation-response")), request))
+        case None if journeyRequired => Future.successful(Redirect(routes.ManageYourTaxAgentsController.show))
+        case optJourney => block(ClientJourneyRequest(optJourney.getOrElse(ClientJourney(journeyType = "authorisation-response")), request))
       }
 }

@@ -37,7 +37,7 @@ class ConfirmationController @Inject()(mcc: MessagesControllerComponents,
                                       (implicit ec: ExecutionContext,
                                           appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport with Logging:
 
-  def show: Action[AnyContent] = actions.clientAuthenticate.async:
+  def show: Action[AnyContent] = actions.clientJourneyRequired.async:
     implicit request =>
       request.journey.journeyComplete match {
         case Some(invitationId) =>

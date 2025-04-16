@@ -153,10 +153,10 @@ class AuthActionsSpec extends AnyWordSpecLike with Matchers with OptionValues wi
 
       status(result) shouldBe SEE_OTHER
       redirectLocation(result).get shouldBe clientRoutes.ClientExitController
-        .showClient(
+        .showExit(
           ClientExitType.CannotFindAuthorisationRequest,
           Some(RedirectUrl(appConfig.appExternalUrl + fakeRequest.uri)),
-          Some("income-tax")
+          "income-tax"
         ).url
 
 
@@ -174,10 +174,10 @@ class AuthActionsSpec extends AnyWordSpecLike with Matchers with OptionValues wi
 
       status(result) shouldBe SEE_OTHER
       redirectLocation(result).get shouldBe clientRoutes.ClientExitController
-        .showClient(
+        .showExit(
           ClientExitType.CannotFindAuthorisationRequest,
           Some(RedirectUrl(appConfig.appExternalUrl + fakeRequest.uri)),
-          Some("income-record-viewer")
+          "income-record-viewer"
         ).url
 
 

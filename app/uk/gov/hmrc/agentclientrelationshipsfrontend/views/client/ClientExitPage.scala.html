@@ -35,7 +35,6 @@
 
 @(
     exitType: ClientExitType,
-    userIsLoggedIn: Boolean,
     lastModifiedDate: Option[Instant] = None,
     continueUrl: Option[RedirectUrl] = None,
     service: String
@@ -52,7 +51,7 @@
     <h1 class="govuk-heading-xl">@pageTitle</h1>
     @{
         exitType match {
-            case ClientExitType.AgentSuspended => agentSuspended(service, userIsLoggedIn)
+            case ClientExitType.AgentSuspended => agentSuspended(service)
             case ClientExitType.NoOutstandingRequests => noOutstandingRequests()
             case ClientExitType.AuthorisationRequestExpired => authorisationHasExpired(lastModifiedDate, service)
             case ClientExitType.AuthorisationRequestCancelled => authorisationHasBeenCancelled(lastModifiedDate, service)

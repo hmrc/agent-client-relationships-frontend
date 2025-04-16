@@ -48,22 +48,20 @@ class DeclineRequestController @Inject()(mcc: MessagesControllerComponents,
     case false => "agent"
   }
 
-  def show(uid: String, taxService: String): Action[AnyContent] = actions.getClientJourney(taxService).async:
+  def show(uid: String, taxService: String): Action[AnyContent] = actions.clientJourney(taxService).async:
     implicit request =>
       agentClientRelationshipsConnector
         .validateInvitation(uid, clientServiceConfig.getServiceKeysForUrlPart(taxService))
         .flatMap {
           case Left(InvitationAgentSuspendedError) =>
-            Future.successful(Redirect(routes.ClientExitController.showClient(
+            Future.successful(Redirect(routes.ClientExitController.showExit(
               exitType = AgentSuspended,
-              continueUrl = None,
-              taxService = Some(taxService)
+              taxService = taxService
             )))
           case Left(InvitationOrAgentNotFoundError) =>
-            Future.successful(Redirect(routes.ClientExitController.showClient(
+            Future.successful(Redirect(routes.ClientExitController.showExit(
               exitType = NoOutstandingRequests,
-              continueUrl = None,
-              taxService = Some(taxService)
+              taxService = taxService
             )))
           case Right(response) =>
             val newJourney = request.journey.copy(
@@ -82,16 +80,16 @@ class DeclineRequestController @Inject()(mcc: MessagesControllerComponents,
               case Pending =>
                 Ok(declineRequestView(form, agentRole, uid, taxService)(updatedRequest, request2Messages, appConfig))
               case Expired =>
-                Redirect(routes.ClientExitController.showClient(AuthorisationRequestExpired))
+                Redirect(routes.ClientExitController.showJourneyExit(AuthorisationRequestExpired))
               case Cancelled =>
-                Redirect(routes.ClientExitController.showClient(AuthorisationRequestCancelled))
-              case Rejected => Redirect(routes.ClientExitController.showClient(AlreadyRefusedAuthorisationRequest))
+                Redirect(routes.ClientExitController.showJourneyExit(AuthorisationRequestCancelled))
+              case Rejected => Redirect(routes.ClientExitController.showJourneyExit(AlreadyRefusedAuthorisationRequest))
               case _ =>
-                Redirect(routes.ClientExitController.showClient(AlreadyAcceptedAuthorisationRequest))
+                Redirect(routes.ClientExitController.showJourneyExit(AlreadyAcceptedAuthorisationRequest))
             })
         }
 
-  def submit(uid: String, taxService: String): Action[AnyContent] = actions.getClientJourney(taxService).async:
+  def submit(uid: String, taxService: String): Action[AnyContent] = actions.clientJourney(taxService).async:
     implicit request =>
       (request.journey.serviceKey, request.journey.agentName, request.journey.invitationId) match {
         case (Some(service), Some(agentName), Some(invId)) =>
