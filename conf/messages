@@ -1,6 +1,7 @@
 # -------------------------------------------------------------------------------------------
 # Common
 # -------------------------------------------------------------------------------------------
+
 outage-page.serviceDisplayName=Agent services account
 service.name.agents.auth=Ask a client to authorise you
 service.name.agents.de-auth=Cancel a client’s authorisation
@@ -19,11 +20,10 @@ button.copied=Link copied
 start-again.button=Start again
 track-requests.button=Manage recent authorisation requests
 
-
-
 # -------------------------------------------------------------------------------------------
 # Generic tax service messages
 # -------------------------------------------------------------------------------------------
+
 PERSONAL-INCOME-RECORD=Income Record Viewer
 HMRC-MTD-IT=Making Tax Digital for Income Tax
 HMRC-MTD-IT-SUPP=Making Tax Digital for Income Tax
@@ -35,6 +35,62 @@ HMRC-MTD-VAT=VAT
 HMRC-PILLAR2-ORG=Pillar 2 Top-up Taxes
 HMRC-TERS-ORG=Trusts and Estates
 HMRC-TERSNT-ORG=Trusts and Estates
+
+# -------------------------------------------------------------------------------------------
+# Generic agent role messages
+# -------------------------------------------------------------------------------------------
+
+agentRole.HMRC-MTD-IT=<strong>main agent</strong>
+agentRole.HMRC-MTD-IT-SUPP=<strong>supporting agent</strong>
+agentRole.PERSONAL-INCOME-RECORD=agent
+agentRole.HMRC-MTD-VAT=agent
+agentRole.HMRC-TERS-ORG=agent
+agentRole.HMRC-TERSNT-ORG=agent
+agentRole.HMRC-CGT-PD=agent
+agentRole.HMRC-PPT-ORG=agent
+agentRole.HMRC-CBC-ORG=agent
+agentRole.HMRC-CBC-NONUK-ORG=agent
+agentRole.HMRC-PILLAR2-ORG=agent
+agentRole.noEMA=agent
+
+agentRoleFor.HMRC-MTD-IT=main agent
+agentRoleFor.HMRC-MTD-IT-SUPP=supporting agent
+agentRoleFor.PERSONAL-INCOME-RECORD=agent
+agentRoleFor.HMRC-MTD-VAT=agent
+agentRoleFor.HMRC-TERS-ORG=agent
+agentRoleFor.HMRC-TERSNT-ORG=agent
+agentRoleFor.HMRC-CGT-PD=agent
+agentRoleFor.HMRC-PPT-ORG=agent
+agentRoleFor.HMRC-CBC-ORG=agent
+agentRoleFor.HMRC-CBC-NONUK-ORG=agent
+agentRoleFor.HMRC-PILLAR2-ORG=agent
+agentRoleFor.noEMA=agent
+
+definitiveAgentRoleFor.HMRC-MTD-IT=the main agent
+definitiveAgentRoleFor.HMRC-MTD-IT-SUPP=a supporting agent
+definitiveAgentRoleFor.PERSONAL-INCOME-RECORD=the agent
+definitiveAgentRoleFor.HMRC-MTD-VAT=the agent
+definitiveAgentRoleFor.HMRC-TERS-ORG=the agent
+definitiveAgentRoleFor.HMRC-TERSNT-ORG=the agent
+definitiveAgentRoleFor.HMRC-CGT-PD=the agent
+definitiveAgentRoleFor.HMRC-PPT-ORG=the agent
+definitiveAgentRoleFor.HMRC-CBC-ORG=the agent
+definitiveAgentRoleFor.HMRC-CBC-NONUK-ORG=the agent
+definitiveAgentRoleFor.HMRC-PILLAR2-ORG=the agent
+definitiveAgentRoleFor.noEMA=the agent
+
+indefiniteAgentRole.HMRC-MTD-IT=a main agent
+indefiniteAgentRole.HMRC-MTD-IT-SUPP=a supporting agent
+indefiniteAgentRole.PERSONAL-INCOME-RECORD=an agent
+indefiniteAgentRole.HMRC-MTD-VAT=an agent
+indefiniteAgentRole.HMRC-TERS-ORG=an agent
+indefiniteAgentRole.HMRC-TERSNT-ORG=an agent
+indefiniteAgentRole.HMRC-CGT-PD=an agent
+indefiniteAgentRole.HMRC-PPT-ORG=an agent
+indefiniteAgentRole.HMRC-CBC-ORG=an agent
+indefiniteAgentRole.HMRC-CBC-NONUK-ORG=an agent
+indefiniteAgentRole.HMRC-PILLAR2-ORG=an agent
+indefiniteAgentRole.noEMA=an agent
 
 # -------------------------------------------------------------------------------------------
 # Timeout/Auth/IV error pages
@@ -78,9 +134,10 @@ error.cannot-view-request.p2=If you are the agent, ask your client to respond to
 error.cannot-view-request.a1=Manage your recent authorisation requests
 error.cannot-view-request.a2=Finish and sign out
 
-# -------------------------------------------------------------------------------------------
-# Select Client Type
-# -------------------------------------------------------------------------------------------
+# ________________________________________________________________________________
+# Agent journey select client type
+# ________________________________________________________________________________
+
 clientType.authorisation-request.header=What type of client is this authorisation for?
 clientType.agent-cancel-authorisation.header=What type of client do you want to cancel your authorisation for?
 clientType.personal=An individual or sole trader
@@ -89,10 +146,10 @@ clientType.trust=A trust or an estate
 clientType.authorisation-request.error.required=Select the type of client you need authorisation from
 clientType.agent-cancel-authorisation.error.required=Select the type of client you want to cancel authorisation for
 
+# ________________________________________________________________________________
+# Agent journey select service
+# ________________________________________________________________________________
 
-# -------------------------------------------------------------------------------------------
-# Select Client Service
-# -------------------------------------------------------------------------------------------
 clientService.authorisation-request.header=What do you want the client to authorise you to do?
 clientService.agent-cancel-authorisation.header=Which authorisation do you want to cancel for the client?
 clientService.hint=You need to create a separate request for each tax service.
@@ -120,7 +177,7 @@ clientService.HMRC-TERS-ORG.trust=Maintain their trust or an estate
 clientService.HMRC-TERSNT-ORG.trust=Maintain their non-taxable trust
 
 # -------------------------------------------------------------------------------------------
-# Client service refinement
+# Agent journey client service refinement
 # -------------------------------------------------------------------------------------------
 
 clientServiceRefinement.HMRC-TERS-ORG.header=Is your client’s trust or estate taxable?
@@ -128,9 +185,9 @@ clientServiceRefinement.HMRC-TERSNT-ORG.header=Is your client’s trust or estat
 clientServiceRefinement.HMRC-TERS-ORG.option=Yes
 clientServiceRefinement.HMRC-TERSNT-ORG.option=No, it’s exempt from tax
 
-# -------------------------------------------------------------------------------------------
-# Enter Client ID
-# -------------------------------------------------------------------------------------------
+# ________________________________________________________________________________
+# Agent journey enter client id
+# ________________________________________________________________________________
 
 clientId.nino.label=What is your client’s National Insurance number?
 clientId.nino.hint=For example, QQ 12 34 56 C
@@ -172,9 +229,9 @@ clientId.PlrId.hint=This is 15 characters, for example, XAPLR0000999999. The cur
 clientId.PlrId.error.invalid=Enter a valid Pillar 2 top-up taxes registration date
 clientId.PlrId.error.required=Enter your client’s  date of registration to report Pillar 2 top-up taxes
 
-#-------------------------------------------------------------------------------------------
-# Enter Client Fact
-# -------------------------------------------------------------------------------------------
+# ________________________________________________________________________________
+# Agent journey enter client fact
+# ________________________________________________________________________________
 
 clientFact.HMRC-MTD-IT.postcode.label=What is your client’s postcode?
 clientFact.HMRC-MTD-IT-SUPP.postcode.label=What is your client’s postcode?
@@ -245,7 +302,7 @@ clientFact.HMRC-PILLAR2-ORG.date.error.day-year.required=Pillar 2 top-up taxes r
 clientFact.HMRC-PILLAR2-ORG.date.error.month-year.required=Pillar 2 top-up taxes registration date must include a month and year
 
 # ________________________________________________________________________________
-# Confirm Client
+# Agent journey confirm client
 # ________________________________________________________________________________
 
 confirmClient.title=Is this the client you want authorisation from?
@@ -257,7 +314,7 @@ confirmClient.true=Yes - this is the right client
 confirmClient.false=No - I need to start again
 
 # ________________________________________________________________________________
-# Select agent role
+# Agent journey select agent role
 # ________________________________________________________________________________
 
 selectAgentRole.HMRC-MTD-IT.newRelationship.header=How do you want to act for {0}?
@@ -289,8 +346,9 @@ selectAgentRole.HMRC-MTD-IT-SUPP.supportingToMain.option=No
 selectAgentRole.HMRC-MTD-IT.supportingToMain.hint=If {0} accepts this request, you’ll get access to all the Income Tax information you need to deal with HMRC on their behalf.
 
 # ________________________________________________________________________________
-# Check Your Answers
+# Agent journey check your answers
 # ________________________________________________________________________________
+
 checkYourAnswers.header=Check your answers
 checkYourAnswers.h2=Authorisation details for {0}
 checkYourAnswers.clientService.label=What you want to do for the client
@@ -337,7 +395,7 @@ confirmCancellation.HMRC-PILLAR2-ORG.outcome=If you cancel your authorisation, y
 confirmCancellation.HMRC-MTD-IT.inset=Cancelling this authorisation will not automatically cancel any authorisation for this client for Self Assessment.
 
 # ________________________________________________________________________________
-# Confirmation page
+# Confirmation of invitation complete
 # ________________________________________________________________________________
 
 authorisationRequestComplete.header=You’ve created an authorisation request
@@ -352,6 +410,10 @@ authorisationRequestComplete.list.four=We will email you at {0} to update you on
 authorisationRequestComplete.createAnother=Create another authorisation request
 authorisationRequestComplete.agentHome=Go to your agent services account homepage
 
+# ________________________________________________________________________________
+# Confirmation of agent cancel authorisation complete
+# ________________________________________________________________________________
+
 agentCancelAuthorisationComplete.header=Authorisation cancelled
 agentCancelAuthorisationComplete.h2=What this means
 agentCancelAuthorisationComplete.p1={0} is no longer authorised to manage {1}’s {2}.
@@ -364,7 +426,7 @@ agentCancelAuthorisationComplete.print=Print this page
 agentCancelAuthorisationComplete.agentHome=Return to agent services account homepage
 
 # ________________________________________________________________________________
-# Track requests
+# Agent track requests
 # ________________________________________________________________________________
 
 trackRequests.title=Manage your recent authorisation requests
@@ -425,6 +487,10 @@ trackRequests.filter-status.ClientCancelledAuthorisation=Accepted by client. The
 trackRequests.filter-status.HMRCCancelledAuthorisation=Accepted by client. HMRC later cancelled your authorisation
 trackRequests.filter-status.Declined.HMRC-CBC={0} request to manage the client’s country-by-country reports was declined.
 
+# ________________________________________________________________________________
+# Agent cancel invitation
+# ________________________________________________________________________________
+
 agentCancelInvitation.header=Are you sure you want to cancel this authorisation request?
 agentCancelInvitation.hint=If you cancel this request, you will not be able to manage their {0}.
 agentCancelInvitation.true=Yes
@@ -456,6 +522,8 @@ genericNotFound.description=We could not find a client in our records using the 
 genericNotFound.advice=Check the details and try again.
 
 # ________________________________________________________________________________
+# Client not registered for Self Assessment
+# ________________________________________________________________________________
 
 clientNotRegistered.p1=You cannot create an authorisation request for this client until they have registered for Self Assessment and have a Self Assessment Unique Taxpayer Reference.
 clientNotRegistered.h2=What to do next
@@ -466,6 +534,7 @@ clientNotRegistered.return=Return to your authorisation requests
 # ________________________________________________________________________________
 # Not authorised to de-auth
 # ________________________________________________________________________________
+
 notAuthorised.HMRC-MTD-IT.p=This client has not authorised you to manage their Making Tax Digital for Income Tax.
 notAuthorised.HMRC-MTD-IT-SUPP.p=This client has not authorised you to manage their Making Tax Digital for Income Tax.
 notAuthorised.PERSONAL-INCOME-RECORD.p=This client has not authorised you to view their Income record.
@@ -510,7 +579,7 @@ authorisationAlreadyExists.p2=You do not need to ask them to authorise you for t
 authorisationAlreadyExists.return=Return to your authorisation requests
 
 # ________________________________________________________________________________
-# Authorise agent start page
+# Client authorise agent start page
 # ________________________________________________________________________________
 
 authoriseAgentStartPage.h1.income-tax=Authorise {0} to manage your Making Tax Digital for Income Tax
@@ -545,61 +614,6 @@ authoriseAgentStartPage.link.text2=I do not want {0} to act for me
 
 consentInformation.header={0} want to be your {1}
 
-agentRole.HMRC-MTD-IT=<strong>main agent</strong>
-agentRole.HMRC-MTD-IT-SUPP=<strong>supporting agent</strong>
-agentRole.PERSONAL-INCOME-RECORD=agent
-agentRole.HMRC-MTD-VAT=agent
-agentRole.HMRC-TERS-ORG=agent
-agentRole.HMRC-TERSNT-ORG=agent
-agentRole.HMRC-CGT-PD=agent
-agentRole.HMRC-PPT-ORG=agent
-agentRole.HMRC-CBC-ORG=agent
-agentRole.HMRC-CBC-NONUK-ORG=agent
-agentRole.HMRC-PILLAR2-ORG=agent
-agentRole.noEMA=agent
-
-agentRoleFor.HMRC-MTD-IT=main agent
-agentRoleFor.HMRC-MTD-IT-SUPP=supporting agent
-agentRoleFor.PERSONAL-INCOME-RECORD=agent
-agentRoleFor.HMRC-MTD-VAT=agent
-agentRoleFor.HMRC-TERS-ORG=agent
-agentRoleFor.HMRC-TERSNT-ORG=agent
-agentRoleFor.HMRC-CGT-PD=agent
-agentRoleFor.HMRC-PPT-ORG=agent
-agentRoleFor.HMRC-CBC-ORG=agent
-agentRoleFor.HMRC-CBC-NONUK-ORG=agent
-agentRoleFor.HMRC-PILLAR2-ORG=agent
-agentRoleFor.noEMA=agent
-
-definitiveAgentRoleFor.HMRC-MTD-IT=the main agent
-definitiveAgentRoleFor.HMRC-MTD-IT-SUPP=a supporting agent
-definitiveAgentRoleFor.PERSONAL-INCOME-RECORD=the agent
-definitiveAgentRoleFor.HMRC-MTD-VAT=the agent
-definitiveAgentRoleFor.HMRC-TERS-ORG=the agent
-definitiveAgentRoleFor.HMRC-TERSNT-ORG=the agent
-definitiveAgentRoleFor.HMRC-CGT-PD=the agent
-definitiveAgentRoleFor.HMRC-PPT-ORG=the agent
-definitiveAgentRoleFor.HMRC-CBC-ORG=the agent
-definitiveAgentRoleFor.HMRC-CBC-NONUK-ORG=the agent
-definitiveAgentRoleFor.HMRC-PILLAR2-ORG=the agent
-definitiveAgentRoleFor.noEMA=the agent
-
-indefiniteAgentRole.HMRC-MTD-IT=a main agent
-indefiniteAgentRole.HMRC-MTD-IT-SUPP=a supporting agent
-indefiniteAgentRole.PERSONAL-INCOME-RECORD=an agent
-indefiniteAgentRole.HMRC-MTD-VAT=an agent
-indefiniteAgentRole.HMRC-TERS-ORG=an agent
-indefiniteAgentRole.HMRC-TERSNT-ORG=an agent
-indefiniteAgentRole.HMRC-CGT-PD=an agent
-indefiniteAgentRole.HMRC-PPT-ORG=an agent
-indefiniteAgentRole.HMRC-CBC-ORG=an agent
-indefiniteAgentRole.HMRC-CBC-NONUK-ORG=an agent
-indefiniteAgentRole.HMRC-PILLAR2-ORG=an agent
-indefiniteAgentRole.noEMA=an agent
-
-# ________________________________________________________________________________
-# Client consent information
-# ________________________________________________________________________________
 consentInformation.warning.mainAgent=If you authorise {0}, we will remove {1} as your existing main agent.
 consentInformation.warning.agent=If you authorise {0}, we will remove {1} as your existing agent.
 consentInformation.warning.suppAgent=If you authorise {0} as your supporting agent, they can not longer act as main agent.
@@ -735,6 +749,7 @@ confirmConsent.HMRC-PILLAR2-ORG.list.item6=view your calculations and amounts ow
 # ________________________________________________________________________________
 # Client confirm decline of request
 # ________________________________________________________________________________
+
 confirmDecline.title=Decline a request
 confirmDecline.agent=agent
 confirmDecline.mainAgent=main agent
@@ -751,6 +766,7 @@ confirmDecline.error.required=Select ''yes'' if you want to decline the request 
 # ________________________________________________________________________________
 # Client journey check your answer page
 # ________________________________________________________________________________
+
 checkYourAnswer.title=Check your answer
 
 checkYourAnswer.question=Do you want {0} to be your {1} for {2}?
@@ -783,7 +799,6 @@ clientConfirmation.section2.signOutLink=Finish and sign out
 clientConfirmation.rejected.h1=You declined a request from {0}
 clientConfirmation.rejected.p1=You have not given permission for {0} to manage your {2}.
 clientConfirmation.PERSONAL-INCOME-RECORD.rejected.p1=You have not given permission for {0} to view your personal income record.
-
 
 # ________________________________________________________________________________
 # MYTA - Manage Your Tax Agents - client content
@@ -872,6 +887,7 @@ no-outstanding-requests.header=There are no outstanding authorisation requests f
 # ________________________________________________________________________________
 # You cannot appoint this tax agent (Agent suspended)
 # ________________________________________________________________________________
+
 agentSuspended.p1=This tax agent cannot manage your {0} at this time.
 agentSuspended.p2=If you have any questions, contact the tax agent who sent you this request.
 agentSuspended.signout-link=Finish and sign out
@@ -879,11 +895,13 @@ agentSuspended.signout-link=Finish and sign out
 # ________________________________________________________________________________
 # There are no outstanding authorisation requests for you to respond to
 # ________________________________________________________________________________
+
 noOutstandingRequests.p1= If you think this is wrong, contact the agent who sent you the request or <a href="{0}" class="govuk-link">view your request history</a>.
 
 # ________________________________________________________________________________
 # This authorisation request has already expired
 # ________________________________________________________________________________
+
 authorisationRequestExpired.p1=This request expired on {0}. Authorisation requests expire after 21 days.
 authorisationRequestExpired.p2=If you want this agent to manage your {0}, ask them to send you another authorisation request.
 authorisationRequestExpired.a1=Manage your tax agents
@@ -892,6 +910,7 @@ authorisationRequestExpired.a2=Finish and sign out
 # ________________________________________________________________________________
 # We cannot find this authorisation request
 # ________________________________________________________________________________
+
 cannotFindAuthRequest.p1=You may have signed in with the wrong user ID.
 cannotFindAuthRequest.p2=You need to use the sign-in details which match the tax service the agent wants to manage for you.
 cannotFindAuthRequest.p3=For example, if an agent wants to manage your VAT you should:
@@ -903,6 +922,7 @@ cannotFindAuthRequest.signOut=Finish and sign out
 # ________________________________________________________________________________
 # This authorisation request has been cancelled
 # ________________________________________________________________________________
+
 authorisationRequestCancelled.p1=This request was cancelled by the agent on {0}.
 authorisationRequestCancelled.p2=If you want this agent to manage your {0}, ask them to send you another authorisation request.
 authorisationRequestCancelled.a1=Manage your tax agents
@@ -911,6 +931,7 @@ authorisationRequestCancelled.a2=Finish and sign out
 # ________________________________________________________________________________
 # You have already accepted this authorisation request
 # ________________________________________________________________________________
+
 authorisationAlreadyAccepted.p1=We received a response to this request on {0}.
 authorisationAlreadyAccepted.p2=To check the details, or to cancel this authorisation, go to <a href="{0}" class="govuk-link">Manage your tax agents</a>.
 authorisationAlreadyAccepted.signOutLink=Finish and sign out
@@ -918,15 +939,16 @@ authorisationAlreadyAccepted.signOutLink=Finish and sign out
 # ________________________________________________________________________________
 # You already refused this authorisation request
 # ________________________________________________________________________________
+
 authorisationAlreadyRefused.p1=This request was refused on {0}.
 authorisationAlreadyRefused.p2=If you want this agent to manage your {0}, ask them to send you another authorisation request.
 authorisationAlreadyRefused.mytaLink=Manage your tax agents
 authorisationAlreadyRefused.signOutLink=Finish and sign out
 
-
 # ________________________________________________________________________________
 # Page not found
 # ________________________________________________________________________________
+
 pageNotFound.header=This page can’t be found
 pageNotFound.text=Please check that you have entered the correct web address.
 pageNotFound.p1=If you typed the web address, check it is correct.
