@@ -10,7 +10,7 @@ service.name.clients=Penodi rhywun i ddelio â CThEF ar eich rhan
 authorisation-request.service.name=Gofyn i gleient eich awdurdodi
 agent-cancel-authorisation.service.name=Canslo awdurdodiad y cleient
 
-error.prefix=Gwall:’ ’
+error.prefix=Gwall:' '
 error.heading=Mae problem.
 
 continue.button=Parhau

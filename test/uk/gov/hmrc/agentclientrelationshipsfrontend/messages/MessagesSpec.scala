@@ -36,9 +36,7 @@ class MessagesSpec extends AnyWordSpecLike with Matchers {
   val english: List[String] = getMessageKeys("messages")
   val welsh: List[String] = getMessageKeys("messages.cy")
 
-  // TODO Enable when messages are in a good state and actually match each other,
-  //  this will enforce no duplicates and translations for all keys
-  "The English messages file" ignore {
+  "The English messages file" should {
     "have a corresponding Welsh translation for all keys" in {
       val missingKeys: List[String] = english.filterNot(welsh.contains)
 
@@ -52,7 +50,7 @@ class MessagesSpec extends AnyWordSpecLike with Matchers {
     }
   }
 
-  "The Welsh messages file" ignore {
+  "The Welsh messages file" should {
     "have a corresponding English translation for all keys" in {
       val missingKeys: List[String] = welsh.filterNot(english.contains)
 
