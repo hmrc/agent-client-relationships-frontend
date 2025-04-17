@@ -32,40 +32,52 @@ class EnterClientFactPageSpec extends ViewSpecSupport {
   private val authorisationRequestJourney: AgentJourney = AgentJourney(AgentJourneyType.AuthorisationRequest)
   private val agentCancelAuthorisationJourney: AgentJourney = AgentJourney(AgentJourneyType.AgentCancelAuthorisation)
 
-  case class ExpectedStrings(authorisationTitle: String, cancelAuthorisationTitle: String)
+  case class ExpectedStrings(
+                              authorisationTitle: String,
+                              cancelAuthorisationTitle: String,
+                              errorRequired: String
+                            )
 
   private val knownFactContentVariants: Map[(String, KnownFactType), ExpectedStrings] = Map(
     ("HMRC-MTD-IT", KnownFactType.PostalCode) -> ExpectedStrings(
       authorisationTitle = "What is your client’s postcode? - Ask a client to authorise you - GOV.UK",
-      cancelAuthorisationTitle = "What is your client’s postcode? - Cancel a client’s authorisation - GOV.UK"
+      cancelAuthorisationTitle = "What is your client’s postcode? - Cancel a client’s authorisation - GOV.UK",
+      errorRequired = "Enter your client’s postcode"
     ),
     ("PERSONAL-INCOME-RECORD", KnownFactType.Date) -> ExpectedStrings(
       authorisationTitle = "What is your client’s date of birth? - Ask a client to authorise you - GOV.UK",
-      cancelAuthorisationTitle = "What is your client’s date of birth? - Cancel a client’s authorisation - GOV.UK"
+      cancelAuthorisationTitle = "What is your client’s date of birth? - Cancel a client’s authorisation - GOV.UK",
+      errorRequired = "Enter your client’s date of birth"
     ),
     ("HMRC-MTD-VAT", KnownFactType.Date) -> ExpectedStrings(
       authorisationTitle = "When did the client’s VAT registration start? - Ask a client to authorise you - GOV.UK",
-      cancelAuthorisationTitle = "When did the client’s VAT registration start? - Cancel a client’s authorisation - GOV.UK"
+      cancelAuthorisationTitle = "When did the client’s VAT registration start? - Cancel a client’s authorisation - GOV.UK",
+      errorRequired = "Enter your client’s VAT registration date"
     ),
     ("HMRC-CGT-PD", KnownFactType.PostalCode) -> ExpectedStrings(
       authorisationTitle = "What is your client’s postcode? - Ask a client to authorise you - GOV.UK",
-      cancelAuthorisationTitle = "What is your client’s postcode? - Cancel a client’s authorisation - GOV.UK"
+      cancelAuthorisationTitle = "What is your client’s postcode? - Cancel a client’s authorisation - GOV.UK",
+      errorRequired = "Enter your client’s postcode"
     ),
     ("HMRC-CGT-PD", KnownFactType.CountryCode) -> ExpectedStrings(
       authorisationTitle = "Which country is your client’s contact address in? - Ask a client to authorise you - GOV.UK",
-      cancelAuthorisationTitle = "Which country is your client’s contact address in? - Cancel a client’s authorisation - GOV.UK"
+      cancelAuthorisationTitle = "Which country is your client’s contact address in? - Cancel a client’s authorisation - GOV.UK",
+      errorRequired = "Enter the country of your client’s contact address"
     ),
     ("HMRC-PPT-ORG", KnownFactType.Date) -> ExpectedStrings(
       authorisationTitle = "When did your client’s registration start for Plastic Packaging Tax? - Ask a client to authorise you - GOV.UK",
-      cancelAuthorisationTitle = "When did your client’s registration start for Plastic Packaging Tax? - Cancel a client’s authorisation - GOV.UK"
+      cancelAuthorisationTitle = "When did your client’s registration start for Plastic Packaging Tax? - Cancel a client’s authorisation - GOV.UK",
+      errorRequired = "Enter your client’s Plastic Packaging Tax registration date"
     ),
     ("HMRC-CBC-ORG", KnownFactType.Email) -> ExpectedStrings(
       authorisationTitle = "What is your client’s Country-by-Country contact email address? - Ask a client to authorise you - GOV.UK",
-      cancelAuthorisationTitle = "What is your client’s Country-by-Country contact email address? - Cancel a client’s authorisation - GOV.UK"
+      cancelAuthorisationTitle = "What is your client’s Country-by-Country contact email address? - Cancel a client’s authorisation - GOV.UK",
+      errorRequired = "Enter your client’s email address"
     ),
     ("HMRC-PILLAR2-ORG", KnownFactType.Date) -> ExpectedStrings(
       authorisationTitle = "What is your client’s registration date for Pillar 2 top-up taxes? - Ask a client to authorise you - GOV.UK",
-      cancelAuthorisationTitle = "What is your client’s registration date for Pillar 2 top-up taxes? - Cancel a client’s authorisation - GOV.UK"
+      cancelAuthorisationTitle = "What is your client’s registration date for Pillar 2 top-up taxes? - Cancel a client’s authorisation - GOV.UK",
+      errorRequired = "Enter your client’s date of registration to report Pillar 2 top-up taxes"
     )
   )
 
@@ -86,13 +98,20 @@ class EnterClientFactPageSpec extends ViewSpecSupport {
           service,
           Set("FR", "DE")
         )
+        val blankForm = form.bindFromRequest(Map.empty)
         val view: HtmlFormat.Appendable = viewTemplate(form, knownFactType.fieldConfiguration)
+        val viewWithRequiredError: HtmlFormat.Appendable = viewTemplate(blankForm, knownFactType.fieldConfiguration)
         val doc: Document = Jsoup.parse(view.body)
+        val requiredErrorDoc: Document = Jsoup.parse(viewWithRequiredError.body)
         "have the right title" in {
           doc.title() shouldBe title
+          requiredErrorDoc.title() shouldBe "Error: " + title
         }
         "have a language switcher" in {
           doc.hasLanguageSwitch shouldBe true
+        }
+        "shows the correct required error" in {
+          requiredErrorDoc.extractText(errorSummaryList, 1).value shouldBe expectedStrings.errorRequired
         }
       }
     })
