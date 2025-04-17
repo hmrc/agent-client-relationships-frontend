@@ -192,8 +192,8 @@ class EnterClientIdPageSpec extends ViewSpecSupport {
     object PlrId extends ServiceStrings {
       val label = "What is your client’s Pillar 2 top-up taxes ID?"
       val hint = "This is 15 characters, for example, XAPLR0000999999. The current filing member can find it on their Report Pillar 2 top-up taxes homepage."
-      val errorInvalid = "Enter a valid Pillar 2 top-up taxes registration date"
-      val errorRequired = "Enter your client’s date of registration to report Pillar 2 top-up taxes"
+      val errorInvalid = "Enter a Pillar 2 top-up taxes ID in the correct format"
+      val errorRequired = "Enter your client’s Pillar 2 top-up taxes ID"
       val authorisationRequestTitle = s"$label - Ask a client to authorise you - GOV.UK"
       val cancelAuthorisationTitle = s"$label - Cancel a client’s authorisation - GOV.UK"
     }

@@ -226,8 +226,8 @@ clientId.cbcId.error.required=Enter your client’s country-by-country ID
 
 clientId.PlrId.label=What is your client’s Pillar 2 top-up taxes ID?
 clientId.PlrId.hint=This is 15 characters, for example, XAPLR0000999999. The current filing member can find it on their Report Pillar 2 top-up taxes homepage.
-clientId.PlrId.error.invalid=Enter a valid Pillar 2 top-up taxes registration date
-clientId.PlrId.error.required=Enter your client’s  date of registration to report Pillar 2 top-up taxes
+clientId.PlrId.error.invalid=Enter a Pillar 2 top-up taxes ID in the correct format
+clientId.PlrId.error.required=Enter your client’s Pillar 2 top-up taxes ID
 
 # ________________________________________________________________________________
 # Agent journey enter client fact
