@@ -265,6 +265,9 @@ clientFact.HMRC-MTD-VAT.date.error.day-year.required=Mae’n rhaid i’r dyddiad
 clientFact.HMRC-MTD-VAT.date.error.month-year.required=Mae’n rhaid i’r dyddiad cofrestru TAW gynnwys mis a blwyddyn
 
 clientFact.HMRC-CGT-PD.postcode.label=Beth yw cod post eich cleient?
+clientFact.HMRC-CGT-PD.postcode.error.required=Nodwch god post eich cleient
+clientFact.HMRC-CGT-PD.postcode.error.invalid=Nodwch god post go iawn
+
 clientFact.HMRC-CGT-PD.countryCode.label=Ym mha wlad y mae cyfeiriad cyswllt eich cleient?
 clientFact.HMRC-CGT-PD.countryCode.hint=Mae’n rhaid i hwn gyd-fynd â gwlad cyfeiriad cyswllt eich cleient yn ei Gyfrif Treth Enillion Cyfalaf ar eiddo yn y DU. Dechreuwch deipio’r wlad.
 clientFact.HMRC-CGT-PD.countryCode.error.required=Nodwch wlad cyfeiriad cyswllt eich cleient

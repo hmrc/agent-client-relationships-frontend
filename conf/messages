@@ -265,6 +265,9 @@ clientFact.HMRC-MTD-VAT.date.error.day-year.required=VAT registration date must 
 clientFact.HMRC-MTD-VAT.date.error.month-year.required=VAT registration date must include a month and year
 
 clientFact.HMRC-CGT-PD.postcode.label=What is your client’s postcode?
+clientFact.HMRC-CGT-PD.postcode.error.required=Enter your client’s postcode
+clientFact.HMRC-CGT-PD.postcode.error.invalid=Enter a real postcode
+
 clientFact.HMRC-CGT-PD.countryCode.label=Which country is your client’s contact address in?
 clientFact.HMRC-CGT-PD.countryCode.hint=This must match the country of the client’s contact address in their Capital Gains Tax on UK property account. Start typing the country.
 clientFact.HMRC-CGT-PD.countryCode.error.required=Enter the country of your client’s contact address
