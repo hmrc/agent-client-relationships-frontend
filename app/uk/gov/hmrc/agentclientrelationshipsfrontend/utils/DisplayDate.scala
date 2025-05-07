@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,38 +25,20 @@ import scala.util.Try
 
 object DisplayDate {
 
-  private val welshMonthLookup = Map(
-    "January"   -> "Ionawr",
-    "February"  -> "Chwefror",
-    "March"     -> "Mawrth",
-    "April"     -> "Ebrill",
-    "May"       -> "Mai",
-    "June"      -> "Mehefin",
-    "July"      -> "Gorffennaf",
-    "August"    -> "Awst",
-    "September" -> "Medi",
-    "October"   -> "Hydref",
-    "November"  -> "Tachwedd",
-    "December"  -> "Rhagfyr"
-  )
+  def displayDateForLang(date: Option[java.time.LocalDate])(implicit request: Request[?]): String = {
+    val lang = request.cookies
+      .get("PLAY_LANG")
+      .map(_.value)
+      .getOrElse("en")
 
-  private val dateFormatter: DateTimeFormatter =
-    DateTimeFormatter.ofPattern("d MMMM uuuu", Locale.UK)
+    val locale = lang match {
+      case "cy" => new Locale("cy", "GB")
+      case _ => Locale.UK
+    }
 
-  def displayDateForLang(date: Option[java.time.LocalDate], df: DateTimeFormatter = dateFormatter)(implicit request: Request[?]): String =
-    date.fold("") { d =>
-      val lang = request.cookies
-        .get("PLAY_LANG")
-        .map(_.value)
-        .getOrElse("en")
+    val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("d MMMM uuuu", locale)
 
-      val dateStrEnglish = d.format(df)
-
-      if (lang == "cy") {
-        val monthStrEnglish = dateStrEnglish.split(' ')(1).trim
-        val cyMonth = welshMonthLookup(monthStrEnglish)
-        dateStrEnglish.replace(monthStrEnglish, cyMonth)
-      } else dateStrEnglish
+    date.map(_.format(dateFormatter)).getOrElse("")
     }
 
   def displayDateForLangFromString(strDate: String)(implicit request: Request[?]): String = {
