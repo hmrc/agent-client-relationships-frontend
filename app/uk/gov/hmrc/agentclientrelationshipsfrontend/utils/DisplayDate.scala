@@ -16,11 +16,11 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.utils
 
+import play.api.i18n.Lang
 import play.api.mvc.Request
 
 import java.time.{Instant, LocalDate, ZoneId}
 import java.time.format.DateTimeFormatter
-import java.util.Locale
 import scala.util.Try
 
 object DisplayDate {
@@ -31,12 +31,7 @@ object DisplayDate {
       .map(_.value)
       .getOrElse("en")
 
-    val locale = lang match {
-      case "cy" => new Locale("cy", "GB")
-      case _ => Locale.UK
-    }
-
-    val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("d MMMM uuuu", locale)
+    val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("d MMMM uuuu", Lang(lang).toLocale)
 
     date.map(_.format(dateFormatter)).getOrElse("")
     }
