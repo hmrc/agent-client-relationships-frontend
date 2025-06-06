@@ -43,6 +43,18 @@ class CheckYourAnswerControllerISpec extends ComponentSpecHelper with AuthStubs 
     "authorisation-response",
     journeyComplete = Some("invitationId")
   )
+
+  val errorModel: ClientJourney = ClientJourney(
+    "authorisation-response",
+    consent = Some(true),
+    serviceKey = Some("HMRC-MTD-IT"),
+    invitationId = Some("invitationId"),
+    agentName = Some("ABC Accountants"),
+    status = Some(Pending),
+    lastModifiedDate = Some(Instant.parse("2024-12-01T12:00:00Z")),
+    backendErrorResponse = Some(true)
+  )
+
   override def beforeEach(): Unit = {
     await(journeyService.deleteAllAnswersInSession(request))
     super.beforeEach()
@@ -86,6 +98,14 @@ class CheckYourAnswerControllerISpec extends ComponentSpecHelper with AuthStubs 
         result.status shouldBe SEE_OTHER
         result.header("Location").value shouldBe routes.ConfirmationController.show.url
 
+    "redirect to Processing Your Request" when:
+      "the user accepts the invitation and a locked response is received from the backend" in:
+        authoriseAsClient()
+        await(journeyService.saveJourney(journeyModel))
+        givenAcceptAuthorisation("invitationId", LOCKED)
+        val result = post(routes.CheckYourAnswerController.submit.url)(Map())
+        result.status shouldBe SEE_OTHER
+        result.header("Location").value shouldBe routes.CheckYourAnswerController.processingYourRequest.url
 
     "redirect to MYTA" when:
 
@@ -110,3 +130,38 @@ class CheckYourAnswerControllerISpec extends ComponentSpecHelper with AuthStubs 
         givenRejectAuthorisation("ABC123", INTERNAL_SERVER_ERROR)
         val result = post(routes.CheckYourAnswerController.submit.url)(Map())
         result.status shouldBe INTERNAL_SERVER_ERROR
+
+  "Processing your request action" should:
+    "redirect the user to the confirmation controller" when:
+      "journey complete flag is found in the cache" in :
+        authoriseAsClient()
+        await(journeyService.saveJourney(completeJourney))
+        givenAcceptAuthorisation("invitationId", NO_CONTENT)
+        val result = get(routes.CheckYourAnswerController.processingYourRequest.url)
+        result.status shouldBe SEE_OTHER
+        result.header("Location").value shouldBe routes.ConfirmationController.show.url
+
+    "show tech difficulties" when:
+      "backend response error flag is found in the cache" in:
+        authoriseAsClient()
+        await(journeyService.saveJourney(errorModel))
+        givenAcceptAuthorisation("invitationId", NO_CONTENT)
+        val result = get(routes.CheckYourAnswerController.processingYourRequest.url)
+        result.status shouldBe INTERNAL_SERVER_ERROR
+
+    "stay on processing your request" when :
+      "a valid session for CYA is found in the cache" in :
+        authoriseAsClient()
+        await(journeyService.saveJourney(journeyModel))
+        givenAcceptAuthorisation("invitationId", NO_CONTENT)
+        val result = get(routes.CheckYourAnswerController.processingYourRequest.url)
+        result.status shouldBe OK
+
+    "redirect to MYTA" when :
+      "the journey is missing data" in :
+        authoriseAsClient()
+        await(journeyService.saveJourney(ClientJourney("authorisation-response")))
+        givenAcceptAuthorisation("invitationId", NO_CONTENT)
+        val result = get(routes.CheckYourAnswerController.processingYourRequest.url)
+        result.status shouldBe SEE_OTHER
+        result.header("Location").value shouldBe routes.ManageYourTaxAgentsController.show.url

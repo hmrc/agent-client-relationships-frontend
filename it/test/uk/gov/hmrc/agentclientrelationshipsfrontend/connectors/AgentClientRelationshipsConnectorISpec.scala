@@ -19,6 +19,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.connectors
 import play.api.libs.json.{JsObject, Json}
 import play.api.test.Helpers.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.*
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.SubmissionResponse.{SubmissionLocked, SubmissionSuccess}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientType.personal
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.invitationLink.{AgentNotFoundError, AgentSuspendedError, ValidateLinkPartsResponse}
@@ -322,9 +323,13 @@ class AgentClientRelationshipsConnectorISpec extends ComponentSpecHelper with Ag
   }
 
   "acceptAuthorisation" should :
-    "return nothing when a 204 status is received" in :
+    "return SubmissionSuccess when a 204 status is received" in :
       givenAcceptAuthorisation("ABC123", NO_CONTENT)
-      await(testConnector.acceptAuthorisation("ABC123")) shouldEqual()
+      await(testConnector.acceptAuthorisation("ABC123")) shouldEqual SubmissionSuccess
+
+    "return SubmissionLocked when a 423 status is received" in :
+      givenAcceptAuthorisation("ABC123", LOCKED)
+      await(testConnector.acceptAuthorisation("ABC123")) shouldEqual SubmissionLocked
 
     "throw an exception when a non-204 status is received" in :
       givenAcceptAuthorisation("ABC123", INTERNAL_SERVER_ERROR)

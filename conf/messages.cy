@@ -957,3 +957,11 @@ pageNotFound.text=Gwiriwch eich bod wedi nodi’r cyfeiriad gwe cywir.
 pageNotFound.p1=Os gwnaethoch deipio’r cyfeiriad gwe, gwiriwch ei fod yn gywir.
 pageNotFound.p2=Os gwnaethoch ludo’r cyfeiriad gwe, gwiriwch eich bod wedi copïo’r cyfeiriad yn llawn.
 pageNotFound.p3=Os yw’r cyfeiriad gwe’n gywir, cysylltwch â’r asiant treth a anfonodd y cais atoch os hoffech ei awdurdodi o hyd.
+
+# ________________________________________________________________________________
+# Processing your request
+# ________________________________________________________________________________
+
+processingYourRequest.header=Rydym yn prosesu’ch cais
+processingYourRequest.para1=Rydych wedi cyrraedd y dudalen hon oherwydd eich bod wedi clicio ddwywaith wrth gyflwyno’ch cais.
+processingYourRequest.para2=Er mwyn gweld y sgrin gadarnhau, arhoswch ychydig o eiliadau ac yna dewiswch ‘parhau’.

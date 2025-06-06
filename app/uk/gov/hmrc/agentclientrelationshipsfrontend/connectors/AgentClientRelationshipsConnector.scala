@@ -22,6 +22,7 @@ import play.api.libs.ws.JsonBodyWritables.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.AgentRequest
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.*
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.SubmissionResponse.{SubmissionLocked, SubmissionSuccess}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ManageYourTaxAgentsData
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.invitationLink.{ValidateLinkPartsError, ValidateLinkPartsResponse}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, AgentJourneyRequest}
@@ -126,10 +127,11 @@ class AgentClientRelationshipsConnector @Inject()(appConfig: AppConfig,
       })
   }
 
-  def acceptAuthorisation(invitationId: String)(implicit hc: HeaderCarrier): Future[Unit] =
+  def acceptAuthorisation(invitationId: String)(implicit hc: HeaderCarrier): Future[SubmissionResponse] =
     val url = s"$agentClientRelationshipsUrl/authorisation-response/accept/$invitationId"
     httpV2.put(url"$url").execute[HttpResponse].map(response => response.status match {
-      case NO_CONTENT => ()
+      case NO_CONTENT => SubmissionSuccess
+      case LOCKED => SubmissionLocked
       case status => throw new Exception(s"Unexpected status $status received when accepting invitation")
     })
 

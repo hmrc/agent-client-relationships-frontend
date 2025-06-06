@@ -43,6 +43,7 @@ POST       /authorisation-response/confirm-consent                              
 
 GET        /authorisation-response/check-answer                                         uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.CheckYourAnswerController.show
 POST       /authorisation-response/check-answer                                         uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.CheckYourAnswerController.submit
+GET        /authorisation-response/processing-your-request                              uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.CheckYourAnswerController.processingYourRequest
 
 GET        /authorisation-response/confirmation                                         uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.ConfirmationController.show
 
