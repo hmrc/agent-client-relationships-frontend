@@ -63,7 +63,7 @@
 @optSurveyUrl = @{if(showSurvey || !isAgent) Some(RedirectUrl(appConfig.surveyUrl(isAgent))) else None}
 @signOutUrl = @{if(isSignedIn) Some(routes.SignOutController.signOut(continueUrl = optSurveyUrl, isAgent = isAgent).url) else None}
 @* only pass in the service name as a fully resolved message if it is not the default for agents auth *@
-@service = @{serviceName.getOrElse(messages("service.name.agents.auth"))}
+@service = @{serviceName.getOrElse(messages("authorisation-request.service.name"))}
 @head = {
     @if(isSignedIn) {
         @hmrcTimeoutDialogHelper(

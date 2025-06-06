@@ -15,23 +15,26 @@
  *@
 
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.AgentJourneyType
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.AgentJourneyType.AuthorisationRequest
 
 @this(
         layout: Layout,
         govukButton: GovukButton
 )
 
-@(continueUrl: String, isAgent: Boolean)(implicit request: RequestHeader, messages: Messages)
-@key = @{
-    "processingYourRequest"
-}
+@(continueUrl: String, isAgent: Boolean, optAgentJourney: Option[AgentJourneyType] = None)(implicit request: RequestHeader, messages: Messages)
 
-@pageTitle = @{
-    messages(s"$key.header")
+@key = @{"processingYourRequest"}
+@pageTitle = @{messages(s"$key.header")}
+@serviceName = @{
+    if(isAgent) messages(s"${optAgentJourney.getOrElse(AuthorisationRequest).toString}.service.name")
+    else messages("service.name.clients")
 }
 
 @layout(
-    pageTitle,
+    pageTitle = pageTitle,
+    serviceName = Some(serviceName),
     isAgent = isAgent
 ) {
     <h1 class="govuk-heading-xl">@pageTitle</h1>

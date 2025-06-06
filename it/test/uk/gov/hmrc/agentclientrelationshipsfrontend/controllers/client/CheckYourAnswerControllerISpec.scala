@@ -81,6 +81,13 @@ class CheckYourAnswerControllerISpec extends ComponentSpecHelper with AuthStubs 
   "The submit action" should:
 
     "redirect the user to the confirmation controller" when:
+      "the session already has a journey completed value" in:
+        authoriseAsClient()
+        await(journeyService.saveJourney(completeJourney))
+        givenAcceptAuthorisation("invitationId", NO_CONTENT)
+        val result = post(routes.CheckYourAnswerController.submit.url)(Map())
+        result.status shouldBe SEE_OTHER
+        result.header("Location").value shouldBe routes.ConfirmationController.show.url
 
       "the user accepts the invitation and a successful response is received from the backend" in:
         authoriseAsClient()

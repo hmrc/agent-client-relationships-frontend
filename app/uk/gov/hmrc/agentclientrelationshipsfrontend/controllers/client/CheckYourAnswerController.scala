@@ -52,6 +52,8 @@ class CheckYourAnswerController @Inject()(mcc: MessagesControllerComponents,
       val invitationId: Option[String] = request.journey.invitationId
 
       (request.journey.consent, request.journey.invitationId, request.journey.journeyComplete) match {
+        case (_, _, Some(_)) =>
+          Future.successful(Redirect(routes.ConfirmationController.show))
         case (Some(true), Some(invId), _) =>
           agentClientRelationshipsConnector.acceptAuthorisation(invId).flatMap {
             case SubmissionSuccess =>
