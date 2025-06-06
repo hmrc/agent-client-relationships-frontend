@@ -51,6 +51,7 @@ GET        /authorisation-response/confirmation                                 
 GET        /manage-your-tax-agents                                                      uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.ManageYourTaxAgentsController.show
 GET        /manage-your-tax-agents/remove-authorisation/:id                             uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.ManageYourTaxAgentsController.showConfirmDeauth(id: String)
 POST       /manage-your-tax-agents/remove-authorisation/:id                             uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.ManageYourTaxAgentsController.submitDeauth(id: String)
+GET        /manage-your-tax-agents/processing-your-request                              uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.ManageYourTaxAgentsController.processingYourRequest
 GET        /manage-your-tax-agents/confirmation/:id                                     uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.ManageYourTaxAgentsController.deauthComplete(id: String)
 
 # Agent Journey URLs ----------------------------------------------------------------------------------------------------------
@@ -79,6 +80,7 @@ POST       /:journeyType/agent-role                                             
 
 GET        /:journeyType/confirm                                                        uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.CheckYourAnswersController.show(journeyType: AgentJourneyType)
 POST       /:journeyType/confirm                                                        uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.CheckYourAnswersController.onSubmit(journeyType: AgentJourneyType)
+GET        /:journeyType/processing-your-request                                        uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.CheckYourAnswersController.processingYourRequest(journeyType: AgentJourneyType)
 
 GET        /:journeyType/confirmation                                                   uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.ConfirmationController.show(journeyType: AgentJourneyType)
 

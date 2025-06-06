@@ -60,22 +60,24 @@ class AgentClientRelationshipsConnector @Inject()(appConfig: AppConfig,
       }
   }
 
-  def removeAuthorisation(journey: AgentJourney)(implicit hc: HeaderCarrier, request: AgentJourneyRequest[?]): Future[Unit] = httpV2
+  def removeAuthorisation(journey: AgentJourney)(implicit hc: HeaderCarrier, request: AgentJourneyRequest[?]): Future[SubmissionResponse] = httpV2
     .post(url"$agentClientRelationshipsUrl/agent/${request.arn}/remove-authorisation")
     .withBody(Json.obj("clientId" -> journey.getClientId, "service" -> journey.getActiveRelationship))
     .execute[HttpResponse].map { response =>
       response.status match {
-        case NO_CONTENT => ()
+        case NO_CONTENT => SubmissionSuccess
+        case LOCKED => SubmissionLocked
         case _ => throw new RuntimeException(s"Failed to cancel authorisation on behalf of agent: ${response.body}")
       }
     }
 
-  def clientCancelAuthorisation(clientId: String, service: String, arn: String)(implicit hc: HeaderCarrier): Future[Unit] = httpV2
+  def clientCancelAuthorisation(clientId: String, service: String, arn: String)(implicit hc: HeaderCarrier): Future[SubmissionResponse] = httpV2
     .post(url"$agentClientRelationshipsUrl/agent/$arn/remove-authorisation")
     .withBody(Json.obj("clientId" -> clientId, "service" -> service))
     .execute[HttpResponse].map { response =>
       response.status match {
-        case NO_CONTENT => ()
+        case NO_CONTENT => SubmissionSuccess
+        case LOCKED => SubmissionLocked
         case _ => throw new RuntimeException(s"Failed to cancel authorisation on behalf of client: ${response.body}")
       }
     }

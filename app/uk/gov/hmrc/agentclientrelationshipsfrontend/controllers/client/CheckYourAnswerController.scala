@@ -48,12 +48,10 @@ class CheckYourAnswerController @Inject()(mcc: MessagesControllerComponents,
 
   def submit: Action[AnyContent] = actions.clientJourneyRequired.async:
     implicit request =>
-      val consentAnswer: Option[Boolean] = request.journey.consent
-      val invitationId: Option[String] = request.journey.invitationId
-
       (request.journey.consent, request.journey.invitationId, request.journey.journeyComplete) match {
         case (_, _, Some(_)) =>
           Future.successful(Redirect(routes.ConfirmationController.show))
+
         case (Some(true), Some(invId), _) =>
           agentClientRelationshipsConnector.acceptAuthorisation(invId).flatMap {
             case SubmissionSuccess =>
@@ -61,8 +59,8 @@ class CheckYourAnswerController @Inject()(mcc: MessagesControllerComponents,
                 journeyType = request.journey.journeyType,
                 journeyComplete = Some(invId)
               )).map(_ => Redirect(routes.ConfirmationController.show))
-            // Ensuring we remove the leftovers from the previous lock
             case SubmissionLocked =>
+              // Ensuring we remove the leftovers from the previous lock
               journeyService.saveJourney(request.journey.copy(backendErrorResponse = None)).map(_ =>
                 Redirect(routes.CheckYourAnswerController.processingYourRequest)
               )
@@ -72,6 +70,7 @@ class CheckYourAnswerController @Inject()(mcc: MessagesControllerComponents,
               journeyService.saveJourney(request.journey.copy(backendErrorResponse = Some(true)))
               throw ex
           }
+
         case (Some(false), Some(invId), _) => for {
           _ <- agentClientRelationshipsConnector.rejectAuthorisation(invId)
           _ <- journeyService.saveJourney(ClientJourney(
@@ -79,6 +78,7 @@ class CheckYourAnswerController @Inject()(mcc: MessagesControllerComponents,
             journeyComplete = Some(invId)
           ))
         } yield Redirect(routes.ConfirmationController.show)
+
         case _ =>
           Future.successful(Redirect(routes.ManageYourTaxAgentsController.show))
       }
@@ -86,8 +86,15 @@ class CheckYourAnswerController @Inject()(mcc: MessagesControllerComponents,
   def processingYourRequest: Action[AnyContent] = actions.clientJourneyRequired.async:
     implicit request =>
       (request.journey.journeyComplete, request.journey.backendErrorResponse, request.journey.consent) match {
-        case (Some(_), _, _) => Future.successful(Redirect(routes.ConfirmationController.show))
-        case (_, Some(_), _) => errorHandler.internalServerErrorTemplate.map(InternalServerError(_))
-        case (_, _, Some(_)) => Future.successful(Ok(processingYourRequestPage(routes.CheckYourAnswerController.processingYourRequest.url, isAgent = false)))
-        case _ => Future.successful(Redirect(routes.ManageYourTaxAgentsController.show))
+        case (Some(_), _, _) =>
+          Future.successful(Redirect(routes.ConfirmationController.show))
+        case (_, Some(_), _) =>
+          errorHandler.internalServerErrorTemplate.map(InternalServerError(_))
+        case (_, _, Some(_)) =>
+          Future.successful(Ok(processingYourRequestPage(
+            routes.CheckYourAnswerController.processingYourRequest.url,
+            isAgent = false
+          )))
+        case _ =>
+          Future.successful(Redirect(routes.ManageYourTaxAgentsController.show))
       }
