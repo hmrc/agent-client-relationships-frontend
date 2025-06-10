@@ -1,3 +1,4 @@
 # Add all the application routes to the app.routes file
 ->         /agent-client-relationships              app.Routes
+->         /invitations                             aif.Routes
 ->         /                                        health.Routes

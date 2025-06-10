@@ -1,0 +1,2 @@
+
+GET /*path                           uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.aif.InvitationsRedirectController.redirect(path: String)
