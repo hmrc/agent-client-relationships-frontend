@@ -40,11 +40,11 @@ class AgentClientRelationshipsService @Inject()(agentClientRelationshipsConnecto
   }
 
   def cancelAuthorisation(journey: AgentJourney)(implicit hc: HeaderCarrier, request: AgentJourneyRequest[?]): Future[SubmissionResponse] = {
-    agentClientRelationshipsConnector.removeAuthorisation(journey)
+    agentClientRelationshipsConnector.removeAuthorisation(journey.getClientId, journey.getActiveRelationship, request.arn)
   }
 
   def cancelAuthorisation(arn: String, clientId: String, service: String)(implicit hc: HeaderCarrier): Future[SubmissionResponse] = {
-    agentClientRelationshipsConnector.clientCancelAuthorisation(clientId, service, arn)
+    agentClientRelationshipsConnector.removeAuthorisation(clientId, service, arn)
   }
 
   def getAuthorisationRequest(invitationId: String)(implicit hc: HeaderCarrier, request: AgentRequest[?]): Future[Option[AuthorisationRequestInfo]] = {

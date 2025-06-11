@@ -86,7 +86,7 @@ class ManageYourTaxAgentsController @Inject()(
                   case SubmissionLocked =>
                     // Ensuring we remove the leftovers from the previous lock
                     authorisationsCacheService.putAuthorisations(AuthorisationsCache(Seq(authorisation), backendErrorResponse = None))
-                      .map(_ => Redirect(routes.ManageYourTaxAgentsController.processingYourRequest))
+                      .map(_ => Redirect(routes.ManageYourTaxAgentsController.processingYourRequest(id)))
                 }.recover {
                   case ex =>
                     // This ensures the submissionInProgress is aware the original request failed
@@ -106,16 +106,16 @@ class ManageYourTaxAgentsController @Inject()(
       }
 
   // Deauth only
-  def processingYourRequest: Action[AnyContent] = actions.clientAuthorised.async:
+  def processingYourRequest(id: String): Action[AnyContent] = actions.clientAuthorised.async:
     implicit request =>
       authorisationsCacheService.getAuthorisations.flatMap {
-        case Some(AuthorisationsCache(Seq(auth), _)) if auth.deauthorised.contains(true) =>
-          Future.successful(Redirect(routes.ManageYourTaxAgentsController.deauthComplete(auth.uid)))
+        case Some(AuthorisationsCache(auths, _)) if auths.exists(auth => auth.uid == id && auth.deauthorised.contains(true)) =>
+          Future.successful(Redirect(routes.ManageYourTaxAgentsController.deauthComplete(id)))
         case Some(AuthorisationsCache(_, Some(_))) =>
           errorHandler.internalServerErrorTemplate.map(InternalServerError(_))
-        case Some(_) =>
+        case Some(AuthorisationsCache(auth :: _, _)) =>
           Future.successful(Ok(processingYourRequestPage(
-            routes.ManageYourTaxAgentsController.processingYourRequest.url,
+            routes.ManageYourTaxAgentsController.processingYourRequest(id).url,
             isAgent = false
           )))
         case _ =>

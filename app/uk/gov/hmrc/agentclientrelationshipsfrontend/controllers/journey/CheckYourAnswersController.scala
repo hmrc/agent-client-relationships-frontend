@@ -69,16 +69,15 @@ class CheckYourAnswersController @Inject()(mcc: MessagesControllerComponents,
       given AgentJourneyRequest[?] = journeyRequest
 
       val journey = journeyRequest.journey
-      if journey.clientDetailsResponse.isEmpty then
+      if journey.journeyComplete.isDefined then
+        Future.successful(Redirect(routes.ConfirmationController.show(journey.journeyType)))
+      else if journey.clientDetailsResponse.isEmpty then
         Future.successful(Redirect(routes.EnterClientIdController.show(journey.journeyType)))
       else {
         val conditionalExitUrl = journeyService.checkExitConditions
 
-        (journeyType, conditionalExitUrl, journey.journeyComplete) match {
-          case (_, _, Some(_)) =>
-            Future.successful(Redirect(routes.ConfirmationController.show(journey.journeyType)))
-
-          case (AgentJourneyType.AuthorisationRequest, None, _) => for {
+        (journeyType, conditionalExitUrl) match {
+          case (AgentJourneyType.AuthorisationRequest, None) => for {
             invitationId <- agentClientRelationshipsService.createAuthorisationRequest(journey)
             _ <- journeyService.saveJourney(AgentJourney(
               journeyType = journey.journeyType,
@@ -86,7 +85,7 @@ class CheckYourAnswersController @Inject()(mcc: MessagesControllerComponents,
             ))
           } yield Redirect(routes.ConfirmationController.show(journey.journeyType))
 
-          case (AgentJourneyType.AgentCancelAuthorisation, None, _) =>
+          case (AgentJourneyType.AgentCancelAuthorisation, None) =>
             ConfirmCancellationForm.form(ConfirmCancellationFieldName, journey.journeyType.toString)
               .bindFromRequest()
               .fold(
@@ -116,7 +115,7 @@ class CheckYourAnswersController @Inject()(mcc: MessagesControllerComponents,
                   else Future.successful(Redirect(routes.StartJourneyController.startJourney(journey.journeyType)))
                 })
 
-          case (_, Some(url), _) =>
+          case (_, Some(url)) =>
             Future.successful(Redirect(url))
         }
       }

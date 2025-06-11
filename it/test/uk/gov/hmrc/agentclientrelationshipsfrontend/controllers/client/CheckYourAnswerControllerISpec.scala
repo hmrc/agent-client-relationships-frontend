@@ -143,7 +143,6 @@ class CheckYourAnswerControllerISpec extends ComponentSpecHelper with AuthStubs 
       "journey complete flag is found in the cache" in :
         authoriseAsClient()
         await(journeyService.saveJourney(completeJourney))
-        givenAcceptAuthorisation("invitationId", NO_CONTENT)
         val result = get(routes.CheckYourAnswerController.processingYourRequest.url)
         result.status shouldBe SEE_OTHER
         result.header("Location").value shouldBe routes.ConfirmationController.show.url
@@ -152,7 +151,6 @@ class CheckYourAnswerControllerISpec extends ComponentSpecHelper with AuthStubs 
       "backend response error flag is found in the cache" in:
         authoriseAsClient()
         await(journeyService.saveJourney(errorModel))
-        givenAcceptAuthorisation("invitationId", NO_CONTENT)
         val result = get(routes.CheckYourAnswerController.processingYourRequest.url)
         result.status shouldBe INTERNAL_SERVER_ERROR
 
@@ -160,7 +158,6 @@ class CheckYourAnswerControllerISpec extends ComponentSpecHelper with AuthStubs 
       "a valid session for CYA is found in the cache" in :
         authoriseAsClient()
         await(journeyService.saveJourney(journeyModel))
-        givenAcceptAuthorisation("invitationId", NO_CONTENT)
         val result = get(routes.CheckYourAnswerController.processingYourRequest.url)
         result.status shouldBe OK
 
@@ -168,7 +165,6 @@ class CheckYourAnswerControllerISpec extends ComponentSpecHelper with AuthStubs 
       "the journey is missing data" in :
         authoriseAsClient()
         await(journeyService.saveJourney(ClientJourney("authorisation-response")))
-        givenAcceptAuthorisation("invitationId", NO_CONTENT)
         val result = get(routes.CheckYourAnswerController.processingYourRequest.url)
         result.status shouldBe SEE_OTHER
         result.header("Location").value shouldBe routes.ManageYourTaxAgentsController.show.url

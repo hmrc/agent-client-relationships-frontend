@@ -230,23 +230,20 @@ class AgentClientRelationshipsConnectorISpec extends ComponentSpecHelper with Ag
       intercept[RuntimeException](await(testConnector.createAuthorisationRequest(basicJourney)))
 
   "removeAuthorisation" should :
-    "return nothing when a 204 status is received" in :
+    "return SubmissionSuccess when a 204 status is received" in :
       givenRemoveAuthorisation(testArn, NO_CONTENT)
 
-      given AgentJourneyRequest[?] = new AgentJourneyRequest(testArn, basicJourney, request)
+      await(testConnector.removeAuthorisation(testClientId, "HMRC-MTD-IT", testArn)) shouldEqual SubmissionSuccess
 
-      await(testConnector.removeAuthorisation(
-        basicJourney.copy(clientDetailsResponse = Some(basicClientDetails.copy(hasExistingRelationshipFor = Some("HMRC-MTD-IT")))))
-      ) shouldEqual()
+    "return SubmissionLocked when a 423 status is received" in :
+      givenRemoveAuthorisation(testArn, LOCKED)
+
+      await(testConnector.removeAuthorisation(testClientId, "HMRC-MTD-IT", testArn)) shouldEqual SubmissionLocked
 
     "throw exception on an unexpected response" in :
       givenRemoveAuthorisation(testArn, INTERNAL_SERVER_ERROR)
 
-      given AgentJourneyRequest[?] = new AgentJourneyRequest(testArn, basicJourney, request)
-
-      intercept[RuntimeException](await(testConnector.removeAuthorisation(
-        basicJourney.copy(clientDetailsResponse = Some(basicClientDetails.copy(hasExistingRelationshipFor = Some("HMRC-MTD-IT")))))
-      ))
+      intercept[RuntimeException](await(testConnector.removeAuthorisation(testClientId, "HMRC-MTD-IT", testArn)))
 
   "getAuthorisationRequest" should :
     "return the authorisation response if found" in :
