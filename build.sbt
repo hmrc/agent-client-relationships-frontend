@@ -17,7 +17,6 @@ lazy val microservice = Project("agent-client-relationships-frontend", file(".")
     ),
     pipelineStages := Seq(gzip)
   )
-  .settings(resolvers += Resolver.jcenterRepo)
   .settings(CodeCoverageSettings.settings)
   .settings(
     RoutesKeys.routesImport ++= Seq(
