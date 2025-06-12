@@ -20,10 +20,12 @@ import com.google.inject.{Inject, Singleton}
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
-import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
+import uk.gov.hmrc.agentclientrelationshipsfrontend.config.{AppConfig, ErrorHandler}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.connectors.AgentClientRelationshipsConnector
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.SubmissionResponse.{SubmissionLocked, SubmissionSuccess}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.ClientJourney
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.ClientJourneyService
+import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.ProcessingYourRequestPage
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.client.CheckYourAnswerPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
@@ -34,34 +36,65 @@ class CheckYourAnswerController @Inject()(mcc: MessagesControllerComponents,
                                           actions: Actions,
                                           agentClientRelationshipsConnector: AgentClientRelationshipsConnector,
                                           checkYourAnswerPage: CheckYourAnswerPage,
-                                          journeyService: ClientJourneyService
+                                          processingYourRequestPage: ProcessingYourRequestPage,
+                                          journeyService: ClientJourneyService,
+                                          errorHandler: ErrorHandler
                                          )(implicit ec: ExecutionContext, appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport:
 
   def show: Action[AnyContent] = actions.clientJourneyRequired:
     implicit request =>
       if request.journey.consent.isDefined then Ok(checkYourAnswerPage())
-      else Redirect(routes.ManageYourTaxAgentsController.show.url)
+      else Redirect(routes.ManageYourTaxAgentsController.show)
 
   def submit: Action[AnyContent] = actions.clientJourneyRequired.async:
     implicit request =>
-      val consentAnswer: Option[Boolean] = request.journey.consent
-      val invitationId: Option[String] = request.journey.invitationId
+      (request.journey.consent, request.journey.invitationId, request.journey.journeyComplete) match {
+        case (_, _, Some(_)) =>
+          Future.successful(Redirect(routes.ConfirmationController.show))
 
-      (consentAnswer, invitationId) match {
-        case (Some(true), Some(invId: String)) => for {
-          _ <- agentClientRelationshipsConnector.acceptAuthorisation(invId)
-          _ <- journeyService.saveJourney(ClientJourney(
-            journeyType = request.journey.journeyType,
-            journeyComplete = Some(invId)
-          ))
-        } yield Redirect(routes.ConfirmationController.show)
-        case (Some(false), Some(invId)) => for {
+        case (Some(true), Some(invId), _) =>
+          agentClientRelationshipsConnector.acceptAuthorisation(invId).flatMap {
+            case SubmissionSuccess =>
+              journeyService.saveJourney(ClientJourney(
+                journeyType = request.journey.journeyType,
+                journeyComplete = Some(invId)
+              )).map(_ => Redirect(routes.ConfirmationController.show))
+            case SubmissionLocked =>
+              // Ensuring we remove the leftovers from the previous lock
+              journeyService.saveJourney(request.journey.copy(backendErrorResponse = None)).map(_ =>
+                Redirect(routes.CheckYourAnswerController.processingYourRequest)
+              )
+          }.recover {
+            case ex =>
+              // This ensures the submissionInProgress is aware the original request failed
+              journeyService.saveJourney(request.journey.copy(backendErrorResponse = Some(true)))
+              throw ex
+          }
+
+        case (Some(false), Some(invId), _) => for {
           _ <- agentClientRelationshipsConnector.rejectAuthorisation(invId)
           _ <- journeyService.saveJourney(ClientJourney(
             journeyType = request.journey.journeyType,
             journeyComplete = Some(invId)
           ))
         } yield Redirect(routes.ConfirmationController.show)
+
         case _ =>
-          Future.successful(Redirect(routes.ManageYourTaxAgentsController.show.url))
+          Future.successful(Redirect(routes.ManageYourTaxAgentsController.show))
+      }
+
+  def processingYourRequest: Action[AnyContent] = actions.clientJourneyRequired.async:
+    implicit request =>
+      (request.journey.journeyComplete, request.journey.backendErrorResponse, request.journey.consent) match {
+        case (Some(_), _, _) =>
+          Future.successful(Redirect(routes.ConfirmationController.show))
+        case (_, Some(_), _) =>
+          errorHandler.internalServerErrorTemplate.map(InternalServerError(_))
+        case (_, _, Some(_)) =>
+          Future.successful(Ok(processingYourRequestPage(
+            routes.CheckYourAnswerController.processingYourRequest.url,
+            isAgent = false
+          )))
+        case _ =>
+          Future.successful(Redirect(routes.ManageYourTaxAgentsController.show))
       }

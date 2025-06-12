@@ -31,7 +31,8 @@ case class ClientJourney(
                           lastModifiedDate: Option[Instant] = None,
                           clientType: Option[ClientType] = None,
                           existingMainAgent: Option[ExistingMainAgent] = None,
-                          journeyComplete: Option[String] = None
+                          journeyComplete: Option[String] = None,
+                          backendErrorResponse: Option[Boolean] = None
                         ) {
   def getAgentName: String = agentName.getOrElse(throw new RuntimeException("Agent Name is missing"))
   def getInvitationId: String = invitationId.getOrElse(throw new RuntimeException("Invitation Id is missing"))

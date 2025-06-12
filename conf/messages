@@ -3,8 +3,6 @@
 # -------------------------------------------------------------------------------------------
 
 outage-page.serviceDisplayName=Agent services account
-service.name.agents.auth=Ask a client to authorise you
-service.name.agents.de-auth=Cancel a client’s authorisation
 service.name.clients=Appoint someone to deal with HMRC for you
 
 authorisation-request.service.name = Ask a client to authorise you
@@ -957,3 +955,11 @@ pageNotFound.text=Please check that you have entered the correct web address.
 pageNotFound.p1=If you typed the web address, check it is correct.
 pageNotFound.p2=If you pasted the web address, check you copied the entire address.
 pageNotFound.p3=If the web address is correct, contact the tax agent who sent you the request if you still want to authorise them.
+
+# ________________________________________________________________________________
+# Processing your request
+# ________________________________________________________________________________
+
+processingYourRequest.header=We’re processing your request
+processingYourRequest.para1=You reached this page because you clicked twice to submit a request.
+processingYourRequest.para2=To see the confirmation screen, wait a few seconds and then select ‘continue’.

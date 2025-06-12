@@ -17,7 +17,7 @@
 package uk.gov.hmrc.agentclientrelationshipsfrontend.services
 
 import play.api.libs.json.Writes
-import play.api.mvc.Request
+import play.api.mvc.RequestHeader
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.{Authorisation, AuthorisationsCache}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.repositories.AuthorisationsCacheRepository
 import uk.gov.hmrc.mongo.cache.DataKey
@@ -26,19 +26,21 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AuthorisationsCacheService @Inject()(sessionCacheRepository: AuthorisationsCacheRepository) {
+class AuthorisationsCacheService @Inject()(sessionCacheRepository: AuthorisationsCacheRepository)
+                                          (implicit executionContext: ExecutionContext) {
 
   def getAuthorisation(id: String)
-                      (implicit request: Request[?], ec: ExecutionContext): Future[Option[Authorisation]] = {
+                      (implicit request: RequestHeader): Future[Option[Authorisation]] =
     sessionCacheRepository.getFromSession[AuthorisationsCache](DataKey("authorisationsCache")).map {
       case Some(records) => records.authorisations.find(_.uid == id)
       case None => None
     }
-  }
 
-  def put[T](dataKey: DataKey[T], value: T)
-            (implicit writes: Writes[T], request: Request[?]): Future[(String, String)] = {
-        sessionCacheRepository.putSession(dataKey, value)
-  }
+  def getAuthorisations(implicit request: RequestHeader): Future[Option[AuthorisationsCache]] =
+    sessionCacheRepository.getFromSession[AuthorisationsCache](DataKey("authorisationsCache"))
+
+  def putAuthorisations(value: AuthorisationsCache)
+                       (implicit writes: Writes[AuthorisationsCache], request: RequestHeader): Future[(String, String)] =
+    sessionCacheRepository.putSession[AuthorisationsCache](DataKey("authorisationsCache"), value)
 
 }

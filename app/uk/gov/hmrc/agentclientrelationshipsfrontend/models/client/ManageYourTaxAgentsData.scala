@@ -72,7 +72,7 @@ object AuthorisationEvent {
   implicit val format: OFormat[AuthorisationEvent] = Json.format[AuthorisationEvent]
 }
 
-case class AuthorisationsCache(authorisations: Seq[Authorisation])
+case class AuthorisationsCache(authorisations: Seq[Authorisation], backendErrorResponse: Option[Boolean] = None)
 
 object AuthorisationsCache {
   implicit val format: OFormat[AuthorisationsCache] = Json.format[AuthorisationsCache]

@@ -30,7 +30,8 @@ case class AgentJourney(journeyType: AgentJourneyType,
                         refinedService: Option[Boolean] = None,
                         journeyComplete: Option[String] = None,
                         confirmationClientName: Option[String] = None,
-                        confirmationService: Option[String] = None
+                        confirmationService: Option[String] = None,
+                        backendErrorResponse: Option[Boolean] = None
                   ):
 
   def getClientTypeWithDefault: String = clientType.getOrElse("")

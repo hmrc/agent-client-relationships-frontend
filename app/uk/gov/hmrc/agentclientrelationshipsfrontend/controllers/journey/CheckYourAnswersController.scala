@@ -19,11 +19,13 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey
 import play.api.i18n.I18nSupport
 import play.api.mvc.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
-import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.ConfirmCancellationFieldName
+import uk.gov.hmrc.agentclientrelationshipsfrontend.config.{AppConfig, ErrorHandler}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.SubmissionResponse.{SubmissionLocked, SubmissionSuccess}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.ConfirmCancellationForm
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, AgentJourney, AgentJourneyType}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{AgentClientRelationshipsService, ClientServiceConfigurationService, AgentJourneyService}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, AgentJourneyRequest, AgentJourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{AgentClientRelationshipsService, AgentJourneyService, ClientServiceConfigurationService}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.ProcessingYourRequestPage
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.agentJourney.{CheckYourAnswersPage, ConfirmCancellationPage}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
@@ -38,6 +40,8 @@ class CheckYourAnswersController @Inject()(mcc: MessagesControllerComponents,
                                            agentClientRelationshipsService: AgentClientRelationshipsService,
                                            checkYourAnswersPage: CheckYourAnswersPage,
                                            confirmCancellationPage: ConfirmCancellationPage,
+                                           processingYourRequestPage: ProcessingYourRequestPage,
+                                           errorHandler: ErrorHandler,
                                            actions: Actions
                                           )(implicit val executionContext: ExecutionContext, appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport:
 
@@ -65,7 +69,9 @@ class CheckYourAnswersController @Inject()(mcc: MessagesControllerComponents,
       given AgentJourneyRequest[?] = journeyRequest
 
       val journey = journeyRequest.journey
-      if journey.clientDetailsResponse.isEmpty then
+      if journey.journeyComplete.isDefined then
+        Future.successful(Redirect(routes.ConfirmationController.show(journey.journeyType)))
+      else if journey.clientDetailsResponse.isEmpty then
         Future.successful(Redirect(routes.EnterClientIdController.show(journey.journeyType)))
       else {
         val conditionalExitUrl = journeyService.checkExitConditions
@@ -87,15 +93,25 @@ class CheckYourAnswersController @Inject()(mcc: MessagesControllerComponents,
                   Future.successful(BadRequest(confirmCancellationPage(formWithErrors)))
                 },
                 confirmCancellation => {
-                  if confirmCancellation then for {
-                    _ <- agentClientRelationshipsService.cancelAuthorisation(journey)
-                    _ <- journeyService.saveJourney(AgentJourney(
-                      journeyType = journey.journeyType,
-                      confirmationService = journey.clientService,
-                      confirmationClientName = Some(journey.getClientDetailsResponse.name),
-                      journeyComplete = Some(LocalDate.now().toString)
-                    ))
-                  } yield Redirect(routes.ConfirmationController.show(journey.journeyType))
+                  if confirmCancellation then agentClientRelationshipsService.cancelAuthorisation(journey).flatMap {
+                    case SubmissionSuccess =>
+                      journeyService.saveJourney(AgentJourney(
+                        journeyType = journey.journeyType,
+                        confirmationService = journey.clientService,
+                        confirmationClientName = Some(journey.getClientDetailsResponse.name),
+                        journeyComplete = Some(LocalDate.now().toString)
+                      )).map(_ => Redirect(routes.ConfirmationController.show(journey.journeyType)))
+                    case SubmissionLocked =>
+                      // Ensuring we remove the leftovers from the previous lock
+                      journeyService.saveJourney(journey.copy(backendErrorResponse = None)).map(_ =>
+                        Redirect(routes.CheckYourAnswersController.processingYourRequest(journey.journeyType))
+                      )
+                  }.recover {
+                    case ex =>
+                      // This ensures the submissionInProgress is aware the original request failed
+                      journeyService.saveJourney(journey.copy(backendErrorResponse = Some(true)))
+                      throw ex
+                  }
                   else Future.successful(Redirect(routes.StartJourneyController.startJourney(journey.journeyType)))
                 })
 
@@ -104,3 +120,20 @@ class CheckYourAnswersController @Inject()(mcc: MessagesControllerComponents,
         }
       }
 
+  // Deauth only
+  def processingYourRequest(journeyType: AgentJourneyType): Action[AnyContent] = actions.getAgentJourney(journeyType).async:
+    implicit request =>
+      (request.journey.journeyComplete, request.journey.backendErrorResponse, request.journey.clientDetailsResponse) match {
+        case (Some(_), _, _) =>
+          Future.successful(Redirect(routes.ConfirmationController.show(request.journey.journeyType)))
+        case (_, Some(_), _) =>
+          errorHandler.internalServerErrorTemplate.map(InternalServerError(_))
+        case (_, _, Some(_)) =>
+          Future.successful(Ok(processingYourRequestPage(
+            routes.CheckYourAnswersController.processingYourRequest(request.journey.journeyType).url,
+            isAgent = true,
+            Some(request.journey.journeyType)
+          )))
+        case _ =>
+          Future.successful(Redirect(routes.EnterClientIdController.show(request.journey.journeyType)))
+      }

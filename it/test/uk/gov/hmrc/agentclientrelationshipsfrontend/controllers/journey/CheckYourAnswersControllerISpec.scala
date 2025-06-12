@@ -28,7 +28,7 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.services.AgentJourneyService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.WiremockHelper.stubPost
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentSpecHelper}
 
-class CheckYourAnswersControllerISpec extends ComponentSpecHelper with ScalaFutures with AuthStubs :
+class CheckYourAnswersControllerISpec extends ComponentSpecHelper with ScalaFutures with AuthStubs:
 
   val testInvitationId: String = "AB1234567890"
   val testCreateAuthorisationRequestResponseJson: JsObject = Json.obj(
@@ -92,22 +92,22 @@ class CheckYourAnswersControllerISpec extends ComponentSpecHelper with ScalaFutu
     super.beforeEach()
   }
 
-  "GET /authorisation-request/confirm" should :
-    "redirect to enter client id when client details are missing" in :
+  "GET /authorisation-request/confirm" should:
+    "redirect to enter client id when client details are missing" in:
       authoriseAsAgent()
       await(journeyService.saveJourney(AgentJourney(journeyType = AuthorisationRequest, clientType = Some("personal"), clientService = Some(HMRCMTDIT))))
       val result = get(routes.CheckYourAnswersController.show(AuthorisationRequest).url)
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe routes.EnterClientIdController.show(AuthorisationRequest).url
 
-    "redirect to ASA home if journeyComplete is defined" in :
+    "redirect to ASA home if journeyComplete is defined" in:
       authoriseAsAgent()
       await(journeyService.saveJourney(AgentJourney(journeyType = AuthorisationRequest, journeyComplete = Some("ABC"))))
       val result = get(routes.CheckYourAnswersController.show(AuthorisationRequest).url)
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe appConfig.agentServicesAccountHomeUrl
       
-    "redirect to an exit URL if there is an exit condition" in :
+    "redirect to an exit URL if there is an exit condition" in:
       authoriseAsAgent()
       val insolventClientSession = singleAgentRequestJourney(HMRCMTDVAT).copy(
         clientDetailsResponse = Some(basicClientDetails.copy(hasPendingInvitation = true))
@@ -118,7 +118,7 @@ class CheckYourAnswersControllerISpec extends ComponentSpecHelper with ScalaFutu
       result.header("Location").value shouldBe routes.JourneyExitController.show(AuthorisationRequest, ClientAlreadyInvited).url
 
     servicesWithSingleAgentRole
-      .foreach(service => s"display the CYA page on authorisation request for $service journey" in :
+      .foreach(service => s"display the CYA page on authorisation request for $service journey" in:
         authoriseAsAgent()
         await(journeyService.saveJourney(singleAgentRequestJourney(service)))
         val result = get(routes.CheckYourAnswersController.show(AuthorisationRequest).url)
@@ -126,16 +126,16 @@ class CheckYourAnswersControllerISpec extends ComponentSpecHelper with ScalaFutu
       )
     servicesWithAgentRoles
       .foreach(service => existingAgentRoles
-        .foreach(role => s"display the CYA page on authorisation request for $service journey when existing role is ${role.getOrElse("none")}" in :
+        .foreach(role => s"display the CYA page on authorisation request for $service journey when existing role is ${role.getOrElse("none")}" in:
         authoriseAsAgent()
         await(journeyService.saveJourney(agentRoleBasedRequestJourney(service, role)))
         val result = get(routes.CheckYourAnswersController.show(AuthorisationRequest).url)
         result.status shouldBe OK
       ))
 
-  "GET /agent-cancel-authorisation/confirm" should :
+  "GET /agent-cancel-authorisation/confirm" should:
 
-    "redirect to an exit URL if there is an exit condition" in :
+    "redirect to an exit URL if there is an exit condition" in:
       authoriseAsAgent()
       val insolventClientSession = existingAuthCancellationJourney(HMRCMTDVAT).copy(
         clientDetailsResponse = Some(basicClientDetails.copy(hasExistingRelationshipFor = None))
@@ -146,7 +146,7 @@ class CheckYourAnswersControllerISpec extends ComponentSpecHelper with ScalaFutu
       result.header("Location").value shouldBe routes.JourneyExitController.show(AgentCancelAuthorisation, NoAuthorisationExists).url
 
     servicesWithSingleAgentRole
-      .foreach(service => s"display the confirm cancellation page for $service journey" in :
+      .foreach(service => s"display the confirm cancellation page for $service journey" in:
         authoriseAsAgent()
         await(journeyService.saveJourney(existingAuthCancellationJourney(service)))
         val result = get(routes.CheckYourAnswersController.show(AgentCancelAuthorisation).url)
@@ -154,15 +154,15 @@ class CheckYourAnswersControllerISpec extends ComponentSpecHelper with ScalaFutu
       )
     servicesWithAgentRoles
       .foreach(service => existingAgentRoles.collect({ case Some(role) => role }) // we don't test for None as it should not be possible
-        .foreach(role => s"display the confirm cancellation page for $service journey when existing role is $role" in :
+        .foreach(role => s"display the confirm cancellation page for $service journey when existing role is $role" in:
         authoriseAsAgent()
         await(journeyService.saveJourney(existingAuthCancellationJourney(service)))
         val result = get(routes.CheckYourAnswersController.show(AgentCancelAuthorisation).url)
         result.status shouldBe OK
       ))
 
-  "POST /authorisation-request/confirm" should :
-    servicesWithSingleAgentRole.foreach(service => s"redirect to authorisation request created for $service page when confirmed" in :
+  "POST /authorisation-request/confirm" should:
+    servicesWithSingleAgentRole.foreach(service => s"redirect to authorisation request created for $service page when confirmed" in:
       authoriseAsAgent()
       await(journeyService.saveJourney(singleAgentRequestJourney(service)))
       stubPost(createAuthorisationRequestUrl, CREATED, testCreateAuthorisationRequestResponseJson.toString)
@@ -174,7 +174,7 @@ class CheckYourAnswersControllerISpec extends ComponentSpecHelper with ScalaFutu
     )
 
     servicesWithAgentRoles.foreach(service => existingAgentRoles.collect({ case Some(role) if role !== service => role }) // we don't test for None as it should not be possible
-      .foreach(role => s"redirect to authorisation request created for $service page when confirmed with existing role as $role" in :
+      .foreach(role => s"redirect to authorisation request created for $service page when confirmed with existing role as $role" in:
         authoriseAsAgent()
         stubPost(createAuthorisationRequestUrl, CREATED, testCreateAuthorisationRequestResponseJson.toString)
         await(journeyService.saveJourney(agentRoleBasedRequestJourney(service, Some(role))))
@@ -185,7 +185,21 @@ class CheckYourAnswersControllerISpec extends ComponentSpecHelper with ScalaFutu
         result.header("Location").value shouldBe routes.ConfirmationController.show(AuthorisationRequest).url
       ))
 
-    "redirect to enter client id when client details are missing" in :
+    "redirect to authorisation request created when journeyComplete is set" in:
+      authoriseAsAgent()
+      journeyService.saveJourney(
+        journey = AgentJourney(
+          journeyType = AuthorisationRequest,
+          journeyComplete = Some(testInvitationId)
+        )
+      ).futureValue
+      val result = post(routes.CheckYourAnswersController.onSubmit(AuthorisationRequest).url)(Map(
+        "confirmed" -> Seq("true")
+      ))
+      result.status shouldBe SEE_OTHER
+      result.header("Location").value shouldBe routes.ConfirmationController.show(AuthorisationRequest).url
+
+    "redirect to enter client id when client details are missing" in:
       authoriseAsAgent()
       journeyService.saveJourney(
         journey = AgentJourney(
@@ -200,7 +214,7 @@ class CheckYourAnswersControllerISpec extends ComponentSpecHelper with ScalaFutu
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe routes.EnterClientIdController.show(AuthorisationRequest).url
 
-    "redirect to an exit URL if there is an exit condition" in :
+    "redirect to an exit URL if there is an exit condition" in:
       authoriseAsAgent()
       val insolventClientSession = singleAgentRequestJourney(HMRCMTDVAT).copy(
         clientDetailsResponse = Some(basicClientDetails.copy(hasPendingInvitation = true))
@@ -210,8 +224,8 @@ class CheckYourAnswersControllerISpec extends ComponentSpecHelper with ScalaFutu
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe routes.JourneyExitController.show(AuthorisationRequest, ClientAlreadyInvited).url
 
-  "POST /agent-cancel-authorisation/confirm" should :
-    servicesWithSingleAgentRole.foreach(service => s"redirect to authorisation cancelled for $service page when confirmed" in :
+  "POST /agent-cancel-authorisation/confirm" should:
+    servicesWithSingleAgentRole.foreach(service => s"redirect to authorisation cancelled for $service page when confirmed" in:
       authoriseAsAgent()
       stubPost(cancelAuthorisationUrl, NO_CONTENT, "")
       await(journeyService.saveJourney(existingAuthCancellationJourney(service)))
@@ -222,7 +236,7 @@ class CheckYourAnswersControllerISpec extends ComponentSpecHelper with ScalaFutu
       result.header("Location").value shouldBe routes.ConfirmationController.show(AgentCancelAuthorisation).url
     )
 
-    existingAgentRoles.flatten.foreach(service => s"redirect to authorisation cancelled for $service page when confirmed" in :
+    existingAgentRoles.flatten.foreach(service => s"redirect to authorisation cancelled for $service page when confirmed" in:
       authoriseAsAgent()
       stubPost(cancelAuthorisationUrl, NO_CONTENT, "")
       await(journeyService.saveJourney(existingAuthCancellationJourney(service)))
@@ -233,7 +247,31 @@ class CheckYourAnswersControllerISpec extends ComponentSpecHelper with ScalaFutu
       result.header("Location").value shouldBe routes.ConfirmationController.show(AgentCancelAuthorisation).url
     )
 
-    "redirect to start again when selecting not to confirm cancellation" in :
+    "redirect to authorisation cancelled when journeyComplete is set" in:
+      authoriseAsAgent()
+      journeyService.saveJourney(
+        journey = AgentJourney(
+          journeyType = AgentCancelAuthorisation,
+          journeyComplete = Some(testInvitationId)
+        )
+      ).futureValue
+      val result = post(routes.CheckYourAnswersController.onSubmit(AgentCancelAuthorisation).url)(Map(
+        "confirmCancellation" -> Seq("true")
+      ))
+      result.status shouldBe SEE_OTHER
+      result.header("Location").value shouldBe routes.ConfirmationController.show(AgentCancelAuthorisation).url
+
+    "redirect to processing your request when confirmed but backend responds with LOCKED" in:
+      authoriseAsAgent()
+      stubPost(cancelAuthorisationUrl, LOCKED, "")
+      await(journeyService.saveJourney(existingAuthCancellationJourney(HMRCMTDIT)))
+      val result = post(routes.CheckYourAnswersController.onSubmit(AgentCancelAuthorisation).url)(Map(
+        "confirmCancellation" -> Seq("true")
+      ))
+      result.status shouldBe SEE_OTHER
+      result.header("Location").value shouldBe routes.CheckYourAnswersController.processingYourRequest(AgentCancelAuthorisation).url
+
+    "redirect to start again when selecting not to confirm cancellation" in:
       authoriseAsAgent()
       await(journeyService.saveJourney(existingAuthCancellationJourney(HMRCMTDIT)))
       val result = post(routes.CheckYourAnswersController.onSubmit(AgentCancelAuthorisation).url)(Map(
@@ -242,13 +280,13 @@ class CheckYourAnswersControllerISpec extends ComponentSpecHelper with ScalaFutu
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe routes.StartJourneyController.startJourney(AgentCancelAuthorisation).url
 
-    "show an error when no selection to confirm cancellation is made" in :
+    "show an error when no selection to confirm cancellation is made" in:
       authoriseAsAgent()
       await(journeyService.saveJourney(existingAuthCancellationJourney(HMRCMTDIT)))
       val result = post(routes.CheckYourAnswersController.onSubmit(AgentCancelAuthorisation).url)("")
       result.status shouldBe BAD_REQUEST
 
-    "redirect to enter client id when client details are missing" in :
+    "redirect to enter client id when client details are missing" in:
       authoriseAsAgent()
       journeyService.saveJourney(
         journey = AgentJourney(
@@ -263,7 +301,7 @@ class CheckYourAnswersControllerISpec extends ComponentSpecHelper with ScalaFutu
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe routes.EnterClientIdController.show(AgentCancelAuthorisation).url
 
-    "redirect to an exit URL if there is an exit condition" in :
+    "redirect to an exit URL if there is an exit condition" in:
       authoriseAsAgent()
       val insolventClientSession = existingAuthCancellationJourney(HMRCMTDVAT).copy(
         clientDetailsResponse = Some(basicClientDetails.copy(hasExistingRelationshipFor = None))
@@ -272,3 +310,48 @@ class CheckYourAnswersControllerISpec extends ComponentSpecHelper with ScalaFutu
       val result = get(routes.CheckYourAnswersController.onSubmit(AgentCancelAuthorisation).url)
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe routes.JourneyExitController.show(AgentCancelAuthorisation, NoAuthorisationExists).url
+
+  "GET /agent-cancel-authorisation/processing-your-request" should:
+    "redirect the user to the confirmation controller" when:
+      "journey complete flag is found in the cache" in:
+        authoriseAsAgent()
+        journeyService.saveJourney(
+          journey = AgentJourney(
+            journeyType = AgentCancelAuthorisation,
+            journeyComplete = Some(testInvitationId)
+          )
+        ).futureValue
+        val result = get(routes.CheckYourAnswersController.processingYourRequest(AgentCancelAuthorisation).url)
+        result.status shouldBe SEE_OTHER
+        result.header("Location").value shouldBe routes.ConfirmationController.show(AgentCancelAuthorisation).url
+
+    "show tech difficulties" when:
+      "backend response error flag is found in the cache" in:
+        authoriseAsAgent()
+        journeyService.saveJourney(
+          journey = AgentJourney(
+            journeyType = AgentCancelAuthorisation,
+            backendErrorResponse = Some(true)
+          )
+        ).futureValue
+        val result = get(routes.CheckYourAnswersController.processingYourRequest(AgentCancelAuthorisation).url)
+        result.status shouldBe INTERNAL_SERVER_ERROR
+
+    "stay on processing your request" when:
+      "a valid session for CYA is found in the cache" in:
+        authoriseAsAgent()
+        await(journeyService.saveJourney(existingAuthCancellationJourney(HMRCMTDIT)))
+        val result = get(routes.CheckYourAnswersController.processingYourRequest(AgentCancelAuthorisation).url)
+        result.status shouldBe OK
+
+    "redirect to enter client id" when:
+      "the journey is missing data" in:
+        authoriseAsAgent()
+        journeyService.saveJourney(
+          journey = AgentJourney(
+            journeyType = AgentCancelAuthorisation
+          )
+        ).futureValue
+        val result = get(routes.CheckYourAnswersController.processingYourRequest(AgentCancelAuthorisation).url)
+        result.status shouldBe SEE_OTHER
+        result.header("Location").value shouldBe routes.EnterClientIdController.show(AgentCancelAuthorisation).url
