@@ -45,8 +45,7 @@ class EmailSpec extends ViewSpecSupport {
         )
         val form = EnterClientFactForm.form(
           KnownFactType.Email.fieldConfiguration,
-          "HMRC-CBC-ORG",
-          Set.empty[String]
+          "HMRC-CBC-ORG"
         )
         val view: HtmlFormat.Appendable = viewTemplate(form, KnownFactType.Email.fieldConfiguration)
         val doc: Document = Jsoup.parse(view.body)

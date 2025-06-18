@@ -60,7 +60,7 @@ class DateSpec extends ViewSpecSupport {
 
     "render base components of a date form" which {
 
-      val form = EnterClientFactForm.form(fieldConfig, "", Set())
+      val form = EnterClientFactForm.form(fieldConfig, "")
       val view: HtmlFormat.Appendable = template(form, fieldConfig, "")
       val doc: Document = Jsoup.parse(view.body)
 
@@ -86,7 +86,7 @@ class DateSpec extends ViewSpecSupport {
       listOfServices.foreach { service =>
 
         val msgPrefix = s"clientFact.$service.date"
-        val form = EnterClientFactForm.form(fieldConfig, service, Set())
+        val form = EnterClientFactForm.form(fieldConfig, service)
         val view: HtmlFormat.Appendable = template(form, fieldConfig, msgPrefix)
         val doc: Document = Jsoup.parse(view.body)
 
@@ -105,7 +105,7 @@ class DateSpec extends ViewSpecSupport {
       listOfServices.foreach { service =>
 
         val msgPrefix = s"clientFact.$service.date"
-        val form = EnterClientFactForm.form(fieldConfig, service, Set()).bind(Map("date" -> ""))
+        val form = EnterClientFactForm.form(fieldConfig, service).bind(Map("date" -> ""))
         val view: HtmlFormat.Appendable = template(form, fieldConfig, msgPrefix)
         val doc: Document = Jsoup.parse(view.body)
 

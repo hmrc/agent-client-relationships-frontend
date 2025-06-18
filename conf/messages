@@ -240,6 +240,10 @@ clientFact.HMRC-MTD-IT-SUPP.postcode.error.required=Enter your client’s postco
 clientFact.HMRC-MTD-IT.postcode.error.invalid=Enter a real postcode
 clientFact.HMRC-MTD-IT-SUPP.postcode.error.invalid=Enter a real postcode
 
+clientFact.HMRC-MTD-IT.countryCode.label=Which country is your client’s address in?
+clientFact.HMRC-MTD-IT.countryCode.hint=For sole traders who are signed up to Making Tax Digital for Income Tax, use the country from their business address. For any other type of client, use the country they live in.
+clientFact.HMRC-MTD-IT.countryCode.error.required=Enter the country of your client’s address
+
 clientFact.PERSONAL-INCOME-RECORD.date.label=What is your client’s date of birth?
 clientFact.PERSONAL-INCOME-RECORD.date.hint=For example, 22 7 1981.
 clientFact.PERSONAL-INCOME-RECORD.date.error.required=Enter your client’s date of birth
