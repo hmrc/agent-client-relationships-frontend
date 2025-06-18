@@ -44,8 +44,7 @@ class PostcodeSpec extends ViewSpecSupport {
         )
         val form = EnterClientFactForm.form(
           KnownFactType.PostalCode.fieldConfiguration,
-          "HMRC-CGT-PD",
-          Set.empty
+          "HMRC-CGT-PD"
         )
         val view: HtmlFormat.Appendable = viewTemplate(form, KnownFactType.PostalCode.fieldConfiguration)
         val doc: Document = Jsoup.parse(view.body)

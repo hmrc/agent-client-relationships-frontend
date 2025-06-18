@@ -20,11 +20,11 @@ import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
-import uk.gov.hmrc.agentclientrelationshipsfrontend.config.CountryNamesLoader
+import uk.gov.hmrc.agentclientrelationshipsfrontend.config.{AppConfig, CountryNamesLoader}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.KnownFactType
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.common.KnownFactsConfiguration
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.EnterClientFactForm
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, AgentJourney, JourneyExitType, AgentJourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, AgentJourneyRequest, AgentJourneyType, JourneyExitType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.AgentJourneyService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.agentJourney.EnterClientFactPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
@@ -37,23 +37,29 @@ class EnterClientFactController @Inject()(mcc: MessagesControllerComponents,
                                           journeyService: AgentJourneyService,
                                           enterKnownFactPage: EnterClientFactPage,
                                           actions: Actions,
-                                          countryNamesLoader: CountryNamesLoader
+                                          countryNamesLoader: CountryNamesLoader,
+                                          appConfig: AppConfig
                                          )(implicit val executionContext: ExecutionContext) extends FrontendController(mcc) with I18nSupport:
-
-
-  private val countries = countryNamesLoader.load
-  private val validCountryCodes = countries.keys.toSet
 
   private def knownFactField(knownFactType: KnownFactType): KnownFactsConfiguration =
     if knownFactType == KnownFactType.CountryCode then
+      val countries = countryNamesLoader.load(
+        namesAsValues = false,
+        location = appConfig.isoCountryListLocation
+      )
+      knownFactType.fieldConfiguration.copy(validOptions = Some(countries.toSeq))
+    else if knownFactType == KnownFactType.Country then
+      val countries = countryNamesLoader.load(
+        namesAsValues = true,
+        location = appConfig.citizenDetailsCountryListLocation
+      )
       knownFactType.fieldConfiguration.copy(validOptions = Some(countries.toSeq))
     else
       knownFactType.fieldConfiguration
 
-  private def knownFactForm(journey: AgentJourney): Form[String] = EnterClientFactForm.form(
-    journey.getKnownFactType.fieldConfiguration,
-    journey.getService,
-    validCountryCodes
+  private def knownFactForm(journey: AgentJourney, field: KnownFactsConfiguration): Form[String] = EnterClientFactForm.form(
+    field,
+    journey.getService
   )
 
   def show(journeyType: AgentJourneyType): Action[AnyContent] = actions.getAgentJourney(journeyType):
@@ -64,13 +70,14 @@ class EnterClientFactController @Inject()(mcc: MessagesControllerComponents,
 
       if journey.clientDetailsResponse.isEmpty || journey.clientId.isEmpty then Redirect(routes.SelectClientTypeController.show(journeyType))
       else {
+        val field = knownFactField(journey.clientDetailsResponse.get.knownFactType.getOrElse(throw RuntimeException("Known fact type is missing")))
         val form = journey.knownFact match {
-          case Some(fact) => knownFactForm(journey).fill(fact)
-          case None => knownFactForm(journey)
+          case Some(fact) => knownFactForm(journey, field).fill(fact)
+          case None => knownFactForm(journey, field)
         }
         Ok(enterKnownFactPage(
           form,
-          knownFactField(journey.clientDetailsResponse.get.knownFactType.getOrElse(throw RuntimeException("Known fact type is missing")))
+          field
         ))
       }
 
@@ -80,12 +87,12 @@ class EnterClientFactController @Inject()(mcc: MessagesControllerComponents,
       given AgentJourneyRequest[?] = journeyRequest
 
       val journey = journeyRequest.journey
-
-      knownFactForm(journey).bindFromRequest().fold(
+      val field = knownFactField(journey.clientDetailsResponse.get.knownFactType.getOrElse(throw RuntimeException("Known fact type is missing")))
+      knownFactForm(journey, field).bindFromRequest().fold(
         formWithErrors => {
           Future.successful(BadRequest(enterKnownFactPage(
             formWithErrors,
-            knownFactField(journey.clientDetailsResponse.get.knownFactType.getOrElse(throw RuntimeException("Known fact type is missing")))
+            field
           )))
         },
         knownFact => {

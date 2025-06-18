@@ -22,11 +22,9 @@ import scala.io.Source
 import scala.util.{Failure, Success, Try}
 
 @Singleton
-class CountryNamesLoader @Inject()(implicit val appConfig: AppConfig) {
+class CountryNamesLoader @Inject() {
 
-  val location = appConfig.countryListLocation
-
-  def load: ListMap[String, String] =
+  def load(namesAsValues: Boolean = false, location: String): ListMap[String, String] =
     Try {
       require(location.nonEmpty, "The country list path should not be empty")
       require(location.endsWith(".csv"), "The country list file should be a csv file")
@@ -37,7 +35,8 @@ class CountryNamesLoader @Inject()(implicit val appConfig: AppConfig) {
         .drop(1)
         .foldLeft(ListMap.empty[String, String]) { (acc, row) =>
           val Array(code, name) = row.split(",", 2)
-          acc.+(code.trim -> name.trim)
+          if namesAsValues then acc.+(name.trim -> name.trim)
+          else acc.+(code.trim -> name.trim)
         }
     } match {
       case Success(countryMap) if countryMap.nonEmpty => countryMap

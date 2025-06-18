@@ -24,20 +24,20 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.helpers.FormFie
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.helpers.TextFormFieldHelper.textFieldMapping
 
 object EnterClientFactForm extends FormFieldHelper {
-  def form(fieldConfig: KnownFactsConfiguration, serviceName: String, options: Set[String]): Form[String] = {
+  def form(fieldConfig: KnownFactsConfiguration, serviceName: String): Form[String] = {
     Form(
       single(
-        (fieldConfig.inputType, options) match {
+        (fieldConfig.inputType, fieldConfig.validOptions) match {
           case ("date", _) =>
             fieldConfig.name -> dateFieldMapping(s"clientFact.$serviceName.${fieldConfig.name}")
-          case ("select", options) if options.nonEmpty =>
+          case ("select", Some(options)) =>
             fieldConfig.name -> optional(text)
-              .verifying(mandatoryFieldErrorMessage(s"clientFact.$serviceName.${fieldConfig.name}"), _.fold(false)(options.contains))
+              .verifying(mandatoryFieldErrorMessage(s"clientFact.$serviceName.${fieldConfig.name}"), _.fold(false)(options.map(_._1).toSet.contains))
               .transform(_.getOrElse(""), (Some(_)): String => Option[String])
           case ("text", _) =>
             fieldConfig.name -> textFieldMapping(fieldConfig.name, s"clientFact.$serviceName.${fieldConfig.name}", fieldConfig.regex)
           case _ =>
-            throw RuntimeException(s"Attempted to create an unsupported form - input type: ${fieldConfig.inputType}, options: $options")
+            throw RuntimeException(s"Attempted to create an unsupported form - input type: ${fieldConfig.inputType}, options: ${fieldConfig.validOptions}")
         }
       )
     )

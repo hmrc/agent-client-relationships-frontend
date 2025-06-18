@@ -30,19 +30,19 @@ class EnterClientFactFormSpec extends AnyWordSpecLike with Matchers :
 
       "the input type is 'date'" in :
         val fieldConfig: KnownFactsConfiguration = KnownFactsConfiguration("fieldName", "", "date", 1, None)
-        val form = EnterClientFactForm.form(fieldConfig, "service", Set())
+        val form = EnterClientFactForm.form(fieldConfig, "service")
         val result = form.bind(Map("fieldName.day" -> "11", "fieldName.month" -> "11", "fieldName.year" -> "2000"))
         result.hasErrors shouldBe false
 
       "the input type is 'select'" in :
         val fieldConfig: KnownFactsConfiguration = KnownFactsConfiguration("fieldName", "", "select", 1, Some(Seq("AL" -> "Albania")))
-        val form = EnterClientFactForm.form(fieldConfig, "service", Set("AL"))
+        val form = EnterClientFactForm.form(fieldConfig, "service")
         val result = form.bind(Map("fieldName" -> "AL"))
         result.hasErrors shouldBe false
 
       "the input type is 'text'" in :
         val fieldConfig: KnownFactsConfiguration = KnownFactsConfiguration("fieldName", "[A-Z]{3}", "text", 3, None)
-        val form = EnterClientFactForm.form(fieldConfig, "service", Set())
+        val form = EnterClientFactForm.form(fieldConfig, "service")
         val result = form.bind(Map("fieldName" -> "ABC"))
         result.hasErrors shouldBe false
 
@@ -50,4 +50,4 @@ class EnterClientFactFormSpec extends AnyWordSpecLike with Matchers :
 
       "the input type is unrecognised" in :
         val fieldConfig: KnownFactsConfiguration = KnownFactsConfiguration("fieldName", "", "music", 1, None)
-        intercept[RuntimeException](EnterClientFactForm.form(fieldConfig, "service", Set()))
+        intercept[RuntimeException](EnterClientFactForm.form(fieldConfig, "service"))

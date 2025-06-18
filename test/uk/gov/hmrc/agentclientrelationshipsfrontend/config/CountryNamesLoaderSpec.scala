@@ -31,21 +31,52 @@ class CountryNamesLoaderSpec extends AnyWordSpecLike with Matchers with MockitoS
   ".load" should :
 
     "return a ListMap of countries when the CSV file is loaded and parsed correctly" in :
-      when(mockAppConfig.countryListLocation).thenReturn("/testCountryList.csv")
-      countryNamesLoader.load shouldBe ListMap("AF" -> "Afghanistan", "AL" -> "Albania")
+      when(mockAppConfig.isoCountryListLocation).thenReturn("/testCountryList.csv")
+      countryNamesLoader.load(
+        namesAsValues = false,
+        location = mockAppConfig.isoCountryListLocation
+      )
+        .shouldBe(ListMap(
+          "AF" -> "Afghanistan",
+          "AL" -> "Albania"
+        ))
+
+    "return a ListMap of country names as values when the CSV file is loaded with namesAsValues being true" in :
+      when(mockAppConfig.isoCountryListLocation).thenReturn("/testCountryList.csv")
+      countryNamesLoader.load(
+        namesAsValues = true,
+        location = mockAppConfig.isoCountryListLocation
+      )
+        .shouldBe(ListMap(
+        "Afghanistan" -> "Afghanistan",
+        "Albania" -> "Albania"
+      ))
 
     "return an exception" when :
 
       "the CSV file is loaded but no countries were parsed" in :
-        when(mockAppConfig.countryListLocation).thenReturn("/testNoCountries.csv")
-        intercept[RuntimeException](countryNamesLoader.load).getMessage shouldBe "No country codes or names found"
+        when(mockAppConfig.isoCountryListLocation).thenReturn("/testNoCountries.csv")
+        intercept[RuntimeException](countryNamesLoader.load(
+          namesAsValues = false,
+          location = mockAppConfig.isoCountryListLocation
+        ))
+          .getMessage
+          .shouldBe("No country codes or names found")
 
       "the file path is empty" in :
-        when(mockAppConfig.countryListLocation).thenReturn("")
-        intercept[RuntimeException](countryNamesLoader.load).getMessage shouldBe
-          "requirement failed: The country list path should not be empty"
+        when(mockAppConfig.isoCountryListLocation).thenReturn("")
+        intercept[RuntimeException](countryNamesLoader.load(
+          namesAsValues = false,
+          location = mockAppConfig.isoCountryListLocation
+        ))
+          .getMessage
+          .shouldBe("requirement failed: The country list path should not be empty")
 
       "the target file is not a CSV type" in :
-        when(mockAppConfig.countryListLocation).thenReturn("/testInvalidFileType.txt")
-        intercept[RuntimeException](countryNamesLoader.load).getMessage shouldBe
-          "requirement failed: The country list file should be a csv file"
+        when(mockAppConfig.isoCountryListLocation).thenReturn("/testInvalidFileType.txt")
+        intercept[RuntimeException](countryNamesLoader.load(
+          namesAsValues = false,
+          location = mockAppConfig.isoCountryListLocation
+        ))
+          .getMessage
+          .shouldBe("requirement failed: The country list file should be a csv file")
