@@ -23,6 +23,7 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.connectors.AgentClientRelationshipsConnector
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientExitType.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.{Cancelled, Expired, Pending, Rejected}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.ClientJourney
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{InvitationAgentSuspendedError, InvitationOrAgentNotFoundError}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{ClientJourneyService, ClientServiceConfigurationService}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.client.ConsentInformationPage
@@ -57,7 +58,8 @@ class ConsentInformationController @Inject()(agentClientRelationshipsConnector: 
               taxService = taxService
             )))
           case Right(response) =>
-            val newJourney = journeyRequest.journey.copy(
+            val newJourney = ClientJourney(
+              journeyType = journeyRequest.journey.journeyType,
               invitationId = Some(response.invitationId),
               serviceKey = Some(response.serviceKey),
               agentName = Some(response.agentName),
