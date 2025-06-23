@@ -64,7 +64,8 @@ class DeclineRequestController @Inject()(mcc: MessagesControllerComponents,
               taxService = taxService
             )))
           case Right(response) =>
-            val newJourney = request.journey.copy(
+            val newJourney = ClientJourney(
+              journeyType = request.journey.journeyType,
               invitationId = Some(response.invitationId),
               serviceKey = Some(response.serviceKey),
               agentName = Some(response.agentName),
