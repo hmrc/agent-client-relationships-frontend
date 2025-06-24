@@ -23,6 +23,7 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.EnumFormatUtil
 enum KnownFactType(val knownFactTypeName: String, val fieldConfiguration: KnownFactsConfiguration):
   case PostalCode extends KnownFactType(knownFactTypeName = "PostalCode", fieldConfiguration= KnownFactsConfiguration("postcode", "^[A-Z]{1,2}[0-9][0-9A-Z]?\\s?[0-9][A-Z]{2}$|BFPO\\s?[0-9]{1,5}$", "text", 10))
   case CountryCode extends KnownFactType(knownFactTypeName = "CountryCode",  fieldConfiguration= KnownFactsConfiguration("countryCode", "^[A-Z]{2}$", "select", 20))
+  case Country extends KnownFactType(knownFactTypeName = "Country",  fieldConfiguration= KnownFactsConfiguration("countryCode", "^[A-Z]{2}$", "select", 20))
   case Email extends KnownFactType(knownFactTypeName = "Email", fieldConfiguration= KnownFactsConfiguration("email", "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$", "text", 20))
   case Date extends KnownFactType(knownFactTypeName = "Date", fieldConfiguration= KnownFactsConfiguration("date", "^[0-9]{4}-[0-9]{2}-[0-9]{2}$", "date", 4))
 

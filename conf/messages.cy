@@ -240,6 +240,10 @@ clientFact.HMRC-MTD-IT-SUPP.postcode.error.required=Nodwch god post eich cleient
 clientFact.HMRC-MTD-IT.postcode.error.invalid=Nodwch god post go iawn
 clientFact.HMRC-MTD-IT-SUPP.postcode.error.invalid=Nodwch god post go iawn
 
+clientFact.HMRC-MTD-IT.countryCode.label=Ym mha wlad y mae cyfeiriad eich cleient?
+clientFact.HMRC-MTD-IT.countryCode.hint=Ar gyfer unig fasnachwyr sydd wedi’u cofrestru am y cynllun Troi Treth yn Ddigidol ar gyfer Treth Incwm, defnyddiwch y wlad lle y mae eu cyfeiriad busnes. Ar gyfer unrhyw fath arall o gleient, defnyddiwch y wlad y mae’n byw ynddi.
+clientFact.HMRC-MTD-IT.countryCode.error.required=Nodwch wlad cyfeiriad cyswllt eich cleient
+
 clientFact.PERSONAL-INCOME-RECORD.date.label=Beth yw dyddiad geni eich cleient?
 clientFact.PERSONAL-INCOME-RECORD.date.hint=Er enghraifft, 22 7 1981.
 clientFact.PERSONAL-INCOME-RECORD.date.error.required=Nodwch ddyddiad geni’ch cleient

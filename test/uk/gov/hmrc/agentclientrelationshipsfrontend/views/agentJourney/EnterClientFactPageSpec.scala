@@ -19,6 +19,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.views.agentJourney
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.twirl.api.HtmlFormat
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.KnownFactType.{Country, CountryCode}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.EnterClientFactForm
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsResponse, KnownFactType}
@@ -37,6 +38,11 @@ class EnterClientFactPageSpec extends ViewSpecSupport {
                               cancelAuthorisationTitle: String,
                               errorRequired: String
                             )
+
+  private def testCountries(knownFactType: KnownFactType): Seq[(String, String)] = knownFactType match {
+    case Country => Seq(("France", "France"), ("Germany", "Germany"))
+    case _ => Seq(("FR", "France"), ("DE", "Germany"))
+  }
 
   private val knownFactContentVariants: Map[(String, KnownFactType), ExpectedStrings] = Map(
     ("HMRC-MTD-IT", KnownFactType.PostalCode) -> ExpectedStrings(
@@ -93,14 +99,14 @@ class EnterClientFactPageSpec extends ViewSpecSupport {
           request
         )
         val title = if j.journeyType == AgentJourneyType.AuthorisationRequest then expectedStrings.authorisationTitle else expectedStrings.cancelAuthorisationTitle
+        val field = knownFactType.fieldConfiguration.copy(validOptions = Some(testCountries(knownFactType)))
         val form = EnterClientFactForm.form(
-          knownFactType.fieldConfiguration,
-          service,
-          Set("FR", "DE")
+          field,
+          service
         )
         val blankForm = form.bindFromRequest(Map.empty)
-        val view: HtmlFormat.Appendable = viewTemplate(form, knownFactType.fieldConfiguration)
-        val viewWithRequiredError: HtmlFormat.Appendable = viewTemplate(blankForm, knownFactType.fieldConfiguration)
+        val view: HtmlFormat.Appendable = viewTemplate(form, field)
+        val viewWithRequiredError: HtmlFormat.Appendable = viewTemplate(blankForm, field)
         val doc: Document = Jsoup.parse(view.body)
         val requiredErrorDoc: Document = Jsoup.parse(viewWithRequiredError.body)
         "have the right title" in {
