@@ -20,6 +20,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.routes as clientRoutes
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.UrlHelper.validateRedirectUrl
+import uk.gov.hmrc.http.StringContextOps
 import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
@@ -31,8 +32,12 @@ class SignOutController @Inject()(mcc: MessagesControllerComponents)
                                  (implicit appConfig: AppConfig) extends FrontendController(mcc):
 
   def signOut(continueUrl: Option[RedirectUrl] = None, isAgent: Boolean): Action[AnyContent] = Action.async: _ =>
-    continueUrl match {
-      case Some(url) => Future.successful(Redirect(validateRedirectUrl(url)).withNewSession)
-      case None if isAgent => Future.successful(Redirect(appConfig.agentServicesAccountHomeUrl).withNewSession)
-      case None => Future.successful(Redirect(clientRoutes.ManageYourTaxAgentsController.show).withNewSession)
+    val continue = continueUrl match {
+      case Some(url) => validateRedirectUrl(url)
+      case None if isAgent => appConfig.agentServicesAccountHomeUrl
+      case None => appConfig.appExternalUrl + clientRoutes.ManageYourTaxAgentsController.show.url
     }
+    val url = url"${appConfig.signOutUrl}?${Map("continue" -> continue)}"
+
+    Future.successful(Redirect(url.toString))
+

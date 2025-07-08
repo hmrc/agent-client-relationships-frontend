@@ -16,6 +16,7 @@ POST        /manage-authorisation-requests/confirm-cancellation/:invitationId   
 GET         /manage-authorisation-requests/cancellation-confirmation/:invitationId      uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.AgentCancelInvitationController.complete(invitationId: String)
 
 # Sign out/Timed out ---------------------------------------------------------------------------------------------------------
+GET         /time-out                                                                   uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.TimedOutController.doTimeOut(continueUrl: RedirectUrl, serviceHeader: String, isAgent: Boolean)
 GET         /timed-out                                                                  uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.TimedOutController.timedOut(continueUrl: RedirectUrl, serviceHeader: String, isAgent: Boolean)
 GET         /sign-out                                                                   uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.SignOutController.signOut(continueUrl: Option[RedirectUrl] ?= None, isAgent: Boolean)
 

@@ -33,10 +33,16 @@ class AppConfig @Inject()(servicesConfig: ServicesConfig, config: Configuration)
   val agentServicesAccountLimitedUrl: String = asaFrontendExternalUrl + getConfString("agent-services-account-frontend.account-limited")
   val agentServicesAccountHomeUrl: String = asaFrontendExternalUrl + getConfString("agent-services-account-frontend.home")
   val ivUpliftUrl: String = getConfString("identity-verification-frontend.uplift-url")
-  val signInUrl: String = getString("sign-in.url")
+
+  private val basGatewayFrontendExternalUrl: String = getConfString("bas-gateway-frontend.external-url")
+  private val signOutPath: String = getConfString("bas-gateway-frontend.sign-out.path")
+  private val signInPath: String = getConfString("bas-gateway-frontend.sign-in.path")
+  lazy val signOutUrl: String = s"$basGatewayFrontendExternalUrl$signOutPath"
+  lazy val signInUrl: String = s"$basGatewayFrontendExternalUrl$signInPath"
+
   val subscriptionUrl: String = getConfString("agent-subscription-frontend.subscription-url")
   val clientLinkBaseUrl: String = s"$baseUrl/agent-client-relationships/appoint-someone-to-deal-with-HMRC-for-you"
-  val feedbackSurveyUrl: String = getConfString("feedback-frontend.external-url")
+  private val feedbackSurveyUrl: String = getConfString("feedback-frontend.external-url")
   def surveyUrl(isAgent: Boolean): String = {
     if isAgent then s"$feedbackSurveyUrl/$agentOriginToken"
     else s"$feedbackSurveyUrl/$clientOriginToken"
