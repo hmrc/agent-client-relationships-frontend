@@ -18,15 +18,15 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers
 
 import play.api.http.Status.{OK, SEE_OTHER}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentSpecHelper}
-import uk.gov.hmrc.http.StringContextOps
+import sttp.model.Uri.UriContext
 import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl
 
 class TimedOutControllerISpec extends ComponentSpecHelper with AuthStubs {
 
   "GET /time-out" should {
     "redirect to bas-gateway-frontend/sign-out-without-state" in {
-      val timedOutPageUrl = url"""${"http://localhost:9435" + routes.TimedOutController.timedOut(RedirectUrl("/agent-client-relationships"), "Agents", isAgent = true).url}"""
-      val signOutUrl = url"http://localhost:9099/bas-gateway/sign-out-without-state?${Map("continue" -> timedOutPageUrl)}"
+      val timedOutPageUrl = uri"""${"http://localhost:9435" + routes.TimedOutController.timedOut(RedirectUrl("/agent-client-relationships"), "Agents", isAgent = true).url}"""
+      val signOutUrl = uri"http://localhost:9099/bas-gateway/sign-out-without-state?${Map("continue" -> timedOutPageUrl)}"
       val result = get(routes.TimedOutController.doTimeOut(RedirectUrl("/agent-client-relationships"), "Agents", isAgent = true).url)
       result.status shouldBe SEE_OTHER
       result.header("LOCATION").value shouldBe signOutUrl.toString

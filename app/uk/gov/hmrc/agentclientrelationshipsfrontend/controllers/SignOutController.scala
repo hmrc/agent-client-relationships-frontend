@@ -17,6 +17,7 @@
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers
 
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import sttp.model.Uri.UriContext
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.routes as clientRoutes
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.UrlHelper.validateRedirectUrl
@@ -37,7 +38,7 @@ class SignOutController @Inject()(mcc: MessagesControllerComponents)
       case None if isAgent => appConfig.agentServicesAccountHomeUrl
       case None => appConfig.appExternalUrl + clientRoutes.ManageYourTaxAgentsController.show.url
     }
-    val url = url"${appConfig.signOutUrl}?${Map("continue" -> continue)}"
+    val url = uri"${appConfig.signOutUrl}?${Map("continue" -> continue)}"
 
     Future.successful(Redirect(url.toString))
 

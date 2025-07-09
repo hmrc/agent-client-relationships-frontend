@@ -19,13 +19,13 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers
 import play.api.http.Status.SEE_OTHER
 import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.routes as clientRoutes
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentSpecHelper}
-import uk.gov.hmrc.http.StringContextOps
+import sttp.model.Uri.UriContext
 import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl
 
 class SignOutControllerISpec extends ComponentSpecHelper with AuthStubs {
 
   def makeSignOutUrl(continueUrl: String): String =
-    url"http://localhost:9099/bas-gateway/sign-out-without-state?${Map("continue" -> continueUrl)}".toString
+    uri"http://localhost:9099/bas-gateway/sign-out-without-state?${Map("continue" -> continueUrl)}".toString
 
   "GET /sign-out" should {
     "sign out and redirect to continueUrl when it is provided" in {
