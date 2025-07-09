@@ -68,7 +68,7 @@
     @if(isSignedIn) {
         @hmrcTimeoutDialogHelper(
             signOutUrl = signOutUrl.get,
-            timeoutUrl = Some(routes.TimedOutController.timedOut(
+            timeoutUrl = Some(routes.TimedOutController.doTimeOut(
                 continueUrl = RedirectUrl(s"${appConfig.appExternalUrl}${request.uri}"),
                 serviceHeader = service,
                 isAgent = isAgent

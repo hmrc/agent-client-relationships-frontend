@@ -17,6 +17,7 @@
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers
 
 import play.api.mvc.*
+import sttp.model.Uri.UriContext
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.UrlHelper.validateRedirectUrl
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.UserTimedOut
@@ -31,6 +32,12 @@ class TimedOutController @Inject()(
                                     timedOutView: UserTimedOut,
                                     mcc: MessagesControllerComponents
                                   )(implicit appConfig: AppConfig) extends FrontendController(mcc):
+
+  def doTimeOut(continueUrl: RedirectUrl, serviceHeader: String, isAgent: Boolean): Action[AnyContent] = Action.async:
+    request =>
+      val timedOutPageUrl = uri"${appConfig.appExternalUrl + routes.TimedOutController.timedOut(continueUrl, serviceHeader, isAgent).url}"
+      val doTimeOutUrl = uri"${appConfig.signOutUrl}?${Map("continue" -> timedOutPageUrl)}"
+      Future.successful(Redirect(doTimeOutUrl.toString))
 
   def timedOut(continueUrl: RedirectUrl, serviceHeader: String, isAgent: Boolean): Action[AnyContent] = Action.async:
     request =>
