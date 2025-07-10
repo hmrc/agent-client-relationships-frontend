@@ -131,7 +131,7 @@
     }
 }
 
-@cellClasses = @{"govuk-body-s govuk-!-width-one-quarter"}
+@cellClasses = @{"govuk-body-s"}
 @currentRequests = {
     <h2 class="govuk-heading-m">@messages(s"$key.currentRequests")</h2>
     @data.agentsInvitations.agentsInvitations.sortBy(_.agentName).map { agent =>
