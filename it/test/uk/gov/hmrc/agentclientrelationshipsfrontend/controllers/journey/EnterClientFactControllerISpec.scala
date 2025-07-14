@@ -73,6 +73,15 @@ class EnterClientFactControllerISpec extends ComponentSpecHelper with AuthStubs 
       result.body.contains("ABCNINO") shouldBe true
 
   "POST /authorisation-request/client-fact" should :
+    "redirect to the journey start when previous answers are missing" in :
+      authoriseAsAgent()
+      await(journeyService.saveJourney(AgentJourney(journeyType = AgentJourneyType.AuthorisationRequest, clientType = Some("personal"))))
+      val result = post(routes.EnterClientFactController.onSubmit(AgentJourneyType.AuthorisationRequest).url)(Map(
+        "postcode" -> Seq(testPostcode)
+      ))
+      result.status shouldBe SEE_OTHER
+      result.header("Location").value shouldBe routes.SelectClientTypeController.show(AgentJourneyType.AuthorisationRequest).url
+
     "redirect to the next page after storing answer for ITSA" in :
       authoriseAsAgent()
       await(journeyService.saveJourney(testItsaJourney(AgentJourneyType.AuthorisationRequest)))

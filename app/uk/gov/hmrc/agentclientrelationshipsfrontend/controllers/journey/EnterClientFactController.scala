@@ -87,29 +87,32 @@ class EnterClientFactController @Inject()(mcc: MessagesControllerComponents,
       given AgentJourneyRequest[?] = journeyRequest
 
       val journey = journeyRequest.journey
-      val field = knownFactField(journey.clientDetailsResponse.get.knownFactType.getOrElse(throw RuntimeException("Known fact type is missing")))
-      knownFactForm(journey, field).bindFromRequest().fold(
-        formWithErrors => {
-          Future.successful(BadRequest(enterKnownFactPage(
-            formWithErrors,
-            field
-          )))
-        },
-        knownFact => {
-          for
-            _ <- if journey.knownFact.contains(knownFact) then Future.successful(()) else journeyService.saveJourney(journey.copy(
-              knownFact = Some(knownFact),
-              clientConfirmed = None,
-              agentType = None,
-              confirmationClientName = None,
-              journeyComplete = None
-            ))
-            redirectUrl <-
-              if journey.clientDetailsResponse.exists(_.knownFacts.contains(knownFact)) then
-                journeyService.nextPageUrl(journeyType)
-              else
-                Future.successful(routes.JourneyExitController.show(journeyType, JourneyExitType.NotFound).url)
-          yield
-            Redirect(redirectUrl)
-        }
-      )
+      if journey.clientDetailsResponse.isEmpty || journey.clientId.isEmpty then Future.successful(Redirect(routes.SelectClientTypeController.show(journeyType)))
+      else {
+        val field = knownFactField(journey.clientDetailsResponse.get.knownFactType.getOrElse(throw RuntimeException("Known fact type is missing")))
+        knownFactForm(journey, field).bindFromRequest().fold(
+          formWithErrors => {
+            Future.successful(BadRequest(enterKnownFactPage(
+              formWithErrors,
+              field
+            )))
+          },
+          knownFact => {
+            for
+              _ <- if journey.knownFact.contains(knownFact) then Future.successful(()) else journeyService.saveJourney(journey.copy(
+                knownFact = Some(knownFact),
+                clientConfirmed = None,
+                agentType = None,
+                confirmationClientName = None,
+                journeyComplete = None
+              ))
+              redirectUrl <-
+                if journey.clientDetailsResponse.exists(_.knownFacts.contains(knownFact)) then
+                  journeyService.nextPageUrl(journeyType)
+                else
+                  Future.successful(routes.JourneyExitController.show(journeyType, JourneyExitType.NotFound).url)
+            yield
+              Redirect(redirectUrl)
+          }
+        )
+      }
