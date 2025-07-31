@@ -66,8 +66,6 @@ class ConfirmConsentPageSpec extends ViewSpecSupport:
     val title = "Authorise an agent - Appoint someone to deal with HMRC for you - GOV.UK"
     val heading = "Authorise an agent"
     def caption(service: String): String = messages(service)
-//    def introductionParagraph(role: String, service: String) =
-//      s"$newAgentName want to be authorised as your ${messages(s"confirmConsent.form.$role")} for ${messages(service)}."
     val subHeading = "Read carefully: we need your consent"
     def agreeParagraph(role: String, service: String) =
       s"If you agree that $newAgentName can act as your ${messages(s"confirmConsent.form.$role")} for ${messages(service)}, they will be able to:"
@@ -78,18 +76,6 @@ class ConfirmConsentPageSpec extends ViewSpecSupport:
     def formError(role: String, service: String) =
       s"Select yes if you want $newAgentName to be your $role for ${messages(service)}"
     val continue = "Continue"
-//    def warningGeneric(service: String) =
-//      s"Warning You can have 1 agent for ${messages(service)}. If you authorise $newAgentName, we will remove ${existingAgent.agencyName} as your existing agent."
-//    def warningMain(service: String) =
-//      s"Warning You can have 1 main agent for ${messages(service)}. If you authorise $newAgentName, we will remove ${existingAgent.agencyName} as your existing main agent."
-//    def warningMainToSupp(service: String) =
-//      s"Warning If you authorise $newAgentName as your supporting agent, you will no longer have a main agent for ${messages(service)}."
-//    val suppDetailsHeading = "What a supporting agent cannot do"
-//    val suppDetailsP1 = "A supporting agent can only carry out limited tax-related tasks for you. For example, they cannot:"
-//    val suppDetailsBullet1 = "submit end-of-year tax returns"
-//    val suppDetailsBullet2 = "estimate tax and view final calculation"
-//    val suppDetailsBullet3 = "view tax amounts owed and paid"
-//    val suppDetailsBullet4 = "deal with penalties for late payment and late submission"
     val bulletListMap: Map[String, String] = Map(
       "HMRC-MTD-IT-1" -> "sign you up or opt you out",
       "HMRC-MTD-IT-2" -> "contact HMRC about your current and previous returns",
@@ -174,75 +160,55 @@ class ConfirmConsentPageSpec extends ViewSpecSupport:
 
     "the request is for a tax type that does not allow for main/supporting agents" when:
 
-      "there is no existing agent" when:
+      genericRoleServices.foreach: service =>
 
-        genericRoleServices.foreach: service =>
+        s"the tax service is $service" should:
 
-          s"the tax service is $service" should:
+          val form = ConfirmConsentForm.form(newAgentName, genericRole, service)
+          implicit val journeyRequest: ClientJourneyRequest[?] =
+            ClientJourneyRequest(baseJourneyModel.copy(serviceKey = Some(service)), request)
+          val view = viewTemplate(form, genericRole)
+          val doc: Document = Jsoup.parse(view.body)
 
-            val form = ConfirmConsentForm.form(newAgentName, genericRole, service)
-            implicit val journeyRequest: ClientJourneyRequest[?] =
-              ClientJourneyRequest(baseJourneyModel.copy(serviceKey = Some(service)), request)
-            val view = viewTemplate(form, genericRole)
-            val doc: Document = Jsoup.parse(view.body)
+          "have the correct title" in:
+            doc.title() shouldBe Expected.title
 
-            "have the correct title" in:
-              doc.title() shouldBe Expected.title
+          "have the correct heading" in:
+            doc.mainContent.extractText(h1, 1).value shouldBe Expected.heading
 
-            "have the correct heading" in:
-              doc.mainContent.extractText(h1, 1).value shouldBe Expected.heading
+          "have the correct caption" in:
+            doc.mainContent.extractText(h2, 1).value shouldBe Expected.caption(service)
 
-            "have the correct caption" in:
-              doc.mainContent.extractText(h2, 1).value shouldBe Expected.caption(service)
+          "not render a warning message" in:
+            doc.mainContent.extractText(".govuk-warning-text__text", 1) shouldBe None
 
-//            "have the correct first paragraph" in:
-//              doc.mainContent.extractText(p, 1).value shouldBe Expected.introductionParagraph(genericRole, service)
+          "have the correct subheading" in:
+            doc.mainContent.extractText(h2, 2).value shouldBe Expected.subHeading
 
-            "not render a warning message" in:
-              doc.mainContent.extractText(".govuk-warning-text__text", 1) shouldBe None
+          "have the correct first paragraph" in:
+            doc.mainContent.extractText(p, 1).value shouldBe Expected.agreeParagraph(genericRole, service)
 
-            "have the correct subheading" in:
-              doc.mainContent.extractText(h2, 2).value shouldBe Expected.subHeading
+          "have the correct consent bullet list" in:
+            val numberOfBulletItems = bulletListItemMap(service)
+            (1 to numberOfBulletItems).foreach: i =>
+              doc.mainContent.extractText("li", i).value.takeWhile(_ != ':') shouldBe Expected.bulletListMap(s"$service-$i")
 
-            "have the correct second paragraph" in:
-              doc.mainContent.extractText(p, 1).value shouldBe Expected.agreeParagraph(genericRole, service)
+          "have the correct form legend" in:
+            doc.mainContent.extractText("legend", 1).value shouldBe Expected.legend(genericRole, service)
 
-            "have the correct consent bullet list" in:
-              val numberOfBulletItems = bulletListItemMap(service)
-              (1 to numberOfBulletItems).foreach: i =>
-                doc.mainContent.extractText("li", i).value.takeWhile(_ != ':') shouldBe Expected.bulletListMap(s"$service-$i")
+          "have the correct radio options" in:
+            val expectedRadioGroup = TestRadioGroup(
+              Expected.legend(genericRole, service),
+              List(
+                Expected.yesOption -> "true",
+                Expected.noOption -> "false"
+              ),
+              None
+            )
+            doc.mainContent.extractRadios().value shouldBe expectedRadioGroup
 
-            "have the correct form legend" in:
-              doc.mainContent.extractText("legend", 1).value shouldBe Expected.legend(genericRole, service)
-
-            "have the correct radio options" in:
-              val expectedRadioGroup = TestRadioGroup(
-                Expected.legend(genericRole, service),
-                List(
-                  Expected.yesOption -> "true",
-                  Expected.noOption -> "false"
-                ),
-                None
-              )
-              doc.mainContent.extractRadios().value shouldBe expectedRadioGroup
-
-            "have the correct button" in:
-              doc.mainContent.extractText(".govuk-button", 1).value shouldBe Expected.continue
-
-      "there is an existing agent" when:
-
-        genericRoleServices.foreach: service =>
-
-          s"the tax service is $service" should:
-
-            val form = ConfirmConsentForm.form(newAgentName, genericRole, service)
-            implicit val journeyRequest: ClientJourneyRequest[?] = ClientJourneyRequest(
-              baseJourneyModel.copy(serviceKey = Some(service), existingMainAgent = Some(existingAgent)), request)
-            val view = viewTemplate(form, genericRole)
-            val doc: Document = Jsoup.parse(view.body)
-
-//            s"have the correct warning message for $service" in:
-//             doc.mainContent.extractText(".govuk-warning-text__text", 1).value shouldBe Expected.warningGeneric(service)
+          "have the correct button" in:
+            doc.mainContent.extractText(".govuk-button", 1).value shouldBe Expected.continue
 
       "there are errors in the form" should :
 
@@ -259,75 +225,55 @@ class ConfirmConsentPageSpec extends ViewSpecSupport:
 
       "the authorisation is for a main agent" when:
 
-        "there is no existing main agent" when:
+        mainRoleServices.foreach: service =>
 
-          mainRoleServices.foreach: service =>
+          s"the tax service is $service" should:
 
-            s"the tax service is $service" should:
+            val form = ConfirmConsentForm.form(newAgentName, mainRole, service)
+            implicit val journeyRequest: ClientJourneyRequest[?] =
+              ClientJourneyRequest(baseJourneyModel.copy(serviceKey = Some(service)), request)
+            val view = viewTemplate(form, mainRole)
+            val doc: Document = Jsoup.parse(view.body)
 
-              val form = ConfirmConsentForm.form(newAgentName, mainRole, service)
-              implicit val journeyRequest: ClientJourneyRequest[?] =
-                ClientJourneyRequest(baseJourneyModel.copy(serviceKey = Some(service)), request)
-              val view = viewTemplate(form, mainRole)
-              val doc: Document = Jsoup.parse(view.body)
+            "have the correct title" in:
+              doc.title() shouldBe Expected.title
 
-              "have the correct title" in:
-                doc.title() shouldBe Expected.title
+            "have the correct heading" in:
+              doc.mainContent.extractText(h1, 1).value shouldBe Expected.heading
 
-              "have the correct heading" in:
-                doc.mainContent.extractText(h1, 1).value shouldBe Expected.heading
+            "have the correct caption" in:
+              doc.mainContent.extractText(h2, 1).value shouldBe Expected.caption(service)
 
-              "have the correct caption" in:
-                doc.mainContent.extractText(h2, 1).value shouldBe Expected.caption(service)
+            "not render a warning message" in:
+              doc.mainContent.extractText(".govuk-warning-text__text", 1) shouldBe None
 
-//              "have the correct first paragraph" in:
-//                doc.mainContent.extractText(p, 1).value shouldBe Expected.introductionParagraph(mainRole, service)
+            "have the correct subheading" in:
+              doc.mainContent.extractText(h2, 2).value shouldBe Expected.subHeading
 
-              "not render a warning message" in:
-                doc.mainContent.extractText(".govuk-warning-text__text", 1) shouldBe None
+            "have the correct consent bullet list" in :
+              val numberOfBulletItems = bulletListItemMap(service)
+              (1 to numberOfBulletItems).foreach: i =>
+                doc.mainContent.extractText("li", i).value.takeWhile(_ != ':') shouldBe Expected.bulletListMap(s"$service-$i")
 
-              "have the correct subheading" in:
-                doc.mainContent.extractText(h2, 2).value shouldBe Expected.subHeading
+            "have the correct first paragraph" in:
+              doc.mainContent.extractText(p, 1).value shouldBe Expected.agreeParagraph(mainRole, service)
 
-              "have the correct consent bullet list" in :
-                val numberOfBulletItems = bulletListItemMap(service)
-                (1 to numberOfBulletItems).foreach: i =>
-                  doc.mainContent.extractText("li", i).value.takeWhile(_ != ':') shouldBe Expected.bulletListMap(s"$service-$i")
+            "have the correct form legend" in:
+              doc.mainContent.extractText("legend", 1).value shouldBe Expected.legend(mainRole, service)
 
-              "have the correct second paragraph" in:
-                doc.mainContent.extractText(p, 1).value shouldBe Expected.agreeParagraph(mainRole, service)
+            "have the correct radio options" in:
+              val expectedRadioGroup = TestRadioGroup(
+                Expected.legend(mainRole, service),
+                List(
+                  Expected.yesOption -> "true",
+                  Expected.noOption -> "false"
+                ),
+                None
+              )
+              doc.mainContent.extractRadios().value shouldBe expectedRadioGroup
 
-              "have the correct form legend" in:
-                doc.mainContent.extractText("legend", 1).value shouldBe Expected.legend(mainRole, service)
-
-              "have the correct radio options" in:
-                val expectedRadioGroup = TestRadioGroup(
-                  Expected.legend(mainRole, service),
-                  List(
-                    Expected.yesOption -> "true",
-                    Expected.noOption -> "false"
-                  ),
-                  None
-                )
-                doc.mainContent.extractRadios().value shouldBe expectedRadioGroup
-
-              "have the correct button" in:
-                doc.mainContent.extractText(".govuk-button", 1).value shouldBe Expected.continue
-
-        "there is an existing main agent" when:
-
-          genericRoleServices.foreach: service =>
-
-            s"the tax service is $service" should:
-
-              val form = ConfirmConsentForm.form(newAgentName, mainRole, service)
-              implicit val journeyRequest: ClientJourneyRequest[?] = ClientJourneyRequest(
-                baseJourneyModel.copy(serviceKey = Some(service), existingMainAgent = Some(existingAgent)), request)
-              val view = viewTemplate(form, mainRole)
-              val doc: Document = Jsoup.parse(view.body)
-
-//              s"have the correct warning message for $service" in:
-//                doc.mainContent.extractText(".govuk-warning-text__text", 1).value shouldBe Expected.warningMain(service)
+            "have the correct button" in:
+              doc.mainContent.extractText(".govuk-button", 1).value shouldBe Expected.continue
 
         "there are errors in the form" should:
 
@@ -342,107 +288,55 @@ class ConfirmConsentPageSpec extends ViewSpecSupport:
 
       "the authorisation is for a supp agent" when:
 
-        "there is no existing main agent" when:
+        suppRoleServices.foreach: service =>
 
-          suppRoleServices.foreach: service =>
+          s"the tax service is $service" should:
 
-            s"the tax service is $service" should:
+            val form = ConfirmConsentForm.form(newAgentName, suppRole, service)
+            implicit val journeyRequest: ClientJourneyRequest[?] =
+              ClientJourneyRequest(baseJourneyModel.copy(serviceKey = Some(service)), request)
+            val view = viewTemplate(form, suppRole)
+            val doc: Document = Jsoup.parse(view.body)
 
-              val form = ConfirmConsentForm.form(newAgentName, suppRole, service)
-              implicit val journeyRequest: ClientJourneyRequest[?] =
-                ClientJourneyRequest(baseJourneyModel.copy(serviceKey = Some(service)), request)
-              val view = viewTemplate(form, suppRole)
-              val doc: Document = Jsoup.parse(view.body)
+            "have the correct title" in:
+              doc.title() shouldBe Expected.title
 
-              "have the correct title" in:
-                doc.title() shouldBe Expected.title
+            "have the correct heading" in:
+              doc.mainContent.extractText(h1, 1).value shouldBe Expected.heading
 
-              "have the correct heading" in:
-                doc.mainContent.extractText(h1, 1).value shouldBe Expected.heading
+            "have the correct caption" in:
+              doc.mainContent.extractText(h2, 1).value shouldBe Expected.caption(service)
 
-              "have the correct caption" in:
-                doc.mainContent.extractText(h2, 1).value shouldBe Expected.caption(service)
+            "not render a warning message" in:
+              doc.mainContent.extractText(".govuk-warning-text__text", 1) shouldBe None
 
-//              "have the correct first paragraph" in:
-//                doc.mainContent.extractText(p, 1).value shouldBe Expected.introductionParagraph(suppRole, service)
+            "have the correct subheading" in:
+              doc.mainContent.extractText(h2, 2).value shouldBe Expected.subHeading
 
-              "not render a warning message" in:
-                doc.mainContent.extractText(".govuk-warning-text__text", 1) shouldBe None
+            "have the correct consent bullet list" in :
+              val numberOfBulletItems = bulletListItemMap(service)
+              (1 to numberOfBulletItems).foreach: i =>
+                doc.mainContent.extractText("div > div > ul > li", i).value.takeWhile(_ != ':') shouldBe Expected.bulletListMap(s"$service-$i")
 
-//              "have the correct details component with supporting agent information" which:
+            "have the correct first paragraph" in:
+              doc.mainContent.extractText(p, 1).value shouldBe Expected.agreeParagraph(suppRole, service)
 
-//                "has the correct heading" in:
-//                  doc.mainContent.extractText(".govuk-details__summary-text", 1).value shouldBe Expected.suppDetailsHeading
+            "have the correct form legend" in:
+              doc.mainContent.extractText("legend", 1).value shouldBe Expected.legend(suppRole, service)
 
-//                "has the correct paragraph" in :
-//                  doc.mainContent.extractText(".govuk-details__text > p", 1).value shouldBe Expected.suppDetailsP1
+            "have the correct radio options" in:
+              val expectedRadioGroup = TestRadioGroup(
+                Expected.legend(suppRole, service),
+                List(
+                  Expected.yesOption -> "true",
+                  Expected.noOption -> "false"
+                ),
+                None
+              )
+              doc.mainContent.extractRadios().value shouldBe expectedRadioGroup
 
-//                "has the correct bullet point list" in :
-//                  doc.mainContent.extractText(".govuk-details__text li", 1).value shouldBe Expected.suppDetailsBullet1
-//                  doc.mainContent.extractText(".govuk-details__text li", 2).value shouldBe Expected.suppDetailsBullet2
-//                  doc.mainContent.extractText(".govuk-details__text li", 3).value shouldBe Expected.suppDetailsBullet3
-//                  doc.mainContent.extractText(".govuk-details__text li", 4).value shouldBe Expected.suppDetailsBullet4
-
-              "have the correct subheading" in:
-                doc.mainContent.extractText(h2, 2).value shouldBe Expected.subHeading
-
-              "have the correct consent bullet list" in :
-                val numberOfBulletItems = bulletListItemMap(service)
-                (1 to numberOfBulletItems).foreach: i =>
-                  doc.mainContent.extractText("div > div > ul > li", i).value.takeWhile(_ != ':') shouldBe Expected.bulletListMap(s"$service-$i")
-
-              "have the correct third paragraph" in:
-                doc.mainContent.extractText(p, 1).value shouldBe Expected.agreeParagraph(suppRole, service)
-
-              "have the correct form legend" in:
-                doc.mainContent.extractText("legend", 1).value shouldBe Expected.legend(suppRole, service)
-
-              "have the correct radio options" in:
-                val expectedRadioGroup = TestRadioGroup(
-                  Expected.legend(suppRole, service),
-                  List(
-                    Expected.yesOption -> "true",
-                    Expected.noOption -> "false"
-                  ),
-                  None
-                )
-                doc.mainContent.extractRadios().value shouldBe expectedRadioGroup
-
-              "have the correct button" in:
-                doc.mainContent.extractText(".govuk-button", 1).value shouldBe Expected.continue
-
-        "there is an existing main agent" when:
-
-          "the existing agent is the same as the requesting agent" when:
-
-            genericRoleServices.foreach: service =>
-
-              s"the tax service is $service" should:
-
-                val form = ConfirmConsentForm.form(newAgentName, suppRole, service)
-                val sameAgent = existingAgent.copy(sameAgent = true)
-                implicit val journeyRequest: ClientJourneyRequest[?] = ClientJourneyRequest(
-                  baseJourneyModel.copy(serviceKey = Some(service), existingMainAgent = Some(sameAgent)), request)
-                val view = viewTemplate(form, suppRole)
-                val doc: Document = Jsoup.parse(view.body)
-
-//                s"have the correct warning message for $service" in:
-//                  doc.mainContent.extractText(".govuk-warning-text__text", 1).value shouldBe Expected.warningMainToSupp(service)
-
-          "the existing agent is different to the requesting agent" when:
-
-            genericRoleServices.foreach: service =>
-
-              s"the tax service is $service" should:
-
-                val form = ConfirmConsentForm.form(newAgentName, suppRole, service)
-                implicit val journeyRequest: ClientJourneyRequest[?] = ClientJourneyRequest(
-                  baseJourneyModel.copy(serviceKey = Some(service), existingMainAgent = Some(existingAgent)), request)
-                val view = viewTemplate(form, suppRole)
-                val doc: Document = Jsoup.parse(view.body)
-
-                "not render a warning message" in:
-                  doc.mainContent.extractText(".govuk-warning-text__text", 1) shouldBe None
+            "have the correct button" in:
+              doc.mainContent.extractText(".govuk-button", 1).value shouldBe Expected.continue
 
         "there are errors in the form" should:
 

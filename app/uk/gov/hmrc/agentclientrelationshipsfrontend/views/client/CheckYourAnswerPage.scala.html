@@ -36,7 +36,7 @@
 @agentName = @{journey.getAgentName}
 @choice = @{journey.getConsent}
 @agentRoleFor(serviceKey: String) = @{
-    if appConfig.emaEnabled then messages(s"agentRoleFor.$serviceKey") else messages("agentRoleFor.noEMA")
+    messages(s"agentRoleFor.$serviceKey")
 }
 @pageTitle = @{
     messages(s"$key.title")

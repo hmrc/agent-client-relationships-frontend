@@ -37,7 +37,7 @@
 }}
 @agentName = @{authorisationRequestInfo.agentName}
 @agentRoleFor(serviceKey: String) = @{
-    if appConfig.emaEnabled then messages(s"agentRoleFor.$serviceKey") else messages("agentRoleFor.noEMA")
+    messages(s"agentRoleFor.$serviceKey")
 }
 @serviceKey = @{authorisationRequestInfo.service}
 @pageTitle = @{

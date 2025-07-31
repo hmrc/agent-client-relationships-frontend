@@ -43,7 +43,7 @@
     case _ => serviceKey
 }}
 @definitiveAgentRoleFor = @{
-    if(appConfig.emaEnabled) messages(s"definitiveAgentRoleFor.$serviceForAgentRole") else messages("definitiveAgentRoleFor.noEMA")
+    messages(s"definitiveAgentRoleFor.$serviceForAgentRole")
 }
 @pageTitle = @{
     messages(s"$key.header")
