@@ -48,87 +48,58 @@
     href = Some(appConfig.mytaOtherTaxServicesGuidanceUrl),
     text = messages(s"$key.link")
   ))
- }
+}
 
 @agentRoleFromService(service: String) = @{
-    if(!appConfig.emaEnabled) ""
-    else if(messages.isDefinedAt(s"$key.agentRole.$service")) messages(s"$key.agentRole.$service")
+    if(messages.isDefinedAt(s"$key.agentRole.$service")) messages(s"$key.agentRole.$service")
     else messages(s"$key.agentRole.main")
 }
+
 @linkFromService(uid: String, service: String, agentName: String) = {
     <a href="@{routes.ConsentInformationController.show(uid, supportedServices(clientServiceConfig.getServiceForForm(service))).url}" class="govuk-link">
         @Html(messages(s"$key.currentRequests.action.link", agentName, messages(service), messages(s"indefiniteAgentRole.$service")))
 }
+
 @deAuthLink(id: String, agentName: String, service: String) = {
     <a href="@{routes.ManageYourTaxAgentsController.showConfirmDeauth(id)}" class="govuk-link">
         @Html(messages(s"$key.authorisedAgents.action.link", agentName, messages(service), messages(s"indefiniteAgentRole.$service")))
     </a>
 }
+
 @invitationsHeadCells = @{
-    if(appConfig.emaEnabled) {
-        Seq(
-            HeadCell(Text(messages(s"$key.currentRequests.taxService")), classes = cellClasses),
-            HeadCell(Text(messages(s"$key.currentRequests.agentRole")), classes = cellClasses),
-            HeadCell(Text(messages(s"$key.currentRequests.respondBy")), classes = cellClasses),
-            HeadCell(Text(messages(s"$key.currentRequests.action")), classes = cellClasses)
-        )
-    } else {
-        Seq(
-            HeadCell(Text(messages(s"$key.currentRequests.taxService")), classes = cellClasses),
-            HeadCell(Text(messages(s"$key.currentRequests.respondBy")), classes = cellClasses),
-            HeadCell(Text(messages(s"$key.currentRequests.action")), classes = cellClasses)
-        )
-    }
+    Seq(
+        HeadCell(Text(messages(s"$key.currentRequests.taxService")), classes = cellClasses),
+        HeadCell(Text(messages(s"$key.currentRequests.agentRole")), classes = cellClasses),
+        HeadCell(Text(messages(s"$key.currentRequests.respondBy")), classes = cellClasses),
+        HeadCell(Text(messages(s"$key.currentRequests.action")), classes = cellClasses)
+    )
 }
+
 @authorisationsHeaders = @{
-    if(appConfig.emaEnabled) {
-        Seq(
-            HeadCell(Text(messages(s"$key.authorisedAgents.taxService")), classes = cellClasses),
-            HeadCell(Text(messages(s"$key.authorisedAgents.agentRole")), classes = cellClasses),
-            HeadCell(Text(messages(s"$key.authorisedAgents.consentDate")), classes = cellClasses),
-            HeadCell(Text(messages(s"$key.authorisedAgents.action")), classes = cellClasses)
-        )
-    } else {
-        Seq(
-            HeadCell(Text(messages(s"$key.authorisedAgents.taxService")), classes = cellClasses),
-            HeadCell(Text(messages(s"$key.authorisedAgents.consentDate")), classes = cellClasses),
-            HeadCell(Text(messages(s"$key.authorisedAgents.action")), classes = cellClasses)
-        )
-    }
+    Seq(
+        HeadCell(Text(messages(s"$key.authorisedAgents.taxService")), classes = cellClasses),
+        HeadCell(Text(messages(s"$key.authorisedAgents.agentRole")), classes = cellClasses),
+        HeadCell(Text(messages(s"$key.authorisedAgents.consentDate")), classes = cellClasses),
+        HeadCell(Text(messages(s"$key.authorisedAgents.action")), classes = cellClasses)
+    )
 }
 
 @invitationRow(request: Invitation, uid: String, agentName: String) = @{
-    if(appConfig.emaEnabled) {
-        Seq(
-            TableRow(content = Text(messages(request.service)), classes = cellClasses),
-            TableRow(Text(agentRoleFromService(request.service)), classes = cellClasses),
-            TableRow(Text(DisplayDate.displayDateForLang(Some(request.expiryDate))), classes = cellClasses),
-            TableRow(HtmlContent(linkFromService(uid, request.service, agentName)), classes = cellClasses)
-        )
-    } else {
-        Seq(
-            TableRow(content = Text(messages(request.service)), classes = cellClasses),
-            TableRow(Text(DisplayDate.displayDateForLang(Some(request.expiryDate))), classes = cellClasses),
-            TableRow(HtmlContent(linkFromService(uid, request.service, agentName)), classes = cellClasses)
-        )
-    }
+    Seq(
+        TableRow(content = Text(messages(request.service)), classes = cellClasses),
+        TableRow(Text(agentRoleFromService(request.service)), classes = cellClasses),
+        TableRow(Text(DisplayDate.displayDateForLang(Some(request.expiryDate))), classes = cellClasses),
+        TableRow(HtmlContent(linkFromService(uid, request.service, agentName)), classes = cellClasses)
+    )
 }
 
 @authorisationRow(authorisation: Authorisation) = @{
-    if(appConfig.emaEnabled) {
-        Seq(
-            TableRow(content = Text(messages(authorisation.service)), classes = cellClasses),
-            TableRow(Text(agentRoleFromService(authorisation.service)), classes = cellClasses),
-            TableRow(Text(DisplayDate.displayDateForLang(Some(authorisation.date))), classes = cellClasses),
-            TableRow(HtmlContent(deAuthLink(authorisation.uid, authorisation.agentName, authorisation.service)), classes = cellClasses)
-        )
-    } else {
-        Seq(
-            TableRow(content = Text(messages(authorisation.service)), classes = cellClasses),
-            TableRow(Text(DisplayDate.displayDateForLang(Some(authorisation.date))), classes = cellClasses),
-            TableRow(HtmlContent(deAuthLink(authorisation.uid, authorisation.agentName, authorisation.service)), classes = cellClasses)
-        )
-    }
+    Seq(
+        TableRow(content = Text(messages(authorisation.service)), classes = cellClasses),
+        TableRow(Text(agentRoleFromService(authorisation.service)), classes = cellClasses),
+        TableRow(Text(DisplayDate.displayDateForLang(Some(authorisation.date))), classes = cellClasses),
+        TableRow(HtmlContent(deAuthLink(authorisation.uid, authorisation.agentName, authorisation.service)), classes = cellClasses)
+    )
 }
 
 @cellClasses = @{"govuk-body-s"}
@@ -216,20 +187,18 @@
 ) {
     @h1(pageTitle)
     @govukDetails(Details(summary = Text(messages(s"$key.p")), content = HtmlContent(servicesList)))
-    @if(appConfig.emaEnabled) {
-        <h2 class="govuk-heading-m">@messages(s"$key.agentRoles.h2")</h2>
-        <p class="govuk-body">@messages(s"$key.agentRoles.p1")</p>
-        <ul class="govuk-list govuk-list--bullet">
-            <li>@messages(s"$key.agentRoles.li1")</li>
-            <li>@messages(s"$key.agentRoles.li2")</li>
-        </ul>
-        <p class="govuk-body">@messages(s"$key.agentRoles.p2")</p>
-        <p class="govuk-body govuk-!-margin-bottom-7">
-        @hmrcNewTabLinkHelper(NewTabLinkHelper(
-            href = Some(appConfig.guidanceUrlForAgentRoles),
-            text = messages(s"$key.agentRoles.guidanceLink")
-        ))
-        </p>
-    }
+    <h2 class="govuk-heading-m">@messages(s"$key.agentRoles.h2")</h2>
+    <p class="govuk-body">@messages(s"$key.agentRoles.p1")</p>
+    <ul class="govuk-list govuk-list--bullet">
+        <li>@messages(s"$key.agentRoles.li1")</li>
+        <li>@messages(s"$key.agentRoles.li2")</li>
+    </ul>
+    <p class="govuk-body">@messages(s"$key.agentRoles.p2")</p>
+    <p class="govuk-body govuk-!-margin-bottom-7">
+    @hmrcNewTabLinkHelper(NewTabLinkHelper(
+        href = Some(appConfig.guidanceUrlForAgentRoles),
+        text = messages(s"$key.agentRoles.guidanceLink")
+    ))
+    </p>
     @govukTabs(Tabs(items = tabs))
 }

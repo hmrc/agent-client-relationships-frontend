@@ -60,7 +60,6 @@ class AppConfig @Inject()(servicesConfig: ServicesConfig, config: Configuration)
 
   // Feature Flags
   val welshLanguageSupportEnabled: Boolean = config.getOptional[Boolean]("features.welsh-language-support").getOrElse(false)
-  val emaEnabled: Boolean = config.get[Boolean]("features.enable-ema")
   val cbcEnabled: Boolean = config.get[Boolean]("features.enable-cbc")
 
   // Service config

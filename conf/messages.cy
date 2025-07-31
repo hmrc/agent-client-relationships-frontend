@@ -49,7 +49,6 @@ agentRole.HMRC-PPT-ORG=asiant
 agentRole.HMRC-CBC-ORG=asiant
 agentRole.HMRC-CBC-NONUK-ORG=asiant
 agentRole.HMRC-PILLAR2-ORG=asiant
-agentRole.noEMA=asiant
 
 agentRoleFor.HMRC-MTD-IT=prif asiant
 agentRoleFor.HMRC-MTD-IT-SUPP=asiant ategol
@@ -62,7 +61,6 @@ agentRoleFor.HMRC-PPT-ORG=asiant
 agentRoleFor.HMRC-CBC-ORG=asiant
 agentRoleFor.HMRC-CBC-NONUK-ORG=asiant
 agentRoleFor.HMRC-PILLAR2-ORG=asiant
-agentRoleFor.noEMA=asiant
 
 definitiveAgentRoleFor.HMRC-MTD-IT=y prif asiant
 definitiveAgentRoleFor.HMRC-MTD-IT-SUPP=asiant ategol
@@ -75,7 +73,6 @@ definitiveAgentRoleFor.HMRC-PPT-ORG=yr asiant
 definitiveAgentRoleFor.HMRC-CBC-ORG=yr asiant
 definitiveAgentRoleFor.HMRC-CBC-NONUK-ORG=yr asiant
 definitiveAgentRoleFor.HMRC-PILLAR2-ORG=yr asiant
-definitiveAgentRoleFor.noEMA=yr asiant
 
 indefiniteAgentRole.HMRC-MTD-IT=prif asiant
 indefiniteAgentRole.HMRC-MTD-IT-SUPP=asiant ategol
@@ -88,7 +85,6 @@ indefiniteAgentRole.HMRC-PPT-ORG=asiant
 indefiniteAgentRole.HMRC-CBC-ORG=asiant
 indefiniteAgentRole.HMRC-CBC-NONUK-ORG=asiant
 indefiniteAgentRole.HMRC-PILLAR2-ORG=asiant
-indefiniteAgentRole.noEMA=asiant
 
 # -------------------------------------------------------------------------------------------
 # Timeout/Auth/IV error pages

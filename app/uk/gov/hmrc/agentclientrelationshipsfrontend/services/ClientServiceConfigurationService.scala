@@ -118,7 +118,7 @@ class ClientServiceConfigurationService @Inject()(implicit appConfig: AppConfig)
       serviceName = HMRCMTDIT,
       urlPart = Map(incomeTax -> Set(HMRCMTDIT, HMRCNI, HMRCPT)),
       serviceOption = true,
-      supportedAgentRoles = if appConfig.emaEnabled then Seq(HMRCMTDIT, HMRCMTDITSUPP) else Seq.empty,
+      supportedAgentRoles = Seq(HMRCMTDIT, HMRCMTDITSUPP),
       clientTypes = Set(personal),
       clientDetails = Seq(
         ClientDetailsConfiguration(
