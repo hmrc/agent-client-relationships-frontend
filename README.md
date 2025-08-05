@@ -28,6 +28,11 @@ Currently this service supports the following invitations:
 
     ./check.sh
 
+### Automated testing
+This service is tested by the following automated test repositories:
+- [agent-services-account-ui-tests](https://github.com/hmrc/agent-services-account-ui-tests)
+- [agent-client-relationships-frontend-perf-tests](https://github.com/hmrc/agent-client-relationships-frontend-perf-tests)
+
 ### Running the app locally
 
     sm2 --start AGENT_AUTHORISATION
