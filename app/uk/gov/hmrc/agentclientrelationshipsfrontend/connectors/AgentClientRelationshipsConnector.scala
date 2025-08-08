@@ -22,18 +22,26 @@ import play.api.libs.ws.JsonBodyWritables.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.AgentRequest
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.*
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.SubmissionResponse.{SubmissionLocked, SubmissionSuccess}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.SubmissionResponse.RelationshipNotFound
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.SubmissionResponse.SubmissionLocked
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.SubmissionResponse.SubmissionSuccess
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ManageYourTaxAgentsData
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.invitationLink.{ValidateLinkPartsError, ValidateLinkPartsResponse}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, AgentJourneyRequest}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.invitationLink.ValidateLinkPartsError
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.invitationLink.ValidateLinkPartsResponse
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.AgentJourney
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.AgentJourneyRequest
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.ClientServiceConfigurationService
 import uk.gov.hmrc.http.HttpReads.Implicits.*
 import uk.gov.hmrc.http.client.HttpClientV2
-import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps}
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.HttpResponse
+import uk.gov.hmrc.http.StringContextOps
 import views.html.helper.urlEncode
 
-import javax.inject.{Inject, Singleton}
-import scala.concurrent.{ExecutionContext, Future}
+import javax.inject.Inject
+import javax.inject.Singleton
+import scala.concurrent.ExecutionContext
+import scala.concurrent.Future
 
 @Singleton
 class AgentClientRelationshipsConnector @Inject()(appConfig: AppConfig,
@@ -67,6 +75,7 @@ class AgentClientRelationshipsConnector @Inject()(appConfig: AppConfig,
       response.status match {
         case NO_CONTENT => SubmissionSuccess
         case LOCKED => SubmissionLocked
+        case NOT_FOUND => RelationshipNotFound
         case _ => throw new RuntimeException(s"Failed to cancel authorisation: ${response.body}")
       }
     }
@@ -106,7 +115,8 @@ class AgentClientRelationshipsConnector @Inject()(appConfig: AppConfig,
   }
 
   def validateLinkParts(uid: String, normalizedAgentName: String)(implicit hc: HeaderCarrier): Future[Either[ValidateLinkPartsError, ValidateLinkPartsResponse]] = {
-    import uk.gov.hmrc.agentclientrelationshipsfrontend.models.invitationLink.{AgentNotFoundError, AgentSuspendedError}
+    import uk.gov.hmrc.agentclientrelationshipsfrontend.models.invitationLink.AgentNotFoundError
+    import uk.gov.hmrc.agentclientrelationshipsfrontend.models.invitationLink.AgentSuspendedError
     httpV2
       .get(url"$agentClientRelationshipsUrl/agent/agent-reference/uid/$uid/$normalizedAgentName")
       .execute[HttpResponse]

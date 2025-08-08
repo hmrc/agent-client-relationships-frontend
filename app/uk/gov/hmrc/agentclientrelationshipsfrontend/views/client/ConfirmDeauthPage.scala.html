@@ -33,11 +33,10 @@
 @key = @{ConfirmDeauthFieldName}
 @taxServiceName = @{messages(authorisation.service)}
 @pageTitle = @{messages(s"$key.h1")}
-@serviceName = @{messages("service.name.clients")}
 
 @layout(
     pageTitle,
-    Some(serviceName),
+    serviceName = Some(messages("service.name.myta")),
     Some(form),
     isAgent = false
 ) {

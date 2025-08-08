@@ -39,6 +39,10 @@ class AgentJourneyExitPageSpec extends ViewSpecSupport {
     JourneyExitType.NotRegistered ->  ExpectedStrings(
       authorisationTitle = "Your client needs to register for Self Assessment - Ask a client to authorise you - GOV.UK",
       cancelAuthorisationTitle = "Your client needs to register for Self Assessment - Cancel a client’s authorisation - GOV.UK"
+    ),
+    JourneyExitType.AuthorisationAlreadyRemoved -> ExpectedStrings(
+      authorisationTitle = "This authorisation has already been removed - Ask a client to authorise you - GOV.UK",
+      cancelAuthorisationTitle = "This authorisation has already been removed - Cancel a client’s authorisation - GOV.UK"
     )
   )
 

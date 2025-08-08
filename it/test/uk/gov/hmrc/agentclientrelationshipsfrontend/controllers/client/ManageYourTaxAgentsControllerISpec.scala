@@ -106,6 +106,7 @@ class ManageYourTaxAgentsControllerISpec extends ComponentSpecHelper with AuthSt
         result.header(LOCATION) shouldBe Some(authRoutes.AuthorisationController.cannotViewRequest.url)
 
   "The show confirm deauth action" should:
+
     "return status 200" when:
       "authorisation id is valid" in:
         authoriseAsClient()

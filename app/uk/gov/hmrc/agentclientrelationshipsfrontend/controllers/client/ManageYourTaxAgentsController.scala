@@ -21,11 +21,12 @@ import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.{AppConfig, ErrorHandler}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.SubmissionResponse.RelationshipNotFound
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.SubmissionResponse.{SubmissionLocked, SubmissionSuccess}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.AuthorisationsCache
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.client.ConfirmDeauthForm
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{AgentClientRelationshipsService, AuthorisationsCacheService, ClientServiceConfigurationService}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.client.{ConfirmDeauthPage, ConfirmationOfDeauthPage, ManageYourTaxAgentsPage}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.client.{ConfirmDeauthPage, ConfirmationOfDeauthPage, ManageYourTaxAgentsPage, RelationshipNotFoundPage}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.{PageNotFound, ProcessingYourRequestPage}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
@@ -41,6 +42,7 @@ class ManageYourTaxAgentsController @Inject()(
                                                deauthCompletePage: ConfirmationOfDeauthPage,
                                                pageNotFound: PageNotFound,
                                                processingYourRequestPage: ProcessingYourRequestPage,
+                                               relationshipNotFoundPage: RelationshipNotFoundPage,
                                                authorisationsCacheService: AuthorisationsCacheService,
                                                errorHandler: ErrorHandler,
                                                actions: Actions,
@@ -87,6 +89,10 @@ class ManageYourTaxAgentsController @Inject()(
                     // Ensuring we remove the leftovers from the previous lock
                     authorisationsCacheService.putAuthorisations(AuthorisationsCache(Seq(authorisation), backendErrorResponse = None))
                       .map(_ => Redirect(routes.ManageYourTaxAgentsController.processingYourRequest(id)))
+                  case RelationshipNotFound =>
+                    // This ensures the submissionInProgress is aware the original request failed
+                    authorisationsCacheService.putAuthorisations(AuthorisationsCache(Seq(authorisation), backendErrorResponse = Some(true)))
+                      .map(_ => Redirect(routes.ManageYourTaxAgentsController.handleRelationshipNotFound().url))
                 }.recover {
                   case ex =>
                     // This ensures the submissionInProgress is aware the original request failed
@@ -121,3 +127,7 @@ class ManageYourTaxAgentsController @Inject()(
         case _ =>
           Future.successful(Redirect(routes.ManageYourTaxAgentsController.show))
       }
+
+  def handleRelationshipNotFound(): Action[AnyContent] = actions.clientAuthorised:
+    implicit request =>
+      Ok(relationshipNotFoundPage())

@@ -4,7 +4,7 @@
 
 outage-page.serviceDisplayName=Cyfrif gwasanaethau asiant
 service.name.clients=Penodi rhywun i ddelio â CThEF ar eich rhan
-
+service.name.myta=Rheoli pwy sy’n gallu delio â CThEF ar eich rhan
 authorisation-request.service.name=Gofyn i gleient eich awdurdodi
 agent-cancel-authorisation.service.name=Canslo awdurdodiad y cleient
 
@@ -514,6 +514,7 @@ journeyExit.pending-authorisation-exists.header=Rydych eisoes wedi creu cais am 
 journeyExit.client-insolvent.header=Ni allwch greu cais am awdurdodiad gan fod y cleient hwn yn ansolfent
 journeyExit.authorisation-already-exists.header=Rydych eisoes wedi’ch awdurdodi
 journeyExit.no-change-of-agent-role.header=Nid ydych wedi newid sut rydych chi’n gweithredu ar gyfer y cleient hwn
+journeyExit.authorisation-already-removed.header=Mae’r awdurdodiad hwn wedi’i dynnu’n barod
 
 # ________________________________________________________________________________
 # Journey exit partials
@@ -578,6 +579,12 @@ authorisationAlreadyExists.HMRC-CBC-NONUK-ORG.p1=Mae’r cleient hwn eisoes wedi
 authorisationAlreadyExists.HMRC-PILLAR2-ORG.p1=Mae’r cleient hwn eisoes wedi’ch awdurdodi i reoli ei drethi atodol Colofn 2.
 authorisationAlreadyExists.p2=Nid oes yn rhaid i chi ofyn iddo eich awdurdodi ar gyfer y gwasanaeth hwn eto.
 authorisationAlreadyExists.return=Dychwelyd i’ch ceisiadau am awdurdodiad
+
+# ________________________________________________________________________________
+# Authorisation already removed
+# ________________________________________________________________________________
+
+authorisationAlreadyRemoved.p1=Nid oes gennych awdurdodiad y cleient bellach ar gyfer y gwasanaeth treth hwn.
 
 # ________________________________________________________________________________
 # Client authorise agent start page
@@ -963,3 +970,10 @@ pageNotFound.p3=Os yw’r cyfeiriad gwe’n gywir, cysylltwch â’r asiant tret
 processingYourRequest.header=Rydym yn prosesu’ch cais
 processingYourRequest.para1=Rydych wedi cyrraedd y dudalen hon oherwydd eich bod wedi clicio ddwywaith wrth gyflwyno’ch cais.
 processingYourRequest.para2=Er mwyn gweld y sgrin gadarnhau, arhoswch ychydig o eiliadau ac yna dewiswch ‘parhau’.
+
+# ________________________________________________________________________________
+# Authorisation not found for client
+# ________________________________________________________________________________
+
+relationshipNotFound.header=Mae’r awdurdodiad hwn wedi’i dynnu’n barod
+relationshipNotFound.p1=Nid ydych bellach yn awdurdodi’r asiant hwn i reoli’r gwasanaeth treth hwn ar eich rhan.
