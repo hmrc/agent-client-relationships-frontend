@@ -21,8 +21,10 @@ import play.api.mvc.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.ConfirmCancellationFieldName
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.{AppConfig, ErrorHandler}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.SubmissionResponse.RelationshipNotFound
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.SubmissionResponse.{SubmissionLocked, SubmissionSuccess}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.ConfirmCancellationForm
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyExitType.AuthorisationAlreadyRemoved
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, AgentJourneyRequest, AgentJourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{AgentClientRelationshipsService, AgentJourneyService, ClientServiceConfigurationService}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.ProcessingYourRequestPage
@@ -105,6 +107,13 @@ class CheckYourAnswersController @Inject()(mcc: MessagesControllerComponents,
                       // Ensuring we remove the leftovers from the previous lock
                       journeyService.saveJourney(journey.copy(backendErrorResponse = None)).map(_ =>
                         Redirect(routes.CheckYourAnswersController.processingYourRequest(journey.journeyType))
+                      )
+                    case RelationshipNotFound =>
+                      journeyService.saveJourney(journey.copy(backendErrorResponse = Some(true))).map(_ =>
+                        Redirect(routes.JourneyExitController.show(
+                          journeyType = journey.journeyType,
+                          exitType = AuthorisationAlreadyRemoved
+                        ))
                       )
                   }.recover {
                     case ex =>

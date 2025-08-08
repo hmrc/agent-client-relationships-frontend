@@ -14,6 +14,7 @@ GET         /manage-authorisation-requests/resend/:invitationId                 
 GET         /manage-authorisation-requests/confirm-cancellation/:invitationId           uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.AgentCancelInvitationController.show(invitationId: String)
 POST        /manage-authorisation-requests/confirm-cancellation/:invitationId           uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.AgentCancelInvitationController.submit(invitationId: String)
 GET         /manage-authorisation-requests/cancellation-confirmation/:invitationId      uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.AgentCancelInvitationController.complete(invitationId: String)
+GET         /manage-authorisation-requests/cancellation-confirmation/:invitationId      uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.AgentCancelInvitationController.complete(invitationId: String)
 
 # Sign out/Timed out ---------------------------------------------------------------------------------------------------------
 GET         /time-out                                                                   uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.TimedOutController.doTimeOut(continueUrl: RedirectUrl, serviceHeader: String, isAgent: Boolean)
@@ -54,6 +55,7 @@ GET        /manage-your-tax-agents/remove-authorisation/:id                     
 POST       /manage-your-tax-agents/remove-authorisation/:id                             uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.ManageYourTaxAgentsController.submitDeauth(id: String)
 GET        /manage-your-tax-agents/processing-your-request/:id                          uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.ManageYourTaxAgentsController.processingYourRequest(id: String)
 GET        /manage-your-tax-agents/confirmation/:id                                     uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.ManageYourTaxAgentsController.deauthComplete(id: String)
+GET        /manage-your-tax-agents/relationship-not-found                               uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.ManageYourTaxAgentsController.handleRelationshipNotFound()
 
 # Agent Journey URLs ----------------------------------------------------------------------------------------------------------
 GET        /:journeyType                                                                uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.StartJourneyController.startJourney(journeyType: AgentJourneyType)

@@ -4,6 +4,7 @@
 
 outage-page.serviceDisplayName=Agent services account
 service.name.clients=Appoint someone to deal with HMRC for you
+service.name.myta=Manage who can deal with HMRC for you
 
 authorisation-request.service.name = Ask a client to authorise you
 agent-cancel-authorisation.service.name = Cancel a client’s authorisation
@@ -514,6 +515,7 @@ journeyExit.pending-authorisation-exists.header=You already created an authorisa
 journeyExit.client-insolvent.header=You cannot create an authorisation request because this client is insolvent
 journeyExit.authorisation-already-exists.header=You are already authorised
 journeyExit.no-change-of-agent-role.header=You have not changed how you act for this client
+journeyExit.authorisation-already-removed.header=This authorisation has already been removed
 
 # ________________________________________________________________________________
 # Journey exit partials
@@ -578,6 +580,12 @@ authorisationAlreadyExists.HMRC-CBC-NONUK-ORG.p1=This client has already authori
 authorisationAlreadyExists.HMRC-PILLAR2-ORG.p1=This client has already authorised you to manage their Pillar 2 top-up taxes.
 authorisationAlreadyExists.p2=You do not need to ask them to authorise you for this service again.
 authorisationAlreadyExists.return=Return to your authorisation requests
+
+# ________________________________________________________________________________
+# Authorisation already removed
+# ________________________________________________________________________________
+
+authorisationAlreadyRemoved.p1=You are no longer authorised by the client for this tax service.
 
 # ________________________________________________________________________________
 # Client authorise agent start page
@@ -963,3 +971,10 @@ pageNotFound.p3=If the web address is correct, contact the tax agent who sent yo
 processingYourRequest.header=We’re processing your request
 processingYourRequest.para1=You reached this page because you clicked twice to submit a request.
 processingYourRequest.para2=To see the confirmation screen, wait a few seconds and then select ‘continue’.
+
+# ________________________________________________________________________________
+# Authorisation not found for client
+# ________________________________________________________________________________
+
+relationshipNotFound.header=This authorisation has already been removed
+relationshipNotFound.p1=You no longer authorise this agent to manage this tax service for you.
