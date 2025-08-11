@@ -29,6 +29,7 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.ProcessingYourReq
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.client.CheckYourAnswerPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
+import scala.annotation.nowarn
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -46,6 +47,8 @@ class CheckYourAnswerController @Inject()(mcc: MessagesControllerComponents,
       if request.journey.consent.isDefined then Ok(checkYourAnswerPage())
       else Redirect(routes.ManageYourTaxAgentsController.show)
 
+  @nowarn("msg=exhaustive") // Disabling this warning as the match should not expect
+  // SubmissionResponse.RelationshipNotFound to be thrown in this context
   def submit: Action[AnyContent] = actions.clientJourneyRequired.async:
     implicit request =>
       (request.journey.consent, request.journey.invitationId, request.journey.journeyComplete) match {

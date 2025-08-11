@@ -22,6 +22,7 @@ import play.api.test.Helpers.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.{HMRCMTDIT, HMRCMTDITSUPP, HMRCMTDVAT}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.AgentJourney
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.AgentJourneyType.*
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyExitType.AuthorisationAlreadyRemoved
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyExitType.{ClientAlreadyInvited, NoAuthorisationExists}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsResponse, KnownFactType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.AgentJourneyService
@@ -301,7 +302,17 @@ class CheckYourAnswersControllerISpec extends ComponentSpecHelper with ScalaFutu
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe routes.EnterClientIdController.show(AgentCancelAuthorisation).url
 
-    "redirect to an exit URL if there is an exit condition" in:
+    "redirect to exit page for no relationship found when relationship removed since loading form" in:
+      authoriseAsAgent()
+      stubPost(cancelAuthorisationUrl, NOT_FOUND, "")
+      await(journeyService.saveJourney(existingAuthCancellationJourney(HMRCMTDIT)))
+      val result = post(routes.CheckYourAnswersController.onSubmit(AgentCancelAuthorisation).url)(Map(
+        "confirmCancellation" -> Seq("true")
+      ))
+      result.status shouldBe SEE_OTHER
+      result.header("Location").value shouldBe routes.JourneyExitController.show(AgentCancelAuthorisation, AuthorisationAlreadyRemoved).url
+
+    "redirect to exit page for no relationship exists when client details does not contain relationship" in:
       authoriseAsAgent()
       val insolventClientSession = existingAuthCancellationJourney(HMRCMTDVAT).copy(
         clientDetailsResponse = Some(basicClientDetails.copy(hasExistingRelationshipFor = None))
