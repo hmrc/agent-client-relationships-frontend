@@ -1,0 +1,3 @@
+
+GET        /             uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.oldmyta.MytaRedirectController.redirect(path: String = "")
+GET        /*path        uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.oldmyta.MytaRedirectController.redirect(path: String)
