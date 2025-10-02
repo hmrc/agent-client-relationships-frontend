@@ -33,6 +33,7 @@ class ConfirmationPageSpec extends ViewSpecSupport {
   val testInvitationId: String = "AB1234567890"
   val testClientName: String = "Test Client"
   val agentName: String = "ABC Accountants"
+  // val invitationAccepted: Boolean
   val serviceLabels: Map[String, String] = Map(
     "HMRC-MTD-IT" -> "Making Tax Digital for Income Tax",
     "PERSONAL-INCOME-RECORD" -> "Income Record Viewer",
@@ -64,7 +65,8 @@ class ConfirmationPageSpec extends ViewSpecSupport {
 
   private val completeJourney: ClientJourney = ClientJourney(
     "authorisation-response",
-    journeyComplete = Some("invitationId")
+    journeyComplete = Some("invitationId"),
+    invitationAccepted = Some(true)
   )
 
   private def agentRoleForService(service: String) = service match {
@@ -77,21 +79,23 @@ class ConfirmationPageSpec extends ViewSpecSupport {
     List(Accepted, PartialAuth, Rejected).foreach(decision =>
       for (taxService <- serviceLabels.keySet.toList) {
         implicit val journeyRequest: ClientJourneyRequest[?] = new ClientJourneyRequest(completeJourney, request)
-        val view: HtmlFormat.Appendable = viewTemplate(confirmationData.copy(service = taxService, status = decision))
+        val view: HtmlFormat.Appendable = viewTemplate(confirmationData.copy(service = taxService, status = decision), completeJourney.invitationAccepted.get)
         val doc: Document = Jsoup.parse(view.body)
         s"include the correct h1 text for ${decision.toString} $taxService" in {
-          val expectedHeading = decision match {
-            case Accepted => s"You have authorised $agentName"
-            case PartialAuth => s"You have authorised $agentName"
-            case _ => s"You declined a request from $agentName"
+          val expectedHeading = if (completeJourney.invitationAccepted.get) {
+            s"You have authorised $agentName"
+          }
+          else {
+            s"You declined a request from $agentName"
           }
           doc.mainContent.extractText("h1.govuk-panel__title", 1).value shouldBe expectedHeading
         }
         s"include the correct p1 text for ${decision.toString} $taxService" in {
-          val expectedContent = decision match {
-            case Accepted => s"$agentName is now your ${agentRoleForService(taxService)}."
-            case PartialAuth => s"$agentName is now your ${agentRoleForService(taxService)}."
-            case _ => s"You have not given permission for $agentName to ${rejectedServiceLabels(taxService)}."
+
+          val expectedContent = if (completeJourney.invitationAccepted.get) {
+            s"$agentName is now your ${agentRoleForService(taxService)}."
+          } else {
+            s"You have not given permission for $agentName to ${rejectedServiceLabels(taxService)}."
           }
           doc.mainContent.extractText(p, 1).value shouldBe expectedContent
         }

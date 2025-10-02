@@ -33,17 +33,19 @@ class ConfirmationController @Inject()(mcc: MessagesControllerComponents,
                                        actions: Actions,
                                        agentClientRelationshipsService: AgentClientRelationshipsService,
                                        confirmationPage: ConfirmationPage
-                                         )
+                                      )
                                       (implicit ec: ExecutionContext,
-                                          appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport with Logging:
+                                       appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport with Logging:
 
   def show: Action[AnyContent] = actions.clientJourneyRequired.async:
     implicit request =>
-      request.journey.journeyComplete match {
-        case Some(invitationId) =>
+      (request.journey.journeyComplete, request.journey.invitationAccepted) match {
+        case (Some(invitationId), Some(invitationAccepted)) =>
           agentClientRelationshipsService.getAuthorisationRequestForClient(invitationId = invitationId).map {
+
             case Some(authorisationRequestInfo) =>
-              Ok(confirmationPage(authorisationRequestInfo))
+
+              Ok(confirmationPage(authorisationRequestInfo, invitationAccepted))
             case None =>
               throw new RuntimeException(s"Authorisation request not found for invitationId: $invitationId")
           }
