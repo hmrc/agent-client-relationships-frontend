@@ -237,15 +237,28 @@ class EnterClientIdControllerISpec extends ComponentSpecHelper with AuthStubs :
       val result = post(routes.EnterClientIdController.onSubmit(AgentJourneyType.AgentCancelAuthorisation).url)("")
       result.status shouldBe BAD_REQUEST
 
-    "redirect to the ConfirmClient page when the clientId and clientDetailsResponse are already in session" in :
+    "redirect to the ConfirmClient page when the clientId and clientDetailsResponse are already in session and  knowFacts match" in :
       authoriseAsAgent()
-      val clientDetailsResponse = ClientDetailsResponse("", None, None, Seq(), None, false, None)
-      await(journeyService.saveJourney(businessAgentCancelAuthorisationJourney.copy(clientService = Some("HMRC-CBC-ORG"), clientId = Some(exampleCbcId), clientDetailsResponse = Some(clientDetailsResponse))))
+      val knowFact = "TestPotsCode"
+      val clientDetailsResponse = ClientDetailsResponse("", None, None, Seq(knowFact), None, false, None)
+      await(journeyService.saveJourney(businessAgentCancelAuthorisationJourney.copy(clientService = Some("HMRC-CBC-ORG"), clientId = Some(exampleCbcId), clientDetailsResponse = Some(clientDetailsResponse), knownFact = Some(knowFact))))
       val result = post(routes.EnterClientIdController.onSubmit(AgentJourneyType.AgentCancelAuthorisation).url)(Map(
         getFieldName("HMRC-CBC-ORG") -> Seq(exampleCbcId)
       ))
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe routes.ConfirmClientController.show(AgentCancelAuthorisation).url
+
+    "redirect to the Enter client details page when the clientId and clientDetailsResponse are already in session and knowFacts do not match" in :
+      authoriseAsAgent()
+      val knowFact = "TestPotsCode"
+      val inputKnowFact = "OtherTestPotsCode"
+      val clientDetailsResponse = ClientDetailsResponse("", None, None, Seq(knowFact), None, false, None)
+      await(journeyService.saveJourney(businessAgentCancelAuthorisationJourney.copy(clientService = Some("HMRC-CBC-ORG"), clientId = Some(exampleCbcId), clientDetailsResponse = Some(clientDetailsResponse), knownFact = Some(inputKnowFact))))
+      val result = post(routes.EnterClientIdController.onSubmit(AgentJourneyType.AgentCancelAuthorisation).url)(Map(
+        getFieldName("HMRC-CBC-ORG") -> Seq(exampleCbcId)
+      ))
+      result.status shouldBe SEE_OTHER
+      result.header("Location").value shouldBe routes.EnterClientFactController.show(AgentCancelAuthorisation).url
 
     "redirect to the journey exit when the clientDetailsResponse from the API was empty" in :
       authoriseAsAgent()

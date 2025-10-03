@@ -117,7 +117,7 @@ class AgentJourneyServiceSpec extends AnyWordSpecLike with Matchers with Mockito
     "return the ConfirmClient URL if the provided client details have not been confirmed yet" in :
       val sessionJourney = baseAgentJourney.copy(
         clientService = Some(HMRCMTDVAT),
-        clientDetailsResponse = Some(ClientDetailsResponse("Colin Client", None, None, Seq(), Some(Date), false, None)),
+        clientDetailsResponse = Some(ClientDetailsResponse("Colin Client", None, None, Seq("2020-01-01"), Some(Date), false, None)),
         knownFact = Some("2020-01-01")
       )
       givenJourneyInSession(sessionJourney)
@@ -125,10 +125,21 @@ class AgentJourneyServiceSpec extends AnyWordSpecLike with Matchers with Mockito
       val result = await(service.nextPageUrl(AuthorisationRequest))
       result shouldBe routes.ConfirmClientController.show(AuthorisationRequest).url
 
+    "return the EnterClientFact URL if the provided client details have not been confirmed yet but KnowFacts do not match" in :
+      val sessionJourney = baseAgentJourney.copy(
+        clientService = Some(HMRCMTDVAT),
+        clientDetailsResponse = Some(ClientDetailsResponse("Colin Client", None, None, Seq("2020-02-02"), Some(Date), false, None)),
+        knownFact = Some("2020-01-01")
+      )
+      givenJourneyInSession(sessionJourney)
+
+      val result = await(service.nextPageUrl(AuthorisationRequest))
+      result shouldBe routes.EnterClientFactController.show(AuthorisationRequest).url
+
     "return the Start URL if the clientConfirmed is defined but set to false" in :
       val sessionJourney = baseAgentJourney.copy(
         clientService = Some(HMRCMTDVAT),
-        clientDetailsResponse = Some(ClientDetailsResponse("Colin Client", None, None, Seq(), Some(Date), false, None)),
+        clientDetailsResponse = Some(ClientDetailsResponse("Colin Client", None, None, Seq("2020-01-01"), Some(Date), false, None)),
         knownFact = Some("2020-01-01"),
         clientConfirmed = Some(false)
       )
@@ -140,7 +151,7 @@ class AgentJourneyServiceSpec extends AnyWordSpecLike with Matchers with Mockito
     "return the AgentRole URL if the provided client details are confirmed and the service supports agent roles" in :
       val sessionJourney = baseAgentJourney.copy(
         clientService = Some(HMRCMTDVAT),
-        clientDetailsResponse = Some(ClientDetailsResponse("Colin Client", None, None, Seq(), Some(Date), false, None)),
+        clientDetailsResponse = Some(ClientDetailsResponse("Colin Client", None, None, Seq("2020-01-01"), Some(Date), false, None)),
         knownFact = Some("2020-01-01"),
         clientConfirmed = Some(true)
       )
@@ -153,7 +164,7 @@ class AgentJourneyServiceSpec extends AnyWordSpecLike with Matchers with Mockito
     "return the CheckYourAnswers URL if all necessary values are defined and there is no reason to exit" in :
       val sessionJourney = baseAgentJourney.copy(
         clientService = Some(HMRCMTDVAT),
-        clientDetailsResponse = Some(ClientDetailsResponse("Colin Client", None, None, Seq(), Some(Date), false, None)),
+        clientDetailsResponse = Some(ClientDetailsResponse("Colin Client", None, None, Seq("2020-01-01"), Some(Date), false, None)),
         knownFact = Some("2020-01-01"),
         clientConfirmed = Some(true),
         agentType = Some("main")

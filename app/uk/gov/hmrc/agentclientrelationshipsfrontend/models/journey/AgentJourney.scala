@@ -59,6 +59,11 @@ case class AgentJourney(journeyType: AgentJourneyType,
       case ClientDetailsResponse(_, _, _, _, _, _, None) => Some(JourneyExitType.NoAuthorisationExists)
     }
 
+    def isKnowFactMatching: Boolean = knownFact match {
+        case Some(kf) => clientDetailsResponse.exists(_.knownFacts.contains(kf))
+        case None => clientDetailsResponse.exists(_.knownFacts.isEmpty)
+      }
+
 object AgentJourney:
   implicit lazy val format: OFormat[AgentJourney] = Json.format[AgentJourney]
 
