@@ -54,7 +54,8 @@ class ConfirmationControllerISpec extends ComponentSpecHelper with AuthStubs :
 
   private val completeJourney: ClientJourney = ClientJourney(
     "authorisation-response",
-    journeyComplete = Some(testInvitationId)
+    journeyComplete = Some(testInvitationId),
+    invitationAccepted = Some(true)
   )
 
   val journeyService: ClientJourneyService = app.injector.instanceOf[ClientJourneyService]

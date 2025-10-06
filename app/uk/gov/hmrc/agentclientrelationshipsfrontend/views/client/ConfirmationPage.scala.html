@@ -27,14 +27,16 @@
         govukPanel: GovukPanel
 )
 
-@(authorisationRequestInfo: AuthorisationRequestInfoForClient)(implicit request: ClientJourneyRequest[?], messages: Messages, appConfig: AppConfig)
+@(authorisationRequestInfo: AuthorisationRequestInfoForClient, invitationAccepted: Boolean)(implicit request: ClientJourneyRequest[?], messages: Messages, appConfig: AppConfig)
 
 @key = @{"clientConfirmation"}
-@decisionKey = @{authorisationRequestInfo.status match {
-    case Accepted | PartialAuth => "accepted"
-    case Rejected => "rejected"
-    case status => throw new RuntimeException(s"Cannot confirm client completion of accept/reject when status is $status")
-}}
+@decisionKey = @{
+    if(invitationAccepted) {
+        "accepted"
+    } else {
+        "rejected"
+    }
+}
 @agentName = @{authorisationRequestInfo.agentName}
 @agentRoleFor(serviceKey: String) = @{
     messages(s"agentRoleFor.$serviceKey")

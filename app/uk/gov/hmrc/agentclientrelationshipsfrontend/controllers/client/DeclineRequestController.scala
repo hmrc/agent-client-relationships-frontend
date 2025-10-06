@@ -106,7 +106,8 @@ class DeclineRequestController @Inject()(mcc: MessagesControllerComponents,
                   _ <- agentClientRelationshipsConnector.rejectAuthorisation(invId)
                   _ <- clientJourneyService.saveJourney(ClientJourney(
                     journeyType = request.journey.journeyType,
-                    journeyComplete = Some(invId)
+                    journeyComplete = Some(invId),
+                    invitationAccepted = Some(false)
                   ))
                 } yield Redirect(routes.ConfirmationController.show)
               case false => Future.successful(Redirect(routes.ConsentInformationController.show(uid, taxService)))

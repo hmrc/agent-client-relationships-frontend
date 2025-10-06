@@ -60,7 +60,8 @@ class CheckYourAnswerController @Inject()(mcc: MessagesControllerComponents,
             case SubmissionSuccess =>
               journeyService.saveJourney(ClientJourney(
                 journeyType = request.journey.journeyType,
-                journeyComplete = Some(invId)
+                journeyComplete = Some(invId),
+                invitationAccepted = Some(true)
               )).map(_ => Redirect(routes.ConfirmationController.show))
             case SubmissionLocked =>
               // Ensuring we remove the leftovers from the previous lock
@@ -78,7 +79,8 @@ class CheckYourAnswerController @Inject()(mcc: MessagesControllerComponents,
           _ <- agentClientRelationshipsConnector.rejectAuthorisation(invId)
           _ <- journeyService.saveJourney(ClientJourney(
             journeyType = request.journey.journeyType,
-            journeyComplete = Some(invId)
+            journeyComplete = Some(invId),
+            invitationAccepted = Some(false)
           ))
         } yield Redirect(routes.ConfirmationController.show)
 
