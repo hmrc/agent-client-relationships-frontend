@@ -98,6 +98,38 @@ class ConfirmClientControllerISpec extends ComponentSpecHelper with ScalaFutures
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe routes.EnterClientIdController.show(AgentJourneyType.AuthorisationRequest).url
     }
+    "redirect to enter know fact when it is missing" in {
+      authoriseAsAgent()
+      await(journeyService.saveJourney(AgentJourney(journeyType = AgentJourneyType.AuthorisationRequest,
+        clientType = Some("personal"), clientService = Some("HMRC-MTD-IT"), clientId = Some(testNino),
+        clientDetailsResponse = Some(ClientDetailsResponse("Test Name", None, None, Seq(testPostcode), Some(KnownFactType.PostalCode), false, None)),
+        knownFact = None)))
+      val result = get(routes.ConfirmClientController.show(AgentJourneyType.AuthorisationRequest).url)
+      result.status shouldBe SEE_OTHER
+      result.header("Location").value shouldBe routes.EnterClientFactController.show(AgentJourneyType.AuthorisationRequest).url
+    }
+    "redirect to enter know fact when not matching" in {
+      authoriseAsAgent()
+      await(journeyService.saveJourney(AgentJourney(
+        journeyType = AgentJourneyType.AuthorisationRequest,
+        clientType = Some("personal"),
+        clientService = Some("HMRC-MTD-IT"),
+        clientId = Some(testNino),
+        clientDetailsResponse = Some(ClientDetailsResponse(
+          name = "Test Name",
+          status = None,
+          isOverseas = None,
+          knownFacts = Seq(testPostcode),
+          knownFactType = Some(KnownFactType.PostalCode),
+          hasPendingInvitation = false,
+          hasExistingRelationshipFor = None)
+        ),
+        knownFact = Some("IncorrectKnownFact"))))
+      val result = get(routes.ConfirmClientController.show(AgentJourneyType.AuthorisationRequest).url)
+      result.status shouldBe SEE_OTHER
+      result.header("Location").value shouldBe routes.EnterClientFactController.show(AgentJourneyType.AuthorisationRequest).url
+    }
+
     List(noAuthJourney(AgentJourneyType.AuthorisationRequest), noAuthJourney(AgentJourneyType.AgentCancelAuthorisation))
       .foreach(j => s"display the confirm client page on ${j.journeyType.toString} journey" in {
         authoriseAsAgent()
@@ -123,6 +155,58 @@ class ConfirmClientControllerISpec extends ComponentSpecHelper with ScalaFutures
       ))
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe routes.EnterClientIdController.show(AgentJourneyType.AuthorisationRequest).url
+    }
+
+    "redirect to enter client id when known fact is missing" in {
+      authoriseAsAgent()
+      journeyService.saveJourney(
+        journey = AgentJourney(
+          journeyType = AgentJourneyType.AuthorisationRequest,
+          clientType = Some("personal"),
+          clientService = Some("HMRC-MTD-IT"),
+          clientId = Some(testNino),
+          clientDetailsResponse = Some(ClientDetailsResponse(
+            name = "Test Name",
+            status = None,
+            isOverseas = None,
+            knownFacts = Seq(testPostcode),
+            knownFactType = Some(KnownFactType.PostalCode),
+            hasPendingInvitation = false,
+            hasExistingRelationshipFor = None)),
+          knownFact = None
+        )
+      ).futureValue
+      val result = post(routes.ConfirmClientController.onSubmit(AgentJourneyType.AuthorisationRequest).url)(Map(
+        "confirmClient" -> Seq("true")
+      ))
+      result.status shouldBe SEE_OTHER
+      result.header("Location").value shouldBe routes.EnterClientFactController.show(AgentJourneyType.AuthorisationRequest).url
+    }
+
+    "redirect to enter client id when known fact do not match" in {
+      authoriseAsAgent()
+      journeyService.saveJourney(
+        journey = AgentJourney(
+          journeyType = AgentJourneyType.AuthorisationRequest,
+          clientType = Some("personal"),
+          clientService = Some("HMRC-MTD-IT"),
+          clientId = Some(testNino),
+          clientDetailsResponse = Some(ClientDetailsResponse(
+            name = "Test Name",
+            status = None,
+            isOverseas = None,
+            knownFacts = Seq(testPostcode),
+            knownFactType = Some(KnownFactType.PostalCode),
+            hasPendingInvitation = false,
+            hasExistingRelationshipFor = None)),
+          knownFact = Some("IncorrectKnownFact")
+        )
+      ).futureValue
+      val result = post(routes.ConfirmClientController.onSubmit(AgentJourneyType.AuthorisationRequest).url)(Map(
+        "confirmClient" -> Seq("true")
+      ))
+      result.status shouldBe SEE_OTHER
+      result.header("Location").value shouldBe routes.EnterClientFactController.show(AgentJourneyType.AuthorisationRequest).url
     }
 
     "redirect to select agent role page when service has supported roles and client is confirmed" in {
