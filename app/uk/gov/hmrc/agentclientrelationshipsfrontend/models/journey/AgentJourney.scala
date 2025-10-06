@@ -59,10 +59,6 @@ case class AgentJourney(journeyType: AgentJourneyType,
       case ClientDetailsResponse(_, _, _, _, _, _, None) => Some(JourneyExitType.NoAuthorisationExists)
     }
 
-    def isKnowFactMatching: Boolean = knownFact match {
-        case Some(kf) => clientDetailsResponse.exists(_.knownFacts.contains(kf))
-        case None => clientDetailsResponse.exists(_.knownFacts.isEmpty)
-      }
       
     def isKnowFactValid: Boolean = clientDetailsResponse.exists { cdr =>
         cdr.knownFactType.fold(true) { _ =>
