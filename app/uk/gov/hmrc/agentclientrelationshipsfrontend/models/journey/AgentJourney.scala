@@ -63,6 +63,13 @@ case class AgentJourney(journeyType: AgentJourneyType,
         case Some(kf) => clientDetailsResponse.exists(_.knownFacts.contains(kf))
         case None => clientDetailsResponse.exists(_.knownFacts.isEmpty)
       }
+      
+    def isKnowFactValid: Boolean = clientDetailsResponse.exists { cdr =>
+        cdr.knownFactType.fold(true) { _ =>
+          knownFact.fold(cdr.knownFacts.isEmpty)(cdr.knownFacts.contains)
+        }
+      }
+
 
 object AgentJourney:
   implicit lazy val format: OFormat[AgentJourney] = Json.format[AgentJourney]

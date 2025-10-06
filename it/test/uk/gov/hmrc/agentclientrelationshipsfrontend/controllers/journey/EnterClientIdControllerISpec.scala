@@ -18,6 +18,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey
 
 import play.api.libs.json.{JsObject, Json}
 import play.api.test.Helpers.*
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.KnownFactType.PostalCode
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.AgentJourneyType.AgentCancelAuthorisation
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsResponse, KnownFactType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, AgentJourneyType, JourneyExitType}
@@ -252,7 +253,7 @@ class EnterClientIdControllerISpec extends ComponentSpecHelper with AuthStubs :
       authoriseAsAgent()
       val knowFact = "TestPotsCode"
       val inputKnowFact = "OtherTestPotsCode"
-      val clientDetailsResponse = ClientDetailsResponse("", None, None, Seq(knowFact), None, false, None)
+      val clientDetailsResponse = ClientDetailsResponse(name = "", status = None, isOverseas = None, knownFacts = Seq(knowFact), knownFactType = Some(PostalCode), hasPendingInvitation = false, hasExistingRelationshipFor = None)
       await(journeyService.saveJourney(businessAgentCancelAuthorisationJourney.copy(clientService = Some("HMRC-CBC-ORG"), clientId = Some(exampleCbcId), clientDetailsResponse = Some(clientDetailsResponse), knownFact = Some(inputKnowFact))))
       val result = post(routes.EnterClientIdController.onSubmit(AgentJourneyType.AgentCancelAuthorisation).url)(Map(
         getFieldName("HMRC-CBC-ORG") -> Seq(exampleCbcId)

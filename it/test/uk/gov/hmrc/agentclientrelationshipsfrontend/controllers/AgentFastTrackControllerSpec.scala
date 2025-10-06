@@ -226,6 +226,7 @@ class AgentFastTrackControllerSpec extends ComponentSpecHelper with AuthStubs wi
     missingKnownFactsFastTrackRequests.foreach(fastTrackFormData => s"redirect to the next page and store journey data for ${fastTrackFormData.service} service for ${fastTrackFormData.clientIdentifierType} and knownFacts missing" in {
       authoriseAsAgent()
       val clientDetailsResponse: Option[ClientDetailsResponse] = Some(toClientRelationship(fastTrackFormData, Some(KnownFactType.PostalCode)))
+        .map(_.copy(knownFacts = List("TestKnowFacts")))
       givenClientRelationshipFor(fastTrackFormData.service, fastTrackFormData.clientIdentifier, Json.toJson(clientDetailsResponse).toString)
 
       val result = post(fastTrackRoutes.AgentFastTrackController.agentFastTrack.url)(toFastTrackRequests(fastTrackFormData))
@@ -387,6 +388,7 @@ class AgentFastTrackControllerSpec extends ComponentSpecHelper with AuthStubs wi
       s"return the correct redirect URL for ${fastTrackFormData.service} service for ${fastTrackFormData.clientIdentifierType} and knownFacts missing" in {
         authoriseAsAgent()
         val clientDetailsResponse: Option[ClientDetailsResponse] = Some(toClientRelationship(fastTrackFormData, Some(KnownFactType.PostalCode)))
+          .map(_.copy(knownFacts = List("TestKnowFacts")))
         givenClientRelationshipFor(fastTrackFormData.service, fastTrackFormData.clientIdentifier, Json.toJson(clientDetailsResponse).toString)
 
         val result = post(fastTrackRoutes.AgentFastTrackController.agentFastTrackGetRedirectUrl.url)(toFastTrackRequests(fastTrackFormData))

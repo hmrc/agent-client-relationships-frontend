@@ -107,7 +107,7 @@ class AgentJourneyServiceSpec extends AnyWordSpecLike with Matchers with Mockito
     "return the EnterClientFact URL if there is no existing known fact for the provided client" in :
       val sessionJourney = baseAgentJourney.copy(
         clientService = Some(HMRCMTDVAT),
-        clientDetailsResponse = Some(ClientDetailsResponse("Colin Client", None, None, Seq(), Some(Date), false, None))
+        clientDetailsResponse = Some(ClientDetailsResponse(name = "Colin Client", status = None, isOverseas = None, knownFacts = Seq("TestKnowFacts"), knownFactType = Some(Date), hasPendingInvitation = false, hasExistingRelationshipFor = None))
       )
       givenJourneyInSession(sessionJourney)
 
