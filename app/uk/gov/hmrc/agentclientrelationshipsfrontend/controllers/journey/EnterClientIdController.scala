@@ -74,7 +74,10 @@ class EnterClientIdController @Inject()(mcc: MessagesControllerComponents,
                 clientId = Some(clientId),
                 clientService = if clientDetailsResponse.isDefined && clientDetailsResponse.get.isOverseas.getOrElse(false)
                 then Some(serviceConfig.getService(journey.getService).get.overseasServiceName.getOrElse(journey.getService))
-                else journey.clientService,
+                else journey.clientService.map {
+                  case "HMRC-CBC-NONUK-ORG" => "HMRC-CBC-ORG"
+                  case x => x
+                },
                 clientDetailsResponse = clientDetailsResponse,
                 clientConfirmed = None,
                 knownFact = None,

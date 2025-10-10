@@ -53,10 +53,28 @@ class EnterClientIdControllerISpec extends ComponentSpecHelper with AuthStubs :
     "hasPendingInvitation" -> false
   )
 
+  val testUKClientDetailsResponseJson: JsObject = Json.obj(
+    "name" -> "anything",
+    "isOverseas" -> false,
+    "knownFacts" -> Json.arr("anything"),
+    "knownFactType" -> "Email",
+    "hasPendingInvitation" -> false
+  )
+
   val testOverseasClientDetailsResponse: ClientDetailsResponse = ClientDetailsResponse(
     name = "anything",
     status = None,
     isOverseas = Some(true),
+    knownFacts = Seq("anything"),
+    knownFactType = Some(KnownFactType.Email),
+    hasPendingInvitation = false,
+    hasExistingRelationshipFor = None
+  )
+
+  val testUKClientDetailsResponse: ClientDetailsResponse = ClientDetailsResponse(
+    name = "anything",
+    status = None,
+    isOverseas = Some(false),
     knownFacts = Seq("anything"),
     knownFactType = Some(KnownFactType.Email),
     hasPendingInvitation = false,
@@ -186,6 +204,24 @@ class EnterClientIdControllerISpec extends ComponentSpecHelper with AuthStubs :
       )
       val updatedJourney = await(journeyService.getJourney)
       updatedJourney shouldBe Some(expectedJourneyWithOverseasServiceName)
+
+    "refine service name to use UK service name if supported and client is UK" in :
+      authoriseAsAgent()
+      stubGet(getClientDetailsUrl("HMRC-CBC-ORG", exampleCbcId), OK, testUKClientDetailsResponseJson.toString)
+      await(journeyService.saveJourney(businessAuthorisationRequestJourney.copy(clientService = Some("HMRC-CBC-NONUK-ORG"))))
+      val result = post(routes.EnterClientIdController.onSubmit(AgentJourneyType.AuthorisationRequest).url)(Map(
+        "cbcId" -> Seq(exampleCbcId)
+      ))
+      result.status shouldBe SEE_OTHER
+      result.header("Location").value shouldBe routes.EnterClientFactController.show(AgentJourneyType.AuthorisationRequest).url
+      val expectedJourneyWithUKServiceName = businessAuthorisationRequestJourney.copy(
+        clientId = Some(exampleCbcId),
+        clientService = Some("HMRC-CBC-ORG"),
+        clientDetailsResponse = Some(testUKClientDetailsResponse)
+      )
+      val updatedJourney = await(journeyService.getJourney)
+      updatedJourney shouldBe Some(expectedJourneyWithUKServiceName)
+
 
     "show an error when no selection is made" in :
       authoriseAsAgent()
