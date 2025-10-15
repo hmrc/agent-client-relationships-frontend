@@ -70,14 +70,10 @@ class EnterClientIdController @Inject()(mcc: MessagesControllerComponents,
           else
             for {
               clientDetailsResponse <- agentClientRelationshipsService.getClientDetails(clientId, journey)
+              adjustedClientService = clientDetailsResponse.map(serviceConfig.adjustServiceWithClientData(journey.getService, _))
               _ <- journeyService.saveJourney(journey.copy(
                 clientId = Some(clientId),
-                clientService = if clientDetailsResponse.isDefined && clientDetailsResponse.get.isOverseas.getOrElse(false)
-                then Some(serviceConfig.getService(journey.getService).get.overseasServiceName.getOrElse(journey.getService))
-                else journey.clientService.map {
-                  case "HMRC-CBC-NONUK-ORG" => "HMRC-CBC-ORG"
-                  case x => x
-                },
+                clientService = adjustedClientService,
                 clientDetailsResponse = clientDetailsResponse,
                 clientConfirmed = None,
                 knownFact = None,
