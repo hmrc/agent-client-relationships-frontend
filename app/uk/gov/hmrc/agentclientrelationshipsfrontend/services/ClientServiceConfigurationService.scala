@@ -38,10 +38,8 @@ class ClientServiceConfigurationService @Inject()(implicit appConfig: AppConfig)
   def adjustServiceWithClientData( serviceName: String, clientDetailsResponse: ClientDetailsResponse): String =
     if (clientDetailsResponse.isOverseas.contains(true))
       getService(serviceName).flatMap(_.overseasServiceName).getOrElse(serviceName)
-    else if (serviceName == "HMRC-CBC-NONUK-ORG")
-      "HMRC-CBC-ORG"
     else
-      serviceName
+      getSupportedEnrolments(serviceName).headOption.getOrElse(serviceName)
 
   
   def validateUrlPart(urlPartKey: String): Boolean = getServiceKeysForUrlPart(urlPartKey).nonEmpty
