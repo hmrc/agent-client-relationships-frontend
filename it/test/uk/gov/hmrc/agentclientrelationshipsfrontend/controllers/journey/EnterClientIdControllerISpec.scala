@@ -34,7 +34,6 @@ class EnterClientIdControllerISpec extends ComponentSpecHelper with AuthStubs :
 
   def testClientDetailsResponseJson(isTrust: Boolean): JsObject = if isTrust then Json.obj(
     "name" -> "anything",
-    "isOverseas" -> false,
     "knownFacts" -> Json.arr(),
     "hasPendingInvitation" -> false
   ) else Json.obj(
@@ -174,18 +173,22 @@ class EnterClientIdControllerISpec extends ComponentSpecHelper with AuthStubs :
   "POST /authorisation-request/client-identifier" should :
     allClientTypeAuthJourneys.foreach(j =>
       allOptionsForClientType.get(j.getClientType).map(allOptions =>
-        allOptions.foreach(o => s"redirect to the next page after storing answer of ${exampleValueForService(o)} for ${j.getClientType} $o" in :
+        allOptions.foreach(serviceName => s"redirect to the next page after storing answer of ${exampleValueForService(serviceName)} for ${j.getClientType} $serviceName" in :
           authoriseAsAgent()
-          stubGet(getClientDetailsUrl(o, exampleValueForService(o)), OK, testClientDetailsResponseJson(o == "HMRC-TERS-ORG" | o == "HMRC-TERSNT-ORG").toString)
-          await(journeyService.saveJourney(j.copy(clientService = Some(o), refinedService = Some(true))))
+          stubGet(getClientDetailsUrl(serviceName, exampleValueForService(serviceName)), OK, testClientDetailsResponseJson(serviceName == "HMRC-TERS-ORG" | serviceName == "HMRC-TERSNT-ORG").toString)
+          await(journeyService.saveJourney(j.copy(clientService = Some(serviceName), refinedService = Some(true))))
           val result = post(routes.EnterClientIdController.onSubmit(AgentJourneyType.AuthorisationRequest).url)(Map(
-            s"${getFieldName(o)}" -> Seq(exampleValueForService(o))
+            s"${getFieldName(serviceName)}" -> Seq(exampleValueForService(serviceName))
           ))
           result.status shouldBe SEE_OTHER
-          val expectedLocation = if o == "HMRC-TERS-ORG" | o == "HMRC-TERSNT-ORG"
+          val expectedLocation = if serviceName == "HMRC-TERS-ORG" | serviceName == "HMRC-TERSNT-ORG"
           then routes.ConfirmClientController.show(AgentJourneyType.AuthorisationRequest).url
           else routes.EnterClientFactController.show(AgentJourneyType.AuthorisationRequest).url
           result.header("Location").value shouldBe expectedLocation
+
+          val updatedJourney = await(journeyService.getJourney)
+          updatedJourney.get.getService shouldBe serviceName
+
         )))
 
     "refine service name to use overseas service name if supported and client is overseas" in :
