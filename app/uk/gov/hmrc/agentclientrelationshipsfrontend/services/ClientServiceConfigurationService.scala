@@ -17,6 +17,7 @@
 package uk.gov.hmrc.agentclientrelationshipsfrontend.services
 
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.ClientDetailsResponse
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientType
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientType.{business, personal, trust}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.common.{ClientDetailsConfiguration, ServiceData}
@@ -33,6 +34,13 @@ class ClientServiceConfigurationService @Inject()(implicit appConfig: AppConfig)
   def allClientTypes: Set[String] = services.flatMap(_._2.clientTypes).toSet.map(_.toString)
   
   def getService(serviceName: String): Option[ServiceData] = services.get(serviceName)
+
+  def adjustServiceWithClientData( serviceName: String, clientDetailsResponse: ClientDetailsResponse): String =
+    if (clientDetailsResponse.isOverseas.contains(true))
+      getService(serviceName).flatMap(_.overseasServiceName).getOrElse(serviceName)
+    else
+      getSupportedEnrolments(serviceName).headOption.getOrElse(serviceName)
+
   
   def validateUrlPart(urlPartKey: String): Boolean = getServiceKeysForUrlPart(urlPartKey).nonEmpty
 
