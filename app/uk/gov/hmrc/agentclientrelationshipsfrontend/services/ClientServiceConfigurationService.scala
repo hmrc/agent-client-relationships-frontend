@@ -36,10 +36,11 @@ class ClientServiceConfigurationService @Inject()(implicit appConfig: AppConfig)
   def getService(serviceName: String): Option[ServiceData] = services.get(serviceName)
 
   def adjustServiceWithClientData( serviceName: String, clientDetailsResponse: ClientDetailsResponse): String =
-    if (clientDetailsResponse.isOverseas.contains(true))
-      getService(serviceName).flatMap(_.overseasServiceName).getOrElse(serviceName)
-    else
-      getSupportedEnrolments(serviceName).headOption.getOrElse(serviceName)
+    clientDetailsResponse.isOverseas match {
+      case Some(true) =>  getService(serviceName).flatMap(_.overseasServiceName).getOrElse(serviceName)
+      case Some(false) => getSupportedEnrolments(serviceName).headOption.getOrElse(serviceName)
+      case None =>        serviceName
+    }
 
   
   def validateUrlPart(urlPartKey: String): Boolean = getServiceKeysForUrlPart(urlPartKey).nonEmpty
