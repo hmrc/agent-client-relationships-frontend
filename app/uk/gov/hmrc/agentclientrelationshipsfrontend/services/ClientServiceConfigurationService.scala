@@ -32,16 +32,17 @@ class ClientServiceConfigurationService @Inject()(implicit appConfig: AppConfig)
   def orderedClientTypes: Seq[String] = Seq("personal", "business", "trust")
 
   def allClientTypes: Set[String] = services.flatMap(_._2.clientTypes).toSet.map(_.toString)
-  
+
   def getService(serviceName: String): Option[ServiceData] = services.get(serviceName)
 
-  def adjustServiceWithClientData( serviceName: String, clientDetailsResponse: ClientDetailsResponse): String =
-    if (clientDetailsResponse.isOverseas.contains(true))
-      getService(serviceName).flatMap(_.overseasServiceName).getOrElse(serviceName)
-    else
-      getSupportedEnrolments(serviceName).headOption.getOrElse(serviceName)
+  def adjustServiceWithClientData(serviceName: String, clientDetailsResponse: ClientDetailsResponse): String =
+    val service = getService(serviceName)
+    (service.flatMap(_.overseasServiceName).isDefined, clientDetailsResponse.isOverseas) match {
+      case (true, Some(true)) => service.flatMap(_.overseasServiceName).getOrElse(serviceName)
+      case (true, Some(false)) => getSupportedEnrolments(serviceName).headOption.getOrElse(serviceName)
+      case _ => serviceName
+    }
 
-  
   def validateUrlPart(urlPartKey: String): Boolean = getServiceKeysForUrlPart(urlPartKey).nonEmpty
 
   // services that are enabled and have the service option enabled meaning they will appear in the user facing service
@@ -52,6 +53,7 @@ class ClientServiceConfigurationService @Inject()(implicit appConfig: AppConfig)
     .keys.toSeq
 
   def allEnabledServices: Set[String] = services.filter(_._2.serviceOption == true).map(_._2.serviceName).toSet
+
   def allSupportedServices: Set[String] = services.map(_._2.serviceName).toSet[String]
 
   def clientDetailsFor(clientService: String): Seq[ClientDetailsConfiguration] = services(clientService).clientDetails
@@ -65,7 +67,7 @@ class ClientServiceConfigurationService @Inject()(implicit appConfig: AppConfig)
   def requiresRefining(clientService: String): Boolean = services(clientService).supportedEnrolments.size > 1 && services(clientService).overseasServiceName.isEmpty
 
   def getSupportedEnrolments(clientService: String): Seq[String] = services(clientService).supportedEnrolments
-  
+
   // this method normalises the service name to the parent service name if the service supports multiple service keys for enrolments
   def getServiceForForm(clientService: String): String = if clientService.nonEmpty then (getSupportedAgentRoles(clientService), getSupportedEnrolments(clientService)) match {
     case (_, enrols) if enrols.size > 1 => enrols.head // the head of the list is the parent service
@@ -120,7 +122,7 @@ class ClientServiceConfigurationService @Inject()(implicit appConfig: AppConfig)
       .contains(personal)
 
   val supportingAgentServices: Seq[String] = Seq(HMRCMTDITSUPP)
-  
+
   private val services: ListMap[String, ServiceData] = ListMap(
     HMRCMTDIT -> ServiceData(
       serviceName = HMRCMTDIT,

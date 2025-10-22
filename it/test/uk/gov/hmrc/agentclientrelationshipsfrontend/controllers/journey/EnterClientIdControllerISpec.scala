@@ -174,15 +174,16 @@ class EnterClientIdControllerISpec extends ComponentSpecHelper with AuthStubs :
   "POST /authorisation-request/client-identifier" should :
     allClientTypeAuthJourneys.foreach(j =>
       allOptionsForClientType.get(j.getClientType).map(allOptions =>
-        allOptions.foreach(o => s"redirect to the next page after storing answer of ${exampleValueForService(o)} for ${j.getClientType} $o" in :
+        allOptions.foreach(option => s"redirect to the next page after storing answer of ${exampleValueForService(option)} for ${j.getClientType} $option" in :
           authoriseAsAgent()
-          stubGet(getClientDetailsUrl(o, exampleValueForService(o)), OK, testClientDetailsResponseJson(o == "HMRC-TERS-ORG" | o == "HMRC-TERSNT-ORG").toString)
-          await(journeyService.saveJourney(j.copy(clientService = Some(o), refinedService = Some(true))))
+          stubGet(getClientDetailsUrl(option, exampleValueForService(option)), OK, testClientDetailsResponseJson(option == "HMRC-TERS-ORG" | option == "HMRC-TERSNT-ORG").toString)
+          await(journeyService.saveJourney(j.copy(clientService = Some(option), refinedService = Some(true))))
           val result = post(routes.EnterClientIdController.onSubmit(AgentJourneyType.AuthorisationRequest).url)(Map(
-            s"${getFieldName(o)}" -> Seq(exampleValueForService(o))
+            s"${getFieldName(option)}" -> Seq(exampleValueForService(option))
           ))
+          await(journeyService.getJourney).flatMap(_.clientService) shouldBe Some(option) //ensure clientService is not changed where overseas value is not relevant
           result.status shouldBe SEE_OTHER
-          val expectedLocation = if o == "HMRC-TERS-ORG" | o == "HMRC-TERSNT-ORG"
+          val expectedLocation = if option == "HMRC-TERS-ORG" | option == "HMRC-TERSNT-ORG"
           then routes.ConfirmClientController.show(AgentJourneyType.AuthorisationRequest).url
           else routes.EnterClientFactController.show(AgentJourneyType.AuthorisationRequest).url
           result.header("Location").value shouldBe expectedLocation
