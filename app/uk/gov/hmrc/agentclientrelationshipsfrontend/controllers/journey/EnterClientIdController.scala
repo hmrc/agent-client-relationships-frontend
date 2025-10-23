@@ -70,10 +70,10 @@ class EnterClientIdController @Inject()(mcc: MessagesControllerComponents,
           else
             for {
               clientDetailsResponse <- agentClientRelationshipsService.getClientDetails(clientId, journey)
-              adjustedClientService = clientDetailsResponse.map(serviceConfig.adjustServiceWithClientData(journey.getService, _))
+              adjustedClientService = serviceConfig.adjustServiceWithClientData(journey.getService, clientDetailsResponse)
               _ <- journeyService.saveJourney(journey.copy(
                 clientId = Some(clientId),
-                clientService = adjustedClientService,
+                clientService = Some(adjustedClientService),
                 clientDetailsResponse = clientDetailsResponse,
                 clientConfirmed = None,
                 knownFact = None,
