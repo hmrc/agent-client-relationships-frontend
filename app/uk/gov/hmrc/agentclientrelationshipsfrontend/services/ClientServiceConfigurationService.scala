@@ -35,9 +35,9 @@ class ClientServiceConfigurationService @Inject()(implicit appConfig: AppConfig)
 
   def getService(serviceName: String): Option[ServiceData] = services.get(serviceName)
 
-  def adjustServiceWithClientData(serviceName: String, clientDetailsResponse: ClientDetailsResponse): String =
+  def adjustServiceWithClientData(serviceName: String, clientDetailsResponse: Option[ClientDetailsResponse]): String =
     val service = getService(serviceName)
-    (service.flatMap(_.overseasServiceName).isDefined, clientDetailsResponse.isOverseas) match {
+    (service.flatMap(_.overseasServiceName).isDefined, clientDetailsResponse.flatMap(_.isOverseas)) match {
       case (true, Some(true)) => service.flatMap(_.overseasServiceName).getOrElse(serviceName)
       case (true, Some(false)) => getSupportedEnrolments(serviceName).headOption.getOrElse(serviceName)
       case _ => serviceName
