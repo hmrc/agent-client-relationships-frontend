@@ -66,8 +66,9 @@
                     classes = "govuk-fieldset__legend--xl"
                 ))
             )),
-            items = clientServices.toSeq.map(clientService =>
+            items = clientServices.zipWithIndex.map((clientService, index) =>
                 RadioItem(
+                    id = Some(s"$ClientServiceFieldName-$index"),
                     content = Text(messages(form(ClientServiceFieldName).name + "." + clientService + "." + clientType)),
                     value = Some(clientService)
                 )

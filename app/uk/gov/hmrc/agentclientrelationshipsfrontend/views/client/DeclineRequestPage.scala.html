@@ -69,9 +69,9 @@
           classes = "govuk-fieldset__legend--m"
         ))
       )),
-      items = Seq("true", "false").map(trueOrFalse =>
+      items = Seq("true", "false").zipWithIndex.map((trueOrFalse,index) =>
         RadioItem(
-          id = Some(DeclineRequestFieldName),
+          id = Some(s"$DeclineRequestFieldName-$index"),
           content = Text(messages(s"$key.$trueOrFalse")),
           value = Some(trueOrFalse)
         )

@@ -67,8 +67,9 @@
                     classes = if legend == pageTitle then "govuk-visually-hidden" else "govuk-fieldset__legend--m"
                 ))
             )),
-            items = sortedOptions.map(option =>
+            items = sortedOptions.zipWithIndex.map((option,index) =>
                 RadioItem(
+                    id = Some(s"$AgentRoleFieldName-$index"),
                     content = Text(messages(s"$key.$option.${agentRoleChangeType.toString}.option")),
                     hint =  if messages.isDefinedAt(s"$key.$option.${agentRoleChangeType.toString}.hint") then Some(Hint(
                         content = HtmlContent(messages(s"$key.$option.${agentRoleChangeType.toString}.hint", clientName))

@@ -58,8 +58,9 @@
                     classes = "govuk-fieldset__legend--xl"
                 ))
             )),
-            items = Seq("true", "false").map(trueOrFalse =>
+            items = Seq("true", "false").zipWithIndex.map((trueOrFalse,index) =>
                 RadioItem(
+                    id = Some(s"$ClientConfirmationFieldName-$index"),
                     content = Text(messages(s"$key.$trueOrFalse")),
                     value = Some(trueOrFalse)
                 )
