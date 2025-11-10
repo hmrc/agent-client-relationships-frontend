@@ -38,7 +38,8 @@
         hmrcReportTechnicalIssue: HmrcReportTechnicalIssue,
         fullWidthLayout: FullWidthLayout,
         twoThirdsMainContent: TwoThirdsMainContent,
-        contactFrontendConfig: ContactFrontendConfig
+        contactFrontendConfig: ContactFrontendConfig,
+        debugInfo: uk.gov.hmrc.agentclientrelationshipsfrontend.views.debug.ViewDebug
 )
 
 @(
@@ -112,6 +113,7 @@ equal the page heading (H1) content, if they are identical then only the service
             baseUrl = contactFrontendConfig.baseUrl
         ))
     </div>
+    @{debugInfo.showViewInfo()}
 }
 
 @hmrcStandardPage(
