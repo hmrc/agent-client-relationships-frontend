@@ -42,7 +42,7 @@ class ConfirmClientController @Inject()(mcc: MessagesControllerComponents,
 
       val journey = journeyRequest.journey
       if (journey.clientDetailsResponse.isEmpty)  Redirect(routes.EnterClientIdController.show(journey.journeyType))
-      else if(!journey.isKnowFactValid) Redirect(routes.EnterClientFactController.show(journey.journeyType))
+      else if(!journey.isKnownFactValid) Redirect(routes.EnterClientFactController.show(journey.journeyType))
       else {
         val clientName = journey.clientDetailsResponse.get.name
         Ok(confirmClientPage(
@@ -57,7 +57,7 @@ class ConfirmClientController @Inject()(mcc: MessagesControllerComponents,
 
       val journey = journeyRequest.journey
       if (journey.clientDetailsResponse.isEmpty) Future.successful(Redirect(routes.EnterClientIdController.show(journey.journeyType)))
-      else if(!journey.isKnowFactValid) Future.successful(Redirect(routes.EnterClientFactController.show(journey.journeyType)))
+      else if (!journey.isKnownFactValid) Future.successful(Redirect(routes.EnterClientFactController.show(journey.journeyType)))
       else {
         val clientName = journey.clientDetailsResponse.get.name
         ConfirmClientForm.form(

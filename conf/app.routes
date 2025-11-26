@@ -80,6 +80,9 @@ POST       /:journeyType/confirm-client                                         
 GET        /:journeyType/agent-role                                                     uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.SelectAgentRoleController.show(journeyType: AgentJourneyType)
 POST       /:journeyType/agent-role                                                     uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.SelectAgentRoleController.onSubmit(journeyType: AgentJourneyType)
 
+GET        /:journeyType/already-manage                                                 uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.DoYouAlreadyManageController.show(journeyType: AgentJourneyType)
+POST       /:journeyType/already-manage                                                 uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.DoYouAlreadyManageController.onSubmit(journeyType: AgentJourneyType)
+
 GET        /:journeyType/confirm                                                        uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.CheckYourAnswersController.show(journeyType: AgentJourneyType)
 POST       /:journeyType/confirm                                                        uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.CheckYourAnswersController.onSubmit(journeyType: AgentJourneyType)
 GET        /:journeyType/processing-your-request                                        uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.CheckYourAnswersController.processingYourRequest(journeyType: AgentJourneyType)

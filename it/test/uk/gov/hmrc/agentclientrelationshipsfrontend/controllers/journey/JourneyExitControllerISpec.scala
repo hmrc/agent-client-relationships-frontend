@@ -24,7 +24,7 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.AgentJourneyService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentSpecHelper}
 
-class AgentJourneyExitControllerISpec extends ComponentSpecHelper with AuthStubs :
+class JourneyExitControllerISpec extends ComponentSpecHelper with AuthStubs :
 
   private val authorisationRequestJourney: AgentJourney = AgentJourney(
     AgentJourneyType.AuthorisationRequest,

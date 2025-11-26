@@ -26,5 +26,6 @@ enum JourneyExitType(val name: String):
   case ClientStatusInvalid extends JourneyExitType("client-status-invalid")
   case NoChangeOfAgentRole extends JourneyExitType("no-change-of-agent-role")
   case AuthorisationAlreadyRemoved extends JourneyExitType("authorisation-already-removed")
+  case ClientAlreadyMapped extends JourneyExitType("already-authorised-for-mtd-itsa")
 
   override def toString: String = name

@@ -71,7 +71,7 @@ class DeclineRequestPageSpec extends ViewSpecSupport:
     val formLegend = s"Do you want to decline the request from $newAgentName?"
     val yesOption = "Yes"
     val noOption = "No, I want to consider this request"
-    def formError(service: String): String = s"Error: Select 'yes' if you want to decline the request from $newAgentName"
+    def formError(service: String): String = s"Error: Select ‘yes’ if you want to decline the request from $newAgentName"
     val continue = "Continue"
 
   "The Decline Request page" when:

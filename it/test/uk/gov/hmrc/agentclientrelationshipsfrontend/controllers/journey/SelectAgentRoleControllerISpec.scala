@@ -42,7 +42,9 @@ class SelectAgentRoleControllerISpec extends ComponentSpecHelper with ScalaFutur
     hasExistingRelationshipFor = None,
     knownFactType = Some(KnownFactType.PostalCode),
     knownFacts = Seq(testPostcode),
-    isOverseas = Some(false)
+    isOverseas = Some(false),
+    isMapped = Some(false),
+    clientsLegacyRelationships = Some(Nil)
   )
 
   val clientDetailsWithExistingMain: ClientDetailsResponse = clientDetailsWithOutExisting.copy(hasExistingRelationshipFor = Some("HMRC-MTD-IT"))
@@ -102,6 +104,51 @@ class SelectAgentRoleControllerISpec extends ComponentSpecHelper with ScalaFutur
       ))
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe routes.EnterClientIdController.show(AgentJourneyType.AuthorisationRequest).url
+    }
+
+    "redirect to Do You Already Manage page when selecting HMRC-MTD-IT for a new relationship when client has an existing legacy agent" in {
+      authoriseAsAgent()
+      await(journeyService.saveJourney(journey.copy(
+        clientDetailsResponse = Some(clientDetailsWithOutExisting.copy(
+          isMapped = Some(false),
+          clientsLegacyRelationships = Some(Seq("A12345"))
+        ))
+      )))
+      val result = post(routes.SelectAgentRoleController.onSubmit(journeyType).url)(Map(
+        "agentRole" -> Seq("HMRC-MTD-IT")
+      ))
+      result.status shouldBe SEE_OTHER
+      result.header("Location").value shouldBe routes.DoYouAlreadyManageController.show(journeyType).url
+    }
+
+    "redirect to CYA page (cya will route to kickout) when selecting HMRC-MTD-IT for a new relationship when client has an existing legacy agent with a prior mapping" in {
+      authoriseAsAgent()
+      await(journeyService.saveJourney(journey.copy(
+        clientDetailsResponse = Some(clientDetailsWithOutExisting.copy(
+          isMapped = Some(true),
+          clientsLegacyRelationships = Some(Seq("A12345"))
+        ))
+      )))
+      val result = post(routes.SelectAgentRoleController.onSubmit(journeyType).url)(Map(
+        "agentRole" -> Seq("HMRC-MTD-IT")
+      ))
+      result.status shouldBe SEE_OTHER
+      result.header("Location").value shouldBe routes.CheckYourAnswersController.show(journeyType).url
+    }
+
+    "redirect to CYA page when selecting HMRC-MTD-IT-SUPP for a new relationship when client has an existing legacy agent" in {
+      authoriseAsAgent()
+      await(journeyService.saveJourney(journey.copy(
+        clientDetailsResponse = Some(clientDetailsWithOutExisting.copy(
+          isMapped = Some(false),
+          clientsLegacyRelationships = Some(Seq("A12345"))
+        ))
+      )))
+      val result = post(routes.SelectAgentRoleController.onSubmit(journeyType).url)(Map(
+        "agentRole" -> Seq("HMRC-MTD-IT-SUPP")
+      ))
+      result.status shouldBe SEE_OTHER
+      result.header("Location").value shouldBe routes.CheckYourAnswersController.show(journeyType).url
     }
 
     List("HMRC-MTD-IT", "HMRC-MTD-IT-SUPP").foreach(role => s"redirect to the CYA page after storing valid answer $role for new relationship" in {

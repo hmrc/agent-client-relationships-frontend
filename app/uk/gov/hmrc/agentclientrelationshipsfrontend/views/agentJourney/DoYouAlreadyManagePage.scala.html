@@ -1,0 +1,65 @@
+@*
+ * Copyright 2024 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.Layout
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.components.SubmitButton
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.routes
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.AgentJourneyRequest
+@import uk.gov.hmrc.govukfrontend.views.html.components.implicits.RichRadios
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.DoYouAlreadyManageFieldName
+@import play.api.data.Form
+@import play.api.i18n.Messages
+
+@this(
+        layout: Layout,
+        formWithCSRF: FormWithCSRF,
+        govukRadios: GovukRadios,
+        submitButton: SubmitButton
+)
+
+@(form: Form[Boolean])(implicit request: AgentJourneyRequest[?], messages: Messages)
+
+@pageTitle = @{
+    messages("doYouAlreadyManage.header", request.journey.getClientDetailsResponse.name)
+}
+
+@layout(
+    pageTitle = pageTitle,
+    optionalForm = Some(form),
+    serviceName = Some(messages("authorisation-request.service.name")),
+    isAgent = true
+) {
+
+    @formWithCSRF(action = routes.DoYouAlreadyManageController.onSubmit(request.journey.journeyType)) {
+        @govukRadios(Radios(
+            fieldset = Some(Fieldset(
+                legend = Some(Legend(
+                    content = Text(pageTitle),
+                    isPageHeading = true,
+                    classes = "govuk-fieldset__legend--xl"
+                ))
+            )),
+            items = Seq("true", "false").map(trueOrFalse =>
+                RadioItem(
+                    content = Text(messages(s"doYouAlreadyManage.$trueOrFalse")),
+                    value = Some(trueOrFalse)
+                )
+            )
+        ).withFormField(form(DoYouAlreadyManageFieldName)))
+
+        @submitButton()
+    }
+}

@@ -348,6 +348,15 @@ selectAgentRole.HMRC-MTD-IT-SUPP.supportingToMain.option=No
 selectAgentRole.HMRC-MTD-IT.supportingToMain.hint=If {0} accepts this request, you’ll get access to all the Income Tax information you need to deal with HMRC on their behalf.
 
 # ________________________________________________________________________________
+# Do you already manage SA for this client?
+# ________________________________________________________________________________
+
+doYouAlreadyManage.header=Do you already manage Self Assessment for {0}?
+doYouAlreadyManage.true=Yes
+doYouAlreadyManage.false=No
+doYouAlreadyManage.error.required=Select ‘yes’ if you already manage Self Assessment for {0}
+
+# ________________________________________________________________________________
 # Agent journey check your answers
 # ________________________________________________________________________________
 
@@ -355,6 +364,7 @@ checkYourAnswers.header=Check your answers
 checkYourAnswers.h2=Authorisation details for {0}
 checkYourAnswers.clientService.label=What you want to do for the client
 checkYourAnswers.agentType.label=How you want to act for them
+checkYourAnswers.doYouAlreadyManage.label=You already manage Self Assessment for {0}
 
 checkYourAnswers.confirmAndSend.button=Confirm and send
 checkYourAnswers.change=Change
@@ -516,6 +526,7 @@ journeyExit.client-insolvent.header=You cannot create an authorisation request b
 journeyExit.authorisation-already-exists.header=You are already authorised
 journeyExit.no-change-of-agent-role.header=You have not changed how you act for this client
 journeyExit.authorisation-already-removed.header=This authorisation has already been removed
+journeyExit.already-authorised-for-mtd-itsa.header=You are already authorised for Making Tax Digital for Income Tax
 
 # ________________________________________________________________________________
 # Journey exit partials
@@ -523,6 +534,14 @@ journeyExit.authorisation-already-removed.header=This authorisation has already 
 
 genericNotFound.description=We could not find a client in our records using the details you gave us.
 genericNotFound.advice=Check the details and try again.
+
+# ________________________________________________________________________________
+# Client already mapped
+# ________________________________________________________________________________
+
+clientAlreadyMapped.p1={0} has authorised you for Self Assessment – you can use this authorisation for Making Tax Digital for Income Tax.
+clientAlreadyMapped.p2=You can now <a class="govuk-link" href="{0}">sign them up for Making Tax Digital for Income Tax</a>.
+clientAlreadyMapped.link=Return to your agent services account homepage
 
 # ________________________________________________________________________________
 # Client not registered for Self Assessment
@@ -628,7 +647,7 @@ consentInformation.warning.agent=If you authorise {0}, we will remove {1} as you
 consentInformation.warning.suppAgent=If you authorise {0} as your supporting agent, they can not longer act as main agent.
 
 consentInformation.section1.h2=What you need to know first
-consentInformation.section1.p1=An agent can either be ''main agent'' or a ''supporting agent'' when they manage your {0}.
+consentInformation.section1.p1=An agent can either be ‘main agent’ or a ‘supporting agent’ when they manage your {0}.
 consentInformation.section1.p2=Some important tasks - like submitting your tax returns - can only be completed by you, or by a main agent acting on your behalf.
 consentInformation.section1.p3=<a href="{0}" class="govuk-link" target="_blank" rel="noreferrer noopener">Find out how main and supporting agents can act for you  (opens in a new tab)</a>.
 
@@ -770,7 +789,7 @@ confirmDecline.p4=You can change your mind later - just ask them to send you ano
 confirmDecline.label=Do you want to decline the request from {0}?
 confirmDecline.true=Yes
 confirmDecline.false=No, I want to consider this request
-confirmDecline.error.required=Select ''yes'' if you want to decline the request from {0}
+confirmDecline.error.required=Select ‘yes’ if you want to decline the request from {0}
 
 # ________________________________________________________________________________
 # Client journey check your answer page

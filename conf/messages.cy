@@ -347,6 +347,15 @@ selectAgentRole.HMRC-MTD-IT-SUPP.supportingToMain.option=Na
 selectAgentRole.HMRC-MTD-IT.supportingToMain.hint=Os bydd {0} yn derbyn y cais hwn, byddwch yn cael mynediad at holl wybodaeth Treth Incwm sydd ei hangen arnoch i ddelio â CThEF ar eu rhan.
 
 # ________________________________________________________________________________
+# Do you already manage SA for this client?
+# ________________________________________________________________________________
+
+doYouAlreadyManage.header=Ydych chi eisoes yn rheoli Hunanasesiad ar gyfer {0}?
+doYouAlreadyManage.true=Iawn
+doYouAlreadyManage.false=Na
+doYouAlreadyManage.error.required=Dewiswch ‘Iawn’ os ydych yn rheoli Hunanasesiad ar gyfer {0} eisoes
+
+# ________________________________________________________________________________
 # Agent journey check your answers
 # ________________________________________________________________________________
 
@@ -354,6 +363,7 @@ checkYourAnswers.header=Gwiriwch eich atebion
 checkYourAnswers.h2=Manylion awdurdodiad ar gyfer {0}
 checkYourAnswers.clientService.label=Yr hyn yr ydych am ei wneud ar gyfer y cleient
 checkYourAnswers.agentType.label=Sut ydych am weithredu drostyn nhw
+checkYourAnswers.doYouAlreadyManage.label=You already manage Self Assessment for {0}
 
 checkYourAnswers.confirmAndSend.button=Cadarnhau ac anfon
 checkYourAnswers.change=Newid
@@ -515,6 +525,7 @@ journeyExit.client-insolvent.header=Ni allwch greu cais am awdurdodiad gan fod y
 journeyExit.authorisation-already-exists.header=Rydych eisoes wedi’ch awdurdodi
 journeyExit.no-change-of-agent-role.header=Nid ydych wedi newid sut rydych chi’n gweithredu ar gyfer y cleient hwn
 journeyExit.authorisation-already-removed.header=Mae’r awdurdodiad hwn wedi’i dynnu’n barod
+journeyExit.already-authorised-for-mtd-itsa.header=You are already authorised for Making Tax Digital for Income Tax
 
 # ________________________________________________________________________________
 # Journey exit partials
@@ -522,6 +533,14 @@ journeyExit.authorisation-already-removed.header=Mae’r awdurdodiad hwn wedi’
 
 genericNotFound.description=Nid oeddem yn gallu dod o hyd i gleient yn ein cofnodion gan ddefnyddio’r manylion a roesoch i ni.
 genericNotFound.advice=Gwiriwch y manylion a rhowch gynnig arall arni.
+
+# ________________________________________________________________________________
+# Client already mapped
+# ________________________________________________________________________________
+
+clientAlreadyMapped.p1={0} has authorised you for Self Assessment – you can use this authorisation for Making Tax Digital for Income Tax.
+clientAlreadyMapped.p2=You can now <a class="govuk-link" href="{0}">sign them up for Making Tax Digital for Income Tax</a>.
+clientAlreadyMapped.link=Return to your agent services account homepage
 
 # ________________________________________________________________________________
 # Client not registered for Self Assessment

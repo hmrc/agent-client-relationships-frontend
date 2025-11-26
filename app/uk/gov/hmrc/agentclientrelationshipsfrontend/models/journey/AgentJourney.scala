@@ -28,6 +28,7 @@ case class AgentJourney(journeyType: AgentJourneyType,
                         agentType: Option[String] = None,
                         clientConfirmed: Option[Boolean] = None,
                         refinedService: Option[Boolean] = None,
+                        alreadyManageAuth: Option[Boolean] = None,
                         journeyComplete: Option[String] = None,
                         confirmationClientName: Option[String] = None,
                         confirmationService: Option[String] = None,
@@ -43,28 +44,32 @@ case class AgentJourney(journeyType: AgentJourneyType,
   def getClientDetailsResponse: ClientDetailsResponse = clientDetailsResponse.getOrElse(throw new RuntimeException("client details are not defined"))
   def getActiveRelationship: String = clientDetailsResponse.flatMap(_.hasExistingRelationshipFor).getOrElse(throw new RuntimeException("active relationship does not exist"))
 
-  def getKnownFactType: KnownFactType = clientDetailsResponse.flatMap(_.knownFactType)getOrElse(throw new RuntimeException("known fact is not defined"))
+  def getKnownFactType: KnownFactType = clientDetailsResponse.flatMap(_.knownFactType).getOrElse(throw new RuntimeException("known fact is not defined"))
 
   def getExitType(journeyType: AgentJourneyType, clientDetails: ClientDetailsResponse, supportedAgentRoles: Seq[String] = Seq.empty): Option[JourneyExitType] = journeyType match
     case AgentJourneyType.AuthorisationRequest => clientDetails match {
-      case ClientDetailsResponse(_, Some(ClientStatus.Insolvent), _, _, _, _, _) => Some(JourneyExitType.ClientStatusInsolvent)
-      case ClientDetailsResponse(_, Some(_), _, _, _, _, _) => Some(JourneyExitType.ClientStatusInvalid)
-      case ClientDetailsResponse(_, None, _, _, _, true, _) => Some(JourneyExitType.ClientAlreadyInvited)
-      case ClientDetailsResponse(_, None, _, _, _, false, Some(service)) if supportedAgentRoles.isEmpty && service == clientService.get => Some(JourneyExitType.AuthorisationAlreadyExists)
-      case ClientDetailsResponse(_, None, _, _, _, false, _) => None
+      case ClientDetailsResponse(_, Some(ClientStatus.Insolvent), _, _, _, _, _, _, _) => Some(JourneyExitType.ClientStatusInsolvent)
+      case ClientDetailsResponse(_, Some(_), _, _, _, _, _, _, _) => Some(JourneyExitType.ClientStatusInvalid)
+      case ClientDetailsResponse(_, None, _, _, _, true, _, _, _) => Some(JourneyExitType.ClientAlreadyInvited)
+      case ClientDetailsResponse(_, None, _, _, _, false, Some(service), _, _) if supportedAgentRoles.isEmpty && service == clientService.get => Some(JourneyExitType.AuthorisationAlreadyExists)
+      case ClientDetailsResponse(_, None, _, _, _, false, None, Some(true), Some(_)) if isMainAgent => Some(JourneyExitType.ClientAlreadyMapped)
+      case ClientDetailsResponse(_, None, _, _, _, false, _, _, _) => None
     }
     case AgentJourneyType.AgentCancelAuthorisation => clientDetails match {
-      case ClientDetailsResponse(_, _, _, _, _, _, Some(service)) if service == clientService.get || supportedAgentRoles.contains(service) => None
-      case ClientDetailsResponse(_, _, _, _, _, _, Some(_)) => Some(JourneyExitType.NoAuthorisationExists)
-      case ClientDetailsResponse(_, _, _, _, _, _, None) => Some(JourneyExitType.NoAuthorisationExists)
+      case ClientDetailsResponse(_, _, _, _, _, _, Some(service), _, _) if service == clientService.get || supportedAgentRoles.contains(service) => None
+      case ClientDetailsResponse(_, _, _, _, _, _, Some(_), _, _) => Some(JourneyExitType.NoAuthorisationExists)
+      case ClientDetailsResponse(_, _, _, _, _, _, None, _, _) => Some(JourneyExitType.NoAuthorisationExists)
     }
 
       
-    def isKnowFactValid: Boolean = clientDetailsResponse.exists { cdr =>
-        cdr.knownFactType.fold(true) { _ =>
-          knownFact.fold(cdr.knownFacts.isEmpty)(cdr.knownFacts.contains)
-        }
-      }
+  def isKnownFactValid: Boolean = clientDetailsResponse.exists { cdr =>
+    cdr.knownFactType.fold(true) { _ =>
+      knownFact.fold(cdr.knownFacts.isEmpty)(cdr.knownFacts.contains)
+    }
+  }
+
+  def isMainAgent: Boolean = agentType.contains(getService)
+  def eligibleForMapping: Boolean = isMainAgent && getClientDetailsResponse.isMapped.contains(false) && getClientDetailsResponse.clientsLegacyRelationships.exists(_.nonEmpty)
 
 
 object AgentJourney:

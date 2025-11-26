@@ -33,7 +33,8 @@
         authorisationAlreadyExists: AuthorisationAlreadyExists,
         noChangeOfAgentRole: NoChangeOfAgentRole,
         clientAlreadyInvited: ClientAlreadyInvited,
-        authorisationAlreadyRemoved: AuthorisationAlreadyRemoved
+        authorisationAlreadyRemoved: AuthorisationAlreadyRemoved,
+        clientAlreadyMapped: ClientAlreadyMapped
 )
 
 @(journeyType: AgentJourneyType, exitType: JourneyExitType)(implicit request: AgentJourneyRequest[?], messages: Messages, appConfig: AppConfig)
@@ -58,6 +59,7 @@
       case JourneyExitType.NoChangeOfAgentRole => noChangeOfAgentRole()
       case JourneyExitType.ClientAlreadyInvited => clientAlreadyInvited()
       case JourneyExitType.AuthorisationAlreadyRemoved => authorisationAlreadyRemoved()
+      case JourneyExitType.ClientAlreadyMapped => clientAlreadyMapped()
      }
     }
 }

@@ -15,7 +15,8 @@ lazy val microservice = Project("agent-client-relationships-frontend", file(".")
       "-Wconf:msg=Flag.*repeatedly:s",
       "-Wconf:msg=unused import.*&src=html/.*:s"
     ),
-    pipelineStages := Seq(gzip)
+    pipelineStages := Seq(gzip),
+    Test / logBuffered := false
   )
   .settings(CodeCoverageSettings.settings)
   .settings(
@@ -41,3 +42,4 @@ lazy val it = project
   .dependsOn(microservice % "test->test")
   .settings(DefaultBuildSettings.itSettings())
   .settings(libraryDependencies ++= AppDependencies.test)
+  .settings(Test / logBuffered := false)
