@@ -171,7 +171,7 @@ class DoYouAlreadyManageControllerISpec extends ComponentSpecHelper with ScalaFu
       result.header("Location").value shouldBe routes.EnterClientIdController.show(AgentJourneyType.AuthorisationRequest).url
     "redirect to mapping journey when the agent already manages the client's affairs" in :
       authoriseAsAgent()
-      stubPost("/agent-mapping/start-auth-mapping-journey", CREATED, Json.obj("redirectUrl" -> "/mapping-journey?id=1234567890").toString)
+      stubPost("/start-auth-mapping-journey", CREATED, Json.obj("redirectUrl" -> "/mapping-journey?id=1234567890").toString)
       journeyService.saveJourney(testJourney).futureValue
       val result = post(routes.DoYouAlreadyManageController.onSubmit(AgentJourneyType.AuthorisationRequest).url)(Map(
         DoYouAlreadyManageFieldName -> Seq("true")
@@ -194,3 +194,19 @@ class DoYouAlreadyManageControllerISpec extends ComponentSpecHelper with ScalaFu
       val document = Jsoup.parse(result.body)
       document.select(".govuk-error-summary__list > li > a").text() should include("Select ‘yes’ if you already manage Self Assessment for Test Name")
 
+  "GET /authorisation-request/already-manage/cancel-mapping" should :
+    "redirect to enter client id when the agent doesn't have a prior answer for 'alreadyManageAuth'" in :
+      authoriseAsAgent()
+      journeyService.saveJourney(testJourney).futureValue
+      val result = get(routes.DoYouAlreadyManageController.cancelMapping(AgentJourneyType.AuthorisationRequest).url)
+      result.status shouldBe SEE_OTHER
+      result.header("Location").value shouldBe routes.EnterClientIdController.show(AgentJourneyType.AuthorisationRequest).url
+    "redirect to CYA and change 'alreadyManageAuth' to false" in :
+      authoriseAsAgent()
+      journeyService.saveJourney(testJourney.copy(
+        alreadyManageAuth = Some(true)
+      )).futureValue
+      val result = get(routes.DoYouAlreadyManageController.cancelMapping(AgentJourneyType.AuthorisationRequest).url)
+      result.status shouldBe SEE_OTHER
+      result.header("Location").value shouldBe routes.CheckYourAnswersController.show(AgentJourneyType.AuthorisationRequest).url
+      journeyService.getJourney.futureValue.get.alreadyManageAuth shouldBe Some(false)

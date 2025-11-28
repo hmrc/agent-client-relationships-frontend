@@ -16,13 +16,16 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.connectors
 
+import play.api.http.HeaderNames
 import play.api.http.Status.*
 import play.api.libs.json.Json
 import play.api.libs.ws.JsonBodyWritables.*
 import play.api.mvc.RequestHeader
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
+import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.routes
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.AgentJourneyType.AuthorisationRequest
 import uk.gov.hmrc.http.HttpReads.Implicits.*
-import uk.gov.hmrc.http.{HttpResponse, StringContextOps}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps}
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.RequestSupport.hc
 
@@ -34,17 +37,23 @@ class AgentMappingConnector @Inject()(appConfig: AppConfig,
                                       httpV2: HttpClientV2
                                      )(implicit executionContext: ExecutionContext):
 
-  private val agentMappingUrl = s"${appConfig.agentMappingFrontendBaseUrl}/agent-mapping"
+  private val agentMappingUrl = s"${appConfig.agentMappingFrontendBaseUrl}"
 
-  def startAuthMappingJourney(clientsLegacyRelationships: Seq[String], clientName: String)(implicit rh: RequestHeader): Future[String] = httpV2
-    .post(url"$agentMappingUrl/start-auth-mapping-journey")
-    .withBody(Json.obj(
-      "clientsLegacyRelationships" -> clientsLegacyRelationships,
-      "clientName" -> clientName
-    ))
-    .execute[HttpResponse].map { response =>
-      response.status match {
-        case CREATED => (response.json \ "redirectUrl").as[String]
-        case _ => throw new RuntimeException(s"Failed to start a mapping journey, request: ${response.body}")
+  def startAuthMappingJourney(clientsLegacyRelationships: Seq[String], clientName: String)(implicit rh: RequestHeader): Future[String] = {
+    given HeaderCarrier = hc.copy(extraHeaders = hc.headers(Seq(HeaderNames.COOKIE)))
+
+    httpV2
+      .post(url"$agentMappingUrl/start-auth-mapping-journey")
+      .withBody(Json.obj(
+        "clientsLegacyRelationships" -> clientsLegacyRelationships,
+        "clientName" -> clientName,
+        "backUrl" -> s"${appConfig.appExternalUrl}${routes.DoYouAlreadyManageController.show(AuthorisationRequest).url}",
+        "cancelUrl" -> s"${appConfig.appExternalUrl}${routes.DoYouAlreadyManageController.cancelMapping(AuthorisationRequest).url}"
+      ))
+      .execute[HttpResponse].map { response =>
+        response.status match {
+          case CREATED => (response.json \ "redirectUrl").as[String]
+          case _ => throw new RuntimeException(s"Failed to start a mapping journey, request: ${response.body}")
+        }
       }
-    }
+  }

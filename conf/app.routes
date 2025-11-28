@@ -82,6 +82,7 @@ POST       /:journeyType/agent-role                                             
 
 GET        /:journeyType/already-manage                                                 uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.DoYouAlreadyManageController.show(journeyType: AgentJourneyType)
 POST       /:journeyType/already-manage                                                 uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.DoYouAlreadyManageController.onSubmit(journeyType: AgentJourneyType)
+GET        /:journeyType/already-manage/cancel-mapping                                  uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.DoYouAlreadyManageController.cancelMapping(journeyType: AgentJourneyType)
 
 GET        /:journeyType/confirm                                                        uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.CheckYourAnswersController.show(journeyType: AgentJourneyType)
 POST       /:journeyType/confirm                                                        uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.CheckYourAnswersController.onSubmit(journeyType: AgentJourneyType)

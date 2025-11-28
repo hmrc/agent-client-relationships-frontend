@@ -76,3 +76,17 @@ class DoYouAlreadyManageController @Inject()(mcc: MessagesControllerComponents,
             }
           }
         )
+
+  def cancelMapping(journeyType: AgentJourneyType): Action[AnyContent] = actions.getAgentJourney(journeyType).async:
+    journeyRequest =>
+      given AgentJourneyRequest[?] = journeyRequest
+
+      val journey = journeyRequest.journey
+
+      if journey.alreadyManageAuth.isEmpty then Future.successful(Redirect(routes.EnterClientIdController.show(journey.journeyType)))
+      else
+        journeyService.saveJourney(journey.copy(
+          alreadyManageAuth = Some(false)
+        )).flatMap { _ =>
+          journeyService.nextPageUrl(journeyType).map(Redirect(_))
+        }
