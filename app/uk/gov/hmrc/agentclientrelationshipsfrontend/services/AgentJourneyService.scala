@@ -60,7 +60,7 @@ class AgentJourneyService @Inject()(val journeyRepository: JourneyRepository,
           routes.StartJourneyController.startJourney(journeyType).url
         else if (journeyType == AgentJourneyType.AuthorisationRequest && serviceConfig.supportsAgentRoles(journey.getService) && journey.agentType.isEmpty)
           routes.SelectAgentRoleController.show(journeyType).url
-        else if (journey.eligibleForMapping && !journey.alreadyManageAuth.contains(false))
+        else if (journey.eligibleForMapping && !(journey.alreadyManageAuth.contains(false) || journey.abortMapping.contains(true)))
           routes.DoYouAlreadyManageController.show(journeyType).url
         else routes.CheckYourAnswersController.show(journeyType).url
       case _ => routes.StartJourneyController.startJourney(journeyType).url

@@ -69,7 +69,8 @@ class DoYouAlreadyManageController @Inject()(mcc: MessagesControllerComponents,
           },
           alreadyManage => {
             journeyService.saveJourney(journey.copy(
-              alreadyManageAuth = Some(alreadyManage)
+              alreadyManageAuth = Some(alreadyManage),
+              abortMapping = None
             )).flatMap { _ =>
               if alreadyManage then journeyService.getMappingJourneyUrl.map(Redirect(_))
               else journeyService.nextPageUrl(journeyType).map(Redirect(_))
@@ -86,7 +87,7 @@ class DoYouAlreadyManageController @Inject()(mcc: MessagesControllerComponents,
       if journey.alreadyManageAuth.isEmpty then Future.successful(Redirect(routes.EnterClientIdController.show(journey.journeyType)))
       else
         journeyService.saveJourney(journey.copy(
-          alreadyManageAuth = Some(false)
+          abortMapping = Some(true)
         )).flatMap { _ =>
           journeyService.nextPageUrl(journeyType).map(Redirect(_))
         }

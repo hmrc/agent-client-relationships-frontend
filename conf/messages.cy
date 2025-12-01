@@ -363,7 +363,7 @@ checkYourAnswers.header=Gwiriwch eich atebion
 checkYourAnswers.h2=Manylion awdurdodiad ar gyfer {0}
 checkYourAnswers.clientService.label=Yr hyn yr ydych am ei wneud ar gyfer y cleient
 checkYourAnswers.agentType.label=Sut ydych am weithredu drostyn nhw
-checkYourAnswers.doYouAlreadyManage.label=You already manage Self Assessment for {0}
+checkYourAnswers.doYouAlreadyManage.label=Rydych chi eisoes yn rheoli Hunanasesiad ar gyfer {0}
 
 checkYourAnswers.confirmAndSend.button=Cadarnhau ac anfon
 checkYourAnswers.change=Newid
@@ -525,7 +525,7 @@ journeyExit.client-insolvent.header=Ni allwch greu cais am awdurdodiad gan fod y
 journeyExit.authorisation-already-exists.header=Rydych eisoes wedi’ch awdurdodi
 journeyExit.no-change-of-agent-role.header=Nid ydych wedi newid sut rydych chi’n gweithredu ar gyfer y cleient hwn
 journeyExit.authorisation-already-removed.header=Mae’r awdurdodiad hwn wedi’i dynnu’n barod
-journeyExit.already-authorised-for-mtd-itsa.header=You are already authorised for Making Tax Digital for Income Tax
+journeyExit.already-authorised-for-mtd-itsa.header=Rydych chi eisoes ag awdurdod ar gyfer Troi Treth yn Ddigidol ar gyfer Treth Incwm
 
 # ________________________________________________________________________________
 # Journey exit partials
@@ -538,9 +538,9 @@ genericNotFound.advice=Gwiriwch y manylion a rhowch gynnig arall arni.
 # Client already mapped
 # ________________________________________________________________________________
 
-clientAlreadyMapped.p1={0} has authorised you for Self Assessment – you can use this authorisation for Making Tax Digital for Income Tax.
-clientAlreadyMapped.p2=You can now <a class="govuk-link" href="{0}">sign them up for Making Tax Digital for Income Tax</a>.
-clientAlreadyMapped.link=Return to your agent services account homepage
+clientAlreadyMapped.p1=Mae {0} wedi’ch awdurdodi ar gyfer Hunanasesiad – gallwch ddefnyddio’r awdurdodiad hwn ar gyfer Troi Treth yn Ddigidol ar gyfer Treth Incwm.
+clientAlreadyMapped.p2=Gallwch chi bellach <a class="govuk-link" href="{0}">ei gofrestru ar gyfer Troi Treth yn Ddigidol ar gyfer Treth Incwm</a>.
+clientAlreadyMapped.link=Dychwelyd i hafan y cyfrif gwasanaethau asiant
 
 # ________________________________________________________________________________
 # Client not registered for Self Assessment

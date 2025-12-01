@@ -79,6 +79,7 @@ class EnterClientIdController @Inject()(mcc: MessagesControllerComponents,
                 knownFact = None,
                 agentType = None,
                 alreadyManageAuth = None,
+                abortMapping = None,
                 confirmationClientName = None,
                 journeyComplete = None
               ))

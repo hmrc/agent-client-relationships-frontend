@@ -104,6 +104,7 @@ class EnterClientFactController @Inject()(mcc: MessagesControllerComponents,
                 clientConfirmed = None,
                 agentType = None,
                 alreadyManageAuth = None,
+                abortMapping = None,
                 confirmationClientName = None,
                 journeyComplete = None
               ))

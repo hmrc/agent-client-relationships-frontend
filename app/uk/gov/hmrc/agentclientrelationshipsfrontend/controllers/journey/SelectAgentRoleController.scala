@@ -85,6 +85,7 @@ class SelectAgentRoleController @Inject()(mcc: MessagesControllerComponents,
               val newJourney = journey.copy(
                 agentType = Some(agentRole),
                 alreadyManageAuth = None,
+                abortMapping = None,
                 confirmationClientName = None,
                 journeyComplete = None
               )
