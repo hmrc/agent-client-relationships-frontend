@@ -201,7 +201,7 @@ class DoYouAlreadyManageControllerISpec extends ComponentSpecHelper with ScalaFu
       val result = get(routes.DoYouAlreadyManageController.cancelMapping(AgentJourneyType.AuthorisationRequest).url)
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe routes.EnterClientIdController.show(AgentJourneyType.AuthorisationRequest).url
-    "redirect to CYA and change 'alreadyManageAuth' to false" in :
+    "redirect to CYA and set 'abortMapping'" in :
       authoriseAsAgent()
       journeyService.saveJourney(testJourney.copy(
         alreadyManageAuth = Some(true)
@@ -209,4 +209,5 @@ class DoYouAlreadyManageControllerISpec extends ComponentSpecHelper with ScalaFu
       val result = get(routes.DoYouAlreadyManageController.cancelMapping(AgentJourneyType.AuthorisationRequest).url)
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe routes.CheckYourAnswersController.show(AgentJourneyType.AuthorisationRequest).url
-      journeyService.getJourney.futureValue.get.alreadyManageAuth shouldBe Some(false)
+      journeyService.getJourney.futureValue.get.alreadyManageAuth shouldBe Some(true)
+      journeyService.getJourney.futureValue.get.abortMapping shouldBe Some(true)
