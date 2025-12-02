@@ -18,6 +18,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.services
 
 import play.api.mvc.Request
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
+import uk.gov.hmrc.agentclientrelationshipsfrontend.connectors.AgentMappingConnector
 import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.routes
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.repositories.JourneyRepository
@@ -28,7 +29,8 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class AgentJourneyService @Inject()(val journeyRepository: JourneyRepository,
-                                    val serviceConfig: ClientServiceConfigurationService
+                                    val serviceConfig: ClientServiceConfigurationService,
+                                    agentMappingConnector: AgentMappingConnector
                                    )(implicit ec: ExecutionContext, appConfig: AppConfig) extends JourneyService[AgentJourney] {
 
   override val dataKey: DataKey[AgentJourney] = DataKey("AgentJourneySessionData")
@@ -44,13 +46,22 @@ class AgentJourneyService @Inject()(val journeyRepository: JourneyRepository,
       case Some(journey) if journey.journeyType != journeyType => routes.StartJourneyController.startJourney(journeyType).url
       case Some(journey) if journey.journeyComplete.nonEmpty => appConfig.agentServicesAccountHomeUrl
       case Some(journey) =>
-        if (journey.clientService.isEmpty) routes.SelectClientTypeController.show(journeyType).url
-        else if (serviceConfig.requiresRefining(journey.clientService.get) && journey.refinedService.isEmpty) routes.ServiceRefinementController.show(journeyType).url
-        else if (journey.clientDetailsResponse.isEmpty) routes.EnterClientIdController.show(journeyType).url
-        else if (!journey.isKnowFactValid) routes.EnterClientFactController.show(journeyType).url
-        else if (journey.clientConfirmed.isEmpty) routes.ConfirmClientController.show(journeyType).url
-        else if (journey.clientConfirmed.contains(false)) routes.StartJourneyController.startJourney(journeyType).url
-        else if (journeyType == AgentJourneyType.AuthorisationRequest && serviceConfig.supportsAgentRoles(journey.getService) && journey.agentType.isEmpty) routes.SelectAgentRoleController.show(journeyType).url
+        if (journey.clientService.isEmpty)
+          routes.SelectClientTypeController.show(journeyType).url
+        else if (serviceConfig.requiresRefining(journey.clientService.get) && journey.refinedService.isEmpty)
+          routes.ServiceRefinementController.show(journeyType).url
+        else if (journey.clientDetailsResponse.isEmpty)
+          routes.EnterClientIdController.show(journeyType).url
+        else if (!journey.isKnownFactValid)
+          routes.EnterClientFactController.show(journeyType).url
+        else if (journey.clientConfirmed.isEmpty)
+          routes.ConfirmClientController.show(journeyType).url
+        else if (journey.clientConfirmed.contains(false))
+          routes.StartJourneyController.startJourney(journeyType).url
+        else if (journeyType == AgentJourneyType.AuthorisationRequest && serviceConfig.supportsAgentRoles(journey.getService) && journey.agentType.isEmpty)
+          routes.SelectAgentRoleController.show(journeyType).url
+        else if (journey.eligibleForMapping && !(journey.alreadyManageAuth.contains(false) || journey.abortMapping.contains(true)))
+          routes.DoYouAlreadyManageController.show(journeyType).url
         else routes.CheckYourAnswersController.show(journeyType).url
       case _ => routes.StartJourneyController.startJourney(journeyType).url
     }
@@ -66,4 +77,11 @@ class AgentJourneyService @Inject()(val journeyRepository: JourneyRepository,
     journeyExitType.map { exitType =>
       routes.JourneyExitController.show(request.journey.journeyType, exitType).url
     }
+
+  def getMappingJourneyUrl(implicit request: AgentJourneyRequest[?]): Future[String] =
+    agentMappingConnector.startAuthMappingJourney(
+      clientsLegacyRelationships = request.journey.getClientDetailsResponse.clientsLegacyRelationships
+        .getOrElse(throw new RuntimeException("Agent tried to start mapping for client without legacy relationships")),
+      clientName = request.journey.getClientDetailsResponse.name
+    )
 }

@@ -24,7 +24,9 @@ case class ClientDetailsResponse(name: String,
                                  knownFacts: Seq[String],
                                  knownFactType: Option[KnownFactType],
                                  hasPendingInvitation: Boolean = false,
-                                 hasExistingRelationshipFor: Option[String]
+                                 hasExistingRelationshipFor: Option[String],
+                                 isMapped: Option[Boolean] = None, // ITSA only, not in config as it's not meant to be standardised
+                                 clientsLegacyRelationships: Option[Seq[String]] = None // ITSA only, not in config as it's not meant to be standardised
                                 )
 
 object ClientDetailsResponse {

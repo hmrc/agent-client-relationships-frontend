@@ -58,7 +58,7 @@ class ConsentInformationPageSpec extends ViewSpecSupport {
   object ExpectedItsa {
     def heading(serviceKey: String, agentName:String) = s"$agentName want to be your ${indefiniteAgentRole(serviceKey)}"
     def title(serviceKey: String, agentName:String) = s"${heading(serviceKey, agentName)} - Appoint someone to deal with HMRC for you - GOV.UK"
-    def section1p1(serviceKey: String) = s"An agent can either be 'main agent' or a 'supporting agent' when they manage your ${taxServiceNames(serviceKey)}."
+    def section1p1(serviceKey: String) = s"An agent can either be ‘main agent’ or a ‘supporting agent’ when they manage your ${taxServiceNames(serviceKey)}."
     def section2p1(serviceKey: String, agentName:String) = s"Giving consent means employees of $agentName will be able to access your ${taxServiceNames(serviceKey)} data."
   }
 
@@ -67,7 +67,7 @@ class ConsentInformationPageSpec extends ViewSpecSupport {
 
     def title(serviceKey: String, agentName: String) = s"${heading(serviceKey, agentName)} - Appoint someone to deal with HMRC for you - GOV.UK"
 
-    def section1p1(serviceKey: String) = s"An agent can either be 'main agent' or a 'supporting agent' when they manage your ${taxServiceNames(serviceKey)}."
+    def section1p1(serviceKey: String) = s"An agent can either be ‘main agent’ or a ‘supporting agent’ when they manage your ${taxServiceNames(serviceKey)}."
 
     def section1p2(serviceKey: String, agentName: String, newAgentName: String) = s"If you authorise $newAgentName, we will remove $agentName as your existing main agent."
     

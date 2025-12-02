@@ -49,7 +49,8 @@ trait ComponentSpecHelper
   def downstreamServices: Map[String, String] = Seq(
     "auth",
     "identity-verification-frontend",
-    "agent-client-relationships"
+    "agent-client-relationships",
+    "agent-mapping-frontend"
   ).flatMap { service =>
     Seq(
       s"microservice.services.$service.host" -> mockHost,

@@ -56,6 +56,20 @@ class AgentJourneySpec extends AnyWordSpecLike with Matchers :
         val clientDetails = ClientDetailsResponse("Client", None, None, Seq(), None, false, None)
         model.getExitType(AuthorisationRequest, clientDetails) shouldBe None
 
+      "return ClientAlreadyMapped when the agent already has a mapping for this client and agent wants to be 'main'" in :
+        val model = AgentJourney(AuthorisationRequest, clientService = Some(HMRCMTDIT), agentType = Some(HMRCMTDIT))
+        val clientDetails = ClientDetailsResponse("Client", None, None, Seq(), None, false, None, Some(true), Some(Seq("A12345")))
+        model.getExitType(AuthorisationRequest, clientDetails) shouldBe Some(ClientAlreadyMapped)
+
+      "return ClientAlreadyMapped when the agent already has a mapping for this client and agent wants to be 'supporting'" in :
+        val model = AgentJourney(AuthorisationRequest, clientService = Some(HMRCMTDIT), agentType = Some(HMRCMTDITSUPP))
+        val clientDetails = ClientDetailsResponse("Client", None, None, Seq(), None, false, None, Some(true), Some(Seq("A12345")))
+        model.getExitType(AuthorisationRequest, clientDetails) shouldBe None
+
+      "return None when the agent does not have a mapping for this client" in :
+        val clientDetails = ClientDetailsResponse("Client", None, None, Seq(), None, false, None, Some(false), Some(Seq("A12345")))
+        model.getExitType(AuthorisationRequest, clientDetails) shouldBe None
+
     "journey type is AgentCancelAuthorisation" should :
 
       val model = AgentJourney(AgentCancelAuthorisation, clientService = Some(HMRCMTDIT))

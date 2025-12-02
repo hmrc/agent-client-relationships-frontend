@@ -74,6 +74,8 @@ class SelectServiceController @Inject()(mcc: MessagesControllerComponents,
             clientConfirmed = None,
             knownFact = None,
             agentType = None,
+            alreadyManageAuth = None,
+            abortMapping = None,
             refinedService = None,
             confirmationClientName = None,
             journeyComplete = None

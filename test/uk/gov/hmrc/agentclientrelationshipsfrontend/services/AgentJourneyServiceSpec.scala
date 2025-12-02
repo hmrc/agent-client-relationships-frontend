@@ -29,6 +29,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.HMRCMTDVAT
+import uk.gov.hmrc.agentclientrelationshipsfrontend.connectors.AgentMappingConnector
 import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.routes
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.ClientDetailsResponse
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.KnownFactType.Date
@@ -44,8 +45,9 @@ class AgentJourneyServiceSpec extends AnyWordSpecLike with Matchers with Mockito
 
   val mockJourneyRepo: JourneyRepository = mock[JourneyRepository]
   val mockClientServiceConfigService: ClientServiceConfigurationService = mock[ClientServiceConfigurationService]
+  val mockAgentMappingConnector: AgentMappingConnector = mock[AgentMappingConnector]
   implicit val mockAppConfig: AppConfig = mock[AppConfig]
-  val service = new AgentJourneyService(mockJourneyRepo, mockClientServiceConfigService)
+  val service = new AgentJourneyService(mockJourneyRepo, mockClientServiceConfigService, mockAgentMappingConnector)
   val baseAgentJourney: AgentJourney = AgentJourney(AuthorisationRequest)
   val arn = "XARN1234567"
   implicit val fakeRequest: FakeRequest[?] = FakeRequest()

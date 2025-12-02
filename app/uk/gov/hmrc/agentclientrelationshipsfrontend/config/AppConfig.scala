@@ -25,6 +25,7 @@ class AppConfig @Inject()(servicesConfig: ServicesConfig, config: Configuration)
   // Base Urls (for use by connectors)
   val ivFrontendBaseUrl: String = baseUrl("identity-verification-frontend")
   val agentClientRelationshipsBaseUrl: String = baseUrl("agent-client-relationships")
+  val agentMappingFrontendBaseUrl: String = baseUrl("agent-mapping-frontend")
 
   // Service Urls
   val baseUrl: String = getString("base.url") // environment specific MTD domain, only use when need to create an absolute url (e.g. invitation link)
@@ -33,6 +34,7 @@ class AppConfig @Inject()(servicesConfig: ServicesConfig, config: Configuration)
   val agentServicesAccountLimitedUrl: String = asaFrontendExternalUrl + getConfString("agent-services-account-frontend.account-limited")
   val agentServicesAccountHomeUrl: String = asaFrontendExternalUrl + getConfString("agent-services-account-frontend.home")
   val ivUpliftUrl: String = getConfString("identity-verification-frontend.uplift-url")
+  val itsaSignupUrl: String = getConfString("income-tax-subscription-frontend.signup-url")
 
   private val basGatewayFrontendExternalUrl: String = getConfString("bas-gateway-frontend.external-url")
   private val signOutPath: String = getConfString("bas-gateway-frontend.sign-out.path")
