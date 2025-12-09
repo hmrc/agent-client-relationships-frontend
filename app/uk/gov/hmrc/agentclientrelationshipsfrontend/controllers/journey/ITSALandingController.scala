@@ -29,6 +29,7 @@ import scala.concurrent.ExecutionContext
 
 @Singleton
 class ITSALandingController @Inject()(mcc: MessagesControllerComponents,
+                                      serviceConfig: ClientServiceConfigurationService,
                                       journeyService: AgentJourneyService,
                                       itsaLandingPage: ITSALandingPage,
                                       actions: Actions
@@ -39,7 +40,7 @@ class ITSALandingController @Inject()(mcc: MessagesControllerComponents,
       given AgentJourneyRequest[?] = journeyRequest
       val journey = journeyRequest.journey
       if journey.clientDetailsResponse.isEmpty then Redirect(routes.EnterClientIdController.show(journey.journeyType))
-      else Ok(itsaLandingPage())
+      else Ok(itsaLandingPage(clientDetailField = serviceConfig.firstClientDetailsFieldFor(journey.getService)))
       
 
   def onSubmit(journeyType: AgentJourneyType): Action[AnyContent] = actions.getAgentJourney(journeyType).async:

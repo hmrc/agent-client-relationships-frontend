@@ -16,6 +16,7 @@
 
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.Layout
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.routes
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.common.ClientDetailsConfiguration
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.AgentJourneyRequest
 
 @this(
@@ -23,16 +24,31 @@
     layout: Layout,
     govukButton: GovukButton,
     govukInsetText : GovukInsetText,
+    govukSummaryList: GovukSummaryList,
     h1: h1
 )
 
-@()(implicit request: AgentJourneyRequest[?], messages: Messages)
+@(clientDetailField: ClientDetailsConfiguration)(implicit request: AgentJourneyRequest[?], messages: Messages)
 
 @key = @{"fasttrackLanding"}
 @journeyKey = @{request.journey.journeyType.toString}
 @serviceKey = @{request.journey.getServiceWithDefault}
 @insetHtml = @{messages(s"$key.$serviceKey.landing.guidance")}
 @pageTitle = @{messages(s"$key.$serviceKey.landing.header")}
+
+@niRow = @{
+    SummaryListRow(
+        key = Key(
+            content = Text(messages(s"$key.${clientDetailField.name}.label"))
+        ),
+        value = Value(
+            content = Text(request.journey.getClientId)
+        ),
+        actions = None
+    )
+}
+
+@rows = @{ Seq(niRow) }
 
 @layout(
     pageTitle = pageTitle,
@@ -43,6 +59,10 @@
     @h1(pageTitle)
 
     @govukInsetText(InsetText(content = HtmlContent(insetHtml)))
+
+    <p class="govuk-body">@messages(s"extra para")</p>
+
+    @govukSummaryList(SummaryList(rows))
 
     @formWithCSRF(action = routes.ITSALandingController.onSubmit(request.journey.journeyType)) {
 
