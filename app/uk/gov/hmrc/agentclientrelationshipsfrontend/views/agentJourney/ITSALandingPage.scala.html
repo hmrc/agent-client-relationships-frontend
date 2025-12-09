@@ -33,8 +33,9 @@
 @key = @{"fasttrackLanding"}
 @journeyKey = @{request.journey.journeyType.toString}
 @serviceKey = @{request.journey.getServiceWithDefault}
-@insetHtml = @{messages(s"$key.$serviceKey.landing.guidance")}
 @pageTitle = @{messages(s"$key.$serviceKey.landing.header")}
+@insetText = @{messages(s"$key.$serviceKey.landing.inset")}
+@paragraphText = @{messages(s"$key.$serviceKey.landing.paragraph")}
 
 @niRow = @{
     SummaryListRow(
@@ -58,9 +59,9 @@
 
     @h1(pageTitle)
 
-    @govukInsetText(InsetText(content = HtmlContent(insetHtml)))
+    @govukInsetText(InsetText(content = Text(insetText)))
 
-    <p class="govuk-body">@messages(s"extra para")</p>
+    <p class="govuk-body">@paragraphText</p>
 
     @govukSummaryList(SummaryList(rows))
 
