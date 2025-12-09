@@ -19,22 +19,20 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey
 import play.api.i18n.I18nSupport
 import play.api.mvc.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
-import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{AgentJourneyService, ClientServiceConfigurationService}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.agentJourney.ITSALandingPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 @Singleton
 class ITSALandingController @Inject()(mcc: MessagesControllerComponents,
-                                      serviceConfig: ClientServiceConfigurationService,
                                       journeyService: AgentJourneyService,
                                       itsaLandingPage: ITSALandingPage,
                                       actions: Actions
-                                       )(implicit val executionContext: ExecutionContext, appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport:
+                                       )(implicit val executionContext: ExecutionContext) extends FrontendController(mcc) with I18nSupport:
 
   def show(journeyType: AgentJourneyType): Action[AnyContent] = actions.getAgentJourney(journeyType):
     journeyRequest =>
@@ -49,4 +47,5 @@ class ITSALandingController @Inject()(mcc: MessagesControllerComponents,
       given AgentJourneyRequest[?] = journeyRequest
       val journey = journeyRequest.journey
       println("PRESSED CONTINUE")
-      Future.successful(Redirect(routes.ITSALandingController.show(journey.journeyType)))
+      val nextPageUrl = journeyService.nextPageUrl(journeyType)
+      nextPageUrl.map(Redirect(_))

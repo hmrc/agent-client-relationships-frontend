@@ -20,6 +20,7 @@
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.AgentJourneyType.AuthorisationRequest
 
 @this(
+    formWithCSRF: FormWithCSRF,
     layout: Layout,
     govukButton: GovukButton,
     govukInsetText : GovukInsetText,
@@ -44,11 +45,14 @@
 
     @govukInsetText(InsetText(content = HtmlContent(insetHtml)))
 
-    @govukButton(Button(
-        id = Some("continueButton"),
-        content = Text(messages("continue.button")),
-        href = Some(routes.ITSALandingController.onSubmit(request.journey.journeyType).url),
-        preventDoubleClick = Some(true)
-    ))
+    @formWithCSRF(action = routes.ITSALandingController.onSubmit(request.journey.journeyType)) {
+
+        @govukButton(Button(
+            id = Some("continueButton"),
+            content = Text(messages("continue.button")),
+            preventDoubleClick = Some(true)
+        ))
+
+    }
 
 }
