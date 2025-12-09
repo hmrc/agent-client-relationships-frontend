@@ -20,12 +20,9 @@ import play.api.i18n.I18nSupport
 import play.api.mvc.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
-import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.AgentRoleFieldName
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.ClientDetailsResponse
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.SelectFromOptionsForm
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{AgentJourneyService, ClientServiceConfigurationService}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.agentJourney.SelectAgentRolePage
+import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.agentJourney.ITSALandingPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}

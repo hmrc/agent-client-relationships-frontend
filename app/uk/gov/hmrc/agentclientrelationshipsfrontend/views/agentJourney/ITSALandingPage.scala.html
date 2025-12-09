@@ -36,23 +36,18 @@
 
 @layout(
     pageTitle = pageTitle,
-    optionalForm = Some(form),
     serviceName = Some(messages(s"$journeyKey.service.name")),
     isAgent = true
 ) {
 
     @h1(pageTitle)
 
-    @if(messages.isDefinedAt(s"$key.$serviceKey.${agentRoleChangeType.toString}.intro")) {
-      <p class="govuk-body">@messages(s"$key.$serviceKey.${agentRoleChangeType.toString}.intro", clientName)</p>
-    }
-
     @govukInsetText(InsetText(content = HtmlContent(insetHtml)))
 
     @govukButton(Button(
         id = Some("continueButton"),
         content = Text(messages("continue.button")),
-        href = Some(routes.ITSALandingController.onSubmit(journeyKey).url)
+        href = Some(routes.ITSALandingController.onSubmit(request.journey.journeyType).url),
         preventDoubleClick = Some(true)
     ))
 
