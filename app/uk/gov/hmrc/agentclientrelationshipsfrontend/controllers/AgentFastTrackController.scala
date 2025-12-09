@@ -84,8 +84,10 @@ class AgentFastTrackController @Inject()(mcc: MessagesControllerComponents,
           _ <- journeyService.saveJourney(newJourney)
 
           nextPage <- (clientDetails, checkedKnownFact) match
-            case (Some(_), None | Some(true)) => journeyService.nextPageUrl(journeyType)
-            case _ => Future.successful(routes.JourneyExitController.show(journeyType, serviceConfig.getNotFoundError(journeyType, agentFastTrackFormData.service)).url)
+//            TODO: TEMP FOR TESTING
+            case _ => Future.successful(routes.ITSALandingController.show(journeyType))
+//            case (Some(_), None | Some(true)) => journeyService.nextPageUrl(journeyType)
+//            case _ => Future.successful(routes.JourneyExitController.show(journeyType, serviceConfig.getNotFoundError(journeyType, agentFastTrackFormData.service)).url)
         } yield nextPage
       }
     )
