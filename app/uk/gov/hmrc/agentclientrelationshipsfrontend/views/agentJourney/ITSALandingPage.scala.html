@@ -52,7 +52,7 @@
     @govukButton(Button(
         id = Some("continueButton"),
         content = Text(messages("continue.button")),
-        href = Some(routes.ITSALandingController.show.url)
+        href = Some(routes.ITSALandingController.onSubmit(journeyKey).url)
         preventDoubleClick = Some(true)
     ))
 

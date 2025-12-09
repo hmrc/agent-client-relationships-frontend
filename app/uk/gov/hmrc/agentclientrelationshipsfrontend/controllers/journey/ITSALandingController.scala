@@ -35,64 +35,21 @@ import scala.concurrent.{ExecutionContext, Future}
 class ITSALandingController @Inject()(mcc: MessagesControllerComponents,
                                       serviceConfig: ClientServiceConfigurationService,
                                       journeyService: AgentJourneyService,
-                                      selectAgentRolePage: SelectAgentRolePage,
+                                      itsaLandingPage: ITSALandingPage,
                                       actions: Actions
                                        )(implicit val executionContext: ExecutionContext, appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport:
-  
-  private def getAgentRoleChangeType(journey: AgentJourney, options: Seq[String]): AgentRoleChangeType = {
-    journey.getClientDetailsResponse.hasExistingRelationshipFor match {
-      case Some(existing) if options.head == existing => AgentRoleChangeType.MainToSupporting
-      case Some(_) => AgentRoleChangeType.SupportingToMain
-      case _ => AgentRoleChangeType.NewRelationship
-    }
-  }
 
   def show(journeyType: AgentJourneyType): Action[AnyContent] = actions.getAgentJourney(journeyType):
     journeyRequest =>
       given AgentJourneyRequest[?] = journeyRequest
       val journey = journeyRequest.journey
       if journey.clientDetailsResponse.isEmpty then Redirect(routes.EnterClientIdController.show(journey.journeyType))
-      else {
-        val options = serviceConfig.getSupportedAgentRoles(journey.getService)
-        Ok(selectAgentRolePage(
-          form = SelectFromOptionsForm.form(AgentRoleFieldName, options, journey.journeyType.toString, journey.getClientDetailsResponse.name).fill(journey.agentType.getOrElse("")),
-          options,
-          getAgentRoleChangeType(journey, options)
-        ))
-      }
+      else Ok(itsaLandingPage())
       
 
   def onSubmit(journeyType: AgentJourneyType): Action[AnyContent] = actions.getAgentJourney(journeyType).async:
     journeyRequest =>
       given AgentJourneyRequest[?] = journeyRequest
       val journey = journeyRequest.journey
-      if journey.clientDetailsResponse.isEmpty
-      then Future.successful(Redirect(routes.EnterClientIdController.show(journey.journeyType)))
-      else {
-        val options = serviceConfig.getSupportedAgentRoles(journey.getServiceWithDefault)
-        SelectFromOptionsForm.form(AgentRoleFieldName, options, journeyType.toString, journey.getClientDetailsResponse.name).bindFromRequest().fold(
-          formWithErrors => {
-            Future.successful(BadRequest(selectAgentRolePage(
-              formWithErrors,
-              options,
-              getAgentRoleChangeType(journey, options)
-            )))
-          },
-          agentRole => {
-            if (journey.getClientDetailsResponse.hasExistingRelationshipFor.contains(agentRole)) {
-              Future.successful(Redirect(routes.JourneyExitController.show(journeyType, JourneyExitType.NoChangeOfAgentRole)))
-            } else {
-              val newJourney = journey.copy(
-                agentType = Some(agentRole),
-                alreadyManageAuth = None,
-                abortMapping = None,
-                confirmationClientName = None,
-                journeyComplete = None
-              )
-              journeyService.saveJourney(newJourney).flatMap { _ =>
-                journeyService.nextPageUrl(journeyType).map(Redirect(_))
-              }
-            }
-          }
-        )
-      }
+      println("PRESSED CONTINUE")
+      Future.successful(Redirect(routes.ITSALandingController.show(journey.journeyType)))
