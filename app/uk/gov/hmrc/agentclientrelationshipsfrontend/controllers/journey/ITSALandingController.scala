@@ -39,7 +39,7 @@ class ITSALandingController @Inject()(mcc: MessagesControllerComponents,
     journeyRequest =>
       given AgentJourneyRequest[?] = journeyRequest
       val journey = journeyRequest.journey
-      if journey.clientDetailsResponse.isEmpty then Redirect(routes.EnterClientIdController.show(journey.journeyType))
+      if journey.clientDetailsResponse.isEmpty || journey.clientId.isEmpty then Redirect(routes.SelectClientTypeController.show(journeyType))
       else Ok(itsaLandingPage(clientDetailField = serviceConfig.firstClientDetailsFieldFor(journey.getService)))
       
 
