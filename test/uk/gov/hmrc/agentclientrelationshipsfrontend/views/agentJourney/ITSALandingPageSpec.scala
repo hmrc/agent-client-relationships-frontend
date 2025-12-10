@@ -89,7 +89,7 @@ class ITSALandingPageSpec extends ViewSpecSupport {
         "have a summary list containing the client id type and value" in {
           val summaryList = doc.select(".govuk-summary-list").get(0)
           summaryList.select(".govuk-summary-list__row").size() shouldEqual 1
-          summaryList.select(".govuk-summary-list__key").get(0).text() shouldBe messages(s"$key.$field.label")
+          summaryList.select(".govuk-summary-list__key").get(0).text() shouldBe messages(s"$key.$field.key")
           summaryList.select(".govuk-summary-list__value").get(0).text() shouldBe agentJourney.clientId.get
         }
         "have a submission button" in {
