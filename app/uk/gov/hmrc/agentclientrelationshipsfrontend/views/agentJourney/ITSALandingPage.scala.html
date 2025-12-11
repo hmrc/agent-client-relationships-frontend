@@ -33,9 +33,9 @@
 @key = @{"fasttrackLanding"}
 @journeyKey = @{request.journey.journeyType.toString}
 @serviceKey = @{request.journey.getServiceWithDefault}
-@pageTitle = @{messages(s"$key.$serviceKey.landing.header")}
-@insetText = @{messages(s"$key.$serviceKey.landing.inset")}
-@paragraphText = @{messages(s"$key.$serviceKey.landing.paragraph")}
+@pageTitle = @{messages(s"$key.$serviceKey.header")}
+@insetText = @{messages(s"$key.$serviceKey.inset")}
+@paragraphText = @{messages(s"$key.$serviceKey.paragraph")}
 
 @niRow = @{
     SummaryListRow(

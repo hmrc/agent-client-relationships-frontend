@@ -75,16 +75,16 @@ class ITSALandingPageSpec extends ViewSpecSupport {
         val view: HtmlFormat.Appendable = viewTemplate(mapOfFieldConfiguration(field))
         val doc: Document = Jsoup.parse(view.body)
         "have the right title" in {
-          doc.title() shouldBe authorisationRequestTitle(messages(s"$key.$serviceName.landing.header"))
+          doc.title() shouldBe authorisationRequestTitle(messages(s"$key.$serviceName.header"))
         }
         "have a language switcher" in {
           doc.hasLanguageSwitch shouldBe true
         }
         "have the right inset text" in {
-          doc.select(".govuk-inset-text").get(0).text() shouldBe messages(s"$key.$serviceName.landing.inset")
+          doc.select(".govuk-inset-text").get(0).text() shouldBe messages(s"$key.$serviceName.inset")
         }
         "have the right paragraph text" in {
-          doc.select(".govuk-body").get(0).text() shouldBe messages(s"$key.$serviceName.landing.paragraph")
+          doc.select(".govuk-body").get(0).text() shouldBe messages(s"$key.$serviceName.paragraph")
         }
         "have a summary list containing the client id type and value" in {
           val summaryList = doc.select(".govuk-summary-list").get(0)
