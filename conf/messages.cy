@@ -129,6 +129,16 @@ error.cannot-view-request.a1=Rheoli’ch ceisiadau diweddar am awdurdodiad
 error.cannot-view-request.a2=Gorffen ac allgofnodi
 
 # ________________________________________________________________________________
+# Agent journey fast track landing
+# ________________________________________________________________________________
+
+fasttrackLanding.HMRC-MTD-IT.header=TODO
+fasttrackLanding.HMRC-MTD-IT.inset=TODO
+fasttrackLanding.HMRC-MTD-IT.paragraph=TODO
+
+fasttrackLanding.nino.label=TODO
+
+# ________________________________________________________________________________
 # Agent journey select client type
 # ________________________________________________________________________________
 

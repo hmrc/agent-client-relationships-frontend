@@ -130,6 +130,16 @@ error.cannot-view-request.a1=Manage your recent authorisation requests
 error.cannot-view-request.a2=Finish and sign out
 
 # ________________________________________________________________________________
+# Agent journey fast track landing
+# ________________________________________________________________________________
+
+fasttrackLanding.HMRC-MTD-IT.header=We need more information about the client
+fasttrackLanding.HMRC-MTD-IT.inset=You’re about to start a request for authorisation to manage a client’s Making Tax Digital for Income Tax.
+fasttrackLanding.HMRC-MTD-IT.paragraph=This is what you’ve told us already:
+
+fasttrackLanding.nino.label=National Insurance number
+
+# ________________________________________________________________________________
 # Agent journey select client type
 # ________________________________________________________________________________
 
