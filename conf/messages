@@ -137,7 +137,7 @@ fasttrackLanding.HMRC-MTD-IT.header=We need more information about the client
 fasttrackLanding.HMRC-MTD-IT.inset=You’re about to start a request for authorisation to manage a client’s Making Tax Digital for Income Tax.
 fasttrackLanding.HMRC-MTD-IT.paragraph=This is what you’ve told us already:
 
-fasttrackLanding.nino.label=National Insurance number
+fasttrackLanding.nino.key=National Insurance number
 
 # ________________________________________________________________________________
 # Agent journey select client type

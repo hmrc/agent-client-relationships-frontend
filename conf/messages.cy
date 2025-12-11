@@ -136,7 +136,7 @@ fasttrackLanding.HMRC-MTD-IT.header=TODO
 fasttrackLanding.HMRC-MTD-IT.inset=TODO
 fasttrackLanding.HMRC-MTD-IT.paragraph=TODO
 
-fasttrackLanding.nino.label=TODO
+fasttrackLanding.nino.key=TODO
 
 # ________________________________________________________________________________
 # Agent journey select client type
