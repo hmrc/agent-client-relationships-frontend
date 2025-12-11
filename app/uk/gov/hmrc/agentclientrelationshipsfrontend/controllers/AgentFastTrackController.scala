@@ -84,10 +84,10 @@ class AgentFastTrackController @Inject()(mcc: MessagesControllerComponents,
 
           _ <- journeyService.saveJourney(newJourney)
 
-          nextPage <- (clientDetails, checkedKnownFact, agentFastTrackFormData.service) match
-            case (_, None, HMRCMTDIT) => Future.successful(routes.FastTrackLandingController.show(journeyType).url)
-            case (Some(_), None | Some(true), _) => journeyService.nextPageUrl(journeyType)
-            case (_, _, _) => Future.successful(routes.JourneyExitController.show(journeyType, serviceConfig.getNotFoundError(journeyType, agentFastTrackFormData.service)).url)
+          nextPage <- (clientDetails, checkedKnownFact, agentFastTrackFormData.service, journeyType) match
+            case (_, None, HMRCMTDIT, AgentJourneyType.AuthorisationRequest) => Future.successful(routes.FastTrackLandingController.show(journeyType).url)
+            case (Some(_), None | Some(true), _, _) => journeyService.nextPageUrl(journeyType)
+            case (_, _, _, _) => Future.successful(routes.JourneyExitController.show(journeyType, serviceConfig.getNotFoundError(journeyType, agentFastTrackFormData.service)).url)
         } yield nextPage
       }
     )
