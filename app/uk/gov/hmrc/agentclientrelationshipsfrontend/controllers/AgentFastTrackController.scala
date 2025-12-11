@@ -19,6 +19,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
+import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.HMRCMTDIT
 import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.routes
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.AgentFastTrackForm
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.AgentJourneyType
@@ -83,11 +84,10 @@ class AgentFastTrackController @Inject()(mcc: MessagesControllerComponents,
 
           _ <- journeyService.saveJourney(newJourney)
 
-          nextPage <- (clientDetails, checkedKnownFact) match
-//            TODO: TEMP FOR TESTING, NEED TO CORRECT THIS CONDITION FOR CASE IM DEVELOPING FOR
-            case _ => Future.successful(routes.FastTrackLandingController.show(journeyType).url)
-//            case (Some(_), None | Some(true)) => journeyService.nextPageUrl(journeyType)
-//            case _ => Future.successful(routes.JourneyExitController.show(journeyType, serviceConfig.getNotFoundError(journeyType, agentFastTrackFormData.service)).url)
+          nextPage <- (clientDetails, checkedKnownFact, agentFastTrackFormData.service) match
+            case (_, _, HMRCMTDIT) => Future.successful(routes.FastTrackLandingController.show(journeyType).url)
+            case (Some(_), None | Some(true), _) => journeyService.nextPageUrl(journeyType)
+            case (_, _, _) => Future.successful(routes.JourneyExitController.show(journeyType, serviceConfig.getNotFoundError(journeyType, agentFastTrackFormData.service)).url)
         } yield nextPage
       }
     )
