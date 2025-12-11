@@ -60,8 +60,8 @@ GET        /manage-your-tax-agents/relationship-not-found                       
 GET        /:journeyType                                                                uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.StartJourneyController.startJourney(journeyType: AgentJourneyType)
 
 # TODO: THESE ARE TEMP NAMES
-GET        /:journeyType/itsa-landing                                                   uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.FastTrackLandingController.show(journeyType: AgentJourneyType)
-POST       /:journeyType/itsa-landing                                                   uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.FastTrackLandingController.onSubmit(journeyType: AgentJourneyType)
+GET        /:journeyType/fast-track-landing                                             uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.FastTrackLandingController.show(journeyType: AgentJourneyType)
+POST       /:journeyType/fast-track-landing                                             uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.FastTrackLandingController.onSubmit(journeyType: AgentJourneyType)
 
 GET        /:journeyType/client-type                                                    uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.SelectClientTypeController.show(journeyType: AgentJourneyType)
 POST       /:journeyType/client-type                                                    uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.SelectClientTypeController.onSubmit(journeyType: AgentJourneyType)
