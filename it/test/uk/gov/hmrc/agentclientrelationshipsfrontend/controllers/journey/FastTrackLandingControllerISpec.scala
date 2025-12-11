@@ -96,17 +96,17 @@ class FastTrackLandingControllerISpec extends ComponentSpecHelper with AuthStubs
     super.beforeEach()
   }
 
-  "GET /authorisation-request/itsa-landing" should :
+  "GET /authorisation-request/FastTrack-landing" should :
     "redirect to ASA dashboard when no journey session present" in :
       authoriseAsAgent()
-      val result = get(routes.ITSALandingController.show(AgentJourneyType.AuthorisationRequest).url)
+      val result = get(routes.FastTrackLandingController.show(AgentJourneyType.AuthorisationRequest).url)
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe "http://localhost:9401/agent-services-account/home"
 
     "redirect to the journey start when no service present" in :
       authoriseAsAgent()
       await(journeyService.saveJourney(AgentJourney(journeyType = AgentJourneyType.AuthorisationRequest, clientType = Some("personal"))))
-      val result = get(routes.ITSALandingController.show(AgentJourneyType.AuthorisationRequest).url)
+      val result = get(routes.FastTrackLandingController.show(AgentJourneyType.AuthorisationRequest).url)
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe routes.SelectClientTypeController.show(AgentJourneyType.AuthorisationRequest).url
 
@@ -114,18 +114,18 @@ class FastTrackLandingControllerISpec extends ComponentSpecHelper with AuthStubs
       allOptionsForClientType(j.getClientType).foreach(o => s"display the client identifier page for ${j.getClientType} $o" in :
         authoriseAsAgent()
         await(journeyService.saveJourney(basicJourney.copy(clientService = Some("HMRC-MTD-IT"), agentType = Some("HMRC-MTD-IT"))))
-        val result = get(routes.ITSALandingController.show(AgentJourneyType.AuthorisationRequest).url)
+        val result = get(routes.FastTrackLandingController.show(AgentJourneyType.AuthorisationRequest).url)
         result.status shouldBe OK
       ))
 
-  "POST /authorisation-request/itsa-landing" should :
+  "POST /authorisation-request/FastTrack-landing" should :
     allClientTypeAuthJourneys.foreach(j =>
       allOptionsForClientType.get(j.getClientType).map(allOptions =>
         allOptions.foreach(option => s"redirect to the next page" in :
           authoriseAsAgent()
           stubGet(getClientDetailsUrl(option, exampleValueForService(option)), OK, testUKClientDetailsResponse.toString)
           await(journeyService.saveJourney(basicJourney.copy(clientService = Some("HMRC-MTD-IT"), agentType = Some("HMRC-MTD-IT"))))
-          val result = post(routes.ITSALandingController.onSubmit(AgentJourneyType.AuthorisationRequest).url)(Map.empty)
+          val result = post(routes.FastTrackLandingController.onSubmit(AgentJourneyType.AuthorisationRequest).url)(Map.empty)
           result.status shouldBe SEE_OTHER
 //          TODO: Is going to wrong page currently, as is known fact has been set up by the stubs in this test - will need to look into it
           val expectedLocation = routes.EnterClientFactController.show(AgentJourneyType.AuthorisationRequest).url
