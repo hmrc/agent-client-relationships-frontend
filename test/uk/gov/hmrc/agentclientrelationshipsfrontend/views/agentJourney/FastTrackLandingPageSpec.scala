@@ -23,11 +23,11 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsRespons
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.common.ClientDetailsConfiguration
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.support.ViewSpecSupport
-import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.agentJourney.ITSALandingPage
+import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.agentJourney.FastTrackLandingPage
 
-class ITSALandingPageSpec extends ViewSpecSupport {
+class FastTrackLandingPageSpec extends ViewSpecSupport {
 
-  val viewTemplate: ITSALandingPage = app.injector.instanceOf[ITSALandingPage]
+  val viewTemplate: FastTrackLandingPage = app.injector.instanceOf[FastTrackLandingPage]
 
   private val journeyType = AgentJourneyType.AuthorisationRequest
   private val exampleClientId: String = "1234567890"
@@ -66,7 +66,7 @@ class ITSALandingPageSpec extends ViewSpecSupport {
   List("HMRC-MTD-IT").foreach(role =>
     val serviceName = "HMRC-MTD-IT"
     List(authorisationRequestJourney).foreach(j =>
-      mapOfFieldConfiguration.keys.map(field => s"ITSALanding for a $field ${j.journeyType.toString} view" should {
+      mapOfFieldConfiguration.keys.map(field => s"FastTrackLanding for a $field ${j.journeyType.toString} view" should {
         val agentJourney = agentRoleBasedRequestJourney(serviceName, role)
         implicit val journeyRequest: AgentJourneyRequest[?] = new AgentJourneyRequest("", agentJourney, request)
 

@@ -28,7 +28,7 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentS
 
 import scala.collection.immutable.Seq
 
-class ITSALandingControllerISpec extends ComponentSpecHelper with AuthStubs :
+class FastTrackLandingControllerISpec extends ComponentSpecHelper with AuthStubs :
 
   def getClientDetailsUrl(service: String, clientId: String) = s"/agent-client-relationships/client/$service/details/$clientId"
 

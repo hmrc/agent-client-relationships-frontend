@@ -21,18 +21,18 @@ import play.api.mvc.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{AgentJourneyService, ClientServiceConfigurationService}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.agentJourney.ITSALandingPage
+import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.agentJourney.FastTrackLandingPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class ITSALandingController @Inject()(mcc: MessagesControllerComponents,
-                                      serviceConfig: ClientServiceConfigurationService,
-                                      journeyService: AgentJourneyService,
-                                      itsaLandingPage: ITSALandingPage,
-                                      actions: Actions
+class FastTrackLandingController @Inject()(mcc: MessagesControllerComponents,
+                                           serviceConfig: ClientServiceConfigurationService,
+                                           journeyService: AgentJourneyService,
+                                           fasttrackLandingPage: FastTrackLandingPage,
+                                           actions: Actions
                                        )(implicit val executionContext: ExecutionContext) extends FrontendController(mcc) with I18nSupport:
 
   def show(journeyType: AgentJourneyType): Action[AnyContent] = actions.getAgentJourney(journeyType):
@@ -40,13 +40,11 @@ class ITSALandingController @Inject()(mcc: MessagesControllerComponents,
       given AgentJourneyRequest[?] = journeyRequest
       val journey = journeyRequest.journey
       if journey.clientDetailsResponse.isEmpty || journey.clientId.isEmpty then Redirect(routes.SelectClientTypeController.show(journeyType))
-      else Ok(itsaLandingPage(clientDetailField = serviceConfig.firstClientDetailsFieldFor(journey.getService)))
+      else Ok(fasttrackLandingPage(clientDetailField = serviceConfig.firstClientDetailsFieldFor(journey.getService)))
       
 
   def onSubmit(journeyType: AgentJourneyType): Action[AnyContent] = actions.getAgentJourney(journeyType).async:
     journeyRequest =>
       given AgentJourneyRequest[?] = journeyRequest
-      val journey = journeyRequest.journey
-      println("PRESSED CONTINUE")
       val nextPageUrl = journeyService.nextPageUrl(journeyType)
       nextPageUrl.map(Redirect(_))

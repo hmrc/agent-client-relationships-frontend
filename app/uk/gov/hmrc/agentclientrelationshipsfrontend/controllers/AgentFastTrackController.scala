@@ -85,7 +85,7 @@ class AgentFastTrackController @Inject()(mcc: MessagesControllerComponents,
 
           nextPage <- (clientDetails, checkedKnownFact) match
 //            TODO: TEMP FOR TESTING, NEED TO CORRECT THIS CONDITION FOR CASE IM DEVELOPING FOR
-            case _ => Future.successful(routes.ITSALandingController.show(journeyType).url)
+            case _ => Future.successful(routes.FastTrackLandingController.show(journeyType).url)
 //            case (Some(_), None | Some(true)) => journeyService.nextPageUrl(journeyType)
 //            case _ => Future.successful(routes.JourneyExitController.show(journeyType, serviceConfig.getNotFoundError(journeyType, agentFastTrackFormData.service)).url)
         } yield nextPage

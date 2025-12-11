@@ -65,7 +65,7 @@
 
     @govukSummaryList(SummaryList(rows))
 
-    @formWithCSRF(action = routes.ITSALandingController.onSubmit(request.journey.journeyType)) {
+    @formWithCSRF(action = routes.FastTrackLandingController.onSubmit(request.journey.journeyType)) {
 
         @govukButton(Button(
             id = Some("continueButton"),
