@@ -44,7 +44,7 @@ class FastTrackLandingControllerISpec extends ComponentSpecHelper with AuthStubs
     name = "anything",
     status = None,
     isOverseas = Some(false),
-    knownFacts = Seq.empty,
+    knownFacts = Seq("TestKnownFact"),
     knownFactType = Some(KnownFactType.PostalCode),
     hasPendingInvitation = false,
     hasExistingRelationshipFor = None
@@ -52,14 +52,12 @@ class FastTrackLandingControllerISpec extends ComponentSpecHelper with AuthStubs
 
   private val journeyType = AgentJourneyType.AuthorisationRequest
   private val exampleClientId: String = "1234567890"
-  private val clientName = "Test Name"
-  private val basicClientDetails = ClientDetailsResponse(clientName, None, None, Seq.empty, Some(KnownFactType.PostalCode), false, None)
   private val basicJourney: AgentJourney = AgentJourney(
     journeyType = journeyType,
     clientType = Some("personal"),
     clientService = Some("HMRC-MTD-IT"),
     clientId = Some(exampleClientId),
-    clientDetailsResponse = Some(basicClientDetails)
+    clientDetailsResponse = Some(testUKClientDetailsResponse)
   )
 
   def agentRoleBasedRequestJourney(service: String, role: String): AgentJourney = basicJourney.copy(
