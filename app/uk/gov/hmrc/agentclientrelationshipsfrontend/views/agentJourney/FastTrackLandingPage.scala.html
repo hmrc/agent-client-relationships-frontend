@@ -37,7 +37,7 @@
 @insetText = @{messages(s"$key.$serviceKey.inset")}
 @paragraphText = @{messages(s"$key.$serviceKey.paragraph")}
 
-@niRow = @{
+@clientIdRow = @{
     SummaryListRow(
         key = Key(
             content = Text(messages(s"$key.${clientDetailField.name}.key"))
@@ -49,7 +49,7 @@
     )
 }
 
-@rows = @{ Seq(niRow) }
+@rows = @{ Seq(clientIdRow) }
 
 @layout(
     pageTitle = pageTitle,

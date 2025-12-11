@@ -64,10 +64,9 @@ case class AgentJourney(journeyType: AgentJourneyType,
 
       
   def isKnownFactValid: Boolean = clientDetailsResponse.exists { cdr =>
-    val dfd = cdr.knownFactType.fold(true) { _ =>
+    cdr.knownFactType.fold(true) { _ =>
       knownFact.fold(cdr.knownFacts.isEmpty)(cdr.knownFacts.contains)
     }
-    dfd
   }
 
   def isMainAgent: Boolean = agentType.contains(getService)

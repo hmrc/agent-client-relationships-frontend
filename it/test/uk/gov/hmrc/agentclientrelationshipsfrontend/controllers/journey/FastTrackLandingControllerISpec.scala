@@ -18,10 +18,8 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey
 
 import play.api.libs.json.{JsObject, Json}
 import play.api.test.Helpers.*
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.KnownFactType.PostalCode
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.AgentJourneyType.AgentCancelAuthorisation
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsResponse, KnownFactType}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, AgentJourneyType, JourneyExitType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, AgentJourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.AgentJourneyService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.WiremockHelper.stubGet
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentSpecHelper}
@@ -66,10 +64,6 @@ class FastTrackLandingControllerISpec extends ComponentSpecHelper with AuthStubs
   )
 
   val exampleNino: String = "AB123456C"
-
-  private def getFieldName(service: String) = service match {
-    case "HMRC-MTD-IT" => "nino"
-  }
 
   private val personalAuthorisationRequestJourney: AgentJourney = AgentJourney(journeyType = AgentJourneyType.AuthorisationRequest, clientType = Some("personal"))
 
@@ -125,7 +119,6 @@ class FastTrackLandingControllerISpec extends ComponentSpecHelper with AuthStubs
           await(journeyService.saveJourney(basicJourney.copy(clientService = Some("HMRC-MTD-IT"), agentType = Some("HMRC-MTD-IT"))))
           val result = post(routes.FastTrackLandingController.onSubmit(AgentJourneyType.AuthorisationRequest).url)(Map.empty)
           result.status shouldBe SEE_OTHER
-//          TODO: Is going to wrong page currently, as is known fact has been set up by the stubs in this test - will need to look into it
           val expectedLocation = routes.EnterClientFactController.show(AgentJourneyType.AuthorisationRequest).url
           result.header("Location").value shouldBe expectedLocation
         )))
