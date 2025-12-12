@@ -25,7 +25,7 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.agentJourney.Fast
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class FastTrackLandingController @Inject()(mcc: MessagesControllerComponents,
@@ -35,12 +35,16 @@ class FastTrackLandingController @Inject()(mcc: MessagesControllerComponents,
                                            actions: Actions
                                        )(implicit val executionContext: ExecutionContext) extends FrontendController(mcc) with I18nSupport:
 
-  def show(journeyType: AgentJourneyType): Action[AnyContent] = actions.getAgentJourney(journeyType):
+  def show(journeyType: AgentJourneyType): Action[AnyContent] = actions.getAgentJourney(journeyType).async:
     journeyRequest =>
       given AgentJourneyRequest[?] = journeyRequest
       val journey = journeyRequest.journey
-      if journey.clientDetailsResponse.isEmpty || journey.clientId.isEmpty then Redirect(routes.SelectClientTypeController.show(journeyType))
-      else Ok(fasttrackLandingPage(clientDetailField = serviceConfig.firstClientDetailsFieldFor(journey.getService)))
+      if journey.clientDetailsResponse.isEmpty || journey.clientId.isEmpty then Future.successful(Redirect(routes.SelectClientTypeController.show(journeyType)))
+      else
+        val continueUrl = journeyService.nextPageUrl(journeyType)
+        continueUrl.map(url => {
+          Ok(fasttrackLandingPage(continueUrl = url, clientDetailField = serviceConfig.firstClientDetailsFieldFor(journey.getService)))
+        })
       
 
   def onSubmit(journeyType: AgentJourneyType): Action[AnyContent] = actions.getAgentJourney(journeyType).async:

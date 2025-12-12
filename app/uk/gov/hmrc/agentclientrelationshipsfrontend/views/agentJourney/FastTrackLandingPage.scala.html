@@ -20,7 +20,6 @@
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.AgentJourneyRequest
 
 @this(
-    formWithCSRF: FormWithCSRF,
     layout: Layout,
     govukButton: GovukButton,
     govukInsetText : GovukInsetText,
@@ -28,7 +27,7 @@
     h1: h1
 )
 
-@(clientDetailField: ClientDetailsConfiguration)(implicit request: AgentJourneyRequest[?], messages: Messages)
+@(continueUrl: String, clientDetailField: ClientDetailsConfiguration)(implicit request: AgentJourneyRequest[?], messages: Messages)
 
 @key = @{"fasttrackLanding"}
 @journeyKey = @{request.journey.journeyType.toString}
@@ -65,14 +64,11 @@
 
     @govukSummaryList(SummaryList(rows))
 
-    @formWithCSRF(action = routes.FastTrackLandingController.onSubmit(request.journey.journeyType)) {
-
-        @govukButton(Button(
-            id = Some("continueButton"),
-            content = Text(messages("continue.button")),
-            preventDoubleClick = Some(true)
-        ))
-
-    }
+    @govukButton(Button(
+        id = Some("continueButton"),
+        href = Some(continueUrl),
+        content = Text(messages("continue.button")),
+        preventDoubleClick = Some(true)
+    ))
 
 }
