@@ -132,11 +132,11 @@ error.cannot-view-request.a2=Gorffen ac allgofnodi
 # Agent journey fast track landing
 # ________________________________________________________________________________
 
-fasttrackLanding.HMRC-MTD-IT.header=TODO
-fasttrackLanding.HMRC-MTD-IT.inset=TODO
-fasttrackLanding.HMRC-MTD-IT.paragraph=TODO
+fasttrackLanding.HMRC-MTD-IT.header=Mae angen rhagor o wybodaeth arnom am y cleient
+fasttrackLanding.HMRC-MTD-IT.inset=Rydych ar fin dechrau cais am awdurdodiad i reoli Troi Treth yn Ddigidol ar gyfer Treth Incwm ar gyfer cleient.
+fasttrackLanding.HMRC-MTD-IT.paragraph=Yr hyn yr ydych eisoes wedi rhoi gwybod i ni amdano:
 
-fasttrackLanding.nino.key=TODO
+fasttrackLanding.nino.key=Rhif Yswiriant Gwladol
 
 # ________________________________________________________________________________
 # Agent journey select client type
