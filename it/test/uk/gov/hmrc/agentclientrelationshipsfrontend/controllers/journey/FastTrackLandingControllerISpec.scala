@@ -88,7 +88,7 @@ class FastTrackLandingControllerISpec extends ComponentSpecHelper with AuthStubs
     super.beforeEach()
   }
 
-  "GET /authorisation-request/FastTrack-landing" should :
+  "GET /authorisation-request/need-more-information" should :
     "redirect to ASA dashboard when no journey session present" in :
       authoriseAsAgent()
       val result = get(routes.FastTrackLandingController.show(AgentJourneyType.AuthorisationRequest).url)
@@ -109,16 +109,3 @@ class FastTrackLandingControllerISpec extends ComponentSpecHelper with AuthStubs
         val result = get(routes.FastTrackLandingController.show(AgentJourneyType.AuthorisationRequest).url)
         result.status shouldBe OK
       ))
-
-  "POST /authorisation-request/FastTrack-landing" should :
-    allClientTypeAuthJourneys.foreach(j =>
-      allOptionsForClientType.get(j.getClientType).map(allOptions =>
-        allOptions.foreach(option => s"redirect to the next page" in :
-          authoriseAsAgent()
-          stubGet(getClientDetailsUrl(option, exampleValueForService(option)), OK, testUKClientDetailsResponse.toString)
-          await(journeyService.saveJourney(basicJourney.copy(clientService = Some("HMRC-MTD-IT"), agentType = Some("HMRC-MTD-IT"))))
-          val result = post(routes.FastTrackLandingController.onSubmit(AgentJourneyType.AuthorisationRequest).url)(Map.empty)
-          result.status shouldBe SEE_OTHER
-          val expectedLocation = routes.EnterClientFactController.show(AgentJourneyType.AuthorisationRequest).url
-          result.header("Location").value shouldBe expectedLocation
-        )))

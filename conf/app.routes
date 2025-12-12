@@ -60,7 +60,6 @@ GET        /manage-your-tax-agents/relationship-not-found                       
 GET        /:journeyType                                                                uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.StartJourneyController.startJourney(journeyType: AgentJourneyType)
 
 GET        /:journeyType/need-more-information                                          uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.FastTrackLandingController.show(journeyType: AgentJourneyType)
-POST       /:journeyType/need-more-information                                          uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.FastTrackLandingController.onSubmit(journeyType: AgentJourneyType)
 
 GET        /:journeyType/client-type                                                    uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.SelectClientTypeController.show(journeyType: AgentJourneyType)
 POST       /:journeyType/client-type                                                    uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.SelectClientTypeController.onSubmit(journeyType: AgentJourneyType)

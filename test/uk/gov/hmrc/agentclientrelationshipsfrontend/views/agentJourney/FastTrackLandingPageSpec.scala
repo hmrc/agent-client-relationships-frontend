@@ -19,6 +19,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.views.agentJourney
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.twirl.api.HtmlFormat
+import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.routes
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsResponse, KnownFactType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.common.ClientDetailsConfiguration
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.*
@@ -71,8 +72,8 @@ class FastTrackLandingPageSpec extends ViewSpecSupport {
         implicit val journeyRequest: AgentJourneyRequest[?] = new AgentJourneyRequest("", agentJourney, request)
 
         val key = "fasttrackLanding"
-
-        val view: HtmlFormat.Appendable = viewTemplate(mapOfFieldConfiguration(field))
+        val exampleContinueUrl = routes.EnterClientFactController.show(j.journeyType).url
+        val view: HtmlFormat.Appendable = viewTemplate(exampleContinueUrl, mapOfFieldConfiguration(field))
         val doc: Document = Jsoup.parse(view.body)
         "have the right title" in {
           doc.title() shouldBe authorisationRequestTitle(messages(s"$key.$serviceName.header"))

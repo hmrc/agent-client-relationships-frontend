@@ -45,10 +45,3 @@ class FastTrackLandingController @Inject()(mcc: MessagesControllerComponents,
         continueUrl.map(url => {
           Ok(fasttrackLandingPage(continueUrl = url, clientDetailField = serviceConfig.firstClientDetailsFieldFor(journey.getService)))
         })
-      
-
-  def onSubmit(journeyType: AgentJourneyType): Action[AnyContent] = actions.getAgentJourney(journeyType).async:
-    journeyRequest =>
-      given AgentJourneyRequest[?] = journeyRequest
-      val nextPageUrl = journeyService.nextPageUrl(journeyType)
-      nextPageUrl.map(Redirect(_))
