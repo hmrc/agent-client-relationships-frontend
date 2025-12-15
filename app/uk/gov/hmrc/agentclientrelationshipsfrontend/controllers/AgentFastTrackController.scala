@@ -19,6 +19,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
+import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.HMRCMTDIT
 import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.routes
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.AgentFastTrackForm
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.AgentJourneyType
@@ -83,9 +84,10 @@ class AgentFastTrackController @Inject()(mcc: MessagesControllerComponents,
 
           _ <- journeyService.saveJourney(newJourney)
 
-          nextPage <- (clientDetails, checkedKnownFact) match
-            case (Some(_), None | Some(true)) => journeyService.nextPageUrl(journeyType)
-            case _ => Future.successful(routes.JourneyExitController.show(journeyType, serviceConfig.getNotFoundError(journeyType, agentFastTrackFormData.service)).url)
+          nextPage <- (clientDetails, checkedKnownFact, agentFastTrackFormData.service, journeyType) match
+            case (Some(_), None, HMRCMTDIT, AgentJourneyType.AuthorisationRequest) => Future.successful(routes.FastTrackLandingController.show(journeyType).url)
+            case (Some(_), None | Some(true), _, _) => journeyService.nextPageUrl(journeyType)
+            case (_, _, _, _) => Future.successful(routes.JourneyExitController.show(journeyType, serviceConfig.getNotFoundError(journeyType, agentFastTrackFormData.service)).url)
         } yield nextPage
       }
     )

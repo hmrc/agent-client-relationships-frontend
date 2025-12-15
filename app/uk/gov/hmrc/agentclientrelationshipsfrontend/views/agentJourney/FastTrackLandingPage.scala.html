@@ -1,0 +1,74 @@
+@*
+ * Copyright 2024 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.Layout
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.routes
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.common.ClientDetailsConfiguration
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.AgentJourneyRequest
+
+@this(
+    layout: Layout,
+    govukButton: GovukButton,
+    govukInsetText : GovukInsetText,
+    govukSummaryList: GovukSummaryList,
+    h1: h1
+)
+
+@(continueUrl: String, clientDetailField: ClientDetailsConfiguration)(implicit request: AgentJourneyRequest[?], messages: Messages)
+
+@key = @{"fasttrackLanding"}
+@journeyKey = @{request.journey.journeyType.toString}
+@serviceKey = @{request.journey.getServiceWithDefault}
+@pageTitle = @{messages(s"$key.$serviceKey.header")}
+@insetText = @{messages(s"$key.$serviceKey.inset")}
+@paragraphText = @{messages(s"$key.$serviceKey.paragraph")}
+
+@clientIdRow = @{
+    SummaryListRow(
+        key = Key(
+            content = Text(messages(s"$key.${clientDetailField.name}.key"))
+        ),
+        value = Value(
+            content = Text(request.journey.getClientId)
+        ),
+        actions = None
+    )
+}
+
+@rows = @{ Seq(clientIdRow) }
+
+@layout(
+    pageTitle = pageTitle,
+    serviceName = Some(messages(s"$journeyKey.service.name")),
+    isAgent = true
+) {
+
+    @h1(pageTitle)
+
+    @govukInsetText(InsetText(content = Text(insetText)))
+
+    <p class="govuk-body">@paragraphText</p>
+
+    @govukSummaryList(SummaryList(rows))
+
+    @govukButton(Button(
+        id = Some("continueButton"),
+        href = Some(continueUrl),
+        content = Text(messages("continue.button")),
+        preventDoubleClick = Some(true)
+    ))
+
+}

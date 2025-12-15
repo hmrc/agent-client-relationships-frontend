@@ -233,6 +233,7 @@ class AgentFastTrackControllerSpec extends ComponentSpecHelper with AuthStubs wi
       result.status shouldBe SEE_OTHER
 
       fastTrackFormData.service match {
+        case "HMRC-MTD-IT" => result.header("Location").value shouldBe journeyRoutes.FastTrackLandingController.show(journeyType).url
         case "HMRC-TERS-ORG" | "HMRC-TERSNT-ORG" => result.header("Location").value shouldBe journeyRoutes.ServiceRefinementController.show(journeyType).url
         case _ => result.header("Location").value shouldBe journeyRoutes.EnterClientFactController.show(journeyType).url
       }
@@ -394,6 +395,7 @@ class AgentFastTrackControllerSpec extends ComponentSpecHelper with AuthStubs wi
         val result = post(fastTrackRoutes.AgentFastTrackController.agentFastTrackGetRedirectUrl.url)(toFastTrackRequests(fastTrackFormData))
         val resultBody = result.body
         val expectedUrl = fastTrackFormData.service match {
+          case "HMRC-MTD-IT" => journeyRoutes.FastTrackLandingController.show(journeyType).url
           case "HMRC-TERS-ORG" | "HMRC-TERSNT-ORG" => journeyRoutes.ServiceRefinementController.show(journeyType).url
           case _ => journeyRoutes.EnterClientFactController.show(journeyType).url
         }
