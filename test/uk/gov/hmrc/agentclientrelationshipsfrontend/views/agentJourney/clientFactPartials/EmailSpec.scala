@@ -54,7 +54,7 @@ class EmailSpec extends ViewSpecSupport {
         }
         "render an input element" in {
           val expectedElement = TestInputField(
-            "What is your client’s Country-by-Country contact email address?",Some("This is the email your client gave to HMRC for Country-by-Country reporting."),"email"
+            "What is your client’s country-by-country contact email address?",Some("This is the first email your client gave to HMRC for country-by-country reporting."),"email"
           )
           doc.extractInputField().value shouldBe expectedElement
         }

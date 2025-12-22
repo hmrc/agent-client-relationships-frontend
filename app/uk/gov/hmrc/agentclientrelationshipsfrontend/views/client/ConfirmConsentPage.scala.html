@@ -20,6 +20,7 @@
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.ClientJourneyRequest
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.Layout
 @import uk.gov.hmrc.govukfrontend.views.Implicits.RichRadios
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.DisplayHelper.capitaliseFirst
 
 @this(layout: Layout,
       govukButton: GovukButton,
@@ -66,7 +67,7 @@
         case HMRCTERSORG | HMRCTERSNTORG  => simpleTerms(HMRCTERSORG, 2)
         case HMRCCGTPD                    => complexTerms(s"$HMRCCGTPD.$clientType", 4, 5)
         case HMRCPPTORG                   => simpleTerms(HMRCPPTORG, 8)
-        case HMRCCBCORG | HMRCCBCNONUKORG => simpleTerms(HMRCCBCORG, 11)
+        case HMRCCBCORG | HMRCCBCNONUKORG => simpleTerms(HMRCCBCORG, 10)
         case HMRCPILLAR2ORG               => simpleTerms(HMRCPILLAR2ORG, 6)
     }
 }
@@ -79,7 +80,7 @@
     isAgent = false
 ) {
 
-    <h2 class="govuk-caption-xl">@messages(serviceKey)</h2>
+    <h2 class="govuk-caption-xl">@capitaliseFirst(serviceKey)</h2>
     <h1 class="govuk-heading-xl">@pageTitle</h1>
 
     <h2 class="govuk-heading-l">@messages(s"$key.h2")</h2>

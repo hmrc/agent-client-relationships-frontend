@@ -39,7 +39,7 @@ class AuthoriseAgentStartPageSpec extends ViewSpecSupport {
     "vat" -> "VAT",
     "capital-gains-tax-uk-property" -> "Capital Gains Tax on UK property account",
     "plastic-packaging-tax" -> "Plastic Packaging Tax",
-    "country-by-country-reporting" -> "Country-by-country Reports",
+    "country-by-country-reporting" -> "country-by-country Reports",
     "pillar-2" -> "Pillar 2 top-up taxes",
     "trusts-and-estates" -> "Trust or an Estate"
   )
