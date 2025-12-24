@@ -181,7 +181,7 @@ class EnterClientIdPageSpec extends ViewSpecSupport {
     }
 
     object CbcId extends ServiceStrings {
-      val label = "What is your client’s Country-by-country ID?"
+      val label = "What is your client’s country-by-country ID (CBC ID)?"
       val hint = "For example, XACBC0000999999."
       val errorInvalid = "Enter your client’s country-by-country ID must start with an ’X’ followed by a letter, then ’CBC’ and then 10 numbers"
       val errorRequired = "Enter your client’s country-by-country ID"

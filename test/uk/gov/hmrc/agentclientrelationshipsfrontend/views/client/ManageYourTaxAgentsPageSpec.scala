@@ -68,7 +68,7 @@ class ManageYourTaxAgentsPageSpec extends ViewSpecSupport {
     "HMRC-MTD-IT" -> "Making Tax Digital for Income Tax",
     "HMRC-PPT-ORG" -> "Plastic Packaging Tax",
     "HMRC-CGT-PD" -> "Capital Gains Tax on UK property account",
-    "HMRC-CBC-ORG" -> "Country-by-country reporting",
+    "HMRC-CBC-ORG" -> "country-by-country reporting",
     "HMRC-MTD-VAT" -> "VAT",
     "HMRC-PILLAR2-ORG" -> "Pillar 2 Top-up Taxes",
     "HMRC-TERS-ORG" -> "Trusts and Estates"
@@ -255,10 +255,10 @@ class ManageYourTaxAgentsPageSpec extends ViewSpecSupport {
             s"Respond to request from $agentName to manage your Trusts and Estates as an agent"
           ),
           IndexedSeq(
-            "Country-by-country reporting",
+            "country-by-country reporting",
             "Main",
             expiryDate.format(dateFormatter),
-            s"Respond to request from $agentName to manage your Country-by-country reporting as an agent"
+            s"Respond to request from $agentName to manage your country-by-country reporting as an agent"
           )
         ))
       doc.mainContent.extractTable(2, 4).value shouldBe TestTable(

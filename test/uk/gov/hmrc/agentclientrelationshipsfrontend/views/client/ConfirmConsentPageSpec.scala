@@ -58,14 +58,18 @@ class ConfirmConsentPageSpec extends ViewSpecSupport:
     "HMRC-TERSNT-ORG" -> 2,
     "HMRC-CGT-PD" -> 10,
     "HMRC-PPT-ORG" -> 8,
-    "HMRC-CBC-ORG" -> 11,
+    "HMRC-CBC-ORG" -> 10,
     "HMRC-PILLAR2-ORG" -> 6,
   )
 
   object Expected:
     val title = "Authorise an agent - Appoint someone to deal with HMRC for you - GOV.UK"
     val heading = "Authorise an agent"
-    def caption(service: String): String = messages(service)
+    def caption(service: String): String = {
+      val serviceName = messages(service)
+      if (serviceName.nonEmpty) s"${serviceName.head.toUpper}${serviceName.tail}" else serviceName
+
+    }
     val subHeading = "Read carefully: we need your consent"
     def agreeParagraph(role: String, service: String) =
       s"If you agree that $newAgentName can act as your ${messages(s"confirmConsent.form.$role")} for ${messages(service)}, they will be able to:"
@@ -137,14 +141,13 @@ class ConfirmConsentPageSpec extends ViewSpecSupport:
       "HMRC-CBC-ORG-1" -> "send new country-by-country reports",
       "HMRC-CBC-ORG-2" -> "send additional information, corrections or deletions for previous country-by-country reports",
       "HMRC-CBC-ORG-3" -> "access a list of any country-by-country reports sent in the last 28 days.",
-      "HMRC-CBC-ORG-4" -> "contact HMRC about your current and previous reports",
-      "HMRC-CBC-ORG-5" -> "share information with HMRC about your current or previous country-by-country reports",
-      "HMRC-CBC-ORG-6" -> "receive information from HMRC about your current or previous country-by-country reports",
-      "HMRC-CBC-ORG-7" -> "access your CBC ID (country-by-country ID)",
-      "HMRC-CBC-ORG-8" -> "access and change your country-by-country contact details, such as your contact names, email addresses and telephone numbers",
-      "HMRC-CBC-ORG-9" -> "access details of any penalties charged",
-      "HMRC-CBC-ORG-10" -> "appeal late submission penalties",
-      "HMRC-CBC-ORG-11" -> "provide additional information when appealing late submission penalties",
+      "HMRC-CBC-ORG-4" -> "share information with HMRC about your current or previous country-by-country reports",
+      "HMRC-CBC-ORG-5" -> "receive information from HMRC about your current or previous country-by-country reports",
+      "HMRC-CBC-ORG-6" -> "access your country-by-country ID (CBC ID)",
+      "HMRC-CBC-ORG-7" -> "access and change your country-by-country contact details, such as your contact names, email addresses and telephone numbers",
+      "HMRC-CBC-ORG-8" -> "access details of any penalties charged",
+      "HMRC-CBC-ORG-9" -> "appeal late submission penalties",
+      "HMRC-CBC-ORG-10" -> "provide additional information when appealing late submission penalties",
       "HMRC-PILLAR2-ORG-1" -> "view, change, and submit your Pillar 2 top-up taxes returns",
       "HMRC-PILLAR2-ORG-2" -> "contact HMRC about your current and previous Pillar 2 top-up taxes returns",
       "HMRC-PILLAR2-ORG-3" -> "view and change your Pillar 2 top-up taxes details such as your contact details, accounting period and organisation type",

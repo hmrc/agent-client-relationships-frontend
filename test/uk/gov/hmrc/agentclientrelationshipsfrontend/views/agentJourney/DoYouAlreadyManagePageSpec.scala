@@ -20,12 +20,11 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.{ClientConfirmationFieldName, DoYouAlreadyManageFieldName}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.ClientDetailsResponse
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.{ConfirmClientForm, DoYouAlreadyManageForm}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.*
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.DoYouAlreadyManageForm
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, AgentJourneyRequest, AgentJourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.support.ViewSpecSupport
-import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.agentJourney.{ConfirmClientPage, DoYouAlreadyManagePage}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.agentJourney.DoYouAlreadyManagePage
 
 class DoYouAlreadyManagePageSpec extends ViewSpecSupport:
 

@@ -76,8 +76,8 @@ class EnterClientFactPageSpec extends ViewSpecSupport {
       errorRequired = "Enter your client’s Plastic Packaging Tax registration date"
     ),
     ("HMRC-CBC-ORG", KnownFactType.Email) -> ExpectedStrings(
-      authorisationTitle = "What is your client’s Country-by-Country contact email address? - Ask a client to authorise you - GOV.UK",
-      cancelAuthorisationTitle = "What is your client’s Country-by-Country contact email address? - Cancel a client’s authorisation - GOV.UK",
+      authorisationTitle = "What is your client’s country-by-country contact email address? - Ask a client to authorise you - GOV.UK",
+      cancelAuthorisationTitle = "What is your client’s country-by-country contact email address? - Cancel a client’s authorisation - GOV.UK",
       errorRequired = "Enter your client’s email address"
     ),
     ("HMRC-PILLAR2-ORG", KnownFactType.Date) -> ExpectedStrings(
