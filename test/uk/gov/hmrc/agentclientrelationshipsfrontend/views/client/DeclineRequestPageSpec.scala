@@ -59,7 +59,7 @@ class DeclineRequestPageSpec extends ViewSpecSupport:
   object Expected:
     val title = "Decline a request - Appoint someone to deal with HMRC for you - GOV.UK"
     val heading = "Decline a request"
-    def caption(service: String): String = messages(service)
+    def caption(service: String): String = messages(service).capitalize
     def introductionParagraph(role: String, service: String): String =
       s"$newAgentName want to be your ${messages(s"confirmDecline.$role")} for ${messages(service)}."
     val guidanceLink =

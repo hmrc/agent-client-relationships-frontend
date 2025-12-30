@@ -57,7 +57,7 @@
     isAgent = false
 ) {
 
-  <h2 class="govuk-caption-xl">@messages(serviceKey)</h2>
+  <h2 class="govuk-caption-xl">@messages(serviceKey).capitalize</h2>
   <h1 class="govuk-heading-xl">@Html(pageTitle)</h1>
   @if(agentRoleKey == "mainAgent" || agentRoleKey == "suppAgent") {
     <h2 class="govuk-heading-l">@messages(s"$key.section1.h2")</h2>

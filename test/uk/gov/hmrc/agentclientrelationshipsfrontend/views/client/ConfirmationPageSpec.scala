@@ -40,7 +40,7 @@ class ConfirmationPageSpec extends ViewSpecSupport {
     "HMRC-MTD-VAT" -> "VAT",
     "HMRC-CGT-PD" -> "Capital Gains Tax on UK property account",
     "HMRC-PPT-ORG" -> "Plastic Packaging Tax",
-    "HMRC-CBC-ORG" -> "Country-by-country reporting",
+    "HMRC-CBC-ORG" -> "country-by-country reporting",
     "HMRC-PILLAR2-ORG" -> "Pillar 2 Top-up Taxes",
     "HMRC-TERS-ORG" -> "Trusts and Estates",
     "HMRC-TERSNT-ORG" -> "Trusts and Estates"
@@ -51,7 +51,7 @@ class ConfirmationPageSpec extends ViewSpecSupport {
     "HMRC-MTD-VAT" -> "manage your VAT",
     "HMRC-CGT-PD" -> "manage your Capital Gains Tax on UK property account",
     "HMRC-PPT-ORG" -> "manage your Plastic Packaging Tax",
-    "HMRC-CBC-ORG" -> "manage your Country-by-country reporting",
+    "HMRC-CBC-ORG" -> "manage your country-by-country reporting",
     "HMRC-PILLAR2-ORG" -> "manage your Pillar 2 Top-up Taxes",
     "HMRC-TERS-ORG" -> "manage your Trusts and Estates",
     "HMRC-TERSNT-ORG" -> "manage your Trusts and Estates"

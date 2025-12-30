@@ -66,7 +66,7 @@
         case HMRCTERSORG | HMRCTERSNTORG  => simpleTerms(HMRCTERSORG, 2)
         case HMRCCGTPD                    => complexTerms(s"$HMRCCGTPD.$clientType", 4, 5)
         case HMRCPPTORG                   => simpleTerms(HMRCPPTORG, 8)
-        case HMRCCBCORG | HMRCCBCNONUKORG => simpleTerms(HMRCCBCORG, 11)
+        case HMRCCBCORG | HMRCCBCNONUKORG => simpleTerms(HMRCCBCORG, 10)
         case HMRCPILLAR2ORG               => simpleTerms(HMRCPILLAR2ORG, 6)
     }
 }
@@ -79,7 +79,7 @@
     isAgent = false
 ) {
 
-    <h2 class="govuk-caption-xl">@messages(serviceKey)</h2>
+    <h2 class="govuk-caption-xl">@messages(serviceKey).capitalize</h2>
     <h1 class="govuk-heading-xl">@pageTitle</h1>
 
     <h2 class="govuk-heading-l">@messages(s"$key.h2")</h2>

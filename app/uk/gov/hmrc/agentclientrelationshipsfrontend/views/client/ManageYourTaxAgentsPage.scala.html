@@ -95,7 +95,7 @@
 
 @authorisationRow(authorisation: Authorisation) = @{
     Seq(
-        TableRow(content = Text(messages(authorisation.service)), classes = cellClasses),
+        TableRow(content = Text(messages(authorisation.service).capitalize), classes = cellClasses),
         TableRow(Text(agentRoleFromService(authorisation.service)), classes = cellClasses),
         TableRow(Text(DisplayDate.displayDateForLang(Some(authorisation.date))), classes = cellClasses),
         TableRow(HtmlContent(deAuthLink(authorisation.uid, authorisation.agentName, authorisation.service)), classes = cellClasses)

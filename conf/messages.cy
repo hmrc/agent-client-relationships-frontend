@@ -223,7 +223,7 @@ clientId.pptRef.hint=Mae hyn yn 15 o gymeriadau, er enghraifft, XMPPT0000000001.
 clientId.pptRef.error.invalid=Nodwch gyfeirnod Treth Deunydd Pacio Plastig eich cleient yn y fformat cywir
 clientId.pptRef.error.required=Nodwch gyfeirnod Treth Deunydd Pacio Plastig eich cleient
 
-clientId.cbcId.label=Beth yw Dynodydd Defnyddiwr (ID) gwlad wrth wlad eich cleient?
+clientId.cbcId.label=Beth yw dynodydd defnyddiwr (CBC ID) gwlad wrth wlad eich cleient?
 clientId.cbcId.hint=Er enghraifft, XACBC0000999999.
 clientId.cbcId.error.invalid=Nodwch Dynodydd Defnyddiwr (ID) gwlad wrth wlad eich cleient, mae’n rhaid iddo ddechrau gyda ‘X’ a ddilynir gan lythyren, yna ‘CBC’ ac yna 10 rhif
 clientId.cbcId.error.required=Nodwch Dynodydd Defnyddiwr (ID) gwlad wrth wlad eich cleient
@@ -292,12 +292,12 @@ clientFact.HMRC-PPT-ORG.date.error.day-year.required=Mae’n rhaid i’r dyddiad
 clientFact.HMRC-PPT-ORG.date.error.month-year.required=Mae’n rhaid i’r dyddiad cofrestru ar gyfer Treth Deunydd Pacio Plastig gynnwys mis a blwyddyn
 
 clientFact.HMRC-CBC-ORG.email.label=Beth yw cyfeiriad e-bost cyswllt gwlad wrth wlad eich cleient?
-clientFact.HMRC-CBC-ORG.email.hint=Dyma’r e-bost a roddodd eich cleient i CThEF ar gyfer adrodd Gwlad wrth Wlad.
+clientFact.HMRC-CBC-ORG.email.hint=Dyma’r e-bost cyntaf a roddodd eich cleient i CThEF ar gyfer adrodd gwlad wrth wlad.
 clientFact.HMRC-CBC-ORG.email.error.invalid=Nodwch gyfeiriad e-bost eich cleient yn y fformat cywir, megis enw@enghraifft.com
 clientFact.HMRC-CBC-ORG.email.error.required=Nodwch gyfeiriad e-bost eich cleient
 
 clientFact.HMRC-CBC-NONUK-ORG.email.label=Beth yw cyfeiriad e-bost cyswllt gwlad wrth wlad eich cleient?
-clientFact.HMRC-CBC-NONUK-ORG.email.hint=Dyma’r e-bost a roddodd eich cleient i CThEF ar gyfer adrodd Gwlad wrth Wlad.
+clientFact.HMRC-CBC-NONUK-ORG.email.hint=Dyma’r e-bost cyntaf a roddodd eich cleient i CThEF ar gyfer adrodd gwlad wrth wlad.
 clientFact.HMRC-CBC-NONUK-ORG.email.error.invalid=Nodwch gyfeiriad e-bost eich cleient yn y fformat cywir, megis enw@enghraifft.com
 clientFact.HMRC-CBC-NONUK-ORG.email.error.required=Nodwch gyfeiriad e-bost eich cleient
 
@@ -624,7 +624,7 @@ authoriseAgentStartPage.h1.income-record-viewer=Awdurdodi {0} i reoli’ch Cofno
 authoriseAgentStartPage.h1.vat=Awdurdodi {0} i reoli’ch TAW
 authoriseAgentStartPage.h1.capital-gains-tax-uk-property=Awdurdodi {0} i reoli’ch cyfrif Treth Enillion Cyfalaf ar eiddo yn y DU
 authoriseAgentStartPage.h1.plastic-packaging-tax=Awdurdodi {0} i reoli’ch Treth Deunydd Pacio Plastig
-authoriseAgentStartPage.h1.country-by-country-reporting=Awdurdodi {0} i reoli’ch Adroddiadau Gwlad wrth wlad
+authoriseAgentStartPage.h1.country-by-country-reporting=Awdurdodi {0} i reoli’ch Adroddiadau gwlad wrth wlad
 authoriseAgentStartPage.h1.pillar-2=Awdurdodi {0} i reoli’ch trethi atodol Colofn 2
 authoriseAgentStartPage.h1.trusts-and-estates=Awdurdodi {0} i reoli’ch Ymddiriedolaeth neu’ch Ystâd
 
@@ -638,7 +638,7 @@ authoriseAgentStartPage.p1.income-record-viewer=Bydd angen i chi fewngofnodi gyd
 authoriseAgentStartPage.p1.vat=Bydd angen i chi fewngofnodi gyda’r Dynodydd Defnyddiwr (ID) rydych chi’n ei ddefnyddio ar gyfer TAW.
 authoriseAgentStartPage.p1.capital-gains-tax-uk-property=Bydd angen i chi fewngofnodi â’r Dynodydd Defnyddiwr (ID) rydych chi’n ei ddefnyddio ar gyfer cyfrif Treth Enillion Cyfalaf ar eiddo yn y DU.
 authoriseAgentStartPage.p1.plastic-packaging-tax=Bydd angen i chi fewngofnodi gyda’r Dynodydd Defnyddiwr (ID) rydych chi’n ei ddefnyddio ar gyfer Treth Deunydd Pacio Plastig.
-authoriseAgentStartPage.p1.country-by-country-reporting=Bydd angen i chi fewngofnodi gyda’r Dynodydd Defnyddiwr (ID) rydych chi’n ei ddefnyddio ar gyfer Adroddiadau Gwlad wrth wlad.
+authoriseAgentStartPage.p1.country-by-country-reporting=Bydd angen i chi fewngofnodi gyda’r Dynodydd Defnyddiwr (ID) rydych chi’n ei ddefnyddio ar gyfer Adroddiadau gwlad wrth wlad.
 authoriseAgentStartPage.p1.pillar-2=Bydd angen i chi fewngofnodi gyda’r Dynodydd Defnyddiwr (ID) rydych chi’n ei ddefnyddio ar gyfer trethi atodol Colofn 2.
 authoriseAgentStartPage.p1.trusts-and-estates=Mae angen i chi fewngofnodi gan ddefnyddio Dynodydd Defnyddiwr (ID) rydych chi’n ei ddefnyddio ar gyfer rheoli eich Ymddiriedolaeth neu’ch Ystâd.
 authoriseAgentStartPage.p2=Os nad oes gennych fanylion mewngofnodi, bydd modd i chi greu rhai.
@@ -767,14 +767,13 @@ confirmConsent.HMRC-PPT-ORG.list.item8=rheoli’ch Treth Deunydd Pacio Plastig g
 confirmConsent.HMRC-CBC-ORG.list.item1=anfon adroddiadau gwlad wrth wlad
 confirmConsent.HMRC-CBC-ORG.list.item2=anfon gwybodaeth ychwanegol, cywiriadau neu ddileu ar gyfer adroddiadau gwlad wrth wlad flaenorol
 confirmConsent.HMRC-CBC-ORG.list.item3=cael mynediad at restr o adroddiadau gwlad wrth wlad a anfonwyd yn ystod y 28 diwrnod diwethaf.
-confirmConsent.HMRC-CBC-ORG.list.item4=cysylltu â CThEF ynghylch eich adroddiadau presennol a blaenorol
-confirmConsent.HMRC-CBC-ORG.list.item5=rhannu gwybodaeth gyda CThEF am eich adroddiadau gwlad wrth wlad bresennol neu flaenorol
-confirmConsent.HMRC-CBC-ORG.list.item6=cael gwybodaeth gan CThEF am eich adroddiadau gwlad wrth wlad bresennol neu flaenorol
-confirmConsent.HMRC-CBC-ORG.list.item7=cael mynediad at eich ID CBC (Dynodydd Defnyddiwr (ID) gwlad wrth wlad)
-confirmConsent.HMRC-CBC-ORG.list.item8=cael mynediad at eich manylion cyswllt gwlad wrth wlad, megis eich enwau cyswllt, cyfeiriadau e-bost a’ch rhifau ffôn
-confirmConsent.HMRC-CBC-ORG.list.item9=cael mynediad at fanylion o unrhyw gosbau wedi’u codi
-confirmConsent.HMRC-CBC-ORG.list.item10=Apêl yn erbyn cosbau am gyflwyno’n hwyr
-confirmConsent.HMRC-CBC-ORG.list.item11=rhoi gwybodaeth ychwanegol wrth apelio yn erbyn cosbau am gyflwyno’n hwyr
+confirmConsent.HMRC-CBC-ORG.list.item4=rhannu gwybodaeth gyda CThEF am eich adroddiadau gwlad wrth wlad bresennol neu flaenorol
+confirmConsent.HMRC-CBC-ORG.list.item5=cael gwybodaeth gan CThEF am eich adroddiadau gwlad wrth wlad bresennol neu flaenorol
+confirmConsent.HMRC-CBC-ORG.list.item6=cael mynediad at eich Dynodydd Defnyddiwr (ID) gwlad wrth wlad (ID CBC)
+confirmConsent.HMRC-CBC-ORG.list.item7=cael mynediad at eich manylion cyswllt gwlad wrth wlad, megis eich enwau cyswllt, cyfeiriadau e-bost a’ch rhifau ffôn
+confirmConsent.HMRC-CBC-ORG.list.item8=cael mynediad at fanylion o unrhyw gosbau wedi’u codi
+confirmConsent.HMRC-CBC-ORG.list.item9=Apêl yn erbyn cosbau am gyflwyno’n hwyr
+confirmConsent.HMRC-CBC-ORG.list.item10=rhoi gwybodaeth ychwanegol wrth apelio yn erbyn cosbau am gyflwyno’n hwyr
 
 confirmConsent.HMRC-PILLAR2-ORG.list.item1=bwrw golwg dros, newid a chyflwyno eich Ffurflenni Treth atodol Colofn 2
 confirmConsent.HMRC-PILLAR2-ORG.list.item2=cysylltu â CThEF ynghylch eich Ffurflenni Treth atodol Colofn 2 presennol a blaenorol
