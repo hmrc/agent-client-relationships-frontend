@@ -20,7 +20,6 @@
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.ClientJourneyRequest
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.Layout
 @import uk.gov.hmrc.govukfrontend.views.Implicits.RichRadios
-@import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.DisplayHelper.capitaliseFirst
 
 @this(layout: Layout,
       govukButton: GovukButton,
@@ -80,7 +79,7 @@
     isAgent = false
 ) {
 
-    <h2 class="govuk-caption-xl">@capitaliseFirst(serviceKey)</h2>
+    <h2 class="govuk-caption-xl">@messages(serviceKey).capitalize</h2>
     <h1 class="govuk-heading-xl">@pageTitle</h1>
 
     <h2 class="govuk-heading-l">@messages(s"$key.h2")</h2>

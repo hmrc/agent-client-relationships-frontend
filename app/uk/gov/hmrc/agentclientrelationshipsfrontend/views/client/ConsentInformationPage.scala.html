@@ -20,7 +20,6 @@
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.ClientJourneyRequest
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.ClientJourney
 @import play.twirl.api.Html
-@import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.DisplayHelper.capitaliseFirst
 
 @this(
         layout: Layout,
@@ -58,7 +57,7 @@
     isAgent = false
 ) {
 
-  <h2 class="govuk-caption-xl">@capitaliseFirst(serviceKey)</h2>
+  <h2 class="govuk-caption-xl">@messages(serviceKey).capitalize</h2>
   <h1 class="govuk-heading-xl">@Html(pageTitle)</h1>
   @if(agentRoleKey == "mainAgent" || agentRoleKey == "suppAgent") {
     <h2 class="govuk-heading-l">@messages(s"$key.section1.h2")</h2>
