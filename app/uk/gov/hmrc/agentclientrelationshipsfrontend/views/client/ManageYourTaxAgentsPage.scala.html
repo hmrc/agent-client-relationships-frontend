@@ -152,7 +152,7 @@
             rows = data.authorisationEvents.authorisationEvents.sortBy(_.date).reverse.map { event =>
                 Seq(
                     TableRow(content = Text(DisplayDate.displayDateForLang(Some(event.date))), classes = cellClasses),
-                    TableRow(Text(messages(event.service)), classes = cellClasses),
+                    TableRow(Text(messages(event.service).capitalize), classes = cellClasses),
                     TableRow(Text(messages(s"$key.history.${event.eventType.toString}.activity", event.agentName, agentRoleFromService(event.service))), classes = cellClasses)
                 )
             }
