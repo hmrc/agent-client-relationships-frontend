@@ -22,6 +22,9 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.services.ClientServiceConfig
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.testOnly.{TestOnlyAsaDashboard, TestOnlyFastTrack}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.testOnly.TestOnlyFastTrackForm
+import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.routes as journeyRoutes
+import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.routes
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.AgentJourneyType.{AgentCancelAuthorisation, AuthorisationRequest}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future
@@ -47,5 +50,12 @@ class TestOnlyController @Inject()(mcc: MessagesControllerComponents,
     Future successful Ok(testFastTrackView(TestOnlyFastTrackForm.form(serviceConfig.allClientTypes, serviceConfig.allSupportedServices), isLocalEnv))
   }
 
-
+  def journeySetup(journey: String): Action[AnyContent] =  Action.async:
+    request =>
+      given MessagesRequest[AnyContent] = request
+      journey match
+        case "create-invitation" => Future.successful(Redirect(journeyRoutes.StartJourneyController.startJourney(AuthorisationRequest)))
+        case "myta" => Future.successful(Redirect("/manage-your-tax-agents"))
+        case "agent-led-deauth" => Future.successful(Redirect(journeyRoutes.StartJourneyController.startJourney(AgentCancelAuthorisation)))
+        case "track" => Future.successful(Redirect(routes.TrackRequestsController.show()))
 

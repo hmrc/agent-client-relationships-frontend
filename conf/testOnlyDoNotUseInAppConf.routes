@@ -12,4 +12,5 @@
 # Add all the application routes to the prod.routes file
 GET        /agent-client-relationships/test-only/asa-dashboard   uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.testOnly.TestOnlyController.fakeDashboard
 GET        /agent-client-relationships/test-only/fast-track      uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.testOnly.TestOnlyController.getFastTrackForm()
+GET        /agent-client-relationships/test-only/journey-setup/:journey uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.testOnly.TestOnlyController.journeySetup(journey: String)
 ->         /                          prod.Routes
