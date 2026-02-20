@@ -147,6 +147,7 @@ class AgentClientRelationshipsConnector @Inject()(appConfig: AppConfig,
     val url = s"$agentClientRelationshipsUrl/agent/cancel-invitation/$invitationId"
     httpV2.put(url"$url").execute[HttpResponse].map(response => response.status match {
       case NO_CONTENT => Future.successful(())
+      case CONFLICT => Future.successful(())
       case status => throw new Exception(s"Unexpected status $status received when cancelling invitation")
     })
 
