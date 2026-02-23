@@ -350,7 +350,7 @@ class AgentClientRelationshipsConnectorISpec extends ComponentSpecHelper with Ag
       givenCancelInvitation("ABC123", INTERNAL_SERVER_ERROR)
       intercept[Exception](await(testConnector.cancelInvitation("ABC123")))
 
-    "return nothing when a 409 status is received" in :
+    "return Future.unit when a 409 status is received" in :
         givenCancelInvitation("ABC123", CONFLICT)
         await(testConnector.cancelInvitation("ABC123")) shouldEqual()
 
