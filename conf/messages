@@ -238,8 +238,8 @@ clientId.PlrId.error.required=Enter your client’s Pillar 2 top-up taxes ID
 # Agent journey enter client fact
 # ________________________________________________________________________________
 
-clientFact.HMRC-MTD-IT.postcode.label=What is your client’s postcode?
-clientFact.HMRC-MTD-IT-SUPP.postcode.label=What is your client’s postcode?
+clientFact.HMRC-MTD-IT.postcode.label=What is your client’s home postcode?
+clientFact.HMRC-MTD-IT-SUPP.postcode.label=What is your client’s home postcode?
 clientFact.HMRC-MTD-IT.postcode.hint=For sole traders who are signed up to Making Tax Digital for Income Tax, use the postcode from their business address.<br /><br />For any other type of client, use their home postcode.
 clientFact.HMRC-MTD-IT-SUPP.postcode.hint=For sole traders who are signed up to Making Tax Digital for Income Tax, use the postcode from their business address.<br /><br />For any other type of client, use their home postcode.
 clientFact.HMRC-MTD-IT.postcode.error.required=Enter your client’s postcode

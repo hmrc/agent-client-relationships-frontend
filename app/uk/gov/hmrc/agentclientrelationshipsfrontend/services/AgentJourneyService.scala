@@ -43,12 +43,15 @@ class AgentJourneyService @Inject()(val journeyRepository: JourneyRepository,
     for {
       journey <- getJourney
     } yield journey match {
-      case Some(journey) if journey.journeyType != journeyType => routes.StartJourneyController.startJourney(journeyType).url
-      case Some(journey) if journey.journeyComplete.nonEmpty => appConfig.agentServicesAccountHomeUrl
+      case Some(journey) if journey.journeyType != journeyType =>
+        routes.StartJourneyController.startJourney(journeyType).url
+      case Some(journey) if journey.journeyComplete.nonEmpty =>
+        appConfig.agentServicesAccountHomeUrl
       case Some(journey) =>
-        if (journey.clientService.isEmpty)
+
+        if (journey.clientService.isEmpty) {
           routes.SelectClientTypeController.show(journeyType).url
-        else if (serviceConfig.requiresRefining(journey.clientService.get) && journey.refinedService.isEmpty)
+        } else if (serviceConfig.requiresRefining(journey.clientService.get) && journey.refinedService.isEmpty)
           routes.ServiceRefinementController.show(journeyType).url
         else if (journey.clientDetailsResponse.isEmpty)
           routes.EnterClientIdController.show(journeyType).url
@@ -62,9 +65,12 @@ class AgentJourneyService @Inject()(val journeyRepository: JourneyRepository,
           routes.SelectAgentRoleController.show(journeyType).url
         else if (journey.eligibleForMapping && !(journey.alreadyManageAuth.contains(false) || journey.abortMapping.contains(true)))
           routes.DoYouAlreadyManageController.show(journeyType).url
-        else routes.CheckYourAnswersController.show(journeyType).url
-      case _ => routes.StartJourneyController.startJourney(journeyType).url
+        else
+          routes.CheckYourAnswersController.show(journeyType).url
+      case _ =>
+        routes.StartJourneyController.startJourney(journeyType).url
     }
+
   }
 
   def checkExitConditions(implicit request: AgentJourneyRequest[?]): Option[String] =

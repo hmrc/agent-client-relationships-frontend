@@ -28,7 +28,7 @@
 )
 
 @(
-        form: Form[?],
+        form: Form[String],
         field: KnownFactsConfiguration,
         messageKeyPrefix: String
 )(implicit
@@ -36,12 +36,14 @@
         messages: Messages
 )
 
-@key = @{messageKeyPrefix}
+@key = @{
+    messageKeyPrefix
+}
 @formWithCSRF(action = routes.EnterClientFactController.onSubmit(request.journey.journeyType)) {
 
     @govukInput(Input(
             label = Label(content = Text(messages(s"$key.label")), isPageHeading = true, classes = "govuk-label--xl"),
-            hint = if messages.isDefinedAt(s"$messageKeyPrefix.hint") then Some(Hint(content = HtmlContent(messages(s"$messageKeyPrefix.hint")))) else None,
+            hint = None,
             classes = "govuk-input--width-10"
     ).withFormField(form(field.name)))
 

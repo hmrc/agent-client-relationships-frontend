@@ -27,7 +27,7 @@
         datePartial: Date
 )
 
-@(form: Form[?], inputField: KnownFactsConfiguration)(implicit request: AgentJourneyRequest[?], messages: Messages)
+@(form: Form[String], inputField: KnownFactsConfiguration)(implicit request: AgentJourneyRequest[?], messages: Messages)
 
 @key = @{
     "clientFact"

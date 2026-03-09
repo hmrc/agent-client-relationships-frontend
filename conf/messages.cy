@@ -237,8 +237,8 @@ clientId.PlrId.error.required=Nodwch Dynodydd (ID) ar gyfer trethi atodol Colofn
 # Agent journey enter client fact
 # ________________________________________________________________________________
 
-clientFact.HMRC-MTD-IT.postcode.label=Beth yw cod post eich cleient?
-clientFact.HMRC-MTD-IT-SUPP.postcode.label=Beth yw cod post eich cleient?
+clientFact.HMRC-MTD-IT.postcode.label=Beth yw cod post cartref eich cleient?
+clientFact.HMRC-MTD-IT-SUPP.postcode.label=Beth yw cod post cartref eich cleient?
 clientFact.HMRC-MTD-IT.postcode.hint=Ar gyfer unig fasnachwyr sydd wedi’u cofrestru am y cynllun Troi Treth yn Ddigidol ar gyfer Treth Incwm, defnyddiwch god post eu cyfeiriad busnes.<br /><br />Ar gyfer unrhyw fath arall o gleient, defnyddiwch god post ei gartref.
 clientFact.HMRC-MTD-IT-SUPP.postcode.hint=Ar gyfer unig fasnachwyr sydd wedi’u cofrestru am y cynllun Troi Treth yn Ddigidol ar gyfer Treth Incwm, defnyddiwch god post eu cyfeiriad busnes.<br /><br />Ar gyfer unrhyw fath arall o gleient, defnyddiwch god post ei gartref.
 clientFact.HMRC-MTD-IT.postcode.error.required=Nodwch god post eich cleient
