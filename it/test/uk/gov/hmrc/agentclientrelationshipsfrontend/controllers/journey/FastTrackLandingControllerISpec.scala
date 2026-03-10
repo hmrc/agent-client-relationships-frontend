@@ -18,10 +18,9 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey
 
 import play.api.libs.json.{JsObject, Json}
 import play.api.test.Helpers.*
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsResponse, KnownFactType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, AgentJourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsResponse, KnownFactType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.AgentJourneyService
-import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.WiremockHelper.stubGet
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentSpecHelper}
 
 import scala.collection.immutable.Seq
@@ -44,7 +43,6 @@ class FastTrackLandingControllerISpec extends ComponentSpecHelper with AuthStubs
     isOverseas = Some(false),
     knownFacts = Seq("TestKnownFact"),
     knownFactType = Some(KnownFactType.PostalCode),
-    hasPendingInvitation = false,
     hasExistingRelationshipFor = None
   )
 
@@ -72,11 +70,7 @@ class FastTrackLandingControllerISpec extends ComponentSpecHelper with AuthStubs
   private val allOptionsForClientType = Map(
     "personal" -> optionsForPersonal
   )
-
-  private def exampleValueForService(service: String): String = service match {
-    case "HMRC-MTD-IT" => exampleNino
-  }
-
+  
   private val allClientTypeAuthJourneys: List[AgentJourney] = List(
     personalAuthorisationRequestJourney
   )

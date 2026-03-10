@@ -46,8 +46,8 @@ class EnterClientFactPageSpec extends ViewSpecSupport {
 
   private val knownFactContentVariants: Map[(String, KnownFactType), ExpectedStrings] = Map(
     ("HMRC-MTD-IT", KnownFactType.PostalCode) -> ExpectedStrings(
-      authorisationTitle = "What is your client’s postcode? - Ask a client to authorise you - GOV.UK",
-      cancelAuthorisationTitle = "What is your client’s postcode? - Cancel a client’s authorisation - GOV.UK",
+      authorisationTitle = "What is your client’s home postcode? - Ask a client to authorise you - GOV.UK",
+      cancelAuthorisationTitle = "What is your client’s home postcode? - Cancel a client’s authorisation - GOV.UK",
       errorRequired = "Enter your client’s postcode"
     ),
     ("PERSONAL-INCOME-RECORD", KnownFactType.Date) -> ExpectedStrings(

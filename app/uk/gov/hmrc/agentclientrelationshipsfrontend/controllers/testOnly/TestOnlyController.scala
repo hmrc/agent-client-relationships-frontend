@@ -16,21 +16,21 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.testOnly
 
-import play.api.{Environment, Mode}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, MessagesRequest}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.services.ClientServiceConfigurationService
-import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.testOnly.{TestOnlyAsaDashboard, TestOnlyFastTrack}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.testOnly.TestOnlyFastTrackForm
+import play.api.{Environment, Mode}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.routes as journeyRoutes
 import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.routes
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.testOnly.TestOnlyFastTrackForm
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.AgentJourneyType.{AgentCancelAuthorisation, AuthorisationRequest}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.services.ClientServiceConfigurationService
+import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.testOnly.{TestOnlyAsaDashboard, TestOnlyFastTrack}
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future
 
 @Singleton
-class TestOnlyController @Inject()(mcc: MessagesControllerComponents, 
+class TestOnlyController @Inject()(mcc: MessagesControllerComponents,
                                    view: TestOnlyAsaDashboard,
                                    testFastTrackView: TestOnlyFastTrack,
                                    serviceConfig: ClientServiceConfigurationService,
@@ -39,7 +39,7 @@ class TestOnlyController @Inject()(mcc: MessagesControllerComponents,
 
   def fakeDashboard: Action[AnyContent] = Action.async:
     request =>
-      given MessagesRequest[AnyContent] = request 
+      given MessagesRequest[AnyContent] = request
       // previously the destination of sign out was determined by MainTemplate code
       // instead we could do that in here
       Future.successful(Ok(view()))
@@ -50,9 +50,8 @@ class TestOnlyController @Inject()(mcc: MessagesControllerComponents,
     Future successful Ok(testFastTrackView(TestOnlyFastTrackForm.form(serviceConfig.allClientTypes, serviceConfig.allSupportedServices), isLocalEnv))
   }
 
-  def journeySetup(journey: String): Action[AnyContent] =  Action.async:
+  def journeySetup(journey: String): Action[AnyContent] = Action.async:
     request =>
-      given MessagesRequest[AnyContent] = request
       journey match
         case "create-invitation" => Future.successful(Redirect(journeyRoutes.StartJourneyController.startJourney(AuthorisationRequest)))
         case "myta" => Future.successful(Redirect("/manage-your-tax-agents"))
