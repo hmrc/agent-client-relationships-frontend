@@ -84,10 +84,70 @@ class AgentJourneyService @Inject()(val journeyRepository: JourneyRepository,
       routes.JourneyExitController.show(request.journey.journeyType, exitType).url
     }
 
+  def checkYourAnswersShowEntry(journeyType: AgentJourneyType)(implicit request: AgentJourneyRequest[?]): CheckYourAnswersShowEntry =
+    val journey = request.journey
+    if journey.journeyComplete.nonEmpty then
+      CheckYourAnswersShowEntry.RedirectToAgentServicesAccount
+    else
+      (journey.clientService, journey.clientDetailsResponse) match
+        case (None, _) =>
+          CheckYourAnswersShowEntry.RedirectToSelectClientType
+        case (_, None) =>
+          CheckYourAnswersShowEntry.RedirectToEnterClientId
+        case (Some(service), Some(clientDetails)) =>
+          journey
+            .getExitType(journey.journeyType, clientDetails, serviceConfig.getSupportedAgentRoles(service))
+            .map(CheckYourAnswersShowEntry.Exit.apply)
+            .getOrElse {
+              journeyType match
+                case AgentJourneyType.AuthorisationRequest =>
+                  CheckYourAnswersShowEntry.ShowAuthorisationRequest(
+                    CheckYourAnswersAuthorisationRequestData(service = service)
+                  )
+                case AgentJourneyType.AgentCancelAuthorisation =>
+                  CheckYourAnswersShowEntry.ShowAgentCancelAuthorisation
+            }
+
+  def checkYourAnswersSubmitEntry(journeyType: AgentJourneyType)(implicit request: AgentJourneyRequest[?]): CheckYourAnswersSubmitEntry =
+    val journey = request.journey
+    if journey.journeyComplete.nonEmpty then
+      CheckYourAnswersSubmitEntry.RedirectToConfirmation
+    else
+      (journey.clientService, journey.clientDetailsResponse) match
+        case (None, _) =>
+          CheckYourAnswersSubmitEntry.RedirectToSelectClientType
+        case (_, None) =>
+          CheckYourAnswersSubmitEntry.RedirectToEnterClientId
+        case (Some(service), Some(clientDetails)) =>
+          journey
+            .getExitType(journey.journeyType, clientDetails, serviceConfig.getSupportedAgentRoles(service))
+            .map(CheckYourAnswersSubmitEntry.Exit.apply)
+            .getOrElse {
+              journeyType match
+                case AgentJourneyType.AuthorisationRequest =>
+                  CheckYourAnswersSubmitEntry.SubmitAuthorisationRequest(
+                    CheckYourAnswersSubmitAuthorisationRequestData(journey = journey)
+                  )
+                case AgentJourneyType.AgentCancelAuthorisation =>
+                  CheckYourAnswersSubmitEntry.SubmitAgentCancelAuthorisation(
+                    CheckYourAnswersSubmitAgentCancelAuthorisationData(
+                      journey = journey,
+                      clientName = clientDetails.name,
+                      activeRelationship = clientDetails.hasExistingRelationshipFor.getOrElse(service)
+                    )
+                  )
+            }
+
   def getMappingJourneyUrl(implicit request: AgentJourneyRequest[?]): Future[String] =
     agentMappingConnector.startAuthMappingJourney(
       clientsLegacyRelationships = request.journey.getClientDetailsResponse.clientsLegacyRelationships
         .getOrElse(throw new RuntimeException("Agent tried to start mapping for client without legacy relationships")),
       clientName = request.journey.getClientDetailsResponse.name
+    )
+
+  def startAuthMappingJourney(clientName: String, clientsLegacyRelationships: Seq[String])(implicit request: Request[?]): Future[String] =
+    agentMappingConnector.startAuthMappingJourney(
+      clientsLegacyRelationships = clientsLegacyRelationships,
+      clientName = clientName
     )
 }

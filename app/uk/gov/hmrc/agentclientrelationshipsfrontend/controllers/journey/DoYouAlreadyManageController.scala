@@ -20,7 +20,7 @@ import play.api.i18n.I18nSupport
 import play.api.mvc.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.DoYouAlreadyManageForm
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, AgentJourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, AgentJourneyType, DoYouAlreadyManageEntry}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.AgentJourneyService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.agentJourney.DoYouAlreadyManagePage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
@@ -40,54 +40,58 @@ class DoYouAlreadyManageController @Inject()(mcc: MessagesControllerComponents,
       given AgentJourneyRequest[?] = journeyRequest
 
       val journey = journeyRequest.journey
-
-      if !journey.eligibleForMapping then Redirect(routes.EnterClientIdController.show(journey.journeyType))
-      else
-        val clientName = journey.getClientDetailsResponse.name
-        val form = journey.alreadyManageAuth match {
-          case Some(prepop) => DoYouAlreadyManageForm.form(clientName).fill(prepop)
-          case _ => DoYouAlreadyManageForm.form(clientName)
-        }
-        Ok(doYouAlreadyManagePage(
-          form = form
-        ))
+      (journey.doYouAlreadyManageEntry, journey.alreadyManageAuth) match
+        case (DoYouAlreadyManageEntry.Ready(data), Some(prepop)) =>
+          Ok(doYouAlreadyManagePage(
+            form = DoYouAlreadyManageForm.form(data.clientName).fill(prepop)
+          ))
+        case (DoYouAlreadyManageEntry.Ready(data), _) =>
+          Ok(doYouAlreadyManagePage(
+            form = DoYouAlreadyManageForm.form(data.clientName)
+          ))
+        case _ =>
+          Redirect(routes.EnterClientIdController.show(journey.journeyType))
 
   def onSubmit(journeyType: AgentJourneyType): Action[AnyContent] = actions.getAgentJourney(journeyType).async:
     journeyRequest =>
       given AgentJourneyRequest[?] = journeyRequest
 
       val journey = journeyRequest.journey
-
-      if !journey.eligibleForMapping then Future.successful(Redirect(routes.EnterClientIdController.show(journey.journeyType)))
-      else
-        val clientName = journey.getClientDetailsResponse.name
-        DoYouAlreadyManageForm.form(clientName).bindFromRequest().fold(
-          formWithErrors => {
-            Future.successful(BadRequest(doYouAlreadyManagePage(
-              formWithErrors,
-            )))
-          },
-          alreadyManage => {
-            journeyService.saveJourney(journey.copy(
-              alreadyManageAuth = Some(alreadyManage),
-              abortMapping = None
-            )).flatMap { _ =>
-              if alreadyManage then journeyService.getMappingJourneyUrl.map(Redirect(_))
-              else journeyService.nextPageUrl(journeyType).map(Redirect(_))
+      journey.doYouAlreadyManageEntry match
+        case DoYouAlreadyManageEntry.Ready(data) =>
+          DoYouAlreadyManageForm.form(data.clientName).bindFromRequest().fold(
+            formWithErrors => {
+              Future.successful(BadRequest(doYouAlreadyManagePage(
+                formWithErrors,
+              )))
+            },
+            alreadyManage => {
+              journeyService.saveJourney(journey.copy(
+                alreadyManageAuth = Some(alreadyManage),
+                abortMapping = None
+              )).flatMap { _ =>
+                if alreadyManage then journeyService.startAuthMappingJourney(
+                  clientName = data.clientName,
+                  clientsLegacyRelationships = data.clientsLegacyRelationships
+                ).map(Redirect(_))
+                else journeyService.nextPageUrl(journeyType).map(Redirect(_))
+              }
             }
-          }
-        )
+          )
+        case _ =>
+          Future.successful(Redirect(routes.EnterClientIdController.show(journey.journeyType)))
 
   def cancelMapping(journeyType: AgentJourneyType): Action[AnyContent] = actions.getAgentJourney(journeyType).async:
     journeyRequest =>
       given AgentJourneyRequest[?] = journeyRequest
 
       val journey = journeyRequest.journey
-
-      if journey.alreadyManageAuth.isEmpty then Future.successful(Redirect(routes.EnterClientIdController.show(journey.journeyType)))
-      else
-        journeyService.saveJourney(journey.copy(
-          abortMapping = Some(true)
-        )).flatMap { _ =>
-          journeyService.nextPageUrl(journeyType).map(Redirect(_))
-        }
+      journey.alreadyManageAuth match
+        case Some(true) =>
+          journeyService.saveJourney(journey.copy(
+            abortMapping = Some(true)
+          )).flatMap { _ =>
+            journeyService.nextPageUrl(journeyType).map(Redirect(_))
+          }
+        case _ =>
+          Future.successful(Redirect(routes.EnterClientIdController.show(journey.journeyType)))

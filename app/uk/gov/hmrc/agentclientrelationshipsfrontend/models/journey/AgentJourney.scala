@@ -19,6 +19,19 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey
 import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsResponse, ClientStatus, KnownFactType}
 
+case class DoYouAlreadyManageData(
+  clientName: String,
+  clientsLegacyRelationships: Seq[String]
+)
+
+enum DoYouAlreadyManageEntry:
+  case Ready(data: DoYouAlreadyManageData)
+  case MissingService
+  case MissingClientDetails
+  case NotMainAgent
+  case AlreadyMapped
+  case NoLegacyRelationships
+
 case class AgentJourney(journeyType: AgentJourneyType,
                         clientType: Option[String] = None,
                         clientService: Option[String] = None,
@@ -72,8 +85,26 @@ case class AgentJourney(journeyType: AgentJourneyType,
   def isMainAgent: Boolean = agentType.contains(getService)
   def eligibleForMapping: Boolean = isMainAgent && getClientDetailsResponse.isMapped.contains(false) && getClientDetailsResponse.clientsLegacyRelationships.exists(_.nonEmpty)
 
+  def doYouAlreadyManageEntry: DoYouAlreadyManageEntry =
+    (clientService, clientDetailsResponse) match
+      case (None, _) =>
+        DoYouAlreadyManageEntry.MissingService
+      case (_, None) =>
+        DoYouAlreadyManageEntry.MissingClientDetails
+      case (Some(service), Some(clientDetails)) if !agentType.contains(service) =>
+        DoYouAlreadyManageEntry.NotMainAgent
+      case (_, Some(clientDetails)) if !clientDetails.isMapped.contains(false) =>
+        DoYouAlreadyManageEntry.AlreadyMapped
+      case (_, Some(ClientDetailsResponse(name,_,_,_,_,_,_,_,Some(seq)))) if seq.nonEmpty=>
+        DoYouAlreadyManageEntry.Ready(
+          DoYouAlreadyManageData(
+            clientName = name,
+            clientsLegacyRelationships = seq
+          )
+        )
+      case _ =>
+        DoYouAlreadyManageEntry.NoLegacyRelationships
+
 
 object AgentJourney:
   implicit lazy val format: OFormat[AgentJourney] = Json.format[AgentJourney]
-
-

@@ -25,7 +25,7 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.models.SubmissionResponse.Re
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.SubmissionResponse.{SubmissionLocked, SubmissionSuccess}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.ConfirmCancellationForm
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyExitType.AuthorisationAlreadyRemoved
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, AgentJourneyRequest, AgentJourneyType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, AgentJourneyRequest, AgentJourneyType, CheckYourAnswersShowEntry, CheckYourAnswersSubmitEntry}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{AgentClientRelationshipsService, AgentJourneyService, ClientServiceConfigurationService}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.ProcessingYourRequestPage
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.agentJourney.{CheckYourAnswersPage, ConfirmCancellationPage}
@@ -51,83 +51,79 @@ class CheckYourAnswersController @Inject()(mcc: MessagesControllerComponents,
     journeyRequest =>
       given AgentJourneyRequest[?] = journeyRequest
 
-      val journey = journeyRequest.journey
-      if journey.journeyComplete.nonEmpty then Redirect(appConfig.agentServicesAccountHomeUrl)
-      else if journey.clientDetailsResponse.isEmpty then Redirect(routes.EnterClientIdController.show(journey.journeyType))
-      else {
-        val conditionalExitUrl = journeyService.checkExitConditions
-        (journeyType, conditionalExitUrl) match {
-          case (AgentJourneyType.AuthorisationRequest, None) =>
-            Ok(checkYourAnswersPage(serviceConfig.supportsAgentRoles(journey.getService)))
-          case (AgentJourneyType.AgentCancelAuthorisation, None) =>
-            Ok(confirmCancellationPage(ConfirmCancellationForm.form(ConfirmCancellationFieldName, journey.journeyType.toString)))
-          case (_, Some(url)) =>
-            Redirect(url)
-        }
-      }
+      journeyService.checkYourAnswersShowEntry(journeyType) match
+        case CheckYourAnswersShowEntry.RedirectToAgentServicesAccount =>
+          Redirect(appConfig.agentServicesAccountHomeUrl)
+        case CheckYourAnswersShowEntry.RedirectToSelectClientType =>
+          Redirect(routes.SelectClientTypeController.show(journeyType))
+        case CheckYourAnswersShowEntry.RedirectToEnterClientId =>
+          Redirect(routes.EnterClientIdController.show(journeyType))
+        case CheckYourAnswersShowEntry.Exit(exitType) =>
+          Redirect(routes.JourneyExitController.show(journeyType, exitType))
+        case CheckYourAnswersShowEntry.ShowAuthorisationRequest(data) =>
+          Ok(checkYourAnswersPage(serviceConfig.supportsAgentRoles(data.service)))
+        case CheckYourAnswersShowEntry.ShowAgentCancelAuthorisation =>
+          Ok(confirmCancellationPage(ConfirmCancellationForm.form(ConfirmCancellationFieldName, journeyType.toString)))
 
   def onSubmit(journeyType: AgentJourneyType): Action[AnyContent] = actions.getAgentJourney(journeyType).async:
     journeyRequest =>
       given AgentJourneyRequest[?] = journeyRequest
 
-      val journey = journeyRequest.journey
-      if journey.journeyComplete.isDefined then
-        Future.successful(Redirect(routes.ConfirmationController.show(journey.journeyType)))
-      else if journey.clientDetailsResponse.isEmpty then
-        Future.successful(Redirect(routes.EnterClientIdController.show(journey.journeyType)))
-      else {
-        val conditionalExitUrl = journeyService.checkExitConditions
-
-        (journeyType, conditionalExitUrl) match {
-          case (AgentJourneyType.AuthorisationRequest, None) => for {
-            invitationId <- agentClientRelationshipsService.createAuthorisationRequest(journey)
+      journeyService.checkYourAnswersSubmitEntry(journeyType) match
+        case CheckYourAnswersSubmitEntry.RedirectToConfirmation =>
+          Future.successful(Redirect(routes.ConfirmationController.show(journeyType)))
+        case CheckYourAnswersSubmitEntry.RedirectToSelectClientType =>
+          Future.successful(Redirect(routes.SelectClientTypeController.show(journeyType)))
+        case CheckYourAnswersSubmitEntry.RedirectToEnterClientId =>
+          Future.successful(Redirect(routes.EnterClientIdController.show(journeyType)))
+        case CheckYourAnswersSubmitEntry.Exit(exitType) =>
+          Future.successful(Redirect(routes.JourneyExitController.show(journeyType, exitType)))
+        case CheckYourAnswersSubmitEntry.SubmitAuthorisationRequest(data) =>
+          for {
+            invitationId <- agentClientRelationshipsService.createAuthorisationRequest(data.journey)
             _ <- journeyService.saveJourney(AgentJourney(
-              journeyType = journey.journeyType,
+              journeyType = data.journey.journeyType,
               journeyComplete = Some(invitationId)
             ))
-          } yield Redirect(routes.ConfirmationController.show(journey.journeyType))
-
-          case (AgentJourneyType.AgentCancelAuthorisation, None) =>
-            ConfirmCancellationForm.form(ConfirmCancellationFieldName, journey.journeyType.toString)
-              .bindFromRequest()
-              .fold(
-                formWithErrors => {
-                  Future.successful(BadRequest(confirmCancellationPage(formWithErrors)))
-                },
-                confirmCancellation => {
-                  if confirmCancellation then agentClientRelationshipsService.cancelAuthorisation(journey).flatMap {
-                    case SubmissionSuccess =>
-                      journeyService.saveJourney(AgentJourney(
-                        journeyType = journey.journeyType,
-                        confirmationService = journey.clientService,
-                        confirmationClientName = Some(journey.getClientDetailsResponse.name),
-                        journeyComplete = Some(LocalDate.now().toString)
-                      )).map(_ => Redirect(routes.ConfirmationController.show(journey.journeyType)))
-                    case SubmissionLocked =>
-                      // Ensuring we remove the leftovers from the previous lock
-                      journeyService.saveJourney(journey.copy(backendErrorResponse = None)).map(_ =>
-                        Redirect(routes.CheckYourAnswersController.processingYourRequest(journey.journeyType))
-                      )
-                    case RelationshipNotFound =>
-                      journeyService.saveJourney(journey.copy(backendErrorResponse = Some(true))).map(_ =>
-                        Redirect(routes.JourneyExitController.show(
-                          journeyType = journey.journeyType,
-                          exitType = AuthorisationAlreadyRemoved
-                        ))
-                      )
-                  }.recover {
-                    case ex =>
-                      // This ensures the submissionInProgress is aware the original request failed
-                      journeyService.saveJourney(journey.copy(backendErrorResponse = Some(true)))
-                      throw ex
-                  }
-                  else Future.successful(Redirect(routes.StartJourneyController.startJourney(journey.journeyType)))
-                })
-
-          case (_, Some(url)) =>
-            Future.successful(Redirect(url))
-        }
-      }
+          } yield Redirect(routes.ConfirmationController.show(data.journey.journeyType))
+        case CheckYourAnswersSubmitEntry.SubmitAgentCancelAuthorisation(data) =>
+          ConfirmCancellationForm.form(ConfirmCancellationFieldName, data.journey.journeyType.toString)
+            .bindFromRequest()
+            .fold(
+              formWithErrors => {
+                Future.successful(BadRequest(confirmCancellationPage(formWithErrors)))
+              },
+              confirmCancellation => {
+                if confirmCancellation then agentClientRelationshipsService.cancelAuthorisation(
+                  arn = journeyRequest.arn,
+                  clientId = data.journey.getClientId,
+                  service = data.activeRelationship
+                ).flatMap {
+                  case SubmissionSuccess =>
+                    journeyService.saveJourney(AgentJourney(
+                      journeyType = data.journey.journeyType,
+                      confirmationService = data.journey.clientService,
+                      confirmationClientName = Some(data.clientName),
+                      journeyComplete = Some(LocalDate.now().toString)
+                    )).map(_ => Redirect(routes.ConfirmationController.show(data.journey.journeyType)))
+                  case SubmissionLocked =>
+                    journeyService.saveJourney(data.journey.copy(backendErrorResponse = None)).map(_ =>
+                      Redirect(routes.CheckYourAnswersController.processingYourRequest(data.journey.journeyType))
+                    )
+                  case RelationshipNotFound =>
+                    journeyService.saveJourney(data.journey.copy(backendErrorResponse = Some(true))).map(_ =>
+                      Redirect(routes.JourneyExitController.show(
+                        journeyType = data.journey.journeyType,
+                        exitType = AuthorisationAlreadyRemoved
+                      ))
+                    )
+                }.recover {
+                  case ex =>
+                    journeyService.saveJourney(data.journey.copy(backendErrorResponse = Some(true)))
+                    throw ex
+                }
+                else Future.successful(Redirect(routes.StartJourneyController.startJourney(data.journey.journeyType)))
+              })
 
   // Deauth only
   def processingYourRequest(journeyType: AgentJourneyType): Action[AnyContent] = actions.getAgentJourney(journeyType).async:
