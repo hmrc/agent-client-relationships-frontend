@@ -33,7 +33,7 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.connectors.AgentMappingConne
 import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.routes
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.ClientDetailsResponse
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.KnownFactType.Date
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.AgentJourney
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, AgentJourneyRequest}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.AgentJourneyType.{AgentCancelAuthorisation, AuthorisationRequest}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.repositories.JourneyRepository
 import uk.gov.hmrc.mongo.cache.DataKey
@@ -175,3 +175,16 @@ class AgentJourneyServiceSpec extends AnyWordSpecLike with Matchers with Mockito
 
       val result = await(service.nextPageUrl(AuthorisationRequest))
       result shouldBe routes.CheckYourAnswersController.show(AuthorisationRequest).url
+
+  ".checkExitConditions" should :
+
+    "return None when client service is missing from a recoverable journey state" in :
+      given AgentJourneyRequest[?] = new AgentJourneyRequest(
+        arn,
+        baseAgentJourney.copy(
+          clientDetailsResponse = Some(ClientDetailsResponse("Colin Client", None, None, Seq("2020-01-01"), Some(Date), false, None))
+        ),
+        fakeRequest
+      )
+
+      service.checkExitConditions shouldBe None

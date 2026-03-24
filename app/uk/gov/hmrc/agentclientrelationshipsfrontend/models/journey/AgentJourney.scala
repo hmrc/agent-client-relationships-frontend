@@ -69,8 +69,18 @@ case class AgentJourney(journeyType: AgentJourneyType,
     }
   }
 
-  def isMainAgent: Boolean = agentType.contains(getService)
-  def eligibleForMapping: Boolean = isMainAgent && getClientDetailsResponse.isMapped.contains(false) && getClientDetailsResponse.clientsLegacyRelationships.exists(_.nonEmpty)
+  def isMainAgent: Boolean = clientService.fold(false)(agentType.contains(_))
+
+  def eligibleForMapping: Boolean = isMainAgent &&
+    clientDetailsResponse.fold(false):
+      cDetailsResponse =>
+        cDetailsResponse.isMapped.contains(false) && cDetailsResponse.clientsLegacyRelationships.exists(_.nonEmpty)
+
+  def exitCheckState: Option[(ClientDetailsResponse, String)] =
+    for
+      service <- clientService
+      clientDetails <- clientDetailsResponse
+    yield (clientDetails, service)
 
 
 object AgentJourney:
