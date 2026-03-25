@@ -69,10 +69,10 @@ case class AgentJourney(journeyType: AgentJourneyType,
     }
   }
 
-  def isMainAgent: Boolean = clientService.fold(false)(agentType.contains(_))
+  def isMainAgent: Boolean = clientService.exists(agentType.contains)
 
   def eligibleForMapping: Boolean = isMainAgent &&
-    clientDetailsResponse.fold(false):
+    clientDetailsResponse.exists:
       cDetailsResponse =>
         cDetailsResponse.isMapped.contains(false) && cDetailsResponse.clientsLegacyRelationships.exists(_.nonEmpty)
 
@@ -85,5 +85,4 @@ case class AgentJourney(journeyType: AgentJourneyType,
 
 object AgentJourney:
   implicit lazy val format: OFormat[AgentJourney] = Json.format[AgentJourney]
-
 
