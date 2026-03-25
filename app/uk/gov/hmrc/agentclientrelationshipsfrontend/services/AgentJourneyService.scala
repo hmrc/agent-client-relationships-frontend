@@ -55,6 +55,8 @@ class AgentJourneyService @Inject()(val journeyRepository: JourneyRepository,
           routes.ServiceRefinementController.show(journeyType).url
         else if (journey.clientDetailsResponse.isEmpty)
           routes.EnterClientIdController.show(journeyType).url
+        else if (journey.clientDetailsResponse.exists(_.isMissingEacdKnownFacts.contains(true)))
+          routes.ProblemWithServiceController.show(journeyType).url // This is a temporary page to handle the case where we know the client has missing known facts, and so cannot proceed with the journey.
         else if (!journey.isKnownFactValid)
           routes.EnterClientFactController.show(journeyType).url
         else if (journey.clientConfirmed.isEmpty)

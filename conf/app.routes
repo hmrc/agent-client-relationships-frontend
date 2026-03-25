@@ -93,7 +93,7 @@ GET        /:journeyType/processing-your-request                                
 GET        /:journeyType/confirmation                                                   uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.ConfirmationController.show(journeyType: AgentJourneyType)
 
 GET        /:journeyType/exit/:exitType                                                 uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.JourneyExitController.show(journeyType: AgentJourneyType, exitType: JourneyExitType)
-
+GET        /:journeyType/problem-with-service                                           uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.ProblemWithServiceController.show(journeyType: AgentJourneyType)
 
 # Fast Track URLs ----------------------------------------------------------------------------------------------------------
 + nocsrf
