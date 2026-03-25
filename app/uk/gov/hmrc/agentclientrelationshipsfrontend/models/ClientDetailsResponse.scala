@@ -26,8 +26,9 @@ case class ClientDetailsResponse(name: String,
                                  hasPendingInvitation: Boolean = false,
                                  hasExistingRelationshipFor: Option[String],
                                  isMapped: Option[Boolean] = None, // ITSA only, not in config as it's not meant to be standardised
-                                 clientsLegacyRelationships: Option[Seq[String]] = None // ITSA only, not in config as it's not meant to be standardised
-                                )
+                                 clientsLegacyRelationships: Option[Seq[String]] = None, // ITSA only, not in config as it's not meant to be standardised
+                                 isMissingEacdKnownFacts: Option[Boolean] = None // Currently CBC only, not in config as it's not meant to be standardised
+)
 
 object ClientDetailsResponse {
   implicit val format: OFormat[ClientDetailsResponse] = Json.format[ClientDetailsResponse]

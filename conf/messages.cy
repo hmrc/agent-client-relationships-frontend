@@ -1005,3 +1005,12 @@ processingYourRequest.para2=Er mwyn gweld y sgrin gadarnhau, arhoswch ychydig o 
 
 relationshipNotFound.header=Mae’r awdurdodiad hwn wedi’i dynnu’n barod
 relationshipNotFound.p1=Nid ydych bellach yn awdurdodi’r asiant hwn i reoli’r gwasanaeth treth hwn ar eich rhan.
+
+# ________________________________________________________________________________
+# Problem With Service (CBC issue with client enrolment)
+# ________________________________________________________________________________
+
+problemWithService.header=HMRC is currently having a problem with this service
+problemWithService.p1=Some customers are experiencing authorisation issues on the country-by-country service.
+problemWithService.p2=We are trying to fix the issue as soon as possible.
+problemWithService.p3=You can try again later.

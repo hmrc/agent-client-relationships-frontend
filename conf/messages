@@ -1006,3 +1006,12 @@ processingYourRequest.para2=To see the confirmation screen, wait a few seconds a
 
 relationshipNotFound.header=This authorisation has already been removed
 relationshipNotFound.p1=You no longer authorise this agent to manage this tax service for you.
+
+# ________________________________________________________________________________
+# Problem With Service (CBC issue with client enrolment)
+# ________________________________________________________________________________
+
+problemWithService.header=HMRC is currently having a problem with this service
+problemWithService.p1=Some customers are experiencing authorisation issues on the country-by-country service.
+problemWithService.p2=We are trying to fix the issue as soon as possible.
+problemWithService.p3=You can try again later.
