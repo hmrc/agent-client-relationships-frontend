@@ -76,6 +76,16 @@ class DoYouAlreadyManageControllerISpec extends ComponentSpecHelper with ScalaFu
   )
 
   "GET /authorisation-request/already-manage" should :
+    "redirect to enter client id when the journey has a client type but no service yet" in :
+      authoriseAsAgent()
+      journeyService.saveJourney(AgentJourney(
+        journeyType = AgentJourneyType.AuthorisationRequest,
+        clientType = Some("personal")
+      )).futureValue
+      val result = get(routes.DoYouAlreadyManageController.show(AgentJourneyType.AuthorisationRequest).url)
+      result.status shouldBe SEE_OTHER
+      result.header("Location").value shouldBe routes.EnterClientIdController.show(AgentJourneyType.AuthorisationRequest).url
+
     "redirect to enter client id when the agent shouldn't be on this page (no client details)" in :
       authoriseAsAgent()
       journeyService.saveJourney(AgentJourney(
@@ -157,6 +167,18 @@ class DoYouAlreadyManageControllerISpec extends ComponentSpecHelper with ScalaFu
       document.select("input[value=false]").hasAttr("checked") shouldBe false
 
   "POST /authorisation-request/already-manage" should :
+    "redirect to enter client id when the journey has a client type but no service yet" in :
+      authoriseAsAgent()
+      journeyService.saveJourney(AgentJourney(
+        journeyType = AgentJourneyType.AuthorisationRequest,
+        clientType = Some("personal")
+      )).futureValue
+      val result = post(routes.DoYouAlreadyManageController.onSubmit(AgentJourneyType.AuthorisationRequest).url)(Map(
+        DoYouAlreadyManageFieldName -> Seq("true")
+      ))
+      result.status shouldBe SEE_OTHER
+      result.header("Location").value shouldBe routes.EnterClientIdController.show(AgentJourneyType.AuthorisationRequest).url
+
     "redirect to enter client id when the agent shouldn't be on this page" in :
       authoriseAsAgent()
       journeyService.saveJourney(AgentJourney(

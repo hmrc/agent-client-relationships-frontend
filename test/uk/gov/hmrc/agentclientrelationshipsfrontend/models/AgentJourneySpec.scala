@@ -26,6 +26,34 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyExitTy
 
 class AgentJourneySpec extends AnyWordSpecLike with Matchers :
 
+  ".isMainAgent" should :
+
+    "return false when the agent type is present but the service is missing" in :
+      val journey = AgentJourney(AuthorisationRequest, agentType = Some(HMRCMTDIT))
+
+      journey.isMainAgent shouldBe false
+
+  ".eligibleForMapping" should :
+
+    "return false when mapping state is partially populated but the service is missing" in :
+      val journey = AgentJourney(
+        AuthorisationRequest,
+        agentType = Some(HMRCMTDIT),
+        clientDetailsResponse = Some(ClientDetailsResponse(
+          "Client",
+          None,
+          None,
+          Seq(),
+          None,
+          false,
+          None,
+          Some(false),
+          Some(Seq("A12345"))
+        ))
+      )
+
+      journey.eligibleForMapping shouldBe false
+
   ".getExitType" when :
 
     "journey type is AuthorisationRequest" should :

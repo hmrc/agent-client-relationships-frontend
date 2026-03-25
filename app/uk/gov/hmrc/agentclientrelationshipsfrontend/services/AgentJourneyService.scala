@@ -74,15 +74,16 @@ class AgentJourneyService @Inject()(val journeyRepository: JourneyRepository,
   }
 
   def checkExitConditions(implicit request: AgentJourneyRequest[?]): Option[String] =
-    val journeyExitType = request.journey.getExitType(
-      request.journey.journeyType,
-      request.journey.getClientDetailsResponse,
-      serviceConfig.getSupportedAgentRoles(request.journey.getService)
-    )
-
-    journeyExitType.map { exitType =>
-      routes.JourneyExitController.show(request.journey.journeyType, exitType).url
-    }
+    request.journey.exitCheckState.flatMap:
+      (clientDetails, service) =>
+        request.journey
+          .getExitType(
+            request.journey.journeyType,
+            clientDetails,
+            serviceConfig.getSupportedAgentRoles(service)
+          ).map:
+            exitType =>
+            routes.JourneyExitController.show(request.journey.journeyType, exitType).url
 
   def getMappingJourneyUrl(implicit request: AgentJourneyRequest[?]): Future[String] =
     agentMappingConnector.startAuthMappingJourney(
