@@ -1010,7 +1010,7 @@ relationshipNotFound.p1=Nid ydych bellach yn awdurdodi’r asiant hwn i reoli’
 # Problem With Service (CBC issue with client enrolment)
 # ________________________________________________________________________________
 
-problemWithService.header=HMRC is currently having a problem with this service
-problemWithService.p1=Some customers are experiencing authorisation issues on the country-by-country service.
-problemWithService.p2=We are trying to fix the issue as soon as possible.
-problemWithService.p3=You can try again later.
+problemWithService.header=Mae problem ar hyn o bryd gyda’r gwasanaeth hwn gan CThEF
+problemWithService.p1=Mae rhai cwsmeriaid yn profi problemau awdurdodi ar y gwasanaeth adrodd fesul gwlad.
+problemWithService.p2=Rydym yn gweithio i ddatrys y broblem cyn gynted â phosibl.
+problemWithService.p3=Gallwch roi cynnig arall arni nes ymlaen.
