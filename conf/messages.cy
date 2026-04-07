@@ -660,16 +660,27 @@ consentInformation.section1.p1=Gall asiant naill ai fod yn “prif asiant” neu
 consentInformation.section1.p2=Dim ond chi neu brif asiant y gall cwblhau rhai tasgau pwysig - fel cyflwyno’ch Ffurflenni Treth.
 consentInformation.section1.p3=<a href="{0}" class="govuk-link" target="_blank" rel="noreferrer noopener">Dysgwch sut y gall prif asiantau ac asiantau ategol weithredu ar eich rhan  (yn agor tab newydd)</a>.
 
-consentInformation.section2.h2=Yr hyn mae’n ei olygu i roi caniatâd i asiant
-consentInformation.section2.p1=Mae rhoi caniatâd yn golygu y bydd modd i gyflogeion {0} gael mynediad at eich {1} data.
-consentInformation.section2.p2=Mae caniatâd yn para nes i chi rhoi gwybod i ni na all {0} weithredu ar eich rhan mwyach.
-consentInformation.section2.p3=Am fanylion ynghylch sut yr ydym yn cadw a phrosesu’ch gwybodaeth, darllenwch ein <a href="{0}" class="govuk-link" target="_blank" rel="noreferrer noopener">hysbysiad preifatrwydd (yn agor tab newydd)</a>.
+consentInformation.section2.h2=Yr hyn mae’n ei olygu i roi caniatâd i {0}
+consentInformation.section2.p1.itsa=Drwy roi caniatâd, mae’n golygu gall cyflogeion {0} gael mynediad at rywfaint o’ch data personol a’ch manylion Treth Incwm. Byddant ond yn cael mynediad at yr wybodaeth sydd ei hangen arnynt er mwyn cyflawni eu dyletswyddau fel asiant i chi.
+consentInformation.section2.p1=Drwy roi caniatâd, mae’n golygu gall cyflogeion {0} gael mynediad at eich data {0}. Byddant ond yn cael mynediad at yr wybodaeth sydd ei hangen arnynt er mwyn cyflawni eu dyletswyddau fel asiant i chi.
+consentInformation.section2.p2=I gael gwybod sut yr ydym yn cadw’ch gwybodaeth ac yn ei phrosesu, darllenwch ein <a href="{0}" class="govuk-link" target="_blank" rel="noreferrer noopener">hysbysiad preifatrwydd (yn agor tab newydd)</a>.
 
-consentInformation.section3.h2=Sut i dynnu caniatâd yn ôl
-consentInformation.section3.p1=Gallwch dynnu’ch caniatâd yn ôl ar unrhyw adeg gan ddefnyddio <a href="{0}" class="govuk-link">Rheoli pwy all ddelio â CThEF i chi</a>. Gellir dod o hyd i gysylltiad i’r dudalen hon yn eich Cyfrif Treth Personol neu Gyfrif Treth Busnes.
+consentInformation.section3.h2=A oes rhaid i chi roi caniatâd i {0}?
+consentInformation.section3.p1=Nac oes. Mae’n rhaid i chi wneud y penderfyniad sydd orau i chi.
+consentInformation.section3.p2=Gallwch chwilio am asiant gwahanol, neu cewch benderfynu rheoli’ch trethi eich hun os yw’n well gennych wneud hynny.
 
-consentInformation.section4.h2=Cyn i chi benderfynu
-consentInformation.section4.p1=Ar y dudalen nesaf rydym yn rhestru’r tasgau y gall {0} ei gyflawni ar eich rhan, os ydych chi’n eu hawdurdodi fel eich {1}.
+consentInformation.section4.h2=Am ba hyd bydd caniatâd yn para?
+consentInformation.section4.p1.main=Mae caniatad yn para hyd nes eich bod yn rhoi gwybod y canlynol i ni:
+consentInformation.section4.bullet1=rydych yn rhoi gwybod i ni na all {0} weithredu ar eich rhan mwyach, neu
+consentInformation.section4.bullet2=rydych yn dewis prif asiant gwahanol ar gyfer {0}
+consentInformation.section4.p1=Mae caniatad yn para hyd nes eich bod yn rhoi gwybod i ni na all {0} weithredu ar eich rhan mwyach.
+consentInformation.section4.p2=Mae’n bosibl bydd CThEF yn cysylltu â chi yn y dyfodol er mwyn gwirio a ydych am i {0} weithredu ar eich rhan.
+
+consentInformation.details.summary=Gallwch dynnu caniatâd yn ôl ar unrhyw adeg – dysgwch sut
+consentInformation.details.content=Gallwch dynnu caniatâd yn ôl ar unrhyw adeg gan ddefnyddio’r <a href="{0}" class="govuk-link">gwasanaeth sy’n rheoli pwy sy’n gallu delio â CThEF ar eich rhan</a>. Gellir dod o hyd i gysylltiad i’r dudalen hon yn eich Cyfrif Treth Personol neu Gyfrif Treth Busnes.
+
+consentInformation.section5.h2=Cyn i chi benderfynu
+consentInformation.section5.p1=Ar y dudalen nesaf rydym yn rhestru’r tasgau y gall {0} ei gyflawni ar eich rhan, os ydych chi’n eu hawdurdodi fel eich {1}.
 
 # ________________________________________________________________________________
 # Client confirm consent

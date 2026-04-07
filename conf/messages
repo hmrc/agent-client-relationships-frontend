@@ -659,18 +659,29 @@ consentInformation.warning.suppAgent=If you authorise {0} as your supporting age
 consentInformation.section1.h2=What you need to know first
 consentInformation.section1.p1=An agent can either be ‘main agent’ or a ‘supporting agent’ when they manage your {0}.
 consentInformation.section1.p2=Some important tasks - like submitting your tax returns - can only be completed by you, or by a main agent acting on your behalf.
-consentInformation.section1.p3=<a href="{0}" class="govuk-link" target="_blank" rel="noreferrer noopener">Find out how main and supporting agents can act for you  (opens in a new tab)</a>.
+consentInformation.section1.p3=<a href="{0}" class="govuk-link" target="_blank" rel="noreferrer noopener">Find out how main and supporting agents can act for you (opens in a new tab)</a>.
 
-consentInformation.section2.h2=What it means to give consent to an agent
-consentInformation.section2.p1=Giving consent means employees of {0} will be able to access your {1} data.
-consentInformation.section2.p2=Consent lasts until you tell us that {0} can no longer act on your behalf.
-consentInformation.section2.p3=For details about how we store and process your information, see our <a href="{0}" class="govuk-link" target="_blank" rel="noreferrer noopener">privacy notice (opens in a new tab)</a>.
+consentInformation.section2.h2=What it means to give consent to {0}
+consentInformation.section2.p1.itsa=Giving consent means employees of {0} will be able to access some of your personal data and Income Tax details. They will only be allowed to access details they need to carry out their duties as your agent.
+consentInformation.section2.p1=Giving consent means employees of {0} will be able to access your {1} data. They will only be allowed to access details they need to carry out their duties as your agent.
+consentInformation.section2.p2=For details about how we store and process your information, see our <a href="{0}" class="govuk-link" target="_blank" rel="noreferrer noopener">privacy notice (opens in a new tab)</a>.
 
-consentInformation.section3.h2=How to remove consent
-consentInformation.section3.p1=You can withdraw consent at any time by using <a href="{0}" class="govuk-link">Manage who can deal with HMRC for you</a>. A link to this page can be found in your Personal Tax Account or Business Tax Account.
+consentInformation.section3.h2=Do you have to give consent to {0}?
+consentInformation.section3.p1=No. You must make the best decision for you.
+consentInformation.section3.p2=You can seek a different agent, or decide to manage your own taxes if you prefer.
 
-consentInformation.section4.h2=Before you decide
-consentInformation.section4.p1=On the next page we list the tasks that {0} can carry out on your behalf, if you authorise them as your {1}.
+consentInformation.section4.h2=How long does consent last?
+consentInformation.section4.p1.main=Consent lasts until:
+consentInformation.section4.bullet1=you tell us that {0} can no longer act on your behalf, or
+consentInformation.section4.bullet2=you choose a different main agent for {0}
+consentInformation.section4.p1=Consent lasts until you tell us that {0} can no longer act on your behalf.
+consentInformation.section4.p2=HMRC might contact you in the future to check if you still want {0} to act for you.
+
+consentInformation.details.summary=You can remove consent at any time – find out how
+consentInformation.details.content=You can remove consent consent at any time by using <a href="{0}" class="govuk-link">Manage who can deal with HMRC for you</a>. A link to this page can be found in your Personal Tax Account or Business Tax Account.
+
+consentInformation.section5.h2=Before you decide
+consentInformation.section5.p1=On the next page we list the tasks that {0} can carry out on your behalf, if you authorise them as your {1}.
 
 # ________________________________________________________________________________
 # Client confirm consent
