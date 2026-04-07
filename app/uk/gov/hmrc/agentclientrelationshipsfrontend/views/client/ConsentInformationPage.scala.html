@@ -20,6 +20,7 @@
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.ClientJourneyRequest
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.ClientJourney
 @import play.twirl.api.Html
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.{HMRCMTDIT, HMRCMTDITSUPP}
 
 @this(
         layout: Layout,
@@ -35,21 +36,21 @@
 @pageTitle = @{messages(s"$key.header", agentName, agentRole)}
 @serviceName = @{messages("service.name.clients")}
 @agentRole = @{messages(s"agentRoleFor.$serviceKey")}
-@indefiniteAgentRole = @{messages(s"indefiniteAgentRole.$serviceKey")}
 @taxServiceName = @{messages(serviceKey)}
-@removeContent = {<p class="govuk-body">@Html(messages(s"$key.section3.p1", routes.ManageYourTaxAgentsController.show.url))</p>}
-@warningHtml= @{(journey.existingMainAgent, agentRoleKey) match {
-    case (Some(exAgent), "suppAgent") if exAgent.sameAgent =>
-        val text = messages(s"$key.warning.$agentRoleKey", agentName)
-        Html(s"""<p class="govuk-inset-text">$text</p>""")
-
-    case (Some(exAgent), role) if role != "suppAgent" =>
-        val text = messages(s"$key.warning.$agentRoleKey", agentName, exAgent.agencyName)
-        Html(s"""<p class="govuk-inset-text">$text</p>""")
-
-    case _ =>
-        Html("")
-}}
+@removeContent = {
+    <p class="govuk-body">@Html(messages(s"$key.details.content", routes.ManageYourTaxAgentsController.show.url))</p>
+}
+@warningHtml = {
+    @(journey.existingMainAgent, agentRoleKey) match {
+        case (Some(exAgent), "suppAgent") if exAgent.sameAgent => {
+                <p class="govuk-inset-text">@messages(s"$key.warning.$agentRoleKey", agentName)</p>
+        }
+        case (Some(exAgent), role) if role != "suppAgent" => {
+                <p class="govuk-inset-text">@messages(s"$key.warning.$agentRoleKey", agentName, exAgent.agencyName)</p>
+        }
+        case _ => {}
+    }
+}
 
 @layout(
     pageTitle,
@@ -57,35 +58,53 @@
     isAgent = false
 ) {
 
-  <h2 class="govuk-caption-xl">@messages(serviceKey).capitalize</h2>
-  <h1 class="govuk-heading-xl">@Html(pageTitle)</h1>
-  @if(agentRoleKey == "mainAgent" || agentRoleKey == "suppAgent") {
-    <h2 class="govuk-heading-l">@messages(s"$key.section1.h2")</h2>
-    <p class="govuk-body">@messages(s"$key.section1.p1", taxServiceName)</p>
-    <p class="govuk-body">@messages(s"$key.section1.p2")</p>
-    @warningHtml
-    <p class="govuk-body">@Html(messages(s"$key.section1.p3", appConfig.guidanceUrlForAgentRoles))</p>
-  } else {
-    @warningHtml
-  }
+    <h2 class="govuk-caption-xl">@messages(serviceKey).capitalize</h2>
+    <h1 class="govuk-heading-xl">@Html(pageTitle)</h1>
+    @if(agentRoleKey == "mainAgent" || agentRoleKey == "suppAgent") {
+        <h2 class="govuk-heading-m">@messages(s"$key.section1.h2")</h2>
+        <p class="govuk-body">@messages(s"$key.section1.p1", taxServiceName)</p>
+        <p class="govuk-body">@messages(s"$key.section1.p2")</p>
+        @warningHtml
+        <p class="govuk-body">@Html(messages(s"$key.section1.p3", appConfig.guidanceUrlForAgentRoles))</p>
+    } else {
+        @warningHtml
+    }
 
+    <h2 class="govuk-heading-m">@messages(s"$key.section2.h2", agentName)</h2>
+    @if(journey.serviceKey.exists(Seq(HMRCMTDIT, HMRCMTDITSUPP).contains)) {
+        <p class="govuk-body">@messages(s"$key.section2.p1.itsa", agentName)</p>
+    } else {
+        <p class="govuk-body">@messages(s"$key.section2.p1", agentName, taxServiceName)</p>
+    }
+    <p class="govuk-body">@Html(messages(s"$key.section2.p2", appConfig.privacyPolicyUrl))</p>
 
-  <h2 class="govuk-heading-l">@messages(s"$key.section2.h2")</h2>
-  <p class="govuk-body">@messages(s"$key.section2.p1", agentName, taxServiceName)</p>
-  <p class="govuk-body">@messages(s"$key.section2.p2", agentName)</p>
-  <p class="govuk-body">@Html(messages(s"$key.section2.p3", appConfig.privacyPolicyUrl))</p>
+    <h2 class="govuk-heading-m">@messages(s"$key.section3.h2", agentName)</h2>
+    <p class="govuk-body">@messages(s"$key.section3.p1")</p>
+    <p class="govuk-body">@messages(s"$key.section3.p2")</p>
 
-  @govukDetails(Details(
-      summary = Text(messages(s"$key.section3.h2")),
-      content = HtmlContent(removeContent))
-  )
+    <h2 class="govuk-heading-m">@messages(s"$key.section4.h2")</h2>
+    @if(agentRoleKey == "mainAgent") {
+        <p class="govuk-body">@messages(s"$key.section4.p1.main")</p>
+        <ul class="govuk-list govuk-list--bullet">
+            <li>@messages(s"$key.section4.bullet1", agentName)</li>
+            <li>@messages(s"$key.section4.bullet2", taxServiceName)</li>
+        </ul>
+    } else {
+        <p class="govuk-body">@messages(s"$key.section4.p1", agentName)</p>
+    }
+    <p class="govuk-body">@messages(s"$key.section4.p2", agentName)</p>
 
-  <h2 class="govuk-heading-l">@messages(s"$key.section4.h2")</h2>
-  <p class="govuk-body">@Html(messages(s"$key.section4.p1", agentName, indefiniteAgentRole))</p>
+    @govukDetails(Details(
+        summary = Text(messages(s"$key.details.summary")),
+        content = HtmlContent(removeContent))
+    )
 
-  @govukButton(Button(
-      id = Some("continueButton"),
-      href = Some(routes.ConfirmConsentController.show.url),
-      content = Text(messages("continue.button"))
-  ))
+    <h2 class="govuk-heading-m">@messages(s"$key.section5.h2")</h2>
+    <p class="govuk-body">@Html(messages(s"$key.section5.p1", agentName, agentRole))</p>
+
+    @govukButton(Button(
+        id = Some("continueButton"),
+        href = Some(routes.ConfirmConsentController.show.url),
+        content = Text(messages("continue.button"))
+    ))
 }
