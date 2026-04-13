@@ -84,6 +84,9 @@ class ClientServiceConfigurationService @Inject()(implicit appConfig: AppConfig)
   def getNotFoundError(journeyType: AgentJourneyType, clientService: String): JourneyExitType =
     services(clientService).journeyErrors(journeyType).notFound
 
+  def getNotMatchedError(journeyType: AgentJourneyType, clientService: String): JourneyExitType =
+    services(clientService).journeyErrors(journeyType).notMatched
+
   def supportsAgentRoles(clientService: String): Boolean = services.get(clientService).exists(_.supportedAgentRoles.size > 1)
 
   def getSupportedAgentRoles(clientService: String): Seq[String] = services(clientService).supportedAgentRoles
@@ -269,6 +272,14 @@ class ClientServiceConfigurationService @Inject()(implicit appConfig: AppConfig)
           width = 20,
           clientIdType = "cbcId"
         )
+      ),
+      journeyErrors = Map(
+        AgentJourneyType.AuthorisationRequest -> JourneyErrors(
+          notMatched = JourneyExitType.NotFoundCbc
+        ),
+        AgentJourneyType.AgentCancelAuthorisation -> JourneyErrors(
+          notMatched = JourneyExitType.NotFoundCbc
+        )
       )
     ),
     HMRCCBCNONUKORG -> ServiceData(
@@ -285,6 +296,14 @@ class ClientServiceConfigurationService @Inject()(implicit appConfig: AppConfig)
           inputType = "text",
           width = 20,
           clientIdType = "cbcId"
+        )
+      ),
+      journeyErrors = Map(
+        AgentJourneyType.AuthorisationRequest -> JourneyErrors(
+          notMatched = JourneyExitType.NotFoundCbc
+        ),
+        AgentJourneyType.AgentCancelAuthorisation -> JourneyErrors(
+          notMatched = JourneyExitType.NotFoundCbc
         )
       )
     ),

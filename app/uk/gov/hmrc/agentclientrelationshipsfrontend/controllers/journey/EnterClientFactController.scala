@@ -25,7 +25,7 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.models.KnownFactType
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.common.KnownFactsConfiguration
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.EnterClientFactForm
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, AgentJourneyRequest, AgentJourneyType, JourneyExitType}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.services.AgentJourneyService
+import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{AgentJourneyService, ClientServiceConfigurationService}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.agentJourney.EnterClientFactPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
@@ -38,7 +38,8 @@ class EnterClientFactController @Inject()(mcc: MessagesControllerComponents,
                                           enterKnownFactPage: EnterClientFactPage,
                                           actions: Actions,
                                           countryNamesLoader: CountryNamesLoader,
-                                          appConfig: AppConfig
+                                          appConfig: AppConfig,
+                                          serviceConfig: ClientServiceConfigurationService
                                          )
                                          (implicit val executionContext: ExecutionContext)
   extends FrontendController(mcc)
@@ -101,7 +102,6 @@ class EnterClientFactController @Inject()(mcc: MessagesControllerComponents,
             )))
           },
           knownFact => {
-
             for
               _ <- if journey.knownFact.contains(knownFact) then Future.successful(()) else journeyService.saveJourney(journey.copy(
                 knownFact = Some(knownFact),
@@ -116,7 +116,10 @@ class EnterClientFactController @Inject()(mcc: MessagesControllerComponents,
                 if journey.clientDetailsResponse.exists(_.knownFacts.contains(knownFact)) then
                   journeyService.nextPageUrl(journeyType)
                 else
-                  Future.successful(routes.JourneyExitController.show(journeyType, JourneyExitType.NotFound).url)
+                  Future.successful(routes.JourneyExitController.show(
+                    journeyType,
+                    serviceConfig.getNotMatchedError(journeyType, journey.getService)).url
+                  )
             yield
               Redirect(redirectUrl)
           }

@@ -528,6 +528,7 @@ agentCancelInvitationComplete.p2=Os gwnaethoch ganslo’ch cais am awdurdodiad d
 # ________________________________________________________________________________
 
 journeyExit.client-not-found.header=Nid oeddem yn gallu dod o hyd i’ch cleient
+journeyExit.client-not-found-cbc.header=Nid oeddem yn gallu dod o hyd i’ch cleient
 journeyExit.not-registered.header=Mae angen i’ch cleient gofrestru ar gyfer Hunanasesiad
 journeyExit.not-authorised.header=Nid ydych wedi eich awdurdodi
 journeyExit.pending-authorisation-exists.header=Rydych eisoes wedi creu cais am awdurdodiad ar gyfer y gwasanaeth treth hwn
@@ -541,8 +542,20 @@ journeyExit.already-authorised-for-mtd-itsa.header=Rydych chi eisoes ag awdurdod
 # Journey exit partials
 # ________________________________________________________________________________
 
+# ________________________________________________________________________________
+# Client not found
+# ________________________________________________________________________________
+
 genericNotFound.description=Nid oeddem yn gallu dod o hyd i gleient yn ein cofnodion gan ddefnyddio’r manylion a roesoch i ni.
 genericNotFound.advice=Gwiriwch y manylion a rhowch gynnig arall arni.
+
+# ________________________________________________________________________________
+# Client not found (CBC)
+# ________________________________________________________________________________
+
+cbcNotFound.p1=Nid yw’r ID CBC na’r e-bost a roddoch yn cyd-fynd â’n cofnodion.
+cbcNotFound.p2=Gwiriwch y manylion sydd gennych a rhowch gynnig arall arni.
+cbcNotFound.p3=Os yw’r broblem yn parhau, gofynnwch i’ch cleient wirio a yw ei fanylion yn gyfredol ar y gwasanaeth gwlad wrth wlad.
 
 # ________________________________________________________________________________
 # Client already mapped
