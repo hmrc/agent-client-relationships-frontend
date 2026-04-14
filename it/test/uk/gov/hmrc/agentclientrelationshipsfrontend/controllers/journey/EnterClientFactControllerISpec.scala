@@ -22,7 +22,7 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.AgentJourneyService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentSpecHelper}
 
-class EnterClientFactControllerISpec extends ComponentSpecHelper with AuthStubs :
+class EnterClientFactControllerISpec extends ComponentSpecHelper with AuthStubs:
 
   val testNino: String = "AB123456C"
   val testPostcode: String = "AA11AA"
@@ -36,6 +36,18 @@ class EnterClientFactControllerISpec extends ComponentSpecHelper with AuthStubs 
     Some("HMRC-MTD-IT"),
     Some(testNino),
     clientDetails
+  )
+
+  val testCbcId = "XACBC0000999999"
+  val testEmail = "test@email.com"
+
+  def testCbcJourney(journeyType: AgentJourneyType,
+                     clientDetails: Option[ClientDetailsResponse] = Some(clientDetailsResponse)): AgentJourney = AgentJourney(
+    journeyType,
+    Some("personal"),
+    Some("HMRC-CBC-ORG"),
+    Some(testCbcId),
+    Some(ClientDetailsResponse("", None, None, Seq(testEmail), Some(KnownFactType.Email), false, None))
   )
 
   val journeyService: AgentJourneyService = app.injector.instanceOf[AgentJourneyService]
@@ -99,6 +111,15 @@ class EnterClientFactControllerISpec extends ComponentSpecHelper with AuthStubs 
       ))
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe routes.JourneyExitController.show(AgentJourneyType.AuthorisationRequest, JourneyExitType.NotFound).url
+
+    "redirect to client-not-found-cbc when submitting a mismatching CBC email" in :
+      authoriseAsAgent()
+      await(journeyService.saveJourney(testCbcJourney(AgentJourneyType.AuthorisationRequest)))
+      val result = post(routes.EnterClientFactController.onSubmit(AgentJourneyType.AuthorisationRequest).url)(Map(
+        "email" -> Seq("wrong@email.com")
+      ))
+      result.status shouldBe SEE_OTHER
+      result.header("Location").value shouldBe routes.JourneyExitController.show(AgentJourneyType.AuthorisationRequest, JourneyExitType.NotFoundCbc).url
 
     "unset existing answers when submitting a new answer" in :
       authoriseAsAgent()
@@ -175,6 +196,15 @@ class EnterClientFactControllerISpec extends ComponentSpecHelper with AuthStubs 
       ))
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe routes.JourneyExitController.show(AgentJourneyType.AgentCancelAuthorisation, JourneyExitType.NotFound).url
+
+    "redirect to client-not-found-cbc when submitting a mismatching CBC email" in :
+      authoriseAsAgent()
+      await(journeyService.saveJourney(testCbcJourney(AgentJourneyType.AgentCancelAuthorisation)))
+      val result = post(routes.EnterClientFactController.onSubmit(AgentJourneyType.AgentCancelAuthorisation).url)(Map(
+        "email" -> Seq("wrong@email.com")
+      ))
+      result.status shouldBe SEE_OTHER
+      result.header("Location").value shouldBe routes.JourneyExitController.show(AgentJourneyType.AgentCancelAuthorisation, JourneyExitType.NotFoundCbc).url
 
     "unset existing answers when submitting a new answer" in :
       authoriseAsAgent()

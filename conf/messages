@@ -529,6 +529,7 @@ agentCancelInvitationComplete.p2=If you cancelled your authorisation request by 
 # ________________________________________________________________________________
 
 journeyExit.client-not-found.header=We could not find your client
+journeyExit.client-not-found-cbc.header=We could not find your client
 journeyExit.not-registered.header=Your client needs to register for Self Assessment
 journeyExit.not-authorised.header=You have not been authorised
 journeyExit.pending-authorisation-exists.header=You already created an authorisation request for this tax service
@@ -542,8 +543,20 @@ journeyExit.already-authorised-for-mtd-itsa.header=You are already authorised fo
 # Journey exit partials
 # ________________________________________________________________________________
 
+# ________________________________________________________________________________
+# Client not found
+# ________________________________________________________________________________
+
 genericNotFound.description=We could not find a client in our records using the details you gave us.
 genericNotFound.advice=Check the details and try again.
+
+# ________________________________________________________________________________
+# Client not found (CBC)
+# ________________________________________________________________________________
+
+cbcNotFound.p1=The CBC ID and email you provided do not match our records.
+cbcNotFound.p2=Check the details you have and try again.
+cbcNotFound.p3=If the problem continues, ask your client to check if their details are up to date on the country-by-country service.
 
 # ________________________________________________________________________________
 # Client already mapped
