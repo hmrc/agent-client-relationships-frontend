@@ -21,21 +21,23 @@ import play.api.data.Forms.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.common.KnownFactsConfiguration
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.helpers.DateFormFieldHelper.dateFieldMapping
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.helpers.FormFieldHelper
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.helpers.TextFormFieldHelper.textFieldMapping
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.helpers.TextFormFieldHelper.{emailTextFieldMapping, postcodeTextFieldMapping}
 
 object EnterClientFactForm extends FormFieldHelper {
   def form(fieldConfig: KnownFactsConfiguration, serviceName: String): Form[String] = {
     Form(
       single(
-        (fieldConfig.inputType, fieldConfig.validOptions) match {
-          case ("date", _) =>
+        (fieldConfig.inputType, fieldConfig.validOptions, fieldConfig.name) match {
+          case ("date", _, _) =>
             fieldConfig.name -> dateFieldMapping(s"clientFact.$serviceName.${fieldConfig.name}")
-          case ("select", Some(options)) =>
+          case ("select", Some(options), _) =>
             fieldConfig.name -> optional(text)
               .verifying(mandatoryFieldErrorMessage(s"clientFact.$serviceName.${fieldConfig.name}"), _.fold(false)(options.map(_._1).toSet.contains))
               .transform(_.getOrElse(""), (Some(_)): String => Option[String])
-          case ("text", _) =>
-            fieldConfig.name -> textFieldMapping(fieldConfig.name, s"clientFact.$serviceName.${fieldConfig.name}", fieldConfig.regex)
+          case ("text", _, "email") =>
+            fieldConfig.name -> emailTextFieldMapping(fieldConfig.name, s"clientFact.$serviceName.${fieldConfig.name}", fieldConfig.regex)
+          case ("text", _, "postcode") =>
+            fieldConfig.name -> postcodeTextFieldMapping(fieldConfig.name, s"clientFact.$serviceName.${fieldConfig.name}", fieldConfig.regex)
           case _ =>
             throw RuntimeException(s"Attempted to create an unsupported form - input type: ${fieldConfig.inputType}, options: ${fieldConfig.validOptions}")
         }

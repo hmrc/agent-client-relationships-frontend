@@ -40,10 +40,18 @@ class EnterClientFactFormSpec extends AnyWordSpecLike with Matchers :
         val result = form.bind(Map("fieldName" -> "AL"))
         result.hasErrors shouldBe false
 
-      "the input type is 'text'" in :
-        val fieldConfig: KnownFactsConfiguration = KnownFactsConfiguration("fieldName", "[A-Z]{3}", "text", 3, None)
+      "the input type is 'text' and the field name is 'email'" in :
+        val fieldConfig: KnownFactsConfiguration = KnownFactsConfiguration("email", "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$", "text", 3, None)
         val form = EnterClientFactForm.form(fieldConfig, "service")
-        val result = form.bind(Map("fieldName" -> "ABC"))
+        val result = form.bind(Map("email" -> "ABC@D.COM"))
+        println(s"The result was $result")
+        result.hasErrors shouldBe false
+
+      "the input type is 'text' and the field name is 'postcode'" in :
+        val fieldConfig: KnownFactsConfiguration = KnownFactsConfiguration("postcode", "^[A-Z]{1,2}[0-9][0-9A-Z]?\\s?[0-9][A-Z]{2}$|BFPO\\s?[0-9]{1,5}$", "text", 3, None)
+        val form = EnterClientFactForm.form(fieldConfig, "service")
+        val result = form.bind(Map("postcode" -> "A1 1AA"))
+        println(s"The result was $result")
         result.hasErrors shouldBe false
 
     "throw an exception" when :

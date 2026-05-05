@@ -29,7 +29,7 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.agentJourney.clie
 class DateSpec extends ViewSpecSupport {
 
   val template: Date = app.injector.instanceOf[Date]
-  val fieldConfig: KnownFactsConfiguration = KnownFactsConfiguration("date", "", "text", 20)
+  val fieldConfig: KnownFactsConfiguration = KnownFactsConfiguration("date", "", "date", 20)
   implicit val journeyRequest: AgentJourneyRequest[?] =
     new AgentJourneyRequest("", AgentJourney(journeyType = AuthorisationRequest), request)
 

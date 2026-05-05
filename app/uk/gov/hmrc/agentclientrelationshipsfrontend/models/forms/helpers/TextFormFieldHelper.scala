@@ -24,13 +24,25 @@ object TextFormFieldHelper extends FormFieldHelper {
   // all text fields in this service are for ids or codes, so we strip all white spaces
   private def stripWhiteSpaces(str: String): String = str.trim.replaceAll("\\s", "")
 
-  def textFieldMapping(fieldName: String, formMessageKey: String, regex: String = ".*"): Mapping[String] = {
+  def clientIdTextFieldMapping(fieldName: String, formMessageKey: String, regex: String = ".*"): Mapping[String] = {
     optional(text)
-      .verifying(validateText(fieldName, formMessageKey, regex))
+      .verifying(validateCaseSensitiveText(fieldName, formMessageKey, regex))
+      .transform(_.map(stripWhiteSpaces).getOrElse(""), (s: String) => Some(s))
+  }
+  
+  def emailTextFieldMapping(fieldName: String, formMessageKey: String, regex: String = ".*"): Mapping[String] = {
+    optional(text)
+      .verifying(validateCaseInsensitiveText(fieldName, formMessageKey, regex))
+      .transform(_.map(stripWhiteSpaces).getOrElse(""), (s: String) => Some(s))
+  }
+  
+  def postcodeTextFieldMapping(fieldName: String, formMessageKey: String, regex: String = ".*"): Mapping[String] = {
+    optional(text)
+      .verifying(validateCaseSensitiveText(fieldName, formMessageKey, regex))
       .transform(_.map(stripWhiteSpaces).getOrElse(""), (s: String) => Some(s))
   }
 
-  private def validateText(fieldName: String, formMessageKey: String, regex: String = ".*"): Constraint[Option[String]] = {
+  private def validateCaseSensitiveText(fieldName: String, formMessageKey: String, regex: String = ".*"): Constraint[Option[String]] = {
     Constraint[Option[String]] { (userInput: Option[String]) =>
       userInput match {
         case Some(value) if stripWhiteSpaces(value).nonEmpty && stripWhiteSpaces(value).matches(regex) => Valid
@@ -39,5 +51,16 @@ object TextFormFieldHelper extends FormFieldHelper {
       }
     }
   }
+
+  private def validateCaseInsensitiveText(fieldName: String, formMessageKey: String, regex: String = ".*"): Constraint[Option[String]] = {
+    Constraint[Option[String]] { (userInput: Option[String]) =>
+      userInput match {
+        case Some(value) if stripWhiteSpaces(value).nonEmpty && stripWhiteSpaces(value).toLowerCase.matches(regex) => Valid
+        case Some(value) if stripWhiteSpaces(value).nonEmpty && !stripWhiteSpaces(value).toLowerCase.matches(regex) => invalidInput(formMessageKey, fieldName)
+        case _ => invalidMandatoryField(formMessageKey, fieldName)
+      }
+    }
+  }
+  
 
 }
