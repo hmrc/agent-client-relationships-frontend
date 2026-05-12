@@ -117,3 +117,175 @@ class AgentJourneySpec extends AnyWordSpecLike with Matchers :
       "return None when the client service is one of the supported agent roles" in :
         val clientDetails = ClientDetailsResponse("Client", None, None, Seq(), None, false, Some(HMRCMTDITSUPP))
         model.getExitType(AgentCancelAuthorisation, clientDetails, Seq(HMRCMTDIT, HMRCMTDITSUPP)) shouldBe None
+
+  ".isKnownFactValid" when :
+
+    "journey type is AuthorisationRequest" should :
+
+      "return false when the clientDetailsResponse is empty" in :
+        val model = AgentJourney(
+          journeyType = AuthorisationRequest
+        )
+        model.isKnownFactValid shouldBe false
+
+      "return true when the clientDetailsResponse is not empty and clientDetailsResponse.knownFactType is empty" in :
+        val clientDetails = ClientDetailsResponse(
+          name =  "Client",
+          status = Some(Insolvent),
+          isOverseas = None,
+          knownFacts = Seq(),
+          knownFactType = None,
+          hasExistingRelationshipFor = None
+        )
+        val model = AgentJourney(
+          journeyType = AuthorisationRequest,
+          clientDetailsResponse = Some(clientDetails)
+        )
+        model.isKnownFactValid shouldBe true
+
+      "return true when the clientDetailsResponse is not empty, clientDetailsResponse.knownFactType is not empty, AgentJourney.knownFact is empty and clientDetailsResponse.knownFacts is empty" in :
+        val clientDetails = ClientDetailsResponse(
+          name = "Client",
+          status = Some(Insolvent),
+          isOverseas = None,
+          knownFacts = Seq(),
+          knownFactType = Some(KnownFactType.Email),
+          hasExistingRelationshipFor = None
+        )
+        val model = AgentJourney(
+          journeyType = AuthorisationRequest,
+          clientDetailsResponse = Some(clientDetails)
+        )
+        model.isKnownFactValid shouldBe true
+
+      "return false when the clientDetailsResponse is not empty, clientDetailsResponse.knownFactType is not empty, AgentJourney.knownFact is empty and clientDetailsResponse.knownFacts is not empty" in :
+        val clientDetails = ClientDetailsResponse(
+          name = "Client",
+          status = Some(Insolvent),
+          isOverseas = None,
+          knownFacts = Seq("a.b@c.com"),
+          knownFactType = Some(KnownFactType.Email),
+          hasExistingRelationshipFor = None
+        )
+        val model = AgentJourney(
+          journeyType = AuthorisationRequest,
+          clientDetailsResponse = Some(clientDetails)
+        )
+        model.isKnownFactValid shouldBe false
+
+      "return true when the clientDetailsResponse is not empty, clientDetailsResponse.knownFactType is not empty, AgentJourney.knownFact is not empty and clientDetailsResponse.knownFacts contains AgentJourney.knownFact" in :
+        val clientDetails = ClientDetailsResponse(
+          name = "Client",
+          status = Some(Insolvent),
+          isOverseas = None,
+          knownFacts = Seq("a.b@c.com"),
+          knownFactType = Some(KnownFactType.Email),
+          hasExistingRelationshipFor = None
+        )
+        val model = AgentJourney(
+          journeyType = AuthorisationRequest,
+          clientDetailsResponse = Some(clientDetails),
+          knownFact = Some("A.b@c.CoM")
+        )
+        model.isKnownFactValid shouldBe true
+
+      "return false when the clientDetailsResponse is not empty, clientDetailsResponse.knownFactType is not empty, AgentJourney.knownFact is not empty and clientDetailsResponse.knownFacts does not contain AgentJourney.knownFact" in :
+        val clientDetails = ClientDetailsResponse(
+          name = "Client",
+          status = Some(Insolvent),
+          isOverseas = None,
+          knownFacts = Seq("a.b@c.com"),
+          knownFactType = Some(KnownFactType.Email),
+          hasExistingRelationshipFor = None
+        )
+        val model = AgentJourney(
+          journeyType = AuthorisationRequest,
+          clientDetailsResponse = Some(clientDetails),
+          knownFact = Some("kLm@stuFF.CoM")
+        )
+        model.isKnownFactValid shouldBe false
+
+    "journey type is AgentCancelAuthorisation" should :
+
+      "return false when the clientDetailsResponse is empty" in :
+        val model = AgentJourney(
+          journeyType = AgentCancelAuthorisation
+        )
+        model.isKnownFactValid shouldBe false
+
+      "return true when the clientDetailsResponse is not empty and clientDetailsResponse.knownFactType is empty" in :
+        val clientDetails = ClientDetailsResponse(
+          name = "Client",
+          status = Some(Insolvent),
+          isOverseas = None,
+          knownFacts = Seq(),
+          knownFactType = None,
+          hasExistingRelationshipFor = None
+        )
+        val model = AgentJourney(
+          journeyType = AgentCancelAuthorisation,
+          clientDetailsResponse = Some(clientDetails)
+        )
+        model.isKnownFactValid shouldBe true
+
+      "return true when the clientDetailsResponse is not empty, clientDetailsResponse.knownFactType is not empty, AgentJourney.knownFact is empty and clientDetailsResponse.knownFacts is empty" in :
+        val clientDetails = ClientDetailsResponse(
+          name = "Client",
+          status = Some(Insolvent),
+          isOverseas = None,
+          knownFacts = Seq(),
+          knownFactType = Some(KnownFactType.Email),
+          hasExistingRelationshipFor = None
+        )
+        val model = AgentJourney(
+          journeyType = AgentCancelAuthorisation,
+          clientDetailsResponse = Some(clientDetails)
+        )
+        model.isKnownFactValid shouldBe true
+
+      "return false when the clientDetailsResponse is not empty, clientDetailsResponse.knownFactType is not empty, AgentJourney.knownFact is empty and clientDetailsResponse.knownFacts is not empty" in :
+        val clientDetails = ClientDetailsResponse(
+          name = "Client",
+          status = Some(Insolvent),
+          isOverseas = None,
+          knownFacts = Seq("a.b@c.com"),
+          knownFactType = Some(KnownFactType.Email),
+          hasExistingRelationshipFor = None
+        )
+        val model = AgentJourney(
+          journeyType = AgentCancelAuthorisation,
+          clientDetailsResponse = Some(clientDetails)
+        )
+        model.isKnownFactValid shouldBe false
+
+      "return true when the clientDetailsResponse is not empty, clientDetailsResponse.knownFactType is not empty, AgentJourney.knownFact is not empty and clientDetailsResponse.knownFacts contains AgentJourney.knownFact" in :
+        val clientDetails = ClientDetailsResponse(
+          name = "Client",
+          status = Some(Insolvent),
+          isOverseas = None,
+          knownFacts = Seq("a.b@c.com"),
+          knownFactType = Some(KnownFactType.Email),
+          hasExistingRelationshipFor = None
+        )
+        val model = AgentJourney(
+          journeyType = AgentCancelAuthorisation,
+          clientDetailsResponse = Some(clientDetails),
+          knownFact = Some("A.b@c.CoM")
+        )
+        model.isKnownFactValid shouldBe true
+
+      "return false when the clientDetailsResponse is not empty, clientDetailsResponse.knownFactType is not empty, AgentJourney.knownFact is not empty and clientDetailsResponse.knownFacts does not contain AgentJourney.knownFact" in :
+        val clientDetails = ClientDetailsResponse(
+          name = "Client",
+          status = Some(Insolvent),
+          isOverseas = None,
+          knownFacts = Seq("a.b@c.com"),
+          knownFactType = Some(KnownFactType.Email),
+          hasExistingRelationshipFor = None
+        )
+        val model = AgentJourney(
+          journeyType = AgentCancelAuthorisation,
+          clientDetailsResponse = Some(clientDetails),
+          knownFact = Some("kLm@stuFF.CoM")
+        )
+        model.isKnownFactValid shouldBe false

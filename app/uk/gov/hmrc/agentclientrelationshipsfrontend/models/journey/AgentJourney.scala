@@ -63,9 +63,15 @@ case class AgentJourney(journeyType: AgentJourneyType,
     }
 
       
-  def isKnownFactValid: Boolean = clientDetailsResponse.exists { cdr =>
-    cdr.knownFactType.fold(true) { _ =>
-      knownFact.fold(cdr.knownFacts.isEmpty)(cdr.knownFacts.contains)
+  def isKnownFactValid: Boolean = clientDetailsResponse.exists {
+    cdr => cdr.knownFactType.fold(true) {
+      _ => knownFact.fold {
+        cdr.knownFacts.isEmpty
+      } { journeyKnownFact =>
+        val modifiedKnownFactsList = cdr.knownFacts.map(fact => fact.toLowerCase)
+        val modifiedKnownFact = journeyKnownFact.toLowerCase
+        modifiedKnownFactsList.contains(modifiedKnownFact)
+      }
     }
   }
 
