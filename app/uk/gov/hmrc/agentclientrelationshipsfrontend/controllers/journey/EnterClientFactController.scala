@@ -24,7 +24,7 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.config.{AppConfig, CountryNa
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.KnownFactType
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.common.KnownFactsConfiguration
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.EnterClientFactForm
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, AgentJourneyRequest, AgentJourneyType, JourneyExitType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, AgentJourneyRequest, AgentJourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{AgentJourneyService, ClientServiceConfigurationService}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.agentJourney.EnterClientFactPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
@@ -91,7 +91,8 @@ class EnterClientFactController @Inject()(mcc: MessagesControllerComponents,
 
       val journey = journeyRequest.journey
 
-      if journey.clientDetailsResponse.isEmpty || journey.clientId.isEmpty then Future.successful(Redirect(routes.SelectClientTypeController.show(journeyType)))
+      if journey.clientDetailsResponse.isEmpty || journey.clientId.isEmpty then
+        Future.successful(Redirect(routes.SelectClientTypeController.show(journeyType)))
       else {
         val field = knownFactField(journey.clientDetailsResponse.get.knownFactType.getOrElse(throw RuntimeException("Known fact type is missing")))
         knownFactForm(journey, field).bindFromRequest().fold(
@@ -102,8 +103,12 @@ class EnterClientFactController @Inject()(mcc: MessagesControllerComponents,
             )))
           },
           knownFact => {
+            
             for
-              _ <- if journey.knownFact.contains(knownFact) then Future.successful(()) else journeyService.saveJourney(journey.copy(
+              _ <- if journey.knownFact.contains(knownFact) then {
+                Future.successful(())
+              } else
+                journeyService.saveJourney(journey.copy(
                 knownFact = Some(knownFact),
                 clientConfirmed = None,
                 agentType = None,
@@ -112,8 +117,14 @@ class EnterClientFactController @Inject()(mcc: MessagesControllerComponents,
                 confirmationClientName = None,
                 journeyComplete = None
               ))
+
               redirectUrl <-
-                if journey.clientDetailsResponse.exists(_.knownFacts.contains(knownFact)) then
+                if journey.clientDetailsResponse.exists {
+                  response =>
+                    val modifiedKnownFactsList = response.knownFacts.map(fact => fact.toLowerCase)
+                    val modifiedKnownFact = knownFact.toLowerCase
+                    modifiedKnownFactsList.contains(modifiedKnownFact)
+                } then
                   journeyService.nextPageUrl(journeyType)
                 else
                   Future.successful(routes.JourneyExitController.show(

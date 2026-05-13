@@ -29,6 +29,13 @@ class EnterClientFactControllerISpec extends ComponentSpecHelper with AuthStubs:
   val clientDetailsResponse: ClientDetailsResponse =
     ClientDetailsResponse("", None, None, Seq(testPostcode), Some(KnownFactType.PostalCode), false, None)
 
+  def reverseAllCharacterCases(originalString: String): String =
+    val modifiedString = originalString.map(
+      character => if (character.isUpper) character.toLower else character.toUpper
+    )
+    modifiedString
+  end reverseAllCharacterCases
+
   def testItsaJourney(journeyType: AgentJourneyType,
                       clientDetails: Option[ClientDetailsResponse] = Some(clientDetailsResponse)): AgentJourney = AgentJourney(
     journeyType,
@@ -41,8 +48,8 @@ class EnterClientFactControllerISpec extends ComponentSpecHelper with AuthStubs:
   val testCbcId = "XACBC0000999999"
   val testEmail = "test@email.com"
 
-  def testCbcJourney(journeyType: AgentJourneyType,
-                     clientDetails: Option[ClientDetailsResponse] = Some(clientDetailsResponse)): AgentJourney = AgentJourney(
+  def testCbcJourney(journeyType: AgentJourneyType): AgentJourney =
+    AgentJourney(
     journeyType,
     Some("personal"),
     Some("HMRC-CBC-ORG"),
@@ -120,6 +127,15 @@ class EnterClientFactControllerISpec extends ComponentSpecHelper with AuthStubs:
       ))
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe routes.JourneyExitController.show(AgentJourneyType.AuthorisationRequest, JourneyExitType.NotFoundCbc).url
+
+    "redirect to Confirm Client page when submitting the expected CBC email but with different case letters" in :
+      authoriseAsAgent()
+      await(journeyService.saveJourney(testCbcJourney(AgentJourneyType.AuthorisationRequest)))
+      val result = post(routes.EnterClientFactController.onSubmit(AgentJourneyType.AuthorisationRequest).url)(Map(
+        "email" -> Seq(reverseAllCharacterCases(testEmail))
+      ))
+      result.status shouldBe SEE_OTHER
+      result.header("Location").value shouldBe routes.ConfirmClientController.show(AgentJourneyType.AuthorisationRequest).url
 
     "unset existing answers when submitting a new answer" in :
       authoriseAsAgent()
@@ -205,6 +221,15 @@ class EnterClientFactControllerISpec extends ComponentSpecHelper with AuthStubs:
       ))
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe routes.JourneyExitController.show(AgentJourneyType.AgentCancelAuthorisation, JourneyExitType.NotFoundCbc).url
+
+    "redirect to Confirm Client page when submitting the expected CBC email but with different case letters" in :
+      authoriseAsAgent()
+      await(journeyService.saveJourney(testCbcJourney(AgentJourneyType.AgentCancelAuthorisation)))
+      val result = post(routes.EnterClientFactController.onSubmit(AgentJourneyType.AgentCancelAuthorisation).url)(Map(
+        "email" -> Seq(reverseAllCharacterCases(testEmail))
+      ))
+      result.status shouldBe SEE_OTHER
+      result.header("Location").value shouldBe routes.ConfirmClientController.show(AgentJourneyType.AgentCancelAuthorisation).url
 
     "unset existing answers when submitting a new answer" in :
       authoriseAsAgent()

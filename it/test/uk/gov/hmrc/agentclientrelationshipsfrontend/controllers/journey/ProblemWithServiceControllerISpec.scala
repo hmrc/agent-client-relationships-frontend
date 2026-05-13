@@ -17,9 +17,7 @@
 package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey
 
 import play.api.test.Helpers.*
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.AgentJourneyType.{AuthorisationRequest, journeyTypeReads}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.JourneyExitType.NotFound
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, AgentJourneyType, JourneyExitType}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourney, AgentJourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsResponse, KnownFactType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.AgentJourneyService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentSpecHelper}
