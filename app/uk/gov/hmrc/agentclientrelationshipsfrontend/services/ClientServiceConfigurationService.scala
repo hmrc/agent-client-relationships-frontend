@@ -262,7 +262,7 @@ class ClientServiceConfigurationService @Inject()(implicit appConfig: AppConfig)
       overseasServiceName = Some(HMRCCBCNONUKORG),
       supportedEnrolments = Seq(HMRCCBCORG, HMRCCBCNONUKORG), // parent service is always head of the list
       urlPart = Map(countryByCountryReporting -> Set(HMRCCBCORG, HMRCCBCNONUKORG)),
-      serviceOption = appConfig.cbcEnabled,
+      serviceOption = true,
       clientTypes = Set(business, trust),
       clientDetails = Seq(
         ClientDetailsConfiguration(
