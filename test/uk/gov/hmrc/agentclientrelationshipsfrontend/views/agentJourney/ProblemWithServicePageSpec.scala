@@ -19,6 +19,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.views.agentJourney
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.twirl.api.HtmlFormat
+import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.routes
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsResponse, KnownFactType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.support.ViewSpecSupport
@@ -30,18 +31,19 @@ class ProblemWithServicePageSpec extends ViewSpecSupport:
 
   private val journey: AgentJourney = AgentJourney(
     AgentJourneyType.AuthorisationRequest,
-    clientType = Some("personal"),
-    clientService = Some("HMRC-MTD-IT"),
+    clientType = Some("business"),
+    clientService = Some("HMRC-CBC-ORG"),
     clientId = Some("AB123"),
-    clientDetailsResponse = Some(ClientDetailsResponse("Test Name", None, None, Seq("AA11AA"), Some(KnownFactType.PostalCode), false, None, isMissingEacdKnownFacts = Some(true)))
+    clientDetailsResponse = Some(ClientDetailsResponse("Test Name", None, None, Seq("AA11AA"), Some(KnownFactType.Email), false, None, isMissingEacdKnownFacts = Some(true)))
   )
 
   object Expected {
-    val heading = "HMRC is currently having a problem with this service"
+    val heading = "We cannot find any clients that match this CBC ID"
     val title = s"$heading - Ask a client to authorise you - GOV.UK"
-    val para1 = "Some customers are experiencing authorisation issues on the country-by-country service."
-    val para2 = "We are trying to fix the issue as soon as possible."
-    val para3 = "You can try again later."
+    val para1 = "You can go back and enter your client’s CBC ID again."
+    val para2 = "If there is still an issue, then your client may need to provide or confirm their details in the country-by-country reporting service."
+    val para3 = "They can use this link to sign in: https://www.tax.service.gov.uk/register-to-send-a-country-by-country-report"
+    val para4 = "Once we receive their details or confirmation, you can come back here and request authorisation."
   }
 
   s"ProblemWithServicePage view" should :
@@ -61,5 +63,17 @@ class ProblemWithServicePageSpec extends ViewSpecSupport:
       doc.mainContent.extractText(p, 1).value shouldBe Expected.para1
       doc.mainContent.extractText(p, 2).value shouldBe Expected.para2
       doc.mainContent.extractText(p, 3).value shouldBe Expected.para3
+      doc.mainContent.extractText(p, 4).value shouldBe Expected.para4
 
+    "link to the country-by-country service" in :
+      doc.mainContent.extractLink(1).value shouldBe TestLink(
+        "https://www.tax.service.gov.uk/register-to-send-a-country-by-country-report",
+        "https://www.tax.service.gov.uk/register-to-send-a-country-by-country-report"
+      )
+
+    "have a start again button" in :
+      doc.mainContent.extractLinkButton("showClientTypeButton").value shouldBe TestLink(
+        "Start again",
+        routes.StartJourneyController.startJourney(AgentJourneyType.AuthorisationRequest).url
+      )
 

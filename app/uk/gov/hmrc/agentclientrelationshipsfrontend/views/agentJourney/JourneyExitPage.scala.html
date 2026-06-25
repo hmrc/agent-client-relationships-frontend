@@ -24,7 +24,6 @@
         layout: Layout,
         clientNotFound: ClientNotFound,
         clientNotFoundCbc: ClientNotFoundCbc,
-        clientNotFoundCbcId: ClientNotFoundCbcId,
         clientNotRegistered: ClientNotRegistered,
         notAuthorised: NotAuthorised,
         clientInsolvent: ClientInsolvent,
@@ -51,7 +50,6 @@
      exitType match {
       case JourneyExitType.NotFound => clientNotFound()
       case JourneyExitType.NotFoundCbc => clientNotFoundCbc()
-      case JourneyExitType.NotFoundCbcId => clientNotFoundCbcId()
       case JourneyExitType.NotRegistered => clientNotRegistered()
       case JourneyExitType.NoAuthorisationExists => notAuthorised()
       case JourneyExitType.ClientStatusInsolvent => clientInsolvent()

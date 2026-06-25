@@ -529,7 +529,6 @@ agentCancelInvitationComplete.p2=Os gwnaethoch ganslo’ch cais am awdurdodiad d
 
 journeyExit.client-not-found.header=Nid oeddem yn gallu dod o hyd i’ch cleient
 journeyExit.client-not-found-cbc.header=Nid oeddem yn gallu dod o hyd i gyfeiriad e-bost eich cleient ar gyfer CBC
-journeyExit.client-not-found-cbc-id.header=Nid yw’r ID CBC hwn yn cyfateb â manylion unrhyw gleientiaid
 journeyExit.not-registered.header=Mae angen i’ch cleient gofrestru ar gyfer Hunanasesiad
 journeyExit.not-authorised.header=Nid ydych wedi eich awdurdodi
 journeyExit.pending-authorisation-exists.header=Rydych eisoes wedi creu cais am awdurdodiad ar gyfer y gwasanaeth treth hwn
@@ -549,15 +548,6 @@ journeyExit.already-authorised-for-mtd-itsa.header=Rydych chi eisoes ag awdurdod
 
 genericNotFound.description=Nid oeddem yn gallu dod o hyd i gleient yn ein cofnodion gan ddefnyddio’r manylion a roesoch i ni.
 genericNotFound.advice=Gwiriwch y manylion a rhowch gynnig arall arni.
-
-# ________________________________________________________________________________
-# Client not found (CBC)
-# ________________________________________________________________________________
-
-cbcIdNotFound.p1=Gallwch fynd yn ôl a nodi ID CBC eich cleient eto.
-cbcIdNotFound.p2=Os yw’r drafferth yn parhau, mae’n bosibl y bydd angen i’ch cleient nodi neu gadarnhau ei fanylion gan ddefnyddio’r gwasanaeth ar gyfer cyflwyno adroddiadau gwlad wrth wlad.
-cbcIdNotFound.p3=Gall eich cleient ddefnyddio’r cysylltiad hwn i fewngofnodi: <a class="govuk-link" href="{0}">{0}</a>
-cbcIdNotFound.p4=Unwaith i ni gael ei fanylion neu ei gadarnhad, gallwch ddychwelyd yma a gwneud cais am awdurdodiad.
 
 cbcNotFound.p1=Gallwch fynd yn ôl a nodi cyfeiriad e-bost eich cleient ar gyfer CBC eto.
 cbcNotFound.p2=Os yw’r broblem yn parhau, gofynnwch i’ch cleient wirio a yw ei fanylion yn gyfredol gan ddefnyddio’r gwasanaeth ar gyfer cyflwyno adroddiadau gwlad wrth wlad.
@@ -1041,7 +1031,8 @@ relationshipNotFound.p1=Nid ydych bellach yn awdurdodi’r asiant hwn i reoli’
 # Problem With Service (CBC issue with client enrolment)
 # ________________________________________________________________________________
 
-problemWithService.header=Mae problem ar hyn o bryd gyda’r gwasanaeth hwn gan CThEF
-problemWithService.p1=Mae rhai cwsmeriaid yn profi problemau awdurdodi ar y gwasanaeth adrodd fesul gwlad.
-problemWithService.p2=Rydym yn gweithio i ddatrys y broblem cyn gynted â phosibl.
-problemWithService.p3=Gallwch roi cynnig arall arni nes ymlaen.
+problemWithService.header=Nid yw’r ID CBC hwn yn cyfateb â manylion unrhyw gleientiaid
+problemWithService.p1=Gallwch fynd yn ôl a nodi ID CBC eich cleient eto.
+problemWithService.p2=Os yw’r drafferth yn parhau, mae’n bosibl y bydd angen i’ch cleient nodi neu gadarnhau ei fanylion gan ddefnyddio’r gwasanaeth ar gyfer cyflwyno adroddiadau gwlad wrth wlad.
+problemWithService.p3=Gall eich cleient ddefnyddio’r cysylltiad hwn i fewngofnodi: <a class="govuk-link" href="{0}">{0}</a>
+problemWithService.p4=Unwaith i ni gael ei fanylion neu ei gadarnhad, gallwch ddychwelyd yma a gwneud cais am awdurdodiad.

@@ -26,17 +26,17 @@ class ProblemWithServiceControllerISpec extends ComponentSpecHelper with AuthStu
 
   private val journey: AgentJourney = AgentJourney(
     AgentJourneyType.AuthorisationRequest,
-    clientType = Some("personal"),
-    clientService = Some("HMRC-MTD-IT"),
+    clientType = Some("business"),
+    clientService = Some("HMRC-CBC-ORG"),
     clientId = Some("AB123"),
-    clientDetailsResponse = Some(ClientDetailsResponse("Test Name", None, None, Seq("AA11AA"), Some(KnownFactType.PostalCode), false, None, isMissingEacdKnownFacts = Some(true)))
+    clientDetailsResponse = Some(ClientDetailsResponse("Test Name", None, None, Seq("AA11AA"), Some(KnownFactType.Email), false, None, isMissingEacdKnownFacts = Some(true)))
   )
   private val invalidJourney: AgentJourney = AgentJourney(
     AgentJourneyType.AuthorisationRequest,
-    clientType = Some("personal"),
-    clientService = Some("HMRC-MTD-IT"),
+    clientType = Some("business"),
+    clientService = Some("HMRC-CBC-ORG"),
     clientId = Some("AB123"),
-    clientDetailsResponse = Some(ClientDetailsResponse("Test Name", None, None, Seq("AA11AA"), Some(KnownFactType.PostalCode), false, None, isMissingEacdKnownFacts = Some(false)))
+    clientDetailsResponse = Some(ClientDetailsResponse("Test Name", None, None, Seq("AA11AA"), Some(KnownFactType.Email), false, None, isMissingEacdKnownFacts = Some(false)))
   )
 
   val journeyService: AgentJourneyService = app.injector.instanceOf[AgentJourneyService]
@@ -53,6 +53,7 @@ class ProblemWithServiceControllerISpec extends ComponentSpecHelper with AuthStu
       await(journeyService.saveJourney(journey))
       val result = get(routes.ProblemWithServiceController.show(journey.journeyType).url)
       result.status shouldBe OK
+      result.body.contains("We cannot find any clients that match this CBC ID") shouldBe true
 
 
     "redirect to ASA home when the journey is not valid for this page" in :

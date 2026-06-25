@@ -14,14 +14,17 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.Layout
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.routes
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.AgentJourneyRequest
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.Layout
 
 @this(
         layout: Layout,
+        govukButton: GovukButton
 )
 
-@()(implicit request: AgentJourneyRequest[?], messages: Messages)
+@()(implicit request: AgentJourneyRequest[?], messages: Messages, appConfig: AppConfig)
 @key = @{
     "problemWithService"
 }
@@ -38,6 +41,12 @@
     <h1 class="govuk-heading-xl">@pageTitle</h1>
     <p class="govuk-body">@messages(s"$key.p1")</p>
     <p class="govuk-body">@messages(s"$key.p2")</p>
-    <p class="govuk-body">@messages(s"$key.p3")</p>
+    <p class="govuk-body">@Html(messages(s"$key.p3", appConfig.countryByCountryReportingUrl))</p>
+    <p class="govuk-body">@messages(s"$key.p4")</p>
+    @govukButton(Button(
+        id = Some("showClientTypeButton"),
+        href = Some(routes.StartJourneyController.startJourney(request.journey.journeyType).url),
+        content = Text(messages("start-again.button"))
+    ))
 
 }
