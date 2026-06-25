@@ -275,11 +275,11 @@ class ClientServiceConfigurationService @Inject()(implicit appConfig: AppConfig)
       ),
       journeyErrors = Map(
         AgentJourneyType.AuthorisationRequest -> JourneyErrors(
-          notFound = JourneyExitType.NotFoundCbcId,
+          notFound = JourneyExitType.NotFound,
           notMatched = JourneyExitType.NotFoundCbc
         ),
         AgentJourneyType.AgentCancelAuthorisation -> JourneyErrors(
-          notFound = JourneyExitType.NotFoundCbcId,
+          notFound = JourneyExitType.NotFound,
           notMatched = JourneyExitType.NotFoundCbc
         )
       )
@@ -302,11 +302,11 @@ class ClientServiceConfigurationService @Inject()(implicit appConfig: AppConfig)
       ),
       journeyErrors = Map(
         AgentJourneyType.AuthorisationRequest -> JourneyErrors(
-          notFound = JourneyExitType.NotFoundCbcId,
+          notFound = JourneyExitType.NotFound,
           notMatched = JourneyExitType.NotFoundCbc
         ),
         AgentJourneyType.AgentCancelAuthorisation -> JourneyErrors(
-          notFound = JourneyExitType.NotFoundCbcId,
+          notFound = JourneyExitType.NotFound,
           notMatched = JourneyExitType.NotFoundCbc
         )
       )

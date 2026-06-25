@@ -530,7 +530,6 @@ agentCancelInvitationComplete.p2=If you cancelled your authorisation request by 
 
 journeyExit.client-not-found.header=We could not find your client
 journeyExit.client-not-found-cbc.header=We could not find your client’s CBC email address
-journeyExit.client-not-found-cbc-id.header=We cannot find any clients that match this CBC ID
 journeyExit.not-registered.header=Your client needs to register for Self Assessment
 journeyExit.not-authorised.header=You have not been authorised
 journeyExit.pending-authorisation-exists.header=You already created an authorisation request for this tax service
@@ -550,15 +549,6 @@ journeyExit.already-authorised-for-mtd-itsa.header=You are already authorised fo
 
 genericNotFound.description=We could not find a client in our records using the details you gave us.
 genericNotFound.advice=Check the details and try again.
-
-# ________________________________________________________________________________
-# Client not found (CBC)
-# ________________________________________________________________________________
-
-cbcIdNotFound.p1=You can go back and enter your client’s CBC ID again.
-cbcIdNotFound.p2=If there is still an issue, then your client may need to provide or confirm their details in the country-by-country reporting service.
-cbcIdNotFound.p3=They can use this link to sign in: <a class="govuk-link" href="{0}">{0}</a>
-cbcIdNotFound.p4=Once we receive their details or confirmation, you can come back here and request authorisation.
 
 cbcNotFound.p1=You can go back and enter your client’s CBC email again.
 cbcNotFound.p2=If the problem continues, ask your client to check if their details are up to date in the country-by-country reporting service.
@@ -1042,7 +1032,8 @@ relationshipNotFound.p1=You no longer authorise this agent to manage this tax se
 # Problem With Service (CBC issue with client enrolment)
 # ________________________________________________________________________________
 
-problemWithService.header=HMRC is currently having a problem with this service
-problemWithService.p1=Some customers are experiencing authorisation issues on the country-by-country service.
-problemWithService.p2=We are trying to fix the issue as soon as possible.
-problemWithService.p3=You can try again later.
+problemWithService.header=We cannot find any clients that match this CBC ID
+problemWithService.p1=You can go back and enter your client’s CBC ID again.
+problemWithService.p2=If there is still an issue, then your client may need to provide or confirm their details in the country-by-country reporting service.
+problemWithService.p3=They can use this link to sign in: <a class="govuk-link" href="{0}">{0}</a>
+problemWithService.p4=Once we receive their details or confirmation, you can come back here and request authorisation.

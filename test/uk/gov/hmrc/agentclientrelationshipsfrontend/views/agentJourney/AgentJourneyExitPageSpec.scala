@@ -45,10 +45,6 @@ class AgentJourneyExitPageSpec extends ViewSpecSupport {
       authorisationTitle = "We could not find your client’s CBC email address - Ask a client to authorise you - GOV.UK",
       cancelAuthorisationTitle = "We could not find your client’s CBC email address - Cancel a client’s authorisation - GOV.UK"
     ),
-    JourneyExitType.NotFoundCbcId -> ExpectedStrings(
-      authorisationTitle = "We cannot find any clients that match this CBC ID - Ask a client to authorise you - GOV.UK",
-      cancelAuthorisationTitle = "We cannot find any clients that match this CBC ID - Cancel a client’s authorisation - GOV.UK"
-    ),
     JourneyExitType.AuthorisationAlreadyRemoved -> ExpectedStrings(
       authorisationTitle = "This authorisation has already been removed - Ask a client to authorise you - GOV.UK",
       cancelAuthorisationTitle = "This authorisation has already been removed - Cancel a client’s authorisation - GOV.UK"
@@ -71,30 +67,6 @@ class AgentJourneyExitPageSpec extends ViewSpecSupport {
     }))
 
   private val cbcReportingUrl = "https://www.tax.service.gov.uk/register-to-send-a-country-by-country-report"
-
-  "CBC ID client-not-found view" should {
-    implicit val journeyRequest: AgentJourneyRequest[?] = new AgentJourneyRequest("", authorisationRequestJourney, request)
-    val view: HtmlFormat.Appendable = viewTemplate(AgentJourneyType.AuthorisationRequest, JourneyExitType.NotFoundCbcId)
-    val doc: Document = Jsoup.parse(view.body)
-
-    "have the approved content" in {
-      doc.mainContent.extractText(p, 1).value shouldBe "You can go back and enter your client’s CBC ID again."
-      doc.mainContent.extractText(p, 2).value shouldBe "If there is still an issue, then your client may need to provide or confirm their details in the country-by-country reporting service."
-      doc.mainContent.extractText(p, 3).value shouldBe s"They can use this link to sign in: $cbcReportingUrl"
-      doc.mainContent.extractText(p, 4).value shouldBe "Once we receive their details or confirmation, you can come back here and request authorisation."
-    }
-
-    "link to the country-by-country service" in {
-      doc.mainContent.extractLink(1).value shouldBe TestLink(cbcReportingUrl, cbcReportingUrl)
-    }
-
-    "have a start again button" in {
-      doc.mainContent.extractLinkButton("showClientTypeButton").value shouldBe TestLink(
-        "Start again",
-        routes.StartJourneyController.startJourney(AgentJourneyType.AuthorisationRequest).url
-      )
-    }
-  }
 
   "CBC email client-not-found view" should {
     implicit val journeyRequest: AgentJourneyRequest[?] = new AgentJourneyRequest("", authorisationRequestJourney, request)

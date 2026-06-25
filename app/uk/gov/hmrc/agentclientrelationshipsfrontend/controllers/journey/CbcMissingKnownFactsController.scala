@@ -19,16 +19,18 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey
 import play.api.i18n.I18nSupport
 import play.api.mvc.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
+import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, AgentJourneyType}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.agentJourney.ProblemWithServicePage
+import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.agentJourney.CbcMissingKnownFactsPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class ProblemWithServiceController @Inject()(mcc: MessagesControllerComponents,
-                                             problemWithServicePage: ProblemWithServicePage,
+class CbcMissingKnownFactsController @Inject()(mcc: MessagesControllerComponents,
+                                               cbcMissingKnownFactsPage: CbcMissingKnownFactsPage,
+                                             implicit val appConfig: AppConfig,
                                              actions: Actions
                                             )(implicit val executionContext: ExecutionContext) extends FrontendController(mcc) with I18nSupport:
 
@@ -38,5 +40,4 @@ class ProblemWithServiceController @Inject()(mcc: MessagesControllerComponents,
 
       val journey = journeyRequest.journey
       if !journey.clientDetailsResponse.exists(_.isMissingEacdKnownFacts.contains(true)) then Redirect(routes.EnterClientIdController.show(journey.journeyType))
-      else Ok(problemWithServicePage())
-
+      else Ok(cbcMissingKnownFactsPage())
