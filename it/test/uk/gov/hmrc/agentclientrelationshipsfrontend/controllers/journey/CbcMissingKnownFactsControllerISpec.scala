@@ -22,7 +22,7 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsRespons
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.AgentJourneyService
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.{AuthStubs, ComponentSpecHelper}
 
-class ProblemWithServiceControllerISpec extends ComponentSpecHelper with AuthStubs:
+class CbcMissingKnownFactsControllerISpec extends ComponentSpecHelper with AuthStubs:
 
   private val journey: AgentJourney = AgentJourney(
     AgentJourneyType.AuthorisationRequest,
@@ -51,7 +51,7 @@ class ProblemWithServiceControllerISpec extends ComponentSpecHelper with AuthStu
     "display the problem page" in :
       authoriseAsAgent()
       await(journeyService.saveJourney(journey))
-      val result = get(routes.ProblemWithServiceController.show(journey.journeyType).url)
+      val result = get(routes.CbcMissingKnownFactsController.show(journey.journeyType).url)
       result.status shouldBe OK
       result.body.contains("We cannot find any clients that match this CBC ID") shouldBe true
 
@@ -59,6 +59,6 @@ class ProblemWithServiceControllerISpec extends ComponentSpecHelper with AuthStu
     "redirect to ASA home when the journey is not valid for this page" in :
       authoriseAsAgent()
       await(journeyService.saveJourney(invalidJourney))
-      val result = get(routes.ProblemWithServiceController.show(journey.journeyType).url)
+      val result = get(routes.CbcMissingKnownFactsController.show(journey.journeyType).url)
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe routes.EnterClientIdController.show(journey.journeyType).url

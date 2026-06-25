@@ -23,11 +23,11 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.routes
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsResponse, KnownFactType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.support.ViewSpecSupport
-import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.agentJourney.ProblemWithServicePage
+import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.agentJourney.CbcMissingKnownFactsPage
 
-class ProblemWithServicePageSpec extends ViewSpecSupport:
+class CbcMissingKnownFactsPageSpec extends ViewSpecSupport:
 
-  val viewTemplate: ProblemWithServicePage = app.injector.instanceOf[ProblemWithServicePage]
+  val viewTemplate: CbcMissingKnownFactsPage = app.injector.instanceOf[CbcMissingKnownFactsPage]
 
   private val journey: AgentJourney = AgentJourney(
     AgentJourneyType.AuthorisationRequest,
@@ -46,7 +46,7 @@ class ProblemWithServicePageSpec extends ViewSpecSupport:
     val para4 = "Once we receive their details or confirmation, you can come back here and request authorisation."
   }
 
-  s"ProblemWithServicePage view" should :
+  s"CbcMissingKnownFactsPage view" should :
     implicit val journeyRequest: AgentJourneyRequest[?] = new AgentJourneyRequest("", journey, request)
     val view: HtmlFormat.Appendable = viewTemplate()
     val doc: Document = Jsoup.parse(view.body)
@@ -76,4 +76,3 @@ class ProblemWithServicePageSpec extends ViewSpecSupport:
         "Start again",
         routes.StartJourneyController.startJourney(AgentJourneyType.AuthorisationRequest).url
       )
-
