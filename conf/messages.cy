@@ -528,7 +528,8 @@ agentCancelInvitationComplete.p2=Os gwnaethoch ganslo’ch cais am awdurdodiad d
 # ________________________________________________________________________________
 
 journeyExit.client-not-found.header=Nid oeddem yn gallu dod o hyd i’ch cleient
-journeyExit.client-not-found-cbc.header=Nid oeddem yn gallu dod o hyd i’ch cleient
+journeyExit.client-not-found-cbc.header=Nid oeddem yn gallu dod o hyd i gyfeiriad e-bost eich cleient ar gyfer CBC
+journeyExit.client-not-found-cbc-id.header=Nid yw’r ID CBC hwn yn cyfateb â manylion unrhyw gleientiaid
 journeyExit.not-registered.header=Mae angen i’ch cleient gofrestru ar gyfer Hunanasesiad
 journeyExit.not-authorised.header=Nid ydych wedi eich awdurdodi
 journeyExit.pending-authorisation-exists.header=Rydych eisoes wedi creu cais am awdurdodiad ar gyfer y gwasanaeth treth hwn
@@ -553,9 +554,15 @@ genericNotFound.advice=Gwiriwch y manylion a rhowch gynnig arall arni.
 # Client not found (CBC)
 # ________________________________________________________________________________
 
-cbcNotFound.p1=Nid yw’r ID CBC na’r e-bost a roddoch yn cyd-fynd â’n cofnodion.
-cbcNotFound.p2=Gwiriwch y manylion sydd gennych a rhowch gynnig arall arni.
-cbcNotFound.p3=Os yw’r broblem yn parhau, gofynnwch i’ch cleient wirio a yw ei fanylion yn gyfredol ar y gwasanaeth gwlad wrth wlad.
+cbcIdNotFound.p1=Gallwch fynd yn ôl a nodi ID CBC eich cleient eto.
+cbcIdNotFound.p2=Os yw’r drafferth yn parhau, mae’n bosibl y bydd angen i’ch cleient nodi neu gadarnhau ei fanylion gan ddefnyddio’r gwasanaeth ar gyfer cyflwyno adroddiadau gwlad wrth wlad.
+cbcIdNotFound.p3=Gall eich cleient ddefnyddio’r cysylltiad hwn i fewngofnodi: <a class="govuk-link" href="{0}">{0}</a>
+cbcIdNotFound.p4=Unwaith i ni gael ei fanylion neu ei gadarnhad, gallwch ddychwelyd yma a gwneud cais am awdurdodiad.
+
+cbcNotFound.p1=Gallwch fynd yn ôl a nodi cyfeiriad e-bost eich cleient ar gyfer CBC eto.
+cbcNotFound.p2=Os yw’r broblem yn parhau, gofynnwch i’ch cleient wirio a yw ei fanylion yn gyfredol gan ddefnyddio’r gwasanaeth ar gyfer cyflwyno adroddiadau gwlad wrth wlad.
+cbcNotFound.p3=Gall eich cleient ddefnyddio’r cysylltiad hwn i fewngofnodi: <a class="govuk-link" href="{0}">{0}</a>
+cbcNotFound.p4=Unwaith i ni gael ei fanylion neu ei gadarnhad, gallwch ddychwelyd yma a gwneud cais am awdurdodiad.
 
 # ________________________________________________________________________________
 # Client already mapped

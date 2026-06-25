@@ -44,6 +44,7 @@ class AppConfig @Inject()(servicesConfig: ServicesConfig, config: Configuration)
 
   val subscriptionUrl: String = getConfString("agent-subscription-frontend.subscription-url")
   val clientLinkBaseUrl: String = s"$baseUrl/agent-client-relationships/appoint-someone-to-deal-with-HMRC-for-you"
+  val countryByCountryReportingUrl: String = "https://www.tax.service.gov.uk/register-to-send-a-country-by-country-report"
   private val feedbackSurveyUrl: String = getConfString("feedback-frontend.external-url")
   def surveyUrl(isAgent: Boolean): String = {
     if isAgent then s"$feedbackSurveyUrl/$agentOriginToken"

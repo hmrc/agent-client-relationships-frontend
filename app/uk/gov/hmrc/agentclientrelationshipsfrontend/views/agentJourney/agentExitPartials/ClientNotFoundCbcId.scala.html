@@ -1,5 +1,5 @@
 @*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,15 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.AgentJourneyRequest
-@import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.routes
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.routes
+@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.AgentJourneyRequest
 
 @this(govukButton: GovukButton)
 
 @()(implicit request: AgentJourneyRequest[?], messages: Messages, appConfig: AppConfig)
 
-@key = @{"cbcNotFound"}
+@key = @{"cbcIdNotFound"}
 <p class="govuk-body">@messages(s"$key.p1")</p>
 <p class="govuk-body">@messages(s"$key.p2")</p>
 <p class="govuk-body">@Html(messages(s"$key.p3", appConfig.countryByCountryReportingUrl))</p>
