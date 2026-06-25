@@ -224,6 +224,17 @@ class EnterClientIdControllerISpec extends ComponentSpecHelper with AuthStubs :
       updatedJourney shouldBe Some(expectedJourneyWithUKServiceName)
 
 
+    "redirect to client-not-found-cbc-id when submitting a CBC ID with no matching client enrolment" in :
+      authoriseAsAgent()
+      stubGet(getClientDetailsUrl("HMRC-CBC-ORG", exampleCbcId), NOT_FOUND, "")
+      await(journeyService.saveJourney(businessAuthorisationRequestJourney.copy(clientService = Some("HMRC-CBC-ORG"))))
+      val result = post(routes.EnterClientIdController.onSubmit(AgentJourneyType.AuthorisationRequest).url)(Map(
+        "cbcId" -> Seq(exampleCbcId)
+      ))
+      result.status shouldBe SEE_OTHER
+      result.header("Location").value shouldBe routes.JourneyExitController.show(AgentJourneyType.AuthorisationRequest, JourneyExitType.NotFoundCbcId).url
+
+
     "show an error when no selection is made" in :
       authoriseAsAgent()
       await(journeyService.saveJourney(personalAuthorisationRequestJourney.copy(clientService = Some("HMRC-MTD-IT"))))
@@ -298,7 +309,7 @@ class EnterClientIdControllerISpec extends ComponentSpecHelper with AuthStubs :
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe routes.EnterClientFactController.show(AgentCancelAuthorisation).url
 
-    "redirect to the journey exit when the clientDetailsResponse from the API was empty" in :
+    "redirect to client-not-found-cbc-id when the CBC clientDetailsResponse from the API was empty" in :
       authoriseAsAgent()
       stubGet(getClientDetailsUrl("HMRC-CBC-ORG", exampleCbcId), NOT_FOUND, "")
       await(journeyService.saveJourney(businessAgentCancelAuthorisationJourney.copy(clientService = Some("HMRC-CBC-ORG"))))
@@ -306,4 +317,4 @@ class EnterClientIdControllerISpec extends ComponentSpecHelper with AuthStubs :
         getFieldName("HMRC-CBC-ORG") -> Seq(exampleCbcId)
       ))
       result.status shouldBe SEE_OTHER
-      result.header("Location").value shouldBe routes.JourneyExitController.show(AgentCancelAuthorisation, JourneyExitType.NotFound).url
+      result.header("Location").value shouldBe routes.JourneyExitController.show(AgentCancelAuthorisation, JourneyExitType.NotFoundCbcId).url
