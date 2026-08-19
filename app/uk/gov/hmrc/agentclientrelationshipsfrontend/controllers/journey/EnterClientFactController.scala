@@ -51,12 +51,6 @@ class EnterClientFactController @Inject()(mcc: MessagesControllerComponents,
         location = appConfig.isoCountryListLocation
       )
       knownFactType.fieldConfiguration.copy(validOptions = Some(countries.toSeq))
-    else if knownFactType == KnownFactType.Country then
-      val countries = countryNamesLoader.load(
-        namesAsValues = true,
-        location = appConfig.citizenDetailsCountryListLocation
-      )
-      knownFactType.fieldConfiguration.copy(validOptions = Some(countries.toSeq))
     else
       knownFactType.fieldConfiguration
 
