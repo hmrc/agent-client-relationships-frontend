@@ -74,7 +74,6 @@ class AppConfig @Inject()(servicesConfig: ServicesConfig, config: Configuration)
   val clientOriginToken = "INVITCLIENT"
 
   val isoCountryListLocation: String = servicesConfig.getString("country.list.location")
-  val citizenDetailsCountryListLocation: String = servicesConfig.getString("citizen-details.country.list.location")
 
   private def getString(key: String) = servicesConfig.getString(key)
 
