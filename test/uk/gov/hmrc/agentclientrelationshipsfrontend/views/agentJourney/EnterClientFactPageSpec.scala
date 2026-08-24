@@ -19,7 +19,6 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.views.agentJourney
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.twirl.api.HtmlFormat
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.KnownFactType.Country
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.EnterClientFactForm
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsResponse, KnownFactType}
@@ -40,7 +39,6 @@ class EnterClientFactPageSpec extends ViewSpecSupport {
                             )
 
   private def testCountries(knownFactType: KnownFactType): Seq[(String, String)] = knownFactType match {
-    case Country => Seq(("France", "France"), ("Germany", "Germany"))
     case _ => Seq(("FR", "France"), ("DE", "Germany"))
   }
 

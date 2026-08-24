@@ -19,7 +19,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.views.agentJourney.clientFa
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.twirl.api.HtmlFormat
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.KnownFactType.{Country, CountryCode}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.KnownFactType.CountryCode
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.EnterClientFactForm
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{ClientDetailsResponse, KnownFactType}
@@ -30,49 +30,45 @@ class CountrySpec extends ViewSpecSupport {
 
   val viewTemplate: EnterClientFactPage = app.injector.instanceOf[EnterClientFactPage]
 
-  def testCountries(knownFactType: KnownFactType): Seq[(String, String)] = knownFactType match {
-    case CountryCode => Seq(("FR", "France"), ("DE", "Germany"))
-    case Country => Seq(("France", "France"), ("Germany", "Germany"))
-  }
+  val testCountries: Seq[(String, String)] = Seq(("FR", "France"), ("DE", "Germany"))
 
   private val authorisationRequestJourney: AgentJourney = AgentJourney(AgentJourneyType.AuthorisationRequest)
   private val agentCancelAuthorisationJourney: AgentJourney = AgentJourney(AgentJourneyType.AgentCancelAuthorisation)
 
   List(authorisationRequestJourney, agentCancelAuthorisationJourney).foreach(j =>
-    List(CountryCode, Country).foreach(c =>
-      s"EnterClientFactPage for ${c.toString} ${j.journeyType.toString} view" should {
-        implicit val journeyRequest: AgentJourneyRequest[?] = new AgentJourneyRequest(
-          "",
-          j.copy(
-            clientService = Some("HMRC-CGT-PD"),
-            clientDetailsResponse = Some(ClientDetailsResponse("", None, None, Nil, Some(KnownFactType.CountryCode), false, None))
-          ),
-          request
+    s"EnterClientFactPage for ${CountryCode.toString} ${j.journeyType.toString} view" should {
+      implicit val journeyRequest: AgentJourneyRequest[?] = new AgentJourneyRequest(
+        "",
+        j.copy(
+          clientService = Some("HMRC-CGT-PD"),
+          clientDetailsResponse = Some(ClientDetailsResponse("", None, None, Nil, Some(KnownFactType.CountryCode), false, None))
+        ),
+        request
+      )
+      val options = testCountries
+      val field = CountryCode.fieldConfiguration.copy(validOptions = Some(options))
+      val form = EnterClientFactForm.form(
+        field,
+        "HMRC-CGT-PD"
+      )
+      val view: HtmlFormat.Appendable = viewTemplate(form, field)
+      val doc: Document = Jsoup.parse(view.body)
+      "have a select element" in {
+        doc.select("select").size() shouldBe 1
+      }
+      "render a select element with country options" in {
+        val expectedElement = TestSelect(
+          "countryCode",
+          Seq(("", "")) ++ options
         )
-        val options = testCountries(c)
-        val field = c.fieldConfiguration.copy(validOptions = Some(options))
-        val form = EnterClientFactForm.form(
-          field,
-          "HMRC-CGT-PD"
-        )
-        val view: HtmlFormat.Appendable = viewTemplate(form, field)
-        val doc: Document = Jsoup.parse(view.body)
-        "have a select element" in {
-          doc.select("select").size() shouldBe 1
-        }
-        "render a select element with country options" in {
-          val expectedElement = TestSelect(
-            "countryCode",
-            Seq(("", "")) ++ options
-          )
-          doc.extractSelectElement().value shouldBe expectedElement
-        }
-        "render an error message when form has errors" in {
-          val formWithErrors = form.bind(Map("countryCode" -> "invalid"))
-          val viewWithErrors: HtmlFormat.Appendable = viewTemplate(formWithErrors, field)
-          val docWithErrors: Document = Jsoup.parse(viewWithErrors.body)
-          docWithErrors.select("p.govuk-error-message").text() shouldBe "Error: Enter the country of your client’s contact address"
-        }
-      })
+        doc.extractSelectElement().value shouldBe expectedElement
+      }
+      "render an error message when form has errors" in {
+        val formWithErrors = form.bind(Map("countryCode" -> "invalid"))
+        val viewWithErrors: HtmlFormat.Appendable = viewTemplate(formWithErrors, field)
+        val docWithErrors: Document = Jsoup.parse(viewWithErrors.body)
+        docWithErrors.select("p.govuk-error-message").text() shouldBe "Error: Enter the country of your client’s contact address"
+      }
+    }
   )
 }
