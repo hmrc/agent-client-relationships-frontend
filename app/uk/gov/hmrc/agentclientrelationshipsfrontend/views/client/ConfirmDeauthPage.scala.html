@@ -15,7 +15,6 @@
  *@
 
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.*
-@import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.routes
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.Authorisation
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.Layout
@@ -28,7 +27,7 @@
         formWithCSRF: FormWithCSRF
 )
 
-@(form: Form[Boolean], authorisation: Authorisation)(implicit request: Request[?], messages: Messages, appConfig: AppConfig)
+@(form: Form[Boolean], authorisation: Authorisation)(implicit request: Request[?], messages: Messages)
 
 @key = @{ConfirmDeauthFieldName}
 @taxServiceName = @{messages(authorisation.service)}

@@ -14,13 +14,13 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.routes
 @import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl
 
 @this()
 
-@(continueUrl: Option[RedirectUrl])(implicit request: Request[?], messages: Messages, appConfig: AppConfig)
+@(continueUrl: Option[RedirectUrl])(implicit messages: Messages)
+
 @key = @{
     "cannotFindAuthRequest"
 }

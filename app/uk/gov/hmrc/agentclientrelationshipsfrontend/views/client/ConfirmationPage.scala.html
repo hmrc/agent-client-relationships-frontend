@@ -16,7 +16,6 @@
 
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.Layout
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.models.AgentCancelAuthorisationResponse
-@import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.routes
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.{routes => clientRoutes}
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.ClientJourneyRequest
@@ -27,7 +26,7 @@
         govukPanel: GovukPanel
 )
 
-@(authorisationRequestInfo: AuthorisationRequestInfoForClient, invitationAccepted: Boolean)(implicit request: ClientJourneyRequest[?], messages: Messages, appConfig: AppConfig)
+@(authorisationRequestInfo: AuthorisationRequestInfoForClient, invitationAccepted: Boolean)(implicit request: ClientJourneyRequest[?], messages: Messages)
 
 @key = @{"clientConfirmation"}
 @decisionKey = @{

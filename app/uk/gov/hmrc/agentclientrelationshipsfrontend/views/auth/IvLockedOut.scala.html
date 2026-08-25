@@ -14,7 +14,6 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.*
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.components.*
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
@@ -24,7 +23,7 @@
         h1: h1
 )
 
-@()(implicit request: Request[?], messages: Messages, appConfig: AppConfig)
+@()(implicit request: Request[?], messages: Messages)
 
 @layout(
     pageTitle = messages("locked-out.header"),

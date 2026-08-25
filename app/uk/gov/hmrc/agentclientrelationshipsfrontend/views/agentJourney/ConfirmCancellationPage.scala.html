@@ -14,7 +14,6 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.Layout
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.components.SubmitButton
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey.routes
@@ -30,7 +29,7 @@
         submitButton: SubmitButton
 )
 
-@(form: Form[Boolean])(implicit request: AgentJourneyRequest[?], messages: Messages, appConfig: AppConfig)
+@(form: Form[Boolean])(implicit request: AgentJourneyRequest[?], messages: Messages)
 
 @key = @{
     "confirmCancellation"

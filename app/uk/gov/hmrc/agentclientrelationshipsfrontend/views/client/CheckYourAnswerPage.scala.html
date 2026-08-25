@@ -17,7 +17,6 @@
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.Layout
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.ClientJourneyRequest
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.routes
-@import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 
 @this(
         layout: Layout,
@@ -26,7 +25,7 @@
         formWithCSRF: FormWithCSRF
 )
 
-@()(implicit request: ClientJourneyRequest[?], messages: Messages, appConfig: AppConfig)
+@()(implicit request: ClientJourneyRequest[?], messages: Messages)
 
 @key = @{
     "checkYourAnswer"

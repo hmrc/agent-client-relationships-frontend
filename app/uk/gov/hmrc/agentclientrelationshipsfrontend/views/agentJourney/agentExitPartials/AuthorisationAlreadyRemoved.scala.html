@@ -14,11 +14,9 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.AgentJourneyRequest
-
 @this()
 
-@()(implicit request: AgentJourneyRequest[?], messages: Messages)
+@()(implicit messages: Messages)
 @key = @{"authorisationAlreadyRemoved"}
 
 <p class="govuk-body">@messages(s"$key.p1")</p>
