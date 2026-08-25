@@ -30,4 +30,4 @@ object RequestSupport:
 
   private object HcProvider
     extends FrontendHeaderCarrierProvider:
-    def headerCarrier(using request: RequestHeader): HeaderCarrier = this.hc(request)
+    def headerCarrier(using request: RequestHeader): HeaderCarrier = this.hc(using request)
