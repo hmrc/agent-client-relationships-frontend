@@ -72,7 +72,7 @@ class DeclineRequestControllerISpec extends ComponentSpecHelper with AuthStubs w
 
   override def beforeEach(): Unit = {
     super.beforeEach()
-    await(journeyService.deleteAllAnswersInSession(request))
+    await(journeyService.deleteAllAnswersInSession(using request))
   }
 
   "GET /authorisation-response/:uid/:taxService/confirm-decline" should :

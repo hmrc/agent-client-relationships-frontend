@@ -40,7 +40,7 @@ class ConfirmConsentControllerISpec extends ComponentSpecHelper with AuthStubs w
     lastModifiedDate = Some(Instant.parse("2024-12-01T12:00:00Z"))
   )
   override def beforeEach(): Unit = {
-    await(journeyService.deleteAllAnswersInSession(request))
+    await(journeyService.deleteAllAnswersInSession(using request))
     super.beforeEach()
   }
 

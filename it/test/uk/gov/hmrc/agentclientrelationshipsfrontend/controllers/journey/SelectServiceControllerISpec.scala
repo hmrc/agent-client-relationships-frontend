@@ -56,7 +56,7 @@ class SelectServiceControllerISpec extends ComponentSpecHelper with AuthStubs {
   val journeyService: AgentJourneyService = app.injector.instanceOf[AgentJourneyService]
 
   override def beforeEach(): Unit = {
-    await(journeyService.deleteAllAnswersInSession(request))
+    await(journeyService.deleteAllAnswersInSession(using request))
     super.beforeEach()
   }
 

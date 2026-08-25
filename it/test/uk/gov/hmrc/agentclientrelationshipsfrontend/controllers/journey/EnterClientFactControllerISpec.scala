@@ -60,7 +60,7 @@ class EnterClientFactControllerISpec extends ComponentSpecHelper with AuthStubs:
   val journeyService: AgentJourneyService = app.injector.instanceOf[AgentJourneyService]
 
   override def beforeEach(): Unit = {
-    await(journeyService.deleteAllAnswersInSession(request))
+    await(journeyService.deleteAllAnswersInSession(using request))
     super.beforeEach()
   }
 
@@ -143,8 +143,8 @@ class EnterClientFactControllerISpec extends ComponentSpecHelper with AuthStubs:
       post(routes.EnterClientFactController.onSubmit(AgentJourneyType.AuthorisationRequest).url)(Map(
         "postcode" -> Seq(testPostcode)
       ))
-      val updatedJourney = await(journeyService.getJourney(request))
-      updatedJourney.get.clientConfirmed shouldBe None
+      val updatedJourney = await(journeyService.getJourney(using request))
+      updatedJourney.get.clientConfirmed `shouldBe` None
 
     "leave existing answers intact when submitting the same answer" in :
       authoriseAsAgent()
@@ -152,8 +152,8 @@ class EnterClientFactControllerISpec extends ComponentSpecHelper with AuthStubs:
       post(routes.EnterClientFactController.onSubmit(AgentJourneyType.AuthorisationRequest).url)(Map(
         "postcode" -> Seq(testPostcode)
       ))
-      val updatedJourney = await(journeyService.getJourney(request))
-      updatedJourney.get.clientConfirmed shouldBe Some(true)
+      val updatedJourney = await(journeyService.getJourney(using request))
+      updatedJourney.get.clientConfirmed `shouldBe` Some(true)
 
     "show an error when no selection is made" in :
       authoriseAsAgent()
@@ -237,8 +237,8 @@ class EnterClientFactControllerISpec extends ComponentSpecHelper with AuthStubs:
       post(routes.EnterClientFactController.onSubmit(AgentJourneyType.AgentCancelAuthorisation).url)(Map(
         "postcode" -> Seq(testPostcode)
       ))
-      val updatedJourney = await(journeyService.getJourney(request))
-      updatedJourney.get.clientConfirmed shouldBe None
+      val updatedJourney = await(journeyService.getJourney(using request))
+      updatedJourney.get.clientConfirmed `shouldBe` None
 
     "leave existing answers intact when submitting the same answer" in :
       authoriseAsAgent()
@@ -246,8 +246,8 @@ class EnterClientFactControllerISpec extends ComponentSpecHelper with AuthStubs:
       post(routes.EnterClientFactController.onSubmit(AgentJourneyType.AgentCancelAuthorisation).url)(Map(
         "postcode" -> Seq(testPostcode)
       ))
-      val updatedJourney = await(journeyService.getJourney(request))
-      updatedJourney.get.clientConfirmed shouldBe Some(true)
+      val updatedJourney = await(journeyService.getJourney(using request))
+      updatedJourney.get.clientConfirmed `shouldBe` Some(true)
 
     "show an error when no selection is made" in :
       authoriseAsAgent()

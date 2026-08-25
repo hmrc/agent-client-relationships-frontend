@@ -36,7 +36,7 @@ class DoYouAlreadyManageControllerISpec extends ComponentSpecHelper with ScalaFu
   val journeyService: AgentJourneyService = app.injector.instanceOf[AgentJourneyService]
 
   override def beforeEach(): Unit = {
-    await(journeyService.deleteAllAnswersInSession(request))
+    await(journeyService.deleteAllAnswersInSession(using request))
     super.beforeEach()
   }
 
