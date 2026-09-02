@@ -25,7 +25,7 @@ import scala.util.{Failure, Success, Try}
 object DateFormFieldHelper {
 
   def dateFieldMapping(formMessageKey: String): Mapping[String] = {
-    of(new LocalDateFormatter(formMessageKey)).transform(
+    of(using new LocalDateFormatter(formMessageKey)).transform(
       date => date.toString,
       dateString => Try(LocalDate.parse(dateString)) match {
         case Success(parsedDate) => parsedDate

@@ -51,7 +51,7 @@ class TestOnlyController @Inject()(mcc: MessagesControllerComponents,
   }
 
   def journeySetup(journey: String): Action[AnyContent] = Action.async:
-    request =>
+    _ =>
       journey match
         case "create-invitation" => Future.successful(Redirect(journeyRoutes.StartJourneyController.startJourney(AuthorisationRequest)))
         case "myta" => Future.successful(Redirect("/manage-your-tax-agents"))

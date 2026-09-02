@@ -18,7 +18,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.support
 
 trait Selectors {
   // Outside main-content
-  val languageSwitcher = ".hmrc-language-select"
+  val languageSwitcher = ".hmrc-service-navigation-language-select"
   val main = "#main-content"
 
   // Inside main-content

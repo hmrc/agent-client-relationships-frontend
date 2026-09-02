@@ -14,12 +14,11 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.routes
 
 @this()
 
-@(serviceKey: String)(implicit messages: Messages, appConfig: AppConfig, request: RequestHeader)
+@(serviceKey: String)(implicit messages: Messages, request: RequestHeader)
 @key = @{"agentSuspended"}
 
 @isSignedIn = @{

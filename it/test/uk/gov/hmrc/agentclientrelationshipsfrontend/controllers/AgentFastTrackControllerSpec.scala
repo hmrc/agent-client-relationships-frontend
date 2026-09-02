@@ -199,7 +199,7 @@ class AgentFastTrackControllerSpec extends ComponentSpecHelper with AuthStubs wi
   val serviceConfig: ClientServiceConfigurationService = app.injector.instanceOf[ClientServiceConfigurationService]
 
   override def beforeEach(): Unit = {
-    await(journeyService.deleteAllAnswersInSession(request))
+    await(journeyService.deleteAllAnswersInSession(using request))
     super.beforeEach()
   }
   
@@ -218,7 +218,7 @@ class AgentFastTrackControllerSpec extends ComponentSpecHelper with AuthStubs wi
         case _ => result.header("Location").value shouldBe journeyRoutes.ConfirmClientController.show(journeyType).url
       }
 
-      whenReady(journeyService.getJourney()) { result =>
+      whenReady(journeyService.getJourney(using request)) { result =>
         result should contain(toJourney(fastTrackFormData, clientDetailsResponse))
       }
     })
@@ -238,7 +238,7 @@ class AgentFastTrackControllerSpec extends ComponentSpecHelper with AuthStubs wi
         case _ => result.header("Location").value shouldBe journeyRoutes.EnterClientFactController.show(journeyType).url
       }
 
-      whenReady(journeyService.getJourney()) { result =>
+      whenReady(journeyService.getJourney(using request)) { result =>
         result should contain(toJourney(fastTrackFormData, clientDetailsResponse))
       }
     })
@@ -255,7 +255,7 @@ class AgentFastTrackControllerSpec extends ComponentSpecHelper with AuthStubs wi
 
       result.header("Location").value shouldBe journeyRoutes.JourneyExitController.show(journeyType, serviceConfig.getNotFoundError(journeyType, fastTrackFormData.service)).url
 
-      whenReady(journeyService.getJourney()) { result =>
+      whenReady(journeyService.getJourney(using request)) { result =>
         result should contain(toJourney(fastTrackFormData, clientDetailsResponse).copy(knownFact = None))
       }
     })
@@ -271,7 +271,7 @@ class AgentFastTrackControllerSpec extends ComponentSpecHelper with AuthStubs wi
 
       result.header("Location").value shouldBe journeyRoutes.JourneyExitController.show(journeyType, serviceConfig.getNotFoundError(journeyType, fastTrackFormData.service)).url
 
-      whenReady(journeyService.getJourney()) { result =>
+      whenReady(journeyService.getJourney(using request)) { result =>
         result should contain(toJourney(fastTrackFormData, clientDetailsResponse).copy(knownFact = None))
       }
     })
@@ -284,7 +284,7 @@ class AgentFastTrackControllerSpec extends ComponentSpecHelper with AuthStubs wi
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe journeyRoutes.StartJourneyController.startJourney(journeyType).url
 
-      whenReady(journeyService.getJourney()) { result =>
+      whenReady(journeyService.getJourney(using request)) { result =>
         result shouldBe None
       }
     })
@@ -296,7 +296,7 @@ class AgentFastTrackControllerSpec extends ComponentSpecHelper with AuthStubs wi
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe journeyRoutes.StartJourneyController.startJourney(journeyType).url
 
-      whenReady(journeyService.getJourney()) { result =>
+      whenReady(journeyService.getJourney(using request)) { result =>
         result shouldBe None
       }
     })
@@ -309,7 +309,7 @@ class AgentFastTrackControllerSpec extends ComponentSpecHelper with AuthStubs wi
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe s"${errorURLRedirect._2}?issue=INVALID_CLIENT_ID_RECEIVED:FAKECLIENTID"
 
-      whenReady(journeyService.getJourney()) { result =>
+      whenReady(journeyService.getJourney(using request)) { result =>
         result shouldBe None
       }
     })
@@ -322,7 +322,7 @@ class AgentFastTrackControllerSpec extends ComponentSpecHelper with AuthStubs wi
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe s"${errorURLRedirect._2}?issue=UNSUPPORTED_SERVICE"
 
-      whenReady(journeyService.getJourney()) { result =>
+      whenReady(journeyService.getJourney(using request)) { result =>
         result shouldBe None
       }
     })
@@ -335,7 +335,7 @@ class AgentFastTrackControllerSpec extends ComponentSpecHelper with AuthStubs wi
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe s"${errorURLRedirect._2}?issue=UNSUPPORTED_CLIENT_ID_TYPE"
 
-      whenReady(journeyService.getJourney()) { result =>
+      whenReady(journeyService.getJourney(using request)) { result =>
         result shouldBe None
       }
     })
@@ -347,7 +347,7 @@ class AgentFastTrackControllerSpec extends ComponentSpecHelper with AuthStubs wi
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe s"${errorURLRedirect._2}?issue=INVALID_SUBMISSION"
 
-      whenReady(journeyService.getJourney()) { result =>
+      whenReady(journeyService.getJourney(using request)) { result =>
         result shouldBe None
       }
     })
@@ -359,7 +359,7 @@ class AgentFastTrackControllerSpec extends ComponentSpecHelper with AuthStubs wi
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe s"${errorURLRedirect._2}?issue=INVALID_SUBMISSION"
 
-      whenReady(journeyService.getJourney()) { result =>
+      whenReady(journeyService.getJourney(using request)) { result =>
         result shouldBe None
       }
     })

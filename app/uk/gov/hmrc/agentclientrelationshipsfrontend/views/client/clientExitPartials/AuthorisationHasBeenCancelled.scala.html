@@ -14,7 +14,6 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.{routes => clientRoutes}
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.routes
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.DisplayDate.displayInstant
@@ -23,7 +22,7 @@
 
 @this()
 
-@(expiryDate: Option[Instant], serviceKey: String)(implicit messages: Messages, appConfig: AppConfig, request: Request[AnyContent])
+@(expiryDate: Option[Instant], serviceKey: String)(implicit messages: Messages, request: Request[AnyContent])
 
 @key = @{"authorisationRequestCancelled"}
 @date = @{expiryDate.getOrElse(throw new RuntimeException("Expiry date is missing"))}

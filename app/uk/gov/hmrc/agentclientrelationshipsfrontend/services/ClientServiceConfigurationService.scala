@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.agentclientrelationshipsfrontend.services
 
-import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.ClientDetailsResponse
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientType
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientType.{business, personal, trust}
@@ -27,7 +26,7 @@ import javax.inject.{Inject, Singleton}
 import scala.collection.immutable.ListMap
 
 @Singleton
-class ClientServiceConfigurationService @Inject()(implicit appConfig: AppConfig) extends ServiceConstants {
+class ClientServiceConfigurationService @Inject() extends ServiceConstants {
 
   def orderedClientTypes: Seq[String] = Seq("personal", "business", "trust")
 

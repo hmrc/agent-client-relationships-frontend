@@ -49,7 +49,7 @@ object UrlHelper {
         val unsafeUrl = redirectUrl.get(UnsafePermitAll).url
         if (RedirectUrl.isRelativeUrl(unsafeUrl)) Some(unsafeUrl)
         else redirectUrl.getEither(AbsoluteWithHostnameFromAllowlist(appConfig.allowedRedirectHosts)).toOption.map(_.url)
-      case Failure(e) => None
+      case Failure(_) => None
     }
   }
 

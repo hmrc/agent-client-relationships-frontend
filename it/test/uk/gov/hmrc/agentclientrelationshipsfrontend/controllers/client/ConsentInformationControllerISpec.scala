@@ -68,7 +68,7 @@ class ConsentInformationControllerISpec extends ComponentSpecHelper with ScalaFu
   val journeyService: ClientJourneyService = app.injector.instanceOf[ClientJourneyService]
 
   override def beforeEach(): Unit = {
-    await(journeyService.deleteAllAnswersInSession(request))
+    await(journeyService.deleteAllAnswersInSession(using request))
     super.beforeEach()
   }
 

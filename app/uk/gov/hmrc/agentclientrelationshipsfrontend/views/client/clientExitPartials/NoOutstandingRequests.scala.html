@@ -14,14 +14,10 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.client.routes
 
 @this()
 
-@()(implicit messages: Messages, appConfig: AppConfig)
-@key = @{
-    "noOutstandingRequests"
-}
+@()(implicit messages: Messages)
 
-<p class="govuk-body">@Html(messages(s"$key.p1", s"${routes.ManageYourTaxAgentsController.show.url}#history"))</p>
+<p class="govuk-body">@Html(messages("noOutstandingRequests.p1", s"${routes.ManageYourTaxAgentsController.show.url}#history"))</p>

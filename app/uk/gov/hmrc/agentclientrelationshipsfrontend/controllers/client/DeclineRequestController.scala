@@ -22,7 +22,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.connectors.AgentClientRelationshipsConnector
-import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{InvitationAgentSuspendedError, InvitationOrAgentNotFoundError, client}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.models.{InvitationAgentSuspendedError, InvitationOrAgentNotFoundError}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.{Cancelled, Expired, Pending, Rejected}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientExitType.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.client.DeclineRequestForm
@@ -79,7 +79,7 @@ class DeclineRequestController @Inject()(mcc: MessagesControllerComponents,
             val form = DeclineRequestForm.form(response.agentName)
             clientJourneyService.saveJourney(newJourney).map(_ => response.status match {
               case Pending =>
-                Ok(declineRequestView(form, agentRole, uid, taxService)(updatedRequest, request2Messages, appConfig))
+                Ok(declineRequestView(form, agentRole, uid, taxService)(using updatedRequest, request2Messages, appConfig))
               case Expired =>
                 Redirect(routes.ClientExitController.showJourneyExit(AuthorisationRequestExpired))
               case Cancelled =>

@@ -14,7 +14,6 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.*
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.components.*
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
@@ -25,7 +24,7 @@
         h1: h1
 )
 
-@(tryAgainUrl: Option[String])(implicit request: Request[?], messages: Messages, appConfig: AppConfig)
+@(tryAgainUrl: Option[String])(implicit request: Request[?], messages: Messages)
 
 @layout(
     pageTitle = messages("cannot-confirm-identity.header"),

@@ -58,7 +58,7 @@ class ClientExitControllerISpec extends ComponentSpecHelper with AuthStubs {
   )
 
   override def beforeEach(): Unit = {
-    await(journeyService.deleteAllAnswersInSession(request))
+    await(journeyService.deleteAllAnswersInSession(using request))
     super.beforeEach()
   }
 

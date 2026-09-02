@@ -51,7 +51,7 @@ class AgentClientRelationshipsService @Inject()(agentClientRelationshipsConnecto
     agentClientRelationshipsConnector.getAuthorisationRequest(invitationId)
   }
 
-  def getAuthorisationRequestForClient(invitationId: String)(implicit hc: HeaderCarrier, request: ClientJourneyRequest[?]): Future[Option[AuthorisationRequestInfoForClient]] = {
+  def getAuthorisationRequestForClient(invitationId: String)(implicit hc: HeaderCarrier): Future[Option[AuthorisationRequestInfoForClient]] = {
     agentClientRelationshipsConnector.getAuthorisationRequestForClient(invitationId)
   }
 
@@ -59,7 +59,7 @@ class AgentClientRelationshipsService @Inject()(agentClientRelationshipsConnecto
     agentClientRelationshipsConnector.getAgentDetails()
   }
 
-  def agentCancelInvitation(invitationId: String)(implicit hc: HeaderCarrier, request: AgentRequest[?]): Future[Unit] = {
+  def agentCancelInvitation(invitationId: String)(implicit hc: HeaderCarrier): Future[Unit] = {
     agentClientRelationshipsConnector.cancelInvitation(invitationId)
   }
 

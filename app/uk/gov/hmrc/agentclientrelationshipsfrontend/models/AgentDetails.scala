@@ -33,8 +33,8 @@ object AgentDetails {
   }
 
   private val reads: Reads[AgentDetails] = (
-    (__ \ "agencyDetails" \ "agencyName").read(optionalReads("Agency name")).orElse(Reads.pure("")) and
-      (__ \ "agencyDetails" \ "agencyEmail").read(optionalReads("Agency email")).orElse(Reads.pure(""))
+    (__ \ "agencyDetails" \ "agencyName").read(using optionalReads("Agency name")).orElse(Reads.pure("")) and
+      (__ \ "agencyDetails" \ "agencyEmail").read(using optionalReads("Agency email")).orElse(Reads.pure(""))
   )(AgentDetails.apply)
 
   private val writes: Writes[AgentDetails] = Json.writes[AgentDetails]
