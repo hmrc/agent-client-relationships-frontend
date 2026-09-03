@@ -18,6 +18,8 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.models.client
 
 import play.api.Logging
 import play.api.libs.json.*
+import uk.gov.hmrc.agentclientrelationshipsfrontend.support.NoRequest
+import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.RequestAwareLogging
 
 sealed trait InvitationStatus
 
@@ -35,7 +37,7 @@ case object DeAuthorised extends InvitationStatus
 
 case object PartialAuth extends InvitationStatus
 
-object InvitationStatus extends Logging {
+object InvitationStatus extends RequestAwareLogging {
 
   def apply(status: String): InvitationStatus = status.toLowerCase match {
     case "pending"      => Pending
@@ -46,7 +48,7 @@ object InvitationStatus extends Logging {
     case "deauthorised" => DeAuthorised
     case "partialauth"  => PartialAuth
     case value =>
-      logger.warn(s"Status of [$value] is not a valid InvitationStatus")
+      logger.warn(s"Status of [$value] is not a valid InvitationStatus")(using NoRequest)
       throw new IllegalArgumentException
   }
 
