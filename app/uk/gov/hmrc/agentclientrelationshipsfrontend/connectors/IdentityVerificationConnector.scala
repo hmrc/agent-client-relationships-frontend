@@ -18,8 +18,10 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.connectors
 
 import play.api.Logging
 import play.api.http.Status.*
+import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.RequestAwareLogging
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.IvResult
+import uk.gov.hmrc.agentclientrelationshipsfrontend.support.NoRequest
 import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.HttpAPIMonitor
 import uk.gov.hmrc.http.*
 import uk.gov.hmrc.http.HttpReads.Implicits.*
@@ -34,7 +36,7 @@ class IdentityVerificationConnector @Inject()(http: HttpClientV2)
                                              (implicit appConfig: AppConfig,
                                               val metrics: Metrics,
                                               val ec: ExecutionContext)
-  extends HttpAPIMonitor with Logging {
+  extends HttpAPIMonitor with RequestAwareLogging {
 
   private[connectors] def getIVResultUrl(journeyId: String) =
     s"${appConfig.ivFrontendBaseUrl}/mdtp/journey/journeyId/$journeyId"
@@ -48,7 +50,7 @@ class IdentityVerificationConnector @Inject()(http: HttpClientV2)
           response.status match {
             case OK =>
               val result = (response.json \ "result").as[IvResult]
-              logger.warn(s"identity verification returned result $result for journeyId $journeyId")
+              logger.warn(s"identity verification returned result $result for journeyId $journeyId")(using NoRequest)
               Some(result)
             case NOT_FOUND => None
           }

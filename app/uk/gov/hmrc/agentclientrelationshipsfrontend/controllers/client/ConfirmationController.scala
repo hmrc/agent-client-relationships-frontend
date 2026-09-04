@@ -20,6 +20,7 @@ import com.google.inject.{Inject, Singleton}
 import play.api.Logging
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.RequestAwareLogging
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.AgentClientRelationshipsService
@@ -35,7 +36,7 @@ class ConfirmationController @Inject()(mcc: MessagesControllerComponents,
                                        confirmationPage: ConfirmationPage
                                       )
                                       (implicit ec: ExecutionContext,
-                                       appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport with Logging:
+                                       appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport with RequestAwareLogging:
 
   def show: Action[AnyContent] = actions.clientJourneyRequired.async:
     implicit request =>

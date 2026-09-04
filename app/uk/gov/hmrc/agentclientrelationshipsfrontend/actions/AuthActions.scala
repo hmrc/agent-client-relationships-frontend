@@ -19,6 +19,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.actions
 import play.api.Logging
 import play.api.mvc.Results.*
 import play.api.mvc.{ActionFunction, Request, Result, WrappedRequest}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.utils.RequestAwareLogging
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.{AsAgent, HMRCCGTPD, HMRCMTDIT}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.routes
@@ -47,7 +48,7 @@ class AuthActions @Inject()(val authConnector: AuthConnector,
                             appConfig: AppConfig,
                             serviceConfig: ClientServiceConfigurationService
                            )(implicit ec: ExecutionContext)
-  extends AuthorisedFunctions with Logging {
+  extends AuthorisedFunctions with RequestAwareLogging {
 
   private val requiredCL = ConfidenceLevel.L250
 
