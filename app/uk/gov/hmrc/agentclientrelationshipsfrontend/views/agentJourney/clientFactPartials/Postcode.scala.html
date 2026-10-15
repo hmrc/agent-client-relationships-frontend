@@ -31,14 +31,9 @@
         form: Form[String],
         field: KnownFactsConfiguration,
         messageKeyPrefix: String
-)(implicit
-        request: AgentJourneyRequest[?],
-        messages: Messages
-)
+)(implicit request: AgentJourneyRequest[?], messages: Messages)
 
-@key = @{
-    messageKeyPrefix
-}
+@key = @{messageKeyPrefix}
 @formWithCSRF(action = routes.EnterClientFactController.onSubmit(request.journey.journeyType)) {
 
     @govukInput(Input(

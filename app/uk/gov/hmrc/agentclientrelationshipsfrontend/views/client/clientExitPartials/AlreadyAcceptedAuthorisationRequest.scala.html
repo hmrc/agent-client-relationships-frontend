@@ -22,9 +22,7 @@
 @this()
 
 @(respondedToDate: Option[Instant])(implicit messages: Messages, request: Request[AnyContent])
-@key = @{
-   "authorisationAlreadyAccepted"
-}
+@key = @{"authorisationAlreadyAccepted"}
 @date = @{respondedToDate.getOrElse(throw new RuntimeException("Responded to date is missing"))}
 
 <p class="govuk-body">@messages(s"$key.p1", displayInstant(date))</p>
