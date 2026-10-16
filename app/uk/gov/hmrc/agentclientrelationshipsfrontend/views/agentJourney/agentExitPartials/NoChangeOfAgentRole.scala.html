@@ -22,7 +22,7 @@
 @()(implicit request: AgentJourneyRequest[?], messages: Messages)
 
 @govukButton(Button(
- id = Some("showClientTypeButton"),
- href = Some(routes.StartJourneyController.startJourney(request.journey.journeyType).url),
- content = Text(messages("start-again.button"))
+    id = Some("showClientTypeButton"),
+    href = Some(routes.StartJourneyController.startJourney(request.journey.journeyType).url),
+    content = Text(messages("start-again.button"))
 ))
