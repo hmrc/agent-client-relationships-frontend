@@ -27,9 +27,7 @@
 
 @()(implicit request: ClientJourneyRequest[?], messages: Messages)
 
-@key = @{
-    "checkYourAnswer"
-}
+@key = @{"checkYourAnswer"}
 @journey = @{request.journey}
 @serviceKey = @{journey.getServiceKey}
 @agentName = @{journey.getAgentName}

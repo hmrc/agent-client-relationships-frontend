@@ -33,12 +33,12 @@
 <ul class="govuk-list">
     <li>
         <a class="govuk-link govuk-!-margin-bottom-4" href="@{routes.SignOutController.signOut(continueUrl = continueUrl, isAgent = false).url}">
-        @messages(s"$key.signIn")
+            @messages(s"$key.signIn")
         </a>
     </li>
     <li>
         <a class="govuk-link" href="@{routes.SignOutController.signOut(isAgent = false).url}">
-        @messages(s"$key.signOut")
+            @messages(s"$key.signOut")
         </a>
     </li>
 </ul>

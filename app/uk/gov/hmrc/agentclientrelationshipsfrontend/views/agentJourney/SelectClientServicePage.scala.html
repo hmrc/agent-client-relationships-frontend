@@ -35,8 +35,10 @@
 @key = @{"clientService"}
 @journeyKey = @{request.journey.journeyType.toString}
 @pageTitle = @{messages(s"$key.$journeyKey.header")}
-@hint = @{if(request.journey.journeyType == AuthorisationRequest) Some(Hint(content = Text(messages(s"$key.hint"))))
-          else None}
+@hint = @{
+    if (request.journey.journeyType == AuthorisationRequest) Some(Hint(content = Text(messages(s"$key.hint"))))
+    else None
+}
 
 
 @detailsContent = {
