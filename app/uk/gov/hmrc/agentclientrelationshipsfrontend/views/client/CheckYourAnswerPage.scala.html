@@ -81,7 +81,6 @@
     @formWithCSRF(routes.CheckYourAnswerController.submit) {
         @govukButton(Button(
             attributes = Map("id" -> "submitAuthorisationButton"),
-            inputType = Some("submit"),
             content = Text(messages("checkYourAnswer.acceptAndSend.button")),
             preventDoubleClick = Some(true)
         ))
