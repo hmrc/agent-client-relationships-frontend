@@ -27,6 +27,6 @@
 <p class="govuk-body">@messages(s"$key.p1", expiryDate.map(displayInstant).getOrElse(""))</p>
 <p class="govuk-body">@messages(s"$key.p2", messages(service))</p>
 <ul class="govuk-list">
-  <li><a class="govuk-link" href="@clientRoutes.ManageYourTaxAgentsController.show.url">@messages(s"$key.a1")</a></li>
-  <li><a class="govuk-link" href="@routes.SignOutController.signOut(isAgent = false).url">@messages(s"$key.a2")</a></li>
+    <li><a class="govuk-link" href="@clientRoutes.ManageYourTaxAgentsController.show.url">@messages(s"$key.a1")</a></li>
+    <li><a class="govuk-link" href="@routes.SignOutController.signOut(isAgent = false).url">@messages(s"$key.a2")</a></li>
 </ul>
