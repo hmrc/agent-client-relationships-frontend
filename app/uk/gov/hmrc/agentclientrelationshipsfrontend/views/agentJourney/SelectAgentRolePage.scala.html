@@ -53,7 +53,7 @@
     @h1(pageTitle)
 
     @if(messages.isDefinedAt(s"$key.$serviceKey.${agentRoleChangeType.toString}.intro")) {
-      <p class="govuk-body">@messages(s"$key.$serviceKey.${agentRoleChangeType.toString}.intro", clientName)</p>
+        <p class="govuk-body">@messages(s"$key.$serviceKey.${agentRoleChangeType.toString}.intro", clientName)</p>
     }
 
     @govukInsetText(InsetText(content = HtmlContent(insertHtml)))

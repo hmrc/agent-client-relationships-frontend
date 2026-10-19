@@ -27,9 +27,7 @@
 
 @()(implicit request: ClientJourneyRequest[?], messages: Messages)
 
-@key = @{
-    "checkYourAnswer"
-}
+@key = @{"checkYourAnswer"}
 @journey = @{request.journey}
 @serviceKey = @{journey.getServiceKey}
 @agentName = @{journey.getAgentName}
@@ -83,7 +81,6 @@
     @formWithCSRF(routes.CheckYourAnswerController.submit) {
         @govukButton(Button(
             attributes = Map("id" -> "submitAuthorisationButton"),
-            inputType = Some("submit"),
             content = Text(messages("checkYourAnswer.acceptAndSend.button")),
             preventDoubleClick = Some(true)
         ))
