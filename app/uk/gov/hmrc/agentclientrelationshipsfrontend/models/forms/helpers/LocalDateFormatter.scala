@@ -25,7 +25,6 @@ import scala.util.{Failure, Success, Try}
 class LocalDateFormatter(messagePrefix: String) extends Formatter[LocalDate] {
 
   val invalidKey = s"$messagePrefix.error.invalid"
-//  TODO: 12540 Add messages for this
   val inThePastKey = s"$messagePrefix.error.inthepast"
   val allRequiredKey = s"$messagePrefix.error.required"
   val dayRequiredKey = s"$messagePrefix.error.day.required"
