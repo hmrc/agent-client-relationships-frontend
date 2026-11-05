@@ -38,6 +38,14 @@ class TextFormFieldHelperSpec extends AnyWordSpec with Matchers :
       result.value shouldBe Some("ABC")
       result.hasErrors shouldBe false
 
+    "validate a text field when the value adheres to the regex and transform to upper case when toUppercase is true" in :
+      val exampleRegexBothCases = "[a-zA-Z]{3}"
+      val toUppercaseFormMapping: Mapping[String] = TextFormFieldHelper.textFieldMapping(fieldName, messageKey, exampleRegexBothCases, toUppercase = true)
+      val exampleForm: Form[String] = Form(single(fieldName -> toUppercaseFormMapping))
+      val result = exampleForm.bind(Map(fieldName -> "abc"))
+      result.value shouldBe Some("ABC")
+      result.hasErrors shouldBe false
+
     "invalidate a text field when the value does not adhere to the regex" in :
       val result = exampleForm.bind(Map(fieldName -> "ABC23495302965"))
       result.hasErrors shouldBe true

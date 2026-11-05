@@ -30,7 +30,6 @@ object TextFormFieldHelper extends FormFieldHelper {
       .transform(
         _
           .map(stripWhiteSpaces)
-//          TODO: 12552 Add unit test
           .map(value => if (toUppercase) value.toUpperCase else value)
           .getOrElse(""),
         (s: String) => Some(s)

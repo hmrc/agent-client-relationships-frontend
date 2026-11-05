@@ -49,6 +49,13 @@ class EnterClientFactFormSpec extends AnyWordSpecLike with Matchers :
         result.value shouldBe Some("ABC")
         result.hasErrors shouldBe false
 
+      "the input type is 'text' and toUppercase is true" in :
+        val fieldConfig: KnownFactsConfiguration = KnownFactsConfiguration("fieldName", "[a-zA-Z]{3}", "text", 3, None, toUppercase = true)
+        val form = EnterClientFactForm.form(fieldConfig, "service")
+        val result = form.bind(Map("fieldName" -> "abc"))
+        result.value shouldBe Some("ABC")
+        result.hasErrors shouldBe false
+
     "throw an exception" when :
 
       "the input type is unrecognised" in :

@@ -35,7 +35,6 @@ object EnterClientFactForm extends FormFieldHelper {
               .verifying(mandatoryFieldErrorMessage(s"clientFact.$serviceName.${fieldConfig.name}"), _.fold(false)(options.map(_._1).toSet.contains))
               .transform(_.getOrElse(""), (Some(_)): String => Option[String])
           case ("text", _) =>
-//            TODO: 12552 Add unit test for toUppercase
             fieldConfig.name -> textFieldMapping(fieldConfig.name, s"clientFact.$serviceName.${fieldConfig.name}", fieldConfig.regex, fieldConfig.toUppercase)
           case _ =>
             throw RuntimeException(s"Attempted to create an unsupported form - input type: ${fieldConfig.inputType}, options: ${fieldConfig.validOptions}")
