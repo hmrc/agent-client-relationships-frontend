@@ -51,6 +51,11 @@ class LocalDateFormatterSpec extends AnyWordSpec with Matchers {
           Seq(FormError("date.year", formatter.invalidKey, Seq()))
       }
 
+      "the year is prior to 1900" in {
+        formatter.validateDayMonthYear("date", Some("11"), Some("11"), Some("1899")) shouldBe
+          Seq(FormError("date.year", formatter.invalidKey, Seq()))
+      }
+
       "the month and year are invalid" in {
         formatter.validateDayMonthYear("date", Some("11"), Some("20"), Some("0")) shouldBe Seq(
           FormError("date.month", formatter.invalidKey, Seq()),
@@ -123,6 +128,12 @@ class LocalDateFormatterSpec extends AnyWordSpec with Matchers {
 
     "return a LocalDate when the provided values make a valid date" in {
       formatter.toDate("date", 11, 11, 2000) shouldBe Right(LocalDate.parse("2000-11-11"))
+    }
+
+    "return a form error when the provided values are in the future" in {
+      val tomorrow = LocalDate.now.plusDays(1)
+      formatter.toDate("date", tomorrow.getDayOfMonth, tomorrow.getMonthValue, tomorrow.getYear) shouldBe
+        Left(Seq(FormError("date", formatter.inThePastKey)))
     }
 
     "return a form error when the provided values do not make a valid date" in {
