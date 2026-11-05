@@ -48,7 +48,7 @@ class LocalDateFormatter(messagePrefix: String) extends Formatter[LocalDate] {
 
     def validateDay: Boolean = Try(day.get.toInt).toOption.exists(value => 1 to 31 contains value)
     def validateMonth: Boolean = Try(month.get.toInt).toOption.exists(value => 1 to 12 contains value)
-    def validateYear: Boolean = Try(year.get.toInt).toOption.exists(value => value > 0)
+    def validateYear: Boolean = Try(year.get.toInt).toOption.exists(value => value >= 1900)
 
     (day, month, year) match {
       case (Some(_), Some(_), Some(_)) =>

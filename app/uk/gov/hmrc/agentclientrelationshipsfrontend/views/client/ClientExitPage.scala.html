@@ -14,7 +14,6 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.agentclientrelationshipsfrontend.config.AppConfig
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.models.client.ClientExitType
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.Layout
 @import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.client.clientExitPartials.*
@@ -38,7 +37,7 @@
     lastModifiedDate: Option[Instant] = None,
     continueUrl: Option[RedirectUrl] = None,
     service: String
-)(implicit request: Request[AnyContent], messages: Messages, appConfig: AppConfig)
+)(implicit request: Request[AnyContent], messages: Messages)
 @serviceName = @{messages("service.name.clients")}
 @pageTitle = @{messages(s"$exitType.header")}
 
