@@ -32,18 +32,21 @@ class EnterClientFactFormSpec extends AnyWordSpecLike with Matchers :
         val fieldConfig: KnownFactsConfiguration = KnownFactsConfiguration("fieldName", "", "date", 1, None)
         val form = EnterClientFactForm.form(fieldConfig, "service")
         val result = form.bind(Map("fieldName.day" -> "11", "fieldName.month" -> "11", "fieldName.year" -> "2000"))
+        result.value shouldBe Some("2000-11-11")
         result.hasErrors shouldBe false
 
       "the input type is 'select'" in :
         val fieldConfig: KnownFactsConfiguration = KnownFactsConfiguration("fieldName", "", "select", 1, Some(Seq("AL" -> "Albania")))
         val form = EnterClientFactForm.form(fieldConfig, "service")
         val result = form.bind(Map("fieldName" -> "AL"))
+        result.value shouldBe Some("AL")
         result.hasErrors shouldBe false
 
       "the input type is 'text'" in :
         val fieldConfig: KnownFactsConfiguration = KnownFactsConfiguration("fieldName", "[A-Z]{3}", "text", 3, None)
         val form = EnterClientFactForm.form(fieldConfig, "service")
         val result = form.bind(Map("fieldName" -> "ABC"))
+        result.value shouldBe Some("ABC")
         result.hasErrors shouldBe false
 
     "throw an exception" when :

@@ -35,6 +35,7 @@ class TextFormFieldHelperSpec extends AnyWordSpec with Matchers :
 
     "validate a text field when the value adheres to the regex" in :
       val result = exampleForm.bind(Map(fieldName -> "ABC"))
+      result.value shouldBe Some("ABC")
       result.hasErrors shouldBe false
 
     "invalidate a text field when the value does not adhere to the regex" in :
