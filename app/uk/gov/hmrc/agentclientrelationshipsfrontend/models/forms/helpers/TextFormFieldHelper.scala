@@ -24,10 +24,16 @@ object TextFormFieldHelper extends FormFieldHelper {
   // all text fields in this service are for ids or codes, so we strip all white spaces
   private def stripWhiteSpaces(str: String): String = str.trim.replaceAll("\\s", "")
 
-  def textFieldMapping(fieldName: String, formMessageKey: String, regex: String = ".*"): Mapping[String] = {
+  def textFieldMapping(fieldName: String, formMessageKey: String, regex: String = ".*", toUppercase: Boolean = false): Mapping[String] = {
     optional(text)
       .verifying(validateText(fieldName, formMessageKey, regex))
-      .transform(_.map(stripWhiteSpaces).getOrElse(""), (s: String) => Some(s))
+      .transform(
+        _
+          .map(stripWhiteSpaces)
+          .map(value => if (toUppercase) value.toUpperCase else value)
+          .getOrElse(""),
+        (s: String) => Some(s)
+      )
   }
 
   private def validateText(fieldName: String, formMessageKey: String, regex: String = ".*"): Constraint[Option[String]] = {

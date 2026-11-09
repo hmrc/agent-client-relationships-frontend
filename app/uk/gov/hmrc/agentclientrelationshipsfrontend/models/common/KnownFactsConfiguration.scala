@@ -21,5 +21,6 @@ case class KnownFactsConfiguration(
                                     regex: String,
                                     inputType: String,
                                     width: Int,
-                                    validOptions: Option[Seq[(String, String)]] = None
+                                    validOptions: Option[Seq[(String, String)]] = None,
+                                    toUppercase: Boolean = false
                                   )
