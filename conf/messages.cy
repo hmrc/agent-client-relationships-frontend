@@ -5,6 +5,7 @@
 outage-page.serviceDisplayName=Cyfrif gwasanaethau asiant
 service.name.clients=Penodi rhywun i ddelio â CThEF ar eich rhan
 service.name.myta=Rheoli pwy sy’n gallu delio â CThEF ar eich rhan
+
 authorisation-request.service.name=Gofyn i gleient eich awdurdodi
 agent-cancel-authorisation.service.name=Canslo awdurdodiad y cleient
 
