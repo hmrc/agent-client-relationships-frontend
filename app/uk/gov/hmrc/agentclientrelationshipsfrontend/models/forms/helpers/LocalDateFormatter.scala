@@ -25,6 +25,7 @@ import scala.util.{Failure, Success, Try}
 class LocalDateFormatter(messagePrefix: String) extends Formatter[LocalDate] {
 
   val invalidKey = s"$messagePrefix.error.invalid"
+  val inThePastKey = s"$messagePrefix.error.inthepast"
   val allRequiredKey = s"$messagePrefix.error.required"
   val dayRequiredKey = s"$messagePrefix.error.day.required"
   val monthRequiredKey = s"$messagePrefix.error.month.required"
@@ -35,10 +36,9 @@ class LocalDateFormatter(messagePrefix: String) extends Formatter[LocalDate] {
 
   def toDate(key: String, day: Int, month: Int, year: Int): Either[Seq[FormError], LocalDate] =
     Try(LocalDate.of(year, month, day)) match {
-      case Success(date) =>
-        Right(date)
-      case Failure(_) =>
-        Left(Seq(FormError(key, invalidKey)))
+      case Failure(_) => Left(Seq(FormError(key, invalidKey)))
+      case Success(date) if date.isAfter(LocalDate.now) => Left(Seq(FormError(key, inThePastKey)))
+      case Success(date) => Right(date)
     }
 
   def validateDayMonthYear(key: String,
@@ -48,7 +48,7 @@ class LocalDateFormatter(messagePrefix: String) extends Formatter[LocalDate] {
 
     def validateDay: Boolean = Try(day.get.toInt).toOption.exists(value => 1 to 31 contains value)
     def validateMonth: Boolean = Try(month.get.toInt).toOption.exists(value => 1 to 12 contains value)
-    def validateYear: Boolean = Try(year.get.toInt).toOption.exists(value => value > 0)
+    def validateYear: Boolean = Try(year.get.toInt).toOption.exists(value => value >= 1900)
 
     (day, month, year) match {
       case (Some(_), Some(_), Some(_)) =>
