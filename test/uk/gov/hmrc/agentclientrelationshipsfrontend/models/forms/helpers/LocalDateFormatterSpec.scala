@@ -130,6 +130,12 @@ class LocalDateFormatterSpec extends AnyWordSpec with Matchers {
       formatter.toDate("date", 11, 11, 2000) shouldBe Right(LocalDate.parse("2000-11-11"))
     }
 
+    "return a LocalDate when today is the provided values" in {
+      val today = LocalDate.now
+      formatter.toDate("date", today.getDayOfMonth, today.getMonthValue, today.getYear) shouldBe
+        Right(LocalDate.parse(s"${today.getYear}-${today.getMonthValue}-${today.getDayOfMonth}"))
+    }
+
     "return a form error when the provided values are in the future" in {
       val tomorrow = LocalDate.now.plusDays(1)
       formatter.toDate("date", tomorrow.getDayOfMonth, tomorrow.getMonthValue, tomorrow.getYear) shouldBe
