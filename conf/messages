@@ -185,8 +185,8 @@ clientService.HMRC-TERSNT-ORG.trust=Maintain their non-taxable trust
 # Agent journey client service refinement
 # -------------------------------------------------------------------------------------------
 
-clientServiceRefinement.HMRC-TERS-ORG.header=Is your client’s trust or estate taxable?
-clientServiceRefinement.HMRC-TERSNT-ORG.header=Is your client’s trust or estate taxable?
+clientServiceRefinement.HMRC-TERS-ORG.header=Select ‘yes’ if your client’s trust or estate is taxable
+clientServiceRefinement.HMRC-TERSNT-ORG.header=Select ‘yes’ if your client’s trust or estate is taxable
 clientServiceRefinement.HMRC-TERS-ORG.option=Yes
 clientServiceRefinement.HMRC-TERSNT-ORG.option=No, it’s exempt from tax
 

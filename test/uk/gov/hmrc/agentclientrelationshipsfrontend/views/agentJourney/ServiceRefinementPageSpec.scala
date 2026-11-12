@@ -31,8 +31,8 @@ class ServiceRefinementPageSpec extends ViewSpecSupport {
   val viewTemplate: ServiceRefinementPage = app.injector.instanceOf[ServiceRefinementPage]
 
   object Expected {
-    val authorisationRequestHeading = "Is your client’s trust or estate taxable?"
-    val cancelAuthorisationHeading = "Is your client’s trust or estate taxable?"
+    val authorisationRequestHeading = "Select ‘yes’ if your client’s trust or estate is taxable"
+    val cancelAuthorisationHeading = "Select ‘yes’ if your client’s trust or estate is taxable"
     val authorisationRequestTitle = s"$authorisationRequestHeading - Ask a client to authorise you - GOV.UK"
     val cancelAuthorisationTitle = s"$cancelAuthorisationHeading - Cancel a client’s authorisation - GOV.UK"
     val authorisationRequestFormError = "Select what you want the client to authorise you to do"

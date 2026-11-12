@@ -185,8 +185,8 @@ clientService.HMRC-TERSNT-ORG.trust=Cynnal ei ymddiriedolaethau nad ydynt yn dre
 # Agent journey client service refinement
 # -------------------------------------------------------------------------------------------
 
-clientServiceRefinement.HMRC-TERS-ORG.header=A yw ymddiriedolaeth neu ystâd eich cleient yn drethadwy?
-clientServiceRefinement.HMRC-TERSNT-ORG.header=A yw ymddiriedolaeth neu ystâd eich cleient yn drethadwy?
+clientServiceRefinement.HMRC-TERS-ORG.header=Dewiswch ‘Iawn’ os yw ymddiriedolaeth neu ystâd eich cleient yn drethadwy
+clientServiceRefinement.HMRC-TERSNT-ORG.header=Dewiswch ‘Iawn’ os yw ymddiriedolaeth neu ystâd eich cleient yn drethadwy
 clientServiceRefinement.HMRC-TERS-ORG.option=Iawn
 clientServiceRefinement.HMRC-TERSNT-ORG.option=Na, mae wedi’i esemptio rhag treth
 
