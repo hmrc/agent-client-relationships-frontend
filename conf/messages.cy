@@ -161,8 +161,8 @@ clientService.hint=Mae angen i chi greu cais ar wahân ar gyfer pob gwasanaeth t
 clientService.alternative=Mae angen awdurdodiad arnaf ar gyfer rhywbeth arall
 clientService.alt-suggestion=Dysgwch ragor am
 clientService.alt-suggestion.link=gofyn i gleient eich awdurdodi i ddelio â gwasanaethau treth eraill (yn agor tab newydd)
-clientService.authorisation-request.error.required=Dewiswch beth ydych am i’r cleient eich awdurdodi i’w wneud
-clientService.agent-cancel-authorisation.error.required=Dewiswch pa awdurdodiad a hoffech ei ganslo ar gyfer y cleient
+clientService.authorisation-request.error.required=Dewiswch ‘Iawn’ os yw ymddiriedolaeth neu ystâd eich cleient yn drethadwy
+clientService.agent-cancel-authorisation.error.required=Dewiswch ‘Iawn’ os yw ymddiriedolaeth neu ystâd eich cleient yn drethadwy
 
 clientService.PERSONAL-INCOME-RECORD.personal=Bwrw golwg dros ei gofnod incwm
 clientService.HMRC-MTD-IT.personal=Rheoli ei gyfrif Troi Treth yn Ddigidol ar gyfer Treth Incwm
@@ -185,8 +185,8 @@ clientService.HMRC-TERSNT-ORG.trust=Cynnal ei ymddiriedolaethau nad ydynt yn dre
 # Agent journey client service refinement
 # -------------------------------------------------------------------------------------------
 
-clientServiceRefinement.HMRC-TERS-ORG.header=Dewiswch ‘Iawn’ os yw ymddiriedolaeth neu ystâd eich cleient yn drethadwy
-clientServiceRefinement.HMRC-TERSNT-ORG.header=Dewiswch ‘Iawn’ os yw ymddiriedolaeth neu ystâd eich cleient yn drethadwy
+clientServiceRefinement.HMRC-TERS-ORG.header=A yw ymddiriedolaeth neu ystâd eich cleient yn drethadwy?
+clientServiceRefinement.HMRC-TERSNT-ORG.header=A yw ymddiriedolaeth neu ystâd eich cleient yn drethadwy?
 clientServiceRefinement.HMRC-TERS-ORG.option=Iawn
 clientServiceRefinement.HMRC-TERSNT-ORG.option=Na, mae wedi’i esemptio rhag treth
 
