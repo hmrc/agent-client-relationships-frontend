@@ -35,8 +35,8 @@ class ServiceRefinementPageSpec extends ViewSpecSupport {
     val cancelAuthorisationHeading = "Is your client’s trust or estate taxable?"
     val authorisationRequestTitle = s"$authorisationRequestHeading - Ask a client to authorise you - GOV.UK"
     val cancelAuthorisationTitle = s"$cancelAuthorisationHeading - Cancel a client’s authorisation - GOV.UK"
-    val authorisationRequestFormError = "Select what you want the client to authorise you to do"
-    val cancelAuthorisationFormError = "Select which authorisation you want to cancel for the client"
+    val authorisationRequestFormError = "Select ‘yes’ if your client’s trust or estate is taxable"
+    val cancelAuthorisationFormError = "Select ‘yes’ if your client’s trust or estate is taxable"
     val radioLabel1 = "Yes"
     val radioLabel2 = "No, it’s exempt from tax"
 

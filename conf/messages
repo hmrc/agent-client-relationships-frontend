@@ -161,8 +161,8 @@ clientService.hint=You need to create a separate request for each tax service.
 clientService.alternative=I need authorisation for something else
 clientService.alt-suggestion=Find out more about
 clientService.alt-suggestion.link=asking a client to authorise you to deal with other tax services (opens in new tab)
-clientService.authorisation-request.error.required=Select what you want the client to authorise you to do
-clientService.agent-cancel-authorisation.error.required=Select which authorisation you want to cancel for the client
+clientService.authorisation-request.error.required=Select ‘yes’ if your client’s trust or estate is taxable
+clientService.agent-cancel-authorisation.error.required=Select ‘yes’ if your client’s trust or estate is taxable
 
 clientService.PERSONAL-INCOME-RECORD.personal=View their Income record
 clientService.HMRC-MTD-IT.personal=Manage their Making Tax Digital for Income Tax
