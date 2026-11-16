@@ -216,8 +216,8 @@ clientId.urn.error.required=Enter your client’s Unique Reference Number (URN)
 
 clientId.cgtRef.label=What is your client’s Capital Gains Tax account reference?
 clientId.cgtRef.hint=This is 15 characters, for example XYCGTP123456789. Your client received this when they created their account.
-clientId.cgtRef.error.invalid=Enter your client’s Capital Gains Tax account reference
-clientId.cgtRef.error.required=Enter your client’s Capital Gains Tax account reference in the correct format
+clientId.cgtRef.error.invalid=Enter your client’s Capital Gains Tax account reference in the correct format
+clientId.cgtRef.error.required=Enter your client’s Capital Gains Tax account reference
 
 clientId.pptRef.label=What is your client’s Plastic Packaging Tax reference?
 clientId.pptRef.hint=This is 15 characters, for example XMPPT0000000001. Your client received this when they registered for Plastic Packaging Tax.
