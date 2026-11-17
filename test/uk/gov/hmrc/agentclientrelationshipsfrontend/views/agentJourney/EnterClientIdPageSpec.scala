@@ -165,8 +165,8 @@ class EnterClientIdPageSpec extends ViewSpecSupport {
     object CgtRef extends ServiceStrings {
       val label = "What is your client’s Capital Gains Tax account reference?"
       val hint = "This is 15 characters, for example XYCGTP123456789. Your client received this when they created their account."
-      val errorInvalid = "Enter your client’s Capital Gains Tax account reference"
-      val errorRequired = "Enter your client’s Capital Gains Tax account reference in the correct format"
+      val errorInvalid = "Enter your client’s Capital Gains Tax account reference in the correct format"
+      val errorRequired = "Enter your client’s Capital Gains Tax account reference"
       val authorisationRequestTitle = s"$label - Ask a client to authorise you - GOV.UK"
       val cancelAuthorisationTitle = s"$label - Cancel a client’s authorisation - GOV.UK"
     }

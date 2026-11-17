@@ -216,8 +216,8 @@ clientId.urn.error.required=Nodwch Gyfeirnod Unigryw (URN) eich cleient
 
 clientId.cgtRef.label=Beth yw cyfeirnod cyfrif Treth Enillion Cyfalaf sydd gan eich cleient?
 clientId.cgtRef.hint=Mae hyn yn 15 o gymeriadau, er enghraifft XYCGTP123456789. Daeth hyn i law eich cleient pan greodd ei gyfrif.
-clientId.cgtRef.error.invalid=Nodwch gyfeirnod cyfrif Treth Enillion Cyfalaf eich cleient
-clientId.cgtRef.error.required=Nodwch Gyfeirnod cyfrif Treth Enillion Cyfalaf eich cleient yn y fformat cywir
+clientId.cgtRef.error.invalid=Nodwch Gyfeirnod cyfrif Treth Enillion Cyfalaf eich cleient yn y fformat cywir
+clientId.cgtRef.error.required=Nodwch gyfeirnod cyfrif Treth Enillion Cyfalaf eich cleient
 
 clientId.pptRef.label=Beth yw cyfeirnod Treth Deunydd Pacio Plastig eich cleient?
 clientId.pptRef.hint=Mae hyn yn 15 o gymeriadau, er enghraifft, XMPPT0000000001. Daeth hyn i law eich cleient pan gofrestrodd ar gyfer Treth Deunydd Pacio Plastig.
