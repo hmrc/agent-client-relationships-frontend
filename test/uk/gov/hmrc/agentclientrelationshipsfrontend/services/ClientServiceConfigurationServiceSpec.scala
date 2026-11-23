@@ -46,7 +46,7 @@ class ClientServiceConfigurationServiceSpec extends AnyWordSpecLike with Matcher
       services.getServiceKeysForUrlPart(pillar2) shouldBe Set(HMRCPILLAR2ORG)
 
     s"return enrolments supported by $incomeRecordViewer" in :
-      services.getServiceKeysForUrlPart(incomeRecordViewer) shouldBe Set(HMRCNI, HMRCPT)
+      services.getServiceKeysForUrlPart(incomeRecordViewer) shouldBe Set(HMRCPT)
 
     s"return enrolments supported by $plasticPackagingTax" in :
       services.getServiceKeysForUrlPart(plasticPackagingTax) shouldBe Set(HMRCPPTORG)
