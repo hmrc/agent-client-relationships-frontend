@@ -166,7 +166,7 @@ class ClientServiceConfigurationService @Inject() extends ServiceConstants {
     ),
     PERSONALINCOMERECORD -> ServiceData(
       serviceName = PERSONALINCOMERECORD,
-      urlPart = Map(incomeRecordViewer -> Set(HMRCNI, HMRCPT)),
+      urlPart = Map(incomeRecordViewer -> Set(HMRCPT)),
       serviceOption = true,
       clientTypes = Set(personal),
       clientDetails = Seq(
