@@ -165,7 +165,7 @@ class AuthActionsSpec extends AnyWordSpecLike with Matchers with OptionValues wi
 
       val result = controller.clientAuthWithEnrolmentCheck(incomeRecordViewer)(fakeRequest)
 
-      status(result) shouldBe OK
+      status(result) shouldBe SEE_OTHER
 
     s"redirect to client exit CannotFindAuthorisationRequest for $incomeRecordViewer" in :
       val controller = clientControllerSetup(Individual, L250, Set(Enrolment(HMRCMTDVAT)))
