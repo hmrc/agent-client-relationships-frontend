@@ -59,7 +59,7 @@ class ServiceRefinementControllerISpec extends ComponentSpecHelper with AuthStub
       authoriseAsAgent()
       await(journeyService.saveJourney(journey))
       val result = post(routes.ServiceRefinementController.onSubmit(AgentJourneyType.AuthorisationRequest).url)(Map(
-        "clientService" -> Seq("HMRC-TERSNT-ORG")
+        "clientServiceRefinement" -> Seq("HMRC-TERSNT-ORG")
       ))
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe routes.EnterClientIdController.show(AgentJourneyType.AuthorisationRequest).url
@@ -102,7 +102,7 @@ class ServiceRefinementControllerISpec extends ComponentSpecHelper with AuthStub
       authoriseAsAgent()
       await(journeyService.saveJourney(journey))
       val result = post(routes.ServiceRefinementController.onSubmit(AgentJourneyType.AgentCancelAuthorisation).url)(Map(
-        "clientService" -> Seq("HMRC-TERS-ORG")
+        "clientServiceRefinement" -> Seq("HMRC-TERS-ORG")
       ))
       result.status shouldBe SEE_OTHER
       result.header("Location").value shouldBe routes.EnterClientIdController.show(AgentJourneyType.AgentCancelAuthorisation).url

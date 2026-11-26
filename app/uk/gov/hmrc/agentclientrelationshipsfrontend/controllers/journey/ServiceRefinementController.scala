@@ -19,10 +19,10 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey
 import play.api.i18n.I18nSupport
 import play.api.mvc.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
-import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.ClientServiceFieldName
+import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.{ClientServiceFieldName, clientServiceRefinementFieldName}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.SelectFromOptionsForm
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, AgentJourneyType}
-import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{ClientServiceConfigurationService, AgentJourneyService}
+import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{AgentJourneyService, ClientServiceConfigurationService}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.views.html.agentJourney.ServiceRefinementPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
@@ -49,7 +49,7 @@ class ServiceRefinementController @Inject()(mcc: MessagesControllerComponents,
           case _ => ""
         }
         Ok(serviceRefinementPage(
-          form = SelectFromOptionsForm.formWithMessageKey(ClientServiceFieldName, options, journey.journeyType.toString, "clientServiceRefinement").fill(prepop),
+          form = SelectFromOptionsForm.form(clientServiceRefinementFieldName, options, journey.journeyType.toString).fill(prepop),
           options
         ))
       }
@@ -60,7 +60,7 @@ class ServiceRefinementController @Inject()(mcc: MessagesControllerComponents,
       given AgentJourneyRequest[?] = journeyRequest
       val journey = journeyRequest.journey
       val options = serviceConfig.getSupportedEnrolments(journey.getServiceWithDefault)
-      SelectFromOptionsForm.formWithMessageKey(ClientServiceFieldName, options, journeyType.toString, "clientServiceRefinement").bindFromRequest().fold(
+      SelectFromOptionsForm.form(clientServiceRefinementFieldName, options, journeyType.toString).bindFromRequest().fold(
         formWithErrors => {
           Future.successful(BadRequest(serviceRefinementPage(
             formWithErrors,

@@ -22,14 +22,10 @@ import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.helpers.FormFie
 
 object SelectFromOptionsForm extends FormFieldHelper {
   def form(fieldName: String, options: Seq[String], journeyType: String, args: String*): Form[String] = {
-    formWithMessageKey(fieldName, options, journeyType, fieldName, args*)
-  }
-
-  def formWithMessageKey(fieldName: String, options: Seq[String], journeyType: String, refinedErrorMessageKey: String, args: String*): Form[String] = {
     Form[String](
       single(
         fieldName -> optional(text)
-          .verifying(mandatoryRadio(s"$refinedErrorMessageKey.$journeyType", options, args*))
+          .verifying(mandatoryRadio(s"$fieldName.$journeyType", options, args*))
           .transform(_.getOrElse(""), (Some(_)): String => Option[String])
       )
     )
