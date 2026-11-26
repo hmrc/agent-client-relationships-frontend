@@ -19,7 +19,7 @@ package uk.gov.hmrc.agentclientrelationshipsfrontend.controllers.journey
 import play.api.i18n.I18nSupport
 import play.api.mvc.*
 import uk.gov.hmrc.agentclientrelationshipsfrontend.actions.Actions
-import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.clientServiceRefinementFieldName
+import uk.gov.hmrc.agentclientrelationshipsfrontend.config.Constants.ClientServiceRefinementFieldName
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.forms.journey.SelectFromOptionsForm
 import uk.gov.hmrc.agentclientrelationshipsfrontend.models.journey.{AgentJourneyRequest, AgentJourneyType}
 import uk.gov.hmrc.agentclientrelationshipsfrontend.services.{AgentJourneyService, ClientServiceConfigurationService}
@@ -49,7 +49,7 @@ class ServiceRefinementController @Inject()(mcc: MessagesControllerComponents,
           case _ => ""
         }
         Ok(serviceRefinementPage(
-          form = SelectFromOptionsForm.form(clientServiceRefinementFieldName, options, journey.journeyType.toString).fill(prepop),
+          form = SelectFromOptionsForm.form(ClientServiceRefinementFieldName, options, journey.journeyType.toString).fill(prepop),
           options
         ))
       }
@@ -60,7 +60,7 @@ class ServiceRefinementController @Inject()(mcc: MessagesControllerComponents,
       given AgentJourneyRequest[?] = journeyRequest
       val journey = journeyRequest.journey
       val options = serviceConfig.getSupportedEnrolments(journey.getServiceWithDefault)
-      SelectFromOptionsForm.form(clientServiceRefinementFieldName, options, journeyType.toString).bindFromRequest().fold(
+      SelectFromOptionsForm.form(ClientServiceRefinementFieldName, options, journeyType.toString).bindFromRequest().fold(
         formWithErrors => {
           Future.successful(BadRequest(serviceRefinementPage(
             formWithErrors,
