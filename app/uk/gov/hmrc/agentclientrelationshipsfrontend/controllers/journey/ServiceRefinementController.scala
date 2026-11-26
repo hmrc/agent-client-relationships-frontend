@@ -49,7 +49,7 @@ class ServiceRefinementController @Inject()(mcc: MessagesControllerComponents,
           case _ => ""
         }
         Ok(serviceRefinementPage(
-          form = SelectFromOptionsForm.form(ClientServiceFieldName, options, journey.journeyType.toString).fill(prepop),
+          form = SelectFromOptionsForm.formWithMessageKey(ClientServiceFieldName, options, journey.journeyType.toString, "clientServiceRefinement").fill(prepop),
           options
         ))
       }
@@ -60,7 +60,7 @@ class ServiceRefinementController @Inject()(mcc: MessagesControllerComponents,
       given AgentJourneyRequest[?] = journeyRequest
       val journey = journeyRequest.journey
       val options = serviceConfig.getSupportedEnrolments(journey.getServiceWithDefault)
-      SelectFromOptionsForm.form(ClientServiceFieldName, options, journeyType.toString).bindFromRequest().fold(
+      SelectFromOptionsForm.formWithMessageKey(ClientServiceFieldName, options, journeyType.toString, "clientServiceRefinement").bindFromRequest().fold(
         formWithErrors => {
           Future.successful(BadRequest(serviceRefinementPage(
             formWithErrors,
