@@ -27,6 +27,7 @@ object Constants extends ServiceConstants {
   val ClientTypeFieldName = "clientType"
   val ClientServiceFieldName = "clientService"
   val ClientNameFieldName = "clientName"
+  val ClientServiceRefinementFieldName = "clientServiceRefinement"
   val ClientConfirmationFieldName = "confirmClient"
   val DoYouAlreadyManageFieldName = "doYouAlreadyManage"
 
